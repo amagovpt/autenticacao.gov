@@ -40,6 +40,19 @@ CByteArray getAuthCert(APL_EIDCard *card) {
     return CByteArray(data_p, certificate_len);
 }
 
+void parseErrorStatusForGetAddress(cJSON *json_item, RA_GetAddressResponse *resp) {
+    cJSON *error_item = cJSON_GetObjectItem(json_item, "ErrorStatus");
+    if (cJSON_IsObject(error_item)) {
+        cJSON * error_code = cJSON_GetObjectItem(error_item, "code");
+        resp->error_code = error_code->valueint;
+
+        cJSON * description = cJSON_GetObjectItem(error_item, "description");
+        if (cJSON_IsString(description))
+            resp->error_msg = description->valuestring;
+
+    }
+}
+
 
 /* JSON parsing functions */
 
@@ -100,6 +113,24 @@ RA_SignChallengeResponse parseSignChallengeResponse(const char * json_str) {
 
 }
 
+int parseRemoteAddressErrorCode(const char * json_str) {
+    int error_code = -1;
+    cJSON *error = cJSON_Parse(json_str);
+    if (error == NULL)
+    {
+        MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+    }
+    cJSON * item = cJSON_GetObjectItem(error, "code");
+
+    if (cJSON_IsNumber(item)) {
+       error_code = item->valueint;
+    }
+
+    cJSON_Delete(error);
+
+    return error_code;
+}
+
 
 RA_DHParamsResponse parseDHParamsResponse(const char * json_str) {
 
@@ -144,6 +175,7 @@ RA_DHParamsResponse parseDHParamsResponse(const char * json_str) {
     return resp;
 }
 
+
 RA_GetAddressResponse * validateReadAddressResponse(const char * json_str) {
 
     RA_GetAddressResponse *resp = new RA_GetAddressResponse();
@@ -162,17 +194,8 @@ RA_GetAddressResponse * validateReadAddressResponse(const char * json_str) {
 
     if (!cJSON_IsObject(item)) {
         //Error response: get Error Status and write it to resp
-        item = cJSON_GetObjectItem(cjson_obj, "ErrorStatus");
-        if (cJSON_IsObject(item)) {
-            cJSON * error_code = cJSON_GetObjectItem(item, "code");
-            resp->error_code = error_code->valueint;
-
-            cJSON * description = cJSON_GetObjectItem(item, "description");
-            if (cJSON_IsString(description))
-                resp->error_msg = description->valuestring;
-
-        }
-        cJSON_Delete(cjson_obj);
+        parseErrorStatusForGetAddress(item, resp);
+        resp->parent_json = cjson_obj;
         return resp;
     }
 
@@ -181,21 +204,21 @@ RA_GetAddressResponse * validateReadAddressResponse(const char * json_str) {
         //This is a national address
         resp->is_foreign_address = false;
         resp->address_obj = item2;
-        resp->parent_json = cjson_obj;
     }
     else {
         item2 = cJSON_GetObjectItem(item, "foreign_addr");
 
         if (cJSON_IsObject(item2)) {
             resp->is_foreign_address = true;
-            resp->address_obj = item2;
-            resp->parent_json = cjson_obj;
+            resp->address_obj = item2;        
         }
         else {
             MWLOG(LEV_ERROR, MOD_APL, "Invalid ReadAddressResponse: both addr and foreign_addr are NULL!");
-
+            parseErrorStatusForGetAddress(item, resp);
         }
     }
+
+    resp->parent_json = cjson_obj;
     return resp;
 }
 

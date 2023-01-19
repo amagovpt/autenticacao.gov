@@ -123,10 +123,16 @@ PageCardAdressForm {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_SMARTCARD_ERROR")
                     + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
-            else if (error_code == GAPI.AddressCertificateError) {
+            else if (error_code == GAPI.AddressServerCertificateError) {
                 bodyPopup = qsTranslate("GAPI", "STR_CERTIFICATE_ERROR")
                     + qsTranslate("GAPI", "STR_CERTIFICATE_ERROR_READ_ADDRESS")
                     + "<br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+            }
+            else if (error_code == GAPI.CardCertificateError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_CARDCERTIFICATE_ERROR")
+            }
+            else if (error_code == GAPI.AddressInvalidStateError) {
+                bodyPopup = qsTr("STR_REMOTEADDRESS_INVALIDSTATE_ERROR")
             }
             else if (error_code == GAPI.AddressUnknownError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
@@ -189,14 +195,6 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.IncompatibleReader) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
-            }
-            else if (error_code == GAPI.AddressCertificateError) {
-                bodyPopup = qsTranslate("GAPI", "STR_CERTIFICATE_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
-            }
-            else if (error_code == GAPI.AddressUnknownError) {
-                bodyPopup = qsTr("STR_REMOTEADDRESS_UNKNOWN_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
             else {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")

@@ -44,6 +44,7 @@
 #include "RemoteAddress.h"
 #include "RemoteAddressRequest.h"
 
+#include <memory>
 #include <ctime>
 
 namespace eIDMW
@@ -1808,7 +1809,7 @@ void APL_AddrEId::loadRemoteAddress() {
             
 			MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (3) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
 
-			RA_GetAddressResponse *getaddr_resp = validateReadAddressResponse(resp.http_response.c_str());
+			std::unique_ptr<RA_GetAddressResponse> getaddr_resp(validateReadAddressResponse(resp.http_response.c_str()));
 			if (getaddr_resp->address_obj != NULL) {
 				remoteAddressLoaded = true;
 				if (!getaddr_resp->is_foreign_address) {
@@ -1820,11 +1821,16 @@ void APL_AddrEId::loadRemoteAddress() {
 
 			}
 			else {
-
-				MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no HTTP error code but empty/malformed response", ENDPOINT_READADDRESS.c_str());
-				exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
+				const int INVALID_STATE_ERR = 1015;
+				if (getaddr_resp->error_code == INVALID_STATE_ERR) {
+					MWLOG(LEV_ERROR, MOD_APL, "Card in invalid state for address reading. Error code %d", INVALID_STATE_ERR);
+					exception_code = EIDMW_REMOTEADDR_INVALID_STATE;
+				}
+				else {
+					MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no HTTP error code but empty/malformed response", ENDPOINT_READADDRESS.c_str());
+					exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
+				}
 			}
-
 		}
 
 	}

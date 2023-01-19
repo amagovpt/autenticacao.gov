@@ -368,6 +368,41 @@ QString GAPI::getAddressField(AddressInfoKey key) {
         emitErrorSignal(__FUNCTION__, e.GetError());                              \
 }
 
+void GAPI::handleRemoteAddressErrors(long errorCode) {
+    if (errorCode == EIDMW_REMOTEADDR_CONNECTION_ERROR)
+    {
+        emit signalRemoteAddressError(AddressConnectionError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_SERVER_ERROR)
+    {
+        emit signalRemoteAddressError(AddressServerError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT)
+    {
+        emit signalRemoteAddressError(AddressConnectionTimeout);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_SMARTCARD_ERROR)
+    {
+        emit signalRemoteAddressError(AddressSmartcardError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_CERTIFICATE_ERROR)
+    {
+        emit signalRemoteAddressError(AddressServerCertificateError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_EXPIRED || errorCode == EIDMW_REMOTEADDR_REVOKED)
+    {
+        emit signalRemoteAddressError(CardCertificateError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_INVALID_STATE)
+    {
+        emit signalRemoteAddressError(AddressInvalidStateError);
+    }
+    else if (errorCode == EIDMW_REMOTEADDR_UNKNOWN_ERROR)
+    {
+        emit signalRemoteAddressError(AddressUnknownError);
+    }
+}
+
 void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int index) {
 	//The SOD-related error codes have values in a contiguous range
     if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_INVALID_PKCS7) {
@@ -401,33 +436,12 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
     else if (errorCode == EIDMW_ERR_TIMEOUT) {
         emit signalCardAccessError(CardPinTimeout);
     }
-    else if (errorCode == EIDMW_REMOTEADDR_CONNECTION_ERROR)
-    {
-        emit signalRemoteAddressError(AddressConnectionError);
-    }
-    else if (errorCode == EIDMW_REMOTEADDR_SERVER_ERROR)
-    {
-        emit signalRemoteAddressError(AddressServerError);
-    }
-    else if (errorCode == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT)
-    {
-        emit signalRemoteAddressError(AddressConnectionTimeout);
-    }
-    else if (errorCode == EIDMW_REMOTEADDR_SMARTCARD_ERROR)
-    {
-        emit signalRemoteAddressError(AddressSmartcardError);
-    }
-    else if (errorCode == EIDMW_REMOTEADDR_CERTIFICATE_ERROR)
-    {
-        emit signalRemoteAddressError(AddressCertificateError);
-    }
-    else if (errorCode == EIDMW_REMOTEADDR_UNKNOWN_ERROR)
-    {
-        emit signalRemoteAddressError(AddressUnknownError);
-    }
     else if (errorCode == EIDMW_ERR_OP_CANCEL) {
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Operation cancelled by user");
         emit signalOperationCanceledByUser();
+    }
+    else if (errorCode >= EIDMW_REMOTEADDR_CONNECTION_ERROR && errorCode <= EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+        handleRemoteAddressErrors(errorCode);
     }
     else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
@@ -1403,59 +1417,27 @@ void GAPI::startPrint(QString outputFile, bool isBasicInfo, bool isAdditionalInf
     printer.setDocName("CartaoCidadao.pdf");
     QPrintDialog *dlg = new QPrintDialog(&printer);
     if (dlg->exec() == QDialog::Accepted) {
-        qDebug() << "QPrintDialog! Accepted";
         BEGIN_TRY_CATCH;
         // Print PDF not Signed
         res = drawpdf(printer, params, addressError);
-        std::cout << "bef " << addressError << std::endl;
         if (params.outputFile.toUtf8().size() > 0){
-            qDebug() << "Create PDF";
+            qDebug() << "Printing to PDF file";
             if (res) {
                 emit signalPdfPrintSucess();
             } 
-            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
-                emit signalRemoteAddressError(AddressConnectionError);
+            else if (addressError >= EIDMW_REMOTEADDR_CONNECTION_ERROR && addressError <= EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+                handleRemoteAddressErrors(addressError);
             }
-            else if (addressError == EIDMW_REMOTEADDR_SERVER_ERROR) {
-                emit signalRemoteAddressError(AddressServerError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT) {
-                emit signalRemoteAddressError(AddressConnectionTimeout);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
-                emit signalRemoteAddressError(AddressSmartcardError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
-                emit signalRemoteAddressError(AddressCertificateError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
-                emit signalRemoteAddressError(AddressUnknownError);
-            }
-            else{
+            else {
                 emit signalPdfPrintFail();
             }
-         }else{
+         } else {
             qDebug() << "Printing to a printer";
             if (res) {
                 emit signalPrinterPrintSucess();
             }
-            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
-                emit signalRemoteAddressError(AddressConnectionError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_SERVER_ERROR) {
-                emit signalRemoteAddressError(AddressServerError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT) {
-                emit signalRemoteAddressError(AddressConnectionTimeout);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
-                emit signalRemoteAddressError(AddressSmartcardError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
-                emit signalRemoteAddressError(AddressCertificateError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
-                emit signalRemoteAddressError(AddressUnknownError);
+            else if (addressError >= EIDMW_REMOTEADDR_CONNECTION_ERROR && addressError <= EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+                handleRemoteAddressErrors(addressError);
             }
             else{
                 emit signalPdfPrintFail();
@@ -1520,7 +1502,7 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
     BEGIN_TRY_CATCH;
     if (base_params.isSign)
     {
-        // Print PDF Signed
+        // Print and sign PDF
         pdffiletmp = QDir::tempPath();
         pdffiletmp.append("/CartaoCidadao.pdf");
         nativepdftmp = QDir::toNativeSeparators(pdffiletmp);
@@ -1531,25 +1513,10 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
 
         if (!res)
         {
-            if (addressError == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
-                emit signalRemoteAddressError(AddressConnectionError);
+            if (addressError >= EIDMW_REMOTEADDR_CONNECTION_ERROR && addressError <= EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+                handleRemoteAddressErrors(addressError);
             }
-            else if (addressError == EIDMW_REMOTEADDR_SERVER_ERROR) {
-                emit signalRemoteAddressError(AddressServerError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT) {
-                emit signalRemoteAddressError(AddressConnectionTimeout);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
-                emit signalRemoteAddressError(AddressSmartcardError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
-                emit signalRemoteAddressError(AddressCertificateError);
-            }
-            else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
-                emit signalRemoteAddressError(AddressUnknownError);
-            }
-            else{
+            else {
                 emit signalPdfPrintFail();
             }
             return;
@@ -1564,30 +1531,14 @@ void GAPI::doPrintPDF(PrintParamsWithSignature &params) {
             emit signalPdfPrintSignSucess();
     } else {
         // Print PDF not Signed
-
         res = drawpdf(pdf_printer, base_params, addressError);
         if (res) {
             emit signalPdfPrintSucess();
         }
-        else if (addressError == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
-            emit signalRemoteAddressError(AddressConnectionError);
+        else if (addressError >= EIDMW_REMOTEADDR_CONNECTION_ERROR && addressError <= EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+            handleRemoteAddressErrors(addressError);
         }
-        else if (addressError == EIDMW_REMOTEADDR_SERVER_ERROR) {
-            emit signalRemoteAddressError(AddressServerError);
-        }
-        else if (addressError == EIDMW_REMOTEADDR_CONNECTION_TIMEOUT) {
-            emit signalRemoteAddressError(AddressConnectionTimeout);
-        }
-        else if (addressError == EIDMW_REMOTEADDR_SMARTCARD_ERROR) {
-            emit signalRemoteAddressError(AddressSmartcardError);
-        }
-        else if (addressError == EIDMW_REMOTEADDR_CERTIFICATE_ERROR) {
-            emit signalRemoteAddressError(AddressCertificateError);
-        }
-        else if (addressError == EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
-            emit signalRemoteAddressError(AddressUnknownError);
-        }
-        else{
+        else {
             emit signalPdfPrintFail();
         }
     }
@@ -1986,7 +1937,9 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params, long &addressError)
             pos_y += 80 * print_scale_factor;
         }
         catch (PTEID_Exception e) {
-            if (e.GetError() & 0xe1d01d50 == 0xe1d01d50) {
+            long errorCode = e.GetError();
+            if (errorCode >= EIDMW_REMOTEADDR_CONNECTION_ERROR && errorCode <= EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
+                qDebug() << "Address exception captured in drawpdf!";
                 addressError = e.GetError();
                 return false;
             }

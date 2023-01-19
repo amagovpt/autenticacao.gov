@@ -244,7 +244,7 @@ public:
 
     enum CardAccessError { NoReaderFound, NoCardFound, CardUnknownCard, PinBlocked, SodCardReadError, CardUserPinCancel, CardUnknownError, CardPinTimeout, IncompatibleReader };
 
-    enum RemoteAddressError { AddressConnectionError, AddressServerError, AddressConnectionTimeout, AddressSmartcardError, AddressCertificateError, AddressUnknownError };
+    enum RemoteAddressError { AddressConnectionError, AddressServerError, AddressConnectionTimeout, AddressSmartcardError, AddressServerCertificateError, CardCertificateError, AddressInvalidStateError, AddressUnknownError };
 
     enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignMessageLtvFailed, SignFilePermissionFailed, PDFFileUnsupported};
 
@@ -623,6 +623,7 @@ private:
     double checkNewPageAndPrint(QPrinter &printer, QPainter &painter, double current_y, double remaining_height, double max_height, bool print_date = false, QString date_label = "");
     double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin = 15, bool is_bounded_rect = false, double bound_width = 360);
     WindowGeometry *getWndGeometry();
+    void handleRemoteAddressErrors(long errorCode);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;

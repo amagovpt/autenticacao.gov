@@ -103,9 +103,8 @@
 #define EIDMW_ERR_PINPAD               0xe1d0020C
 
 /** A card is present but we can't connect.
- * E.g. no card present, or a synchronous (e.g. SIS card) is
- * inserted in the reader, but no 'reader specific card plugin'
- * is available for that reader */
+ *  E.g. unresponsive card
+ */
 #define EIDMW_ERR_CANT_CONNECT         0xe1d0020D
 
 /** The card has been reset (e.g. by another application) */
@@ -280,4 +279,7 @@
 #define EIDMW_REMOTEADDR_CONNECTION_TIMEOUT 0xe1d01d53
 #define EIDMW_REMOTEADDR_SMARTCARD_ERROR    0xe1d01d54
 #define EIDMW_REMOTEADDR_CERTIFICATE_ERROR  0xe1d01d55
+#define EIDMW_REMOTEADDR_EXPIRED            0xe1d01d56
+#define EIDMW_REMOTEADDR_REVOKED            0xe1d01d57
+#define EIDMW_REMOTEADDR_INVALID_STATE      0xe1d01d58
 #define EIDMW_REMOTEADDR_UNKNOWN_ERROR      0xe1d01d59

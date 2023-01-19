@@ -226,7 +226,7 @@ PageCardPrintForm {
 
         }
         onSignalRemoteAddressError: {
-            console.log("Card Address onSignalRemoteAddressError: "+ error_code)
+            console.log("PageCardPrint nSignalRemoteAddressError: "+ error_code)
             var titlePopup = qsTr("STR_PRINT_CREATE_PDF") + ": " + qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
             if (error_code == GAPI.AddressConnectionError) {
@@ -244,6 +244,17 @@ PageCardPrintForm {
             else if (error_code == GAPI.AddressSmartcardError) {
                 bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_SMARTCARD_ERROR")
                     + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
+            }
+            else if (error_code == GAPI.AddressServerCertificateError) {
+                bodyPopup = qsTranslate("GAPI", "STR_CERTIFICATE_ERROR")
+                    + qsTranslate("GAPI", "STR_CERTIFICATE_ERROR_READ_ADDRESS")
+                    + "<br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
+            }
+            else if (error_code == GAPI.CardCertificateError) {
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_CARDCERTIFICATE_ERROR")
+            }
+            else if (error_code == GAPI.AddressInvalidStateError) {
+                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_INVALIDSTATE_ERROR")
             }
             else if (error_code == GAPI.AddressUnknownError) {
                 bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_UNKNOWN_ERROR")

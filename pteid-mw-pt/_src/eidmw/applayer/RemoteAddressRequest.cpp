@@ -27,6 +27,9 @@ namespace eIDMW
     //Implemented in CurlProxy.cpp
     extern void curl_apply_proxy_settings(CURL * curl_handle, const char * url);
 
+    //Implemented in RemoteAddress.cpp
+    int parseRemoteAddressErrorCode(const char * json_str);
+
 
 static size_t curl_write_data(char *ptr, size_t size, size_t nmemb, void * stream) {
     std::string *receive_buffer = (std::string *)stream;
@@ -75,10 +78,37 @@ void handle_curl_error(CURLcode rc) {
     }
  }
 
- void handle_http_error(long http_code) {
+ void handle_http_error(long http_code, std::string &received_data) {
+    //Application error codes returned by SCM (Serviço de consulta de morada)
+    //Some errors that we need to handle differently to notify the user
+    const int EXPIRED_CERT_ERR = 1009;
+    const int EXPIRED_DOCUMENT_ERR = 1006;
+    const int REVOKED_CERT_ERR  = 1007;
+    const int INVALID_STATE_ERR = 1015;
+    const int NO_TOP_ERROR_STRUCT = -1;
+
     if (http_code >= 400 && http_code < 500) {
-        //TODO: should we have an error code for 4XX errors from the API ?
-        throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
+
+        MWLOG(LEV_DEBUG, MOD_APL, "Received HTTP error %ld and data: %s", http_code, received_data.c_str());
+        
+        int scm_error_code = parseRemoteAddressErrorCode(received_data.data());
+
+        switch (scm_error_code) {
+
+            case EXPIRED_CERT_ERR:
+            case EXPIRED_DOCUMENT_ERR:
+                throw CMWEXCEPTION(EIDMW_REMOTEADDR_EXPIRED);
+            case EIDMW_REMOTEADDR_REVOKED:
+                throw CMWEXCEPTION(EIDMW_REMOTEADDR_REVOKED);
+            case INVALID_STATE_ERR:
+                throw CMWEXCEPTION(EIDMW_REMOTEADDR_INVALID_STATE);
+            // If no top-level error code is present we need to check the ErrorStatus struct in validateReadAddressResponse()
+            case NO_TOP_ERROR_STRUCT:
+                break;
+            default:
+                throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
+        }
+
     }
     else if (http_code >= 500 && http_code < 600) {
         throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
@@ -173,7 +203,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
             curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
             resp.http_code = http_code;
 
-            if (http_code >= 200 && http_code < 300)
+            if (http_code >= 200 && http_code < 500)
             {
                 resp.http_response.append(received_data);
                 resp.http_headers.append(received_headers);
@@ -206,7 +236,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
     if (res != CURLE_OK) {
         handle_curl_error(res);
     }
-    handle_http_error(resp.http_code);
+    handle_http_error(resp.http_code, received_data);
     return resp;
 
 }

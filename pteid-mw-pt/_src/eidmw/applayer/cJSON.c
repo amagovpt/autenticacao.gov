@@ -58,6 +58,10 @@ int cJSON_IsString(cJSON * json)
   return json != NULL && json->type == cJSON_String;
 }
 
+int cJSON_IsNumber(cJSON * json) {
+	return json != NULL && json->type == cJSON_Number;
+}
+
 static char* cJSON_strdup(const char* str)
 {
       size_t len;

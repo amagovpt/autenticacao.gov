@@ -66,6 +66,8 @@ extern int cJSON_IsObject(cJSON * json);
    
 extern int cJSON_IsString(cJSON * json);
 
+extern int cJSON_IsNumber(cJSON * json);
+
 
 /* Supply a block of JSON, and this returns a cJSON object you can interrogate. Call cJSON_Delete when finished. */
 extern cJSON *cJSON_Parse(const char *value);

@@ -740,6 +740,14 @@
         <translation>Please try again. If this error persists, please contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
+        <source>STR_REMOTEADDRESS_CARDCERTIFICATE_ERROR</source>
+        <translation>Error loading remote address: expired or cancelled card.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_INVALIDSTATE_ERROR</source>
+        <translation>Error loading remote address: you should seek help at a civil registration office (Instituto dos Registos e do Notariado).</translation>
+    </message>
+    <message>
         <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
         <translation>Please check your Internet connection.</translation>
     </message>
