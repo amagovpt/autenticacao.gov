@@ -25,7 +25,7 @@ and removal of associated certificates from local "MY" certificate store
 #include <stdio.h>
 #include <bcrypt.h>
 #include <ncrypt.h>
-#include "..\inc\KSP.h"
+#include "..\inc\KSPConstants.h"
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Forward declarations of local routines...

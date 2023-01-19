@@ -35,6 +35,7 @@ Implementation Note:
 #include <intsafe.h>
 #include <strsafe.h>
 #include "../Inc/KSP.h"
+#include "../Inc/KSPConstants.h"
 #include "../Inc/log.h"
 #include "psapi.h"
 #include <codecvt>

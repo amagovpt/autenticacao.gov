@@ -23,6 +23,7 @@ Abstract:
 #include <bcrypt.h>
 #include <ncrypt.h>
 #include "../Inc/KSP.h"
+#include "../Inc/KSPConstants.h"
 #include "../Inc/log.h"
 #include "cmdSignatureClient.h"
 #include "dialogs.h"
