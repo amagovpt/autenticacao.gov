@@ -49,11 +49,15 @@ Item {
             Rectangle {
                 id: notification_box
                 width: parent.width
-                height: model.activated ? news.height + update.height + definitions_cmd.height 
-                        + definitions_cache.height + definitions_telemetry.height : Constants.SIZE_IMAGE_BOTTOM_MENU * 2 
+                height: visible ? (model.activated ? add_up_heights() : Constants.SIZE_IMAGE_BOTTOM_MENU * 2) : 0
                 color: activeFocus ? Constants.COLOR_MAIN_MIDDLE_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
                 visible: !hasMandatory || model.mandatory
                 clip: true
+
+                function add_up_heights() {
+                    return news.height + update.height + definitions_cmd.height
+                        + definitions_cache.height + definitions_telemetry.height
+                }
 
                 Rectangle {
                     id: selected_part
