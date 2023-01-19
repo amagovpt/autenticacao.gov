@@ -98,7 +98,7 @@ void handle_curl_error(CURLcode rc) {
             case EXPIRED_CERT_ERR:
             case EXPIRED_DOCUMENT_ERR:
                 throw CMWEXCEPTION(EIDMW_REMOTEADDR_EXPIRED);
-            case EIDMW_REMOTEADDR_REVOKED:
+            case REVOKED_CERT_ERR:
                 throw CMWEXCEPTION(EIDMW_REMOTEADDR_REVOKED);
             case INVALID_STATE_ERR:
                 throw CMWEXCEPTION(EIDMW_REMOTEADDR_INVALID_STATE);
