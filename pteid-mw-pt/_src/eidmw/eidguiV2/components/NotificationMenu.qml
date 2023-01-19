@@ -489,7 +489,7 @@ Item {
             id: notificationArea
             width: parent.width
             height: parent.height - title.height - 30
-            contentHeight: listView_read.height + listView.height + new_notification_title.height + read_notification_title.height + 50
+            contentHeight: container_notif.height
             clip: true
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: title.bottom
@@ -498,92 +498,109 @@ Item {
             ScrollBar.vertical: ScrollBar {
                 id: viewScroll
                 active: true
-                policy: ScrollBar.AlwaysOn
+                policy: ScrollBar.AsNeeded
             }
 
-            Text {
-                id: new_notification_title
-                text: qsTranslate("main", "STR_NOTIFICATION_RECENT") + controler.autoTr
-                visible: listView.model.count > 0
-                color: Constants.COLOR_GRAY
-                
-                anchors.top: parent.top
+            Item {
+                id: container_notif
+                height: childrenRect.height
+                width: parent.width
 
-                font.bold: activeFocus
-                font.family: lato.name
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.capitalization: Font.MixedCase
+                Item {
+                    id: container_new_notif
+                    height: childrenRect.height
+                    width: parent.width
 
-                Keys.enabled: true
-                KeyNavigation.tab: listView
-                KeyNavigation.down: listView
-                KeyNavigation.right: listView
+                    visible: listView.model.count > 0
 
-                Accessible.role: Accessible.StaticText
-                Accessible.name: text
-            }
+                    Text {
+                        id: new_notification_title
+                        text: qsTranslate("main", "STR_NOTIFICATION_RECENT") + controler.autoTr
+                        visible: listView.model.count > 0
+                        color: Constants.COLOR_GRAY
 
-            ListView {
-                id: listView
-                width: parent.width - Constants.MARGIN_NOTIFICATION_CENTER * 2
-                height: childrenRect.height 
-                clip: true
-                model: model_recent
-                delegate: delegate
-                focus: true
-                spacing: 6
-                interactive: false
+                        font.bold: activeFocus
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
 
-                anchors.top: new_notification_title.bottom
-                anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
+                        Keys.enabled: true
+                        KeyNavigation.tab: listView
+                        KeyNavigation.down: listView
+                        KeyNavigation.right: listView
 
-                Keys.forwardTo: delegate
-                onFocusChanged: currentIndex = 0
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                    }
 
-            }
+                    ListView {
+                        id: listView
+                        width: parent.width - Constants.MARGIN_NOTIFICATION_CENTER * 2
+                        height: childrenRect.height
+                        clip: true
+                        model: model_recent
+                        delegate: delegate
+                        focus: true
+                        spacing: 6
+                        interactive: false
 
-            Text {
-                id: read_notification_title
-                text: qsTranslate("main", "STR_NOTIFICATION_READ") + controler.autoTr
-                visible: listView_read.model.count > 0 && !hasMandatory
-                color: Constants.COLOR_GRAY
-                
-                anchors.top: listView.model.count > 0 ? listView.bottom : parent.top
-                anchors.topMargin: listView.model.count > 0 ? Constants.MARGIN_NOTIFICATION_CENTER * 2 : 0
+                        anchors.top: new_notification_title.bottom
+                        anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
 
-                font.bold: activeFocus
-                font.family: lato.name
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.capitalization: Font.MixedCase
+                        Keys.forwardTo: delegate
+                        onFocusChanged: currentIndex = 0
+                    }
+                }
 
-                Keys.enabled: true
-                KeyNavigation.tab: listView_read
-                KeyNavigation.down: listView_read
-                KeyNavigation.right: listView_read
-                KeyNavigation.backtab: new_notification_title.visible ? new_notification_title : popupTitle
-                KeyNavigation.up: new_notification_title.visible ? new_notification_title : popupTitle
+                Item {
+                    id: container_read_notif
+                    height: container_read_notif.visible ? childrenRect.height : 0
+                    width: parent.width
 
-                Accessible.role: Accessible.StaticText
-                Accessible.name: text
-            }
+                    visible: !hasMandatory
 
-            ListView {
-                id: listView_read
-                width: listView.width
-                height: childrenRect.height 
-                clip: true
-                model: model_read
-                delegate: delegate
-                focus: true
-                spacing: 6
-                interactive: false
+                    anchors.top: listView.model.count > 0 ? container_new_notif.bottom : parent.top
+                    anchors.topMargin: visible && listView.model.count > 0 ? Constants.MARGIN_NOTIFICATION_CENTER * 2 : 0
 
-                anchors.top: read_notification_title.bottom
-                anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
+                    Text {
+                        id: read_notification_title
+                        text: qsTranslate("main", "STR_NOTIFICATION_READ") + controler.autoTr
+                        color: Constants.COLOR_GRAY
 
-                Keys.forwardTo: delegate
+                        font.bold: activeFocus
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
 
-                onFocusChanged: currentIndex = 0
+                        Keys.enabled: true
+                        KeyNavigation.tab: listView_read
+                        KeyNavigation.down: listView_read
+                        KeyNavigation.right: listView_read
+                        KeyNavigation.backtab: new_notification_title.visible ? new_notification_title : popupTitle
+                        KeyNavigation.up: new_notification_title.visible ? new_notification_title : popupTitle
+
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: text
+                    }
+
+                    ListView {
+                        id: listView_read
+                        width: listView.width
+                        height: childrenRect.height
+                        clip: true
+                        model: model_read
+                        delegate: delegate
+                        focus: true
+                        spacing: 6
+                        interactive: false
+
+                        anchors.top: read_notification_title.bottom
+                        anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
+
+                        Keys.forwardTo: delegate
+                        onFocusChanged: currentIndex = 0
+                    }
+                }
             }
         }
 
