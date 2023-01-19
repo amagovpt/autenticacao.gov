@@ -498,7 +498,7 @@ Item {
 
             ScrollBar.vertical: ScrollBar {
                 id: viewScroll
-                active: true
+                visible: notificationArea.height < notificationArea.contentHeight
                 policy: ScrollBar.AsNeeded
             }
 
