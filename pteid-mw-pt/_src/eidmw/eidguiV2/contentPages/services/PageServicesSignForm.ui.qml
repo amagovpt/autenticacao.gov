@@ -888,6 +888,7 @@ Item {
                                 x: 5
                                 text: qsTranslate("PageServicesSign",
                                                   "STR_SIGN_ADD_ATTRIBUTES")
+                                checked: false
                                 enabled: fileLoaded && propertyRadioButtonPADES.checked
                                 font.family: lato.name
                                 font.bold: activeFocus

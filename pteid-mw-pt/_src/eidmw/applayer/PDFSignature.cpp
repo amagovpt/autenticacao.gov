@@ -798,6 +798,13 @@ namespace eIDMW
 		m_ca_certificates = certificateCAS;
     }
 
+    char * PDFSignature::getCitizenCertificateID() {
+        if (m_isExternalCertificate) {
+            parseCitizenDataFromCert(m_externCertificate);
+        }
+        return m_document_number;
+    }
+
     /* Hash */
     CByteArray PDFSignature::getHash() {
         return m_hash;

@@ -24,13 +24,13 @@
 namespace eIDMW 
 {
 
-EIDMW_CMN_API struct WrapParams {
+struct WrapParams {
     unsigned int font_size;
     unsigned int available_lines;
     double first_line_offset;
 };
 
-EIDMW_CMN_API struct FontParams {
+struct FontParams {
     unsigned int font_size;
     unsigned int line_height;
 };

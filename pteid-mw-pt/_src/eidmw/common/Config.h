@@ -155,6 +155,8 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_SCAP_HOST     L"scap_host"
 #define EIDMW_CNF_GENERAL_SCAP_PORT     L"scap_port"
 #define EIDMW_CNF_GENERAL_SCAP_APIKEY   L"scap_apikey"
+#define EIDMW_CNF_GENERAL_SCAP_USERID   L"scap_userid"
+#define EIDMW_CNF_GENERAL_SCAP_PASSWORD L"scap_password"
 #define EIDMW_CNF_GENERAL_SCAP_APPID    L"scap_appid"
 #define EIDMW_CNF_GENERAL_CMD_HOST      L"cmd_host"
 #define EIDMW_CNF_GENERAL_CMD_APPID     L"cmd_appid"
@@ -303,6 +305,8 @@ public:
 
 	static void           SetString(tLocation location, const struct Param_Str param, const std::wstring &csValue);
     static void           SetString(tLocation location, const std::wstring &csName, const std::wstring &czSection, const std::wstring &csValue);
+    static unsigned int   CountKeysByPrefix(tLocation location, const struct Param_Str param);
+    static unsigned int   CountKeysByPrefix(tLocation location, const std::wstring &csName, const std::wstring &czSection);
     static void           DeleteKeysByPrefix(tLocation location, const struct Param_Str param);
 	static void           DeleteKeysByPrefix(tLocation location, const std::wstring &csName, const std::wstring &czSection);
     static void           SetLong(  tLocation location, const struct Param_Num param, long lValue);
@@ -339,6 +343,8 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_PORT;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_APIKEY;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_APPID;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_USERID;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_PASSWORD;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CMD_APPID;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CMD_USERID;

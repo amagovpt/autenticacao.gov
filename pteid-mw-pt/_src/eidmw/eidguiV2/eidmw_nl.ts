@@ -178,7 +178,7 @@
     </message>
     <message>
         <source>STR_SIGN_FILE_PERMISSION_FAIL</source>
-        <translation>Falha ao assinar o ficheiro, verifique se ficheiro resultante não está aberto em outro programa ou se tem permissões para escrita</translation>
+        <translation>Falha ao assinar o ficheiro, verifique se o ficheiro resultante não está aberto em outro programa ou se tem permissões para escrita</translation>
     </message>
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
@@ -1153,7 +1153,7 @@
     </message>
     <message>
         <source>STR_ROOT_CA_CERT_INSTALL_DESC</source>
-        <translation>Algumas aplicações requerem a instalação do certificado raíz da nova cadeia de certificados para gerarem ou validarem assinaturas corretamente.</translation>
+        <translation>Algumas aplicações requerem a instalação do certificado raiz da nova cadeia de certificados para gerarem ou validarem assinaturas corretamente.</translation>
     </message>
     <message>
         <source>STR_CERT_ALREADY_INSTALLED</source>
@@ -1260,11 +1260,11 @@
     </message>
     <message>
         <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST</source>
-        <translation>Não tem atributos profissionais na entidade</translation>
+        <translation>Não tem atributos profissionais nas entidades:</translation>
     </message>
     <message>
         <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND</source>
-        <translation>Para mais informações, por favor contacte a entidade</translation>
+        <translation>Para mais informações, por favor contacte as entidades.</translation>
     </message>
     <message>
         <source>STR_SCAP_SERVICE_FAIL_FIRST</source>
@@ -1312,7 +1312,7 @@
     </message>
     <message>
         <source>STR_SCAP_ATTRIBUTES_ENTITIES_MSG</source>
-        <translation>Escolha as entidades para as quais pretende carregar os atributos profissionais. Atributos carregados previamente serão apagados.</translation>
+        <translation>Escolha as entidades para as quais pretende carregar os atributos profissionais.</translation>
     </message>
     <message>
         <source>STR_BACK_TO_SIGNATURE_PAGE</source>
@@ -1333,7 +1333,19 @@
     </message>
     <message>
         <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
-        <translation>Lista das entidades para a qual tem atributos empresariais</translation>
+        <translation>Lista das entidades para as quais tem atributos empresariais.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_INCOMPLETE_RESPONSE_FIRST</source>
+        <translation>Não foi possível carregar os atributos profissionais para as seguintes entidades:</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_BAD_CREDENTIALS</source>
+        <translation>A aplicação instalada não possui suporte para o serviço do Sistema de Certificação de Atributos Profissionais.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_LEGACY_CACHE</source>
+        <translation>Foram detectados e removidos atributos profissionais em cache criados por uma versão anterior da aplicação. Por favor, recarregue os seus atributos.</translation>
     </message>
 </context>
 <context>
@@ -1940,7 +1952,7 @@
     </message>
     <message>
         <source>STR_SIGN_FILE_PERMISSION_FAIL</source>
-        <translation>Falha ao assinar o ficheiro, verifique se ficheiro resultante não está aberto em outro programa ou se tem permissões para escrita</translation>
+        <translation>Falha ao assinar o ficheiro, verifique se o ficheiro resultante não está aberto em outro programa ou se tem permissões para escrita</translation>
     </message>
     <message>
         <source>STR_SIGN_GENERIC_ERROR</source>
@@ -2208,6 +2220,10 @@
     <message>
         <source>STR_FILE_ASIC</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>STR_SCAP_ERROR</source>
+        <translation>Erro</translation>
     </message>
 </context>
 <context>

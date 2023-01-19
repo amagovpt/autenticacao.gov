@@ -1222,7 +1222,7 @@
     </message>
     <message>
         <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
-        <translation>Do not have business attributes. To associate new attributes, please go to</translation>
+        <translation>You have no business attributes. To associate new attributes, please go to</translation>
     </message>
     <message>
         <source>STR_WARNING</source>
@@ -1254,11 +1254,11 @@
     </message>
     <message>
         <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST</source>
-        <translation>Has no professional attributes in the entity</translation>
+        <translation>You have no professional attributes in these entities:</translation>
     </message>
     <message>
         <source>STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND</source>
-        <translation>For more information, please contact the entity</translation>
+        <translation>For more information, please contact the entities.</translation>
     </message>
     <message>
         <source>STR_SCAP_SERVICE_FAIL_FIRST</source>
@@ -1306,7 +1306,7 @@
     </message>
     <message>
         <source>STR_SCAP_ATTRIBUTES_ENTITIES_MSG</source>
-        <translation>Choose the entities for which you want to load the professional attributes. Attributes previously loaded will be deleted.</translation>
+        <translation>Choose the entities for which you want to load the professional attributes.</translation>
     </message>
     <message>
         <source>STR_BACK_TO_SIGNATURE_PAGE</source>
@@ -1327,7 +1327,19 @@
     </message>
     <message>
         <source>STR_SCAP_ATTRIBUTES_COMPANY_MSG</source>
-        <translation>List of entities for which you have business attributes</translation>
+        <translation>List of entities for which you have business attributes.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_INCOMPLETE_RESPONSE_FIRST</source>
+        <translation>It was not possible to load professional attributes for the following entitites:</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_BAD_CREDENTIALS</source>
+        <translation>The installed application does not have support for the professional attributes certification system (SCAP).</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_LEGACY_CACHE</source>
+        <translation>There were professional attributes in cache, created by an outdated version of the application, which have been cleared. Please reload your attributes.</translation>
     </message>
 </context>
 <context>
@@ -2202,6 +2214,10 @@
     <message>
         <source>STR_FILE_ASIC</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>STR_SCAP_ERROR</source>
+        <translation>Error</translation>
     </message>
 </context>
 <context>

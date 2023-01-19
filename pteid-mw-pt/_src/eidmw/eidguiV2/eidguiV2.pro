@@ -17,23 +17,9 @@ QMAKE_CXXFLAGS += -fvisibility=hidden
 SOURCES += main.cpp \
     appcontroller.cpp \
     gapi.cpp \
-    SCAP-services-v3/SCAPAttributeClientServiceBindingProxy.cpp \
-    SCAP-services-v3/SCAPAttributeSupplierBindingProxy.cpp \
-    SCAP-services-v3/SCAPAuthorizationServiceSoapBindingProxy.cpp \
-    SCAP-services-v3/SCAPC.cpp \
-    SCAP-services-v3/SCAPSignatureServiceSoapBindingProxy.cpp \
     autoUpdates.cpp \
-    pdfsignatureclient.cpp \
-    ErrorConn.cpp \
-    stdsoap2.cpp \
-    scapsignature.cpp \
-    scapcompanies.cpp \
     certificates.cpp \
-    totp_gen.cpp \
     singleapplication.cpp \
-    cJSON_1_7_12.c \
-    AttributeFactory.cpp \
-    OAuthAttributes.cpp \
     concurrent.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
@@ -42,6 +28,7 @@ INCLUDEPATH += ../applayer
 INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
 INCLUDEPATH += ../eidlib
+INCLUDEPATH += ../scap
 INCLUDEPATH += ../_Builds
 
 #Don't mess up the source folder with generated files
@@ -53,15 +40,19 @@ macx: INCLUDEPATH += $$DEPS_DIR/openssl/include
 macx: INCLUDEPATH += $$DEPS_DIR/poppler/include/poppler/qt5/
 macx: INCLUDEPATH += $$DEPS_DIR/libcurl/include
 macx: INCLUDEPATH += $$DEPS_DIR/libzip/include
+macx: INCLUDEPATH += $$DEPS_DIR/cJSON-1.7.15/include
 macx: LIBS += -L$$DEPS_DIR/openssl/lib/
 macx: LIBS += -L$$DEPS_DIR/poppler/lib/
 macx: LIBS += -L$$DEPS_DIR/libcurl/lib/
 macx: LIBS += -L$$DEPS_DIR/libzip/lib/
-macx: LIBS += -Wl,-framework -Wl,Security
+macx: LIBS += -L$$DEPS_DIR/cJSON-1.7.15/lib/
+macx: LIBS += -Wl,-framework -Wl,CoreFoundation -Wl,-framework -Wl,Security
 
 unix:!macx: LIBS += -Wl,-rpath-link,../lib
-LIBS += -L../lib -lpteidcommon -lpteidapplayer -lpteidlib  \
-        -lssl -lcrypto -lpoppler-qt5 -lCMDServices -lcurl -lzip
+
+#pteid-scap needs to be before its dependencies here
+LIBS += -L../lib -lpteidscap -lpteidcommon -lpteidapplayer -lpteidlib  \
+        -lssl -lcrypto -lpoppler-qt5 -lCMDServices -lcurl -lzip -lcjson
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -150,13 +141,9 @@ HEADERS += \
     appcontroller.h \
     gapi.h \
     autoUpdates.h \
-    scapsignature.h \
     Settings.h \
     certificates.h \
     singleapplication.h \
     singleapplication_p.h \
-    cJSON_1_7_12.h \
-    AttributeFactory.h \
-    OAuthAttributes.h \
     concurrent.h \
     eidguiV2Credentials.h

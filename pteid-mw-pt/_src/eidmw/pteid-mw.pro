@@ -25,10 +25,7 @@ SUBDIRS +=	pkcs11/pkcs11.pro \
 
 applayer.depends = pteid-poppler		
 
-#Uncomment to build the V2-specific projects
-#SUBDIRS += eidgui
-#SUBDIRS += scap-client-v2
-
+SUBDIRS += scap
 SUBDIRS += eidguiV2
 
 macx:SUBDIRS += pteid-ctk

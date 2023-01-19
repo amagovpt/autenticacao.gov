@@ -226,6 +226,8 @@ public:
 				// DeleteKeysByPrefix: Deletes keys with some prefix from a specific section
 	size_t		DeleteKeysByPrefix(t_Str szKey, t_Str szFromSection = t_Str(L""));
 
+	size_t		CountKeysByPrefix(t_Str szKey, t_Str szFromSection = t_Str(L""));
+
 				// DeleteSection: Deletes a given section.
 	bool		DeleteSection(t_Str szSection);
 				

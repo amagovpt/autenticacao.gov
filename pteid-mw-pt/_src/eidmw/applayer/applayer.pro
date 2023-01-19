@@ -95,16 +95,17 @@ HEADERS += \
 	SecurityContext.h  \
 	APLPublicKey.h \
 	SigContainer.h \
-	ScapSSLConnection.h \
 	XadesSignature.h \
 	TSAClient.h \
 	SODParser.h \ 
 	cJSON.h \
 	SSLConnection.h \
+	SSLConnectionLegacy.h \
 	PNGConverter.h \
 	PAdESExtender.h \
 	J2KHelper.h \
 	PDFSignature.h \
+	CurlUtil.h \
 	proxyinfo.h
 
 SOURCES += \
@@ -126,12 +127,12 @@ SOURCES += \
 	PhotoPteid.cpp \
 	APLPublicKey.cpp \
 	SigContainer.cpp \
-	ScapSSLConnection.cpp \
 	XadesSignature.cpp \
 	RemoteAddress.cpp  \
 	RemoteAddressRequest.cpp \
 	SODParser.cpp \
 	SSLConnection.cpp \
+	SSLConnectionLegacy.cpp \
 	TSAClient.cpp \
 	SecurityContext.cpp \
 	sign-pkcs7.cpp \
@@ -144,6 +145,7 @@ SOURCES += \
 	SAM.cpp \
 	PNGConverter.cpp \
 	J2KHelper.cpp \
+	CurlUtil.cpp \
 	proxyinfo.cpp
 
 # Disable annoying and mostly useless gcc warning and add hidden visibility for non-exposed classes and functions

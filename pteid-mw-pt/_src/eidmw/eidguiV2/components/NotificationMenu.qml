@@ -24,7 +24,7 @@ Item {
     anchors.fill: parent
 
     property bool reload: false
-    property bool hasMandatory: false
+    property bool hasMandatory: hasMandatoryItem(model_recent)
     property alias popupTitle: title
 
     Popup {
@@ -136,7 +136,7 @@ Item {
                     CheckBox {
                         id: activatedCache
                         text: qsTranslate("main","STR_SET_CACHE_YES")
-                        checked: false
+                        checked: model.checkbox_value == 2
                         onClicked: deactivatedCache.checked = false
 
                         anchors.top: definitions_cache.description.bottom
@@ -157,7 +157,7 @@ Item {
                     CheckBox {
                         id: deactivatedCache
                         text: qsTranslate("main","STR_SET_CACHE_NO")
-                        checked: false
+                        checked: model.checkbox_value == 1
                         onClicked: activatedCache.checked = false
 
                         anchors.top: activatedCache.bottom
@@ -294,7 +294,7 @@ Item {
                     CheckBox {
                         id: activatedTelemetry
                         text: qsTranslate("main","STR_SET_TELEMETRY_YES")
-                        checked: false
+                        checked: model.checkbox_value == 2
                         onClicked: deactivatedTelemetry.checked = false
 
                         anchors.top: terms.bottom
@@ -315,7 +315,7 @@ Item {
                     CheckBox {
                         id: deactivatedTelemetry
                         text: qsTranslate("main","STR_SET_TELEMETRY_NO")
-                        checked: false
+                        checked: model.checkbox_value == 1
                         onClicked: activatedTelemetry.checked = false
 
                         anchors.top: activatedTelemetry.bottom
@@ -463,7 +463,7 @@ Item {
 
         Image {
             id: exitIcon
-            visible: true
+            visible: !hasMandatory
             width: Constants.SIZE_IMAGE_BOTTOM_MENU 
             height: Constants.SIZE_IMAGE_BOTTOM_MENU 
             fillMode: Image.PreserveAspectFit
@@ -480,6 +480,7 @@ Item {
 
         MouseArea {
             id: exitArea
+            enabled: !hasMandatory
             anchors.fill: exitIcon
             hoverEnabled: true
             onClicked: close()
@@ -656,6 +657,7 @@ Item {
                 "read": news_list[index]["read"],
                 "category": "news",
                 "priority": 0,
+                "checkbox_value": 0,
                 "activated": false,
                 "mandatory": false
             })
@@ -674,6 +676,7 @@ Item {
             "category": "definitions_cmd",
             "read": read,
             "priority": 2,
+            "checkbox_value": 0,
             "activated": false,
             "mandatory": false
         })
@@ -695,13 +698,11 @@ Item {
             "category": "definitions_cache",
             "read": false,
             "priority": 3,
+            "checkbox_value": 0,
             "activated": true,
             "mandatory": true
         })
 
-        hasMandatory = true
-        exitIcon.visible = false
-        exitArea.enabled = false
         notificationArea.interactive = true
         mainFormID.propertyNotificationMenu.open()
     }
@@ -714,23 +715,21 @@ Item {
             "category": "definitions_telemetry",
             "read": false,
             "priority": 4,
+            "checkbox_value": 0,
             "activated": true,
             "mandatory": true
         })
 
-        hasMandatory = true
-        exitIcon.visible = false
-        exitArea.enabled = false
         notificationArea.interactive = true
         mainFormID.propertyNotificationMenu.open()
     }
 
     function setCacheSettings(index, model, activatedCache) {
         model.mandatory = false
-        hasMandatory = false
-        exitIcon.visible = true
-        exitArea.enabled = true
         notificationArea.interactive = true
+        //Save which checkbox is selected in the model
+        var model_item = model_recent.get(index)
+        model_item.checkbox_value = activatedCache ? 2 : 1
 
         openNotification(index, model.read, model.activated)
         controler.setAskToSetCacheValue(false)
@@ -741,15 +740,15 @@ Item {
         else {
             controler.setEnablePteidCache(false);
             controler.flushCache();
-        }     
+        }
     }
 
     function setTelemetrySettings(index, model, activatedTelemetry) {
         model.mandatory = false
-        hasMandatory = false
-        exitIcon.visible = true
-        exitArea.enabled = true
         notificationArea.interactive = true
+        //Save which checkbox is selected in the model
+        var model_item = model_recent.get(index)
+        model_item.checkbox_value = activatedTelemetry ? 2 : 1
 
         openNotification(index, model.read, model.activated)
         controler.setAskToSetTelemetryValue(false)
@@ -883,6 +882,13 @@ Item {
             default:
                 return null
         }
+    }
+
+    function hasMandatoryItem(model) {
+        for (var i = 0; i < model.count; ++i) {
+            if (model.get(i).mandatory) return true;
+        }
+        return false;
     }
 
     function clearModels() {

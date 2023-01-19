@@ -1053,23 +1053,9 @@ class PTEID_PDFSignature
 	friend class PTEID_Card;
 };
 
-
-//Fwd declaration
-class ScapSSLConnection;
-
-class PTEID_ScapConnection
-{
-	public:
-		PTEIDSDK_API PTEID_ScapConnection(PTEID_EIDCard *card, char *host, char *port);
-		PTEIDSDK_API ~PTEID_ScapConnection();
-		PTEIDSDK_API char *postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
-
-	private:
-		ScapSSLConnection *m_connection;
-};
-
 class SecurityContext;
 
+class SSLConnection;
 
 /******************************************************************************//**
   * This class represents a Portugal EID card.
@@ -1094,9 +1080,10 @@ public:
 	PTEIDSDK_API bool isActive();
 	PTEIDSDK_API void doSODCheck(bool check);			/**< Enable/disable the verification of ID and address data against the SOD file */
 
-	#if !defined SWIG
+	
 
-  ScapSSLConnection * buildScapSSLConnection(char *host, char *port);
+	#if !defined SWIG
+	PTEIDSDK_API SSLConnection *buildSSLConnection();
 
 	#endif
 
@@ -1848,6 +1835,7 @@ public:
 
     PTEIDSDK_API void setString(const char *csValue);	/**< Set the string value (Throw exception for numerical parameter) */
     PTEIDSDK_API void DeleteKeysByPrefix();  	/**< Reset the strings with some prefix (Throw exception for numerical parameter) */
+    PTEIDSDK_API unsigned int CountKeysByPrefix();  	/**< Count keys with some prefix */
 	PTEIDSDK_API void setLong(long lValue);				/**< Set the numerical value (Throw exception for string parameter) */
     PTEIDSDK_API static void SetTestMode(bool bTestMode);				/**< Set the test mode */
 

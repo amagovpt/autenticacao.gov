@@ -750,6 +750,29 @@ size_t CDataFile::DeleteKeysByPrefix(t_Str szKey, t_Str szFromSection)
     return nCounter;
 }
 
+// Returns the number of keys with some prefix in a specific section.
+size_t CDataFile::CountKeysByPrefix(t_Str szKey, t_Str szFromSection)
+{
+    if(!LoadAndLock())
+        return false;
+
+    KeyItor k_pos;
+    t_Section* pSection;
+    size_t nCounter = 0;
+
+    if ( (pSection = GetSection(szFromSection)) == NULL )
+        return false;
+
+    for (k_pos = pSection->Keys.begin(); k_pos < pSection->Keys.end(); k_pos++)
+    {
+        if ( (*k_pos).szKey.size() != 0 && CompareNoCaseN( (*k_pos).szKey, szKey, szKey.length() ) == 0 )
+        {
+            nCounter++;
+        }
+    }
+    return nCounter;
+}
+
 // CreateKey
 // Given a key, a value and a section, this function will attempt to locate the
 // Key within the given section, and if it finds it, change the keys value to

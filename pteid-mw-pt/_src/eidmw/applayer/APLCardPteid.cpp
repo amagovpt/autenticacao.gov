@@ -37,7 +37,7 @@
 #include "MWException.h"
 #include "CardLayer.h"
 #include "MiscUtil.h"
-#include "SSLConnection.h"
+#include "SSLConnectionLegacy.h"
 #include "SAM.h"
 #include "StringOps.h"
 #include "APLConfig.h"
@@ -289,8 +289,7 @@ void APL_EIDCard::ChangeAddress(char *secret_code, char *process, t_callback_add
 	}
 	//Init the thread-local variable to be able to access the card in the OpenSSL callback
 	setThreadLocalCardInstance(this);
-
-	SSLConnection conn;
+	SSLConnectionLegacy conn;
 
 	conn.InitSAMConnection();
 

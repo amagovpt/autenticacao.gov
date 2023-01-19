@@ -17,12 +17,12 @@
 #include <QMap>
 #include <QUrl>
 #include "Settings.h"
-#include "ScapSettings.h"
+#include "scapsettings.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
 #include <QNetworkReply>
-#include "cJSON_1_7_12.h"
+#include <cjson/cJSON.h>
 
 //MW libraries
 #include "eidlib.h"

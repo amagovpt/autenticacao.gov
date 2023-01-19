@@ -38,25 +38,7 @@
     <ClCompile Include="appcontroller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ErrorConn.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pdfsignatureclient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scapcompanies.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scapsignature.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="autoUpdates.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stdsoap2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="totp_gen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="certificates.cpp">
@@ -80,39 +62,12 @@
     <ClCompile Include="GeneratedFiles\Release\moc_singleapplication_p.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="SCAP-services-v3\SCAPAttributeSupplierBindingProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SCAP-services-v3\SCAPC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SCAP-services-v3\SCAPSignatureServiceSoapBindingProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SCAP-services-v3\SCAPAuthorizationServiceSoapBindingProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cJSON_1_7_12.c">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AttributeFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OAuthAttributes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="concurrent.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="release\qrc_resources.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cJSON_1_7_12.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -246,8 +201,6 @@
     <None Include="contentPages\definitions\PageDefinitionsSCAPForm.ui.qml" />
     <None Include="contentPages\definitions\PageDefinitionsDataForm.ui.qml" />
     <None Include="contentPages\definitions\PageDefinitionsData.qml" />
-    <None Include="contentPages\services\PageServicesSignHelp.qml" />
-    <None Include="contentPages\services\PageServicesSignHelpForm.ui.qml" />
     <None Include="contentPages\help\PageHelpAccessibility.qml" />
     <None Include="contentPages\help\PageHelpAccessibilityForm.ui.qml" />
     <None Include="components\TextRow.qml" />
@@ -285,21 +238,6 @@
     <ResourceCompile Include="eidguiV2.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SCAP-services-v3\SCAPAttributeClientServiceBindingProxy.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cJSON_1_7_12.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cJSON_1_7_12.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OAuthAttributes.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AttributeFactory.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="concurrent.h">
       <Filter>Generated Files</Filter>
     </ClInclude>

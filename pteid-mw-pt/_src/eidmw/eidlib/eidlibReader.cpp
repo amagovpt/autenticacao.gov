@@ -985,6 +985,20 @@ void PTEID_Config::DeleteKeysByPrefix()
 	}
 }
 
+unsigned int PTEID_Config::CountKeysByPrefix()
+{
+	try
+	{
+		APL_Config *pimpl=static_cast<APL_Config *>(m_impl);
+
+		return pimpl->CountKeysByPrefix(false);
+	}
+	catch(CMWException &e)
+	{
+		throw PTEID_Exception::THROWException(e);
+	}
+}
+
 void PTEID_Config::setLong(long lValue)
 {
 	try

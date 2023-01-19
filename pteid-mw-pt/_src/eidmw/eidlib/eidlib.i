@@ -42,7 +42,6 @@
 
 
 %newobject eIDMW::PTEID_PDFSignature::getOccupiedSectors(int page);
-%newobject eIDMW::PTEID_ScapConnection::postSoapRequest(char *endpoint, char *soapAction, char *soapBody);
 
 %{
 #include "eidlib.h"

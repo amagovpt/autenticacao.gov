@@ -39,7 +39,7 @@
 #include "PhotoPteid.h"
 #include "ByteArray.h"
 #include "CardPteid.h"
-#include "ScapSSLConnection.h"
+#include "SSLConnection.h"
 #include "PDFSignature.h"
 #include "SecurityContext.h"
 #include "dialogs.h"
@@ -320,26 +320,9 @@ int PTEID_Card::SignPDF(PTEID_PDFSignature &sig_handler, int page, double coord_
 
 }
 
-ScapSSLConnection * PTEID_EIDCard::buildScapSSLConnection(char *host, char *port) {
+SSLConnection *PTEID_EIDCard::buildSSLConnection() {
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
-
-	return new ScapSSLConnection(pcard, host, port);
-
-}
-
-PTEID_ScapConnection::PTEID_ScapConnection(PTEID_EIDCard *card, char *host, char *port)
-{
-	m_connection = card->buildScapSSLConnection(host, port);
-}
-
-PTEID_ScapConnection::~PTEID_ScapConnection()
-{
-	delete m_connection;
-}
-
-char * PTEID_ScapConnection::postSoapRequest(char *endpoint, char *soapAction, char *soapBody)
-{
-	return m_connection->postSoapRequest(endpoint, soapAction, soapBody);
+	return new SSLConnection(pcard);
 }
 
 PTEID_PDFSignature::PTEID_PDFSignature()

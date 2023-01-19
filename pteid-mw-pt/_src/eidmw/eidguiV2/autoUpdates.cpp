@@ -256,7 +256,7 @@ time_t getTimeFromString(std::string stringTime){
         month = std::stoi(splitTime.at(1));
         day = std::stoi(splitTime.at(2));
     }
-    catch (const std::invalid_argument &ex) {
+    catch (const std::invalid_argument &) {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                 "Error parsing news.json: bad date format (expected YYYY-MM-DD) - bad year, month or day");
         return 0;
@@ -388,7 +388,7 @@ void AutoUpdates::parseNews(std::string data){
         try{
             newsEntry.id = std::stoi(new_jsonID->valuestring);
         }
-        catch (const std::invalid_argument &ex) {
+        catch (const std::invalid_argument &) {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                  "Error parsing news.json: bad id. (expected 'id':'n', n being an integer)");
             return;
@@ -1059,7 +1059,6 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
 #endif
 
     bool bUpdateCertsSuccess = false;
-    bool bHaveFilesToCopy = false;
 
 #ifdef WIN32
     certs_dir_str.append("\\");
@@ -1121,6 +1120,7 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
 
 #else
     QString filesToCopy;
+	bool bHaveFilesToCopy = false;
     if (certs.length() > 0){
         bUpdateCertsSuccess = true;
         for (int i = 0; i < certs.length(); i++){

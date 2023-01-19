@@ -4,7 +4,7 @@
  * Copyright (C) 2017-2019 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
- * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
+ * Copyright (C) 2019-2022 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -29,10 +29,13 @@
 #include "SigContainer.h"
 
 //SCAP
-#include "scapsignature.h"
-#include "SCAP-services-v3/SCAPH.h"
+#include "scapsettings.h"
+#include "scapclient.h"
+#include "scaperrors.h"
+#include "scapcache.h"
+#include "pdfsignatureutils.h"
 
-#include "ScapSettings.h"
+#include "stdsoap2.h"
 #include "credentials.h"
 #include "eidguiV2Credentials.h"
 #include "Config.h"
@@ -214,6 +217,18 @@ void GAPI::updateTelemetry(TelemetryAction action)
         Concurrent::run(this, &GAPI::doUpdateTelemetry, action);
 }
 
+static std::string get_scap_app_id() {
+    PTEID_Config app_id_config(PTEID_PARAM_GENERAL_SCAP_APPID);
+    std::string appid = app_id_config.getString();
+
+    if (appid.empty()) {
+        appid = QUuid::createUuid().toString(QUuid::WithoutBraces).toStdString();
+        app_id_config.setString(appid.c_str());
+    }
+
+    return appid;
+}
+
 GAPI::GAPI(QObject *parent) :
     QObject(parent) {
     image_provider = new PhotoImageProvider();
@@ -246,6 +261,9 @@ GAPI::GAPI(QObject *parent) :
     m_timerReaderList = new QTimer(this);
     connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
     m_timerReaderList->start(TIMERREADERLIST);
+
+    ScapCredentials scap_credentials = {SCAP_BASIC_AUTH_USERID, SCAP_BASIC_AUTH_PASSWORD, get_scap_app_id()};
+    m_scap_client = new ScapClient(scap_credentials);
 }
 
 void GAPI::initTranslation() {
@@ -888,27 +906,6 @@ void GAPI::showSignCMDDialog(long error_code)
     case 0:
         message = tr("STR_CMD_SUCESS");
         break;
-    case SCAP_GENERIC_ERROR_CODE:
-        message = tr("STR_SCAP_SIGNATURE_ERROR");
-        break;
-    case SCAP_CLOCK_ERROR_CODE:
-        message = tr("STR_SCAP_CLOCK_ERROR");
-        break;
-    case SCAP_SECRETKEY_ERROR_CODE:
-        message = tr("STR_SCAP_SECRETKEY_ERROR");
-        break;
-    case SCAP_ATTR_POSSIBLY_EXPIRED_WARNING:
-        message = tr("STR_SCAP_SIGNATURE_ERROR") + "<br>" + tr("STR_SCAP_CHECK_EXPIRED_ATTR");
-        break;
-    case SCAP_ATTRIBUTES_EXPIRED:
-        message = tr("STR_SCAP_NOT_VALID_ATTRIBUTES");
-        break;
-    case SCAP_ZERO_ATTRIBUTES:
-        message = tr("STR_SCAP_NOT_VALID_ATTRIBUTES");
-        break;
-    case SCAP_ATTRIBUTES_NOT_VALID:
-        message = tr("STR_SCAP_NOT_VALID_ATTRIBUTES");
-        break;
     case SOAP_EOF:
         message = tr("STR_CMD_TIMEOUT_ERROR");
         break;
@@ -957,18 +954,6 @@ void GAPI::showSignCMDDialog(long error_code)
         // If there is error show message screen
         if (error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
             signalUpdateProgressStatus(message);
-        }
-        else if (error_code == SCAP_SECRETKEY_ERROR_CODE
-                 || error_code == SCAP_ATTRIBUTES_EXPIRED
-                 || error_code == SCAP_ZERO_ATTRIBUTES
-                 || error_code == SCAP_ATTRIBUTES_NOT_VALID
-                 || error_code == SCAP_ATTR_POSSIBLY_EXPIRED_WARNING){
-            signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "! " + message);
-            signalShowLoadAttrButton();
-        }
-        else if (error_code == SCAP_CLOCK_ERROR_CODE){
-            signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
-            signalShowMessage(message,"");
         } else {
             message += "<br><br>" + support_string;
             signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
@@ -989,6 +974,7 @@ void GAPI::showSignCMDDialog(long error_code)
             "Failed CMD signature - Returned error code: 0x%08x", error_code);
     }
 
+    emit signalSignatureFinished();
     qDebug() << "Show Sign CMD Dialog - Error code: " << error_code
              << "Message: " << message;
 }
@@ -1085,74 +1071,19 @@ void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams)
     }
     catch (PTEID_Exception &e) {
         ret = e.GetError();
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignCMD",
-            "Caught exception in PTEID_CMDSignatureClient::SignPDF. Error code: %08x", e.GetError());
+
+        if (ret == EIDMW_ERR_OP_CANCEL) {
+            emit signalCanceledSignature();
+        } else {
+            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignCMD",
+                "Caught exception in PTEID_CMDSignatureClient::SignPDF. Error code: %08x", e.GetError());
+        }
     }
 
     showSignCMDDialog(ret);
 
     if (ret == 0)
         updateTelemetry(TelemetryAction::SignCMD);
-}
-
-void GAPI::doSignSCAPWithCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams, QList<int> attribute_list) {
-    connect(this, SIGNAL(signCMDFinished(long)), this, SLOT(showSignCMDDialog(long)), Qt::UniqueConnection);
-
-    long ret = 0;
-
-    try {
-        PTEID_CMDSignatureClient * client = m_cmd_client;
-
-        const int page = signParams.page;
-        const double coord_x = signParams.coord_x;
-        const double coord_y = signParams.coord_y;
-        const std::string location = signParams.location.toStdString();
-        const std::string reason = signParams.reason.toStdString();
-        const std::string outputFile = signParams.outputFile.toStdString();
-
-        ret = client->SignPDF(pdf_signature, page, coord_x, coord_y, location.c_str(), reason.c_str(), outputFile.c_str());
-    }
-    catch (PTEID_Exception &e) {
-        ret = e.GetError();
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignSCAPWithCMD", "CMD Sign. Error code: %08x", ret);
-    }
-
-    // CMD signature success
-    if (ret == 0 || ret == EIDMW_TIMESTAMP_ERROR || ret == EIDMW_LTV_ERROR) {
-        //Do SCAP Signature
-        emit signalUpdateProgressStatus(tr("STR_CMD_SIGNING_SCAP"));
-
-        std::vector<int> attrs;
-        for (int attr: attribute_list) {
-            attrs.push_back(attr);
-        }
-
-        CmdSignedFileDetails cmd_details;
-        cmd_details.signedCMDFile = m_scap_params.inputPDF;
-        cmd_details.citizenName = pdf_signature.getCertificateCitizenName();
-        cmd_details.citizenId = pdf_signature.getCertificateCitizenID();
-
-        try {
-            int ret_scap = scapServices.executeSCAPWithCMDSignature(this, m_scap_params.outputPDF, m_scap_params.page,
-                m_scap_params.location_x, m_scap_params.location_y, m_scap_params.location, m_scap_params.reason,
-                m_scap_params.isTimestamp, m_scap_params.isLtv, attrs, cmd_details, useCustomSignature(),
-                m_jpeg_scaled_data, m_seal_width, m_seal_height);
-
-            if(ret_scap != GAPI::ScapSucess){
-                signalUpdateProgressBar(100);
-                return;
-            }
-        }
-        catch (PTEID_Exception &e) {
-            ret = e.GetError();
-            PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doCloseSignCMDWithSCAP",
-                "executeSCAPWithCMDSignature. Error code: %08x", ret);
-        }
-    }
-    signCMDFinished(ret);
-    signalUpdateProgressBar(100);
-
-    updateTelemetry(TelemetryAction::SignCMDScap);
 }
 
 void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
@@ -1208,65 +1139,6 @@ void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
     END_TRY_CATCH
 }
 
-QString generateTempFile() {
-    QTemporaryFile tempFile;
-
-    if (!tempFile.open()) {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "generateTempFile", "SCAP Signature error: Error creating temporary file");
-        return "";
-    }
-
-    return tempFile.fileName();
-}
-
-void GAPI::signScapWithCMD(QList<QString> loadedFilePaths, QString outputFile, QList<int> attribute_list,
-    int page, double coord_x, double coord_y, QString reason, QString location, bool isTimestamp, bool isLtv) {
-
-    //Final params for the SCAP signature (visible PDF signature params)  
-    m_scap_params.outputPDF = outputFile;
-    m_scap_params.inputPDF = generateTempFile();
-    m_scap_params.page = page;
-    m_scap_params.location_x = coord_x;
-    m_scap_params.location_y = coord_y;
-    m_scap_params.location = location;
-    m_scap_params.reason = reason;
-    m_scap_params.isTimestamp = isTimestamp;
-    m_scap_params.isLtv = isLtv;
-
-    SignParams signParams;
-
-    /* Invisible CMD signature: with SCAP only the last signature generated
-        by the actual SCAP system is visible */
-    signParams.loadedFilePaths = loadedFilePaths;
-    signParams.outputFile = m_scap_params.inputPDF;
-    signParams.page = 0;
-    signParams.coord_x = -1;
-    signParams.coord_y = -1;
-    signParams.location = location;
-    signParams.reason = reason;
-    signParams.isTimestamp = false;
-    signParams.isLtv = false;
-    signParams.isSmallSignature = 0;
-	//TODO: this pdf_signature is never destroyed, it should be built in doSignSCAPWithCMD() where it's actually used
-    PTEID_PDFSignature * pdf_signature = new PTEID_PDFSignature();
-
-    pdf_signature->setFileSigning((char *)getPlatformNativeString(loadedFilePaths.first()));
-
-	PTEID_SignatureLevel citizen_signature_level = isTimestamp ?
-		(isLtv ? PTEID_LEVEL_LT : PTEID_LEVEL_TIMESTAMP) : PTEID_LEVEL_BASIC;
-	pdf_signature->setSignatureLevel(citizen_signature_level);
-
-    pdf_signature->setCustomSealSize(m_seal_width, m_seal_height);
-
-    if (useCustomSignature()) {
-        const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()),
-                                        static_cast<unsigned long>(m_jpeg_scaled_data.size()));
-        pdf_signature->setCustomImage(const_cast<unsigned char *>(imageData.GetBytes()), imageData.Size());
-    }
-
-    Concurrent::run(this, &GAPI::doSignSCAPWithCMD, *pdf_signature, signParams, attribute_list);
-}
-
 void GAPI::signCMD(QList<QString> loadedFilePaths, QString outputFile, int page, double coord_x,
     double coord_y, QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall, bool isLastPage)
 {
@@ -1320,7 +1192,7 @@ QString GAPI::getCardActivation() {
 
     PTEID_EId &eid_file = card->getID();
 
-    PTEID_Certificates&	 certificates = card->getCertificates();
+    PTEID_Certificates&  certificates = card->getCertificates();
 
     int certificateStatus = PTEID_CERTIF_STATUS_UNKNOWN;
 
@@ -2473,119 +2345,8 @@ void GAPI::startGettingCompanyAttributes(bool useOauth) {
     Concurrent::run(this, &GAPI::getSCAPCompanyAttributes, useOauth);
 }
 
-void GAPI::startGettingEntityAttributes(QList<int> entities_index, bool useOAuth) {
-    Concurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_index, useOAuth);
-}
-
-void GAPI::startPingSCAP() {
-
-    // schedule the request
-    httpRequestAborted = httpRequestSuccess = false;
-
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Start Ping SCAP");
-
-    const char * as_endpoint = "/CCC-REST/rest/scap/pingSCAP";
-
-    // Get Endpoint from settings
-    ScapSettings settings;
-    std::string port = settings.getScapServerPort().toStdString();
-    std::string sup_endpoint = std::string("https://")
-        + settings.getScapServerHost().toStdString() + ":" + port + as_endpoint;
-
-    url = sup_endpoint.c_str();
-
-    eIDMW::PTEID_Config config_pacfile(eIDMW::PTEID_PARAM_PROXY_PACFILE);
-    const char * pacfile_url = config_pacfile.getString();
-
-    if (pacfile_url != NULL && strlen(pacfile_url) > 0)
-    {
-        m_pac_url = QString(pacfile_url);
-    }
-
-    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
-    eIDMW::PTEID_Config config_port(eIDMW::PTEID_PARAM_PROXY_PORT);
-    eIDMW::PTEID_Config config_username(eIDMW::PTEID_PARAM_PROXY_USERNAME);
-    eIDMW::PTEID_Config config_pwd(eIDMW::PTEID_PARAM_PROXY_PWD);
-
-    std::string proxy_host = config.getString();
-    std::string proxy_username = config_username.getString();
-    std::string proxy_pwd = config_pwd.getString();
-    long proxy_port = config_port.getLong();
-
-    //10 second timeout
-    int network_timeout = 10000;
-
-    proxy = QNetworkProxy();
-
-    if (!proxy_host.empty() && proxy_port != 0)
-    {
-        eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PingSCAP: using manual proxy config");
-        qDebug() << "C++: PingSCAP: using manual proxy config";
-        proxy.setType(QNetworkProxy::HttpProxy);
-        proxy.setHostName(QString::fromStdString(proxy_host));
-        proxy.setPort(proxy_port);
-
-        if (!proxy_username.empty())
-        {
-            proxy.setUser(QString::fromStdString(proxy_username));
-            proxy.setPassword(QString::fromStdString(proxy_pwd));
-        }
-    }
-    else if (!m_pac_url.isEmpty())
-    {
-        std::string proxy_port_str;
-        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "PingSCAP: using system proxy config");
-        qDebug() << "C++: PingSCAP: using system proxy config";
-        PTEID_GetProxyFromPac(m_pac_url.toUtf8().constData(),
-            url.toString().toUtf8().constData(), &proxy_host, &proxy_port_str);
-        proxy.setType(QNetworkProxy::HttpProxy);
-        proxy.setHostName(QString::fromStdString(proxy_host));
-        proxy.setPort(atol(proxy_port_str.c_str()));
-    }
-    QNetworkProxy::setApplicationProxy(proxy);
-
-    reply = qnam.get(QNetworkRequest(url));
-
-    QTimer::singleShot(network_timeout, this, SLOT(cancelDownload()));
-    connect(reply, SIGNAL(finished()),
-        this, SLOT(httpFinished()));
-}
-
-void GAPI::cancelDownload()
-{
-    if (!httpRequestSuccess && !httpRequestAborted){
-        qDebug() << "C++: signalSCAPPingFail";
-        httpRequestAborted = true;
-        httpRequestSuccess = false;
-        emit signalSCAPPingFail();
-        reply->deleteLater();
-    }
-}
-
-void GAPI::httpFinished()
-{
-    qDebug() << "C++: httpFinished";
-    if (!httpRequestSuccess && !httpRequestAborted){
-
-        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute) != 200) {
-            qDebug() << "C++: reply error";
-            httpRequestAborted = true;
-            httpRequestSuccess = false;
-            emit signalSCAPPingFail();
-            QString strLog = QString("PingSCAP: HTTP request FAIL to: ");
-            strLog += reply->url().toString();
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature", strLog.toStdString().c_str());
-        } else {
-            qDebug() << "C++: signalSCAPPingSuccess";
-            QString strLog = QString("PingSCAP: HTTP request SUCCESS to: ");
-            strLog += reply->url().toString();
-            PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "ScapSignature", strLog.toStdString().c_str());
-            httpRequestAborted = false;
-            httpRequestSuccess = true;
-            emit signalSCAPPingSuccess();
-        }
-        reply->deleteLater();
-    }
+void GAPI::startGettingEntityAttributes(QList<QString> entities_names, bool useOAuth) {
+    Concurrent::run(this, &GAPI::getSCAPEntityAttributes, entities_names, useOAuth);
 }
 
 void GAPI::startReadingPersoNotes() {
@@ -2596,57 +2357,237 @@ void GAPI::startReadingAddress() {
     Concurrent::run(this, &GAPI::getAddressFile);
 }
 
-void GAPI::startLoadingAttributesFromCache(int scapAttrType, bool isShortDescription) {
-    Concurrent::run(this, &GAPI::getSCAPAttributesFromCache, scapAttrType, isShortDescription);
+void GAPI::startLoadingAttributesFromCache(bool showSubAttributes) {
+    Concurrent::run(this, &GAPI::getSCAPAttributesFromCache, showSubAttributes);
 }
 
-void GAPI::startRemovingAttributesFromCache(int scapAttrType) {
-    Concurrent::run(this, &GAPI::removeSCAPAttributesFromCache, scapAttrType);
+void GAPI::startRemovingAttributesFromCache() {
+    Concurrent::run(this, &GAPI::removeSCAPAttributesFromCache);
 }
 
-void GAPI::startSigningSCAP(QString inputPDF, QString outputPDF, int page, double location_x,
-    double location_y, QString location, QString reason, bool isTimestamp, bool isLtv,  QList<int> attribute_index) {
+void GAPI::startSigningSCAP(QList<QString> inputPDFs, QString outputPDF, int page, double location_x,
+    double location_y, QString location, QString reason, bool isTimestamp, bool isLtv, bool isLastPage,  QList<QString> attribute_ids) {
 
-    SCAPSignParams signParams = { inputPDF, outputPDF, page, location_x, location_y,
-        reason, location, isTimestamp, isLtv, attribute_index };
+    SCAPSignParams signParams = { inputPDFs, outputPDF, page, location_x, location_y,
+        reason, location, isTimestamp, isLtv, isLastPage, attribute_ids };
 
-    Concurrent::run(this, &GAPI::doSignSCAP, signParams);
+    Concurrent::run(this, &GAPI::doSignSCAP, signParams, false);
 }
 
-void GAPI::doSignSCAP(SCAPSignParams params) {
+void GAPI::signScapWithCMD(QList<QString> inputPDFs, QString outputPDF, QList<QString> attribute_ids,
+    int page, double location_x, double location_y, QString reason, QString location, bool isTimestamp, bool isLtv, bool isLastPage) {
 
-    BEGIN_TRY_CATCH
+    SCAPSignParams signParams = {inputPDFs, outputPDF, page, location_x, location_y,
+        reason, location, isTimestamp, isLtv, isLastPage, attribute_ids};
 
-        std::vector<int> attrs;
-    for (int i = 0; i != params.attribute_index.size(); i++) {
-        attrs.push_back(params.attribute_index.at(i));
+    Concurrent::run(this, &GAPI::doSignSCAP, signParams, true);
+}
+
+static std::vector<ScapAttribute> get_attributes_by_ids(const std::vector<std::string> &ids) {
+    const auto all_attributes = ScapClient::readAttributeCache().data();
+
+    std::vector<ScapAttribute> result;
+    for (const ScapAttribute &a: all_attributes) {
+        if (std::find(ids.begin(), ids.end(), a.id) != ids.end()) {
+            result.push_back(a);
+        }
     }
 
-    scapServices.executeSCAPSignature(this, params.inputPDF, params.outputPDF, params.page,
-        params.location_x, params.location_y, params.location, params.reason,
-        params.isTimestamp, params.isLtv, attrs, useCustomSignature(), m_jpeg_scaled_data, 
-        m_seal_width, m_seal_height);
+    return result;
+}
 
-    updateTelemetry(TelemetryAction::SignCCScap);
+template<typename T>
+bool GAPI::handleScapError(const ScapResult<T> &result, bool isCompany) {
+    QList<QString> error_data;
+    for (const std::string &provider: result.error_data()) {
+		error_data.append(QString::fromStdString(provider));
+    }
+
+    bool update_attributes = false;
+    ScapError error = result.error();
+    if (error == ScapError::generic) {
+        emit signalSCAPServiceFail(ScapGenericError, isCompany);
+    }
+    else if (error == ScapError::connection) {
+        emit signalSCAPConnectionFailed();
+    }
+    else if (error == ScapError::proxy_auth) {
+        emit signalSCAPProxyAuthRequired();
+    }
+    else if (error == ScapError::possibly_proxy) {
+        emit signalSCAPProssibleProxyMisconfigured();
+    }
+    else if (error == ScapError::sign_timestamp) {
+        emit signalPdfSignSuccess(SignMessageTimestampFailed);
+    }
+    else if (error == ScapError::sign_ltv) {
+        emit signalPdfSignSuccess(SignMessageLtvFailed);
+    }
+    else if (error == ScapError::sign_unsupported_pdf) {
+		if (!error_data.empty()) {
+			//error on batch signature comes with failed filename
+			emit signalPdfBatchSignFail(PDFFileUnsupported, error_data.first());
+		} else {
+			emit signalPdfSignFail(PDFFileUnsupported, -1);
+		}
+    }
+    else if (error == ScapError::sign_permission_denied) {
+		if (!error_data.empty()) {
+			//error on batch signature comes with failed filename
+			emit signalPdfBatchSignFail(SignFilePermissionFailed, error_data.first());
+		} else {
+			emit signalPdfSignFail(SignFilePermissionFailed, -1);
+		}
+    }
+    else if (error == ScapError::sign_pin_blocked) {
+        emit signalCardAccessError(PinBlocked);
+    }
+    else if (error == ScapError::sign_pin_cancel) {
+        emit signalCardAccessError(CardUserPinCancel);
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Operation canceled.");
+    }
+    else if (error == ScapError::sign_cancel) {
+        emit signalCanceledSignature();
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Operation canceled.");
+    }
+    else if (error == ScapError::oauth_cancelled) {
+        emit signalEndOAuth(OAuthCancelled);
+    }
+    else if (error == ScapError::oauth_timeout) {
+        emit signalEndOAuth(OAuthTimeoutError);
+    }
+    else if (error == ScapError::oauth_connection) {
+        emit signalEndOAuth(OAuthConnectionError);
+    }
+    else if (error == ScapError::oauth_failure) {
+        emit signalEndOAuth(OAuthGenericError);
+    }
+    else if (error == ScapError::timeout) {
+        emit signalSCAPServiceFail(ScapTimeOutError, isCompany);
+    }
+    else if (error == ScapError::incomplete_response) {
+        emit signalSCAPIncompleteResponse(error_data);
+        update_attributes = true;
+    }
+    else if (error == ScapError::no_attributes) {
+        emit signalSCAPNoAttributesResponse(error_data);
+        update_attributes = true;
+    }
+    else if (error == ScapError::bad_secret_key) {
+        emit signalSCAPServiceFail(ScapSecretKeyError, isCompany);
+    }
+    else if (error == ScapError::clock) {
+        emit signalSCAPServiceFail(ScapClockError, isCompany);
+    }
+    else if (error == ScapError::bad_credentials) {
+        emit signalSCAPBadCredentials();
+    }
+    else if (error == ScapError::cache_removed_legacy) {
+        emit signalCacheRemovedLegacy();
+    }
+    else {
+        emit signalSCAPServiceFail(ScapGenericError, isCompany);
+    }
+
+    return update_attributes;
+}
+
+void GAPI::doSignSCAP(const SCAPSignParams &params, bool isCMD) {
+    BEGIN_TRY_CATCH
+
+    PTEID_SigningDevice *device = NULL;
+    if (isCMD) {
+        device = m_cmd_client;
+    } else {
+        PTEID_EIDCard *card = NULL;
+        getCardInstance(card);
+        device = card;
+    }
+
+    std::vector<std::string> ids;
+    foreach(QString id, params.attribute_ids) {
+        ids.push_back(id.toStdString());
+    }
+
+    std::vector<ScapAttribute> attributes = get_attributes_by_ids(ids);
+
+    PTEID_SignatureLevel level = PTEID_LEVEL_BASIC;
+    if (params.isLtv) {
+        level = PTEID_LEVEL_LTV;
+    }
+    else if (params.isTimestamp) {
+        level = PTEID_LEVEL_TIMESTAMP;
+    }
+
+    SealGeometry seal_geometry = {
+        static_cast<unsigned int>(m_seal_width),
+        static_cast<unsigned int>(m_seal_height),
+        params.location_x,
+        params.location_y
+    };
+
+    bool visible = seal_geometry.x != -1 && seal_geometry.y != -1;
+
+    std::vector<std::string> input;
+    foreach(QString file_name, params.inputPDFs) {
+        input.push_back(file_name.toStdString());
+    }
+
+    PDFSignatureInfo signature_info = {
+        input,
+        params.outputPDF.toStdString(),
+        params.location.toStdString(),
+        params.reason.toStdString(),
+        level,
+        visible,
+        static_cast<unsigned int>(params.page),
+        params.isLastPage,
+        seal_geometry,
+        useCustomSignature(),
+        reinterpret_cast<unsigned char *>(m_jpeg_scaled_data.data()),
+        static_cast<unsigned long>(m_jpeg_scaled_data.size())
+    };
+
+    const auto result = m_scap_client->sign(device, signature_info, attributes);
+    if (result.is_error()) {
+        handleScapError(result);
+        return;
+    }
+
+    emit signalPdfSignSuccess(SignMessageOK);
+
+    updateTelemetry(isCMD ? TelemetryAction::SignCMDScap : TelemetryAction::SignCCScap);
 
     END_TRY_CATCH
 }
 
+const std::string SCAP_FUNCIONARIOS_ENTITY_NAME = "SCAP Funcionários";
+
 void GAPI::getSCAPEntities() {
-
-    QList<QString> attributeSuppliers;
-    std::vector<ns3__AttributeSupplierType *> entities = scapServices.getAttributeSuppliers();
-
-    if (entities.size() == 0){
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "Get SCAP Entities returned zero");
-        emit signalSCAPDefinitionsServiceFail(ScapGenericError, false);
+    const auto result = m_scap_client->getAttributeProviders();
+    if (result.is_error()) {
+        handleScapError(result);
         return;
     }
 
-    for (unsigned int i = 0; i != entities.size(); i++)
-        attributeSuppliers.append(QString::fromStdString(entities.at(i)->Name));
+    const auto &providers = result.data();
+    if (providers.size() == 0){
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature", "getAttributeProviders returned zero");
+        emit signalSCAPServiceFail(ScapGenericError, false);
+        return;
+    }
 
-    emit signalSCAPEntitiesLoaded(attributeSuppliers);
+    QList<QString> provider_names;
+    for (size_t i = 0; i < providers.size(); ++i) {
+        //temporary workaround: compare uriId of employee providers, they seem to come with the wrong type
+        if (providers[i].type == "EMPLOYEE" || providers[i].uriId == "http://interop.gov.pt/SCAP/FAF") { //hammer time
+            provider_names.append(QString::fromStdString(SCAP_FUNCIONARIOS_ENTITY_NAME));
+        } else {
+            provider_names.append(QString::fromStdString(providers[i].name));
+        }
+    }
+
+    emit signalSCAPEntitiesLoaded(provider_names);
 }
 
 bool isSpecialValidity(QString value) {
@@ -2657,156 +2598,148 @@ bool isSpecialValidity(QString value) {
     return dateFormat.indexIn(value) != -1;
 }
 
-std::vector<std::string> getChildAttributes(ns2__AttributesType *attributes, bool isShortDescription) {
-    std::vector<std::string> childrensList;
-
-    if (attributes->SignedAttributes == NULL){
-            return childrensList;
-    }
-    std::vector<ns5__SignatureType *> signatureAttributeList = attributes->SignedAttributes->ns3__SignatureAttribute;
-
-    for (uint i = 0; i < signatureAttributeList.size(); i++) {
-        ns5__SignatureType * signatureType = signatureAttributeList.at(i);
-        if (signatureType->ns5__Object.size() > 0)
-        {
-            ns5__ObjectType * signatureObject = signatureType->ns5__Object.at(0);
-            ns3__PersonalDataType * personalDataObject = signatureObject->union_ObjectType.ns3__Attribute->PersonalData;
-            ns3__MainAttributeType * mainAttributeObject = signatureObject->union_ObjectType.ns3__Attribute->MainAttribute;
-            std::string validity = signatureObject->union_ObjectType.ns3__Attribute->Validity;
-
-            std::string name = personalDataObject->Name;
-            childrensList.push_back(name.c_str());
-
-            std::string description = mainAttributeObject->Description->c_str();
-
-            std::string entityName;
-
-            QString subAttributes(" (");
-            QString subAttributesValues;
-            uint subAttributePos = 0;
-
-            while (mainAttributeObject->SubAttributeList != NULL && subAttributePos < mainAttributeObject->SubAttributeList->SubAttribute.size()) {
-                ns3__SubAttributeType * subAttribute = mainAttributeObject->SubAttributeList->SubAttribute.at(subAttributePos);
-                QString subDescription, subValue;
-                if (subAttribute->Description != NULL) {
-                    subDescription += subAttribute->Description->c_str();
-                }
-                if (subAttribute->Value != NULL) {
-                    subValue += subAttribute->Value->c_str();
-                }
-                // Don't append special validity date -> "31 12 9999"
-                if (!isSpecialValidity(subValue) && !isShortDescription)
-                    subAttributesValues.append(subDescription + ": " + subValue + ", ");
-
-                // For use with scap attribute type: EMPLOYEE
-                if(subDescription == "Nome da entidade")
-                    entityName = subAttribute->Value->c_str();
-
-                subAttributePos++;
-            }
-            // Chop 2 to remove last 2 chars (', ')
-            subAttributesValues.chop(2);
-            subAttributes.append(subAttributesValues + ")");
-
-            /* qDebug() << "Sub attributes : " << subAttributes; */
-            if (subAttributes != " ()") // don't append empty parenthesis
-                description += subAttributes.toStdString();
-
-            childrensList.push_back(description.c_str());
-            childrensList.push_back(validity);
-            childrensList.push_back(entityName.c_str());
-        }
-    }
-    return childrensList;
-}
-
-void GAPI::initScapAppId(){
-    ScapSettings settings;
-    if (settings.getAppID() == ""){
-        // Remove cache from older SCAP implementation
-        removeSCAPAttributesFromCache(ScapAttrAll);
-        QString appIDstring;
-        QString request_uuid = QUuid::createUuid().toString();
-        appIDstring = request_uuid.midRef(1, request_uuid.size() - 2).toString();
-        settings.setAppID(appIDstring);
-    }
-}
-
-void GAPI::getSCAPEntityAttributes(QList<int> entityIDs, bool useOAuth) {
-
-    QList<QString> attribute_list;
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPEntityAttributes");
-
-    if (!prepareSCAPCache(ScapAttrEntities)){
-        return;
-    }
-
-    PTEID_EIDCard * card = NULL;
-    if (useOAuth){
-        emit signalBeginOAuth();
-    }
-    else {
-        getCardInstance(card);
-    }
-    if (!useOAuth && card == NULL) {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "ScapSignature", "SCAP Entities Attributes Loaded Error!");
-        emit signalEntityAttributesLoadedError();
-        return;
-    }
-
-    initScapAppId();
-
-    std::vector<int> supplier_ids;
-
-    int supplier_id;
-    foreach(supplier_id, entityIDs) {
-        supplier_ids.push_back(supplier_id);
-    }
-
-    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, card, supplier_ids, useOAuth);
+static std::map<std::string, std::vector<std::string>> format_scap_attr_strings(const std::vector<ScapAttribute> &attributes, bool showSubAttributes) {
+    std::map<std::string, std::vector<std::string>> result;
 
     if (attributes.size() == 0) {
-        return;
+        return result;
     }
 
-    getSCAPAttributesFromCache(false,false);
+    for (size_t i = 0; i < attributes.size(); ++i) {
+        const ScapAttribute &attribute = attributes[i];
+
+        std::string provider_name = attribute.provider.name;
+        std::string attr_string = attribute.citizen_name + " - ";
+        attr_string += attribute.description + " ";
+
+        if (showSubAttributes) {
+            //TODO: empty subattribute list?
+            attr_string += "(";
+            for (auto it = attribute.sub_attributes.begin(); it != attribute.sub_attributes.end(); ++it) {
+                //if (!isSpecialValidity(QString::fromStdString(it->value))) { //TODO: review this function, it is matching things it shouldn't...
+                    attr_string += it->description + ": " + it->value;
+                //}
+                attr_string += (std::next(it) != attribute.sub_attributes.end()) ? ", " : ")";
+            }
+
+            if (attribute.provider.type == "EMPLOYEE") {
+                provider_name = SCAP_FUNCIONARIOS_ENTITY_NAME;
+            }
+        } else {
+            // send id of each attribute to signature page
+            // using an uncommon sequence to split id from attribute description , for now
+            attr_string += " [id] " + attribute.id;
+        }
+
+        result[provider_name].push_back(attr_string);
+    }
+
+    return result;
 }
 
+static std::vector<ScapProvider> filter_providers_by_names(const std::vector<ScapProvider> &providers, const std::vector<std::string> &names) {
+    std::vector<ScapProvider> result;
 
-void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
-
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPCompanyAttributes");
-
-    if (!prepareSCAPCache(ScapAttrCompanies)) {
-        return;
+    for (const ScapProvider &p: providers) {
+        if (std::find(names.begin(), names.end(), p.name) != names.end()) {
+            result.push_back(p);
+        }
     }
 
-    PTEID_EIDCard * card = NULL;
-    QList<QString> attribute_list;
-    if (useOAuth){
-        emit signalBeginOAuth();
+    return result;
+}
+
+static QVariantMap map_of_string_vectors_to_qvariant_map(const std::map<std::string, std::vector<std::string>> &map) {
+    QVariantMap result;
+
+    for (const auto &x: map) {
+        QList<QString> list;
+        for (const auto &s: x.second) {
+            list.append(QString::fromStdString(s));
+        }
+
+        result.insert(QString::fromStdString(x.first), QVariant::fromValue(list));
     }
-    else {
+
+    return result;
+}
+
+static std::vector<ScapAttribute> filter_attributes_by_type(const std::vector<ScapAttribute> &attributes,
+    const std::vector<std::string> &types) {
+    std::vector<ScapAttribute> result;
+
+    for (const ScapAttribute &attribute: attributes) {
+        if (std::find(types.begin(), types.end(), attribute.provider.type) != types.end()) {
+            result.push_back(attribute);
+        }
+    }
+
+    return result;
+}
+
+static std::pair<QVariantMap, QVariantMap> split_attributes_by_type(const std::vector<ScapAttribute> &all_attributes, bool showSubAttributes) {
+    std::vector<ScapAttribute> institution = filter_attributes_by_type(all_attributes, {"INSTITUTION", "EMPLOYEE"});
+    std::vector<ScapAttribute> enterprise = filter_attributes_by_type(all_attributes, {"ENTERPRISE"});
+
+    const auto institution_map = format_scap_attr_strings(institution, showSubAttributes);
+    const auto enterprise_map = format_scap_attr_strings(enterprise, showSubAttributes);
+
+    QVariantMap institutions_result = map_of_string_vectors_to_qvariant_map(institution_map);
+    QVariantMap enterprise_result = map_of_string_vectors_to_qvariant_map(enterprise_map);
+
+    return std::make_pair(institutions_result, enterprise_result);
+}
+
+void GAPI::getSCAPEntityAttributes(QList<QString> provider_names, bool useOAuth) {
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "getSCAPEntityAttributes");
+
+    PTEID_EIDCard *card = NULL;
+    if (!useOAuth) {
         getCardInstance(card);
     }
-    if (!useOAuth && card == NULL) {
-        PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "SCAP Companies Attributes Loaded Error!");
-        emit signalCompanyAttributesLoadedError();
+
+    const auto get_providers_result = m_scap_client->getAttributeProviders();
+    if (get_providers_result.is_error()) {
+        handleScapError(get_providers_result);
         return;
     }
 
-    initScapAppId();
-
-    std::vector<int> supplierIDs;
-
-    std::vector<ns2__AttributesType *> attributes = scapServices.getAttributes(this, card, supplierIDs, useOAuth);
-
-    if (attributes.size() == 0)
-    {
-        return;
+    std::vector<std::string> names;
+    foreach(QString id, provider_names) {
+        names.push_back(id.toStdString());
     }
 
-    getSCAPAttributesFromCache(true,false);
+	const auto &all_providers = get_providers_result.data();
+    std::vector<ScapProvider> providers = filter_providers_by_names(all_providers, names);
+
+    bool employee = std::find(names.begin(), names.end(), SCAP_FUNCIONARIOS_ENTITY_NAME) != names.end();
+
+    const auto result = m_scap_client->getCitizenAttributes(card, providers, false, employee);
+    bool update_attributes = (!result.is_error()) || handleScapError(result, false);
+
+    if (update_attributes) {
+        const auto &attributes = result.data();
+        const auto split_attributes = split_attributes_by_type(attributes, true);
+        emit signalAttributesLoaded(split_attributes.first, split_attributes.second);
+    }
+}
+
+void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
+     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "getSCAPCompanyAttributes");
+
+    PTEID_EIDCard *card = NULL;
+    if (!useOAuth) {
+        getCardInstance(card);
+    }
+
+    const auto result = m_scap_client->getCitizenAttributes(card, {}, true, false);
+    bool update_attributes = (!result.is_error()) || handleScapError(result, true);
+
+    if (update_attributes) {
+        const auto &attributes = result.data();
+        const auto split_attributes = split_attributes_by_type(attributes, true);
+        emit signalAttributesLoaded(split_attributes.first, split_attributes.second);
+    }
 }
 
 bool GAPI::isAttributeExpired(std::string& date, std::string& supplier) {
@@ -2829,160 +2762,40 @@ bool GAPI::isAttributeExpired(std::string& date, std::string& supplier) {
     return isExpired;
 }
 
-void GAPI::getSCAPAttributesFromCache(int scapAttrType, bool isShortDescription) {
+void GAPI::getSCAPAttributesFromCache(bool showSubAttributes) {
+    qDebug() << "getSCAPAttributesFromCache" ;
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "getSCAPAttributesFromCache");
 
-    qDebug() << "getSCAPAttributesFromCache scapAttrType: " << scapAttrType;
-
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "GetCardInstance getSCAPAttributesFromCache");
-
-    if (!prepareSCAPCache(ScapAttrCompanies)) {
+    const auto all_attributes = ScapClient::readAttributeCache();
+    if (all_attributes.is_error()) {
+        handleScapError(all_attributes);
         return;
     }
 
-    std::vector<ns2__AttributesType *> attributes;
-    QList<QString> attribute_list;
+    const auto split_attributes = split_attributes_by_type(all_attributes.data(), showSubAttributes);
+    emit signalAttributesLoaded(split_attributes.first, split_attributes.second);
 
-    //Card is only required for loading entities and companies seperately...
-    if (scapAttrType != ScapAttrAll) {
-        attributes = scapServices.loadAttributesFromCache(scapAttrType == ScapAttrCompanies);
-    }
-    // Loading all attributes without NIC
-    else {
-        attributes = scapServices.reloadAttributesFromCache();
-    }
-
-    QList<bool> enterpriseAttribute;
-    QStringList possiblyExpiredSuppliers;
-    for (uint i = 0; i < attributes.size(); i++) {
-        //Skip malformed AttributeResponseValues element
-        if (attributes.at(i)->ATTRSupplier == NULL) {
-            continue;
-        }
-
-        _ns3__AttributeSupplierType_Type *type = attributes.at(i)->ATTRSupplier->Type;
-        bool isEnterprise = (type && *type == _ns3__AttributeSupplierType_Type__ENTERPRISE);
-
-        std::string attrSupplier = attributes.at(i)->ATTRSupplier->Name;
-        std::vector<std::string> childAttributes = getChildAttributes(attributes.at(i), isShortDescription);
-
-        for (uint j = 0; j < childAttributes.size(); j = j + 4) {
-            attribute_list.append(QString::fromStdString(attrSupplier));
-            attribute_list.append(QString::fromStdString(childAttributes.at(j)));
-            attribute_list.append(QString::fromStdString(childAttributes.at(j + 1)));
-
-            // For use with scap attribute type: EMPLOYEE
-            if(QString::fromStdString(attributes.at(i)->ATTRSupplier->Id) == "http://interop.gov.pt/SCAP/FAF"){
-                attribute_list.append(QString::fromStdString(childAttributes.at(j + 3)));
-            } else {
-                attribute_list.append(QString::fromStdString(attrSupplier));
-            }
-            //check validity of attributes
-            if (isAttributeExpired(childAttributes.at(j + 2), attrSupplier)) {
-                possiblyExpiredSuppliers.push_back(QString::fromStdString(attrSupplier));
-            }
-            enterpriseAttribute.append(isEnterprise);
-        }
-    }
-    if (scapAttrType == ScapAttrEntities)
-        emit signalEntityAttributesLoaded(attribute_list);
-    else if (scapAttrType == ScapAttrCompanies)
-        emit signalCompanyAttributesLoaded(attribute_list);
-    else if (scapAttrType == ScapAttrAll)
-        emit signalAttributesLoaded(attribute_list, enterpriseAttribute);
-
+#if 0
     if (!possiblyExpiredSuppliers.empty()) {
         possiblyExpiredSuppliers.removeDuplicates();
         emit signalAttributesPossiblyExpired(possiblyExpiredSuppliers);
     }
+#endif
 }
 
-void GAPI::removeSCAPAttributesFromCache(int scapAttrType) {
+void GAPI::removeSCAPAttributesFromCache() {
+    qDebug() << "removeSCAPAttributesFromCache";
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "Remove SCAP Attributes From Cache");
 
-    qDebug() << "removeSCAPAttributesFromCache scapAttrType: " << scapAttrType;
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature",
-        "Remove SCAP Attributes From Cache scapAttrType = %d", scapAttrType);
-
-    ScapSettings settings;
-    QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
-    QDir dir(scapCacheDir);
-    bool has_read_permissions = true;
-
-    // Delete all SCAP secretkey's and SCAP AppID
-    settings.resetScapKeys();
-
-    //Nothing more to do if cache dir doesn't exist
-    if (!dir.exists()) {
-        emit signalRemoveSCAPAttributesSucess(scapAttrType);
-    }
-
-#ifdef WIN32
-    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
-    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
-#endif
-    if (!dir.isReadable())
-    {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-            "No read permissions: SCAP cache directory!");
-        qDebug() << "C++: Cache folder does not have read permissions! ";
-        has_read_permissions = false;
-        emit signalCacheNotReadable(scapAttrType);
-    }
-#ifdef WIN32
-    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
-#endif
-
-    bool status = false;
-    status = scapServices.removeAttributesFromCache();
-
-    if (!has_read_permissions)
-        return;
-
-    if (status == true)
-        emit signalRemoveSCAPAttributesSucess(scapAttrType);
+    //Nothing more to do if cache dir doesn't exist - TODO: return success if cache does not exist
+    if (m_scap_client->clearAttributeCache())
+        emit signalRemoveSCAPAttributesSucess();
     else
-        emit signalRemoveSCAPAttributesFail(scapAttrType);
-}
-
-bool GAPI::prepareSCAPCache(int scapAttrType) {
-    ScapSettings settings;
-    QString s_scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
-    QFileInfo scapCacheDir(s_scapCacheDir);
-    QDir scapCache(s_scapCacheDir);
-    bool hasPermissions = true;
-    // Tries to create if does not exist
-    if (!scapCache.mkpath(s_scapCacheDir)) {
-        qDebug() << "couldn't create SCAP cache folder";
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-            "Couldn't create SCAP cache folder");
-        emit signalCacheFolderNotCreated();
-        hasPermissions = false;
-    }
-#ifdef WIN32
-    extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
-    qt_ntfs_permission_lookup++; // turn ntfs checking (allows isReadable and isWritable)
-#endif
-    if (!scapCacheDir.isWritable()) {
-        qDebug() << "SCAP cache not writable";
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-            "SCAP cache not writable");
-        emit signalCacheNotWritable();
-        hasPermissions = false;
-    }
-    if (!scapCacheDir.isReadable()) {
-        qDebug() << "SCAP cache not readable";
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "ScapSignature",
-            "SCAP cache not readable");
-        emit signalCacheNotReadable(scapAttrType);
-        hasPermissions = false;
-    }
-#ifdef WIN32
-    qt_ntfs_permission_lookup--; // turn ntfs permissions lookup off for performance
-#endif
-    return hasPermissions;
+        emit signalRemoveSCAPAttributesFail();
 }
 
 void GAPI::abortSCAPWithCMD() {
-    scapServices.cancelGetAttributesWithCMD();
+    m_scap_client->cancelOAuth();
 }
 
 void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
@@ -3597,7 +3410,7 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
 
         try {
             buildTree(cert.getIssuer(), bEx, certificatesMap);
-        } catch (PTEID_ExCertNoIssuer &ex) {
+        } catch (PTEID_ExCertNoIssuer &) {
             bEx = true;
         }
     }
@@ -3794,90 +3607,33 @@ QStringList GAPI::getWrappedText(QString text, int maxlines, int offset) {
     return wrapped;
 }
 
-/* Helper function to format SCAP strings to be displayed in signature seal preview */
-std::pair<std::string, std::string> formatSCAPSealStrings(QVariantList qVarList) {
-    //qVarList is a list of "pairs" -> entity - attribute
-
-    // group by entity
-    std::map<std::string, std::vector<std::string>> grouped;
-    for (const QVariant& a: qVarList) { //order will be reversed
-        QStringList entity_attribute_pair = a.toStringList();
-        std::string entity = entity_attribute_pair.at(0).toStdString();
-        std::string attribute = entity_attribute_pair.at(1).toStdString();
-        grouped[entity].push_back(attribute);
+static std::vector<std::string> string_vector_from_qstringlist(const QList<QString> &qstrings) {
+    std::vector<std::string> vector_of_strings;
+    foreach(QString s, qstrings) {
+        vector_of_strings.push_back(s.toStdString());
     }
 
-    // format attributes strings for each enitity
-    const std::string comma_sep = ", ";
-    const std::string and_sep = " e ";
-    std::string current_sep;
-
-    const size_t numberOfEntities = grouped.size();
-    std::map<std::string, std::string> joined;
-    for (const auto& g: grouped) {
-        std::string currentEntitiy = g.first;
-        std::vector<std::string> currentAttrs = g.second;
-        std::string currentAttrsString;
-        size_t attrCount = currentAttrs.size();
-
-        if (attrCount > 1 && numberOfEntities > 1)
-            currentAttrsString = "{";
-        else
-            currentAttrsString = "";
-
-        current_sep = "";
-        for (size_t i = 0; i < attrCount; i++) {
-            currentAttrsString += current_sep;
-            currentAttrsString += currentAttrs[i];
-
-            if ( i != attrCount - 2 )
-                current_sep = comma_sep;
-            else
-                current_sep = and_sep;
-        }
-
-        if (attrCount > 1 && numberOfEntities > 1)
-            currentAttrsString.append("}");
-
-        currentAttrsString.append(" de ").append(currentEntitiy);
-
-        joined[currentEntitiy] = currentAttrsString;
-    }
-
-    // merge all entities and attributes in a string each
-    std::string result_entities;
-    std::string result_attributes;
-
-    current_sep = "";
-    // iterating in reverse to restore correct order of attributes
-    for (auto it = joined.rbegin(); it != joined.rend(); it++) {
-        result_entities += current_sep;
-        result_entities += it->first;
-
-        result_attributes += current_sep;
-        result_attributes += it->second;
-
-        current_sep = and_sep;
-    }
-
-    return std::make_pair(result_entities, result_attributes);
+    return vector_of_strings;
 }
 
-QVariantList GAPI::getSCAPAttributesText(QVariantList attr_list) {
-
-    // merge attributes into one string for entities and another for attributes, ready to wrap
-    std::pair<std::string, std::string> joined = formatSCAPSealStrings(attr_list);
-
-    std::string entities_to_wrap = QString::fromStdString(joined.first).toLatin1().constData();
-    std::string attributes_to_wrap = QString::fromStdString(joined.second).toLatin1().constData();
+QVariantList GAPI::getSCAPAttributesText(QList<QString> qstring_ids) {
+    std::vector<std::string> ids = string_vector_from_qstringlist(qstring_ids);
+    std::vector<ScapAttribute> attributes = get_attributes_by_ids(ids);
+    const auto formatted_strings = format_scap_seal_strings(attributes);
 
     QVariantList result;
-    result.append(QString::fromLatin1(entities_to_wrap.c_str()));
-    result.append(QString::fromLatin1(attributes_to_wrap.c_str()));
+    result.append(QString::fromStdString(formatted_strings.first));
+    result.append(QString::fromStdString(formatted_strings.second));
     result.append(m_font_size);
+
     return result;
 }
 
+QString GAPI::getSCAPProviderLogo(QList<QString> qstring_ids) {
+    std::vector<std::string> ids = string_vector_from_qstringlist(qstring_ids);
+    std::vector<ScapAttribute> attributes = get_attributes_by_ids(ids);
+    return get_scap_image_path(attributes);
+}
 
 int GAPI::getSealFontSize(bool isReduced, QString reason, QString name, 
         bool nic, bool date, QString location, QString entities, QString attributes, 

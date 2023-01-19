@@ -196,7 +196,7 @@ std::wstring GetStringInt(
     ) 
 {
     wchar_t     wcsKeyRegName[MAX_PATH];
-    BYTE        abValueDat[512];
+    BYTE        abValueDat[4*1024];
 
     DWORD       dwValDatLen = 0;
     DWORD       dwType;
@@ -600,6 +600,88 @@ void CConfig::DeleteKeysByPrefix(
     }
     RegCloseKey(hRegKey);
 }
+	/* Count number of registry values under "czSection" registry key with "csName" as prefix */
+	unsigned int CConfig::CountKeysByPrefix(tLocation location, const std::wstring &csName, const std::wstring &czSection) {
+		wchar_t     wcsKeyRegName[MAX_PATH];
+
+		LONG        lRes;
+		HKEY        hRegKeyTree;
+		HKEY        hRegKey;
+		unsigned int regvalue_counter = 0;
+		
+		DWORD       cValues;                            // number of values for key 
+		DWORD       i, retCode;
+		TCHAR       achValue[MAX_VALUE_NAME];
+		DWORD       cchValue = MAX_VALUE_NAME;
+
+		if (location == SYSTEM)
+			hRegKeyTree = HKEY_LOCAL_MACHINE;
+		else
+			hRegKeyTree = HKEY_CURRENT_USER;
+
+		//--- Open the KeyInfo entry
+		swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+		lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+		if (lRes != ERROR_SUCCESS) {
+			RegCloseKey(hRegKey);
+			throw CMWEXCEPTION(EIDMW_CONF);
+		}
+		else
+		{
+			// Get the class name and the value count. 
+			retCode = RegQueryInfoKey(
+				hRegKey,                    // key handle 
+				NULL,                // buffer for class name 
+				NULL,           // size of class string 
+				NULL,                    // reserved 
+				NULL,               // number of subkeys 
+				NULL,            // longest subkey size 
+				NULL,            // longest class string 
+				&cValues,                // number of values for this key 
+				NULL,            // longest value name 
+				NULL,            // longest value data 
+				NULL,            // security descriptor 
+				NULL);           // last write time 
+
+			// Enumerate the key values. 
+			if (cValues)
+			{
+				for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++)
+				{
+					cchValue = MAX_VALUE_NAME;
+					achValue[0] = '\0';
+					lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+					if (lRes != ERROR_SUCCESS) {
+						RegCloseKey(hRegKey);
+						throw CMWEXCEPTION(EIDMW_CONF);
+					}
+
+					retCode = RegEnumValue(hRegKey,
+						i,
+						achValue,
+						&cchValue,
+						NULL,
+						NULL,
+						NULL,
+						NULL);
+
+					if (retCode == ERROR_SUCCESS)
+					{
+						if (CompareNoCaseN(achValue, csName, csName.size()) == 0) {
+							regvalue_counter++;
+						}
+					}
+				}
+			}
+		}
+		RegCloseKey(hRegKey);
+
+		return regvalue_counter;
+	}
+
+	unsigned int CConfig::CountKeysByPrefix(tLocation location, const struct Param_Str param) {
+		return CountKeysByPrefix(location, param.csParam, param.csSection);
+	}
 
 /** Modify/add into the configuration a parameter of the type STRING
 

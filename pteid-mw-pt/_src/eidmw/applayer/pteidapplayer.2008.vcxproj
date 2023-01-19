@@ -71,7 +71,7 @@
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-	<TargetName>pteid$(ProjectName)</TargetName>
+    <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
@@ -83,7 +83,7 @@
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-	<TargetName>pteid$(ProjectName)</TargetName>
+    <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
@@ -232,6 +232,7 @@
     <ClCompile Include="CardPteid.cpp" />
     <ClCompile Include="CertStatusCache.cpp" />
     <ClCompile Include="cJSON.c" />
+    <ClCompile Include="CurlUtil.cpp" />
     <ClCompile Include="PAdESExtender.cpp" />
     <ClCompile Include="PNGConverter.cpp" />
     <ClCompile Include="CRLFetcher.cpp" />
@@ -244,12 +245,12 @@
     <ClCompile Include="proxyinfo.cpp" />
     <ClCompile Include="SAM.cpp" />
     <ClCompile Include="ess_lib.c" />
-    <ClCompile Include="ScapSSLConnection.cpp" />
     <ClCompile Include="SecurityContext.cpp" />
     <ClCompile Include="SigContainer.cpp" />
     <ClCompile Include="sign-pkcs7.cpp" />
     <ClCompile Include="SODParser.cpp" />
     <ClCompile Include="SSLConnection.cpp" />
+    <ClCompile Include="SSLConnectionLegacy.cpp" />
     <ClCompile Include="TsaClient.cpp" />
     <ClCompile Include="XadesSignature.cpp" />
     <ClCompile Include="XercesUtils.cpp" />

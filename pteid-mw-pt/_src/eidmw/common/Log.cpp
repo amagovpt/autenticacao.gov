@@ -103,6 +103,9 @@ CLog &MapModule(tModule moduleIn)
 		case MOD_KSP:
 			group = L"KSP";
 			break;
+		case MOD_SCAP:
+			group = L"SCAP";
+			break;
 		default:
 			group = L"";
 			break;

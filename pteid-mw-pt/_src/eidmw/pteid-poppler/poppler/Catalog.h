@@ -56,7 +56,7 @@
 
 #define SEAL_NAME_OFFSET            6
 #define SEAL_LOCATION_OFFSET        5.5
-#define SEAL_PROVIDER_NAME_OFFSET   6.5
+#define SEAL_PROVIDER_NAME_OFFSET   6.85
 #define SEAL_ATTR_NAME_OFFSET       9.5
 
 #define NAME_MAX_LINES              5

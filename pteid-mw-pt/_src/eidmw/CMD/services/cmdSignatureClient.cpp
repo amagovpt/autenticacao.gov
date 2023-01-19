@@ -250,6 +250,7 @@ namespace eIDMW
             handleErrorCode(ret, true);
 
             updateCertificateCache(&(cmdSignature.m_certificates));
+            pdf_sig.setExternCertificate(cmdSignature.m_certificates.front());
 
             for (PDFSignature *sig : pdfSignatures)
             {

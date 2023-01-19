@@ -105,7 +105,7 @@ namespace eIDMW
 
 		EIDMW_APL_API char * getCitizenCertificateName() { return m_citizen_fullname; };
 
-		EIDMW_APL_API char * getCitizenCertificateID() { return m_document_number; } ;
+		EIDMW_APL_API char * getCitizenCertificateID();
 
         /* Hash */
 		EIDMW_APL_API CByteArray getHash();

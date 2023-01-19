@@ -11,7 +11,6 @@
 #include <iostream>
 #include "Log.h"
 #include "MiscUtil.h"
-#include "cJSON_1_7_12.h"
 #include <sstream>
 #include <regex>
 #include <QFile>
@@ -29,6 +28,7 @@
 #endif
 
 #include <curl/curl.h>
+#include <cjson/cJSON.h>
 
 #define FA_OAUTH_ASK_AUTH           "/OAuth/AskAuthorization"               // service to obtain token
 #define FA_OAUTH_API_RESOURCE       "/OAuthResourceServer/Api/Resource"     // service to obtain citizen attributes with token
@@ -121,7 +121,7 @@ namespace eIDMW
         }
         const char * url = faAuthReq.c_str();
 
-        MWLOG(LEV_DEBUG, MOD_GUI, "OAuthAttributes::openBrowser URL: %s", url);
+        MWLOG(LEV_DEBUG, MOD_SCAP, "OAuthAttributes::openBrowser URL: %s", url);
         QDesktopServices::openUrl(QUrl(url));
     }
 
@@ -133,7 +133,7 @@ namespace eIDMW
         size_t tokenPos = token.find("access_token=");
         if (tokenPos == std::string::npos)
         {
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes:parseRequestToken() token not received in query string");
+            MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes:parseRequestToken() token not received in query string");
             return OAuthGenericError;
         }
         token = token.substr(tokenPos + 13, TOKEN_SIZE);
@@ -142,7 +142,7 @@ namespace eIDMW
 
         if (!std::regex_match(token, tokenValidation))
         {
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes:parseRequestToken() token received is not valid!");
+            MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes:parseRequestToken() token received is not valid!");
             return OAuthGenericError;
         }
         m_secretToken.assign(token); 
@@ -176,11 +176,11 @@ namespace eIDMW
             inputFile.close();
             if (!conn->waitForBytesWritten(SEND_TOKEN_TIMEOUT))
             {
-                MWLOG(LEV_ERROR, MOD_GUI, "OAuthAttributes: connection failed: could not return page!");
+                MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: connection failed: could not return page!");
             }
         }
         else {
-            MWLOG(LEV_ERROR, MOD_GUI, "OAuthAttributes: open html file %s error: %d: %s", pagePath.c_str(), inputFile.error(), inputFile.errorString().toLocal8Bit().data());
+            MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: open html file %s error: %d: %s", pagePath.c_str(), inputFile.error(), inputFile.errorString().toLocal8Bit().data());
         }
         conn->close();
     }
@@ -188,49 +188,45 @@ namespace eIDMW
     OAuthResult OAuthAttributes::fetchToken() {
         // Open listener
         if (!m_server.listen(QHostAddress::LocalHost)) {
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes: open listener server failed");
+            MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes: open listener server failed");
             return OAuthConnectionError;
         }
 
-        MWLOG(LEV_DEBUG, MOD_GUI, "OAuthAttributes:local server listening on: %s:%d", 
+        MWLOG(LEV_DEBUG, MOD_SCAP, "OAuthAttributes:local server listening on: %s:%d",
             m_server.serverAddress().toString().toStdString().c_str(), m_server.serverPort());
 
         openBrowser(m_server.serverPort());
 
         // POLLING
-        bool hasConn = false;
-        int seconds = 0;
-        while ( seconds < GET_TOKEN_TIMEOUT && !hasConn && !m_wasCancelled) {
-            hasConn = m_server.waitForNewConnection(1000);
-            seconds++;
-        }
-        
-        if (m_wasCancelled) {
-            m_server.close();
-            MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttributes: process was canceled");
-            return OAuthCancelled;
+        int elapsed = 0;
+        while (!m_server.waitForNewConnection(1000) && !m_wasCancelled) {
+            if (++elapsed > GET_TOKEN_TIMEOUT) {
+                m_server.close();
+                MWLOG(LEV_DEBUG, MOD_SCAP, L"OAuthAttributes: get token timed out");
+                return OAuthTimeoutError;
+            }
         }
 
-        if (!hasConn) {
+        if (m_wasCancelled) {
             m_server.close();
-            MWLOG(LEV_DEBUG, MOD_GUI, L"OAuthAttributes: get token timed out");
-            return OAuthTimeoutError;
-        }     
+            MWLOG(LEV_DEBUG, MOD_SCAP, L"OAuthAttributes: process was canceled");
+            return OAuthCancelled;
+        }
 
         QTcpSocket *conn = m_server.nextPendingConnection();
         QByteArray buffer;
         if (!conn){
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes: callback with token connection failed: can't establish new connection");
+            MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes: callback with token connection failed: can't establish new connection");
             return OAuthConnectionError;
         }
         if (!conn->waitForReadyRead(RECV_TOKEN_TIMEOUT)){
             if (conn->bytesAvailable() > 0) 
             {
-                MWLOG(LEV_CRIT, MOD_GUI, L"OAuthAttributes: waitForReadyRead() failed but there is data present in the socket");
+                MWLOG(LEV_CRIT, MOD_SCAP, L"OAuthAttributes: waitForReadyRead() failed but there is data present in the socket");
             }
             else
             {
-                MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes: callback with token connection failed: expired timeout waiting for socket read");
+                MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes: callback with token connection failed: expired timeout waiting for socket read");
                 return OAuthConnectionError;
             }
         }
@@ -238,7 +234,7 @@ namespace eIDMW
         buffer = conn->readAll();
         if (buffer.isEmpty())
         {
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes: callback with token connection failed: Could not read to buffer.");
+            MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes: callback with token connection failed: Could not read to buffer.");
             return OAuthConnectionError;
         }
         /* We are going to send the "success" page now because it's the one containing 
@@ -253,7 +249,7 @@ namespace eIDMW
         }
         conn = m_server.nextPendingConnection();
         if (!conn || !conn->waitForReadyRead(RECV_TOKEN_TIMEOUT)){
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes: redirect with token connection failed");
+            MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes: redirect with token connection failed");
             return OAuthConnectionError;
         }
         buffer = conn->readAll();
@@ -264,9 +260,8 @@ namespace eIDMW
 
     size_t OAuthAttributes::curl_write_data(char *recv, size_t size, size_t nmemb, void * buffer)
     {
-        
         size_t realsize = size * nmemb;
-		MWLOG(LEV_DEBUG, MOD_GUI, "OAuthAttributes::curl_write_data received %d bytes", realsize);
+        MWLOG(LEV_DEBUG, MOD_SCAP, "OAuthAttributes::curl_write_data received %d bytes", realsize);
         ((std::string *)buffer)->append((char*)recv, realsize);
         return realsize;
     }
@@ -274,7 +269,7 @@ namespace eIDMW
     void OAuthAttributes::parseAttributes(const char * response) {
         if (response == NULL || strlen(response) == 0)
         {
-            MWLOG(LEV_ERROR, MOD_GUI, "OAuthAttributes::parseAttributes() Can't parse null/empty string!");
+            MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes::parseAttributes() Can't parse null/empty string!");
             return;
         }
         cJSON *json_array = cJSON_Parse(response);
@@ -282,16 +277,21 @@ namespace eIDMW
         for (int i = 0; i < cJSON_GetArraySize(json_array); i++)
         {
             cJSON *json_attribute = cJSON_GetArrayItem(json_array, i);
-            cJSON *name = cJSON_GetObjectItem(json_attribute, "name");
-            cJSON *value = cJSON_GetObjectItem(json_attribute, "value");
-            CitizenAttribute attributeName = uriToAttribute(name->valuestring);
+            cJSON *state = cJSON_GetObjectItem(json_attribute, "state");
 
-            if (attributeName == NONE || m_attributes.find(attributeName) == m_attributes.end())
-            {
-                MWLOG(LEV_ERROR, MOD_GUI, "OAuthAttributes::parseAttributes received invalid attribute name: %s", name->valuestring);
-                continue; // Parse all even if some citizen attributes are unrequested/malformed 
+            // parse only available attributes
+            if (state && strcmp(state->valuestring, "Available") == 0) {
+                cJSON *value = cJSON_GetObjectItem(json_attribute, "value");
+                cJSON *name = cJSON_GetObjectItem(json_attribute, "name");
+                CitizenAttribute attributeName = uriToAttribute(name->valuestring);
+
+                if (attributeName == NONE || m_attributes.find(attributeName) == m_attributes.end())
+                {
+                    MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes::parseAttributes received invalid attribute name: %s", name->valuestring);
+                    continue; // Parse all even if some citizen attributes are unrequested/malformed
+                }
+                m_attributes[attributeName].assign(value->valuestring);
             }
-            m_attributes[attributeName].assign(value->valuestring);
         }
     }
 
@@ -310,7 +310,7 @@ namespace eIDMW
         curl = curl_easy_init();
         if (curl == NULL)
         {
-            MWLOG(LEV_ERROR, MOD_GUI, "OAuthAttributes: curl_easy_init() failed!");
+            MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: curl_easy_init() failed!");
             return OAuthGenericError;
         }
 
@@ -365,10 +365,11 @@ namespace eIDMW
                 curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxyUserAndPwd.c_str());
             }
         }
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); // for DEBUG
 
         CURLcode res = curl_easy_perform(curl);
         if (res != CURLE_OK) {
-            MWLOG(LEV_ERROR, MOD_GUI, L"OAuthAttributes: curl_easy_perform() failed: %S", curl_easy_strerror(res));
+            MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes: curl_easy_perform() failed: %S", curl_easy_strerror(res));
             curl_easy_cleanup(curl);
             return OAuthGenericError;
         }
@@ -377,7 +378,7 @@ namespace eIDMW
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
         if (http_code != 200)
         {
-            MWLOG(LEV_ERROR, MOD_GUI, "OAuthAttributes: Server response http code: %d with error: %s", http_code, responseBuffer.c_str());
+            MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: Server response http code: %d with error: %s", http_code, responseBuffer.c_str());
             curl_easy_cleanup(curl);
             return OAuthGenericError;
         }

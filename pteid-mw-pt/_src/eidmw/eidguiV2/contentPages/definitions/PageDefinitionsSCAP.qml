@@ -20,7 +20,6 @@ import "../../scripts/Functions.js" as Functions
 
 PageDefinitionsSCAPForm {
 
-    property string popupMsg: ""
     property bool isCardPresent: false
     property bool isLoadingAttributes: false
     property bool isLoadingCache: false
@@ -138,7 +137,7 @@ PageDefinitionsSCAPForm {
                     !isLoadingCache && isCardPresent && isAnyEntitySelected()
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalSCAPDefinitionsServiceFail: {
+        onSignalSCAPServiceFail: {
             isLoadingAttributes = false
             console.log("Definitions SCAP - Signal SCAP service fail Code = "
                         + pdfsignresult + " isCompany = " + isCompany)
@@ -171,34 +170,17 @@ PageDefinitionsSCAPForm {
                             + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
                 }else {
                     console.log("ScapGenericError")
-                    gapi.startPingSCAP()
+                    show_generic_scap_error_message()
                     return
                 }
             }else{
-                var attributeList = []
-                var totalCount = 0
-                var count = 0
-                popupMsg = ""
+                var attributeList = getSelectedEntityNames()
 
-                for (var i = 0; i < entityAttributesModel.count; i++){
-                    if(entityAttributesModel.get(i).checkBoxAttr == true){
-                        totalCount++
-                    }
-                }
-
-                for (var i = 0; i < entityAttributesModel.count; i++){
-                    if(entityAttributesModel.get(i).checkBoxAttr == true){
-
-                        if(count > 0){
-                            if(count == totalCount-1){
-                                popupMsg += " e "
-                            }else{
-                                popupMsg += ", "
-                            }
-                        }
-                        popupMsg += entityAttributesModel.get(i).entityName
-                        count++
-                    }
+                var popupMsg = ""
+                var separator = ""
+                for (var i = 0; i < attributeList.length; i++) {
+                    popupMsg += separator + attributeList[i]
+                    separator = (i == attributeList.length - 1) ? " e " : ", "
                 }
                 console.log("popupMsg: " + popupMsg)
 
@@ -225,7 +207,7 @@ PageDefinitionsSCAPForm {
                             + " " + popupMsg + "."
                 }else {
                     console.log("ScapGenericError")
-                    gapi.startPingSCAP()
+                    show_generic_scap_error_message()
                     return
                 }
             }
@@ -236,32 +218,76 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicatorAttributes.running = false
             propertyBusyIndicator.running = false
         }
-        onSignalSCAPPingSuccess: {
-            console.log("Definitions SCAP Signature -->Signal SCAP ping success")
-            var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
-            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_FIRST")
-                    + "\n\n"
-                    + qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_SECOND")
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            // Load attributes from cache (Entities, isShortDescription)
-            propertyBusyIndicatorAttributes.running = false
-            propertyBusyIndicator.running = false
+
+        onSignalSCAPIncompleteResponse: {
+            console.log("ScapIncompleteResponse")
+
+            var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_INCOMPLETE_RESPONSE_FIRST") + "<br>"
+                + "<ul><li>" + failed_providers.join("</li><li>") + "</li></ul>"
+
+            show_error_message(titlePopup, bodyPopup)
         }
-        onSignalSCAPPingFail: {
-            console.log("Definitions SCAP - Signal SCAP ping fail")
+
+        onSignalSCAPConnectionFailed: {
+            console.log("Scap connection failed")
+
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
-            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_FIRST")
-                    + "\n\n"
-                    + qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_SECOND")
-            if (controler.isProxyConfigured()) {
-                bodyPopup += " " 
-                    + qsTranslate("GAPI","STR_VERIFY_PROXY")
-            }
-            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            // Load attributes from cache (Entities, isShortDescription)
-            propertyBusyIndicator.running = false
-            propertyBusyIndicatorAttributes.running = false
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_FIRST") + "<br>"
+                + qsTranslate("PageDefinitionsSCAP", "STR_SCAP_PING_FAIL_SECOND")
+
+            show_error_message(titlePopup, bodyPopup)
         }
+
+        onSignalSCAPProxyAuthRequired: {
+            console.log("Scap proxy auth required")
+
+            var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
+            var bodyPopup = qsTranslate("GAPI","STR_PROXY_AUTH_FAILED")
+
+            show_error_message(titlePopup, bodyPopup)
+        }
+
+        onSignalSCAPProssibleProxyMisconfigured: {
+            console.log("Scap possible misconfiguration of proxy")
+
+            var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_FIRST") + "<br>"
+                + qsTranslate("PageDefinitionsSCAP", "STR_SCAP_PING_FAIL_SECOND") + "<br>"
+                + qsTranslate("GAPI","STR_VERIFY_PROXY")
+
+            show_error_message(titlePopup, bodyPopup)
+        }
+
+        onSignalSCAPNoAttributesResponse: {
+            console.log("Scap No Attributes")
+
+            var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
+                + "<ul><li>" + failed_providers.join("</li><li>") + "</li></ul>"
+                + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
+
+            show_error_message(titlePopup, bodyPopup)
+        }
+
+        onSignalSCAPBadCredentials: {
+            console.log("Scap Bad Credentials")
+
+            var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_ERROR")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_BAD_CREDENTIALS")
+
+            show_error_message(titlePopup, bodyPopup)
+        }
+
+        onSignalCacheRemovedLegacy: {
+            console.log("Scap Removed Legacy cache files")
+
+            var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_LEGACY_CACHE")
+
+            show_error_message(titlePopup, bodyPopup)
+        }
+
         onSignalEntityAttributesLoadedError: {
             isLoadingAttributes = false
             console.log("Definitions SCAP - Signal SCAP entities loaded error")
@@ -295,88 +321,19 @@ PageDefinitionsSCAPForm {
 
             // Load attributes from cache (Entities, ShortDescription)
             isLoadingCache = true
-            gapi.startLoadingAttributesFromCache(GAPI.ScapAttrEntities,
-                                                 GAPI.ScapAttrDescriptionShort)
+            gapi.startLoadingAttributesFromCache(true)
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicatorAttributes.running = false
         }
-        onSignalEntityAttributesLoaded:{
+        onSignalAttributesLoaded: {
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
-            console.log("Attributelist: " + attribute_list)
-            if(entityAttributesModel.count == 0){
-                for(var i = 0; i < attribute_list.length; i=i+4)
-                {
-                    entityAttributesModel.append({
-                                                     entityName: attribute_list[i],
-                                                     attribute: "<ul><li><b>"+attribute_list[i+1]+"</b> - "+attribute_list[i+2]+"</li></ul>",
-                                                     checkBoxAttr: false
-                                                 });
-                }
-            }else{
-                // Remove old attributes
-                for(i = 0; i < attribute_list.length; i=i+4)
-                {
-                    for (var j = 0; j < entityAttributesModel.count; j++){
-                        if(entityAttributesModel.get(j).entityName === attribute_list[i]){
-                            entityAttributesModel.set(j, {
-                                "entityName": attribute_list[i],
-                                "attribute":""})
-                        } else {
-                            entityAttributesModel.set(j, {
-                                "entityName": entityAttributesModel.get(j).entityName,
-                                "attribute":""})
-                        }
-                    }
-                }
-                // Add new attribute
-                for(i = 0; i < attribute_list.length; i=i+4)
-                {
-                    for (var j = 0; j < entityAttributesModel.count; j++){
-                        if(entityAttributesModel.get(j).entityName === attribute_list[i]){
-                            entityAttributesModel.set(j, {
-                                "entityName": attribute_list[i],
-                                "attribute": entityAttributesModel.get(j).attribute 
-                                + "<ul><li><b>"+attribute_list[i+1]+"</b> - " + attribute_list[i+2]+"</li></ul>"})
-                        }
-                    }
-                }
-            }
-            //Load attributes from cache (Companies, ShortDescription)
-            propertyBusyIndicatorAttributes.running = false
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            gapi.startLoadingAttributesFromCache(GAPI.ScapAttrCompanies,
-                                                 GAPI.ScapAttrDescriptionShort)
-        }
-        onSignalCompanyAttributesLoaded: {
-            console.log("Definitions SCAP - Signal SCAP company attributes loaded")
             isLoadingCache = false
-            companyAttributesModel.clear()
-            for(var i = 0; i < attribute_list.length; i=i+4)
-            {
-                attribute_list[i+1] = toTitleCase(attribute_list[i+1])
-                // Let's see if company already exists and in what index
-                var companyIndex
-                for(companyIndex = 0; companyIndex < companyAttributesModel.count; companyIndex++) {
-                    if(companyAttributesModel.get(companyIndex).entityName === attribute_list[i]) {
-                        break
-                    }
-                }
-                if(companyAttributesModel.count>0 &&
-                        companyIndex < companyAttributesModel.count){
-                    companyAttributesModel.set(companyIndex,{
-                                                   entityName: attribute_list[i],
-                                                   attribute: companyAttributesModel.get(companyIndex).attribute
-                                                              + "<ul><li><b>"+attribute_list[i+1]+"</b> - "+attribute_list[i+2]+"</li></ul>"
-                                               });
-                }else{
-                    companyAttributesModel.append({
-                                                      entityName: attribute_list[i],
-                                                      attribute: "<ul><li><b>"+attribute_list[i+1]+"</b> - "+attribute_list[i+2]+"</li></ul>",
-                                                      checkBoxAttr: false
-                                                  });
-                }
-            }
+            cmdLoadDialog.close()
+
+            update_entity_attributes(institution_attributes)
+            update_company_attributes(enterprise_attributes)
+
             propertyBusyIndicatorAttributes.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
@@ -395,11 +352,8 @@ PageDefinitionsSCAPForm {
                 var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
                 var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                if(scapAttrType != GAPI.ScapAttrCompanies){
-                    gapi.startGettingEntities()
-                    propertyBusyIndicator.running = true
-                }
             }
+            gapi.startGettingEntities()
         }
         onSignalRemoveSCAPAttributesFail: {
             console.log("Definitions SCAP - Signal Remove SCAP Attributes Fail")
@@ -407,20 +361,15 @@ PageDefinitionsSCAPForm {
             var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_FAIL")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            if(scapAttrType != GAPI.ScapAttrCompanies){
-                gapi.startGettingEntities()
-                propertyBusyIndicator.running = true
-            }
+            gapi.startGettingEntities()
         }
         onSignalCacheNotReadable:{
             propertyBusyIndicatorAttributes.running = false;
             var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-            if(scapAttrType != GAPI.ScapAttrCompanies){
-                gapi.startGettingEntities()
-                propertyBusyIndicator.running = true
-            }
+            gapi.startGettingEntities()
+            propertyBusyIndicator.running = true
         }
         onSignalCacheNotWritable:{
             propertyBusyIndicatorAttributes.running = false;
@@ -434,35 +383,26 @@ PageDefinitionsSCAPForm {
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_FOLDER_NOT_CREATED")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalBeginOAuth: { 
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-            cmdLoadDialog.open()
-        }
         onSignalEndOAuth: {
             cmdLoadDialog.close()
-            // Error codes from OAuthResult in OAuthAttributes.h
+
             switch (oauthResult){
-                case 0://OAuthSuccess
-                    var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_LOADING_SCAP_ATTRIBUTES")
-                    var bodyPopup = qsTranslate("OAuth","STR_OAUTH_SUCCESS_SCAP")
-                    break;
-                case 1://OAuthTimeoutError
+                case 0://OAuthTimeoutError
                     var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
                     var bodyPopup = qsTranslate("OAuth","STR_OAUTH_TIMEOUT")
                     break;
-                case 2://OAuthGenericError
+                case 1://OAuthGenericError
                     var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
                     var bodyPopup = qsTranslate("OAuth","STR_OAUTH_GENERIC_ERROR")
-                case 3://OAuthConnectionError
+                case 2://OAuthConnectionError
                     var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
                     var bodyPopup = qsTranslate("OAuth","STR_OAUTH_CONNECTION_ERROR")
                     break;
-                case 4://OAuthCancelled
+                case 3://OAuthCancelled
                     console.log("OAuth - cancelled")
                     return;
             }
-            if (oauthResult != 0)
-                propertyBusyIndicatorAttributes.running = false
+            propertyBusyIndicatorAttributes.running = false
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
@@ -746,6 +686,8 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
             gapi.startGettingCompanyAttributes(true)
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            cmdLoadDialog.open()
         }
     }
 
@@ -755,14 +697,7 @@ PageDefinitionsSCAPForm {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             propertyBusyIndicatorAttributes.running = true
             isLoadingAttributes = true
-            var attributeList = []
-            var count = 0
-            for (var i = 0; i < entityAttributesModel.count; i++){
-                if(entityAttributesModel.get(i).checkBoxAttr == true){
-                    attributeList[count] = i
-                    count++
-                }
-            }
+            var attributeList = getSelectedEntityNames()
             console.log("QML AttributeList: ", attributeList)
             propertyPageLoader.attributeListBackup = []
             gapi.startGettingEntityAttributes(attributeList, false)
@@ -773,17 +708,12 @@ PageDefinitionsSCAPForm {
             console.log("ButtonLoadEntityAttributesOAuth clicked!")
             propertyBusyIndicatorAttributes.running = true
             isLoadingAttributes = true
-            var attributeList = []
-            var count = 0
-            for (var i = 0; i < entityAttributesModel.count; i++){
-                if(entityAttributesModel.get(i).checkBoxAttr == true){
-                    attributeList[count] = i
-                    count++
-                }
-            }
+            var attributeList = getSelectedEntityNames()
             console.log("QML AttributeList: ", attributeList)
             propertyPageLoader.attributeListBackup = []
             gapi.startGettingEntityAttributes(attributeList, true)
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            cmdLoadDialog.open()
         }
     }
     propertyButtonRemoveCompanyAttributes {
@@ -794,7 +724,7 @@ PageDefinitionsSCAPForm {
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
-            gapi.startRemovingAttributesFromCache(1)
+            gapi.startRemovingAttributesFromCache()
         }
 
     }
@@ -807,7 +737,7 @@ PageDefinitionsSCAPForm {
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
-            gapi.startRemovingAttributesFromCache(0)
+            gapi.startRemovingAttributesFromCache()
         }
     }
 
@@ -843,6 +773,75 @@ PageDefinitionsSCAPForm {
         gapi.startGettingEntities()
     }
 
+    function update_entity_attributes(attributes) {
+        if (entityAttributesModel.count == 0) {
+            for (var provider in attributes) {
+                entityAttributesModel.set(j, {
+                    "entityName": provider,
+                    "attribute": "<ul><li>" + attributes[provider].join("</li><br><li>") + "</li></ul>",
+                    checkBoxAttr: false
+                })
+            }
+        } else {
+            for (var provider in attributes) {
+                for (var j = 0; j < entityAttributesModel.count; j++) {
+                    if (entityAttributesModel.get(j).entityName === provider) {
+                        entityAttributesModel.set(j, {
+                            "entityName": entityAttributesModel.get(j).entityName,
+                            "attribute": "<ul><li>" + attributes[provider].join("</li><br><li>") + "</li></ul>"
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    function update_company_attributes(attributes) {
+        companyAttributesModel.clear()
+        for (var provider in attributes) {
+            // Let's see if company already exists and in what index
+            var companyIndex
+            for (companyIndex = 0; companyIndex < companyAttributesModel.count; companyIndex++) {
+                if (companyAttributesModel.get(companyIndex).entityName === provider) {
+                    break
+                }
+            }
+            if (companyAttributesModel.count>0 && companyIndex < companyAttributesModel.count) {
+                companyAttributesModel.set(companyIndex,
+                {
+                    entityName: provider,
+                    attribute: companyAttributesModel.get(companyIndex).attribute
+                              + "<ul><li>" + attributes[provider].join("</li><br><li>") + "</li></ul>"
+                });
+            } else {
+                companyAttributesModel.append(
+                {
+                  entityName: provider,
+                  attribute: "<ul><li>" + attributes[provider].join("</li><br><li>") + "</li></ul>",
+                  checkBoxAttr: false
+                });
+            }
+        }
+    }
+
+    function show_generic_scap_error_message() {
+        var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
+        var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_FIRST")
+
+        if (controler.isProxyConfigured()) {
+            bodyPopup += " " 
+                + qsTranslate("GAPI","STR_VERIFY_PROXY")
+        }
+        show_error_message(titlePopup, bodyPopup)
+    }
+
+    function show_error_message(title, body) {
+        mainFormID.propertyPageLoader.activateGeneralPopup(title, body, false)
+
+        propertyBusyIndicator.running = false
+        propertyBusyIndicatorAttributes.running = false
+    }
+
     function returnToSignaturePage() {
         propertyPageLoader.propertyBackupFromSignaturePage = false
         mainFormID.state = Constants.MenuState.EXPAND
@@ -860,6 +859,17 @@ PageDefinitionsSCAPForm {
             }
         }
         return false
+    }
+
+    function getSelectedEntityNames() {
+        var entities = []
+        for (var i = 0; i < entityAttributesModel.count; i++) {
+            if (entityAttributesModel.get(i).checkBoxAttr == true) {
+                entities.push(entityAttributesModel.get(i).entityName)
+            }
+        }
+
+        return entities
     }
 
     function toTitleCase(str) {

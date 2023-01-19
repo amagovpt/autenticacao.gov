@@ -18,7 +18,13 @@ namespace eIDMW
         else if (uri == ATTR_URI_SURNAME)
             return SURNAME;
         else if (uri == ATTR_URI_COMPLETENAME)
-            return COMPLETENAME;        
+            return COMPLETENAME;
+        else if (uri == ATTR_URI_DOCTYPE)
+            return DOCTYPE;
+        else if (uri == ATTR_URI_DOCNATIONALITY)
+            return DOCNATIONALITY;
+        else if (uri == ATTR_URI_DOCNUMBER)
+            return DOCNUMBER;
         return NONE;
     }
 
@@ -33,6 +39,12 @@ namespace eIDMW
             return ATTR_URI_SURNAME;
         case COMPLETENAME:
             return ATTR_URI_COMPLETENAME;
+        case DOCTYPE:
+            return ATTR_URI_DOCTYPE;
+        case DOCNATIONALITY:
+            return ATTR_URI_DOCNATIONALITY;
+        case DOCNUMBER:
+            return ATTR_URI_DOCNUMBER;
         default:
             return "";
         }

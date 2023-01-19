@@ -2443,88 +2443,11 @@
         </Component>
       </Directory>
       <Directory Id="dirECC29599FCFE9E458549A895F0628289" Name="translations">
-        <Component Id="cmpAED73B0152F25F518488AD1C4CA8B6DA" Guid="{A8E9FBFA-77E0-49BD-BE12-C79A3806E0B8}">
-          <File Id="filCB2115C7A109C7D2970B555B96850520" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ar.qm" />
-        </Component>
-        <Component Id="cmpFC9073088F9C705F0DD59FF0D6CD9635" Guid="{F6745E12-0BC9-4EAA-A5DB-62115ADD5694}">
-          <File Id="fil0BF893D7F314AB368B1ECD5281ACA1CF" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_bg.qm" />
-        </Component>
-        <Component Id="cmp8494351EA7DAA1DC026E4F5B02D21572" Guid="{E2846D08-86BB-4556-8647-EB655E6695CA}">
-          <File Id="fil0011EBD34625FFC5FC5C22AAE186838A" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ca.qm" />
-        </Component>
-        <Component Id="cmpD9C58E2B9527653C8E3DD3426D43F77B" Guid="{5CA7EFA0-3465-47BC-B669-5E6109971102}">
-          <File Id="filE4C05F709C0FF0242A2F27D78F941436" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_cs.qm" />
-        </Component>
-        <Component Id="cmp2B46EB4F8C6030705B98FD0D3B4E894E" Guid="{88557A03-3C2E-41A7-BF47-C1E1027DFE7B}">
-          <File Id="filCEC6B50B0F1ECB9D94668ADF8F052BB0" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_da.qm" />
-        </Component>
-        <Component Id="cmp928AC4D8573342D8E28D1002BC5C55C3" Guid="{1A3B4817-B2B6-490B-BFBB-73C7C4CFDC80}">
-          <File Id="fil7EC5166ECC30B6E0B5C2F6B227A64AA2" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_de.qm" />
-        </Component>
         <Component Id="cmpBA7634D5AD3249D667CE516CD6E742A4" Guid="{42865C70-A0E1-41F2-961C-02EC1ED76DF1}">
           <File Id="fil6B3FBB64B43ED99D6040953875B1485C" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_en.qm" />
         </Component>
-        <Component Id="cmp541D963AFEA1EF2FDBCE4C13185D7AA7" Guid="{01E73B89-BA6F-4155-8340-8655751EE1D3}">
-          <File Id="filD6E6B762C703648488771E22C5DB6E44" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_es.qm" />
-        </Component>
-        <Component Id="cmp117D49F717160D348E2058725167ED28" Guid="{952DA6F4-7EE6-4D05-889F-FDD23D509A64}">
-          <File Id="fil8911ECE07B85F83C7BBE4AC0648C4C87" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_fi.qm" />
-        </Component>
-        <Component Id="cmp8C23D508E060D545B33FA1AAE609663D" Guid="{1DD4B49E-50D9-4AD5-921F-9CFB9C604061}">
-          <File Id="fil179457B18BB07257464037C8ABDC93C6" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_fr.qm" />
-        </Component>
-        <Component Id="cmpB66C0D7389B913E438D93C6A3A571B47" Guid="{CC7424B0-4207-451C-9E11-7CD1353EF44C}">
-          <File Id="fil6BC785EA947807F339AD95CD6711CED0" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_gd.qm" />
-        </Component>
-        <Component Id="cmp23398EAAFB16BFA56F4F5C210DEF4C7E" Guid="{3DCA0F32-D2B3-4EDA-9EEF-53F297B65723}">
-          <File Id="fil340FF5DF54FB65C1EF3D2F8914BF2B77" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_he.qm" />
-        </Component>
-        <Component Id="cmpE9582353D1D4B653DA9D120BF1CE9F70" Guid="{3B2D5A0C-13A6-4877-8E56-C74C284BFFF7}">
-          <File Id="fil06310AB0A3514D41D40B1DAF12BED355" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_hu.qm" />
-        </Component>
-        <Component Id="cmpEFB5E458EB368DCC8CFEF314922A01A5" Guid="{5EB41EF7-D96C-40BA-B95C-3058B677DFFE}">
-          <File Id="filC8DF6B0E3FB47CB0710E1DAD96757F99" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_it.qm" />
-        </Component>
-        <Component Id="cmpF8410BCA5ADC6DCE1FF7A9B730D46B4E" Guid="{7E87F774-D025-4AE6-9156-C9FAEC4E1411}">
-          <File Id="fil0388B5DFD767755B36C9B30B0713B59F" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ja.qm" />
-        </Component>
-        <Component Id="cmp0B63E8865B856CC302EE7CE9CFD039A2" Guid="{C941A956-E0B0-4C6B-AF3C-2ED8951D2961}">
-          <File Id="filCA020F4510A48BA5F83FABC8F6053026" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ko.qm" />
-        </Component>
-        <Component Id="cmp7230359FB14B8D98A420E806ED71AE43" Guid="{68D9DD51-28EC-4C47-BCD2-34031766939E}">
-          <File Id="fil1523367E6077A64482160E6B9DBF82E6" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_lv.qm" />
-        </Component>
-        <Component Id="cmpC0DC860CBE93525EC4C3D9BCEF44309A" Guid="{859E2C62-CA4D-4225-AE47-6307523ABD41}">
-          <File Id="filEA5EC9E3741E8BCC3EA7C0D00A8C5920" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_pl.qm" />
-        </Component>
-        <Component Id="cmp289565675F8E1D4CD87E0627509545DF" Guid="{D046BF19-AB8E-4FBF-8CA3-D9837F5943C1}">
-          <File Id="fil3B572FC0E6630A08538EF0E0841B0433" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_ru.qm" />
-        </Component>
-        <Component Id="cmp34ABC78F1EFF6E4560CF196C9EF384B8" Guid="{0D938C43-8043-40C2-8AF9-7F7FEB9F9FEA}">
-          <File Id="fil1C755CE9F97B8B97FCAE078B7CE5C710" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_sk.qm" />
-        </Component>
         <Component Id="cmp49E46CC5913046A79B04663EE450DAB1" Guid="{E5ED163A-2A9D-4BA4-93AF-E36DE1B70561}">
           <File Id="filD53ACE0C78FB0756269481A97DFE7F0D" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_uk.qm" />
-        </Component>
-        <Component Id="cmp6FC7614EBB2801FC04A2D5CD08073C54" Guid="{C12AD079-9F65-4FAD-838A-35BF3DAC496E}">
-          <File Id="fil2EC8050C34DD34DAF030C7E47308C210" KeyPath="yes" Source="$(var.QMLDIR)\translations\qt_zh_TW.qm" />
-        </Component>
-      </Directory>
-      <Directory Id="dirD711620FA2A9EA31D2D265622FC6E5A3" Name="virtualkeyboard">
-        <Component Id="cmp0C8F84FF41E3B86E988F1A6699485045" Guid="{A30AEE7A-E80B-406D-8644-503F077F8964}">
-          <File Id="fil09BA275260CF5465D5377C5DEB50E579" KeyPath="yes" Source="$(var.QMLDIR)\virtualkeyboard\qtvirtualkeyboard_hangul.dll" />
-        </Component>
-        <Component Id="cmp456841036531715695B2CCF22D0E0992" Guid="{69B22556-813E-446D-B352-C8DC3F2F340A}">
-          <File Id="filCDE7722174DD52D7EC14970F255F4B84" KeyPath="yes" Source="$(var.QMLDIR)\virtualkeyboard\qtvirtualkeyboard_openwnn.dll" />
-        </Component>
-        <Component Id="cmpAFC9A1BC30B2C31CC82D9C9ECD976501" Guid="{2D45B958-F8B2-4215-950A-1DB0DE1F3D6A}">
-          <File Id="fil7AC6E1E0D1904405234470685F323E0A" KeyPath="yes" Source="$(var.QMLDIR)\virtualkeyboard\qtvirtualkeyboard_pinyin.dll" />
-        </Component>
-        <Component Id="cmp3AFBED9C05C92192367C6E8E580C6A8B" Guid="{4D7E8474-309C-4825-872E-FA74EB58C727}">
-          <File Id="fil10A38E04ACB68FAF1F86E1C7C5F72920" KeyPath="yes" Source="$(var.QMLDIR)\virtualkeyboard\qtvirtualkeyboard_tcime.dll" />
-        </Component>
-        <Component Id="cmpE45E89D351C4680CB2FA78500688F988" Guid="{256A5B56-D768-4F3A-BEDC-C68145CBB10E}">
-          <File Id="filC4317F52A899F332DBB5CCE585FB1963" KeyPath="yes" Source="$(var.QMLDIR)\virtualkeyboard\qtvirtualkeyboard_thai.dll" />
         </Component>
       </Directory>
     </DirectoryRef>
@@ -3297,33 +3220,8 @@
       <ComponentRef Id="cmp22D34568CC04EB9491F379B2297A0E1B" />
       <ComponentRef Id="cmp1836776EB714B45421A541AC4AFB9259" />
       <ComponentRef Id="cmp77EBBCFC7CFE888F78CFDA93C06AA438" />
-      <ComponentRef Id="cmpAED73B0152F25F518488AD1C4CA8B6DA" />
-      <ComponentRef Id="cmpFC9073088F9C705F0DD59FF0D6CD9635" />
-      <ComponentRef Id="cmp8494351EA7DAA1DC026E4F5B02D21572" />
-      <ComponentRef Id="cmpD9C58E2B9527653C8E3DD3426D43F77B" />
-      <ComponentRef Id="cmp2B46EB4F8C6030705B98FD0D3B4E894E" />
-      <ComponentRef Id="cmp928AC4D8573342D8E28D1002BC5C55C3" />
       <ComponentRef Id="cmpBA7634D5AD3249D667CE516CD6E742A4" />
-      <ComponentRef Id="cmp541D963AFEA1EF2FDBCE4C13185D7AA7" />
-      <ComponentRef Id="cmp117D49F717160D348E2058725167ED28" />
-      <ComponentRef Id="cmp8C23D508E060D545B33FA1AAE609663D" />
-      <ComponentRef Id="cmpB66C0D7389B913E438D93C6A3A571B47" />
-      <ComponentRef Id="cmp23398EAAFB16BFA56F4F5C210DEF4C7E" />
-      <ComponentRef Id="cmpE9582353D1D4B653DA9D120BF1CE9F70" />
-      <ComponentRef Id="cmpEFB5E458EB368DCC8CFEF314922A01A5" />
-      <ComponentRef Id="cmpF8410BCA5ADC6DCE1FF7A9B730D46B4E" />
-      <ComponentRef Id="cmp0B63E8865B856CC302EE7CE9CFD039A2" />
-      <ComponentRef Id="cmp7230359FB14B8D98A420E806ED71AE43" />
-      <ComponentRef Id="cmpC0DC860CBE93525EC4C3D9BCEF44309A" />
-      <ComponentRef Id="cmp289565675F8E1D4CD87E0627509545DF" />
-      <ComponentRef Id="cmp34ABC78F1EFF6E4560CF196C9EF384B8" />
       <ComponentRef Id="cmp49E46CC5913046A79B04663EE450DAB1" />
-      <ComponentRef Id="cmp6FC7614EBB2801FC04A2D5CD08073C54" />
-      <ComponentRef Id="cmp0C8F84FF41E3B86E988F1A6699485045" />
-      <ComponentRef Id="cmp456841036531715695B2CCF22D0E0992" />
-      <ComponentRef Id="cmpAFC9A1BC30B2C31CC82D9C9ECD976501" />
-      <ComponentRef Id="cmp3AFBED9C05C92192367C6E8E580C6A8B" />
-      <ComponentRef Id="cmpE45E89D351C4680CB2FA78500688F988" />
     </ComponentGroup>
   </Fragment>
 </Wix>

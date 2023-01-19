@@ -85,30 +85,19 @@ PageServicesSignForm {
     Connections {
         target: gapi
         onSignalGenericError: {
-            propertyBusyIndicatorRunning = false
+            propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
         onSignalAttributesLoaded:{
             console.log("Sign advanced - Signal SCAP attributes loaded")
-
-            for(var i = 0; i < attribute_list.length; i=i+4)
-            {
-                // Fix the differences between entities and companies attributes about uppercase style
-                attribute_list[i+1] = toTitleCase(attribute_list[i+1])
-                entityAttributesModel.append({
-                                                 entityName: attribute_list[i+3] != "" ? attribute_list[i+3] : attribute_list[i],
-                                                 citizenName: attribute_list[i+1],
-                                                 attribute: attribute_list[i+2],
-                                                 checkBoxAttr: false,
-                                                 isEnterprise: enterpriseAttribute[i/4]
-                                             });
-            }
+            append_attributes_to_model(institution_attributes)
+            append_attributes_to_model(enterprise_attributes)
 
             for (var i = 0; i < propertyPageLoader.attributeListBackup.length; i++){
                 entityAttributesModel.get(i).checkBoxAttr = propertyPageLoader.attributeListBackup[i]
             }
 
-            propertyBusyIndicatorRunning = false
+            propertyBusyIndicator.running = false
             propertyListViewEntities.currentIndex = 0
             entityAttributesModel.count > 0
                     ? propertyListViewEntities.forceActiveFocus()
@@ -124,7 +113,8 @@ PageServicesSignForm {
         }
         onSignalPdfSignSuccess: {
             signsuccess_dialog.open()
-            propertyBusyIndicatorRunning = false
+            propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             // test time stamp
             if(error_code == GAPI.SignMessageTimestampFailed){
                 if(propertyListViewFiles.count > 1 && propertyRadioButtonPADES.checked){
@@ -140,34 +130,50 @@ PageServicesSignForm {
                 signsuccess_dialog.propertySignSuccessDialogText.text = ""
             }
         }
+
+        onSignalSignatureFinished: {
+            propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        }
+
         onSignalPdfSignFail: {
             console.log("Sign failed with error code: " + error_code)
 
-            signerror_dialog.propertySignFailDialogText.text = ""
+            var error_text = ""
             if ( index != -1 ){ //batch signature failed
                 var filename = Functions.fileBaseName(propertyListViewFiles.model.get(index).fileUrl)
-                signerror_dialog.propertySignFailDialogText.text =
-                    qsTranslate("PageServicesSign","STR_SIGN_BATCH_FAILED") + filename
+                error_text = qsTranslate("PageServicesSign","STR_SIGN_BATCH_FAILED") + filename
             }
 
+            var generic_text = ""
             if (error_code == GAPI.SignFilePermissionFailed) {
-                signerror_dialog.propertySignFailDialogGenericText.text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
             } else if (error_code == GAPI.PDFFileUnsupported) {
-                signerror_dialog.propertySignFailDialogGenericText.text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
             } else {
-                signerror_dialog.propertySignFailDialogGenericText.text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
-            dialogSignCMD.close()
-            signerror_dialog.visible = true
-            propertyBusyIndicatorRunning = false
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            propertyOutputSignedFile = ""
+
+            show_error_message(error_text, generic_text)
         }
-        onSignalSCAPServiceTimeout: {
-            gapi.startPingSCAP()
+
+        onSignalPdfBatchSignFail: {
+            var batch_error_text = qsTranslate("PageServicesSign","STR_SIGN_BATCH_FAILED") + filename
+            var generic_text
+            if (error_code == GAPI.SignFilePermissionFailed) {
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
+            } else if (error_code == GAPI.PDFFileUnsupported) {
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
+            } else {
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
+            }
+            show_error_message(batch_error_text, generic_text)
         }
+
         onSignalSCAPServiceFail: {
             console.log("Sign advanced - Signal SCAP Service Fail")
+            signerror_dialog.propertySignFailDialogGenericText.text = ""
+
             if(pdfsignresult == GAPI.ScapAttributesExpiredError ||
                     pdfsignresult == GAPI.ScapZeroAttributesError ||
                     pdfsignresult == GAPI.ScapNotValidAttributesError){
@@ -205,45 +211,45 @@ PageServicesSignForm {
             }
             else {
                 console.log("ScapGenericError")
-                gapi.startPingSCAP()
+                signerror_dialog.propertySignFailDialogText.text =
+                    qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL")
             }
             signerror_dialog.visible = true
-            propertyBusyIndicatorRunning = false
+            propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyOutputSignedFile = ""
         }
-        onSignalSCAPPingSuccess: {
-            var msg = qsTranslate("PageServicesSign","STR_SIGN_SCAP_SERVICE_FAIL")
-            if (dialogSignCMD.isVisible()){
-                dialogSignCMD.showMessage(msg,"")
-            } else {
-                signerror_dialog.propertySignFailDialogText.text = msg
-                signerror_dialog.visible = true
-                propertyBusyIndicatorRunning = false
-                mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                propertyOutputSignedFile = ""
-            }
-        }
-        onSignalSCAPPingFail: {
-            console.log("Sign advanced - Signal SCAP ping fail")
-            var msg = qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_FIRST")
-                    + "\n\n"
-                    + qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_SECOND")
 
-            if (controler.isProxyConfigured()) {
-                msg += " " + qsTranslate("GAPI","STR_VERIFY_PROXY")
-            }
+        onSignalSCAPConnectionFailed: {
+            console.log("Scap connection failed")
 
-            if (dialogSignCMD.isVisible()){
-                dialogSignCMD.showMessage(msg,"")
-            } else {
-                signerror_dialog.propertySignFailDialogText.text = msg
-                signerror_dialog.visible = true
-                propertyBusyIndicatorRunning = false
-                mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                propertyOutputSignedFile = ""
-            }
+            var text_top = qsTranslate("PageServicesSign", "STR_SCAP_PING_FAIL_FIRST")
+            var text_bottom = qsTranslate("PageServicesSign", "STR_SCAP_PING_FAIL_SECOND")
+
+            show_error_message(text_top, text_bottom)
         }
+
+        onSignalSCAPBadCredentials: {
+            console.log("Scap Bad Credentials")
+
+            var text_top = qsTranslate("PageServicesSign", "STR_SCAP_BAD_CREDENTIALS")
+
+            show_error_message(text_top, "")
+        }
+
+        onSignalCacheRemovedLegacy: {
+            console.log("Removed Legacy Scap cache files")
+
+            var text_top = qsTranslate("PageDefinitionsSCAP","STR_SCAP_LEGACY_CACHE")
+
+            show_error_message(text_top, "")
+        }
+
+        onSignalCanceledSignature: {
+            propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        }
+
         onSignalCardAccessError: {
             console.log("Sign Advanced Page onSignalCardAccessError")
             if(cardLoaded){
@@ -278,7 +284,7 @@ PageServicesSignForm {
                 if(error_code != GAPI.CardUserPinCancel && error_code != GAPI.CardPinTimeout)
                     cardLoaded = false
             }
-            propertyBusyIndicatorRunning = false
+            propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyButtonAdd.forceActiveFocus()
         }
@@ -295,8 +301,9 @@ PageServicesSignForm {
             }
 
             propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
-            
-            propertyBusyIndicatorRunning = false
+
+            propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyButtonAdd.forceActiveFocus()
             cardLoaded = true
         }
@@ -320,7 +327,7 @@ PageServicesSignForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
-                propertyBusyIndicatorRunning = true
+                propertyBusyIndicator.running = true
                 cardLoaded = true
                 signCertExpired = false
 
@@ -343,6 +350,7 @@ PageServicesSignForm {
             signCertExpired = true
             
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
         onSignalSignCertSuspended: {
@@ -352,6 +360,7 @@ PageServicesSignForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
         onSignalSignCertRevoked: {
@@ -361,6 +370,7 @@ PageServicesSignForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
         onSignalCustomSignImageRemoved: {
@@ -373,10 +383,12 @@ PageServicesSignForm {
         onSignalStartCheckCCSignatureCert: {
             console.log("Services Sign onSignalStartCheckCCSignatureCert")
             propertyBusyIndicator.running = true
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
         }
 
         onSignalOkSignCertificate: {
             propertyBusyIndicator.running = false
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
             if (gapi.doGetTriesLeftSignPin() === 0) {
                 var titlePopup = qsTranslate("Popup PIN", "STR_POPUP_ERROR")
@@ -395,52 +407,44 @@ PageServicesSignForm {
                     gapi.setShortcutOutput("")
                     return;
                 }
+
+                if(propertySwitchAddAttributes.checked && numberOfAttributesSelected() == 0) {
+                    //SCAP switch checked but no attributes selected
+                    var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+                    var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                    return
+                }
+
                 var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://");
                 if (propertyListViewFiles.count == 1) {
                     propertyFileDialogOutput.title = qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
 
-                    //PAdES with SCAP switch checked but no attributes selected
-                    if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked
-                        && numberOfAttributesSelected() == 0) {
-                        var titlePopup = qsTranslate("PageServicesSign", "STR_SCAP_WARNING")
-                        var bodyPopup = qsTranslate("PageServicesSign", "STR_SCAP_ATTRIBUTES_NOT_SELECT")
-                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                        return
-                    }
-
                     var outputFile = propertyListViewFiles.model.get(0).fileUrl
                     var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
 
-                    if (containsPackageAsic()) {
-                        propertyBusyIndicatorRunning = true
-                        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                    if(containsPackageAsic()){
                         var output = decodeURIComponent(Functions.stripFilePrefix(outputFile))
                         signCC(output)
                     } else {
                         propertyFileDialogOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
                         propertyFileDialogOutput.open()
                     }
-                } else {
-                    if (propertySwitchAddAttributes.checked) {
-                        var titlePopup = qsTranslate("PageServicesSign", "STR_SCAP_WARNING")
-                        var bodyPopup = qsTranslate("PageServicesSign", "STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
-                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                }else{
+                    if (propertyRadioButtonPADES.checked) {
+                        propertyFileDialogBatchOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                        propertyFileDialogBatchOutput.open()
                     } else {
-                        if (propertyRadioButtonPADES.checked) {
-                            propertyFileDialogBatchOutput.title = qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT_FOLDER")
-                            propertyFileDialogBatchOutput.open()
+                        if (containsPackageAsic()) {
+                            var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+                            var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
+                            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                         } else {
-                            if (containsPackageAsic()) {
-                                var titlePopup = qsTranslate("PageServicesSign", "STR_FILE_ASIC_TITLE")
-                                var bodyPopup = qsTranslate("PageServicesSign", "STR_FILE_ASIC")
-                                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                            } else {
-                                var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count - 1).fileUrl
-                                if (outputFolderPath.lastIndexOf('/') >= 0)
-                                    outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
-                                propertyFileDialogOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
-                                propertyFileDialogOutput.open()
-                            }
+                            var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
+                            if (outputFolderPath.lastIndexOf('/') >= 0)
+                                outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
+                            propertyFileDialogOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
+                            propertyFileDialogOutput.open()
                         }
                     }
                 }
@@ -486,7 +490,7 @@ PageServicesSignForm {
 
             updateWrappedName();
             updateWrappedLocation(propertyTextFieldLocal.text);
-            updateSCAPInfoOnPreview();
+            if (propertySwitchAddAttributes.checked) updateSCAPInfoOnPreview();
         }
     }
     Components.DialogCMD{
@@ -689,11 +693,11 @@ PageServicesSignForm {
             Accessible.role: Accessible.AlertMessage
             Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
                              + titleTextError.text + text_sign_error.text + text_sign_generic_error
-            KeyNavigation.tab: closeButtonError.visible ? closeButtonError: buttonLoadAttr
-            KeyNavigation.right: closeButtonError.visible ? closeButtonError: buttonLoadAttr
-            KeyNavigation.down: closeButtonError.visible ? closeButtonError: buttonLoadAttr
-            KeyNavigation.backtab: closeButtonError.visible ? closeButtonError: buttonLoadAttr
-            KeyNavigation.up: closeButtonError.visible ? closeButtonError: buttonLoadAttr
+            KeyNavigation.tab: closeButtonError.visible ? closeButtonError : (buttonCancelAttr.visible ? buttonCancelAttr : buttonLoadAttr)
+            KeyNavigation.right: closeButtonError.visible ? closeButtonError : (buttonCancelAttr.visible ? buttonCancelAttr : buttonLoadAttr)
+            KeyNavigation.down: closeButtonError.visible ? closeButtonError : (buttonCancelAttr.visible ? buttonCancelAttr : buttonLoadAttr)
+            KeyNavigation.backtab: buttonLoadAttr.visible ? buttonLoadAttr : (buttonCancelAttr.visible ? buttonCancelAttr : closeButtonError)
+            KeyNavigation.up: buttonLoadAttr.visible ? buttonLoadAttr : (buttonCancelAttr.visible ? buttonCancelAttr : closeButtonError)
             Column{
                 spacing: 10
                 Text {
@@ -742,9 +746,9 @@ PageServicesSignForm {
                     }
                     Accessible.role: Accessible.Button
                     Accessible.name: text
-                    KeyNavigation.tab: rectPopUpError
-                    KeyNavigation.down: rectPopUpError
-                    KeyNavigation.right: rectPopUpError
+                    KeyNavigation.tab: buttonLoadAttr.visible ? buttonLoadAttr : rectPopUpError
+                    KeyNavigation.right: buttonLoadAttr.visible ? buttonLoadAttr : rectPopUpError
+                    KeyNavigation.down: buttonLoadAttr.visible ? buttonLoadAttr : rectPopUpError
                     KeyNavigation.backtab: rectPopUpError
                     KeyNavigation.up: rectPopUpError
                     highlighted: activeFocus
@@ -773,8 +777,8 @@ PageServicesSignForm {
                     KeyNavigation.tab: rectPopUpError
                     KeyNavigation.down: rectPopUpError
                     KeyNavigation.right: rectPopUpError
-                    KeyNavigation.backtab: rectPopUpError
-                    KeyNavigation.up: rectPopUpError
+                    KeyNavigation.backtab: buttonCancelAttr.visible ? buttonCancelAttr : (closeButtonError.visible ? closeButtonError : rectPopUpError)
+                    KeyNavigation.up: buttonCancelAttr.visible ? buttonCancelAttr : (closeButtonError.visible ? closeButtonError : rectPopUpError)
                     highlighted: activeFocus
                     Keys.onEnterPressed: clicked()
                     Keys.onReturnPressed: clicked()
@@ -795,9 +799,9 @@ PageServicesSignForm {
                     }
                     Accessible.role: Accessible.Button
                     Accessible.name: text
-                    KeyNavigation.tab: rectPopUpError
-                    KeyNavigation.down: rectPopUpError
-                    KeyNavigation.right: rectPopUpError
+                    KeyNavigation.tab: buttonLoadAttr.visible ? buttonLoadAttr : rectPopUpError
+                    KeyNavigation.right: buttonLoadAttr.visible ? buttonLoadAttr : rectPopUpError
+                    KeyNavigation.down: buttonLoadAttr.visible ? buttonLoadAttr : rectPopUpError
                     KeyNavigation.backtab: rectPopUpError
                     KeyNavigation.up: rectPopUpError
                     highlighted: activeFocus
@@ -961,8 +965,6 @@ PageServicesSignForm {
 
     propertyFileDialogOutput {
         onAccepted: {
-            propertyBusyIndicatorRunning = true
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var output = propertyFileDialogOutput.file.toString()
             output = decodeURIComponent(Functions.stripFilePrefix(output))
             signCC(output)
@@ -980,8 +982,6 @@ PageServicesSignForm {
     }
     propertyFileDialogBatchOutput {
         onAccepted: {
-            propertyBusyIndicatorRunning = true
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var output = propertyFileDialogBatchOutput.folder.toString()
             output = decodeURIComponent(Functions.stripFilePrefix(output))
             signCC(output)
@@ -1112,7 +1112,7 @@ PageServicesSignForm {
                 anchors.leftMargin: Constants.SIZE_LISTVIEW_SPACING
                 Text {
                     id: entityText
-                    text: "<b>" + citizenName + " </b> - " + entityName + " - " + attribute
+                    text: "<b>" + citizenName + "</b> - " + entityName + " - " + attribute
                     width: parent.width
                     wrapMode: Text.WordWrap
                     font.family: lato.name
@@ -1161,16 +1161,14 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked
             if(propertySwitchAddAttributes.checked){
-                propertyBusyIndicatorRunning = true
+                propertyBusyIndicator.running = true
                 propertyCheckSignReduced.checked = false
                 propertyTextAttributesMsg.visible = true
                 propertyMouseAreaTextAttributesMsg.enabled = true
                 propertyMouseAreaTextAttributesMsg.z = 1
                 propertyPDFPreview.propertyDragSigCertifiedByText.visible = true
                 propertyPDFPreview.propertyDragSigAttributesText.visible = true
-                // Load attributes from cache (all, LongDescription)
-                gapi.startLoadingAttributesFromCache(GAPI.ScapAttrAll,
-                                                     GAPI.ScapAttrDescriptionLong)
+                gapi.startLoadingAttributesFromCache(false)
             }else{
                 propertyTextAttributesMsg.visible = false
                 propertyMouseAreaTextAttributesMsg.enabled = false
@@ -1249,11 +1247,6 @@ PageServicesSignForm {
                 var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
                 return;
-            }
-            else if (propertySwitchAddAttributes.checked && propertyListViewFiles.count > 1){
-                var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                var bodyPopup = qsTranslate("PageServicesSign","STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG")
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
             else {
                 // If application was started with signAdvanced and output option from command line
@@ -1642,10 +1635,7 @@ PageServicesSignForm {
         }
     }
 
-    Component.onCompleted: {
-        console.log("Page Services Sign Advanced mainWindowCompleted")
-        propertyPageLoader.propertyBackupFromSignaturePage = false
-        propertyBusyIndicatorRunning = true
+    function update_image_on_seal() {
         var urlCustomImage = gapi.getCachePath()+"/CustomSignPicture.jpg"
         if(gapi.getUseCustomSignature() && gapi.customSignImageExist()){
             if (Qt.platform.os === "windows") {
@@ -1657,6 +1647,13 @@ PageServicesSignForm {
         }else{
             propertyPDFPreview.propertyDragSigImg.source = "qrc:/images/logo_CC_seal.png"
         }
+    }
+
+    Component.onCompleted: {
+        console.log("Page Services Sign Advanced mainWindowCompleted")
+        propertyPageLoader.propertyBackupFromSignaturePage = false
+        propertyBusyIndicator.running = true
+        update_image_on_seal()
 
         if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign){
             var paths = gapi.getShortcutPaths()
@@ -1687,7 +1684,7 @@ PageServicesSignForm {
             propertyPDFPreview.propertyDragSigNumIdText.visible = false
         }
         propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
-        
+
         signCertExpired = false
         gapi.startGettingInfoFromSignCert();
         gapi.startCheckSignatureCertValidity();
@@ -1699,6 +1696,27 @@ PageServicesSignForm {
             gapi.setShortcutOutput("")
         }
     }
+
+    function append_attributes_to_model(attributes) {
+        for (var provider in attributes) {
+            for (var i = 0; i < attributes[provider].length; i++) {
+                //we have to receive the attribut ids in the same array for now...
+                // citizen name - attribute [id] "exampleID"
+                var attribute_and_id = attributes[provider][i].split("[id]")
+
+                var name_attributes = attribute_and_id[0].split("-")
+
+                entityAttributesModel.append({
+                    citizenName: toTitleCase(name_attributes[0]),
+                    entityName: provider,
+                    attribute: name_attributes[1],
+                    id: attribute_and_id[1].trim(),
+                    checkBoxAttr: false
+                });
+            }
+        }
+    }
+
     function loadUnfinishedSignature() {
         // Load backup data about unfinished advanced signature
         propertyRadioButtonPADES.checked = propertyPageLoader.propertyBackupFormatPades
@@ -1880,18 +1898,6 @@ PageServicesSignForm {
         return count
     }
 
-    function getSeletctedAttributes() {
-        var attributeList = []
-        var count = 0
-        for (var i = 0; i < entityAttributesModel.count; i++){
-            if(entityAttributesModel.get(i).checkBoxAttr) {
-                attributeList[count++] = i
-            }
-        }
-
-        return attributeList
-    }
-
     function jumpToDefinitionsSCAP(){
         propertyPageLoader.propertyBackupFromSignaturePage = true
         // Jump to Menu Definitions - PageDefinitionsSCAP
@@ -1924,6 +1930,9 @@ PageServicesSignForm {
     }
 
     function signCC(outputFile) {
+        propertyBusyIndicator.running = true
+        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+
         var isTimestamp = propertySwitchSignTemp.checked
         var isLTV = propertyCheckboxLTV.checked
         if (propertyRadioButtonPADES.checked) {
@@ -1946,39 +1955,33 @@ PageServicesSignForm {
                         + " and coord_y: " + coord_y + " page: " + page + " timestamp: " + isTimestamp + " ltv: " + isLTV + " lastPage: " + isLastPage)
 
             propertyOutputSignedFile = outputFile;
-            if (propertyListViewFiles.count == 1) {
-                var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
-                if(propertySwitchAddAttributes.checked) {
-                    //In the new SCAP implementation we use our PDFSignature class as a simple signature
-                    //so we don't need to convert coordinates
-                    //coord_x = gapi.getPageSize(page).width * coord_x
-                    //coord_y = gapi.getPageSize(page).height * (1 - coord_y)
 
-                    var attributeList = []
-                    var count = 0
-                    for (var i = 0; i < entityAttributesModel.count; i++){
-                        if(entityAttributesModel.get(i).checkBoxAttr == true){
-                            attributeList[count] = i
-                            count++
-                        }
-                    }
-                    console.log("QML AttributeList: ", attributeList)
-                    gapi.startSigningSCAP(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                            location, reason, isTimestamp, isLTV, attributeList)
-                } else {
-                    gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
-                                            reason, location, isTimestamp, isLTV, isSmallSignature)
-                }
-            } else {
+            if (propertySwitchAddAttributes.checked) {
                 var batchFilesArray = []
-                for(var i = 0; i < propertyListViewFiles.count; i++){
+                for (var i = 0; i < propertyListViewFiles.count; i++) {
                     batchFilesArray[i] =  propertyListViewFiles.model.get(i).fileUrl;
                 }
-
-                // remove duplicate fileUrls
                 batchFilesArray = batchFilesArray.filter(onlyUnique);
-                gapi.startSigningBatchPDF(batchFilesArray, outputFile, page, coord_x, coord_y,
-                                        reason, location, isTimestamp, isLTV, isSmallSignature, isLastPage)
+
+                var attributeList = getSelectedAttributesIds()
+
+                gapi.startSigningSCAP(batchFilesArray, outputFile, page, coord_x, coord_y,
+                    location, reason, isTimestamp, isLTV, isLastPage, attributeList)
+            } else {
+                if (propertyListViewFiles.count == 1) {
+                    var loadedFilePath = propertyListViewFiles.model.get(0).fileUrl
+                    gapi.startSigningPDF(loadedFilePath, outputFile, page, coord_x, coord_y,
+                        reason, location, isTimestamp, isLTV, isSmallSignature)
+                } else {
+                    var batchFilesArray = []
+                    for (var i = 0; i < propertyListViewFiles.count; i++) {
+                        batchFilesArray[i] =  propertyListViewFiles.model.get(i).fileUrl;
+                    }
+
+                    batchFilesArray = batchFilesArray.filter(onlyUnique);
+                    gapi.startSigningBatchPDF(batchFilesArray, outputFile, page, coord_x, coord_y,
+                        reason, location, isTimestamp, isLTV, isSmallSignature, isLastPage)
+                }
             }
         }
         else {  //XAdES signature
@@ -1999,6 +2002,9 @@ PageServicesSignForm {
     }
 
     function signCMD() {
+        propertyBusyIndicator.running = true
+        mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+
         var isTimestamp = false
         if (typeof propertySwitchSignTemp !== "undefined")
             isTimestamp = propertySwitchSignTemp.checked
@@ -2063,8 +2069,9 @@ PageServicesSignForm {
             propertyOutputSignedFile = outputFile
 
             if (typeof propertySwitchAddAttributes !== "undefined" && propertySwitchAddAttributes.checked) {
-                gapi.signScapWithCMD(loadedFilePaths, outputFile, getSeletctedAttributes(), page, coord_x,
-                    coord_y, reason, location, isTimestamp, isLTV)
+                var attributeList = getSelectedAttributesIds()
+                gapi.signScapWithCMD(loadedFilePaths, outputFile, attributeList, page, coord_x,
+                     coord_y, reason, location, isTimestamp, isLTV, isLastPage)
             } else {
                 gapi.signCMD(loadedFilePaths, outputFile, page, coord_x, coord_y, reason, location, isTimestamp,
                     isLTV,isSmallSignature, isLastPage)
@@ -2178,31 +2185,17 @@ PageServicesSignForm {
         filesModel.remove(index)
     }
     function updateSCAPInfoOnPreview(){
-        var attrList = []
-        var attrListEnterprise = []
-        var count = 0
-        for (var i = 0; i < entityAttributesModel.count; i++) {
-            var currentAttribute = entityAttributesModel.get(i)
-            if (currentAttribute.checkBoxAttr == true) {
-                var entity = currentAttribute.entityName
-                var attr = currentAttribute.attribute
-                attrList.push([entity.trim(), attr.trim()])
-
-                // used show "Certificado por: SCAP" for enterprise attributes
-                attrListEnterprise.push([currentAttribute.isEnterprise ? "SCAP" : entity.trim(), attr.trim()])
-            }
-        }
-
         propertyPDFPreview.propertyDragSigCertifiedByText.text =
             qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_BY")
         propertyPDFPreview.propertyDragSigAttributesText.text =
             qsTranslate("PageServicesSign","STR_SCAP_CERTIFIED_ATTRIBUTES")
 
+        var attrList = getSelectedAttributesIds()
+
         if (attrList != []) {
-            var entitiesToWrap = gapi.getSCAPAttributesText(attrListEnterprise)
             var attributesToWrap = gapi.getSCAPAttributesText(attrList)
 
-            var entitiesText = entitiesToWrap[0]
+            var entitiesText = attributesToWrap[0]
             var attributesText = attributesToWrap[1]
 
             ownerEntitiesBackup = entitiesText
@@ -2218,8 +2211,24 @@ PageServicesSignForm {
             propertyPDFPreview.propertyDragSigAttributesText.text += " <b>" + attributes.join("<br>") + "</b>";
             propertyPDFPreview.propertyCurrentAttrsFontSize = fontSize
 
+            var scap_logo = gapi.getSCAPProviderLogo(attrList)
+            if (scap_logo.length != 0) {
+                propertyPDFPreview.propertyDragSigImg.source = "file:///" + scap_logo
+            } else {
+                update_image_on_seal()
+            }
+        }
+    }
+
+    function getSelectedAttributesIds() {
+        var attributeList = []
+        for (var i = 0; i < entityAttributesModel.count; i++) {
+            if (entityAttributesModel.get(i).checkBoxAttr) {
+                attributeList.push(entityAttributesModel.get(i).id)
+            }
         }
 
+        return attributeList
     }
 
     function getFontSize() {       
@@ -2244,5 +2253,16 @@ PageServicesSignForm {
 
         propertyPDFPreview.propertyFontMargin = 
                 propertyPDFPreview.propertyFontSize  > 5 ? 1 : 0  
+    }
+
+    function show_error_message(text, generic_text) {
+        signerror_dialog.propertySignFailDialogText.text = text
+        signerror_dialog.propertySignFailDialogGenericText.text = generic_text
+
+        dialogSignCMD.close()
+        signerror_dialog.visible = true
+        propertyBusyIndicator.running = false
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        propertyOutputSignedFile = ""
     }
 }

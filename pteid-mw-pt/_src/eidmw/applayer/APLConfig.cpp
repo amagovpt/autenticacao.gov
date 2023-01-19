@@ -281,6 +281,14 @@ void APL_Config::DeleteKeysByPrefix(bool system)
 	CConfig::DeleteKeysByPrefix((system?CConfig::SYSTEM:CConfig::USER),m_name,m_section);
 }
 
+unsigned int APL_Config::CountKeysByPrefix(bool system)
+{
+	if(m_numtype)
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+
+	return CConfig::CountKeysByPrefix((system?CConfig::SYSTEM:CConfig::USER),m_name,m_section);
+}
+
 void APL_Config::setWString(const wchar_t *csValue, bool system)
 {
 	if(m_numtype)

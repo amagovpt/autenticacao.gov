@@ -40,6 +40,7 @@
 #undef X509_EXTENSIONS
 #undef X509_CERT_PAIR
 #undef PKCS7_ISSUER_AND_SERIAL
+#undef PKCS7_SIGNER_INFO
 #undef OCSP_REQUEST
 #undef OCSP_RESPONSE
 #endif
@@ -103,6 +104,9 @@ struct tOcspCertID
 class CrlMemoryCache;
 
 void loadWindowsRootCertificates(X509_STORE *store);
+
+//Implemented in sign-pkcs7.cpp
+EIDMW_APL_API unsigned int SHA256_Wrapper(unsigned char *data, unsigned long data_len, unsigned char *digest);
 
 /******************************************************************************//**
   * Abstract class for cryptographic features 

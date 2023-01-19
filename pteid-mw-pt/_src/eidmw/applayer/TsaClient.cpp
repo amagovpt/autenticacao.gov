@@ -17,7 +17,7 @@
 #include "MiscUtil.h"
 
 #include "APLReader.h"
-//#include "cryptoFwkPteid.h"
+#include "CurlUtil.h"
 #include "Util.h"
 #include "Log.h"
 #include "TsaClient.h"
@@ -99,7 +99,6 @@ namespace eIDMW
 
 		CURL *curl;
 		CURLcode res;
-
 		char error_buf[CURL_ERROR_SIZE];
 		unsigned char *ts_request = timestamp_asn1_request;
 		size_t post_size = sizeof(timestamp_asn1_request);
@@ -113,7 +112,6 @@ namespace eIDMW
 		const char * TSA_URL = tsa_url.getString();
 
 		MWLOG(LEV_DEBUG, MOD_APL, "Requesting timestamp with TSA url: %s", TSA_URL);
-				
 	    if (data_len == SHA256_LEN)
 		{
 			generate_asn1_request_struct(input, true);
@@ -138,14 +136,9 @@ namespace eIDMW
 			headers = curl_slist_append(headers, PTEID_USER_AGENT);
 
 			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, post_size);
-
 			curl_easy_setopt(curl, CURLOPT_URL, TSA_URL);
-
 			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
-
-			curl_apply_proxy_settings(curl, TSA_URL);
 
 			/* Now specify the POST data */ 
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, ts_request);
@@ -153,6 +146,8 @@ namespace eIDMW
 			curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buf);
 
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &TSAClient::curl_write_data);
+
+			applyProxyConfigToCurl(curl, TSA_URL);
 
 			/* Perform the request, res will get the return code */ 
 			res = curl_easy_perform(curl);

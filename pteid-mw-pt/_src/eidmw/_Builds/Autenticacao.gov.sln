@@ -47,6 +47,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "clean_mdrv_keys", "..\clean
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eidguiV2", "..\eidguiV2\eidguiV2.vcxproj", "{8669C59A-52C0-32D6-A32D-91546481FAEA}"
 	ProjectSection(ProjectDependencies) = postProject
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128} = {1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}
 		{3A09DD63-945E-40EB-9053-5FE50F74B7C1} = {3A09DD63-945E-40EB-9053-5FE50F74B7C1}
 		{A35BC7D7-882E-487A-9C8A-70D903EF02C3} = {A35BC7D7-882E-487A-9C8A-70D903EF02C3}
 	EndProjectSection
@@ -106,6 +107,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cmdKsp", "..\cmd-ksp\Provid
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "clean_cache_directory", "..\clean_cache_directory\clean_cache_directory.vcxproj", "{039A79B0-273A-42E6-937F-DB773A8C8C12}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "scap", "..\scap\scap.vcxproj", "{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -447,6 +450,22 @@ Global
 		{039A79B0-273A-42E6-937F-DB773A8C8C12}.Release|x64.Build.0 = Release|x64
 		{039A79B0-273A-42E6-937F-DB773A8C8C12}.Release|x86.ActiveCfg = Release|Win32
 		{039A79B0-273A-42E6-937F-DB773A8C8C12}.Release|x86.Build.0 = Release|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Debug|Win32.Build.0 = Debug|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Debug|x64.ActiveCfg = Debug|x64
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Debug|x64.Build.0 = Debug|x64
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Debug|x86.ActiveCfg = Debug|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Debug|x86.Build.0 = Debug|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Release|Win32.ActiveCfg = Release|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Release|Win32.Build.0 = Release|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Release|x64.ActiveCfg = Release|x64
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Release|x64.Build.0 = Release|x64
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Release|x86.ActiveCfg = Release|Win32
+		{1CDC113F-7AF5-41D6-9F84-E9EAEB1C0128}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

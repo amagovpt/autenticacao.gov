@@ -336,6 +336,30 @@ void CConfig::DeleteKeysByPrefix(tLocation location,
     }
 };
 
+unsigned int CConfig::CountKeysByPrefix(tLocation location, const struct Param_Str param)
+{
+  return(CountKeysByPrefix(location, param.csParam, param.csSection));
+};
+
+unsigned int CConfig::CountKeysByPrefix(tLocation location, const std::wstring &csName,
+  const std::wstring &czSection) {
+  CAutoMutex autoMutex(&m_Mutex);
+
+  if (! bIsInitialized) Init();
+
+  unsigned int count = 0;
+  if (location == SYSTEM) {
+    count = o_systemDataFile.CountKeysByPrefix(csName,czSection);
+    if( ! o_systemDataFile.Save() )
+      throw CMWEXCEPTION(EIDMW_CONF);
+  } else {
+    count = o_userDataFile.CountKeysByPrefix(csName,czSection);
+    if( ! o_userDataFile.Save() )
+      throw CMWEXCEPTION(EIDMW_CONF);
+  }
+
+  return count;
+};
 
 void CConfig::SetLong(tLocation location,const struct Param_Num param,long lValue)
 {

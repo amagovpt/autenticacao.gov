@@ -90,9 +90,6 @@
     <ClCompile Include="XadesSignature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScapSSLConnection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SecurityContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -123,6 +120,12 @@
 	<ClCompile Include="CurlProxy.cpp">
 		<Filter>Source Files</Filter>
 	</ClCompile>
+    <ClCompile Include="SSLConnectionLegacy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CurlUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APLCard.h">
