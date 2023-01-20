@@ -15,6 +15,7 @@
 
 #include "Log.h"
 #include "eidErrors.h"
+#include "CurlUtil.h"
 #include "MiscUtil.h"
 #include "APLConfig.h"
 
@@ -23,9 +24,6 @@
 namespace eIDMW
 {
 
-
-    //Implemented in CurlProxy.cpp
-    extern void curl_apply_proxy_settings(CURL * curl_handle, const char * url);
 
     //Implemented in RemoteAddress.cpp
     int parseRemoteAddressErrorCode(const char * json_str);
@@ -167,7 +165,7 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
 
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, DEFAULT_NETWORK_TIMEOUT);
 
-        curl_apply_proxy_settings(curl, endpoint_url);
+		bool using_proxy = applyProxyConfigToCurl(curl, endpoint_url);
 
         /* send all data to this function  */
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_data);
@@ -193,8 +191,8 @@ PostResponse post_json_remoteaddress(const char *endpoint_url, char *json_data, 
         /* Check for errors */
         if (res != CURLE_OK) {
 
-            MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s failed! curl error code: %d curl message: %s",
-                    get_url_endpoint(endpoint_url), res, strlen(errbuf) > 0 ? errbuf: curl_easy_strerror(res));
+            MWLOG(LEV_ERROR, MOD_APL, "RemoteAddress call to %s failed! Using proxy: %d curl error code: %d curl message: %s",
+                    get_url_endpoint(endpoint_url), using_proxy, res, strlen(errbuf) > 0 ? errbuf: curl_easy_strerror(res));
             goto cleanup;
         }
         else {
