@@ -231,6 +231,7 @@ echo "**************************************************************************
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\KSP.h" />
+    <ClInclude Include="..\Inc\KSPConstants.h" />
     <ClInclude Include="..\Inc\log.h" />
     <ClInclude Include="kspCredentials.h" />
     <ClInclude Include="language.h" />
