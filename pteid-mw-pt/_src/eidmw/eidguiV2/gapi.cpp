@@ -42,6 +42,7 @@
 #include "Util.h"
 #include "StringOps.h"
 #include "MiscUtil.h"
+#include "CurlUtil.h"
 #include "proxyinfo.h"
 #include "concurrent.h"
 
@@ -125,6 +126,8 @@ void GAPI::disableTelemetry()
 //
 void GAPI::doUpdateTelemetry(TelemetryAction action)
 {
+	//Request timeout in seconds
+	const long TLMT_REQUEST_TIMEOUT = 5;
     //
     // Create a new guid once per system.
     //
@@ -158,7 +161,8 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
         url += telemetryActionToString(action);
         url += "?tel_id=";
         url += m_Settings.getTelemetryId();
-        curl_easy_setopt(curl, CURLOPT_URL, url.toStdString().c_str());
+		std::string url_std_string = url.toStdString();
+        curl_easy_setopt(curl, CURLOPT_URL, url_std_string.c_str());
 
         //
         // Create user-agent header with the following structure
@@ -175,6 +179,10 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
         // it does not print to the console/log
         //
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+		//We shouldn't block the telemetry request thread for too long
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, TLMT_REQUEST_TIMEOUT);
+
+		bool using_proxy = applyProxyConfigToCurl(curl, url_std_string);
 
         curl_easy_perform(curl);
 
@@ -183,7 +191,7 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
         //
         long http_code = 0;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-        qDebug() << "updateTelemetry HTTP status:" << http_code << "for URL:" << url;
+        qDebug() << "updateTelemetry HTTP status:" << http_code << "for URL:" << url << "Using proxy?: "<< using_proxy;
         if(action == TelemetryAction::Accepted || action == TelemetryAction::Denied)
         {
             setTelemetryStatus(
