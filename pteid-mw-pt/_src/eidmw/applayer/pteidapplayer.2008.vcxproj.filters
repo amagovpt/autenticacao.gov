@@ -111,15 +111,12 @@
     <ClCompile Include="proxyinfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="RemoteAddressRequest.cpp">
+    <ClCompile Include="RemoteAddressRequest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="RemoteAddress.cpp">
+    <ClCompile Include="RemoteAddress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="CurlProxy.cpp">
-		<Filter>Source Files</Filter>
-	</ClCompile>
     <ClCompile Include="SSLConnectionLegacy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -221,13 +218,12 @@
     <ClInclude Include="PAdESExtender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="RemoteAddress.h">
-	  <Filter>Header Files</Filter>
+    <ClInclude Include="RemoteAddress.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RemoteAddressRequest.h" >
-	  <Filter>Header Files</Filter>
+    <ClInclude Include="RemoteAddressRequest.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-	
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pteidapplayer.rc">

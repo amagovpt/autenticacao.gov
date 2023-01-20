@@ -32,10 +32,6 @@ namespace eIDMW
 #define SHA1_OFFSET 20
 #define SHA256_OFFSET 24
 
-	//Implemented in CurlProxy.cpp
-    extern void curl_apply_proxy_settings(CURL * curl_handle, const char * url);
-
-
 	/* ASN1 "templates" for timestamp requests of SHA-1 and SHA-256 hashes  */
 
 	static unsigned char timestamp_asn1_request[TS_REQUEST_SHA1_LEN] =

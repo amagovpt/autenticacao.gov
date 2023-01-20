@@ -256,7 +256,6 @@
     <ClCompile Include="XercesUtils.cpp" />
     <ClCompile Include="RemoteAddress.cpp" />
     <ClCompile Include="RemoteAddressRequest.cpp" />
-    <ClCompile Include="CurlProxy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APLCard.h" />

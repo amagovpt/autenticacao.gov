@@ -120,7 +120,6 @@ SOURCES += \
 	CertStatusCache.cpp  \
 	cryptoFramework.cpp  \
 	cryptoFwkPteid.cpp   \
-	CurlProxy.cpp        \
 	APLCard.cpp          \ 
 	MiscUtil.cpp \
 	XercesUtils.cpp \
