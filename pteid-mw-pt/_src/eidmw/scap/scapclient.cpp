@@ -338,8 +338,18 @@ static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device,
 	const PDFSignatureInfo &signature_info, CitizenInfo *out_citizen_info, std::vector<Document> &out_documents)
 {
 	PTEID_PDFSignature signature;
-	for (const std::string &filename: signature_info.filenames) {
-		signature.addToBatchSigning((char *)filename.c_str());
+
+	const auto &filenames = signature_info.filenames;
+	if (filenames.empty()) {
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s(): Empty input file list", __FUNCTION__);
+		return ScapError::generic;
+	}
+	if (filenames.size() > 1) {
+		for (const std::string &filename: filenames) {
+			signature.addToBatchSigning((char *)filename.c_str());
+		}
+	} else {
+		signature.setFileSigning((char *)filenames.front().c_str());
 	}
 
 	//If a SCAP signature is LEVEL_TIMESTAMP or higher the 1st citizen signature must include timestamp
