@@ -1,3 +1,10 @@
+/*-****************************************************************************
+ *
+ *  Copyright (C) 2022 André Guerreiro - <aguerreiro1985@gmail.com>
+ *  Licensed under the EUPL V.1.2
+ *
+ *  Apply pteid proxy configuration to a libcurl request handle
+ */
 
 #include <string>
 #include <curl/curl.h>
