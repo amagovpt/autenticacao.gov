@@ -230,8 +230,9 @@ PageCardPrintForm {
             var titlePopup = qsTr("STR_PRINT_CREATE_PDF") + ": " + qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
             if (error_code == GAPI.AddressConnectionError) {
-                bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_NETWORK_ERROR")
-                    + "<br/><br/>" + qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_GENERIC")
+                bodyPopup = qsTr("STR_REMOTEADDRESS_NETWORK_ERROR")
+                    + "<br/>" + qsTranslate("GAPI","STR_VERIFY_PROXY") + "<br/>"
+                    + qsTr("STR_REMOTEADDRESS_GENERIC")
             }            
             else if (error_code == GAPI.AddressServerError) {
                 bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_SERVER_ERROR")

@@ -109,7 +109,8 @@ PageCardAdressForm {
 
             if (error_code == GAPI.AddressConnectionError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_NETWORK_ERROR")
-                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
+                    + "<br/>"+qsTranslate("GAPI","STR_VERIFY_PROXY") + "<br/>"
+                    + qsTr("STR_REMOTEADDRESS_GENERIC")
             }
             else if (error_code == GAPI.AddressServerError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_SERVER_ERROR")
