@@ -745,7 +745,7 @@
     </message>
     <message>
         <source>STR_REMOTEADDRESS_INVALIDSTATE_ERROR</source>
-        <translation>Error loading remote address: you should seek help at a civil registration office (Instituto dos Registos e do Notariado).</translation>
+        <translation>Error loading remote address: you should seek help at a Citizen Card pick-up counter.</translation>
     </message>
     <message>
         <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>

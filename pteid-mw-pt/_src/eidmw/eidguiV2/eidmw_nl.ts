@@ -759,7 +759,7 @@
     </message>
     <message>
         <source>STR_REMOTEADDRESS_INVALIDSTATE_ERROR</source>
-        <translation>Erro na consulta de morada: deve dirigir-se a um balcão do Instituto dos Registos e do Notariado.</translation>
+        <translation>Erro na consulta de morada: deve dirigir-se a um balcão de levantamento do Cartão de Cidadão</translation>
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
