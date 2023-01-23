@@ -231,8 +231,8 @@ PageCardPrintForm {
             var bodyPopup = ""
             if (error_code == GAPI.AddressConnectionError) {
                 bodyPopup = qsTr("STR_REMOTEADDRESS_NETWORK_ERROR")
-                    + "<br/>" + qsTranslate("GAPI","STR_VERIFY_PROXY") + "<br/>"
-                    + qsTr("STR_REMOTEADDRESS_GENERIC")
+                    + "<br/><br/>" + qsTranslate("GAPI","STR_VERIFY_PROXY")
+                    + "<br/><br/>" + qsTr("STR_REMOTEADDRESS_GENERIC")
             }            
             else if (error_code == GAPI.AddressServerError) {
                 bodyPopup = qsTranslate("PageCardAdress", "STR_REMOTEADDRESS_SERVER_ERROR")

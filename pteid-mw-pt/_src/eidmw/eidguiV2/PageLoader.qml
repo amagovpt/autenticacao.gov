@@ -58,7 +58,7 @@ Loader{
     Dialog {
         id: generalPopUp
         width: 450
-        height: 200
+        height: 220
         visible: false
 
         font.family: lato.name

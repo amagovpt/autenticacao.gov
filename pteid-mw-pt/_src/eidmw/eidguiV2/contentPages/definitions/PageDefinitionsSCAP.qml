@@ -253,7 +253,7 @@ PageDefinitionsSCAPForm {
 
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
             var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_SERVICE_FAIL_FIRST") + "<br>"
-                + qsTranslate("PageDefinitionsSCAP", "STR_SCAP_PING_FAIL_SECOND") + "<br>"
+                + qsTranslate("PageDefinitionsSCAP", "STR_SCAP_PING_FAIL_SECOND") + "<br><br>"
                 + qsTranslate("GAPI","STR_VERIFY_PROXY")
 
             show_error_message(titlePopup, bodyPopup)
@@ -829,8 +829,7 @@ PageDefinitionsSCAPForm {
         var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_PING_FAIL_FIRST")
 
         if (controler.isProxyConfigured()) {
-            bodyPopup += " " 
-                + qsTranslate("GAPI","STR_VERIFY_PROXY")
+            bodyPopup += "<br><br>" + qsTranslate("GAPI","STR_VERIFY_PROXY")
         }
         show_error_message(titlePopup, bodyPopup)
     }
