@@ -338,18 +338,8 @@ static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device,
 	const PDFSignatureInfo &signature_info, CitizenInfo *out_citizen_info, std::vector<Document> &out_documents)
 {
 	PTEID_PDFSignature signature;
-
-	const auto &filenames = signature_info.filenames;
-	if (filenames.empty()) {
-		MWLOG(LEV_ERROR, MOD_SCAP, "%s(): Empty input file list", __FUNCTION__);
-		return ScapError::generic;
-	}
-	if (filenames.size() > 1) {
-		for (const std::string &filename: filenames) {
-			signature.addToBatchSigning((char *)filename.c_str());
-		}
-	} else {
-		signature.setFileSigning((char *)filenames.front().c_str());
+	for (const std::string &filename: signature_info.filenames) {
+		signature.addToBatchSigning((char *)filename.c_str());
 	}
 
 	//If a SCAP signature is LEVEL_TIMESTAMP or higher the 1st citizen signature must include timestamp
@@ -367,10 +357,14 @@ static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device,
 	try {
 		device->SignPDF(signature, 0, 0, 0, signature_info.location.c_str(), signature_info.reason.c_str(), output_path.c_str());
 	} catch (const PTEID_ExBatchSignatureFailed &ex) {
-		const std::string &failed_filename = signature_info.filenames.at(ex.GetFailedSignatureIndex());
-		const ScapError error = interpret_exception_code(ex.GetError(), __FUNCTION__);
+		if (signature_info.filenames.size() > 1) {
+			const std::string &failed_filename = signature_info.filenames.at(ex.GetFailedSignatureIndex());
+			const ScapError error = interpret_exception_code(ex.GetError(), __FUNCTION__);
 
-		result = {error, {failed_filename}};
+			result = {error, {failed_filename}};
+		} else { //not really a batch signature - return simple error without filenames
+			result = interpret_exception_code(ex.GetError(), __FUNCTION__);
+		}
 		ABORT_ON_CRITICAL_ERROR(result);
 	} catch (const PTEID_Exception &ex) {
 		result = interpret_exception_code(ex.GetError(), __FUNCTION__);
@@ -432,8 +426,11 @@ static ScapResult<void> close_scap_signature(std::vector<Document> &documents, c
 			doc.sign_handle->getPdfSignature()->signClose(signature);
 		}
 		catch (const CMWException &ex) {
-			long code = ex.GetError();
-			result = {interpret_exception_code(code, __FUNCTION__), {doc.name}};
+			if (documents.size() > 1) {
+				result = {interpret_exception_code(ex.GetError(), __FUNCTION__), {doc.name}};
+			} else { //not really a batch signature - return simple error without filenames
+				result = interpret_exception_code(ex.GetError(), __FUNCTION__);
+			}
 			ABORT_ON_CRITICAL_ERROR(result);
 		}
 
