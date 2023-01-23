@@ -376,6 +376,10 @@
             <RegistryValue Type="string" Name="log_dirname" Value="[APPLICATIONFOLDER]log"/>
           </RegistryKey>
 
+          <RegistryKey Key="proxy" Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="integer" Name="use_system_proxy" Value="1"/>
+          </RegistryKey>
+
           <RegistryKey Key="configuretool" Action="createAndRemoveOnUninstall">
             <RegistryValue Type="integer" Name="start_with_windows" Value="1"/>
             <RegistryValue Type="integer" Name="start_minimized" Value="0"/>
