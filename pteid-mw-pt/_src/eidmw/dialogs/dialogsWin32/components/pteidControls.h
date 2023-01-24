@@ -100,7 +100,11 @@ public:
     struct TextFieldData : ControlData {
         LPCTSTR title = NULL;
         size_t minLength = 0;
+#ifdef _WIN64
         size_t maxLength = UINTMAX_MAX;
+#else
+		size_t maxLength = UINT32_MAX;
+#endif
         BOOL isPassword = FALSE;
         BOOL isNumeric = FALSE;
 
