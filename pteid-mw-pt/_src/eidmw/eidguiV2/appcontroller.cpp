@@ -565,8 +565,10 @@ void AppController::getScapCacheSize() {
 
 void AppController::doGetScapCacheSize() {
     ScapSettings settings;
-    QString scapCacheDir = settings.getCacheDir() + "/scap_attributes/";
-    emit signalScapCacheSize(formatSize(dirSize(scapCacheDir, "*.xml")));
+    QString scapAttrDir = settings.getCacheDir() + "/scap_attributes/";
+    QString scapLogoDir = settings.getCacheDir() + "/scap_logos/";
+    const qint64 total_size = dirSize(scapAttrDir, "*.json") + dirSize(scapLogoDir, "*.jpeg");
+    emit signalScapCacheSize(formatSize(total_size));
 }
 
 //borrowed from https://stackoverflow.com/a/47854799
