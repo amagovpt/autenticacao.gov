@@ -138,11 +138,11 @@
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>
         <oldsource>SCAP_CLOCK_ERROR_CODE</oldsource>
-        <translation>An error occured while signing with professional attributes. Please make sure the date, time and time zone settings are correct on your computer and try again.</translation>
+        <translation>An error occurred while signing with professional attributes. Please make sure the date, time and time zone settings are correct on your computer and try again.</translation>
     </message>
     <message>
         <source>STR_SCAP_SECRETKEY_ERROR</source>
-        <translation>An error occured while signing with professional attributes. Please reload professional attributes.</translation>
+        <translation>An error occurred while signing with professional attributes. Please reload professional attributes.</translation>
     </message>
     <message>
         <source>STR_NIC</source>
@@ -160,7 +160,7 @@
     <message>
         <source>STR_CMD_SERVICE_FAIL</source>
         <oldsource>STR_SERVICE_FAIL</oldsource>
-        <translation>A service failure has occured</translation>
+        <translation>A service failure has occurred</translation>
     </message>
     <message>
         <source>STR_CMD_INVALID_PIN</source>
@@ -232,11 +232,11 @@
     </message>
     <message>
         <source>STR_CERT_REG_ERROR</source>
-        <translation>An error occured while registering the certificate. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;.</translation>
+        <translation>An error occurred while registering the certificate. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_CERT_REG_SUCC</source>
-        <translation>The certificate was succesfully registered.</translation>
+        <translation>The certificate was successfully registered.</translation>
     </message>
     <message>
         <source>STR_CARD_STATUS_FAIL</source>
@@ -472,7 +472,7 @@
     </message>
     <message>
         <source>STR_SAVE_PHOTO_ERROR</source>
-        <translation>An error occured while saving the photo. Check if the file is not currently open in another program or if you have write permissions.</translation>
+        <translation>An error occurred while saving the photo. Check if the file is not currently open in another program or if you have write permissions.</translation>
     </message>
     <message>
         <source>STR_LTV_FAILED</source>
@@ -633,11 +633,11 @@
     </message>
     <message>
         <source>STR_OAUTH_CONNECTION_ERROR</source>
-        <translation>A conecction error has occured during the authentication process.</translation>
+        <translation>A conecction error has occurred during the authentication process.</translation>
     </message>
     <message>
         <source>STR_OAUTH_GENERIC_ERROR</source>
-        <translation>An error has occured during the authentication process.</translation>
+        <translation>An error has occurred during the authentication process.</translation>
     </message>
     <message>
         <source>STR_OAUTH_SUCCESS_SCAP</source>
@@ -1179,7 +1179,7 @@
     </message>
     <message>
         <source>STR_LOG_ZIP_FAIL</source>
-        <translation>An error occured creating report on Desktop.</translation>
+        <translation>An error occurred creating report on Desktop.</translation>
     </message>
     <message>
         <source>STR_LOG_ZIP_BUTTON</source>
@@ -1404,7 +1404,7 @@
     </message>
     <message>
         <source>STR_UPDATE_ERROR</source>
-        <translation>An error occured.</translation>
+        <translation>An error occurred.</translation>
     </message>
     <message>
         <source>STR_UPDATE_NO_UPDATES</source>
@@ -2545,7 +2545,7 @@
     </message>
     <message>
         <source>STR_IMAGE_LOGO_ACCESSIBLE_NAME</source>
-        <translation>In menu help, there is a submenu named Accessibility, containing a brief explanation on how to navigate in this application.</translation>
+        <translation>In Help menu, there is a sub-menu named Accessibility, containing a brief explanation on how to navigate in this application.</translation>
     </message>
     <message>
         <source>STR_DONT_ASK_AGAIN</source>
