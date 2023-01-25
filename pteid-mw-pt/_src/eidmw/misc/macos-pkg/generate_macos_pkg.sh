@@ -32,7 +32,7 @@ cd $LIB_DIR
 git_revision=`git rev-list --count HEAD`
 popd
 
-VERSION="3.9.1.$git_revision"
+VERSION="3.10.0.$git_revision"
 
 echo "Packaging PTEID version $VERSION"
 echo "IMPORTANT: Don't forget to update the version in apps/Info.plist and release notes in resources dir"
@@ -81,9 +81,6 @@ cp  $BIN_DIR/../eidguiV2/fonts/lato/Lato-Regular.ttf "$RESOURCES_BUNDLE_DIR"
 cp  $BIN_DIR/../eidguiV2/fonts/myriad/MyriadPro-Regular.otf "$RESOURCES_BUNDLE_DIR"
 cp apps/Info.plist "$EIDGUI_BUNDLE_DIR/../"
 
-#Copy CryptoTokenKit extension
-cp -r ${CTK_BUNDLE_DIR}/PteidToken.appex ${EIDGUI_BUNDLE_DIR}/../PlugIns/
-
 cd ${PKG_DIR}/apps/
 sh ./change_paths.sh
 
@@ -111,6 +108,17 @@ cd $PKG_DIR
 if [ -n "$SIGNING_CERTIFICATE" ]
 then
 	./codesigning.sh "$SIGNING_CERTIFICATE"
+fi
+
+#Copy CryptoTokenKit extension
+cp -r ${CTK_BUNDLE_DIR}/PteidToken.appex ${EIDGUI_BUNDLE_DIR}/../PlugIns/
+
+if [ -n "$SIGNING_CERTIFICATE" ]
+then
+	SIGNING_IDENTITY="Developer ID Application: $SIGNING_CERTIFICATE"
+	ENTITLEMENTS_CTK=$CTK_BUNDLE_DIR/../../PteidToken/PteidToken.entitlements
+	#Sign PteidToken extension with its own entitlements file
+	codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime --entitlements ${ENTITLEMENTS_CTK} ${EIDGUI_BUNDLE_DIR}/../PlugIns/PteidToken.appex
 fi
 
 recreate_dir $PKG_DIR/pkg/
