@@ -1228,7 +1228,7 @@
     </message>
     <message>
         <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
-        <translation>Não tem atributos empresariais. Para associar novos atributos, por favor aceda a</translation>
+        <translation>Não tem atributos empresariais.&lt;br&gt;Para associar novos atributos, por favor aceda a</translation>
     </message>
     <message>
         <source>STR_WARNING</source>

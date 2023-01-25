@@ -2404,8 +2404,10 @@ static std::vector<ScapAttribute> get_attributes_by_ids(const std::vector<std::s
     return result;
 }
 
+const std::string SCAP_FUNCIONARIOS_ENTITY_NAME = "SCAP Funcionários";
+
 template<typename T>
-bool GAPI::handleScapError(const ScapResult<T> &result, bool isCompany) {
+bool GAPI::handleScapError(const ScapResult<T> &result, bool isCompany, bool isEmployee) {
     QList<QString> error_data;
     for (const std::string &provider: result.error_data()) {
 		error_data.append(QString::fromStdString(provider));
@@ -2478,7 +2480,13 @@ bool GAPI::handleScapError(const ScapResult<T> &result, bool isCompany) {
         update_attributes = true;
     }
     else if (error == ScapError::no_attributes) {
-        emit signalSCAPNoAttributesResponse(error_data);
+        // the new scap service does not provide a proper way to determine if getting
+        // employee attributes succeeded or failed
+        if (isEmployee) {
+            error_data.push_back(QString::fromStdString(SCAP_FUNCIONARIOS_ENTITY_NAME));
+        }
+
+        emit signalSCAPNoAttributesResponse(error_data, isCompany);
         update_attributes = true;
     }
     else if (error == ScapError::bad_secret_key) {
@@ -2568,8 +2576,6 @@ void GAPI::doSignSCAP(const SCAPSignParams &params, bool isCMD) {
 
     END_TRY_CATCH
 }
-
-const std::string SCAP_FUNCIONARIOS_ENTITY_NAME = "SCAP Funcionários";
 
 void GAPI::getSCAPEntities() {
     const auto result = m_scap_client->getAttributeProviders();
@@ -2723,7 +2729,7 @@ void GAPI::getSCAPEntityAttributes(QList<QString> provider_names, bool useOAuth)
     bool employee = std::find(names.begin(), names.end(), SCAP_FUNCIONARIOS_ENTITY_NAME) != names.end();
 
     const auto result = m_scap_client->getCitizenAttributes(card, providers, false, employee);
-    bool update_attributes = (!result.is_error()) || handleScapError(result, false);
+    bool update_attributes = (!result.is_error()) || handleScapError(result, false, employee);
 
     if (update_attributes) {
         const auto &attributes = result.data();

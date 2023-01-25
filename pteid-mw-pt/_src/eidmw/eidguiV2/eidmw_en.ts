@@ -1222,7 +1222,7 @@
     </message>
     <message>
         <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
-        <translation>You have no business attributes. To associate new attributes, please go to</translation>
+        <translation>You have no business attributes.&lt;br&gt;To associate new attributes, please go to</translation>
     </message>
     <message>
         <source>STR_WARNING</source>

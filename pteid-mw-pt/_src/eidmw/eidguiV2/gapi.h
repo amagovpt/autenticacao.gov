@@ -541,7 +541,7 @@ signals:
     void signalSCAPEntitiesLoaded(const QList<QString> entitiesList);
     void signalSCAPServiceFail(int pdfsignresult, bool isCompany);
     void signalSCAPIncompleteResponse(const QList<QString> failed_providers);
-    void signalSCAPNoAttributesResponse(const QList<QString> failed_providers);
+    void signalSCAPNoAttributesResponse(const QList<QString> failed_providers, bool enterprise);
     void signalSCAPServiceTimeout();
     void signalSCAPConnectionFailed();
     void signalSCAPProxyAuthRequired();
@@ -586,7 +586,7 @@ private:
     void doCancelCMDRegisterCert();
     void doSignSCAP(const SCAPSignParams &params, bool isCMD);
     template<typename T>
-    bool handleScapError(const ScapResult<T> &result, bool isCompany = false);
+    bool handleScapError(const ScapResult<T> &result, bool isCompany = false, bool isEmployee = false);
     void getPersoDataFile();
     void setPersoDataFile(QString text);
     void doSaveCardPhoto(QString outputFile);

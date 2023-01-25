@@ -263,11 +263,23 @@ PageDefinitionsSCAPForm {
             console.log("Scap No Attributes")
 
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
-                + "<ul><li>" + failed_providers.join("</li><li>") + "</li></ul>"
-                + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
+            var bodyPopup = ""
+            var linkUrl = ""
+            var accessibleText = ""
+            if (enterprise) {
+                bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
+                    + " <a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
+                    + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
+                linkUrl = 'https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais'
+                accessibleText = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
+                    + " https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
+            } else {
+                bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
+                    + "<ul><li>" + failed_providers.join("</li><li>") + "</li></ul>"
+                    + qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_SECOND")
+            }
 
-            show_error_message(titlePopup, bodyPopup)
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false, linkUrl, accessibleText)
         }
 
         onSignalSCAPBadCredentials: {
