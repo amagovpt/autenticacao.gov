@@ -15,6 +15,7 @@
 @set PTEID_DIR_LIBPNG=C:\git\tools\build-scripts\windows\external-libs\libpng-1.6.37\Win32
 @set PTEID_DIR_OPENJPEG=C:\git\tools\build-scripts\windows\external-libs\openjpeg-2.3\Win32
 @set PTEID_DIR_JPEG=C:\git\tools\build-scripts\windows\external-libs\poppler-0.87\win32
+@set PTEID_DIR_CJSON=C:\git\tools\build-scripts\windows\external-libs\cjson-win32
 
 :: Compiled / external libs x64
 ::==============================
@@ -29,6 +30,7 @@
 @set PTEID_DIR_LIBPNG_X64=C:\git\tools\build-scripts\windows\external-libs\libpng-1.6.37\x64
 @set PTEID_DIR_OPENJPEG_X64=C:\git\tools\build-scripts\windows\external-libs\openjpeg-2.3\x64
 @set PTEID_DIR_JPEG_X64=C:\git\tools\build-scripts\windows\external-libs\poppler-0.87\x64
+@set PTEID_DIR_CJSON_X64=C:\git\tools\build-scripts\windows\external-libs\cjson-x64
 
 :: Tools
 ::======
