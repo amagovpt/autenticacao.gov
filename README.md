@@ -84,18 +84,19 @@ Instruções para compilação em Windows (Visual Studio 2017)
 É importante assegurar que as dependências são compiladas com a mesma versão de Visual Studio que será usada para compilar o Middleware.
 Será assim necessário compilar as seguintes bibliotecas (versões utilizadas para a última release Windows):
 
-- openSSL 1.1.1j - https://www.openssl.org/source/openssl-1.1.1j.tar.gz
+- OpenSSL 1.1.1q - https://www.openssl.org/source/openssl-1.1.1q.tar.gz
 - xerces-c 3.2.3 - https://xerces.apache.org/xerces-c/build-3.html
-- libcurl 7.69.1 - https://curl.haxx.se/download.html
-- zlib 1.2.11 - http://www.zlib.net/zlib-1.2.11.tar.gz
-- libzip 1.5.2 - https://libzip.org/download/
+- libcurl 7.80.0 - https://curl.haxx.se/download.html
+- zlib 1.2.11 - https://www.zlib.net/fossils/zlib-1.2.11.tar.gz
+- libzip 1.6.1 - https://libzip.org/download/
 - libpng 1.6.37 - http://www.libpng.org/pub/png/libpng.html
-- openjpeg 2.3 - https://www.openjpeg.org/
-- libxml-security-c 2.0.2 - http://archive.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.zip
+- openjpeg 2.4 - https://www.openjpeg.org/
+- libxml-security-c 2.0.4 - http://archive.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.zip
+- cJSON 1.7.15 - https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.15.zip 
 
 Para compilar a aplicação GUI, projeto disponível em eidmw/eidguiV2, é necessária uma dependência adicional:
 
-- poppler-qt5 0.87 - https://poppler.freedesktop.org/
+- poppler-qt5 0.87 - https://poppler.freedesktop.org/releases.html
 
 Para o caso do Qt5 (versão igual ou superior a 5.12) estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  `https://download.qt.io/archive/online_installers/2.0/`
 
