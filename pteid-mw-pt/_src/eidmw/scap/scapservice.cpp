@@ -258,7 +258,6 @@ ScapResponse perform_polling_request(const ScapCredentials &credentials, const S
 			if (inner_status == 404) {
 				MWLOG(LEV_DEBUG, MOD_SCAP, "Possibly reached polling time limit. Got incomplete response.");
 				break;
-				//TODO: Report to user which provider failed
 			}
 		}
 
