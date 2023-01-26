@@ -6,14 +6,14 @@
 ::==============================
 @set PTEID_DIR_QML=C:\git\tools\build-scripts\windows\external-libs\qt5.12.8\Win32\VC9\Release\qml-app
 @set PTEID_DIR_QT_5=C:\Qt\Qt5.12.8\5.12.8\msvc2017
-@set PTEID_DIR_OPENSSL=C:\git\tools\build-scripts\windows\external-libs\openssl-1.1.1n-win32
+@set PTEID_DIR_OPENSSL=C:\git\tools\build-scripts\windows\external-libs\openssl-1.1.1q-win32
 @set PTEID_DIR_XERCES=C:\git\tools\build-scripts\windows\external-libs\xerces-c-3.2.3-win32
-@set PTEID_XMLSECURITY=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-2.0.2-win32
+@set PTEID_XMLSECURITY=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-2.0.4-win32
 @set PTEID_DIR_CURL=C:\git\tools\build-scripts\windows\external-libs\libcurl-vc-x86-release
 @set PTEID_DIR_ZLIB=C:\git\tools\build-scripts\windows\external-libs\zlib\Win32
-@set PTEID_DIR_LIBZIP=C:\git\tools\build-scripts\windows\external-libs\libzip-1.5.2\win32
+@set PTEID_DIR_LIBZIP=C:\git\tools\build-scripts\windows\external-libs\libzip-1.6.1\win32
 @set PTEID_DIR_LIBPNG=C:\git\tools\build-scripts\windows\external-libs\libpng-1.6.37\Win32
-@set PTEID_DIR_OPENJPEG=C:\git\tools\build-scripts\windows\external-libs\openjpeg-2.3\Win32
+@set PTEID_DIR_OPENJPEG=C:\git\tools\build-scripts\windows\external-libs\openjpeg-2.4\Win32
 @set PTEID_DIR_JPEG=C:\git\tools\build-scripts\windows\external-libs\poppler-0.87\win32
 @set PTEID_DIR_CJSON=C:\git\tools\build-scripts\windows\external-libs\cjson-win32
 
@@ -21,14 +21,14 @@
 ::==============================
 @set PTEID_DIR_QML_X64=C:\git\tools\build-scripts\windows\external-libs\qt5.12.8\x64\VC9\Release\qml-app
 @set PTEID_DIR_QT_5_X64=C:\Qt\Qt5.12.8\5.12.8\msvc2017_64
-@set PTEID_DIR_OPENSSL_X64=C:\git\tools\build-scripts\windows\external-libs\openssl-1.1.1n-x64
+@set PTEID_DIR_OPENSSL_X64=C:\git\tools\build-scripts\windows\external-libs\openssl-1.1.1q-x64
 @set PTEID_DIR_XERCES_X64=C:\git\tools\build-scripts\windows\external-libs\xerces-c-3.2.3-win64
-@set PTEID_XMLSECURITY_X64=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-2.0.2-win64
+@set PTEID_XMLSECURITY_X64=C:\git\tools\build-scripts\windows\external-libs\xml-security-c-2.0.4-win64
 @set PTEID_DIR_CURL_X64=C:\git\tools\build-scripts\windows\external-libs\libcurl-vc-x64-release
 @set PTEID_DIR_ZLIB_X64=C:\git\tools\build-scripts\windows\external-libs\zlib\x64
-@set PTEID_DIR_LIBZIP_X64=C:\git\tools\build-scripts\windows\external-libs\libzip-1.5.2\x64
+@set PTEID_DIR_LIBZIP_X64=C:\git\tools\build-scripts\windows\external-libs\libzip-1.6.1\x64
 @set PTEID_DIR_LIBPNG_X64=C:\git\tools\build-scripts\windows\external-libs\libpng-1.6.37\x64
-@set PTEID_DIR_OPENJPEG_X64=C:\git\tools\build-scripts\windows\external-libs\openjpeg-2.3\x64
+@set PTEID_DIR_OPENJPEG_X64=C:\git\tools\build-scripts\windows\external-libs\openjpeg-2.4\x64
 @set PTEID_DIR_JPEG_X64=C:\git\tools\build-scripts\windows\external-libs\poppler-0.87\x64
 @set PTEID_DIR_CJSON_X64=C:\git\tools\build-scripts\windows\external-libs\cjson-x64
 
