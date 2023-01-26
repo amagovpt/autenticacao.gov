@@ -4,22 +4,19 @@
 #include <cstdint>
 #include "ByteArray.h"
 #include "APLCard.h"
-#include "SAM.h"
 #include "Export.h"
 
 namespace eIDMW
 {
+	class SAM;
 
 	class SecurityContext
 	{
 		public:
 
 			EIDMW_APL_API ~SecurityContext();
-			EIDMW_APL_API SecurityContext(APL_Card * card)
-			{
-				m_card = card;
-				sam_helper = new SAM(card);
-			}
+			EIDMW_APL_API SecurityContext(APL_Card * card);
+			
 
 			EIDMW_APL_API bool verifyCVCCertificate(CByteArray ifd_cvc);
 

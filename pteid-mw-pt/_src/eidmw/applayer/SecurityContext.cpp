@@ -24,6 +24,7 @@
 #include "SecurityContext.h"
 #include "Log.h"
 #include "eidErrors.h"
+#include "SAM.h"
 
 //#include <algorithm>
 #include <iostream>
@@ -35,6 +36,12 @@ namespace eIDMW
 
 	#define PRND2_SIZE 106
 	#define SESSION_KEY_SIZE 16
+
+	SecurityContext::SecurityContext(APL_Card * card)
+	{
+		m_card = card;
+		sam_helper = new SAM(card);
+	}
 
 
 	void SecurityContext::deriveSessionKeys()

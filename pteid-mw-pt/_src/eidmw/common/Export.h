@@ -4,6 +4,7 @@
  * Copyright (C) 2008-2009 FedICT.
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
+ * Copyright (C) 2015-2022 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -38,18 +39,6 @@
 #define EIDMW_CAL_API __declspec(dllimport)
 #endif
 
-#ifdef EIDMW_PF_EXPORT
-#define EIDMW_PF_API __declspec(dllexport)
-#else
-#define EIDMW_PF_API __declspec(dllimport)
-#endif
-
-#ifdef EIDMW_PCSCEMU_EXPORT
-#define EIDMW_PCSCEMU_API __declspec(dllexport)
-#else
-#define EIDMW_PCSCEMU_API __declspec(dllimport)
-#endif
-
 #ifdef EIDMW_APPLAYER_EXPORTS
 #define EIDMW_APL_API __declspec(dllexport)
 #else
@@ -62,9 +51,7 @@
 
 #define EIDMW_CAL_API
 
-#define EIDMW_PCSCEMU_API
-
-#define EIDMW_APL_API
+#define EIDMW_APL_API __attribute__ ((visibility ("default")))
 
 #endif
 

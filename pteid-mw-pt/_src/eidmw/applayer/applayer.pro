@@ -148,4 +148,5 @@ SOURCES += \
 	proxyinfo.cpp
 
 # Disable annoying and mostly useless gcc warning and add hidden visibility for non-exposed classes and functions
-QMAKE_CXXFLAGS += -Wno-write-strings
+QMAKE_CXXFLAGS += -Wno-write-strings -fvisibility=hidden
+QMAKE_CFLAGS += -fvisibility=hidden
