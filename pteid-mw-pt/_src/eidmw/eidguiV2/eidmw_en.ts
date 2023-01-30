@@ -476,7 +476,7 @@
     </message>
     <message>
         <source>STR_LTV_FAILED</source>
-        <translation>However, the Long Term Validation was not correctly applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
+        <translation>However, Long Term Validation option was not correctly applied due to this signature or a previous one present in the document not fulfilling the necessary requirements. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
     </message>
     <message>
         <source>STR_MAIL_SUPPORT</source>

@@ -499,7 +499,7 @@ PageServicesSignForm {
     Dialog {
         id: signsuccess_dialog
         width: 400
-        height: 200
+        height: 220
         visible: false
         font.family: lato.name
         modal: true
@@ -552,7 +552,7 @@ PageServicesSignForm {
             Item {
                 id: rectLabelText
                 width: parent.width
-                height: 55
+                height: 75
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
@@ -572,6 +572,8 @@ PageServicesSignForm {
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: rectLabelText.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
                 Text {
                     id: labelOpenText
                     text: {
@@ -594,7 +596,7 @@ PageServicesSignForm {
         Item {
             width: signsuccess_dialog.availableWidth
             height: Constants.HEIGHT_BOTTOM_COMPONENT
-            y: 80
+            y: 100
             Item {
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT

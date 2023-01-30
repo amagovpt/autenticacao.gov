@@ -474,7 +474,7 @@
     </message>
     <message>
         <source>STR_LTV_FAILED</source>
-        <translation>No entanto, a Validação de Longo Prazo não foi corretamente aplicada. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
+        <translation>No entanto, a Validação de Longo Prazo não foi corretamente aplicada, devido a esta assinatura ou outra já existente no documento não cumprir os requisitos necessários. Verifique também as configurações do serviço de selos temporais no menu "Configuração de assinaturas".</translation>
     </message>
     <message>
         <source>STR_MAIL_SUPPORT</source>
