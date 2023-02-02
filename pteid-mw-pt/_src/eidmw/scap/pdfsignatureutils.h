@@ -38,12 +38,4 @@ struct PDFSignatureInfo {
     unsigned long seal_image_length;
 };
 
-struct SignatureDetails {
-    QByteArray signature;
-    QByteArray document_hash;
-    QByteArray signing_certificate;
-};
-
-bool get_citizen_signature_details(const QString &filepath, SignatureDetails &sig_details);
-
 };

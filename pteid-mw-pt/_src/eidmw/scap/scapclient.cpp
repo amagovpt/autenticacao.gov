@@ -33,6 +33,15 @@
 
 namespace eIDMW {
 
+struct SignatureDetails {
+    QByteArray signature;
+    QByteArray document_hash;
+    QByteArray signing_certificate;
+};
+
+//implemented in pdfsignatureutils.h
+bool get_citizen_signature_details(const QString &filepath, SignatureDetails &sig_details);
+
 static std::string generate_process_id()
 {
 	return QUuid::createUuid().toString(QUuid::WithoutBraces).toStdString();

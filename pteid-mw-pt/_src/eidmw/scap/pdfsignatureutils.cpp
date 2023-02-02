@@ -30,6 +30,12 @@
 
 namespace eIDMW {
 
+struct SignatureDetails {
+    QByteArray signature;
+    QByteArray document_hash;
+    QByteArray signing_certificate;
+};
+
 static void signatureDataFromPkcs7Object(QByteArray &sigBinary, SignatureDetails &sigDetails)
 {
     STACK_OF(PKCS7_SIGNER_INFO) *sinfos = NULL;
