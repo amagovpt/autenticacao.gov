@@ -172,7 +172,7 @@
         </rect>
       </property>
       <property name="styleSheet">
-        <string notr="true">margin: 13px; border: transparent;</string>
+        <string notr="true">color : #000000; margin: 13px; border: transparent;</string>
       </property>
       </widget>
 
