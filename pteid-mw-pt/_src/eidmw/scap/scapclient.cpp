@@ -754,8 +754,7 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 
 	ScapResponse response = perform_request(m_scap_credentials, request);
 	if (response.status != SCAP_OK) {
-		MWLOG(LEV_ERROR, MOD_SCAP, "Received bad HTTP status from signHashAuthorization request: HTTP %d",
-			response.status);
+		MWLOG(LEV_ERROR, MOD_SCAP, "signHashAuthorization failed with error: %d", response.status);
 		clean_up_temp_documents(documents);
 		return map_perform_error(response.status);
 	}
@@ -818,8 +817,7 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 
 		ScapResponse sign_hash_response = perform_request(m_scap_credentials, sign_hash_request);
 		if (sign_hash_response.status != SCAP_OK) {
-			MWLOG(LEV_ERROR, MOD_SCAP, "Received bad HTTP status from signHash request: HTTP %d",
-				sign_hash_response.status);
+			MWLOG(LEV_ERROR, MOD_SCAP, "signHash failed with error: %d", sign_hash_response.status);
 			clean_up_temp_documents(documents);
 			return map_perform_error(sign_hash_response.status);
 		}
@@ -830,8 +828,7 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 
 		ScapResponse get_signed_hash_response = perform_polling_request(m_scap_credentials, get_signed_hash_request);
 		if (get_signed_hash_response.status != SCAP_OK) {
-			MWLOG(LEV_ERROR, MOD_SCAP, "Received bad HTTP status from signHash request: HTTP %d",
-				get_signed_hash_response.status);
+			MWLOG(LEV_ERROR, MOD_SCAP, "getSignHashResult failed with error: %d", get_signed_hash_response.status);
 			clean_up_temp_documents(documents);
 			return map_perform_error(get_signed_hash_response.status);
 		}

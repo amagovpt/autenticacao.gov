@@ -100,6 +100,8 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 	const char * cacerts_location = "/usr/local/share/certs/cacerts.pem";
 #endif
 
+	// curl handle is always NULL here except when loading attributes with card
+	// as it is the only request with client certificate authentication
 	if (curl == NULL) {
 		curl_global_init(CURL_GLOBAL_NOTHING);
 		if ((curl = curl_easy_init()) == NULL) {
