@@ -19,6 +19,7 @@ SOURCES += main.cpp \
     gapi.cpp \
     autoUpdates.cpp \
     certificates.cpp \
+    singleapplication_p.cpp \
     singleapplication.cpp \
     concurrent.cpp
 
