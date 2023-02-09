@@ -534,9 +534,7 @@ PageServicesSignForm {
 
             Keys.enabled: true
             Keys.onPressed: {
-                if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return
-                        || event.key===Qt.Key_Space)
-                {
+                if (event.key===Qt.Key_Enter || event.key===Qt.Key_Return || event.key===Qt.Key_Space) {
                     signSuccessShowSignedFile()
                 }
             }
@@ -552,44 +550,33 @@ PageServicesSignForm {
             Item {
                 id: rectLabelText
                 width: parent.width
-                height: 75
+                height: childRect.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
+                    width: parent.width
                     font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width
                     wrapMode: Text.Wrap
                 }
-            }
-            Item {
-                id: rectLabelOpenText
-                width: parent.width
-                height: 50
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: rectLabelText.bottom
-                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
 
                 Text {
                     id: labelOpenText
-                    text: {
-                        if(propertyListViewFiles.count > 1 || propertyRadioButtonXADES.checked) {
-                            qsTranslate("PageServicesSign", "STR_SIGN_OPEN_MULTI")
-                        } else {
+                    width: parent.width
+                    text: (propertyListViewFiles.count > 1 || propertyRadioButtonXADES.checked) ?
+                            qsTranslate("PageServicesSign", "STR_SIGN_OPEN_MULTI") :
                             qsTranslate("PageServicesSign", "STR_SIGN_OPEN")
-                        }
-                    }
+
                     font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width - 48
                     wrapMode: Text.Wrap
+
+                    anchors.top: labelText.text == "" ? parent.top : labelText.bottom
+                    anchors.topMargin: labelText.text == "" ? 0 : Constants.SIZE_ROW_V_SPACE
                 }
             }
         }
