@@ -323,6 +323,9 @@ bool GAPI::LoadTranslationFile(QString NewLanguage)
 }
 
 WindowGeometry *GAPI::getWndGeometry() {
+#ifdef WIN32
+	return NULL;
+#else
     if (m_mainWnd == NULL) {
         qDebug() << "C++: GAPI getWndGeometry: Failed to get reference to main window";
         return NULL;
@@ -334,6 +337,7 @@ WindowGeometry *GAPI::getWndGeometry() {
     m_wndGeometry.height = m_mainWnd->geometry().height();
 
     return &m_wndGeometry;
+#endif
 }
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) {
