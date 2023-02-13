@@ -248,9 +248,6 @@ cJSON * buildIDObject(APL_EidFile_ID &id_file) {
     cJSON_AddItemToObject(parent,"NISS", cJSON_CreateString(id_file.getSocialSecurityNumber()));
     cJSON_AddItemToObject(parent,"NSNS", cJSON_CreateString(id_file.getHealthNumber()));
     cJSON_AddItemToObject(parent,"NIF", cJSON_CreateString(id_file.getTaxNo()));
-    cJSON_AddItemToObject(parent,"MRZ1", cJSON_CreateString(id_file.getMRZ1()));
-    cJSON_AddItemToObject(parent,"MRZ2", cJSON_CreateString(id_file.getMRZ2()));
-    cJSON_AddItemToObject(parent,"MRZ3", cJSON_CreateString(id_file.getMRZ3()));
     cJSON_AddItemToObject(parent,"AccidentalIndications", cJSON_CreateString(id_file.getAccidentalIndications()));
 
     return parent;
