@@ -39,8 +39,7 @@ LIBS += -L../lib \
 	    -lcurl \
 	    -lpng \
 	    -lz \
-	    -lzip \
-	    -lstdc++
+	    -lzip
 
 macx:  LIBS += -lopenjp2
 !macx: PKGCONFIG += libopenjp2
@@ -51,12 +50,12 @@ LIBS += ../lib/libpteid-poppler.a
 !macx: LIBS += -Wl,--exclude-libs,ALL 
 
 macx: LIBS += -L $$DEPS_DIR/openssl/lib/ \
-	    -L$$DEPS_DIR/xerces-c-3.2.3/lib/ \
-	    -L$$DEPS_DIR/libzip/lib/ \
-        -L$$DEPS_DIR/libpng/lib \
-        -L$$DEPS_DIR/openjpeg/lib \
-	    -L$$DEPS_DIR/xml-security-c/lib \
-	    -L$$DEPS_DIR/libcurl/lib/
+	-L$$DEPS_DIR/xerces-c-3.2.3/lib/ \
+	-L$$DEPS_DIR/libzip/lib/ \
+	-L$$DEPS_DIR/libpng/lib \
+	-L$$DEPS_DIR/openjpeg/lib \
+	-L$$DEPS_DIR/xml-security-c/lib \
+	-L$$DEPS_DIR/libcurl/lib/
 macx: LIBS += -Wl,-framework -Wl,CoreFoundation
 macx: LIBS += -Wl,-framework -Wl,SystemConfiguration
 macx: LIBS += -Wl,-framework -Wl,CoreServices
