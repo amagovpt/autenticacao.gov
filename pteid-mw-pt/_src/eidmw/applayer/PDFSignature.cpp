@@ -11,7 +11,6 @@
 
 ****************************************************************************-*/
 
-#include "poppler/Error.h"
 #include "poppler/PDFDoc.h"
 #include "poppler/Page.h"
 #include "poppler/ErrorCodes.h"
@@ -25,8 +24,11 @@
 #include "Util.h"
 #include "APLConfig.h"
 #include "cryptoFwkPteid.h"
-
+#ifdef WIN32
+#include <shlwapi.h>
+#endif
 #include <string>
+#include <algorithm>
 
 //For the setSSO calls
 #include "CardLayer.h"
@@ -40,11 +42,26 @@
 namespace eIDMW
 {
 
+#ifdef WIN32
+	/* Generate a native Windows path capable of bypassing the MAX_PATH limit */
+	std::string generatePrefixedNativePath(const std::string &path) {
+		char * path_cstr = (char *)path.c_str();
+		//Don't support long paths if input is a relative path
+		if (PathIsRelativeA(path_cstr))
+			return path;
+		else {
+			std::string prefixed_path = std::string(R"(\\?\)") + path_cstr;
+			//Replace any Unix path seperator with Windows ones
+			std::replace(prefixed_path.begin(), prefixed_path.end(), '/', '\\');
+			return prefixed_path;
+		}
+	}
+#endif
 
 	PDFDoc * makePDFDoc(const char *utf8Filepath) {
 #ifdef WIN32
 		std::string utf8Filename(utf8Filepath);
-		std::wstring utf16Filename = utilStringWiden(utf8Filename);
+		std::wstring utf16Filename = utilStringWiden(generatePrefixedNativePath(utf8Filename));
 
 		return new PDFDoc((wchar_t *)utf16Filename.c_str(), utf16Filename.size());
 #else
@@ -908,6 +925,7 @@ namespace eIDMW
         PDFWriteMode pdfWriteMode =
             m_incrementalMode ? writeForceIncremental : writeForceRewrite;
         // Create and save pdf to temp file to allow overwrite of original file
+		std::string utf8_outname(m_outputName->getCString());
 #ifdef WIN32
         TCHAR tmpPathBuffer[MAX_PATH];
         DWORD lengthCopied = GetTempPath(MAX_PATH, tmpPathBuffer);
@@ -935,9 +953,10 @@ namespace eIDMW
         std::string utf8FilenameTmp = tmpFilename;
 #endif
         std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
-        int tmp_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
-        PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
-        int final_ret = tmpDoc->saveAs((wchar_t *)utilStringWiden(m_outputName->getCString()).c_str());
+        int tmp_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);	
+		std::string native_path = generatePrefixedNativePath(utf8_outname);
+		BOOL copyfile_ok = CopyFileW(utf16FilenameTmp.c_str(), utilStringWiden(native_path).c_str(), FALSE);
+		int final_ret = copyfile_ok ? errNone: errOpenFile;
 #else
         char tmpFilename[L_tmpnam];
         if (!tmpnam(tmpFilename)) {
@@ -949,13 +968,14 @@ namespace eIDMW
         int tmp_ret = m_doc->saveAs(&tmpFilenameGoo, pdfWriteMode);
         PDFDoc *tmpDoc = makePDFDoc(utf8FilenameTmp.c_str());
         int final_ret = tmpDoc->saveAs(m_outputName);
+		delete tmpDoc;
+		tmpDoc = NULL;
 #endif
-        delete tmpDoc;
-        tmpDoc = NULL;
-        remove(utf8FilenameTmp.c_str());
+        
+        std::remove(utf8FilenameTmp.c_str());
 
         delete m_doc;
-        m_doc = makePDFDoc(m_outputName->getCString());
+        m_doc = makePDFDoc(utf8_outname.c_str());
 
         if (tmp_ret == errPermission || tmp_ret == errOpenFile) {
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
