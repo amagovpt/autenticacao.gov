@@ -512,7 +512,6 @@ signals:
     void signalUpdateProgressStatus(const QString statusMessage);
     void signalAddressShowLink();
     void signalAddressShowUndefinedLink();
-    void signalAddressShowEmail();
     void signCMDFinished(long error_code);
     void signalCanceledSignature();
     void signalValidateOtp();

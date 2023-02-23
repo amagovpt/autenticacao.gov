@@ -89,10 +89,6 @@ PageCardAdressForm {
             textMessageTop.propertyText.forceActiveFocus()
         }
 
-        onSignalAddressShowEmail: {
-            rectMessageTopLink.visible = true
-            textMessageTop.propertyLinkUrl= 'mailto:cartaodecidadao@irn.mj.pt'
-        }
         onSignalAddressShowLink: {
             rectMessageTopLink.visible = true
             textMessageTop.propertyLinkUrl= 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
