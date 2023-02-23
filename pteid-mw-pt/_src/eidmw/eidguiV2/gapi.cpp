@@ -2429,7 +2429,7 @@ bool GAPI::handleScapError(const ScapResult<T> &result, bool isCompany, bool isE
         emit signalSCAPProxyAuthRequired();
     }
     else if (error == ScapError::possibly_proxy) {
-        emit signalSCAPProssibleProxyMisconfigured();
+        emit signalSCAPPossibleProxyMisconfigured();
     }
     else if (error == ScapError::sign_timestamp) {
         emit signalPdfSignSuccess(SignMessageTimestampFailed);

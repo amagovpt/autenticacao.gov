@@ -237,6 +237,16 @@ PageServicesSignForm {
             show_error_message(text_top, "")
         }
 
+        onSignalSCAPPossibleProxyMisconfigured: {
+            console.log("Scap possible misconfiguration of proxy")
+
+            var text_top = qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_FIRST")
+            var text_bottom = qsTranslate("PageServicesSign", "STR_SCAP_PING_FAIL_SECOND")
+                + "<br>" + qsTranslate("GAPI","STR_VERIFY_PROXY")
+
+            show_error_message(text_top, text_bottom)
+        }
+
         onSignalCacheRemovedLegacy: {
             console.log("Removed Legacy Scap cache files")
 

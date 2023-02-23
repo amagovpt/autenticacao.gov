@@ -544,7 +544,7 @@ signals:
     void signalSCAPServiceTimeout();
     void signalSCAPConnectionFailed();
     void signalSCAPProxyAuthRequired();
-    void signalSCAPProssibleProxyMisconfigured();
+    void signalSCAPPossibleProxyMisconfigured();
     void signalSCAPBadCredentials();
     void signalAttributesLoaded(const QVariantMap institution_attributes, const QVariantMap enterprise_attributes);
     void signalCompanyAttributesLoadedError();

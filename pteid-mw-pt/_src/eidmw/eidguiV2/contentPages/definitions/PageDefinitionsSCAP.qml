@@ -248,7 +248,7 @@ PageDefinitionsSCAPForm {
             show_error_message(titlePopup, bodyPopup)
         }
 
-        onSignalSCAPProssibleProxyMisconfigured: {
+        onSignalSCAPPossibleProxyMisconfigured: {
             console.log("Scap possible misconfiguration of proxy")
 
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
