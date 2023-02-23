@@ -1,5 +1,6 @@
 /*
-    To be able to build with support for CMD, please contact info.cidadao@ama.pt
+    To be able to build with support for CMD, please contact AMA through:
+    https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop
 */
 
 #ifndef CREDENTIALS_H

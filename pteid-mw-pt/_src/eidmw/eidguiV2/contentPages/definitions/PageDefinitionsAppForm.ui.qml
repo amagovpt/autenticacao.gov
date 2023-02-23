@@ -1030,7 +1030,7 @@ Item {
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
                         propertyText.font.bold: activeFocus
-                        propertyLinkUrl: 'mailto:cartaodecidadao@irn.mj.pt'
+                        propertyLinkUrl: 'https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop'
                         Keys.onPressed: {
                             handleKeyPressed(event.key, debugModeDescriptionTextField)
                         }

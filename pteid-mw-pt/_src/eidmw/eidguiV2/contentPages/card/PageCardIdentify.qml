@@ -78,7 +78,7 @@ PageCardIdentifyForm {
             }
             else if (error_code == GAPI.SodCardReadError) {
                 bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR")
-                    + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG")
+                    + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_CARD_ERROR_MSG")
             }
             else if (error_code == GAPI.CardUserPinCancel) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")

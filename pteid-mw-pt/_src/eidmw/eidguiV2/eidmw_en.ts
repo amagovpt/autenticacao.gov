@@ -109,7 +109,7 @@
     </message>
     <message>
         <source>STR_CMD_ERROR_MSG</source>
-        <translation>Please try again. If this error persists email us at  &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;, indicating the mobile number linked to your Chave Móvel Digital.</translation>
+        <translation>Please try again.&lt;br&gt;If this error persists contact us through &lt;a href=&quot;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&quot;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;, indicating the mobile number linked to your Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_SUCESS</source>
@@ -151,7 +151,7 @@
     <message>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
-        <translation>Non-existent registration or inactive digital signature subscription. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;If this error persists email us at &lt;b&gt;info.cidadao@ama.pt&lt;/b&gt;, indicating the mobile number linked to your Chave Móvel Digital.</translation>
+        <translation>Non-existent registration or inactive digital signature subscription. Verify that digital signature subscription is enabled on &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;If this error persists contact us through &lt;a href=&apos;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&apos;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;, indicating the mobile number linked to your Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_PROXY_AUTH_ERROR</source>
@@ -479,8 +479,8 @@
         <translation>However, Long Term Validation option was not correctly applied due to this signature or a previous one present in the document not fulfilling the necessary requirements. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
     </message>
     <message>
-        <source>STR_MAIL_SUPPORT</source>
-        <translation>mailto:info.cidadao@ama.pt</translation>
+        <source>STR_LINK_SUPPORT</source>
+        <translation>https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop</translation>
     </message>
     <message>
         <source>STR_URL_AUTENTICACAO_GOT_PT</source>
@@ -1019,7 +1019,7 @@
     </message>
     <message>
         <source>STR_DEBUG_MODE_STEP5</source>
-        <translation>5. - Send an email with the description of the problem and the report, saved in the Desktop, to: &lt;a href=&apos;mailto:cartaodecidadao@irn.mj.pt&apos;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
+        <translation>5. - Send the description of the problem and the report, saved in the Desktop, through &lt;a href=&apos;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&apos;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_DEBUG_MODE_ENABLE</source>
@@ -1445,7 +1445,7 @@
     </message>
     <message>
         <source>STR_CONTACT_SUPPORT</source>
-        <translation>Please try again. If this error persists email us at  &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;.</translation>
+        <translation>Please try again. If this error persists contact us through &lt;a href=&quot;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&quot;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_UPDATE_NETWORK_ERROR</source>
@@ -2275,7 +2275,7 @@
         <translation>Application error! Please reinstall the application</translation>
     </message>
     <message>
-        <source>STR_GENERIC_ERROR_MSG</source>
+        <source>STR_GENERIC_CARD_ERROR_MSG</source>
         <translation>Please try again. If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
@@ -2321,6 +2321,10 @@
     <message>
         <source>STR_POPUP_INCOMPATIBLE_READER</source>
         <translation>The reader may be incompatible with this card. Try to update the reader&apos;s driver or a different reader if possible.&lt;br&gt;If this error persists, contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>STR_GENERIC_ERROR_MSG</source>
+        <translation>Please try again. If this error persists, contact us through &lt;a href=&quot;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&quot;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>

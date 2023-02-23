@@ -124,4 +124,4 @@ Após configurado o ambiente conforme acima descrito, efetuar os seguintes passo
 Em alternativa, pode ser editado o script `pteid-mw-pt\windows\ezbuild_sln_autenticacao.gov.bat` para compilar na consola. As instruções estão no próprio ficheiro.
 
 ## Contactos
-Para questões, sugestões ou comentários envie um e-mail para info.cidadao@ama.pt.
+Para questões, sugestões ou comentários contacte-nos através da página: [Contactos](https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop).

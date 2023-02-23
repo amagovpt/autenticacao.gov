@@ -911,7 +911,7 @@ void GAPI::showSignCMDDialog(long error_code)
 {
     QString message;
     QString support_string = tr("STR_CMD_ERROR_MSG");
-    QString urlLink = tr("STR_MAIL_SUPPORT");
+    QString urlLink = tr("STR_LINK_SUPPORT");
 
     switch (error_code)
     {

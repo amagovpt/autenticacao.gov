@@ -103,7 +103,7 @@
     </message>
     <message>
         <source>STR_CMD_ERROR_MSG</source>
-        <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;, indicando o número de telemóvel associado à sua Chave Móvel Digital.</translation>
+        <translation>Por favor tente novamente.&lt;br&gt;Caso o erro persista, contacte-nos através da página &lt;a href=&quot;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&quot;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;, indicando o número de telemóvel associado à sua Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_SUCESS</source>
@@ -149,7 +149,7 @@
     <message>
         <source>STR_CMD_GET_CERTIFICATE_ERROR</source>
         <oldsource>STR_GET_CERTIFICATE_ERROR</oldsource>
-        <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;https://www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;Caso o erro persista, contacte-nos por email para &lt;b&gt;info.cidadao@ama.pt&lt;/b&gt;, indicando o número de telemóvel associado à sua Chave Móvel Digital.</translation>
+        <translation>Registo inexistente ou subscrição da assinatura digital inativa. Verifique se a subscrição da assinatura digital está ativada em &lt;a href=&apos;https://www.autenticacao.gov.pt&apos;&gt;www.autenticacao.gov.pt&lt;/a&gt;. &lt;br&gt;&lt;br&gt;Caso o erro persista, contacte-nos através da página &lt;a href=&apos;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&apos;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt; indicando o número de telemóvel associado à sua Chave Móvel Digital.</translation>
     </message>
     <message>
         <source>STR_CMD_PROXY_AUTH_ERROR</source>
@@ -474,11 +474,11 @@
     </message>
     <message>
         <source>STR_LTV_FAILED</source>
-        <translation>No entanto, a Validação de Longo Prazo não foi corretamente aplicada, devido a esta assinatura ou outra já existente no documento não cumprir os requisitos necessários. Verifique também as configurações do serviço de selos temporais no menu "Configuração de assinaturas".</translation>
+        <translation>No entanto, a Validação de Longo Prazo não foi corretamente aplicada, devido a esta assinatura ou outra já existente no documento não cumprir os requisitos necessários. Verifique também as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
     </message>
     <message>
-        <source>STR_MAIL_SUPPORT</source>
-        <translation>mailto:info.cidadao@ama.pt</translation>
+        <source>STR_LINK_SUPPORT</source>
+        <translation>https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop</translation>
     </message>
     <message>
         <source>STR_URL_AUTENTICACAO_GOT_PT</source>
@@ -1029,7 +1029,7 @@
     </message>
     <message>
         <source>STR_DEBUG_MODE_STEP5</source>
-        <translation>5. - Enviar a descrição do problema em conjunto com o relatório, presente no Ambiente de Trabalho, para: &lt;a href=&apos;mailto:cartaodecidadao@irn.mj.pt&apos;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
+        <translation>5. - Enviar a descrição do problema em conjunto com o relatório, presente no Ambiente de Trabalho, através da página &lt;a href=&apos;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&apos;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_DEBUG_MODE_ENABLE</source>
@@ -1451,7 +1451,7 @@
     </message>
     <message>
         <source>STR_CONTACT_SUPPORT</source>
-        <translation>Por favor tente novamente. Caso o erro persista, contacte-nos por email para &lt;a href=&quot;mailto:info.cidadao@ama.pt&quot;&gt;info.cidadao@ama.pt&lt;/a&gt;.</translation>
+        <translation>Por favor tente novamente. Caso o erro persista, contacte-nos através da página &lt;a href=&quot;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&quot;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_UPDATE_NETWORK_ERROR</source>
@@ -2281,7 +2281,7 @@
         <translation>Erro da aplicação! Por favor reinstale a aplicação</translation>
     </message>
     <message>
-        <source>STR_GENERIC_ERROR_MSG</source>
+        <source>STR_GENERIC_CARD_ERROR_MSG</source>
         <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
     <message>
@@ -2327,6 +2327,10 @@
     <message>
         <source>STR_POPUP_INCOMPATIBLE_READER</source>
         <translation>Leitor possivelmente incompatível com este cartão. Se possível, experimente atualizar o controlador do seu leitor ou um leitor diferente.&lt;br&gt;Caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>STR_GENERIC_ERROR_MSG</source>
+        <translation>Por favor tente novamente e, caso o erro persista, contacte-nos através da página &lt;a href=&quot;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&quot;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
