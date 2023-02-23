@@ -1677,11 +1677,11 @@ void APL_AddrEId::mapForeignFields(cJSON * json_obj) {
 
 void APL_AddrEId::loadRemoteAddress() {
 	const std::string ENDPOINT_DH = "/readaddress/sendDHParams";
-    const std::string ENDPOINT_SIGNCHALLENGE = "/readaddress/signChallenge";
-    const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
+	const std::string ENDPOINT_SIGNCHALLENGE = "/readaddress/signChallenge";
+	const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
 
-    std::string url_endpoint_dh, url_endpoint_signchallenge, url_endpoint_readaddress;
-    long exception_code = 0;
+	std::string url_endpoint_dh, url_endpoint_signchallenge, url_endpoint_readaddress;
+	long exception_code = 0;
 
 	if (remoteAddressLoaded) {
 		return;
@@ -1733,7 +1733,7 @@ void APL_AddrEId::loadRemoteAddress() {
 			goto cleanup;
 		}
 
-    	//2nd POST
+		//2nd POST
 		char * kicc = sam_helper.getKICC();
 
 		bool verified = sam_helper.verifyCert_CV_IFD((char *)dh_params_resp.cv_ifd_cert.c_str());
@@ -1778,7 +1778,7 @@ void APL_AddrEId::loadRemoteAddress() {
 
 			const unsigned char le_byte[] = { 0x00 };
 
-            //Needed for T=1 smartcard protocol
+			//Needed for T=1 smartcard protocol
 			mse_internal_auth_cmd.Append(le_byte, sizeof(le_byte));
 			internal_auth_cmd.Append(le_byte, sizeof(le_byte));
 
