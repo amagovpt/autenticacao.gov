@@ -10,4 +10,4 @@ e da assinatura com Chave Móvel Digital
 O código fonte da documentação e os documentos técnicos deste projecto foram transferidos para o repositório https://github.com/amagovpt/docs.autenticacao.gov. A documentação desta pasta não deve ser utilizada.
 
 ## Contactos
-Para questões, sugestões ou comentários contacte-nos através da página: <a href="https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop">Contactos</a>.
+Para questões, sugestões ou comentários contacte-nos através da página: [Contactos](https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop).
