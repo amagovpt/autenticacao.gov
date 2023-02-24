@@ -332,7 +332,7 @@ public slots:
     void startSavingCardPhoto(QString outputFile);
     int getStringByteLength(QString text);
     void startReadingPersoNotes();
-    void startWritingPersoNotes(QString text);
+    void startWritingPersoNotes(const QString &text);
     void startReadingAddress();
     void startPrintPDF(QString outputFile, bool isBasicInfo,bool isAdditionalInfo,
                        bool isAddress,bool isNotes,bool isPrintDate,bool isSign, bool isTimestamp, bool isLtv);
@@ -587,7 +587,7 @@ private:
     template<typename T>
     bool handleScapError(const ScapResult<T> &result, bool isCompany = false, bool isEmployee = false);
     void getPersoDataFile();
-    void setPersoDataFile(QString text);
+    void setPersoDataFile(const QString &text);
     void doSaveCardPhoto(QString outputFile);
     void getAddressFile();
     void doSignPDF(SignParams &params);

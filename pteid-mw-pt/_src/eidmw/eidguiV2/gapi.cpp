@@ -562,40 +562,38 @@ void GAPI::getPersoDataFile() {
 
 }
 
-void GAPI::setPersoDataFile(QString text) {
-
+void GAPI::setPersoDataFile(const QString &text) {
     qDebug() << "setPersoDataFile() called";
 
-    int testAuthPin = doVerifyAuthPin("");
-
-    if (testAuthPin == 0 || testAuthPin == TRIES_LEFT_ERROR) {
+    int auth_pin_res = doVerifyAuthPin("");
+    if (auth_pin_res == 0 || auth_pin_res == TRIES_LEFT_ERROR) {
         return;
     }
 
+    PTEID_EIDCard *card = NULL;
+    getCardInstance(card);
+
+    QByteArray notes = text.toUtf8();
+    const unsigned char *p_notes = reinterpret_cast<const unsigned char*>(notes.constData());
+    const PTEID_ByteArray ba_notes(p_notes, notes.size() + 1);
+
     try {
-        QString TxtPersoDataString = text.toUtf8();
-
-        PTEID_EIDCard * Card = NULL;
-        getCardInstance(Card);
-
-        const PTEID_ByteArray oData(reinterpret_cast<const unsigned char*>
-            (TxtPersoDataString.toStdString().c_str()), (TxtPersoDataString.toStdString().size() + 1));
-        Card->writePersonalNotes(oData);
-
-
-        qDebug() << "Personal notes successfully written!";
-        emit signalSetPersoDataFile(tr("STR_POPUP_SUCESS"), tr("STR_PERSONAL_NOTES_SUCESS"), true);
-
-    } catch (PTEID_Exception& e) {
+        card->writePersonalNotes(ba_notes);
+    }
+    catch (PTEID_Exception& e) {
         qDebug() << "Error writing personal notes!";
         emit signalSetPersoDataFile(tr("STR_POPUP_ERROR"), tr("STR_PERSONAL_NOTES_ERROR"), false);
+        return;
     }
 
+    qDebug() << "Personal notes successfully written!";
+    emit signalSetPersoDataFile(tr("STR_POPUP_SUCESS"), tr("STR_PERSONAL_NOTES_SUCESS"), true);
 }
 
 void GAPI::verifyAuthPin(QString pin_value) {
     Concurrent::run(this, &GAPI::doVerifyAuthPin, pin_value);
 }
+
 unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifyAuthPin");
@@ -2340,7 +2338,7 @@ void GAPI::startSavingCardPhoto(QString outputFile) {
     QFuture<void> future = Concurrent::run(this, &GAPI::doSaveCardPhoto, outputFile);
 }
 
-void GAPI::startWritingPersoNotes(QString text) {
+void GAPI::startWritingPersoNotes(const QString &text) {
     QFuture<void> future = Concurrent::run(this, &GAPI::setPersoDataFile, text);
 }
 
