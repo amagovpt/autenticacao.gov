@@ -617,11 +617,11 @@ namespace eIDMW
 
 		if (m_visible)
 		{
-			//By the spec, the visible/writable area can be cropped by the CropBox, BleedBox, etc...
-			//We're assuming the most common case of MediaBox matching the visible area
-			PDFRectangle *p_media = p->getMediaBox();
+			//By the spec, the visible area of the page is limited by Cropbox
+			//Poppler returns a correct value for Cropbox if it's not defined or it's bigger than MediaBox
+			PDFRectangle *p_cropbox = p->getCropBox();
 
-			double height = p_media->y2, width = p_media->x2;
+			double height = p_cropbox->y2, width = p_cropbox->x2;
 			m_isLandscape = isLandscapeFormat();
 
 			//Fix dimensions for the /Rotate case
