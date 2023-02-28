@@ -337,6 +337,18 @@ static ScapError interpret_exception_code(const long code, const char *call)
 		case EIDMW_ERR_OP_CANCEL:
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s: operation cancelled by user.", call);
 			return ScapError::sign_cancel;
+		case EIDMW_ERR_CMD_CONNECTION:
+			MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service connection error.", call);
+			return ScapError::sign_cmd_connection;
+		case EIDMW_ERR_CMD_INVALID_CODE:
+			MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service invalid otp.", call);
+			return ScapError::sign_cmd_invalid_code;
+		case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
+			MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service invalid account.", call);
+			return ScapError::sign_cmd_invalid_account;
+		case EIDMW_ERR_CMD_SERVICE:
+			MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service generic error.", call);
+			return ScapError::sign_cmd_generic;
 		default:
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s: caught exception: %08lx.", call, code);
 			return ScapError::generic;

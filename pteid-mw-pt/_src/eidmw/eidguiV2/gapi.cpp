@@ -2429,6 +2429,18 @@ bool GAPI::handleScapError(const ScapResult<T> &result, bool isCompany, bool isE
     else if (error == ScapError::possibly_proxy) {
         emit signalSCAPPossibleProxyMisconfigured();
     }
+    else if (error == ScapError::sign_cmd_connection) {
+        showSignCMDDialog(EIDMW_ERR_CMD_CONNECTION);
+    }
+    else if (error == ScapError::sign_cmd_invalid_code) {
+        showSignCMDDialog(EIDMW_ERR_CMD_INVALID_CODE);
+    }
+    else if (error == ScapError::sign_cmd_invalid_account) {
+        showSignCMDDialog(EIDMW_ERR_CMD_INACTIVE_ACCOUNT);
+    }
+    else if (error == ScapError::sign_cmd_generic) {
+        showSignCMDDialog(EIDMW_ERR_CMD_SERVICE);
+    }
     else if (error == ScapError::sign_timestamp) {
         emit signalPdfSignSuccess(SignMessageTimestampFailed);
     }
