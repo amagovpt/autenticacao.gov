@@ -6,7 +6,7 @@
 #define CMDKSP_INTERFACE_VERSION BCRYPT_MAKE_INTERFACE_VERSION(1,0) //version of the KSP interface
 #define CMDKSP_VERSION 0x00010000                         //version of the KSP
 #define CMDKSP_SUPPORT_SECURITY_DESCRIPTOR   0x00000001             //This KSP supports security descriptor
-#define CMDKSP_PROVIDER_NAME           L"Chave MÃ³vel Digital Key Storage Provider" //name of the KSP provider
+#define CMDKSP_PROVIDER_NAME           L"Chave Móvel Digital Key Storage Provider" //name of the KSP provider
 #define CMDKSP_PROVIDER_MAGIC          0x9f347be4      // SPLP
 #define CMDKSP_KEY_MAGIC               0xd18933bd      // SPLK
 #define CMDKSP_KEY_FILE_VERSION        1               // version of the key file
