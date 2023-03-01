@@ -250,9 +250,15 @@ PageServicesSignForm {
         onSignalCacheRemovedLegacy: {
             console.log("Removed Legacy Scap cache files")
 
+            signerror_dialog.propertySignFailDialogTitle.text = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
             var text_top = qsTranslate("PageDefinitionsSCAP","STR_SCAP_LEGACY_CACHE")
 
             show_error_message(text_top, "")
+
+            // Show button to load attributesText
+            closeButtonError.visible = false
+            buttonLoadAttr.visible = true
+            buttonCancelAttr.visible = true
         }
 
         onSignalCanceledSignature: {
@@ -670,6 +676,7 @@ PageServicesSignForm {
            + mainView.width * 0.5 - signerror_dialog.width * 0.5
         y: parent.height * 0.5 - signerror_dialog.height * 0.5
 
+        property alias propertySignFailDialogTitle: titleTextError
         property alias propertySignFailDialogText: text_sign_error
         property alias propertySignFailDialogGenericText: text_sign_generic_error
 
@@ -813,6 +820,12 @@ PageServicesSignForm {
             rectPopUpError.forceActiveFocus()
         }
         onClosed: {
+            //reset title and visible buttons when closing dialog
+            titleTextError.text = qsTranslate("PageServicesSign","STR_SIGN_FAIL")
+            closeButtonError.visible = true
+            buttonLoadAttr.visible = false
+            buttonCancelAttr.visible = false
+
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             mainFormID.propertyPageLoader.forceActiveFocus()
         }
