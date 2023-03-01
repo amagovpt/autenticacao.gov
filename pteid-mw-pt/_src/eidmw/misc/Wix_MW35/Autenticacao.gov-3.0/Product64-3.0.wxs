@@ -623,8 +623,6 @@
 			
 			<CustomAction Id="IsPrivileged" Error="!(loc.AdminNeeded)" />
 			<CustomAction Id="PreventDowngrading" Error="!(loc.NoDowngrade)" />
-			<Property Id="RUNDLLPATH" Value="C:\Windows\System32\rundll32.exe"> </Property>
-
 			<CustomAction BinaryKey="cmdKspConfig" Execute="deferred" Return="check" Impersonate="no" ExeCommand="-register" Id="KSPRegister"/>
 			<CustomAction BinaryKey="cmdKspConfig" Execute="deferred" Return="check" Impersonate="no" ExeCommand="-unregister" Id="KSPUnregister"/>
 			<CustomAction BinaryKey="cmdKspConfig" Execute="deferred" Return="check" Impersonate="yes" ExeCommand="-removeCerts" Id="KSPRemoveCmdCerts"/>
