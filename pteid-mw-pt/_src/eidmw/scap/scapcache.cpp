@@ -328,12 +328,37 @@ static bool save_cache(const std::string &to_be_saved, const std::string &id)
 	return true;
 }
 
+static bool check_dir_readable(const QDir &dir)
+{
+#ifdef WIN32
+	// necessary according to https://doc.qt.io/archives/qt-5.12/qfileinfo.html#ntfs-permissions
+	extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+	qt_ntfs_permission_lookup++;
+#endif
+
+	const bool is_readable = dir.isReadable();
+
+#ifdef WIN32
+	qt_ntfs_permission_lookup--;
+#endif
+
+	return is_readable;
+}
+
 ScapResult<std::vector<ScapAttribute>> load_cache()
 {
 	std::vector<ScapAttribute> result;
 	bool removed_legacy = false;
 
-	QDir cache_dir(get_attribute_cache_dir());
+	QString cache_path = get_attribute_cache_dir();
+	QDir cache_dir(cache_path);
+
+	if (QFileInfo::exists(cache_path) && !check_dir_readable(cache_dir)) {
+		std::string cache_path_str = cache_path.toStdString();
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s cache dir not readable: %s", __FUNCTION__, cache_path_str.c_str());
+		return ScapError::cache_read_failure;
+	}
+
 	QStringList file_list = cache_dir.entryList(QStringList({"*.json", "*.xml"}), QDir::Files | QDir::NoSymLinks);
 	foreach(QString cache_file_name, file_list) {
 		QFile cache_file(get_attribute_cache_dir() + cache_file_name);
@@ -382,8 +407,11 @@ static std::vector<ScapAttribute> handle_cache(const std::string &response)
 bool cache_response(const std::string& response, const std::string &id, std::vector<ScapAttribute> &out_attributes)
 {
 	QDir cache_dir; //create cache dir if it does not exist
-	if (!cache_dir.mkpath(get_attribute_cache_dir())) {
-		MWLOG(LEV_ERROR, MOD_SCAP, "%s Failed to create scap cache directory", __FUNCTION__);
+	QString cache_path = get_attribute_cache_dir();
+	if (!cache_dir.mkpath(cache_path)) {
+		std::string cache_path_str = cache_path.toStdString();
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s Failed to create scap cache directory, %s", __FUNCTION__,
+			cache_path_str.c_str());
 		return false;
 	}
 

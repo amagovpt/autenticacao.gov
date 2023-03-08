@@ -552,7 +552,7 @@ signals:
     void signalAttributesPossiblyExpired(const QStringList expiredSuppliers);
     void signalRemoveSCAPAttributesSucess();
     void signalRemoveSCAPAttributesFail();
-    void signalCacheNotReadable(int scapAttrType);
+    void signalCacheNotReadable();
     void signalCacheNotWritable();
     void signalCacheRemovedLegacy();
     void signalCacheFolderNotCreated();

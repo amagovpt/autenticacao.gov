@@ -261,6 +261,15 @@ PageServicesSignForm {
             buttonCancelAttr.visible = true
         }
 
+        onSignalCacheNotReadable: {
+            console.log("Scap cache not readable")
+
+            signerror_dialog.propertySignFailDialogTitle.text = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
+            var text_top = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
+
+            show_error_message(text_top, "")
+        }
+
         onSignalCanceledSignature: {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS

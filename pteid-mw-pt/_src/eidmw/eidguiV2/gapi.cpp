@@ -2515,6 +2515,12 @@ bool GAPI::handleScapError(const ScapResult<T> &result, bool isCompany, bool isE
     else if (error == ScapError::cache_removed_legacy) {
         emit signalCacheRemovedLegacy();
     }
+    else if (error == ScapError::cache_read_failure) {
+        emit signalCacheNotReadable();
+    }
+    else if (error == ScapError::cache_write_failure) {
+        emit signalCacheNotWritable();
+    }
     else {
         emit signalSCAPServiceFail(ScapGenericError, isCompany);
     }
