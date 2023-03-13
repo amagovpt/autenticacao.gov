@@ -562,7 +562,7 @@ Item {
                     height: container_read_notif.visible ? childrenRect.height : 0
                     width: parent.width
 
-                    visible: !hasMandatory
+                    visible: !hasMandatory && model_read.count > 0
 
                     anchors.top: listView.model.count > 0 ? container_new_notif.bottom : parent.top
                     anchors.topMargin: visible && listView.model.count > 0 ? Constants.MARGIN_NOTIFICATION_CENTER * 2 : 0
@@ -607,6 +607,24 @@ Item {
                     }
                 }
             }
+        }
+
+        Text {
+            id: no_notifications_message
+            text: qsTranslate("main", "STR_NO_NOTIFICATIONS") + controler.autoTr
+            color: Constants.COLOR_GRAY
+
+            visible: model_read.count == 0 && listView.model.count == 0
+
+            font.bold: activeFocus
+            font.family: lato.name
+            font.pixelSize: Constants.SIZE_TEXT_FIELD
+            font.capitalization: Font.MixedCase
+
+            anchors.centerIn: parent
+
+            Accessible.role: Accessible.StaticText
+            Accessible.name: text
         }
 
         onOpened: {

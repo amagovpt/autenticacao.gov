@@ -2605,6 +2605,10 @@
         <translation>Notificações Lidas</translation>
     </message>
     <message>
+        <source>STR_NO_NOTIFICATIONS</source>
+        <translation>Nenhuma nova notificação</translation>
+    </message>
+    <message>
         <source>STR_NOTIFICATION_SERVICES</source>
         <translation>Serviços</translation>
     </message>

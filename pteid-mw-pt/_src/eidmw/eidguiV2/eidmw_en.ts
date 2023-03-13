@@ -2600,6 +2600,10 @@
         <translation>Read Notifications</translation>
     </message>
     <message>
+        <source>STR_NO_NOTIFICATIONS</source>
+        <translation>No new notifications</translation>
+    </message>
+    <message>
         <source>STR_NOTIFICATION_SERVICES</source>
         <translation>Services</translation>
     </message>
