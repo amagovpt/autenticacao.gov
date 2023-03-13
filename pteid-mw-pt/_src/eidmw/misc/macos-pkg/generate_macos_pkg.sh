@@ -102,6 +102,9 @@ mkdir -p $HTML_BUNDLE_DIR
 cp -af $MISC_DIR/web/AutenticacaoGov.html $HTML_BUNDLE_DIR
 cp -af $MISC_DIR/web/AutenticacaoGov_failed.html $HTML_BUNDLE_DIR
 
+#Copy CryptoTokenKit extension
+cp -r ${CTK_BUNDLE_DIR}/PteidToken.appex ${EIDGUI_BUNDLE_DIR}/../PlugIns/
+
 cd $PKG_DIR
 
 # Sign all the included dylibs and executables before packaging
@@ -109,9 +112,6 @@ if [ -n "$SIGNING_CERTIFICATE" ]
 then
 	./codesigning.sh "$SIGNING_CERTIFICATE"
 fi
-
-#Copy CryptoTokenKit extension
-cp -r ${CTK_BUNDLE_DIR}/PteidToken.appex ${EIDGUI_BUNDLE_DIR}/../PlugIns/
 
 if [ -n "$SIGNING_CERTIFICATE" ]
 then
