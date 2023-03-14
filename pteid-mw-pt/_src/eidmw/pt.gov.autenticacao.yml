@@ -42,6 +42,7 @@ modules:
       - '/bin/*'
       - '/lib/pkg-config'
       - '/lib/libxerces-c.a'
+      - '/lib/libxerces-c.la'
     sources:
       - type: archive
         url: https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.3.tar.gz
@@ -49,9 +50,11 @@ modules:
   - name: libzip
     buildsystem: cmake-ninja
     cleanup:
+      - '/include'
       - '/bin/zip*'
       - '/share/man'
       - '/lib/pkg-config'
+      - '/lib/cmake'
     sources:
       - type: archive
         url: https://libzip.org/download/libzip-1.9.2.tar.xz
@@ -69,8 +72,10 @@ modules:
   - name: cJSON
     buildsystem: cmake
     cleanup:
+      - '/include'
       - '/lib/pkg-config'
       - '/lib/cmake'
+      - '/lib/libcjson.a'
     config-opts:
       - -DBUILD_SHARED_LIBS=OFF
     sources:
