@@ -1,7 +1,7 @@
 #
 # spec file for package pteid-mw
 #
-# Copyright (c) 2011-2021 Caixa Magica Software
+# Copyright (c) 2011-2023 Caixa Magica Software
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -20,8 +20,8 @@
 %endif
 %endif
 
-%define git_revision git20230102
-%define app_version 3.9.1
+%define git_revision git20230314
+%define app_version 3.10.0
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make
@@ -70,6 +70,7 @@ BuildRequires:  qt5-qtquickcontrols
 BuildRequires:  qt5-qtquickcontrols2
 
 BuildRequires:  libpng-devel
+BuildRequires:  cjson-devel
 
 BuildRequires:  xml-security-c-devel
 BuildRequires:  poppler-qt5-devel
@@ -90,7 +91,7 @@ Summary:        Portuguese eID middleware
 Url:            https://github.com/amagovpt/autenticacao.gov
 Vendor:         Portuguese Government
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Source0:        pteid-mw_%{app_version}+%{git_revision}.tar.xz
+Source0:        pteid-mw_%{app_version}-%{git_revision}.tar.xz
 Source1:        pteid-mw-gui.desktop
 Source2:        pteid-scalable.svg
 Source3:        pteid-signature.png
@@ -307,6 +308,11 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
+* Tue Mar 14 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - New feature: SCAP signature in batch mode
+  - CMD signature for foreign residents
+  - Improvements in remote address reading
+
 * Mon Jan 3 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Bugfix in address change
   - Update help messages related to the new address change process in ePortugal
