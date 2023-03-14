@@ -21,6 +21,8 @@
 
 #include "CurlUtil.h"
 #include "MiscUtil.h"
+#include "APLConfig.h"
+#include "Config.h"
 #include "Log.h"
 #include "eidErrors.h"
 
@@ -94,11 +96,8 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 	ScapSettings settings;
 	std::string partial_url = "https://" + settings.getScapServerHost();
 	bool using_proxy = false;
-#ifdef WIN32
-	const char * cacerts_location = "C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\cacerts.pem";
-#else
-	const char * cacerts_location = "/usr/local/share/certs/cacerts.pem";
-#endif
+	APL_Config conf_certsdir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+	std::string cacerts_location = std::string(conf_certsdir.getString()) + "/cacerts.pem";
 
 	// curl handle is always NULL here except when loading attributes with card
 	// as it is the only request with client certificate authentication
@@ -151,7 +150,7 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 	curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, &curl_write_data);
 	curl_easy_setopt(curl, CURLOPT_HEADERDATA, &received_header_data);
 
-	curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_location);
+	curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_location.c_str());
 
 	using_proxy = applyProxyConfigToCurl(curl, partial_url.c_str());
 

@@ -23,6 +23,7 @@
 #include "APLConfig.h"
 #include "APLCertif.h"
 #include "Log.h"
+#include "Config.h"
 #include "MiscUtil.h"
 #include "CardPteidDef.h"
 #include "cJSON.h"
@@ -127,13 +128,10 @@ static APL_Certif * loadCertsFromCard(SSL_CTX *ctx, APL_Certifs *certs)
 
 static void loadRootCertsFromCACerts(SSL_CTX *ctx)
 {
-#ifdef WIN32
-	const char * cacerts_location = "C:\\Program Files\\Portugal Identity Card\\eidstore\\certs\\cacerts.pem";
-#else
-	const char * cacerts_location = "/usr/local/share/certs/cacerts.pem";
-#endif
+	APL_Config conf_certsdir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+	std::string cacerts_location = std::string(conf_certsdir.getString()) + "/cacerts.pem";
 
-	if (SSL_CTX_load_verify_locations(ctx, cacerts_location, NULL) == 0) {
+	if (SSL_CTX_load_verify_locations(ctx, cacerts_location.c_str(), NULL) == 0) {
 		char *loading_error = ERR_error_string(ERR_get_error(), NULL);
 		MWLOG(LEV_ERROR, MOD_APL, "Failed to load cacerts.pem certificates bundle! Error: %s", loading_error);
 	}
