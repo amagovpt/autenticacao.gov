@@ -94,7 +94,6 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        pteid-mw_%{app_version}-%{git_revision}.tar.xz
 Source1:        pteid-mw-gui.desktop
 Source2:        pteid-scalable.svg
-Source3:        pteid-signature.png
 
 %if 0%{?suse_version}
 BuildRequires:  update-desktop-files
@@ -175,10 +174,6 @@ install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/usr/share/applications
 mkdir -p $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/apps/
 install -m 644 -p %{SOURCE2} $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/apps/
 
-mkdir -p $RPM_BUILD_ROOT/usr/share/pixmaps
-install -m 644 -p %{SOURCE3} $RPM_BUILD_ROOT/usr/share/pixmaps
-mkdir -p $RPM_BUILD_ROOT/usr/share/mime/packages
-
 %if 0%{?suse_version}
  %suse_update_desktop_file -i pteid-mw-gui Office Presentation
   export NO_BRP_CHECK_RPATH=true
@@ -208,9 +203,6 @@ ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2.0
 ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so
 ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so.1
 ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so.1.0
-
-ln -s /usr/share/pixmaps/pteid-signature.png /usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
-ln -s /usr/share/pixmaps/pteid-signature.png /usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
 
 %if 0%{?fedora} || 0%{?centos_version}
 # BLURP: Add usr local to ldconf
@@ -258,9 +250,6 @@ rm -rf /usr/local/lib/libpteidlib.so
 rm -rf /usr/local/lib/libpteidlib.so.2
 rm -rf /usr/local/lib/libpteidlib.so.2.0
 
-rm -rf /usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
-rm -rf /usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
-
 # Delete all .pteid-ng folder and its contents from all users
 users=$(getent passwd | awk -F: '$3 >= 1000 && $3 <= 6000' | cut -d: -f6);
 for d in $users; do
@@ -303,7 +292,6 @@ fi
 /usr/local/include/*
 /usr/share/applications/*
 /usr/share/icons/*
-/usr/share/pixmaps/*
 /usr/local/share/certs
 /usr/local/share/pteid-mw
 
@@ -313,7 +301,7 @@ fi
   - CMD signature for foreign residents
   - Improvements in remote address reading
 
-* Mon Jan 3 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
+* Tue Jan 3 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Bugfix in address change
   - Update help messages related to the new address change process in ePortugal
 
