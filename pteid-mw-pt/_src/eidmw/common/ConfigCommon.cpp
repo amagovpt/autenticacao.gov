@@ -129,7 +129,6 @@ namespace eIDMW
   const struct CConfig::Param_Num CConfig::EIDMW_CONFIG_PARAM_XSIGN_TIMEOUT 		=	{EIDMW_CNF_SECTION_XSIGN,	EIDMW_CNF_XSIGN_TIMEOUT,	30};
 
 //AutoUpdates
-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_URL      =       {EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_URL, L"https://www.autenticacao.gov.pt/documents/" };
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL = { EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_VERIFY_URL, L"https://aplicacoes.autenticacao.gov.pt/apps/" };
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_CERTS_URL = { EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_CERTS_URL, L"https://raw.githubusercontent.com/amagovpt/autenticacao.gov/master/pteid-mw-pt/_src/eidmw/misc/certs/" };
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_NEWS_URL = { EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_NEWS_URL, L"https://raw.githubusercontent.com/amagovpt/autenticacao.gov/master/pteid-mw-pt/_src/eidmw/" };

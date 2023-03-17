@@ -237,13 +237,12 @@ replace $install by string in install parameter
 #define EIDMW_CNF_XSIGN_TIMEOUT             L"timeout"                  //number;
 
 #define EIDMW_CNF_SECTION_AUTOUPDATES       L"autoupdates"              //section with the autoupdates parameters
-#define EIDMW_CNF_AUTOUPDATES_URL           L"serverurl"                //string
 #define EIDMW_CNF_AUTOUPDATES_VERIFY_URL    L"serververifyurl"          //string
 #define EIDMW_CNF_AUTOUPDATES_CERTS_URL     L"servercertsurl"           //string
 #define EIDMW_CNF_AUTOUPDATES_NEWS_URL      L"servernewsurl"            //string
 
 #define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL      L"remoteaddr_url"          //string
-#define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_TST  L"remoteaddr_url_test"          //string
+#define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_TST  L"remoteaddr_url_test"     //string
 
 namespace eIDMW
 {
