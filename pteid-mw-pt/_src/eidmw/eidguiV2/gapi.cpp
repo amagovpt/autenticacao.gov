@@ -1818,7 +1818,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params, long &addressError)
             }
             pos_y += 80 * print_scale_factor;
         }
-        catch (PTEID_Exception e) {
+        catch (PTEID_Exception &e) {
             long errorCode = e.GetError();
             if (errorCode >= EIDMW_REMOTEADDR_CONNECTION_ERROR && errorCode <= EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
                 qDebug() << "Address exception captured in drawpdf!";
