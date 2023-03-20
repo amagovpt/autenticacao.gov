@@ -48,6 +48,11 @@ namespace eIDMW
         const char *hexToken = NULL;
         unsigned long len = doc->getSigByteArray(&to_sign, true);
 
+        if (len == 0) {
+            MWLOG(LEV_ERROR, MOD_APL, "%s: getSigByteArray() failed! Invalid signature_offset.", __FUNCTION__);
+            return false;
+        }
+
         TSAClient tsp;
 
         //Compute SHA-256 of the signed digest

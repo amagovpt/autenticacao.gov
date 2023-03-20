@@ -833,12 +833,18 @@ unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array, bool increment
 
 	if (incremental_mode)
 	    saveIncrementalUpdate(out_str);
-	else 
+	else
 	    saveAs(out_str, writeForceRewrite);
+
+  if (m_sig_offset >= mem_stream.size()) {
+    error(errInternal, -1, "getSigByteArray: m_sig_offset greater than current doc size: %d >= %d", m_sig_offset, mem_stream.size());
+    return 0;
+  }
 	
 	char * base_ptr = (char *)mem_stream.getData();
 
-	ret_len = mem_stream.size() - ESTIMATED_LEN - 2; 
+	ret_len = mem_stream.size() - ESTIMATED_LEN - 2;
+
 	*byte_array = (unsigned char *)gmalloc(ret_len);
 
 	memcpy((*byte_array)+i, base_ptr, m_sig_offset);

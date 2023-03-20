@@ -759,6 +759,11 @@ namespace eIDMW
 
 		unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
 
+		if (len == 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "%s: getSigByteArray failed! Invalid signature_offset.",  __FUNCTION__);
+			throw CMWEXCEPTION(EIDMW_ERR_PDF_SIGNATURE_SANITY_CHECK);
+		}
+
 		int rc = 0;
 		try
 		{

@@ -269,6 +269,8 @@
 #define EIDMW_ERR_CMD_INACTIVE_ACCOUNT           0xe1d01e0b
 #define EIDMW_ERR_CMD_SERVICE                    0xe1d01e0c
 
+#define EIDMW_ERR_PDF_SIGNATURE_SANITY_CHECK     0xe1d01e10
+
 // XAdES signature errors
 #define EIDMW_XADES_UNKNOWN_ERROR                0xe1d01f06
 #define EIDMW_XADES_INVALID_ASIC_ERROR           0xe1d01f07
