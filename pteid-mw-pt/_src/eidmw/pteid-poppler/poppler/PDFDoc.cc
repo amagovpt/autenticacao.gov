@@ -1027,11 +1027,17 @@ void PDFDoc::prepareTimestamp()
     unsigned char *haystack = streamPtr;
     unsigned char *found = 0;
     unsigned char *needlePtr = 0;
+    long offset = 0;
+
+    size_t buffer_len = mem_stream.size();
     /* Find the last occurence of needle */
-    while (needlePtr = (unsigned char *)memmem(haystack, mem_stream.size(), needle, sizeof(needle) - 1))
+    while (needlePtr = (unsigned char *)memmem(haystack, buffer_len, needle, sizeof(needle) - 1))
     {
         found = needlePtr;
+        offset = (long)found - (long)streamPtr;
         haystack = found + sizeof(needle);
+
+        buffer_len -= offset + sizeof(needle);
     }
     
     if (found == NULL)
