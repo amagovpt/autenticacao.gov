@@ -222,7 +222,7 @@ function stripFilePrefix(filePath) {
         return filePath.replace(/^(file:\/{3})|(file:)|(qrc:\/{3})|(http:\/{3})/, "")
     }
     else {
-        return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/, "");
+        return filePath.replace(/^(file:\/{2})|(qrc:\/{2})|(qrc:)|(http:\/{2})/, "");
     }
 }
 function replaceFileSuffix(url, suffix){
