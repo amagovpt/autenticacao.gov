@@ -134,6 +134,7 @@ PageServicesSignForm {
         onSignalSignatureFinished: {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            gapi.setShortcutOutput("")
         }
 
         onSignalPdfSignFail: {
@@ -429,7 +430,6 @@ PageServicesSignForm {
                         shortcutOutput = shortcutOutput + Functions.replaceFileSuffix(inputFile, "_signed.pdf")
                     }
                     signCC(shortcutOutput)
-                    gapi.setShortcutOutput("")
                     return;
                 }
 
@@ -1272,7 +1272,6 @@ PageServicesSignForm {
             else {
                 // If application was started with signAdvanced and output option from command line
                 var shortcutOutput = getShortcutOutput()
-                gapi.setShortcutOutput("")
 
                 var prefix = (Qt.platform.os === "windows" ? "file:///" : "file://")
 
@@ -1283,7 +1282,6 @@ PageServicesSignForm {
                         shortcutOutput = prefix + shortcutOutput + Functions.replaceFileSuffix(inputFile, "_signed.pdf")
                         propertyFileDialogCMDOutput.file = shortcutOutput
                         propertyFileDialogCMDOutput.accepted()
-                        gapi.setShortcutOutput("")
                         return
                     }
 
@@ -1298,6 +1296,12 @@ PageServicesSignForm {
                     }
                 } else {
                     if (propertyRadioButtonPADES.checked) {
+                        if(shortcutOutput) {
+                            propertyFileDialogBatchCMDOutput.folder = shortcutOutput
+                            propertyFileDialogBatchCMDOutput.accepted()
+                            return
+                        }
+
                         propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
                         propertyFileDialogBatchCMDOutput.open()
                     } else {
@@ -1714,7 +1718,6 @@ PageServicesSignForm {
         console.log("PageServicesSignAdvanced destruction")
         if(gapi) {
             gapi.closeAllPdfPreviews();
-            gapi.setShortcutOutput("")
         }
     }
 
