@@ -21,6 +21,11 @@
 #include "MiscUtil.h"
 #include "Log.h"
 
+#ifdef WIN32
+//QtCore global variable to enable and disable file permissions checking on Windows
+extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+#endif
+
 namespace eIDMW {
 
 static QString get_cache_dir()
@@ -332,10 +337,8 @@ static bool check_dir_readable(const QDir &dir)
 {
 #ifdef WIN32
 	// necessary according to https://doc.qt.io/archives/qt-5.12/qfileinfo.html#ntfs-permissions
-	extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 	qt_ntfs_permission_lookup++;
 #endif
-
 	const bool is_readable = dir.isReadable();
 
 #ifdef WIN32
