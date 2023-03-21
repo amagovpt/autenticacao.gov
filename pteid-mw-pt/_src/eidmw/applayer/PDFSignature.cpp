@@ -28,6 +28,7 @@
 #include <shlwapi.h>
 #endif
 #include <string>
+#include <regex>
 #include <algorithm>
 
 //For the setSSO calls
@@ -50,9 +51,12 @@ namespace eIDMW
 		if (PathIsRelativeA(path_cstr))
 			return path;
 		else {
-			std::string prefixed_path = std::string(R"(\\?\)") + path_cstr;
+			std::string normalized_path = path;
 			//Replace any Unix path seperator with Windows ones
-			std::replace(prefixed_path.begin(), prefixed_path.end(), '/', '\\');
+			std::replace(normalized_path.begin(), normalized_path.end(), '/', '\\');
+			normalized_path = regex_replace(normalized_path, std::regex(R"(\\{2,})"), R"(\)");
+			std::string prefixed_path = std::string(R"(\\?\)") + normalized_path;
+		
 			return prefixed_path;
 		}
 	}
@@ -397,6 +401,7 @@ namespace eIDMW
 	#endif
 	std::string PDFSignature::generateFinalPath(const char *output_dir, const char *path)
 	{
+		fprintf(stderr, "%s Outdir: %s path: %s\n", __FUNCTION__, output_dir, path);
 		char * pdf_filename = Basename((char*)path);
 		std::string clean_filename = CPathUtil::remove_ext_from_basename(pdf_filename);
 
