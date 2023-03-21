@@ -320,25 +320,28 @@ namespace eIDMW
             switch (err)
             {
             case ERR_GET_CERTIFICATE:
-                MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Expired account or inactive signature subscription.");
+                MWLOG(LEV_ERROR, MOD_CMD, "%s: Expired account or inactive signature subscription.", __FUNCTION__);
                 throw CMWEXCEPTION(EIDMW_ERR_CMD_INACTIVE_ACCOUNT);
             case SOAP_ERR_INVALID_OTP:
-                MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Invalid PIN or OTP.");
+                MWLOG(LEV_ERROR, MOD_CMD, "%s: Invalid PIN or OTP.", __FUNCTION__);
                 throw CMWEXCEPTION(EIDMW_ERR_CMD_INVALID_CODE);
+			case SOAP_SSL_ERROR:
+				MWLOG(LEV_ERROR, MOD_CMD, "%: TLS connection error occured.", __FUNCTION__);
+				throw CMWEXCEPTION(EIDMW_ERR_CMD_CONNECTION);
             case SOAP_TCP_ERROR:
-                MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: connection error occured.");
+                MWLOG(LEV_ERROR, MOD_CMD, "%s: connection error occured.", __FUNCTION__);
                 throw CMWEXCEPTION(EIDMW_ERR_CMD_CONNECTION);
             case SOAP_EOF:
-                MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: timeout in service request");
+                MWLOG(LEV_ERROR, MOD_CMD, "%s: timeout in service request", __FUNCTION__);
                 throw CMWEXCEPTION(EIDMW_ERR_CMD_SERVICE);
 
             default:
                 if (err > ERR_ADDR_CMD_BASE + 200) {
-                    MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: HTTP service Error code %d.", err-ERR_ADDR_CMD_BASE);
+                    MWLOG(LEV_ERROR, MOD_CMD, "%s: HTTP service Error code %d.", __FUNCTION__, err-ERR_ADDR_CMD_BASE);
                     throw CMWEXCEPTION(EIDMW_ERR_CMD_SERVICE);
                 }
                 else {
-                    MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::handleErrorCode: Error code %d.", err);
+                    MWLOG(LEV_ERROR, MOD_CMD, "%s: Error code %d.", __FUNCTION__, err);
                     throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
                 }
                 
