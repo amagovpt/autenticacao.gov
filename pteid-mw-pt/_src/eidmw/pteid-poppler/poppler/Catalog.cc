@@ -1568,11 +1568,6 @@ GBool Catalog::setSigFlags(Object * acroform, int value)
 	Object obj1;	
 	if (acroform->isDict())
 	{
-
-		Ref catalog_ref;
-		catalog_ref.gen = xref->getRootGen();
-		catalog_ref.num = xref->getRootNum();
-
 		acroform->dictSet("SigFlags", obj1.initInt(value));
 
 	}
