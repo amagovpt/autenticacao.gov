@@ -596,7 +596,6 @@ int Catalog::setSignatureByteRange(unsigned long sig_contents_offset, unsigned
 		long estimated_len, unsigned long filesize, Object *signature_dict, Ref *signature_dict_ref) {
 	unsigned int padded_byterange_len = 100;
 	Object obj, obj2;
-	char tmp[100];
 	int off2 = sig_contents_offset;
 	int off3 = sig_contents_offset + estimated_len +2;
 	int off4 = filesize-sig_contents_offset-estimated_len-2+
@@ -621,7 +620,7 @@ int Catalog::setSignatureByteRange(unsigned long sig_contents_offset, unsigned
 
     m_sig_dict->dictSet("ByteRange", &obj);
 
-	int actual_size = snprintf(tmp, sizeof(tmp),
+	int actual_size = snprintf(NULL, 0,
 		       	"/ByteRange [0 %d %d %d ] ", off2, off3, off4);
 
 	SignatureDict *d = dynamic_cast<SignatureDict *>(m_sig_dict->getDict());
