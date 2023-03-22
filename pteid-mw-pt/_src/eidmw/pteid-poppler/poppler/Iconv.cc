@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
+#include <iostream>
 #include <ctype.h>
 #include <string.h>
 
@@ -125,43 +126,44 @@ char * utf8_to_latin1(const char * in)
 void write_hex_string(char *str)
 {
 
-	printf("%s", "Hex: ");
 
-	for(int i=0; i!=strlen(str); i++)
+	char c = 0;
+
+	for (int i=0; i!=strlen(str); i++)
 	{
-		if(isascii(str[i]))
-			printf("%c ", (int)str[i]);
+		c = str[i];
+		if(isascii(c))
+			std::cout << c;
 		else
-			printf("%02x ", str[i]);
+			std::cout << "\\x" << std::hex << (static_cast<int>(c) & 0xFF);
 
 	}
 
-	puts(".");
-
+	std::cout << ".\n";
 }
 
 int main(int argc, char **argv)
 {
 
-	char *t[] = 
-	{
+	const char *t[] = {
 		"Hello, my friend, this is the sanctuary of ...",
 		"Euro: €pá, pé, Chulé",
 		"O presidente do CNECV que já há implícito Há médicos serviço",
-		"mamã gugu-dádá",
-		"GBP: £",
+		"mamã gugu-dódá",
+		"Great British Pound: £",
 
 	};
 
 	for (int i=0; i!=sizeof(t)/sizeof(char*); i++)
 	{
-		printf("UTF-8 str: %s\n", t[i]);
-		puts("Latin1 str: ");
-		write_hex_string(utf8_to_latin1(t[i]));
+		std::cout << "UTF-8 str: " << t[i] << '\n';
+
+		std::cout << "Latin-1 str: ";
+
+		char * latin1_str = utf8_to_latin1(t[i]);
+		write_hex_string(latin1_str);
 
 	}
 
 }
 #endif
-
-
