@@ -12,22 +12,27 @@
 #include "win_iconv.h"
 #endif
 
-/* Iconv Wrapper for UNIX */
+/* Iconv Wrapper */
 
-const char * OUTSET = "WINDOWS-1252";
-const char * INSET = "UTF-8";
+#ifdef __APPLE__
+const char * OUTPUT_CHARSET = "ISO-8859-1";
+#else
+const char * OUTPUT_CHARSET = "ISO-8859-1//IGNORE";
+#endif
+
+const char * INPUT_CHARSET = "UTF-8";
 
 iconv_t
 iconv_init(void)
 {
     iconv_t conv_desc;
-    conv_desc = iconv_open (OUTSET, INSET);
+    conv_desc = iconv_open (OUTPUT_CHARSET, INPUT_CHARSET);
     if (conv_desc == (iconv_t)-1) {
 	/* Initialization failure. */
 	if (errno == EINVAL) {
 	    fprintf (stderr,
 		     "Conversion from '%s' to '%s' is not supported.\n",
-		     INSET, OUTSET);
+		     INPUT_CHARSET, OUTPUT_CHARSET);
 	} else {
 	    fprintf (stderr, "Initialization failure: %s\n",
 		     strerror (errno));
@@ -67,30 +72,36 @@ utf82latin1(iconv_t conv_desc, const char * euc)
     utf8len_start = utf8len;
     utf8start = utf8;
     euc_start = euc;
+
+#ifdef __APPLE__
+    //MacOS specific API from libiconv
+    int discard_value = 1;
+    iconvctl(conv_desc, ICONV_SET_DISCARD_ILSEQ, &discard_value);
+#endif
 #ifdef _WIN32
-    iconv_value = iconv (conv_desc, (const char **)&euc, & len, & utf8, & utf8len);
+    iconv_value = iconv(conv_desc, (const char **)&euc, &len, &utf8, &utf8len);
 #else
-	iconv_value = iconv (conv_desc, (char **)&euc, & len, & utf8, & utf8len);
+	iconv_value = iconv(conv_desc, (char **)&euc, &len, &utf8, &utf8len);
 #endif
     /* Handle failures. */
     if (iconv_value == (size_t) -1) {
-	fprintf (stderr, "iconv failed: in string '%s', length %d, "
-		"out string '%s', length %d\n",
-		 euc, (int)len, utf8start, (int)utf8len);
-	switch (errno) {
-	    /* See "man 3 iconv" for an explanation. */
-	case EILSEQ:
-	    fprintf (stderr, "Invalid multibyte sequence.\n");
-	    break;
-	case EINVAL:
-	    fprintf (stderr, "Incomplete multibyte sequence.\n");
-	    break;
-	case E2BIG:
-	    fprintf (stderr, "No more room.\n");
-	    break;
-	default:
-	    fprintf (stderr, "Error: %s.\n", strerror (errno));
-	}
+		fprintf(stderr, "iconv failed: in string '%s', length %d, "
+			"out string '%s', length %d\n",
+			 euc, (int)len, utf8start, (int)utf8len);
+		switch (errno) {
+		    /* See "man 3 iconv" for an explanation. */
+		case EILSEQ:
+		    fprintf(stderr, "Invalid multibyte sequence.\n");
+		    break;
+		case EINVAL:
+		    fprintf(stderr, "Incomplete multibyte sequence.\n");
+		    break;
+		case E2BIG:
+		    fprintf(stderr, "No more room.\n");
+		    break;
+		default:
+		    fprintf(stderr, "Error: %s.\n", strerror (errno));
+		}
     }
     return utf8start;
 }
