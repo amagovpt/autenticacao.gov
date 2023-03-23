@@ -213,11 +213,12 @@ signals:
 private:
     void doCloseDoc(QString filePath);
     void doCloseAllDocs();
-    QPixmap renderPdf(int page,const QSize &requestedSize);
     QPixmap renderPDFPage(unsigned int page);
     std::unordered_map<std::string, Poppler::Document *> m_docs; // all loaded pdfs (remain open)
     std::string m_filePath; // file in preview
+    QString m_file_id; // file and page in preview
     QMutex renderMutex;
+    QPixmap m_cache;
 };
 
 const QString MAIN_QML_PATH("qrc:/main.qml");

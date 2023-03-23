@@ -44,7 +44,7 @@ Rectangle {
     property alias propertyCoordY: dragTarget.coord_y
 
     // Properties used to convert to postscript points
-    property real propertyConvertPtsToPixel:  (1/72.0) * 96.0
+    property real propertyConvertPtsToPixel:  (1/72.0) * 300.0
 
     property real propertySealWidthTemp: 0 
     property real propertySealHeightTemp: 0 

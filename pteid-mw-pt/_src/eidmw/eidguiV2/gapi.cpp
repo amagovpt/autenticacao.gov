@@ -2090,7 +2090,6 @@ void GAPI::doSignBatchPDF(SignParams &params) {
 
 QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    /*qDebug() << "PDFPreviewImageProvider received request for: " << id;*/
     qDebug() << "PDFPreviewImageProvider received request for (width height): "
         << requestedSize.width() << " - " << requestedSize.height();
     QStringList strList = id.split("?");
@@ -2115,21 +2114,18 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
         newdoc->setRenderBackend(Poppler::Document::RenderBackend::SplashBackend);
     }
 
-    QPixmap p = renderPdf(page, requestedSize);
-    size->setHeight(p.height());
-    size->setWidth(p.width());
+    if (m_file_id != id) {
+        m_cache = renderPDFPage(page);
+        m_file_id = id;
+    }
 
-    return p;
-}
+    QPixmap scaled = m_cache.scaled(requestedSize.width(), requestedSize.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    size->setHeight(scaled.height());
+    size->setWidth(scaled.width());
 
-QPixmap PDFPreviewImageProvider::renderPdf(int page, const QSize &requestedSize) {
-    QPixmap pdf_page = renderPDFPage(page);
-    QPixmap resized_pdf_page = pdf_page.scaled(requestedSize.width(), requestedSize.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    emit signalPdfSourceChanged(m_cache.width());
 
-    qDebug() << "PDFPreviewImageProvider emmitting signalPdfSourceChanged original width: " << pdf_page.width();
-    emit signalPdfSourceChanged(pdf_page.width());
-
-    return resized_pdf_page;
+    return scaled;
 }
 
 QSize PDFPreviewImageProvider::getPageSize(int page) {
@@ -2154,8 +2150,8 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
         return QPixmap();
     }
 
-    const double resX = 96.0;
-    const double resY = 96.0;
+    const double resX = 300.0;
+    const double resY = 300.0;
     QImage image = popplerPage->renderToImage(resX, resY);
 
     delete popplerPage;
