@@ -1,4 +1,3 @@
-
 /*
  * iconv implementation using Win32 API to convert.
  *
@@ -10,12 +9,22 @@
 # define WINVER 0x0500
 #endif
 
+#define STRICT
 #include <windows.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include "win_iconv.h"
+#ifdef __GNUC__
+#define UNUSED __attribute__((unused))
+#else
+#define UNUSED
+#endif
+
+/* WORKAROUND: */
+#ifndef UNDER_CE
+#define GetProcAddressA GetProcAddress
+#endif
 
 #if 0
 # define MAKE_EXE
@@ -34,19 +43,17 @@
 
 #define FLAG_USE_BOM            1
 #define FLAG_TRANSLIT           2 /* //TRANSLIT */
-#define FLAG_IGNORE             4 /* //IGNORE (not implemented) */
+#define FLAG_IGNORE             4 /* //IGNORE */
 
 typedef unsigned char uchar;
 typedef unsigned short ushort;
 typedef unsigned int uint;
 
-/*
 typedef void* iconv_t;
 
 iconv_t iconv_open(const char *tocode, const char *fromcode);
 int iconv_close(iconv_t cd);
 size_t iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
-*/
 
 /* libiconv interface for vim */
 #if defined(MAKE_DLL)
@@ -108,7 +115,7 @@ static int win_iconv_open(rec_iconv_t *cd, const char *tocode, const char *fromc
 static int win_iconv_close(iconv_t cd);
 static size_t win_iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft);
 
-static int load_mlang();
+static int load_mlang(void);
 static int make_csconv(const char *name, csconv_t *cv);
 static int name_to_codepage(const char *name);
 static uint utf16_to_ucs4(const ushort *wbuf);
@@ -122,7 +129,7 @@ static int seterror(int err);
 #if defined(USE_LIBICONV_DLL)
 static int libiconv_iconv_open(rec_iconv_t *cd, const char *tocode, const char *fromcode);
 static PVOID MyImageDirectoryEntryToData(LPVOID Base, BOOLEAN MappedAsImage, USHORT DirectoryEntry, PULONG Size);
-static HMODULE find_imported_module_by_funcname(HMODULE hModule, const char *funcname);
+static FARPROC find_imported_function(HMODULE hModule, const char *funcname);
 
 static HMODULE hwiniconv;
 #endif
@@ -156,21 +163,28 @@ static struct {
     {1200, "CP1200"},
     {1200, "UTF16LE"},
     {1200, "UTF-16LE"},
+    {1200, "UCS2LE"},
     {1200, "UCS-2LE"},
+    {1200, "UCS-2-INTERNAL"},
 
     {1201, "CP1201"},
     {1201, "UTF16BE"},
     {1201, "UTF-16BE"},
+    {1201, "UCS2BE"},
     {1201, "UCS-2BE"},
     {1201, "unicodeFFFE"},
 
     {12000, "CP12000"},
     {12000, "UTF32LE"},
     {12000, "UTF-32LE"},
+    {12000, "UCS4LE"},
+    {12000, "UCS-4LE"},
 
     {12001, "CP12001"},
     {12001, "UTF32BE"},
     {12001, "UTF-32BE"},
+    {12001, "UCS4BE"},
+    {12001, "UCS-4BE"},
 
 #ifndef GLIB_COMPILATION
     /*
@@ -179,15 +193,22 @@ static struct {
      */
     {1201, "UTF16"},
     {1201, "UTF-16"},
+    {1201, "UCS2"},
+    {1201, "UCS-2"},
     {12001, "UTF32"},
     {12001, "UTF-32"},
+    {12001, "UCS-4"},
+    {12001, "UCS4"},
 #else
     /* Default is little endian, because the platform is */
     {1200, "UTF16"},
     {1200, "UTF-16"},
+    {1200, "UCS2"},
     {1200, "UCS-2"},
     {12000, "UTF32"},
     {12000, "UTF-32"},
+    {12000, "UCS4"},
+    {12000, "UCS-4"},
 #endif
 
     /* copy from libiconv `iconv -l` */
@@ -314,6 +335,8 @@ static struct {
 
     {950, "CP950"},
     {950, "BIG5"},
+    {950, "BIG5HKSCS"},
+    {950, "BIG5-HKSCS"},
 
     {949, "CP949"},
     {949, "UHC"},
@@ -422,6 +445,8 @@ static struct {
     {936, "gb2312"}, /* ANSI/OEM Simplified Chinese (PRC, Singapore); Chinese Simplified (GB2312) */
     {949, "ks_c_5601-1987"}, /* ANSI/OEM Korean (Unified Hangul Code) */
     {950, "big5"}, /* ANSI/OEM Traditional Chinese (Taiwan; Hong Kong SAR, PRC); Chinese Traditional (Big5) */
+    {950, "big5hkscs"}, /* ANSI/OEM Traditional Chinese (Hong Kong SAR); Chinese Traditional (Big5-HKSCS) */
+    {950, "big5-hkscs"}, /* alternative name for it */
     {1026, "IBM1026"}, /* IBM EBCDIC Turkish (Latin 5) */
     {1047, "IBM01047"}, /* IBM EBCDIC Latin 1/Open System */
     {1140, "IBM01140"}, /* IBM EBCDIC US-Canada (037 + Euro symbol); IBM EBCDIC (US-Canada-Euro) */
@@ -499,29 +524,53 @@ static struct {
     {21866, "koi8-u"}, /* Ukrainian (KOI8-U); Cyrillic (KOI8-U) */
     {28591, "iso-8859-1"}, /* ISO 8859-1 Latin 1; Western European (ISO) */
     {28591, "iso8859-1"}, /* ISO 8859-1 Latin 1; Western European (ISO) */
+    {28591, "iso_8859-1"},
+    {28591, "iso_8859_1"},
     {28592, "iso-8859-2"}, /* ISO 8859-2 Central European; Central European (ISO) */
     {28592, "iso8859-2"}, /* ISO 8859-2 Central European; Central European (ISO) */
+    {28592, "iso_8859-2"},
+    {28592, "iso_8859_2"},
     {28593, "iso-8859-3"}, /* ISO 8859-3 Latin 3 */
     {28593, "iso8859-3"}, /* ISO 8859-3 Latin 3 */
+    {28593, "iso_8859-3"},
+    {28593, "iso_8859_3"},
     {28594, "iso-8859-4"}, /* ISO 8859-4 Baltic */
     {28594, "iso8859-4"}, /* ISO 8859-4 Baltic */
+    {28594, "iso_8859-4"},
+    {28594, "iso_8859_4"},
     {28595, "iso-8859-5"}, /* ISO 8859-5 Cyrillic */
     {28595, "iso8859-5"}, /* ISO 8859-5 Cyrillic */
+    {28595, "iso_8859-5"},
+    {28595, "iso_8859_5"},
     {28596, "iso-8859-6"}, /* ISO 8859-6 Arabic */
     {28596, "iso8859-6"}, /* ISO 8859-6 Arabic */
+    {28596, "iso_8859-6"},
+    {28596, "iso_8859_6"},
     {28597, "iso-8859-7"}, /* ISO 8859-7 Greek */
     {28597, "iso8859-7"}, /* ISO 8859-7 Greek */
+    {28597, "iso_8859-7"},
+    {28597, "iso_8859_7"},
     {28598, "iso-8859-8"}, /* ISO 8859-8 Hebrew; Hebrew (ISO-Visual) */
     {28598, "iso8859-8"}, /* ISO 8859-8 Hebrew; Hebrew (ISO-Visual) */
+    {28598, "iso_8859-8"},
+    {28598, "iso_8859_8"},
     {28599, "iso-8859-9"}, /* ISO 8859-9 Turkish */
     {28599, "iso8859-9"}, /* ISO 8859-9 Turkish */
+    {28599, "iso_8859-9"},
+    {28599, "iso_8859_9"},
     {28603, "iso-8859-13"}, /* ISO 8859-13 Estonian */
     {28603, "iso8859-13"}, /* ISO 8859-13 Estonian */
+    {28603, "iso_8859-13"},
+    {28603, "iso_8859_13"},
     {28605, "iso-8859-15"}, /* ISO 8859-15 Latin 9 */
     {28605, "iso8859-15"}, /* ISO 8859-15 Latin 9 */
+    {28605, "iso_8859-15"},
+    {28605, "iso_8859_15"},
     {29001, "x-Europa"}, /* Europa 3 */
     {38598, "iso-8859-8-i"}, /* ISO 8859-8 Hebrew; Hebrew (ISO-Logical) */
     {38598, "iso8859-8-i"}, /* ISO 8859-8 Hebrew; Hebrew (ISO-Logical) */
+    {38598, "iso_8859-8-i"},
+    {38598, "iso_8859_8-i"},
     {50220, "iso-2022-jp"}, /* ISO 2022 Japanese with no halfwidth Katakana; Japanese (JIS) */
     {50221, "csISO2022JP"}, /* ISO 2022 Japanese with halfwidth Katakana; Japanese (JIS-Allow 1 byte Kana) */
     {50222, "iso-2022-jp"}, /* ISO 2022 Japanese JIS X 0201-1989; Japanese (JIS-Allow 1 byte Kana - SO/SI) */
@@ -661,7 +710,7 @@ static LCIDTORFC1766A LcidToRfc1766A;
 static RFC1766TOLCIDA Rfc1766ToLcidA;
 
 static int
-load_mlang()
+load_mlang(void)
 {
     HMODULE h;
     if (ConvertINetString != NULL)
@@ -669,12 +718,12 @@ load_mlang()
     h = LoadLibrary(TEXT("mlang.dll"));
     if (!h)
         return FALSE;
-    ConvertINetString = (CONVERTINETSTRING)GetProcAddress(h, TEXT("ConvertINetString"));
-    ConvertINetMultiByteToUnicode = (CONVERTINETMULTIBYTETOUNICODE)GetProcAddress(h, TEXT("ConvertINetMultiByteToUnicode"));
-    ConvertINetUnicodeToMultiByte = (CONVERTINETUNICODETOMULTIBYTE)GetProcAddress(h, TEXT("ConvertINetUnicodeToMultiByte"));
-    IsConvertINetStringAvailable = (ISCONVERTINETSTRINGAVAILABLE)GetProcAddress(h, TEXT("IsConvertINetStringAvailable"));
-    LcidToRfc1766A = (LCIDTORFC1766A)GetProcAddress(h, TEXT("LcidToRfc1766A"));
-    Rfc1766ToLcidA = (RFC1766TOLCIDA)GetProcAddress(h, TEXT("Rfc1766ToLcidA"));
+    ConvertINetString = (CONVERTINETSTRING)GetProcAddressA(h, "ConvertINetString");
+    ConvertINetMultiByteToUnicode = (CONVERTINETMULTIBYTETOUNICODE)GetProcAddressA(h, "ConvertINetMultiByteToUnicode");
+    ConvertINetUnicodeToMultiByte = (CONVERTINETUNICODETOMULTIBYTE)GetProcAddressA(h, "ConvertINetUnicodeToMultiByte");
+    IsConvertINetStringAvailable = (ISCONVERTINETSTRINGAVAILABLE)GetProcAddressA(h, "IsConvertINetStringAvailable");
+    LcidToRfc1766A = (LCIDTORFC1766A)GetProcAddressA(h, "LcidToRfc1766A");
+    Rfc1766ToLcidA = (RFC1766TOLCIDA)GetProcAddressA(h, "Rfc1766ToLcidA");
     return TRUE;
 }
 
@@ -741,7 +790,7 @@ win_iconv_open(rec_iconv_t *cd, const char *tocode, const char *fromcode)
 }
 
 static int
-win_iconv_close(iconv_t cd)
+win_iconv_close(iconv_t cd UNUSED)
 {
     return 0;
 }
@@ -768,8 +817,15 @@ win_iconv(iconv_t _cd, const char **inbuf, size_t *inbytesleft, char **outbuf, s
             outsize = cd->to.flush(&cd->to, (uchar *)*outbuf, *outbytesleft);
             if (outsize == -1)
             {
-                cd->to.mode = tomode;
-                return (size_t)(-1);
+                if ((cd->to.flags & FLAG_IGNORE) && errno != E2BIG)
+                {
+                    outsize = 0;
+                }
+                else
+                {
+                    cd->to.mode = tomode;
+                    return (size_t)(-1);
+                }
             }
             *outbuf += outsize;
             *outbytesleft -= outsize;
@@ -788,8 +844,17 @@ win_iconv(iconv_t _cd, const char **inbuf, size_t *inbytesleft, char **outbuf, s
         insize = cd->from.mbtowc(&cd->from, (const uchar *)*inbuf, *inbytesleft, wbuf, &wsize);
         if (insize == -1)
         {
-            cd->from.mode = frommode;
-            return (size_t)(-1);
+            if (cd->to.flags & FLAG_IGNORE)
+            {
+                cd->from.mode = frommode;
+                insize = 1;
+                wsize = 0;
+            }
+            else
+            {
+                cd->from.mode = frommode;
+                return (size_t)(-1);
+            }
         }
 
         if (wsize == 0)
@@ -830,9 +895,17 @@ win_iconv(iconv_t _cd, const char **inbuf, size_t *inbytesleft, char **outbuf, s
         outsize = cd->to.wctomb(&cd->to, wbuf, wsize, (uchar *)*outbuf, *outbytesleft);
         if (outsize == -1)
         {
-            cd->from.mode = frommode;
-            cd->to.mode = tomode;
-            return (size_t)(-1);
+            if ((cd->to.flags & FLAG_IGNORE) && errno != E2BIG)
+            {
+                cd->to.mode = tomode;
+                outsize = 0;
+            }
+            else
+            {
+                cd->from.mode = frommode;
+                cd->to.mode = tomode;
+                return (size_t)(-1);
+            }
         }
 
         *inbuf += insize;
@@ -847,7 +920,7 @@ win_iconv(iconv_t _cd, const char **inbuf, size_t *inbytesleft, char **outbuf, s
 static int
 make_csconv(const char *_name, csconv_t *cv)
 {
-    CPINFOEX cpinfoex;
+    CPINFO cpinfo;
     int use_compat = TRUE;
     int flag = 0;
     char *name;
@@ -879,14 +952,17 @@ make_csconv(const char *_name, csconv_t *cv)
     {
         cv->mbtowc = utf16_mbtowc;
         cv->wctomb = utf16_wctomb;
-        if (_stricmp(name, "UTF-16") == 0 || _stricmp(name, "UTF16") == 0)
+        if (_stricmp(name, "UTF-16") == 0 || _stricmp(name, "UTF16") == 0 ||
+          _stricmp(name, "UCS-2") == 0 || _stricmp(name, "UCS2") == 0 ||
+	  _stricmp(name,"UCS-2-INTERNAL") == 0)
             cv->flags |= FLAG_USE_BOM;
     }
     else if (cv->codepage == 12000 || cv->codepage == 12001)
     {
         cv->mbtowc = utf32_mbtowc;
         cv->wctomb = utf32_wctomb;
-        if (_stricmp(name, "UTF-32") == 0 || _stricmp(name, "UTF32") == 0)
+        if (_stricmp(name, "UTF-32") == 0 || _stricmp(name, "UTF32") == 0 ||
+          _stricmp(name, "UCS-4") == 0 || _stricmp(name, "UCS4") == 0)
             cv->flags |= FLAG_USE_BOM;
     }
     else if (cv->codepage == 65001)
@@ -908,15 +984,15 @@ make_csconv(const char *_name, csconv_t *cv)
         cv->mblen = eucjp_mblen;
     }
     else if (IsValidCodePage(cv->codepage)
-	     && GetCPInfoEx(cv->codepage, 0, &cpinfoex) != 0)
+	     && GetCPInfo(cv->codepage, &cpinfo) != 0)
     {
         cv->mbtowc = kernel_mbtowc;
         cv->wctomb = kernel_wctomb;
-        if (cpinfoex.MaxCharSize == 1)
+        if (cpinfo.MaxCharSize == 1)
             cv->mblen = sbcs_mblen;
-        else if (cpinfoex.MaxCharSize == 2)
+        else if (cpinfo.MaxCharSize == 2)
             cv->mblen = dbcs_mblen;
-	else
+        else
 	    cv->mblen = mbcs_mblen;
     }
     else
@@ -998,7 +1074,7 @@ ucs4_to_utf16(uint wc, ushort *wbuf, int *wbufsize)
 /*
  * Check if codepage is one of those for which the dwFlags parameter
  * to MultiByteToWideChar() must be zero. Return zero or
- * MB_ERR_INVALID_CHARS.  The docs in Platform SDK for for Windows
+ * MB_ERR_INVALID_CHARS.  The docs in Platform SDK for Windows
  * Server 2003 R2 claims that also codepage 65001 is one of these, but
  * that doesn't seem to be the case. The MSDN docs for MSVS2008 leave
  * out 65001 (UTF-8), and that indeed seems to be the case on XP, it
@@ -1019,7 +1095,7 @@ mbtowc_flags(int codepage)
 /*
  * Check if codepage is one those for which the lpUsedDefaultChar
  * parameter to WideCharToMultiByte() must be NULL.  The docs in
- * Platform SDK for for Windows Server 2003 R2 claims that this is the
+ * Platform SDK for Windows Server 2003 R2 claims that this is the
  * list below, while the MSDN docs for MSVS2008 claim that it is only
  * for 65000 (UTF-7) and 65001 (UTF-8). This time the earlier Platform
  * SDK seems to be correct, at least for XP.
@@ -1073,7 +1149,6 @@ static int
 libiconv_iconv_open(rec_iconv_t *cd, const char *tocode, const char *fromcode)
 {
     HMODULE hlibiconv = NULL;
-    HMODULE hmsvcrt = NULL;
     char *dllname;
     const char *p;
     const char *e;
@@ -1115,20 +1190,16 @@ libiconv_iconv_open(rec_iconv_t *cd, const char *tocode, const char *fromcode)
     if (hlibiconv == NULL)
         goto failed;
 
-    hmsvcrt = find_imported_module_by_funcname(hlibiconv, "_errno");
-    if (hmsvcrt == NULL)
-        goto failed;
-
-    _iconv_open = (f_iconv_open)GetProcAddress(hlibiconv, TEXT("libiconv_open"));
+    _iconv_open = (f_iconv_open)GetProcAddressA(hlibiconv, "libiconv_open");
     if (_iconv_open == NULL)
-        _iconv_open = (f_iconv_open)GetProcAddress(hlibiconv, TEXT("iconv_open"));
-    cd->iconv_close = (f_iconv_close)GetProcAddress(hlibiconv, TEXT("libiconv_close"));
+        _iconv_open = (f_iconv_open)GetProcAddressA(hlibiconv, "iconv_open");
+    cd->iconv_close = (f_iconv_close)GetProcAddressA(hlibiconv, "libiconv_close");
     if (cd->iconv_close == NULL)
-        cd->iconv_close = (f_iconv_close)GetProcAddress(hlibiconv, TEXT("iconv_close"));
-    cd->iconv = (f_iconv)GetProcAddress(hlibiconv, TEXT("libiconv"));
+        cd->iconv_close = (f_iconv_close)GetProcAddressA(hlibiconv, "iconv_close");
+    cd->iconv = (f_iconv)GetProcAddressA(hlibiconv, "libiconv");
     if (cd->iconv == NULL)
-        cd->iconv = (f_iconv)GetProcAddress(hlibiconv, TEXT("iconv"));
-    cd->_errno = (f_errno)GetProcAddress(hmsvcrt, TEXT("_errno"));
+        cd->iconv = (f_iconv)GetProcAddressA(hlibiconv, "iconv");
+    cd->_errno = (f_errno)find_imported_function(hlibiconv, "_errno");
     if (_iconv_open == NULL || cd->iconv_close == NULL
             || cd->iconv == NULL || cd->_errno == NULL)
         goto failed;
@@ -1143,7 +1214,6 @@ libiconv_iconv_open(rec_iconv_t *cd, const char *tocode, const char *fromcode)
 failed:
     if (hlibiconv != NULL)
         FreeLibrary(hlibiconv);
-    /* do not free hmsvcrt which is obtained by GetModuleHandle() */
     return FALSE;
 }
 
@@ -1173,17 +1243,18 @@ MyImageDirectoryEntryToData(LPVOID Base, BOOLEAN MappedAsImage, USHORT Directory
     return (PVOID)((LPBYTE)Base + p->VirtualAddress);
 }
 
-static HMODULE
-find_imported_module_by_funcname(HMODULE hModule, const char *funcname)
+static FARPROC
+find_imported_function(HMODULE hModule, const char *funcname)
 {
-    DWORD Base;
+    DWORD_PTR Base;
     ULONG Size;
     PIMAGE_IMPORT_DESCRIPTOR Imp;
+    PIMAGE_THUNK_DATA Address;      /* Import Address Table */
     PIMAGE_THUNK_DATA Name;         /* Import Name Table */
     PIMAGE_IMPORT_BY_NAME ImpName;
 
-    Base = (DWORD)hModule;
-    Imp = MyImageDirectoryEntryToData(
+    Base = (DWORD_PTR)hModule;
+    Imp = (PIMAGE_IMPORT_DESCRIPTOR)MyImageDirectoryEntryToData(
             (LPVOID)Base,
             TRUE,
             IMAGE_DIRECTORY_ENTRY_IMPORT,
@@ -1192,15 +1263,16 @@ find_imported_module_by_funcname(HMODULE hModule, const char *funcname)
         return NULL;
     for ( ; Imp->OriginalFirstThunk != 0; ++Imp)
     {
+        Address = (PIMAGE_THUNK_DATA)(Base + Imp->FirstThunk);
         Name = (PIMAGE_THUNK_DATA)(Base + Imp->OriginalFirstThunk);
-        for ( ; Name->u1.Ordinal != 0; ++Name)
+        for ( ; Name->u1.Ordinal != 0; ++Name, ++Address)
         {
             if (!IMAGE_SNAP_BY_ORDINAL(Name->u1.Ordinal))
             {
                 ImpName = (PIMAGE_IMPORT_BY_NAME)
-                    (Base + (DWORD)Name->u1.AddressOfData);
+                    (Base + (DWORD_PTR)Name->u1.AddressOfData);
                 if (strcmp((char *)ImpName->Name, funcname) == 0)
-                    return GetModuleHandleA((char *)(Base + Imp->Name));
+                    return (FARPROC)Address->u1.Function;
             }
         }
     }
@@ -1209,7 +1281,7 @@ find_imported_module_by_funcname(HMODULE hModule, const char *funcname)
 #endif
 
 static int
-sbcs_mblen(csconv_t *cv, const uchar *buf, int bufsize)
+sbcs_mblen(csconv_t *cv UNUSED, const uchar *buf UNUSED, int bufsize UNUSED)
 {
     return 1;
 }
@@ -1246,7 +1318,7 @@ mbcs_mblen(csconv_t *cv, const uchar *buf, int bufsize)
 }
 
 static int
-utf8_mblen(csconv_t *cv, const uchar *buf, int bufsize)
+utf8_mblen(csconv_t *cv UNUSED, const uchar *buf, int bufsize)
 {
     int len = 0;
 
@@ -1265,7 +1337,7 @@ utf8_mblen(csconv_t *cv, const uchar *buf, int bufsize)
 }
 
 static int
-eucjp_mblen(csconv_t *cv, const uchar *buf, int bufsize)
+eucjp_mblen(csconv_t *cv UNUSED, const uchar *buf, int bufsize)
 {
     if (buf[0] < 0x80) /* ASCII */
         return 1;
@@ -1305,6 +1377,12 @@ kernel_mbtowc(csconv_t *cv, const uchar *buf, int bufsize, ushort *wbuf, int *wb
     len = cv->mblen(cv, buf, bufsize);
     if (len == -1)
         return -1;
+    /* If converting from ASCII, reject 8bit
+     * chars. MultiByteToWideChar() doesn't. Note that for ASCII we
+     * know that the mblen function is sbcs_mblen() so len is 1.
+     */
+    if (cv->codepage == 20127 && buf[0] >= 0x80)
+        return seterror(EILSEQ);
     *wbufsize = MultiByteToWideChar(cv->codepage, mbtowc_flags (cv->codepage),
             (const char *)buf, len, (wchar_t *)wbuf, *wbufsize);
     if (*wbufsize == 0)
@@ -1338,7 +1416,7 @@ kernel_wctomb(csconv_t *cv, ushort *wbuf, int wbufsize, uchar *buf, int bufsize)
             return seterror(E2BIG);
         return seterror(EILSEQ);
     }
-    else if (usedDefaultChar)
+    else if (usedDefaultChar && !(cv->flags & FLAG_TRANSLIT))
         return seterror(EILSEQ);
     else if (cv->mblen(cv, buf, len) != len) /* validate result */
         return seterror(EILSEQ);
@@ -1498,7 +1576,7 @@ static int
 utf32_mbtowc(csconv_t *cv, const uchar *buf, int bufsize, ushort *wbuf, int *wbufsize)
 {
     int codepage = cv->codepage;
-    uint wc;
+    uint wc = 0xD800;
 
     /* swap endian: 12000 <-> 12001 */
     if (cv->mode & UNICODE_MODE_SWAPPED)
@@ -1897,6 +1975,9 @@ main(int argc, char **argv)
     iconv_t cd;
     size_t r;
     FILE *in = stdin;
+    FILE *out = stdout;
+    int ignore = 0;
+    char *p;
 
     _setmode(_fileno(stdin), _O_BINARY);
     _setmode(_fileno(stdout), _O_BINARY);
@@ -1914,6 +1995,17 @@ main(int argc, char **argv)
             fromcode = argv[++i];
         else if (strcmp(argv[i], "-t") == 0)
             tocode = argv[++i];
+        else if (strcmp(argv[i], "-c") == 0)
+            ignore = 1;
+        else if (strcmp(argv[i], "--output") == 0)
+        {
+            out = fopen(argv[++i], "wb");
+            if(out == NULL)
+            {
+                fprintf(stderr, "cannot open %s\n", argv[i]);
+                return 1;
+            }
+        }
         else
         {
             in = fopen(argv[i], "rb");
@@ -1928,8 +2020,21 @@ main(int argc, char **argv)
 
     if (fromcode == NULL || tocode == NULL)
     {
-        printf("usage: %s -f from-enc -t to-enc [file]\n", argv[0]);
+        printf("usage: %s [-c] -f from-enc -t to-enc [file]\n", argv[0]);
         return 0;
+    }
+
+    if (ignore)
+    {
+        p = tocode;
+        tocode = (char *)malloc(strlen(p) + strlen("//IGNORE") + 1);
+        if (tocode == NULL)
+        {
+            perror("fatal error");
+            return 1;
+        }
+        strcpy(tocode, p);
+        strcat(tocode, "//IGNORE");
     }
 
     cd = iconv_open(tocode, fromcode);
@@ -1947,7 +2052,7 @@ main(int argc, char **argv)
         pout = outbuf;
         outbytesleft = sizeof(outbuf);
         r = iconv(cd, &pin, &inbytesleft, &pout, &outbytesleft);
-        fwrite(outbuf, 1, sizeof(outbuf) - outbytesleft, stdout);
+        fwrite(outbuf, 1, sizeof(outbuf) - outbytesleft, out);
         if (r == (size_t)(-1) && errno != E2BIG && (errno != EINVAL || feof(in)))
         {
             perror("conversion error");
@@ -1959,7 +2064,7 @@ main(int argc, char **argv)
     pout = outbuf;
     outbytesleft = sizeof(outbuf);
     r = iconv(cd, NULL, NULL, &pout, &outbytesleft);
-    fwrite(outbuf, 1, sizeof(outbuf) - outbytesleft, stdout);
+    fwrite(outbuf, 1, sizeof(outbuf) - outbytesleft, out);
     if (r == (size_t)(-1))
     {
         perror("conversion error");
