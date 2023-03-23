@@ -2123,14 +2123,13 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
 }
 
 QPixmap PDFPreviewImageProvider::renderPdf(int page, const QSize &requestedSize) {
-    QPixmap pTest = renderPDFPage(page);
-    qDebug() << "PDFPreviewImageProvider sending signal signalPdfSourceChanged width : "
-        << pTest.width() << " - height : " << pTest.height();
-    emit signalPdfSourceChanged(pTest.width(), pTest.height());
+    QPixmap pdf_page = renderPDFPage(page);
+    QPixmap resized_pdf_page = pdf_page.scaled(requestedSize.width(), requestedSize.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    QPixmap p = pTest.scaled(requestedSize.width(), requestedSize.height(),
-        Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    return p;
+    qDebug() << "PDFPreviewImageProvider emmitting signalPdfSourceChanged original width: " << pdf_page.width();
+    emit signalPdfSourceChanged(pdf_page.width());
+
+    return resized_pdf_page;
 }
 
 QSize PDFPreviewImageProvider::getPageSize(int page) {
@@ -2149,19 +2148,15 @@ QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page)
     // Document starts at page 0 in the poppler-qt5 API
     Poppler::Page *popplerPage = m_docs.at(m_filePath)->page(page - 1);
 
-    // This DPI resolution have the be the same
-    // used in qml property "propertyConvertPtsToPixel"
-    const double resX = 300.0;
-    const double resY = 300.0;
     if (popplerPage == NULL)
     {
         qDebug() << "Failed to get page object: " << page;
         return QPixmap();
     }
 
-    QImage image = popplerPage->renderToImage(resX, resY, -1, -1, -1, -1, Poppler::Page::Rotate0);
-    //DEBUG
-    //image.save("/tmp/pteid_preview.png");
+    const double resX = 96.0;
+    const double resY = 96.0;
+    QImage image = popplerPage->renderToImage(resX, resY);
 
     delete popplerPage;
     renderMutex.unlock();

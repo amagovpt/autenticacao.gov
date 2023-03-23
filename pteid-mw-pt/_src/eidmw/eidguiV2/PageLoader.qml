@@ -31,11 +31,14 @@ Loader{
     property bool propertyBackupAddLTV: false
     property bool propertyBackupSwitchAddAttributes: false
     property variant attributeListBackup: []
+    property variant selectedAttributesListBackup: []
     property bool propertyBackupSignShow: true
     property double propertyBackupCoordX: 0
     property double propertyBackupCoordY: 0
     property double propertyBackupBackgroundWidth: 0
     property double propertyBackupBackgroundHeight: 0
+    property double propertyBackupSealWidth: 0
+    property double propertyBackupSealHeight: 0
     property bool propertyBackupSignReduced: false
     property int propertyBackupPage: 1
     property bool propertyBackupLastPage: false
@@ -157,6 +160,14 @@ Loader{
         onOpened: {
             rectPopUp.forceActiveFocus()
         }
+    }
+
+    function persist_signature_options() {
+        console.log(selectedAttributesListBackup)
+        controler.setSignatureOptions([propertyBackupFormatPades, propertyBackupTempSign,
+            propertyBackupAddLTV, propertyBackupSignShow, propertyBackupSignReduced, propertyBackupReason,
+            propertyBackupLocal, propertyBackupSealWidth, propertyBackupSealHeight,
+            propertyBackupSwitchAddAttributes, selectedAttributesListBackup])
     }
 
     anchors{

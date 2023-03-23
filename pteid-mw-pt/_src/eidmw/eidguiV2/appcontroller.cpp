@@ -45,6 +45,8 @@
 #include <unistd.h>
 #endif
 
+#include <cjson/cJSON.h>
+
 #include "gapi.h"
 #include "autoUpdates.h"
 #include "concurrent.h"
@@ -921,4 +923,211 @@ void AppController::zipLogs() {
 
     zipFileName.remove(0,1); //remove slash
     emit signalZipLogsSuccess(largeZip, zipFileName);
+}
+
+void AppController::getSignatureOptions() {
+    std::string content;
+
+    QString sign_options_file_path = m_Settings.getPteidCachedir() + "/SignOptions.json";
+    QFile file(sign_options_file_path);
+    if (file.open(QIODevice::ReadOnly)) {
+        content = file.readAll().toStdString();
+        file.close();
+    } else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s Error writting options file: %s", __FUNCTION__,
+            sign_options_file_path.toStdString().c_str());
+        return;
+    }
+
+    cJSON *json =  NULL;
+    if ((json = cJSON_Parse(content.c_str())) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse options file content: %s",
+            __FUNCTION__, content.c_str());
+        return;
+    }
+
+    cJSON *pades_obj = NULL;
+    if ((pades_obj = cJSON_GetObjectItem(json, "pades")) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get pades field", __FUNCTION__);
+    }
+    bool pades = cJSON_IsTrue(pades_obj);
+
+    cJSON *timestamp_obj = NULL;
+    if ((timestamp_obj = cJSON_GetObjectItem(json, "timestamp")) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get timestamp field", __FUNCTION__);
+    }
+    bool timestamp = cJSON_IsTrue(timestamp_obj);
+
+    cJSON *lta_obj = NULL;
+    if ((lta_obj = cJSON_GetObjectItem(json, "lta")) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get lta field", __FUNCTION__);
+    }
+    bool lta = cJSON_IsTrue(lta_obj);
+
+    cJSON *visible_obj = NULL;
+    if ((visible_obj = cJSON_GetObjectItem(json, "visible")) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get visible field", __FUNCTION__);
+    }
+    bool visible = cJSON_IsTrue(visible_obj);
+
+    cJSON *reduced_obj = NULL;
+    if ((reduced_obj = cJSON_GetObjectItem(json, "reduced")) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get reduced field", __FUNCTION__);
+    }
+    bool reduced = cJSON_IsTrue(reduced_obj);
+
+    char *reason = NULL;
+    if ((reason = cJSON_GetStringValue(cJSON_GetObjectItem(json, "reason"))) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get reason field", __FUNCTION__);
+    }
+
+    char *location = NULL;
+    if ((location = cJSON_GetStringValue(cJSON_GetObjectItem(json, "location"))) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get location field", __FUNCTION__);
+    }
+
+    cJSON *seal_width_obj = NULL;
+    double seal_width = 0;
+    if ((seal_width_obj = cJSON_GetObjectItem(json, "seal_width")) == NULL || !cJSON_IsNumber(seal_width_obj)) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get seal_width field", __FUNCTION__);
+    } else {
+        seal_width = cJSON_GetNumberValue(seal_width_obj);
+    }
+
+    cJSON *seal_height_obj = NULL;
+    double seal_height = 0;
+    if ((seal_height_obj = cJSON_GetObjectItem(json, "seal_height")) == NULL || !cJSON_IsNumber(seal_height_obj)) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get seal_height field", __FUNCTION__);
+    } else {
+        seal_height = cJSON_GetNumberValue(seal_height_obj);
+    }
+
+    cJSON *scap_obj = NULL;
+    if ((scap_obj = cJSON_GetObjectItem(json, "scap")) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get scap field", __FUNCTION__);
+    }
+    bool scap = cJSON_IsTrue(scap_obj);
+
+    QStringList attribute_ids;
+    cJSON *attributes = NULL;
+    if ((attributes = cJSON_GetObjectItem(json, "attributes")) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse attributes array", __FUNCTION__);
+    } else {
+        const size_t array_size = cJSON_GetArraySize(attributes);
+        for (size_t i = 0; i < array_size; ++i) {
+            cJSON *array_item = NULL;
+            if ((array_item = cJSON_GetArrayItem(attributes, i)) == NULL) {
+                PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse attributes item", __FUNCTION__);
+            }
+
+            char *id = cJSON_GetStringValue(array_item);
+            if (id) {
+                attribute_ids.push_back(id);
+            }
+        }
+    }
+
+    QVariantList options;
+    options.append({pades, timestamp, lta, visible, reduced, reason, location, seal_width,
+        seal_height, scap, attribute_ids});
+    emit signalRetrieveStoredSignOptions(options);
+}
+
+static void add_to_options_object(cJSON *obj, const char *name, const char* value) {
+    if (cJSON_AddStringToObject(obj, name, value) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to add field: %s, with value: %s",
+            __FUNCTION__, name, value);
+    }
+}
+
+static void add_to_options_object(cJSON *obj, const char *name, bool value) {
+    if (cJSON_AddBoolToObject(obj, name, value) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to add field: %s, with value: %s",
+            __FUNCTION__, name, value);
+    }
+}
+
+static void add_to_options_object(cJSON *obj, const char *name, double value) {
+    if (cJSON_AddNumberToObject(obj, name, value) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to add field: %s, with value: %s",
+            __FUNCTION__, name, value);
+    }
+}
+
+static void add_to_options_object(cJSON *obj, const char *name, const std::vector<std::string> &strings) {
+    std::vector<const char *> string_vector;
+    for (const auto &s: strings) {
+        string_vector.push_back(s.c_str());
+    }
+
+    cJSON *json_array = NULL;
+    if ((json_array = cJSON_CreateStringArray(&string_vector[0], string_vector.size())) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to create strings array", __FUNCTION__);
+        return;
+    }
+
+    if (!cJSON_AddItemToObject(obj, name, json_array)) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to add array field: %s", __FUNCTION__, name);
+    }
+}
+
+void AppController::setSignatureOptions(const QVariantList &options) {
+    bool pades = options.at(0).toBool();
+    bool timestamp = options.at(1).toBool();
+    bool lta = options.at(2).toBool();
+    bool visible = options.at(3).toBool();
+    bool reduced = options.at(4).toBool();
+    const QString &reason = options.at(5).toString();
+    const QString &location = options.at(6).toString();
+    const double seal_width = options.at(7).toDouble();
+    const double seal_height = options.at(8).toDouble();
+    const bool scap_signature = options.at(9).toBool();
+    const QStringList &attribute_ids = options.at(10).toStringList();
+
+    qDebug() << "options: " << pades << timestamp << lta << visible << reduced << reason << location << attribute_ids;
+
+    cJSON *json = NULL;
+    if ((json = cJSON_CreateObject()) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s cJSON_CreateObject() failed", __FUNCTION__);
+    }
+
+    add_to_options_object(json, "pades", pades);
+    add_to_options_object(json, "timestamp", timestamp);
+    add_to_options_object(json, "lta", lta);
+    add_to_options_object(json, "visible", visible);
+    add_to_options_object(json, "reduced", reduced);
+
+    std::string s_reason = reason.toStdString();
+    add_to_options_object(json, "reason", s_reason.c_str());
+
+    std::string s_location = location.toStdString();
+    add_to_options_object(json, "location", s_location.c_str());
+
+    add_to_options_object(json, "seal_width", seal_width);
+    add_to_options_object(json, "seal_height", seal_height);
+
+    add_to_options_object(json, "scap", scap_signature);
+
+    std::vector<std::string> attributes;
+    foreach(const QString &id, attribute_ids) {
+        attributes.push_back(id.toStdString());
+    }
+
+    add_to_options_object(json, "attributes", attributes);
+
+    std::string options_json = cJSON_Print(json);
+
+    cJSON_Delete(json);
+
+    QString sign_options_file_path = m_Settings.getPteidCachedir() + "/SignOptions.json";
+    QFile file(sign_options_file_path);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        file.write(options_json.c_str());
+        file.close();
+    } else {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s Error writting options file: %s", __FUNCTION__,
+            sign_options_file_path.toStdString().c_str());
+    }
+
+    return;
 }

@@ -154,6 +154,9 @@ public slots:
     void openTransfersFolder();
     void zipLogs();
 
+    void getSignatureOptions();
+    void setSignatureOptions(const QVariantList &options);
+
 private:
     GUISettings&    m_Settings;
     bool LoadTranslationFile(QString NewLanguage );
@@ -200,6 +203,8 @@ signals:
     void signalScapCacheSize(QString cacheSize);
     void signalZipLogsSuccess(bool largeZip, QString filename);
     void signalZipLogsFail();
+
+    void signalRetrieveStoredSignOptions(const QVariantList& options);
 };
 
 #endif // APPCONTROLLER_H

@@ -44,11 +44,10 @@ Rectangle {
     property alias propertyCoordY: dragTarget.coord_y
 
     // Properties used to convert to postscript points
-    // The DPI resolution value (300) have to be same as used in gapi.cpp in method renderPDFPage (resX and resY)
-    property real propertyConvertPtsToPixel:  (1/72) * 300 // (300 DPI)
-    
-    // Signature have a dynamic size
+    property real propertyConvertPtsToPixel:  (1/72.0) * 96.0
 
+    property real propertySealWidthTemp: 0 
+    property real propertySealHeightTemp: 0 
 
     property real propertySigWidthDefault: 178 * propertyConvertPtsToPixel
     property real propertySigWidthReducedDefault: 178 * propertyConvertPtsToPixel
@@ -58,8 +57,8 @@ Rectangle {
     property real propertySigWidthMin: 120 * propertyConvertPtsToPixel
     property real propertySigHeightMin: 35 * propertyConvertPtsToPixel
 
-    property real propertyPDFHeightScaleFactor: background_image.height / propertyPdfOriginalHeight
-    property real propertyPDFWidthScaleFactor: background_image.width / propertyPdfOriginalWidth
+    property real propertyPDFScaleFactor: 0
+    property real propertyLastPDFScaleFactor: 0
 
     // The files used in preview seal and draw seal are not the same so we have some differences.
     // From Catalog.cc: 
@@ -68,9 +67,9 @@ Rectangle {
     property real propertyWaterMarkImgHeight:   31.5 * propertyConvertPtsToPixel
     property real propertySignImgHeight:        30.87 * propertyConvertPtsToPixel
 
-    property real propertySigFontSizeBig: 8 * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
-    property real propertySigFontSizeSmall: 6 * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
-    property real propertyCurrentAttrsFontSize: 8 * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+    property real propertySigFontSizeBig: 8 * propertyConvertPtsToPixel * propertyPDFScaleFactor
+    property real propertySigFontSizeSmall: 6 * propertyConvertPtsToPixel * propertyPDFScaleFactor
+    property real propertyCurrentAttrsFontSize: 8 * propertyConvertPtsToPixel * propertyPDFScaleFactor
 
     //Properties to store Pdf original size
     property real propertyPdfOriginalWidth: 0
@@ -81,6 +80,7 @@ Rectangle {
 
     property bool sealHasChanged: false
     property bool smallFile: false
+    property bool loaded_persistent_options: false
     property string propertyFileName: ""
 
     color: Constants.COLOR_MAIN_SOFT_GRAY
@@ -174,6 +174,20 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             asynchronous: true
 
+            onStatusChanged: if (background_image.status == Image.Ready) {
+                propertyLastPDFScaleFactor = propertyPDFScaleFactor
+                propertyPDFScaleFactor = background_image.width / propertyPdfOriginalWidth 
+                if (loaded_persistent_options) {
+                    dragSigRect.width = propertySealWidthTemp * propertyConvertPtsToPixel * propertyPDFScaleFactor 
+                    dragSigRect.height = propertySealHeightTemp * propertyConvertPtsToPixel * propertyPDFScaleFactor
+                    loaded_persistent_options = false
+                }
+
+                updateSealPreview()
+                dragTarget.lastScreenWidth = background_image.width
+                dragTarget.lastScreenHeight = background_image.height
+            }
+
             Rectangle {
                 width: dragSigRect.width + 2 * Constants.FOCUS_BORDER
                 height: dragSigRect.height + 2 * Constants.FOCUS_BORDER
@@ -187,8 +201,8 @@ Rectangle {
             }
             Item {
                 id: dragSigRect
-                width: propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFWidthScaleFactor : propertySigWidthDefault * propertyPDFWidthScaleFactor
-                height: propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFHeightScaleFactor : propertySigHeightDefault * propertyPDFHeightScaleFactor
+                width: propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFScaleFactor : propertySigWidthDefault * propertyPDFScaleFactor
+                height: propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFScaleFactor : propertySigHeightDefault * propertyPDFScaleFactor
                 visible: propertyCheckSignShow.checked && !smallFile && propertyRadioButtonPADES.checked
                 Drag.active: dragArea.drag.active
                 opacity: background_image.status == Image.Ready ? 1.0 : 0.0
@@ -219,14 +233,16 @@ Rectangle {
                             if (dragSigRect.x + dragSigRect.width + delta.x > background_image.width) {
                                 dragSigRect.width = dragSigRect.width
                             }
-                            else if(dragSigRect.width+delta.x > (propertySigWidthMin) * propertyPDFWidthScaleFactor){
+                            else if(dragSigRect.width+delta.x > (propertySigWidthMin) * propertyPDFScaleFactor){
                                 dragSigRect.width = dragSigRect.width+delta.x
                             }
                             else {
-                                dragSigRect.width = (propertySigWidthMin) * propertyPDFWidthScaleFactor
+                                dragSigRect.width = (propertySigWidthMin) * propertyPDFScaleFactor
                             }
                             lastPos = newPos;
+                        }
 
+                        onReleased: {
                             pdfPreview.updateSealData();
                         }
                     }
@@ -257,21 +273,18 @@ Rectangle {
                             if (dragSigRect.y + dragSigRect.height + delta.y > background_image.height) {
                                 dragSigRect.height = dragSigRect.height
                             }
-                            else if(dragSigRect.height+delta.y > (propertySigHeightMin) * propertyPDFWidthScaleFactor){
+                            else if(dragSigRect.height+delta.y > (propertySigHeightMin) * propertyPDFScaleFactor){
                                 dragSigRect.height = (dragSigRect.height+delta.y)
                             }else{
-                                dragSigRect.height = (propertySigHeightMin) * propertyPDFHeightScaleFactor
+                                dragSigRect.height = (propertySigHeightMin) * propertyPDFScaleFactor
                             }
 
-                            if (dragSigRect.height < dragSigImage.height + dragSigWaterImage.height) {
-                                dragSigImage.visible = false
-                            }
-                            else {
-                                dragSigImage.visible = true
-                            }
+                            dragSigImage.visible = dragSigRect.height >= dragSigImage.height + dragSigWaterImage.height
 
                             lastPos = newPos;
+                        }
 
+                        onReleased: {
                             pdfPreview.updateSealData();
                         }
                     }
@@ -285,16 +298,17 @@ Rectangle {
 
                     Image {
                         id: dragSigWaterImage
-                        height: propertyWaterMarkImgHeight * propertyPDFHeightScaleFactor
+                        height: propertyWaterMarkImgHeight * propertyPDFScaleFactor
                         fillMode: Image.PreserveAspectFit
                         anchors.top: parent.top
                         anchors.topMargin: 0
+                        source: "qrc:/images/pteid_signature_watermark.jpg"
                         x: 1
                     }
 
                     Image {
                         id: dragSigImage
-                        height: propertyReducedChecked ? 0 : propertySignImgHeight * propertyPDFHeightScaleFactor
+                        height: propertyReducedChecked ? 0 : propertySignImgHeight * propertyPDFScaleFactor
                         fillMode: Image.PreserveAspectFit
                         anchors.top: dragSigWaterImage.bottom
                         anchors.topMargin: parent.height - dragSigWaterImage.height - dragSigImage.height
@@ -312,7 +326,7 @@ Rectangle {
 
                     Text {
                         id: sigReasonText
-                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFScaleFactor
                         font.italic: true
                         height: sigReasonText.contentWidth == 0
                                 ? 0
@@ -332,7 +346,7 @@ Rectangle {
 
                     Text {
                         id: sigSignedByText
-                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFScaleFactor
                         height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         font.family: myriad.name
                         color: Constants.COLOR_TEXT_BODY
@@ -344,7 +358,7 @@ Rectangle {
                     }
                     Text {
                         id: sigSignedByNameText
-                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFScaleFactor
                         font.family: myriad.name
                         width: parent.width
                         color: Constants.COLOR_TEXT_BODY
@@ -357,7 +371,7 @@ Rectangle {
                     }
                     Text {
                         id: sigNumIdText
-                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFScaleFactor
                         height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         width: parent.width - 4
                         clip: true
@@ -369,7 +383,7 @@ Rectangle {
                     }
                     Text {
                         id: sigDateText
-                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFScaleFactor
                         height: font.pixelSize + Constants.SIZE_SIGN_SEAL_TEXT_V_SPACE
                         width: parent.width - 4
                         clip: true
@@ -381,7 +395,7 @@ Rectangle {
                     }
                     Text {
                         id: sigLocationText
-                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFScaleFactor
                         width: parent.width - 4
                         clip: true
                         font.family: myriad.name
@@ -393,7 +407,7 @@ Rectangle {
                     Text {
                         id: sigCertifiedByText
                         width: parent.width
-                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFScaleFactor
                         visible: false
                         font.family: myriad.name
                         color: Constants.COLOR_TEXT_BODY
@@ -405,7 +419,7 @@ Rectangle {
                     Text {
                         id: sigAttributesText
                         width: parent.width
-                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFHeightScaleFactor
+                        font.pixelSize: propertyFontSize * propertyConvertPtsToPixel * propertyPDFScaleFactor
                         lineHeight: 0.8 // smaller line spacing to match real seal
                         visible: false
                         font.family: myriad.name
@@ -422,7 +436,10 @@ Rectangle {
                     id: dragArea
                     width: dragSigRect.width + dragSigMoveImage.width * 0.5
                     height: dragSigRect.height + dragSigMoveImage.height * 0.5
-                    onReleased: parent.Drag.drop()
+                    onReleased: {
+                        parent.Drag.drop()
+                        saveSealPosition()
+                    }
                     drag.target: parent
                     drag.axis: Drag.XAndYAxis
                     drag.minimumX: 0
@@ -431,30 +448,20 @@ Rectangle {
                     drag.maximumY: background_image.height - dragSigRect.height
                 }
                 onHeightChanged: {
-                    if(dragSigRect.x === 0 && dragSigRect.y === 0){
-                        dragTarget.coord_x = 0
-                        dragTarget.coord_y = dragSigRect.height / background_image.height
-                    }else{
-                        dragTarget.coord_x = (dragSigRect.x) / background_image.width
-                        dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
-                    }
-                    if((dragSigRect.x + dragSigRect.width) > background_image.width
-                            || (dragSigRect.y + dragSigRect.height) > background_image.height){
-                        dragSigRect.x = 0
-                        dragSigRect.y = 0
+                    dragTarget.coord_x = (dragSigRect.x) / background_image.width
+                    dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
+
+                    if ((dragSigRect.x + dragSigRect.width) > background_image.width
+                            || (dragSigRect.y + dragSigRect.height) > background_image.height) {
+                        dragSigRect.x = background_image.width - dragSigRect.width
+                        dragSigRect.y = background_image.height - dragSigRect.height
                     }
 
-                    if(propertyReducedChecked){
+                    if (propertyReducedChecked) {
                         propertySigLineHeight = propertyDragSigRect.height * 0.2
-                    }else{
+                    } else {
                         propertySigLineHeight = propertyDragSigRect.height * 0.1
                     }
-                    propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
-                    pdfPreview.updateSealData();
-                }
-                onWidthChanged: {
-                    propertyPDFWidthScaleFactor =  background_image.width / propertyPdfOriginalWidth
-                    pdfPreview.updateSealData();
                 }
             }
 
@@ -484,110 +491,45 @@ Rectangle {
                 dragSigRect.x = dragTarget.lastCoord_x / dragTarget.lastScreenWidth * background_image.width
                 dragSigRect.y = dragTarget.lastCoord_y / dragTarget.lastScreenHeight * background_image.height
 
-                updateSignPreviewSize()
-
                 propertyPageLoader.propertyBackupBackgroundWidth = background_image.width
                 propertyPageLoader.propertyBackupBackgroundHeight = background_image.height
             }
         }
     }
 
-    function updatePageSize() {
-        smallFile = false
-        propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
-        propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
-
-        if (propertyPDFWidthScaleFactor > 0 & propertyPDFHeightScaleFactor > 0) {
-            propertyDragSigRect.height = dragSigRect.height
-            propertyDragSigRect.width = dragSigRect.width
-        }
-
-        if (propertyPdfOriginalWidth != 0 && propertyPdfOriginalHeight != 0 
-            && background_image.width != 0 && background_image.height != 0) 
-        {
-            dragSigRect.width = dragSigRect.width / propertyPdfOriginalWidth * dragTarget.lastWidth
-            dragSigRect.height = dragSigRect.height / propertyPdfOriginalHeight * dragTarget.lastHeight
-        }
-
-        if (background_image.width != 0 && background_image.height != 0) 
-        {
-            if (dragSigRect.height > background_image.height ) 
-            {
-                if (background_image.height < propertySigHeightMin * propertyPDFHeightScaleFactor){
-                    smallFile = true
-                } else {
-                    dragSigRect.height = background_image.height
-                }
-            }
-
-            if (dragSigRect.width > background_image.width ) 
-            {
-                if (background_image.width < propertySigWidthMin * propertyPDFWidthScaleFactor){
-                    smallFile = true
-                } else {
-                    dragSigRect.width = background_image.width
-                }
-            }
-        }
-        dragTarget.lastWidth = propertyPdfOriginalWidth
-        dragTarget.lastHeight = propertyPdfOriginalHeight
-    }
-
-    function updateSignPreviewSize() {
-        smallFile = false
-        propertyPDFHeightScaleFactor = background_image.height / propertyPdfOriginalHeight
-        propertyPDFWidthScaleFactor = background_image.width / propertyPdfOriginalWidth
-
+    //TODO: check for small files
+    //TODO: check minimum seal size
+    function updateSealPreview() {
         if (!sealHasChanged) {
-            dragSigRect.width = propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFWidthScaleFactor : propertySigWidthDefault * propertyPDFWidthScaleFactor
-            dragSigRect.height = propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFHeightScaleFactor : propertySigHeightDefault * propertyPDFHeightScaleFactor
+            dragSigRect.width = propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFScaleFactor : propertySigWidthDefault * propertyPDFScaleFactor
+            dragSigRect.height = propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFScaleFactor : propertySigHeightDefault * propertyPDFScaleFactor
             sealHasChanged = true
         }
 
-        if (propertyPDFWidthScaleFactor > 0 & propertyPDFHeightScaleFactor > 0) {
-            propertyDragSigRect.height = dragSigRect.height
-            propertyDragSigRect.width = dragSigRect.width
-        }
-
-        if (dragTarget.lastScreenWidth != 0 && dragTarget.lastScreenHeight != 0 
-            && background_image.width != 0 && background_image.height != 0) 
-        {
-            dragSigRect.width = dragSigRect.width / dragTarget.lastScreenWidth * background_image.width
-            dragSigRect.height = dragSigRect.height / dragTarget.lastScreenHeight * background_image.height
-        }
-        if (background_image.width != 0 && background_image.height != 0) 
-        {
-            if (dragSigRect.height > background_image.height ) 
-            {
-                if (background_image.height < propertySigHeightMin * propertyPDFHeightScaleFactor){
-                    smallFile = true
-                } else {
-                    dragSigRect.height = background_image.height
-                }
+        if (background_image.width != 0 && background_image.height != 0) {
+            if (dragTarget.lastScreenWidth != 0 && dragTarget.lastScreenHeight != 0) {
+                dragSigRect.width *= (propertyPDFScaleFactor / propertyLastPDFScaleFactor)
+                dragSigRect.height *= (propertyPDFScaleFactor / propertyLastPDFScaleFactor)
             }
 
-            if (dragSigRect.width > background_image.width ) 
-            {
-                if (background_image.width < propertySigWidthMin * propertyPDFWidthScaleFactor){
-                    smallFile = true
-                } else {
-                    dragSigRect.width = background_image.width
-                }
-            }
+            dragSigRect.width = Math.min(dragSigRect.width, background_image.width)
+            dragSigRect.height = Math.min(dragSigRect.height, background_image.height)
+            
+            dragSigImage.visible = dragSigRect.height >= dragSigImage.height + dragSigWaterImage.height
         }
+        
+        saveSealPosition()
+        updateSealData()
     }
 
-    function updateSignPreview(){
-
-        dragTarget.coord_x = (dragSigRect.x) / background_image.width   
+    function saveSealPosition() {
+        dragTarget.coord_x = (dragSigRect.x) / background_image.width
         dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
         dragTarget.lastCoord_x = dragSigRect.x
         dragTarget.lastCoord_y = dragSigRect.y
-        dragTarget.lastScreenWidth = background_image.width
-        dragTarget.lastScreenHeight = background_image.height
     }
-    function setSignPreview(droped_x,droped_y){
 
+    function setSignPreview(droped_x, droped_y){
         dragSigRect.x = droped_x
         dragSigRect.y = droped_y
     }
@@ -604,7 +546,7 @@ Rectangle {
 
         y = y - diff
         setSignPreview(x, y)
-        updateSignPreview()
+        saveSealPosition()
     }
 
     function moveDown(positions) {
@@ -622,7 +564,7 @@ Rectangle {
         var x = dragSigRect.x
         var y = dragSigRect.y + diff
         setSignPreview(x, y)
-        updateSignPreview()
+        saveSealPosition()
     }
 
     function moveLeft(positions) {
@@ -637,7 +579,7 @@ Rectangle {
 
         x = x - diff
         setSignPreview(x, y)
-        updateSignPreview()
+        saveSealPosition()
     }
 
     function moveRight(positions) {
@@ -655,7 +597,7 @@ Rectangle {
         var x = dragSigRect.x + diff
         var y = dragSigRect.y
         setSignPreview(x, y)
-        updateSignPreview()
+        saveSealPosition()
     }
 
     // this is a hack to make screen reader say x and y positions
@@ -703,37 +645,5 @@ Rectangle {
         time += " " + offset
 
         return time
-    }
-
-    function reset() {
-
-        dragSigRect.width = propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFWidthScaleFactor : propertySigWidthDefault * propertyPDFWidthScaleFactor
-        dragSigRect.height = propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFHeightScaleFactor : propertySigHeightDefault * propertyPDFHeightScaleFactor
-
-        dragTarget.coord_x = 0
-        dragTarget.coord_y = 0
-
-        //Properties to store last signature positions
-        dragTarget.lastCoord_x = 0
-        dragTarget.lastCoord_y = 0
-
-        //Properties to store last screen size
-        dragTarget.lastScreenWidth = 0
-        dragTarget.lastScreenHeight = 0
-
-        //Properties to store last screen size
-        dragTarget.lastWidth = 0
-        dragTarget.lastHeight = 0
-
-        //propertyPdfOriginalWidth = 0
-        //propertyPdfOriginalHeight = 0
-
-        propertyFontSize = 0
-        propertyFontMargin = 0
-
-        propertyPDFHeightScaleFactor = 0
-        propertyPDFWidthScaleFactor = 0
-
-        sealHasChanged = false
     }
 }

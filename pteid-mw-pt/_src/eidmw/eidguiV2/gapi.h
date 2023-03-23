@@ -209,7 +209,7 @@ public:
     void closeDoc(QString filePath);
     void closeAllDocs();
 signals:
-    Q_SIGNAL void signalPdfSourceChanged(int pdfWidth, int pdfHeight);
+    Q_SIGNAL void signalPdfSourceChanged(double original_width);
 private:
     void doCloseDoc(QString filePath);
     void doCloseAllDocs();
