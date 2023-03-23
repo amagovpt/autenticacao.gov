@@ -1057,11 +1057,6 @@ void PDFDoc::prepareTimestamp()
 
 }
 
-unsigned int PDFDoc::getSignedVersionLen()
-{
-	return preparedSigLength;
-}
-
 GBool PDFDoc::containsXfaForm() {
 	Object * acroForm = NULL;
 	Object xfa;

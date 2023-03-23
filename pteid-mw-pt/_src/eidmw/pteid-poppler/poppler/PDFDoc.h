@@ -265,7 +265,6 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
   POPPLER_API char* getOccupiedSectors(int page);
 
   POPPLER_API void closeSignature(const char *signature_contents);
-  POPPLER_API unsigned int getSignedVersionLen();
 
   // LTV related methods
   POPPLER_API void addDSS(std::vector<ValidationDataElement *> validationData);
@@ -387,15 +386,11 @@ private:
 #endif
   FILE *file;
   unsigned long m_sig_offset;
-  unsigned int m_byterange_padding;
 
   unsigned char * m_image_data_jpeg;
   unsigned long m_image_length;
   const char * m_attribute_supplier;
   const char * m_attribute_name;
-  //Internal buffer that will store the final signed Document
-  unsigned char * preparedSig;
-  unsigned int preparedSigLength;
 
   //Insert a
 
