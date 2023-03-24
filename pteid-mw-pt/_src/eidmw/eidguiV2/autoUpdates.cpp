@@ -67,6 +67,8 @@ struct PteidVersion
 
 using namespace eIDMW;
 
+using cJSON_ptr = std::unique_ptr<cJSON, decltype(&::cJSON_Delete)>;
+
 /*
   AutoUpdates implementation for eidguiV2
 */
@@ -184,15 +186,15 @@ void AutoUpdates::VerifyCertsUpdates(std::string filedata)
     qDebug() << "C++ AUTO UPDATES: VerifyCertsUpdates";
 
     // certs.json parsing
-    cJSON *json = cJSON_Parse(filedata.c_str());
-    if (!cJSON_IsObject(json))
+    cJSON_ptr json(cJSON_Parse(filedata.c_str()), ::cJSON_Delete);
+    if (!cJSON_IsObject(json.get()))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing certs.json: may be a syntax error.");
         getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
         return;
     }
 
-    cJSON *certs_json = cJSON_GetObjectItem(json, "certs");
+    cJSON *certs_json = cJSON_GetObjectItem(json.get(), "certs");
     if (!cJSON_IsObject(certs_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing certs.json: Could not get certs object.");
@@ -304,15 +306,15 @@ std::vector<NewsEntry> AutoUpdates::ChooseNews()
 }
 
 void AutoUpdates::parseNews(std::string data){
-    // parses news.json file into vector of NewsEntry's
-    cJSON *json = cJSON_Parse(data.c_str());
-    if (!cJSON_IsObject(json))
+    // parses news.json file into vector of NewsEntry in m_news
+    cJSON_ptr json(cJSON_Parse(data.c_str()), ::cJSON_Delete);
+    if (!cJSON_IsObject(json.get()))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: may be a syntax error.");
         return;
     }
 
-    cJSON *news_json = cJSON_GetObjectItem(json, "news");
+    cJSON *news_json = cJSON_GetObjectItem(json.get(), "news");
     if (!cJSON_IsArray(news_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing news.json: Could not get news array.");
@@ -752,7 +754,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
                                 QString::fromStdString(cert_json->valuestring))){
 #endif
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
-        } else{
+        } else {
             PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
                 "AutoUpdates::ChooseCertificates: Cert does not exist or invalid:! %s",file_name_temp.c_str());
 
