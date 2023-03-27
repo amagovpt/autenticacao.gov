@@ -132,9 +132,7 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 
 			cJSON *sub_attributes = NULL;
 			if ((sub_attributes = cJSON_GetObjectItem(attribute_json, "subAttributes")) == NULL) {
-				MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse sub_attributes object", __FUNCTION__);
-				cJSON_Delete(json);
-				return result;
+				MWLOG(LEV_DEBUG, MOD_SCAP, "%s failed to parse sub_attributes object", __FUNCTION__);
 			}
 
 			const size_t sub_attributes_array_size = cJSON_GetArraySize(sub_attributes);
