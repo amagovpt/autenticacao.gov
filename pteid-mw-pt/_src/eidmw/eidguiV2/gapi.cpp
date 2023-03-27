@@ -2647,8 +2647,10 @@ static std::map<std::string, std::vector<std::string>> format_scap_attr_strings(
         attr_string += attribute.description + " ";
 
         if (showSubAttributes) {
-            //TODO: empty subattribute list?
-            attr_string += "(";
+            if (!attribute.sub_attributes.empty()) {
+                attr_string += "(";
+            }
+
             for (auto it = attribute.sub_attributes.begin(); it != attribute.sub_attributes.end(); ++it) {
                 //if (!isSpecialValidity(QString::fromStdString(it->value))) { //TODO: review this function, it is matching things it shouldn't...
                     attr_string += it->description + ": " + it->value;
