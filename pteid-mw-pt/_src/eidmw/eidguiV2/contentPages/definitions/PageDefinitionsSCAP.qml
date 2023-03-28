@@ -747,6 +747,8 @@ PageDefinitionsSCAPForm {
             isLoadingAttributes = isLoadingCache = false
             companyAttributesModel.clear()
             entityAttributesModel.clear()
+            propertyButtonLoadEntityAttributes.enabled = false
+            propertyButtonLoadEntityAttributesOAuth.enabled = false
             propertyBusyIndicatorAttributes.running = true
             propertyPageLoader.attributeListBackup = []
             gapi.startRemovingAttributesFromCache()
