@@ -2398,7 +2398,7 @@ static std::vector<ScapAttribute> get_attributes_by_ids(const std::vector<std::s
 
     std::vector<ScapAttribute> result;
     for (const ScapAttribute &a: all_attributes) {
-        if (std::find(ids.begin(), ids.end(), a.id) != ids.end()) {
+        if (std::find(ids.begin(), ids.end(), a.unique_id) != ids.end()) {
             result.push_back(a);
         }
     }
@@ -2664,7 +2664,7 @@ static std::map<std::string, std::vector<std::string>> format_scap_attr_strings(
         } else {
             // send id of each attribute to signature page
             // using an uncommon sequence to split id from attribute description , for now
-            attr_string += " [id] " + attribute.id;
+            attr_string += " [id] " + attribute.unique_id;
         }
 
         result[provider_name].push_back(attr_string);

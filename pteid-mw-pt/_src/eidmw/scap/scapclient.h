@@ -48,6 +48,7 @@ struct ScapAttribute
 	std::vector<ScapSubAttribute> sub_attributes;
 	ScapProvider provider;
 	std::string citizen_name;
+	std::string unique_id;
 
 	bool operator==(const ScapAttribute& a) const { return id == a.id && citizen_name == a.citizen_name && provider.nipc == a.provider.nipc; };
 };

@@ -130,6 +130,9 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 				citizen_name
 			};
 
+			ScapAttributeHasher id_generator;
+			attribute.unique_id = std::to_string(id_generator(attribute));
+
 			cJSON *sub_attributes = NULL;
 			if ((sub_attributes = cJSON_GetObjectItem(attribute_json, "subAttributes")) == NULL) {
 				MWLOG(LEV_DEBUG, MOD_SCAP, "%s failed to parse sub_attributes object", __FUNCTION__);
