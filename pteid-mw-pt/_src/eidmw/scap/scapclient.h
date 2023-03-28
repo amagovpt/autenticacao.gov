@@ -49,7 +49,7 @@ struct ScapAttribute
 	ScapProvider provider;
 	std::string citizen_name;
 
-	bool operator==(const ScapAttribute& a) const { return id == a.id && citizen_name == a.citizen_name; };
+	bool operator==(const ScapAttribute& a) const { return id == a.id && citizen_name == a.citizen_name && provider.nipc == a.provider.nipc; };
 };
 
 struct PDFSignatureInfo;
@@ -107,7 +107,7 @@ struct ScapProviderHasher
 struct ScapAttributeHasher
 {
 	std::size_t operator()(ScapAttribute const& a) const noexcept {
-		return std::hash<std::string>{}(a.id + a.citizen_name);
+		return std::hash<std::string>{}(a.id) ^ std::hash<std::string>{}(a.citizen_name) ^ std::hash<std::string>{}(a.provider.nipc);
 	}
 };
 
