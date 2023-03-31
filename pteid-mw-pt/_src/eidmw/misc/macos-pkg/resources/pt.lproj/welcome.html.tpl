@@ -6,9 +6,9 @@
 	</style>
 </head>
 <body>
-<h1>Bem-vindo ao instalador do Autenticação.gov 3.10.0</h2>
+<h1>Bem-vindo ao instalador do Autenticação.gov 3.10.1</h2>
 
-	<h2>Versão 3.10.0 - revisão GIT_REVISION</h2>
+	<h2>Versão 3.10.1 - revisão GIT_REVISION</h2>
 	<ul>
 		<li>Assinatura de múltiplos ficheiros com atributos profissionais</li>
 		<li>Assinatura CMD para cidadãos estrangeiros residentes em Portugal</li>
