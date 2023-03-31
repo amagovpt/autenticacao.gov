@@ -20,8 +20,8 @@
 %endif
 %endif
 
-%define git_revision git20230314
-%define app_version 3.10.0
+%define git_revision git20230328
+%define app_version 3.10.1
 
 Name:           pteid-mw
 BuildRequires:  pcsc-lite-devel make
@@ -296,7 +296,10 @@ fi
 /usr/local/share/pteid-mw
 
 %changelog
-* Tue Mar 14 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
+* Tue Mar 28 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
+  - SCAP signature bugfix
+
+* Tue Mar 21 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - New feature: SCAP signature in batch mode
   - CMD signature for foreign residents
   - Improvements in remote address reading
