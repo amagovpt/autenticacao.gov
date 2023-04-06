@@ -660,34 +660,6 @@
 <context>
     <name>PageCardAdress</name>
     <message>
-        <source>STR_ADDRESS_CHANGE_CONFIRMATION</source>
-        <translation>Address Confirmation</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_1</source>
-        <translation>If you applied for a change of address &lt;b&gt;since December 28, 2022&lt;/b&gt;,</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_2</source>
-        <translation>If you applied for a change of address &lt;b&gt;before December 28, 2022&lt;/b&gt;, complete the following fields:</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_NUMBER</source>
-        <translation>Process Number</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_NUMBER_OP</source>
-        <translation>Process number?</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_CODE</source>
-        <translation>Address Confirmation Code</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_CODE_OP</source>
-        <translation>Address Confirmation Code?</translation>
-    </message>
-    <message>
         <source>STR_ADDRESS_CHANGE_CANCEL</source>
         <translation>Cancel</translation>
     </message>
@@ -696,28 +668,12 @@
         <translation>OK</translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_TEXT</source>
-        <translation>In order to complete any change of address process click on the &quot;Confirm&quot; button</translation>
+        <translation>To complete any change of address process, you can do so on the </translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_BUTTON</source>
-        <translation>Confirm</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_LINK</source>
-        <translation>For more information about changing the address on the Citizen Card on the ePortugal portal.</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
-        <translation>here.</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_ONLINE_CHANGE_TEXT</source>
-        <translation>If you want to change your address, click</translation>
+        <source>STR_ADDRESS_CHANGE_CONFIRMATION_LINK</source>
+        <translation>ePortugal portal.</translation>
     </message>
     <message>
         <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
@@ -750,10 +706,6 @@
     <message>
         <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
         <translation>Please check your Internet connection.</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
-        <translation>confirm the address change on the ePortugal portal.</translation>
     </message>
 </context>
 <context>

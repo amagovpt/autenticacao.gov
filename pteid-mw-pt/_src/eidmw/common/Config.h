@@ -150,8 +150,6 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_CARDTXDELAY   L"card_transmit_delay"  //number, delay while communicating with the smartcard, in mili-seconds, default 1 mSec
 #define EIDMW_CNF_GENERAL_CARDCONNDELAY L"card_connect_delay"   //number, delay before connecting to a smartcard, in mili-seconds, default 0 mSec
 #define EIDMW_CNF_GENERAL_BUILDNBR		L"build_number"			//Number of the installed build
-#define EIDMW_CNF_GENERAL_OTP_SERVER    L"otp_server"
-#define EIDMW_CNF_GENERAL_SAM_SERVER    L"sam_server"
 #define EIDMW_CNF_GENERAL_SCAP_HOST     L"scap_host"
 #define EIDMW_CNF_GENERAL_SCAP_PORT     L"scap_port"
 #define EIDMW_CNF_GENERAL_SCAP_APIKEY   L"scap_apikey"
@@ -335,8 +333,6 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDTXDELAY;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_BUILDNBR;
-    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER;
-    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_HOST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_SCAP_PORT;

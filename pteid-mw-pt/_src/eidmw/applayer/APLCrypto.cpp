@@ -669,18 +669,10 @@ const char *APL_Pin::getLabel()
 
 bool APL_Pin::verifyPin(const char *csPin,unsigned long &ulRemaining,bool bShowDlg, void *wndGeometry )
 {
-	const unsigned long ADDRESS_PIN_REF = 0x83;
-	//We need to perform another mutual authentication for the next read address op
 
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
-	if (getPinRef() == ADDRESS_PIN_REF) {
-		if (pcard->getMutualAuthFinished()) {
-			pcard->selectApplication();
-		}
-	}
-
-	return m_card->pinCmd(PIN_OP_VERIFY,m_pinP15,csPin,"",ulRemaining,bShowDlg, wndGeometry );
+	return m_card->pinCmd(PIN_OP_VERIFY, m_pinP15, csPin, "",ulRemaining, bShowDlg, wndGeometry );
 
 }
 

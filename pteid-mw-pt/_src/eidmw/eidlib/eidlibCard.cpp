@@ -766,19 +766,6 @@ bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
 }
 */
 
-void PTEID_EIDCard::ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data)
-{
-
-	BEGIN_TRY_CATCH
-
-	APL_EIDCard *pcard = static_cast<APL_EIDCard *>(m_impl);
-
-	pcard->ChangeAddress(secretCode, process, callback, callback_data);
-
-	END_TRY_CATCH
-}
-
-
 void PTEID_EIDCard::doSODCheck(bool check) {
 
 	BEGIN_TRY_CATCH

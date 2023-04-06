@@ -410,8 +410,6 @@ public slots:
     void changeSignPin(QString currentPin, QString newPin);
     void changeAddressPin(QString currentPin, QString newPin);
 
-    void changeAddress(QString process, QString secret_code);
-    void doChangeAddress(QString process, QString secret_code);
     void cancelCMDRegisterCert();
     void signCMD(QList<QString> loadedFilePath, QString outputFile, int page, double coord_x,
                      double coord_y, QString reason, QString location, bool isTimestamp, bool isLTV,
@@ -425,7 +423,6 @@ public slots:
 
 
     static void addressChangeCallback(void *, int);
-    void showChangeAddressDialog(long code);
     void showSignCMDDialog(long error_code);
     bool checkCMDSupport();
 
@@ -504,14 +501,11 @@ signals:
     void signalGenericError(const QString error_code);
     void signalSaveCardPhotoFinished(bool success);
     void signalPersoDataLoaded(const QString& persoNotes);
-    void signalAddressLoadedChanged();
     void signalPdfSignSuccess(int error_code);
     void signalPdfSignFail(int error_code, int index);
     void signalPdfBatchSignFail(int error_code, const QString &filename);
     void signalUpdateProgressBar(int value);
     void signalUpdateProgressStatus(const QString statusMessage);
-    void signalAddressShowLink();
-    void signalAddressShowUndefinedLink();
     void signCMDFinished(long error_code);
     void signalCanceledSignature();
     void signalValidateOtp();

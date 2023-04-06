@@ -100,9 +100,6 @@ public:
 	  */
 	EIDMW_APL_API virtual unsigned long certificateCount();
 
-	
-
-	EIDMW_APL_API void ChangeAddress(char *secret_code, char *process, t_callback_addr, void *);
 
 	EIDMW_APL_API APL_CCXML_Doc& getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo);
 
@@ -170,10 +167,6 @@ public:
 	APLPublicKey *getRootCAPubKey();						/**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
 	EIDMW_APL_API bool isActive();
 	EIDMW_APL_API bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);						/**< Activate the pteid card */
-	bool selectApplication();
-	//Setter and getter for the mutualAuthFinished flag
-	void setMutualAuthFinished(bool is_finished) { m_mutualAuthFinished = is_finished;  }
-	bool getMutualAuthFinished() { return m_mutualAuthFinished;  };
 
 protected:
 	/**
@@ -213,7 +206,6 @@ private:
 	APL_CardFile_Certificate *m_fileCertRootSign;
 
 	bool m_sodCheck;
-	bool m_mutualAuthFinished;
 
 friend bool APL_ReaderContext::connectCard();	/**< This method must access protected constructor */
 };

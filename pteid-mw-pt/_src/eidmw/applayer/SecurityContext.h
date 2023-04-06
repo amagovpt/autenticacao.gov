@@ -8,7 +8,7 @@
 
 namespace eIDMW
 {
-	class SAM;
+	class MutualAuthentication;
 
 	class SecurityContext
 	{
@@ -70,7 +70,7 @@ namespace eIDMW
 			CByteArray m_kicc;
 			CByteArray m_kifd;
 			CByteArray pkIccAuth;
-			SAM * sam_helper;
+			MutualAuthentication * mutual_authentication;
 
 			//Value extracted from ifd_cvc certificate
 			CByteArray m_snIFD;

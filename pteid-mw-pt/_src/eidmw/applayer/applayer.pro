@@ -99,7 +99,6 @@ HEADERS += \
 	SODParser.h \ 
 	cJSON.h \
 	SSLConnection.h \
-	SSLConnectionLegacy.h \
 	PNGConverter.h \
 	PAdESExtender.h \
 	J2KHelper.h \
@@ -130,7 +129,6 @@ SOURCES += \
 	RemoteAddressRequest.cpp \
 	SODParser.cpp \
 	SSLConnection.cpp \
-	SSLConnectionLegacy.cpp \
 	TSAClient.cpp \
 	SecurityContext.cpp \
 	sign-pkcs7.cpp \
@@ -140,7 +138,7 @@ SOURCES += \
 	CRLFetcher.cpp \
 	PDFSignature.cpp \
 	PAdESExtender.cpp \
-	SAM.cpp \
+	MutualAuthentication.cpp \
 	PNGConverter.cpp \
 	J2KHelper.cpp \
 	CurlUtil.cpp \

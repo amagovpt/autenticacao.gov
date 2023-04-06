@@ -24,7 +24,7 @@
 #include "SecurityContext.h"
 #include "Log.h"
 #include "eidErrors.h"
-#include "SAM.h"
+#include "MutualAuthentication.h"
 
 //#include <algorithm>
 #include <iostream>
@@ -40,7 +40,7 @@ namespace eIDMW
 	SecurityContext::SecurityContext(APL_Card * card)
 	{
 		m_card = card;
-		sam_helper = new SAM(card);
+		mutual_authentication = new MutualAuthentication(card);
 	}
 
 
@@ -609,8 +609,8 @@ namespace eIDMW
 		dh_params.Append(this->dh_p);
 		dh_params.Append(this->dh_q);
 
-		char *snIFD = sam_helper->getPK_IFD_AUT(m_ifd_cvc);
-		char *cRnd = sam_helper->generateChallenge(snIFD);
+		char *snIFD = mutual_authentication->getPK_IFD_AUT(m_ifd_cvc);
+		char *cRnd = mutual_authentication->generateChallenge(snIFD);
 
 		if (cRnd == NULL || strlen(cRnd) == 0)
 		{
@@ -686,7 +686,7 @@ namespace eIDMW
 		//Before generating DH keys, init the RNG
 		RAND_seed(rnd_seed, sizeof(rnd_seed));
 
-		sam_helper->getDHParams(&dh_params);
+		mutual_authentication->getDHParams(&dh_params);
 		this->dh_p = CByteArray(std::string(dh_params.dh_p), true);
 		this->dh_g = CByteArray(std::string(dh_params.dh_g), true);
 		this->dh_q = CByteArray(std::string(dh_params.dh_q), true);
@@ -722,7 +722,7 @@ namespace eIDMW
 	 	BN_bn2bin(pub_key, kifd_bytes);
 	 	m_kifd = CByteArray(kifd_bytes, BN_num_bytes(pub_key));
 
-	 	if(!sam_helper->sendKIFD(kifd))
+	 	if(!mutual_authentication->sendKIFD(kifd))
 	 	{
 
 	 		MWLOG(LEV_ERROR, MOD_APL, L"SendKIFD() failed, possible error in DH code!");
@@ -732,7 +732,7 @@ namespace eIDMW
 		/* Receive the public key from the peer. In this example we're just hard coding a value */
 		BIGNUM *kicc = NULL;
 
-		char * kicc_str = sam_helper->getKICC();
+		char * kicc_str = mutual_authentication->getKICC();
 		m_kicc = CByteArray(kicc_str, true);
 		//int BN_hex2bn(BIGNUM **a, const char *str);
 		int rc = BN_hex2bn(&kicc, kicc_str);
@@ -878,7 +878,7 @@ namespace eIDMW
 		//Initial value of SCC
 		this->m_ssc = 1;
 
-		bool resp = sam_helper->verifySignedChallenge(externalAuthInput);
+		bool resp = mutual_authentication->verifySignedChallenge(externalAuthInput);
 		resp = internalAuthenticate();
 
 		return resp;
@@ -902,7 +902,7 @@ namespace eIDMW
 		initMuthualAuthProcess();
 		m_ifd_cvc = ifd_cvc;
 
-		return sam_helper->verifyCert_CV_IFD(ifd_cvc);
+		return mutual_authentication->verifyCert_CV_IFD(ifd_cvc);
 
 	}
 

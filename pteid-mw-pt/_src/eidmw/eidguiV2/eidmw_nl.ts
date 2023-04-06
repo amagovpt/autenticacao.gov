@@ -670,34 +670,6 @@
 <context>
     <name>PageCardAdress</name>
     <message>
-        <source>STR_ADDRESS_CHANGE_CONFIRMATION</source>
-        <translation>Confirmação de Morada</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_1</source>
-        <translation>Se fez o pedido de alteração de morada &lt;b&gt;a partir de 28 de dezembro de 2022&lt;/b&gt;,</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_2</source>
-        <translation>Se fez o pedido de alteração de morada &lt;b&gt;antes de 28 de dezembro de 2022&lt;/b&gt;, preencha os campos seguintes:</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_NUMBER</source>
-        <translation>Nº de Processo de alteração de Morada</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_NUMBER_OP</source>
-        <translation>Número de processo?</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_CODE</source>
-        <translation>Código de Confirmação de Morada</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_CODE_OP</source>
-        <translation>Código de confirmação de Morada?</translation>
-    </message>
-    <message>
         <source>STR_ADDRESS_CHANGE_CANCEL</source>
         <translation>Cancelar</translation>
     </message>
@@ -706,28 +678,12 @@
         <translation>Confirmar</translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_TEXT</source>
-        <translation>Para concluir um eventual processo de alteração de morada, clique no botão “Confirmar”</translation>
+        <translation>Para concluir um eventual processo de alteração de morada, poderá fazê-lo </translation>
     </message>
     <message>
-        <source>STR_ADDRESS_CHANGE_BUTTON</source>
-        <translation>Confirmar</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_LINK</source>
-        <translation>Saiba mais sobre alterar a morada do Cartão de Cidadão no portal ePortugal.</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_HERE</source>
-        <translation>aqui.</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_ONLINE_CHANGE_TEXT</source>
-        <translation>Caso pretenda alterar a sua morada, clique</translation>
+        <source>STR_ADDRESS_CHANGE_CONFIRMATION_LINK</source>
+        <translation>no portal ePortugal.</translation>
     </message>
     <message>
         <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
@@ -760,10 +716,6 @@
     <message>
         <source>STR_REMOTEADDRESS_INVALIDSTATE_ERROR</source>
         <translation>Erro na consulta de morada: deve dirigir-se a um balcão de levantamento do Cartão de Cidadão</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_TEXT_LINK</source>
-        <translation>confirme a alteração de morada no portal ePortugal.</translation>
     </message>
 </context>
 <context>

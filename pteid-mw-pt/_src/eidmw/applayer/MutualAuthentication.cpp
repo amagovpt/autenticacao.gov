@@ -16,7 +16,7 @@
 #include "MiscUtil.h"
 #include "Reader.h"
 #include "Log.h"
-#include "SAM.h"
+#include "MutualAuthentication.h"
 #include <string>
 #include <cstring>
 #include <iostream>
@@ -30,7 +30,7 @@
 namespace eIDMW
 {
 	
-SAM::SAM(APL_Card *card)
+MutualAuthentication::MutualAuthentication(APL_Card *card)
 {
 	m_card = card;
 }
@@ -54,7 +54,7 @@ bool checkResultSW12(CByteArray &result)
 	return ulSW12 == 0x9000;
 }
 
-char * SAM::_getDH_Param(unsigned char specific_byte, unsigned long offset)
+char * MutualAuthentication::_getDH_Param(unsigned char specific_byte, unsigned long offset)
 {
 		char * hex_param = NULL;
 		// 00 CB 00 FF 0A A6 03 83 01 32 7F 49 02 87 00 00 
@@ -79,7 +79,7 @@ char * SAM::_getDH_Param(unsigned char specific_byte, unsigned long offset)
 
 
 //Return DER encoding of the pubkey
-char * SAM::_getCVCPublicKey()
+char * MutualAuthentication::_getCVCPublicKey()
 {
 	const int offset_mod = 14;
 	const int offset_exp = 13;
@@ -136,7 +136,7 @@ char * SAM::_getCVCPublicKey()
 	return cvc_key;
 }
 
-char * SAM::_getCardAuthPublicKey()
+char * MutualAuthentication::_getCardAuthPublicKey()
 {
 	EVP_PKEY *evp_key = EVP_PKEY_new();
 	RSA *key_tmp = RSA_new();
@@ -171,7 +171,7 @@ char * SAM::_getCardAuthPublicKey()
 	return card_auth_pubkey;
 }
 
-char * SAM::_getSODCert()
+char * MutualAuthentication::_getSODCert()
 {
 	char *sod_cert = NULL;
 	PKCS7 * p7 = NULL;
@@ -198,26 +198,7 @@ char * SAM::_getSODCert()
 	return sod_cert;
 }
 
-char *SAM::getSerialNumberIAS101()
-{
-	const unsigned char apdu_serial[] = {0x00, 0xCA, 0x02, 0x5A, 0x0D};
-
-	CByteArray serial_apdu = CByteArray(apdu_serial,
-		sizeof(apdu_serial));
-
-	CByteArray serial_ba = m_card->getCalReader()->SendAPDU(serial_apdu);
-
-	serial_ba.Chop(2);
-
-	char *serial = (char *)malloc(serial_ba.Size()*2+1);
-
-	binToHex(serial_ba.GetBytes(), serial_ba.Size(), serial, serial_ba.Size()*2+1);
-
-	return serial;
-}
-
-
-bool SAM::sendKIFD(char *kifd)
+bool MutualAuthentication::sendKIFD(char *kifd)
 {
 	const unsigned char verify_apdu_key_agreement[] = {0x00, 0x22, 0x41, 0xA6, 0x89, 0x83, 0x01, 0x32, 0x95, 0x01, 0x80, 0x91, 0x81, 0x80}; 
 	CByteArray sendKIFD_apdu = CByteArray(verify_apdu_key_agreement,
@@ -238,7 +219,7 @@ bool SAM::sendKIFD(char *kifd)
 	return true;	
 }
 
-char *SAM::getKICC()
+char *MutualAuthentication::getKICC()
 {
 	char *kicc_hex = NULL;
 	const int KICC_LEN = 128;
@@ -262,12 +243,12 @@ char *SAM::getKICC()
 }
 
 
-bool SAM::verifyCert_CV_IFD(char * cv_cert)
+bool MutualAuthentication::verifyCert_CV_IFD(char * cv_cert)
 {
 	
 	if (cv_cert == NULL || strlen(cv_cert) == 0)
 	{
-		fprintf(stderr, "Invalid cv_cert in SAM::VerifyCert_CV_IFD(1)!");
+		fprintf(stderr, "Invalid cv_cert in MutualAuthentication::VerifyCert_CV_IFD(1)!");
 		return false;
 	}
 
@@ -277,7 +258,7 @@ bool SAM::verifyCert_CV_IFD(char * cv_cert)
 }
 
 
-bool SAM::verifyCert_CV_IFD(CByteArray &cv_cert)
+bool MutualAuthentication::verifyCert_CV_IFD(CByteArray &cv_cert)
 {
 	unsigned char ba_apdu_pso_verify[] = {0x00, 0x2A, 0x00, 0xBE, 0xD1};
 	unsigned char apdu_se_verify_cert[] = {0x00, 0x22, 0x41, 0xB6, 0x06, 0x83, 0x01, 0x44, 0x95, 0x01, 0x80};
@@ -285,7 +266,7 @@ bool SAM::verifyCert_CV_IFD(CByteArray &cv_cert)
 
 	if (cv_cert.Size() == 0)
 	{
-		fprintf(stderr, "Invalid cv_cert in SAM::VerifyCert_CV_IFD(2)!");
+		fprintf(stderr, "Invalid cv_cert in MutualAuthentication::VerifyCert_CV_IFD(2)!");
 		return false;
 	}
 
@@ -309,7 +290,7 @@ bool SAM::verifyCert_CV_IFD(CByteArray &cv_cert)
 	return true;
 }
 
-char *SAM::getPK_IFD_AUT(CByteArray &cvc_cert)
+char *MutualAuthentication::getPK_IFD_AUT(CByteArray &cvc_cert)
 {
 	unsigned char decrypted_data[128];
 	unsigned char signature[128];
@@ -377,7 +358,7 @@ char *SAM::getPK_IFD_AUT(CByteArray &cvc_cert)
 }
 
 
-char * SAM::getPK_IFD_AUT(char * cvc_cert)
+char * MutualAuthentication::getPK_IFD_AUT(char * cvc_cert)
 {
 	
 	if (cvc_cert != NULL && strlen(cvc_cert) > 0)
@@ -396,12 +377,12 @@ char * SAM::getPK_IFD_AUT(char * cvc_cert)
 /*
 The parameter CHR indicates the IFD serial used in the MSE SET command
 */
-char *SAM::generateChallenge(char * chr_string)
+char *MutualAuthentication::generateChallenge(char * chr_string)
 {
 	char *challenge = NULL;
 	if (!chr_string || strlen(chr_string) == 0)
 	{
-		MWLOG(LEV_ERROR, MOD_APL, "SAM::generateChallenge(): Invalid or empty CHR param");
+		MWLOG(LEV_ERROR, MOD_APL, "MutualAuthentication::generateChallenge(): Invalid or empty CHR param");
 		return NULL;
 	}
 
@@ -434,10 +415,10 @@ char *SAM::generateChallenge(char * chr_string)
 	return challenge;
 }
 
-std::vector<char *> SAM::sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array)
+std::vector<char *> MutualAuthentication::sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array)
 {
 	int i = 0;
-	MWLOG(LEV_DEBUG, MOD_APL, L"SAM::sendSequenceOfPrebuiltAPDUs()");
+	MWLOG(LEV_DEBUG, MOD_APL, L"MutualAuthentication::sendSequenceOfPrebuiltAPDUs()");
 	std::vector <char *> responses;
 
 	while(i != apdu_array.size())
@@ -450,7 +431,7 @@ std::vector<char *> SAM::sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_a
 	return responses;
 }
 
-char *SAM::sendPrebuiltAPDU(char *apdu_string)
+char *MutualAuthentication::sendPrebuiltAPDU(char *apdu_string)
 {
 	char *resp_string = NULL;
 
@@ -467,7 +448,7 @@ char *SAM::sendPrebuiltAPDU(char *apdu_string)
 	return resp_string;
 }
 
-bool SAM::verifySignedChallenge(CByteArray &signed_challenge)
+bool MutualAuthentication::verifySignedChallenge(CByteArray &signed_challenge)
 {
 
 	unsigned char external_authenticate[] = {0x80, 0x82, 0x00, 0x00, 0x88};
@@ -481,11 +462,11 @@ bool SAM::verifySignedChallenge(CByteArray &signed_challenge)
 
 }
 
-bool SAM::verifySignedChallenge(char *signed_challenge)
+bool MutualAuthentication::verifySignedChallenge(char *signed_challenge)
 {
 	if (signed_challenge == NULL || strlen(signed_challenge) == 0)
 	{
-		MWLOG(LEV_ERROR, MOD_APL, L"Invalid signed_challenge in SAM::verifySignedChallenge()!");
+		MWLOG(LEV_ERROR, MOD_APL, L"Invalid signed_challenge in MutualAuthentication::verifySignedChallenge()!");
 		return false;
 	}
 
@@ -495,7 +476,7 @@ bool SAM::verifySignedChallenge(char *signed_challenge)
 }
 
 /* Fetch all the parameters needed from the card */
-bool SAM::getDHParams(DHParams *dh_struct, bool getAllParams)
+bool MutualAuthentication::getDHParams(DHParams *dh_struct, bool getAllParams)
 {
 
 	dh_struct->dh_g = _getDH_Param(0x88, 12);

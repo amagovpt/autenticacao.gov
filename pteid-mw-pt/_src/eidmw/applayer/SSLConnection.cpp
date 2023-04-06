@@ -180,21 +180,6 @@ static void loadCertChain(X509_STORE *store, APL_Certif * authentication_cert)
 	}
 }
 
-//Translate the string via specific OpenSSL error codes
-//is not feasible AFAICT
-static unsigned int translate_openssl_error(unsigned int error)
-{
-	char *error_string = ERR_error_string(error, NULL);
-
-	if (strstr(error_string, "Connection refused") != NULL
-	|| strstr(error_string, "bad hostname lookup") != NULL)
-		return EIDMW_OTP_CONNECTION_ERROR;
-
-	else if (strstr(error_string, "certificate verify failed") != NULL)
-		return EIDMW_OTP_CERTIFICATE_ERROR;
-	else
-		return EIDMW_OTP_UNKNOWN_ERROR;
-}
 
 /**
  * Initialise OpenSSL
@@ -220,7 +205,7 @@ SSLConnection::SSLConnection(APL_Card *card)
 	init_openssl();
 }
 
-static void setupInternalSSL(SSL_CTX *ctx, APL_Card *card)
+static bool setupInternalSSL(SSL_CTX *ctx, APL_Card *card)
 {
 	setThreadLocalCardInstance(card);
 
@@ -228,6 +213,11 @@ static void setupInternalSSL(SSL_CTX *ctx, APL_Card *card)
 	APL_Certifs *certs = eid_card->getCertificates();
 
 	APL_Certif * cert = loadCertsFromCard(ctx, certs);
+
+	if (!cert) {
+		return false;
+	}
+	
 	X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
 	//Load cert chain for the current card
@@ -252,7 +242,7 @@ static void setupInternalSSL(SSL_CTX *ctx, APL_Card *card)
 	if (rc != 1) {
 		long openssl_error = ERR_get_error();
 		MWLOG(LEV_ERROR, MOD_APL, "Dummy key generation failed. OpenSSL error: %s", ERR_error_string(openssl_error, NULL));
-		throw CMWEXCEPTION(translate_openssl_error(openssl_error));
+		return false;
 	}
 
 	RSA_METHOD * current_method = (RSA_METHOD *)RSA_get_default_method();
@@ -264,22 +254,21 @@ static void setupInternalSSL(SSL_CTX *ctx, APL_Card *card)
 
 	if (SSL_CTX_use_RSAPrivateKey(ctx, rsa) != 1) {
 		MWLOG(LEV_ERROR, MOD_APL, "Fatal error: SSL_CTX_use_RSAPrivateKey failed!");
-		return;
+		return false;
 	}
+
+	return true;
 
 }
 
-static CURLcode sslctxfun(CURL *curl, void *sslctx, void *param)
-{
+static CURLcode sslctxfun(CURL *curl, void *sslctx, void *param) {
 	APL_Card *card = (APL_Card *)param;
 	SSL_CTX *ctx = (SSL_CTX *)sslctx;
 
 	//Signature algorithms available on all cards
 	SSL_CTX_set1_client_sigalgs_list(ctx, "RSA+SHA256:RSA+SHA1");
 
-	setupInternalSSL(ctx, card);
-
-	return CURLE_OK;
+	return setupInternalSSL(ctx, card) ? CURLE_OK : CURLE_SSL_CONNECT_ERROR;
 
 }
 

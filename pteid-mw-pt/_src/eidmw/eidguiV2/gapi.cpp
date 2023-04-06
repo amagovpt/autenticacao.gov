@@ -811,99 +811,6 @@ unsigned int GAPI::doChangeSignPin(QString currentPin, QString newPin) {
     //QML default types don't include long
     return (unsigned int)tries_left;
 }
-void GAPI::showChangeAddressDialog(long code)
-{
-    QString error_msg;
-    long sam_error_code = 0;
-    QString support_string = tr("STR_CHANGE_ADDRESS_ERROR_MSG");
-    QString support_string_wait_5min = tr("STR_CHANGE_ADDRESS_WAIT_5MIN_ERROR_MSG");
-
-    QString support_string_undefined = tr("STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG");
-
-    if (code == 0){
-        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AddressChange op completed successfully");
-    } else {
-		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AddressChange op finished with error code 0x%08x", code);
-    }
-
-    switch (code)
-    {
-    case 0:
-        error_msg = tr("STR_CHANGE_ADDRESS_SUCESS");
-        //Force address reload in PageCardAddress
-        setAddressLoaded(false);
-        break;
-        //The error code for connection error is common between SAM and OTP
-    case EIDMW_OTP_CONNECTION_ERROR:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
-            tr("STR_VERIFY_INTERNET_SAM");
-        if (m_Settings.isProxyConfigured())
-            error_msg.append(" ").append(tr("STR_VERIFY_PROXY"));
-        break;
-
-    case EIDMW_OTP_CERTIFICATE_ERROR:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_VERIFY_APP_UPDATE") + "<br><br>" +
-            tr("STR_CERTIFICATE_ERROR") + tr("STR_CERTIFICATE_ERROR_CHANGE_ADDRESS");
-        break;
-
-    case EIDMW_SAM_PROXY_AUTH_FAILED:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
-            tr("STR_PROXY_AUTH_FAILED");
-        break;
-    case EIDMW_SAM_PROXY_UNSUPPORTED:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CONNECTION_ERROR") + "<br><br>" +
-            tr("STR_PROXY_UNSUPPORTED");
-        break;
-    case SAM_UNDEFINED_PROCESS_NUMBER:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER");    
-        break;    
-    case SAM_PROCESS_NUMBER_ERROR_1:
-    case SAM_PROCESS_NUMBER_ERROR_2:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER");
-        sam_error_code = code;
-        break;
-    case SAM_PROCESS_EXPIRED_ERROR:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_CHECK_PROCESS_EXPIRED");
-        sam_error_code = code;
-        break;
-    case EIDMW_SAM_UNCONFIRMED_CHANGE:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_ERROR_INCOMPLETE") + "<br><br>" + tr("STR_CHANGE_ADDRESS_NOT_CONFIRMED");
-        break;
-    case EIDMW_SSL_PROTOCOL_ERROR:
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + tr("STR_CHANGE_ADDRESS_CHECK_AUTHENTICATION_CERTIFICATE");
-        break;
-    default:
-        //Make sure we only show the user error codes from the SAM service and not some weird pteid exception error code
-        if (code > 1100 && code < 3500)
-            sam_error_code = code;
-        error_msg = "<b>" + tr("STR_CHANGE_ADDRESS_ERROR") + "</b><br><br>" + "\n\n";
-        break;
-    }
-
-    if (sam_error_code != 0)
-    {
-        error_msg += "<br><br>" + tr("STR_ERROR_CODE") + QString::number(sam_error_code);
-    }
-
-    if (code != 0){
-        if (code == EIDMW_SAM_UNCONFIRMED_CHANGE){
-            error_msg += "<br><br>" + support_string_wait_5min;
-        }
-        else if (code == SAM_UNDEFINED_PROCESS_NUMBER){
-            error_msg += "<br>" + support_string_undefined;
-            signalAddressShowUndefinedLink();
-        }
-        else if (code == SAM_PROCESS_EXPIRED_ERROR){
-            signalAddressShowLink();
-        }
-        else {
-            error_msg += "<br><br>" + support_string;
-        }
-    }
-
-    qDebug() << error_msg;
-    signalUpdateProgressStatus(error_msg);
-}
 
 void GAPI::showSignCMDDialog(long error_code)
 {
@@ -1021,38 +928,6 @@ void GAPI::addressChangeCallback(void *instance, int value)
     qDebug() << "addressChangeCallback";
     GAPI * gapi = (GAPI*)(instance);
     gapi->signalUpdateProgressBar(value);
-}
-
-void GAPI::doChangeAddress(QString qs_process, QString qs_secret_code)
-{
-    qDebug() << "DoChangeAddress!";
-    PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "Change Address started");
-
-    PTEID_EIDCard * card = NULL;
-    getCardInstance(card);
-    if (card == NULL) return;
-
-    std::string process = qs_process.toUtf8().constData();
-    std::string secret_code = qs_secret_code.toUtf8().constData();
-
-    long error_code = 0;
-    try {
-        card->ChangeAddress((char *)secret_code.c_str(), (char *)process.c_str(), &GAPI::addressChangeCallback, (void*)this);
-    }
-    catch (PTEID_Exception &exception) {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Caught exception in EidCard.ChangeAddress()... closing progressBar");
-        emit signalUpdateProgressBar(100);
-        error_code = exception.GetError();
-    }
-
-    showChangeAddressDialog(error_code);
-}
-
-void GAPI::changeAddress(QString process, QString secret_code)
-{
-    qDebug() << "Called changeAddress(): process = " + process + "; secret_code = " + secret_code;
-    Concurrent::run(this, &GAPI::doChangeAddress, process, secret_code);
-    signalUpdateProgressStatus(tr("STR_CHANGING_ADDRESS"));
 }
 
 /*Store a pointer to our QMLEngine and register the signal that when triggered will register

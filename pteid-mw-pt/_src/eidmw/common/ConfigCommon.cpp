@@ -132,8 +132,6 @@ namespace eIDMW
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL = { EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_VERIFY_URL, L"https://aplicacoes.autenticacao.gov.pt/apps/" };
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_CERTS_URL = { EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_CERTS_URL, L"https://raw.githubusercontent.com/amagovpt/autenticacao.gov/master/pteid-mw-pt/_src/eidmw/misc/certs/" };
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_NEWS_URL = { EIDMW_CNF_SECTION_AUTOUPDATES, EIDMW_CNF_AUTOUPDATES_NEWS_URL, L"https://raw.githubusercontent.com/amagovpt/autenticacao.gov/master/pteid-mw-pt/_src/eidmw/" };
-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER = { EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_SAM_SERVER, L"pki.cartaodecidadao.pt:443" };
-  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_OTP_SERVER      =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_OTP_SERVER, L"otp.cartaodecidadao.pt:443"};
 
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_HOST       =       {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CMD_HOST, L"cmd.autenticacao.gov.pt"};
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_APPID = { EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CMD_APPID, L"default_value" };

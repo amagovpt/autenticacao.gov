@@ -56,15 +56,12 @@ int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settin
 
     parser->parse(QCoreApplication::arguments());
 
-    PTEID_Config sam_server(PTEID_PARAM_GENERAL_SAM_SERVER);
     // Default is production mode
     PTEID_Config::SetTestMode(false);
-    sam_server.setString("pki.cartaodecidadao.pt:443");
 
     if (parser->isSet(testModeOption))
     {
         PTEID_Config::SetTestMode(true);
-        sam_server.setString("pki.teste.cartaodecidadao.pt:443");
         settings->setTestMode(true);
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", 
             "Starting App in test mode");

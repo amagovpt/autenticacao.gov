@@ -256,45 +256,6 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_SOD_ERR_INVALID_PKCS7:
 				error_message = "SOD Error: invalid PKCS#7 object";
 				break;
-			// OTP related errors
-			case EIDMW_OTP_CONNECTION_ERROR:
-				error_message = "OTP Error: generic connection error";
-				break;
-			case EIDMW_OTP_PROTOCOL_ERROR:
-				error_message = "OTP Error: protocol error";
-				break;
-			case EIDMW_OTP_CERTIFICATE_ERROR:
-				error_message = "OTP Error: certificate verification failed";
-				break;
-			case EIDMW_OTP_UNKNOWN_ERROR:
-				error_message = "OTP Error: unknown error";
-				break;
-
-			// SAM related errors
-			case EIDMW_SAM_CONNECTION_ERROR:
-				error_message = "SAM Error: server connection error";
-				break;
-			case EIDMW_SAM_PROTOCOL_ERROR:
-				error_message = "SAM Error: unexpected server response";
-				break;
-			case EIDMW_SAM_UNKNOWN_ERROR:
-				error_message = "SAM Error: generic error";
-				break;
-			case EIDMW_SSL_PROTOCOL_ERROR:
-				error_message = "SAM Error: connection SSL error";
-				break;
-			case EIDMW_SAM_UNSUPPORTED_CARD:
-				error_message = "SAM Error: unsupported card";
-				break;
-			case EIDMW_SAM_UNCONFIRMED_CHANGE:
-				error_message = "SAM Error: address change unconfirmed by the server";
-				break;
-			case EIDMW_SAM_PROXY_AUTH_FAILED:
-				error_message = "SAM Error: proxy server authentication failure";
-				break;
-			case EIDMW_SAM_PROXY_UNSUPPORTED:
-				error_message = "SAM Error: change address proxy server is not supported";
-				break;
 
 			//Errors related to CVC authentication and Secure Messaging
 			case EIDMW_ERR_CVC_GENERIC_ERROR:

@@ -3,7 +3,7 @@
 #pragma once
 
 #include <string>
-#include "SAM.h"
+#include "MutualAuthentication.h"
 #include "ByteArray.h"
 #include "cJSON.h"
 

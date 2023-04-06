@@ -52,11 +52,12 @@ struct SignedChallengeResponse
 char * byteArrayToHexString(CByteArray &ba_in);
 
 
-class SAM
+// change name to MutualAuthentication
+class MutualAuthentication
 {
 
 public:
-	SAM(APL_Card *card);
+	MutualAuthentication(APL_Card *card);
 
 	bool getDHParams(DHParams *otp_struct, bool getAllParams = false);
 	bool verifyCVCCertificate(const char *cvc_certificate_hex);
@@ -68,8 +69,6 @@ public:
 	bool verifyCert_CV_IFD(char * cv_cert);
 	bool verifyCert_CV_IFD(CByteArray &cv_cert);
 	char *generateChallenge(char * CHR);
-
-	char *getSerialNumberIAS101();
 	
 	char * getPK_IFD_AUT(CByteArray &cvc_cert);
 	char * getPK_IFD_AUT(char * cvc_cert);

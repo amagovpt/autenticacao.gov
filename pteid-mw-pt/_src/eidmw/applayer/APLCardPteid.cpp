@@ -37,8 +37,7 @@
 #include "MWException.h"
 #include "CardLayer.h"
 #include "MiscUtil.h"
-#include "SSLConnectionLegacy.h"
-#include "SAM.h"
+#include "MutualAuthentication.h"
 #include "StringOps.h"
 #include "APLConfig.h"
 #include "RemoteAddress.h"
@@ -80,7 +79,6 @@ APL_EIDCard::APL_EIDCard(APL_ReaderContext *reader, APL_CardType cardType):APL_S
 	m_fileCertRootAuth=NULL;
 
 	m_sodCheck = false;
-	m_mutualAuthFinished = false;
 	m_tokenLabel = NULL;
 	m_tokenSerial = NULL;
 	m_appletVersion = NULL;
@@ -237,171 +235,6 @@ APL_EidFile_Address *APL_EIDCard::getFileAddress()
 	}
 
 	return m_FileAddress;
-}
-
-bool APL_EIDCard::selectApplication() {
-
-	static const unsigned char PTEID_SELECT_APPLICATION[] = { 0x00, 0xA4, 0x04, 0x00, 0x07, 0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02 };
-	CByteArray select_application_cmd(PTEID_SELECT_APPLICATION, sizeof(PTEID_SELECT_APPLICATION));
-	
-	//SelectApplication to reset previous mutual authentication
-	CByteArray resp_ba = sendAPDU(select_application_cmd);
-
-	const unsigned char * resp = resp_ba.GetBytes();
-
-	if (resp_ba.Size() == 2 && resp[0] == 0x90 && resp[1] == 0x00) {
-		m_mutualAuthFinished = false;
-		return true;
-	}
-	else {
-		MWLOG(LEV_ERROR, MOD_APL, "%s Error in select application command: [%2x %2x]", __FUNCTION__, resp[0], resp[1]);
-		return false;
-	}
-
-}
-
-
-/*
-	Implements the address change protocol as implemented by the Portuguese State hosted website
-	It conditionally executes some card interactions and sends different parameters to the server
-	depending on the version of the smart card applet, IAS 0.7 or IAS 1.01.
-	Technical specification: the confidential document "Change Address Technical Solution" by Zetes version 5.3
-*/
-void APL_EIDCard::ChangeAddress(char *secret_code, char *process, t_callback_addr callback, void* callback_data)
-{
-	char * kicc = NULL;
-	SAM sam_helper(this);
-	StartWriteResponse * resp3 = NULL;
-	char *serialNumber = NULL;
-	char *resp_internal_auth = NULL, *resp_mse = NULL;
-
-	DHParams dh_params;
-
-	if (m_mutualAuthFinished) {
-		selectApplication();
-	}
-
-	if (this->getType() == APL_CARDTYPE_PTEID_IAS07)
-		sam_helper.getDHParams(&dh_params, true);
-	else
-	{
-	    throw CMWEXCEPTION(EIDMW_SAM_UNSUPPORTED_CARD);
-	}
-	//Init the thread-local variable to be able to access the card in the OpenSSL callback
-	setThreadLocalCardInstance(this);
-	SSLConnectionLegacy conn;
-
-	conn.InitSAMConnection();
-
-	callback(callback_data, 10);
-
-	DHParamsResponse *p1 = conn.do_SAM_1stpost(&dh_params, secret_code, process, serialNumber);
-
-	callback(callback_data, 25);
-
-	if (p1->cv_ifd_aut == NULL)
-	{
-		delete p1;
-		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
-	}
-
-	if (p1->kifd != NULL)
-		sam_helper.sendKIFD(p1->kifd);
-
-	kicc = sam_helper.getKICC();
-
-	if ( !sam_helper.verifyCert_CV_IFD(p1->cv_ifd_aut))
-	{
-		delete p1;
-		free(kicc);
-
-		throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
-	}
-
-	char * CHR = sam_helper.getPK_IFD_AUT(p1->cv_ifd_aut);
-
-	char *challenge = sam_helper.generateChallenge(CHR);
-
-	callback(callback_data, 30);
-
-	SignedChallengeResponse * resp_2ndpost = conn.do_SAM_2ndpost(challenge, kicc);
-
-	callback(callback_data, 40);
-
-	if (resp_2ndpost != NULL && resp_2ndpost->signed_challenge != NULL)
-	{
-		bool ret_signed_ch = sam_helper.verifySignedChallenge(resp_2ndpost->signed_challenge);
-
-		m_mutualAuthFinished = true;
-
-		if (!ret_signed_ch)
-		{
-            delete resp_2ndpost;
-            free(challenge);
-            free(CHR);
-			MWLOG(LEV_ERROR, MOD_APL, L"EXTERNAL AUTHENTICATE command failed! Aborting Address Change!");
-			throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
-		}
-
-		resp_mse = sam_helper.sendPrebuiltAPDU(resp_2ndpost->set_se_command);
-
-		resp_internal_auth = sam_helper.sendPrebuiltAPDU(resp_2ndpost->internal_auth);
-
-		StartWriteResponse * resp3 = conn.do_SAM_3rdpost(resp_mse, resp_internal_auth);
-
-		callback(callback_data, 60);
-
-		if (resp3 == NULL)
-		{
-			goto err;
-		}
-		else
-		{
-			MWLOG(LEV_DEBUG, MOD_APL, L"ChangeAddress: writing new address...");
-			std::vector<char *> address_response = sam_helper.sendSequenceOfPrebuiltAPDUs(resp3->apdu_write_address);
-
-			MWLOG(LEV_DEBUG, MOD_APL, L"ChangeAddress: writing new SOD...");
-			std::vector<char *> sod_response = sam_helper.sendSequenceOfPrebuiltAPDUs(resp3->apdu_write_sod);
-
-			StartWriteResponse start_write_resp = {address_response, sod_response};
-
-			callback(callback_data, 90);
-
-			// Report the results to the server for verification purposes,
-			// We only consider the Address Change successful if the server returns its "Acknowledge" message
-			if (!conn.do_SAM_4thpost(start_write_resp)) {
-                delete resp3;
-                free(resp_mse);
-                free(resp_internal_auth);
-                MWLOG(LEV_ERROR, MOD_APL, 
-                	"The Address Change process WAS ABORTED after successful card write because of unexpected server reply!");
-				throw CMWEXCEPTION(EIDMW_SAM_UNCONFIRMED_CHANGE);
-			}
-
-			callback(callback_data, 100);
-			invalidateAddressSOD();
-
-			delete resp3;
-			delete resp_2ndpost;
-			free(challenge);
-			free(CHR);
-			free(resp_mse);
-			free(resp_internal_auth);
-			return;
-		}
-	}
-
-err:
-	delete resp3;
-	delete resp_2ndpost;
-    delete p1;
-    free(kicc);
-	free(challenge);
-	free(CHR);
-	free(resp_mse);
-	free(resp_internal_auth);
-
-	throw CMWEXCEPTION(EIDMW_SAM_PROTOCOL_ERROR);
 }
 
 
@@ -1706,13 +1539,13 @@ void APL_AddrEId::loadRemoteAddress() {
 	url_endpoint_readaddress += ENDPOINT_READADDRESS;
 	
 
-	SAM sam_helper(m_card);
+	MutualAuthentication mutual_authentication(m_card);
 	DHParams dh_params;
 
 	CByteArray sod_data = getSodData(m_card);
 	CByteArray authCert_data = getAuthCert(m_card);
 
-	sam_helper.getDHParams(&dh_params, true);
+	mutual_authentication.getDHParams(&dh_params, true);
 
 	char * json_str = build_json_obj_dhparams(dh_params, m_card->getFileID(), m_card->getFileAddress(), sod_data, authCert_data);
 
@@ -1727,16 +1560,16 @@ void APL_AddrEId::loadRemoteAddress() {
 
 	if (dh_params_resp.error_code == 0)
 	{
-		if (!sam_helper.sendKIFD((char *)dh_params_resp.kifd.c_str())) {
+		if (!mutual_authentication.sendKIFD((char *)dh_params_resp.kifd.c_str())) {
 			MWLOG(LEV_ERROR, MOD_APL, "loadRemoteAddress(): Card failed to accept DH server public key KIFD!");
 			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
 			goto cleanup;
 		}
 
 		//2nd POST
-		char * kicc = sam_helper.getKICC();
+		char * kicc = mutual_authentication.getKICC();
 
-		bool verified = sam_helper.verifyCert_CV_IFD((char *)dh_params_resp.cv_ifd_cert.c_str());
+		bool verified = mutual_authentication.verifyCert_CV_IFD((char *)dh_params_resp.cv_ifd_cert.c_str());
 
 		if (!verified) {
 			MWLOG(LEV_ERROR, MOD_APL, "Card failed to verify server-provided CV certificate!");
@@ -1744,9 +1577,9 @@ void APL_AddrEId::loadRemoteAddress() {
 			goto cleanup;
 		}
 
-		char * chr = sam_helper.getPK_IFD_AUT((char *)dh_params_resp.cv_ifd_cert.c_str());
+		char * chr = mutual_authentication.getPK_IFD_AUT((char *)dh_params_resp.cv_ifd_cert.c_str());
 
-		char * challenge = sam_helper.generateChallenge(chr);
+		char * challenge = mutual_authentication.generateChallenge(chr);
 		if (challenge == NULL) {
 			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
 			goto cleanup;
@@ -1763,14 +1596,14 @@ void APL_AddrEId::loadRemoteAddress() {
 
 		if (signed_challenge_obj.error_code == 0) {
 			char * signed_challenge = (char *) signed_challenge_obj.signed_challenge.c_str();
-			bool ret = sam_helper.verifySignedChallenge(signed_challenge);
+			bool ret = mutual_authentication.verifySignedChallenge(signed_challenge);
 
 			if (!ret) {
 				MWLOG(LEV_ERROR, MOD_APL, "Card rejected server-provided signature. Process aborted!");
 				exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
 				goto cleanup;
 			}
-			m_card->setMutualAuthFinished(true);
+
 			MWLOG(LEV_DEBUG, MOD_APL, "From now on using Secure Messaging with the smartcard...");
 			bool is_hex = true;
 			CByteArray mse_internal_auth_cmd(signed_challenge_obj.set_se_command, is_hex); 

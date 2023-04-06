@@ -243,14 +243,13 @@
     <ClCompile Include="PDFSignature.cpp" />
     <ClCompile Include="PhotoPteid.cpp" />
     <ClCompile Include="proxyinfo.cpp" />
-    <ClCompile Include="SAM.cpp" />
+    <ClCompile Include="MutualAuthentication.cpp" />
     <ClCompile Include="ess_lib.c" />
     <ClCompile Include="SecurityContext.cpp" />
     <ClCompile Include="SigContainer.cpp" />
     <ClCompile Include="sign-pkcs7.cpp" />
     <ClCompile Include="SODParser.cpp" />
     <ClCompile Include="SSLConnection.cpp" />
-    <ClCompile Include="SSLConnectionLegacy.cpp" />
     <ClCompile Include="TsaClient.cpp" />
     <ClCompile Include="XadesSignature.cpp" />
     <ClCompile Include="XercesUtils.cpp" />
@@ -282,7 +281,7 @@
     <ClInclude Include="OCSP.h" />
     <ClInclude Include="PDFSignature.h" />
     <ClInclude Include="PhotoPteid.h" />
-    <ClInclude Include="SAM.h" />
+    <ClInclude Include="MutualAuthentication.h" />
     <ClInclude Include="SigContainer.h" />
     <ClInclude Include="sign-pkcs7.h" />
     <ClInclude Include="SODParser.h" />

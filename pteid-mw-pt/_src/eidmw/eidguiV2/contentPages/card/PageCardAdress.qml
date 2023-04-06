@@ -66,12 +66,10 @@ PageCardAdressForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
             gapi.setAddressLoaded(true)
-            propertyButtonConfirmOfAddress.enabled = true
 
             if(!Constants.USE_SDK_PIN_UI_POPUP)
                 dialogTestPin.visible = false
-            if(mainFormID.propertyPageLoader.propertyForceFocus
-                && !dialogConfirmOfAddressProgress.visible )
+            if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyRectNacionalDistrict.forceActiveFocus()
         }
         onSignalUpdateProgressBar: {
@@ -89,15 +87,6 @@ PageCardAdressForm {
             textMessageTop.propertyText.forceActiveFocus()
         }
 
-        onSignalAddressShowLink: {
-            rectMessageTopLink.visible = true
-            textMessageTop.propertyLinkUrl= 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
-        }
-
-        onSignalAddressShowUndefinedLink: {
-            rectMessageTopLink.visible = true
-            textMessageTop.propertyLinkUrl= 'https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
-        }
         onSignalRemoteAddressError: {
             console.log("Card Address onSignalRemoteAddressError: "+ error_code)
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -162,7 +151,6 @@ PageCardAdressForm {
             propertyBusyIndicator.running = false
 
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            propertyButtonConfirmOfAddress.enabled = true
         }
 
         onSignalCardAccessError: {
@@ -170,7 +158,6 @@ PageCardAdressForm {
 
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
-            propertyButtonConfirmOfAddress.enabled = false
 
             if (error_code == GAPI.NoReaderFound) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
@@ -184,11 +171,9 @@ PageCardAdressForm {
             }
             else if (error_code == GAPI.CardUserPinCancel) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
-                propertyButtonConfirmOfAddress.enabled = true
             }
             else if (error_code == GAPI.CardPinTimeout) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
-                propertyButtonConfirmOfAddress.enabled = true
             }
             else if (error_code == GAPI.IncompatibleReader) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
@@ -220,13 +205,11 @@ PageCardAdressForm {
             propertyBusyIndicator.running = false
 
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            propertyButtonConfirmOfAddress.enabled = true
         }
 
         onSignalCardChanged: {
             console.log("Card Address onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                propertyButtonConfirmOfAddress.enabled = false
                 var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
                 var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
@@ -414,450 +397,6 @@ PageCardAdressForm {
         onRejected: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
-    }
-
-    Dialog {
-        id: dialogConfirmOfAddress
-        width: 600
-        height: 340
-        font.family: lato.name
-        // Center dialog in the main view
-        x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - dialogConfirmOfAddress.width * 0.5
-        y: parent.height * 0.5 - dialogConfirmOfAddress.height * 0.5
-        modal: true
-        focus: true
-
-        header: Label {
-            id: labelConfirmOfAddressTextTitle
-            text: qsTr("STR_ADDRESS_CHANGE_CONFIRMATION")
-            visible: true
-            elide: Label.ElideRight
-            padding: 24
-            bottomPadding: 0
-            font.bold: rectPopUp.activeFocus ? true : false
-            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
-            color: Constants.COLOR_MAIN_BLUE
-        }
-
-        Item {
-            id: rectPopUp
-            width: parent.width
-            height: rectChangeAddressMsg1.height + rectChangeAddressMsg2.height + rectNumProcess.height + rectConfirmAddress.height
-
-            Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + labelConfirmOfAddressTextTitle.text
-            KeyNavigation.tab: textChangeAddressMsg1.propertyText
-            KeyNavigation.down: textChangeAddressMsg1.propertyText
-            KeyNavigation.right: textChangeAddressMsg1.propertyText
-            KeyNavigation.left: okButton
-            KeyNavigation.backtab: okButton
-            KeyNavigation.up: okButton
-
-            Item {
-                id: rectChangeAddressMsg1
-                width: parent.width
-                height: 40
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Components.Link {
-                    id: textChangeAddressMsg1
-                    propertyText.text: qsTr("STR_ADDRESS_CHANGE_TEXT_1") + " "
-                          + "<a href=https://eportugal.gov.pt/pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao>" + qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")+ "</a>"
-                    propertyText.verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                    anchors.fill: parent 
-                    propertyText.anchors.fill: textChangeAddressMsg1
-                    propertyAccessibleText: qsTr("STR_ADDRESS_CHANGE_TEXT_1") + qsTr("STR_ADDRESS_CHANGE_TEXT_LINK")
-                    propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
-                    KeyNavigation.tab: textChangeAddressMsg2
-                    KeyNavigation.down: textChangeAddressMsg2
-                    KeyNavigation.right: textChangeAddressMsg2
-                    KeyNavigation.left: rectPopUp
-                    KeyNavigation.backtab: rectPopUp
-                    KeyNavigation.up: rectPopUp
-                }
-            }
-
-            Item {
-                id: rectChangeAddressMsg2
-                width: parent.width
-                height: 40
-                anchors.top: rectChangeAddressMsg1.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: textChangeAddressMsg2
-                    text: qsTr("STR_ADDRESS_CHANGE_TEXT_2")
-                    wrapMode: Text.WordWrap
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    font.bold: activeFocus ? true : false
-                    color: Constants.COLOR_TEXT_BODY
-                    height: parent.height
-                    width: parent.width
-                    anchors.bottom: parent.bottom
-                    KeyNavigation.tab: textChangeAddressMsg1
-                    KeyNavigation.down: textChangeAddressMsg1
-                    KeyNavigation.right: textChangeAddressMsg1
-                    KeyNavigation.left: textChangeAddressMsg1.propertyText
-                    KeyNavigation.backtab: textChangeAddressMsg1.propertyText
-                    KeyNavigation.up: textChangeAddressMsg1.propertyText
-                }
-
-            }
-
-            Item {
-                id: rectNumProcess
-                width: parent.width
-                height: 60
-                anchors.top: rectChangeAddressMsg2.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: textPinCurrent
-                    text:  qsTr("STR_ADDRESS_CHANGE_NUMBER")
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    font.bold: activeFocus ? true : false
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width * 0.5
-                    anchors.bottom: parent.bottom
-
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
-                    KeyNavigation.tab: textFieldNumProcess
-                    KeyNavigation.down: textFieldNumProcess
-                    KeyNavigation.right: textFieldNumProcess
-                    KeyNavigation.left: textChangeAddressMsg2
-                    KeyNavigation.backtab: textChangeAddressMsg2
-                    KeyNavigation.up: textChangeAddressMsg2
-                }
-                TextField {
-                    id: textFieldNumProcess
-                    width: parent.width * 0.5
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.italic: textFieldNumProcess.text === "" ? true: false
-                    placeholderText: qsTr("STR_ADDRESS_CHANGE_NUMBER_OP")
-                    font.bold: activeFocus ? true : false
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    clip: false
-                    anchors.left: textPinCurrent.right
-                    anchors.bottom: parent.bottom
-                    focus: true
-                    validator: RegExpValidator { regExp: /[a-zA-Z0-9]+/ }
-                    Accessible.role: Accessible.EditableText
-                    Accessible.name: placeholderText
-                    KeyNavigation.tab: textPinNew
-                    KeyNavigation.down: textPinNew
-                    KeyNavigation.right: textPinNew
-                    KeyNavigation.left: textPinCurrent
-                    KeyNavigation.backtab: textPinCurrent
-                    KeyNavigation.up: textPinCurrent
-                }
-            }
-            Item {
-                id: rectConfirmAddress
-                width: parent.width
-                height: 60
-                anchors.top: rectNumProcess.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: textPinNew
-                    text: qsTr("STR_ADDRESS_CHANGE_CODE")
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.bold: activeFocus ? true : false
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width * 0.5
-                    anchors.bottom: parent.bottom
-
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
-                    KeyNavigation.tab: textFieldConfirmAddress
-                    KeyNavigation.down: textFieldConfirmAddress
-                    KeyNavigation.right: textFieldConfirmAddress
-                    KeyNavigation.left: textFieldNumProcess
-                    KeyNavigation.backtab: textFieldNumProcess
-                    KeyNavigation.up: textFieldNumProcess
-                }
-                TextField {
-                    id: textFieldConfirmAddress
-                    width: parent.width * 0.5
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.italic: textFieldConfirmAddress.text === "" ? true: false
-                    placeholderText: qsTr("STR_ADDRESS_CHANGE_CODE_OP")
-                    font.bold: activeFocus ? true : false
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    clip: false
-                    anchors.left: textPinNew.right
-                    anchors.bottom: parent.bottom
-                    validator: RegExpValidator { regExp: /[a-zA-Z0-9]+/ }
-                    Accessible.role: Accessible.EditableText
-                    Accessible.name: placeholderText
-                    KeyNavigation.tab: cancelButton
-                    KeyNavigation.down: cancelButton
-                    KeyNavigation.right: cancelButton
-                    KeyNavigation.left: textPinNew
-                    KeyNavigation.backtab: textPinNew
-                    KeyNavigation.up: textPinNew
-                }
-            }
-        }
-
-        Item {
-            width: dialogConfirmOfAddress.availableWidth
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: rectPopUp.bottom 
-            Button {
-                id: cancelButton
-                width: Constants.WIDTH_BUTTON
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                text: qsTr("STR_ADDRESS_CHANGE_CANCEL")
-                anchors.left: parent.left
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                highlighted: activeFocus ? true : false
-                onClicked: {
-                    dialogConfirmOfAddress.close()
-                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                    mainFormID.propertyPageLoader.forceActiveFocus()
-                }
-                Accessible.role: Accessible.Button
-                Accessible.name: text
-                KeyNavigation.tab: okButton
-                KeyNavigation.down: okButton
-                KeyNavigation.right: okButton
-                KeyNavigation.left: textFieldConfirmAddress
-                KeyNavigation.backtab: textFieldConfirmAddress
-                KeyNavigation.up: textFieldConfirmAddress
-                Keys.onEnterPressed: clicked()
-                Keys.onReturnPressed: clicked()
-            }
-            Button {
-                id: okButton
-                width: Constants.WIDTH_BUTTON
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                text: qsTr("STR_ADDRESS_CHANGE_CONFIRM")
-                anchors.right: parent.right
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                enabled: textFieldNumProcess.length !== 0 && textFieldConfirmAddress.length !== 0 ? true : false
-                highlighted: activeFocus ? true : false
-                onClicked: {
-                    gapi.changeAddress(textFieldNumProcess.text,textFieldConfirmAddress.text)
-                    progressBarIndeterminate.visible = true
-                    textFieldNumProcess.text = ""
-                    textFieldConfirmAddress.text = ""
-                    dialogConfirmOfAddress.close()
-                    dialogConfirmOfAddressProgress.open()
-                }
-                Accessible.role: Accessible.Button
-                Accessible.name: text
-                KeyNavigation.tab: rectPopUp
-                KeyNavigation.down: rectPopUp
-                KeyNavigation.right: rectPopUp
-                KeyNavigation.left: cancelButton
-                KeyNavigation.backtab: cancelButton
-                KeyNavigation.up: cancelButton
-                Keys.onEnterPressed: clicked()
-                Keys.onReturnPressed: clicked()
-            }
-        }
-        onRejected:{
-            // Reject address change Popup's only with ESC key
-            dialogConfirmOfAddress.open()
-        }
-        onOpened: {
-            rectPopUp.forceActiveFocus()
-        }
-    }
-
-    Dialog {
-        id: dialogConfirmOfAddressProgress
-        width: 600
-        height: 300
-        font.family: lato.name
-        // Center dialog in the main view
-        x: - mainMenuView.width - subMenuView.width
-           + mainView.width * 0.5 - dialogConfirmOfAddress.width * 0.5
-        y: parent.height * 0.5 - dialogConfirmOfAddress.height * 0.5
-        modal: true
-        focus: true
-
-        header: Label {
-            id: labelConfirmOfAddressProgressTextTitle
-            text: qsTr("STR_ADDRESS_CHANGE_CONFIRMATION")
-            visible: true
-            elide: Label.ElideRight
-            padding: 24
-            bottomPadding: 0
-            font.bold: rectPopUpProgress.activeFocus ? true : false
-            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
-            color: Constants.COLOR_MAIN_BLUE
-        }
-        Item {
-            id: rectPopUpProgress
-            width: parent.width
-            height: rectMessageTop.height + progressBar.height + progressBarIndeterminate.height
-
-            Accessible.role: Accessible.AlertMessage
-            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
-                             + labelConfirmOfAddressProgressTextTitle.text
-            KeyNavigation.tab: textMessageTop.propertyText
-            KeyNavigation.down: textMessageTop.propertyText
-            KeyNavigation.right: textMessageTop.propertyText
-            KeyNavigation.left: confirmOkButton
-            KeyNavigation.backtab: confirmOkButton
-            KeyNavigation.up: confirmOkButton
-
-            Item {
-                id: rectMessageTop
-                width: parent.width
-                height: 150
-                anchors.horizontalCenter: parent.horizontalCenter
-                Components.Link {
-                    id: textMessageTop
-                    propertyText.text: ""
-                    propertyText.verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                    height: parent.height
-                    width: parent.width
-                    propertyText.height: parent.height
-                    anchors.bottom: parent.bottom
-                    propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
-                    KeyNavigation.tab: textMessageTopLink.propertyText
-                    KeyNavigation.down: textMessageTopLink.propertyText
-                    KeyNavigation.right: textMessageTopLink.propertyText
-                    KeyNavigation.left: rectPopUpProgress
-                    KeyNavigation.backtab: rectPopUpProgress
-                    KeyNavigation.up: rectPopUpProgress 
-                }
-            }
-
-            Item {
-                id: rectMessageTopLink
-                width: parent.width
-                visible: false
-                height: 50
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: rectMessageTop.bottom
-                Components.Link {
-                    id: textMessageTopLink
-                    propertyText.text: "<a href=https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao>" + qsTr("STR_CHANGE_ADDRESS_LINK")+ "</a>"
-                    propertyText.verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                    anchors.fill: parent 
-                    propertyText.anchors.fill: textMessageTopLink
-                    propertyAccessibleText: qsTr("STR_CHANGE_ADDRESS_LINK")
-                    propertyLinkUrl: 'https://eportugal.gov.pt/pt/servicos/alterar-a-morada-do-cartao-de-cidadao'
-                    propertyText.font.bold: activeFocus
-                    KeyNavigation.tab: confirmOkButton
-                    KeyNavigation.down: confirmOkButton
-                    KeyNavigation.right: confirmOkButton
-                    KeyNavigation.left: textMessageTop.propertyText
-                    KeyNavigation.backtab: textMessageTop.propertyText
-                    KeyNavigation.up: textMessageTop.propertyText 
-                }
-            }
-
-            ProgressBar {
-                id: progressBar
-                width: parent.width * 0.5
-                anchors.top: rectMessageTop.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: 20
-                to: 100
-                value: 0
-                visible: true
-                indeterminate: false
-                z:1
-            }
-
-            ProgressBar {
-                id: progressBarIndeterminate
-                width: parent.width * 0.5
-                anchors.top: progressBar.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: 20
-                to: 100
-                value: 0
-                visible: true
-                indeterminate: true
-                z:1
-            }
-        }
-
-        Item {
-            width: dialogConfirmOfAddress.availableWidth
-            height: Constants.HEIGHT_BOTTOM_COMPONENT
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 180
-
-            Button {
-                id: confirmOkButton
-                width: Constants.WIDTH_BUTTON
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                text: qsTr("STR_ADDRESS_CHANGE_OK")
-                anchors.right: parent.right
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                visible: progressBarIndeterminate.visible ? false : true
-                onClicked: {
-                    rectMessageTopLink.visible = false
-                    dialogConfirmOfAddressProgress.close()
-                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                    mainFormID.propertyPageLoader.forceActiveFocus()
-                    //Start reloading address data after successful address change operation
-                    if (!gapi.isAddressLoaded()) {
-                        gapi.verifyAddressPin("", false)
-                    }
-                }
-                highlighted: activeFocus ? true : false
-                Accessible.role: Accessible.Button
-                Accessible.name: text
-                KeyNavigation.tab: rectPopUpProgress
-                KeyNavigation.down: rectPopUpProgress
-                KeyNavigation.right: rectPopUpProgress
-                KeyNavigation.left: textMessageTopLink.propertyText
-                KeyNavigation.backtab: textMessageTopLink.propertyText
-                KeyNavigation.up: textMessageTopLink.propertyText
-                Keys.onEnterPressed: clicked()
-                Keys.onReturnPressed: clicked()
-            }
-        }
-        onRejected:{
-            // Reject address change Popup's only with ESC key
-            dialogConfirmOfAddressProgress.open()
-        }
-        onOpened: {
-            rectPopUpProgress.forceActiveFocus()
-        }
-    }
-
-    propertyButtonConfirmOfAddress{
-        onClicked: {
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-            dialogConfirmOfAddress.open()
-        }
-
     }
 
     Component.onCompleted: {

@@ -234,7 +234,6 @@ void APL_Certifs::init(APL_SmartCard *card) {
 	APL_Config certs_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
 	APL_Config certs_dir_test(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST);
 
-	APL_Config sam_server(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SAM_SERVER);
 	m_certs_dir = certs_dir.getString();
 
 	//Load test certificates from different directory

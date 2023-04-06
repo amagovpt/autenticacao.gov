@@ -43,8 +43,6 @@ Item {
 
     property alias propertyBusyIndicator: busyIndicator
 
-    property alias propertyButtonConfirmOfAddress : buttonConfirmOfAddress
-
     anchors.fill: parent
     Item {
         id: rowTop
@@ -209,8 +207,8 @@ Item {
                 KeyNavigation.tab: rectMunicipality
                 KeyNavigation.down: rectMunicipality
                 KeyNavigation.right: rectMunicipality
-                KeyNavigation.backtab: buttonConfirmOfAddress
-                KeyNavigation.up: buttonConfirmOfAddress
+                KeyNavigation.backtab: addressChangeConfirmationText
+                KeyNavigation.up: addressChangeConfirmationText
             }
         }
         Item {
@@ -486,76 +484,53 @@ Item {
                 }
                 Accessible.role: Accessible.Column
                 Accessible.name: textBoxPostalLocality.accessibleText
-                KeyNavigation.tab: rectConfirmationOfAddressText
-                KeyNavigation.down: rectConfirmationOfAddressText
-                KeyNavigation.right: rectConfirmationOfAddressText
+                KeyNavigation.tab: addressChangeConfirmationText
+                KeyNavigation.down: addressChangeConfirmationText
+                KeyNavigation.right: addressChangeConfirmationText
                 KeyNavigation.backtab: rectZip4
                 KeyNavigation.up: rectZip4
             }
         }
     }
     Item {
-        id: rowConfirmationOfAddress
+        id: addressChangeConfirmationItem
         width: parent.width
         height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 3
                 * Constants.SIZE_TEXT_FIELD
         anchors.top: itemNationalCitizen.bottom
         anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
 
-        Item {
-            id: rectConfirmationOfAddressText
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE) * 0.50
-            Text {
-                id: dateField
-                y: Constants.SIZE_TEXT_FIELD_V_SPACE
-                text: qsTranslate("PageCardAdress","STR_ADDRESS_CHANGE_CONFIRMATION_TEXT")
-                width: parent.width
-                height: parent.height
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.capitalization: Font.MixedCase
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.bold: parent.focus ? true : false
-                color: Constants.COLOR_TEXT_LABEL
-                wrapMode: Text.WordWrap
-            }
-            Accessible.role: Accessible.Row
-            Accessible.name: dateField.text
-            KeyNavigation.tab: buttonConfirmOfAddress
-            KeyNavigation.down: buttonConfirmOfAddress
-            KeyNavigation.right: buttonConfirmOfAddress
+        Components.Link {
+            id: addressChangeConfirmationText
+            propertyText.text:  qsTranslate("PageCardAdress",
+                                            "STR_ADDRESS_CHANGE_CONFIRMATION_TEXT")
+                                + "<a href='https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'>"
+                                + qsTranslate("PageCardAdress",
+                                                "STR_ADDRESS_CHANGE_CONFIRMATION_LINK")
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.bottom: parent.bottom
+            
+            height: parent.height
+            width: parent.width
+            
+            propertyText.verticalAlignment: Text.AlignVCenter
+            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+            propertyText.height: parent.height
+            propertyLinkUrl: 'https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
+            
+            propertyAccessibleText: qsTranslate(
+                                        "PageCardAdress",
+                                        "STR_ADDRESS_CHANGE_CONFIRMATION_TEXT") + qsTranslate(
+                                        "PageCardAdress",
+                                        "STR_ADDRESS_CHANGE_CONFIRMATION_LINK")
+            propertyAccessibleDescription: 'https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao'
+
+            KeyNavigation.tab: rectNacionalDistrict
+            KeyNavigation.down: rectNacionalDistrict
+            KeyNavigation.right: rectNacionalDistrict
             KeyNavigation.backtab: rectPostalLocality
             KeyNavigation.up: rectPostalLocality
-
-        }
-        Item {
-            id: rectConfirmationOfAddressButton
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE) * 0.50
-            height: parent.height
-            anchors.left: rectConfirmationOfAddressText.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Button {
-                id: buttonConfirmOfAddress
-                text: qsTranslate("PageCardAdress","STR_ADDRESS_CHANGE_BUTTON")
-                width: 250
-                height: Constants.HEIGHT_BOTTOM_COMPONENT
-                anchors.right: parent.right
-                font.pixelSize: Constants.SIZE_TEXT_FIELD
-                font.family: lato.name
-                font.capitalization: Font.MixedCase
-                highlighted: activeFocus ? true : false
-                enabled: false
-                focus: true
-                Accessible.role: Accessible.Button
-                Accessible.name: text
-                KeyNavigation.tab: rectNacionalDistrict
-                KeyNavigation.down: rectNacionalDistrict
-                KeyNavigation.right: rectNacionalDistrict
-                KeyNavigation.backtab: rectConfirmationOfAddressText
-                KeyNavigation.up: rectConfirmationOfAddressText
-                Keys.onEnterPressed: clicked()
-                Keys.onReturnPressed: clicked()
-            }
+                
         }
     }
 }

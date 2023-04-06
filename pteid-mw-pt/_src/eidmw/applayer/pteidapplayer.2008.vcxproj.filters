@@ -69,7 +69,7 @@
     <ClCompile Include="PhotoPteid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SAM.cpp">
+    <ClCompile Include="MutualAuthentication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SigContainer.cpp">
@@ -115,9 +115,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RemoteAddress.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SSLConnectionLegacy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CurlUtil.cpp">
@@ -188,7 +185,7 @@
     <ClInclude Include="PhotoPteid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SAM.h">
+    <ClInclude Include="MutualAuthentication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SigContainer.h">

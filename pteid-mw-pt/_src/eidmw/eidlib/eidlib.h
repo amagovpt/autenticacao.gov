@@ -1095,12 +1095,6 @@ public:
 	*/
 	PTEIDSDK_API bool Activate(const char *pinCode, PTEID_ByteArray &BCDDate, bool blockActivationPIN);
 
-#if !defined SWIG
-	    typedef void (*t_address_change_callback)(void *, int);
-
-	    PTEIDSDK_API void ChangeAddress(char *secretCode, char *process, t_address_change_callback callback, void *callback_data);
-#endif  
-
 protected:
 	PTEID_EIDCard(const SDK_Context *context,APL_Card *impl);		/**< For internal use : Constructor */
 
