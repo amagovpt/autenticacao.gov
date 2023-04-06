@@ -1084,8 +1084,6 @@ void AppController::setSignatureOptions(const QVariantList &options) {
     const bool scap_signature = options.at(9).toBool();
     const QStringList &attribute_ids = options.at(10).toStringList();
 
-    qDebug() << "options: " << pades << timestamp << lta << visible << reduced << reason << location << attribute_ids;
-
     cJSON *json = NULL;
     if ((json = cJSON_CreateObject()) == NULL) {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s cJSON_CreateObject() failed", __FUNCTION__);
