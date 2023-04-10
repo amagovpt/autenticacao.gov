@@ -52,8 +52,6 @@
 
 using namespace std;
 
-std::string m_SerialNumber;
-
 namespace eIDMW
 {
 /*****************************************************************************************
@@ -357,7 +355,6 @@ void APL_EidFile_ID::MapFieldsInternal(){
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_DocumentNumberPAN, PTEIDNG_FIELD_ID_LEN_DocumentNumberPAN);
 	pteidngidBuffer.TrimRight('\0');
 	m_ChipNumber.assign((char*)(pteidngidBuffer.GetBytes()), pteidngidBuffer.Size());
-	m_SerialNumber = m_ChipNumber;
 
 	//Country
 	pteidngidBuffer = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Country,PTEIDNG_FIELD_ID_LEN_Country);

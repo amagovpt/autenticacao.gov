@@ -298,7 +298,6 @@ tCardFileStatus APL_CardFile_Info::VerifyFile()
 
 void APL_CardFile_Info::EmptyFields()
 {
-	//m_SerialNumber.clear();
 	m_ComponentCode.clear();
 	m_OsNumber.clear();
 	m_OsVersion.clear();
