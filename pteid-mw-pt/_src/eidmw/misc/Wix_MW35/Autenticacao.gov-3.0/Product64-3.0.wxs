@@ -48,9 +48,9 @@
 	  <?define var.PTEID_TARGET_RUNTIME=VCR9 ?>
 
     <!-- Look for compiled components and libs in: -->
-	  <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\VC9\Release\ ?>
-	  <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\VC9\Release\ ?>
-	  <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\VC9\Release\ ?>
+	  <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\Release\ ?>
+	  <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\Release\ ?>
+	  <?define var.PTEID_BUILD_FOLDER_AnyCPU=..\..\..\_Binaries35\AnyCPU\Release\ ?>
 
 		<WixVariable Id="WixUILicenseRtf" Value="..\..\..\misc\licenses\License_pt.rtf" />
 		<WixVariable Id="WixUIBannerBmp" Value="..\..\..\misc\Wix_MW35\new_banner.bmp" />
@@ -565,7 +565,7 @@
 	      <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
         <Binary Id="CleanCacheDir" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_cache_dir.exe"/>
 	    <?elseif $(var.PTEID_TARGET_RUNTIME) = VCR9 ?>
-	      <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Build\x64\VC9\Release\MarkHidden.exe" />
+	      <Binary Id="MarkHidden"    SourceFile="..\..\..\misc\Wix_MW35\MarkHidden\Build\x64\Release\MarkHidden.exe" />
 	      <Binary Id="CleanMdrvKeys" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_mdrv_keys.exe" />
         <Binary Id="CleanCacheDir" SourceFile="$(var.PTEID_BUILD_FOLDER_X64)clean_cache_directory.exe"/>
 	    <?endif?>

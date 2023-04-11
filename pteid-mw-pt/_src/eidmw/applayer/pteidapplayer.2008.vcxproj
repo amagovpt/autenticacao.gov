@@ -68,26 +68,26 @@
     <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\$(Configuration)\obj\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)Build\$(Platform)\VC9\$(Configuration)\obj\</IntDir>
+    <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)Build\$(Platform)\$(Configuration)\obj\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
@@ -112,8 +112,8 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES)\lib;$(PTEID_DIR_OPENSSL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBPNG)\lib;$(PTEID_DIR_OPENJPEG)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES)\lib;$(PTEID_DIR_OPENSSL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBPNG)\lib;$(PTEID_DIR_OPENJPEG)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -140,8 +140,8 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES)\lib;$(PTEID_DIR_OPENSSL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBPNG)\lib;$(PTEID_DIR_OPENJPEG)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES)\lib;$(PTEID_DIR_OPENSSL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBPNG)\lib;$(PTEID_DIR_OPENJPEG)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -175,8 +175,8 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBPNG_X64)\lib;$(PTEID_DIR_OPENJPEG_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBPNG_X64)\lib;$(PTEID_DIR_OPENJPEG_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -207,9 +207,9 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <Version />
-      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBPNG_X64)\lib;$(PTEID_DIR_OPENJPEG_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBPNG_X64)\lib;$(PTEID_DIR_OPENJPEG_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

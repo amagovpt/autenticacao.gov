@@ -8,8 +8,8 @@ set IMG_PATH=%~dp0..\img
 set BUILDPATH=%~dp0
 
 :: Paths to compiled drivers
-set BINPATH_32=%~dp0..\Build\Win32\VC9\Release
-set BINPATH_32D=%~dp0..\Build\Win32\VC9\Debug
+set BINPATH_32=%~dp0..\Build\Win32\Release
+set BINPATH_32D=%~dp0..\Build\Win32\Debug
 
 :: Path to output/signed files
 md %BUILDPATH%\Release

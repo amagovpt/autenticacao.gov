@@ -7,10 +7,10 @@ set INF2CAT_PATH="C:\Program Files (x86)\Windows Kits\10\bin\x86\inf2cat.exe"
 set BUILDPATH=%~dp0
 
 :: Paths to compiled drivers
-set BINPATH_32=%~dp0..\Build\Win32\VC9\Release
-set BINPATH_64=%~dp0..\Build\x64\VC9\Release
-::set BINPATH_32D=%~dp0..\Build\Win32\VC9\Debug
-::set BINPATH_64D=%~dp0..\Build\x64\VC9\Debug
+set BINPATH_32=%~dp0..\Build\Win32\Release
+set BINPATH_64=%~dp0..\Build\x64\Release
+::set BINPATH_32D=%~dp0..\Build\Win32\Debug
+::set BINPATH_64D=%~dp0..\Build\x64\Debug
 
 :: Path to output/signed files
 md %BUILDPATH%\Release

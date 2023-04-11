@@ -77,7 +77,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pteidguiV2</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pteidguiV2</TargetName>
@@ -93,7 +93,7 @@
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\_Binaries35\$(Platform)\VC9\$(Configuration)\</OutDir>
+    <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -117,13 +117,13 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcurl_a.lib;Ws2_32.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;Crypt32.lib;qtmain.lib;shell32.lib;libcrypto.lib;libssl.lib;libzip.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteid-poppler.lib;pteidlib.lib;cmdServices.lib;scap.lib;cjson.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;$(PTEID_DIR_CJSON_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;$(PTEID_DIR_CJSON_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -174,13 +174,13 @@ echo "**************************************************************************
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcurl_a.lib;Ws2_32.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;qtmain.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;scap.lib;cjson.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBZIP)\lib;$(PTEID_DIR_CJSON)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBZIP)\lib;$(PTEID_DIR_CJSON)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -229,12 +229,12 @@ echo "**************************************************************************
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcurl_a.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;qtmaind.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quickd.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Qmld.lib;Qt5Networkd.lib;Qt5Cored.lib;Qt5PrintSupportd.lib;Qt5QuickControls2d.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -268,12 +268,12 @@ echo "**************************************************************************
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcurl_a.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;qtmaind.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quickd.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Qmld.lib;Qt5Networkd.lib;Qt5Cored.lib;Qt5PrintSupportd.lib;Qt5QuickControls2d.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\VC9\$(Configuration);$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>..\_Binaries35\$(Platform)\VC9\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
