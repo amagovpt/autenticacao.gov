@@ -44,18 +44,18 @@
 
 #define MAX_LOG_DIR_NAME	4800
 #define MAX_LOG_FILE_NAME	5000
-char    g_szLogFile[MAX_LOG_FILE_NAME]  = "C:\\SmartCardMinidriverLog\\pteidmdrv.LOG";
+char    g_szLogFile[MAX_LOG_FILE_NAME];
 
 #ifdef _DEBUG
-unsigned int   g_uiLogLevel      = LOGTYPE_TRACE;
+unsigned int   g_uiLogLevel      = LOGTYPE_;
 #else
-unsigned int   g_uiLogLevel      = LOGTYPE_INFO;
+unsigned int   g_uiLogLevel      = LOGTYPE_ERROR;
 #endif
 
 /****************************************************************************************************/
 void LogInit()
 {
-	BYTE        lpData[MAX_LOG_DIR_NAME];
+	BYTE        lpData[MAX_LOG_DIR_NAME] = { 0 };
 	DWORD       dwData = sizeof(lpData); 
 
 	BOOL dwRet = ReadReg(
@@ -65,28 +65,11 @@ void LogInit()
         (LPBYTE)&lpData,
         &dwData);
 
-	if (!dwRet) {
-		//If the registry key is not defined write the logfile in TMP directory
-		dwRet = GetEnvironmentVariable("TMP", lpData, MAX_LOG_DIR_NAME);
-		if (dwRet > 0 && dwRet <= MAX_LOG_DIR_NAME)
-		{
-			lstrcpy(g_szLogFile, lpData);
-			lstrcat(g_szLogFile, TEXT("\\pteidmdrv.log"));
-		}
-		return;
-	}
-
 	if (dwRet) {
 		// log_level found
-		// Read loglevels from registry and map on pteid middleware loglevels
-		// debug   -> LOGTYPE_TRACE
-		// info    -> LOGTYPE_INFO
-		// warning -> LOGTYPE_WARNING
-		// error   -> LOGTYPE_ERROR
-		// none    -> LOGTYPE_NONE
 
 		if (!lstrcmp((LPTSTR)lpData,TEXT("debug")))
-			g_uiLogLevel = LOGTYPE_TRACE;
+			g_uiLogLevel = LOGTYPE_DEBUG;
 		else if (!lstrcmp((LPTSTR)lpData,TEXT("info")))
 			g_uiLogLevel = LOGTYPE_INFO;
 		else if (!lstrcmp((LPTSTR)lpData,TEXT("warning")))
@@ -118,70 +101,22 @@ void LogInit()
 		// append file name
 		lstrcat(g_szLogFile, TEXT("\\pteidmdrv.log"));
 	}
-}
-
-
-/****************************************************************************************************/
-
-void PteidLogInit()
-{
-    BYTE        lpData[512];
-    DWORD       dwData = sizeof(lpData);
-
-    printf("\nRetrieving the data...");
-
-    BOOL dwRet = ReadReg(
-        TEXT("Software\\PTEID\\logging"),
-        TEXT("log_level"),
-        NULL,
-        (LPBYTE)&lpData,
-        &dwData);
-
-    if (dwRet) {
-    	// log_level found
-        // Read loglevels from registry and map on pteid middleware loglevels
-    	// debug   -> LOGTYPE_TRACE
-    	// info    -> LOGTYPE_INFO
-    	// warning -> LOGTYPE_WARNING
-    	// error   -> LOGTYPE_ERROR
-        // none    -> LOGTYPE_NONE
-    	if (lstrcmp((LPTSTR)lpData,TEXT("debug")))
-    		g_uiLogLevel = LOGTYPE_TRACE;
-    	if (lstrcmp((LPTSTR)lpData,TEXT("info")))
-    		g_uiLogLevel = LOGTYPE_INFO;
-    	if (lstrcmp((LPTSTR)lpData,TEXT("warning")))
-    		g_uiLogLevel = LOGTYPE_WARNING;
-    	if (lstrcmp((LPTSTR)lpData,TEXT("error")))
-    		g_uiLogLevel = LOGTYPE_ERROR;
-    	if (lstrcmp((LPTSTR)lpData,TEXT("none")))
-    		g_uiLogLevel = LOGTYPE_NONE;
-    }
-    //getting log_dirname
-    dwData = sizeof(lpData);
-    dwRet = ReadReg(
-        TEXT("Software\\PTEID\\logging"),
-        TEXT("log_dirname"),
-        NULL,
-        (LPBYTE)&lpData,
-        &dwData);
-
-    if (dwRet && dwData != 0) {
-    	// log_dirname found
-    	// we are not sure the string is null-terminated
-    	lpData[dwData/sizeof(TCHAR) -  1] = '\0';
-    	// put dirname in global var
-    	lstrcpy(g_szLogFile, lpData);
-    	// append file name
-    	lstrcat(g_szLogFile, TEXT("\\pteidmdrv.log"));
-    }
-
+	else {
+		//If the registry value is not defined write the logfile in TMP directory
+		dwRet = GetEnvironmentVariable("TMP", lpData, MAX_LOG_DIR_NAME);
+		if (dwRet > 0 && dwRet <= MAX_LOG_DIR_NAME)
+		{
+			lstrcpy(g_szLogFile, lpData);
+			lstrcat(g_szLogFile, TEXT("\\pteidmdrv.log"));
+		}
+	}
 }
 
 void LogTrace(int info, const char *pWhere, const char *format,... )
 {
 	char           buffer[2048];
-	BYTE baseName[512];
-	DWORD baseNamseSize; 
+	BYTE           baseName[512];
+	DWORD          baseNameSize;
 
 	time_t         timer;
 	struct tm      *t;
@@ -220,7 +155,7 @@ void LogTrace(int info, const char *pWhere, const char *format,... )
 		}
 		break;
 
-	case LOGTYPE_TRACE:
+	case LOGTYPE_DEBUG:
 		bShouldLog = TRUE;
 		break;
 
@@ -239,14 +174,12 @@ void LogTrace(int info, const char *pWhere, const char *format,... )
 		return;
 	}
 
-	/* get the name of the file that started this process*/
-	baseNamseSize = GetModuleFileName(NULL,(LPTSTR)baseName,512);
-	if (baseNamseSize == 0)
+	/* get the name of the executable file that started this process */
+	baseNameSize = GetModuleFileName(NULL, (LPTSTR)baseName, sizeof(baseName));
+	if (baseNameSize == 0)
 		lstrcpy(baseName,TEXT("Unknown name"));
-	//baseNamseSize = GetModuleBaseName(GetCurrentProcess(),NULL,(LPTSTR)baseName,512);
-	//baseNamseSize = GetProcessImageFileName(NULL,(LPTSTR)baseName,512);
 
-	/* Gets time of day */
+	/* Get time of day */
 	timer = time(NULL);
 
 	/* Converts date/time to a structure */
@@ -287,7 +220,7 @@ void LogTrace(int info, const char *pWhere, const char *format,... )
 
 #define TT_HEXDUMP_LZ      16
 
-void LogDump (int iStreamLg, unsigned char *pa_cStream)
+void LogDumpHex (int iStreamLg, unsigned char *pa_cStream)
 {
 	FILE           *fp = NULL;
 
@@ -300,8 +233,13 @@ void LogDump (int iStreamLg, unsigned char *pa_cStream)
 		return;
 	}
 
+	if (g_uiLogLevel < LOGTYPE_INFO) 
+	{
+		return;
+	}
+
 	fp = fopen(g_szLogFile, "a");
-	if ( fp == NULL )
+	if (fp == NULL)
 	{
 		return;
 	}
@@ -323,17 +261,17 @@ void LogDump (int iStreamLg, unsigned char *pa_cStream)
 
 /****************************************************************************************************/
 
-void LogDumpBin (char *pa_cName, int iStreamLg, unsigned char *pa_cStream)
+void LogDumpBin (char *fileName, int iStreamLg, unsigned char *pa_cStream)
 {
 	FILE           *fp = NULL;
 
-	if ( ( pa_cName   == NULL ) ||
+	if ( (fileName == NULL ) ||
 		( pa_cStream == NULL ) )
 	{
 		return;
 	}
 
-	fp = fopen(pa_cName, "wb");
+	fp = fopen(fileName, "wb");
 	if ( fp != NULL )
 	{
 		fwrite(pa_cStream, sizeof(char), iStreamLg, fp);

@@ -1433,7 +1433,7 @@ DWORD WINAPI   CardGetProperty
    }
 
 #ifdef _DEBUG
-   LogDump (cbData, (char *)pbData);
+   LogDumpHex(cbData, (char *)pbData);
 #endif
 
 cleanup:
@@ -1497,7 +1497,7 @@ DWORD WINAPI   CardSetProperty
    }
 
 #ifdef _DEBUG
-   LogDump (cbDataLen, (char *)pbData);
+   LogDumpHex(cbDataLen, (char *)pbData);
 #endif
 
 cleanup:

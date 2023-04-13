@@ -33,7 +33,6 @@
 #include "winerror.h"
 /****************************************************************************************************/
 
-//#define CHALLENGE_DATA_SIZE         16
 
 #define PTEID_MIN_USER_PIN_LEN     4
 #define PTEID_MAX_USER_PIN_LEN     8
@@ -63,20 +62,20 @@ void PteidDelayAndRecover(PCARD_DATA  pCardData,
 			dwReturn = SCardReconnect(pCardData->hScard, SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0, SCARD_RESET_CARD, &ap);
 			if ( dwReturn != SCARD_S_SUCCESS )
 			{
-				LogTrace(LOGTYPE_TRACE, WHERE, "  [%d] SCardReconnect errorcode: [0x%02X]", i, dwReturn);
+				LogTrace(LOGTYPE_DEBUG, WHERE, "  [%d] SCardReconnect errorcode: [0x%02X]", i, dwReturn);
 				continue;
 			}
 			// transaction is lost after an SCardReconnect()
 			dwReturn = SCardBeginTransaction(pCardData->hScard);
 			if ( dwReturn != SCARD_S_SUCCESS )
 			{
-				LogTrace(LOGTYPE_TRACE, WHERE, "  [%d] SCardBeginTransaction errorcode: [0x%02X]", i, dwReturn);
+				LogTrace(LOGTYPE_DEBUG, WHERE, "  [%d] SCardBeginTransaction errorcode: [0x%02X]", i, dwReturn);
 				continue;
 			}
 			dwReturn = PteidSelectApplet(pCardData);
 			if ( dwReturn != SCARD_S_SUCCESS )
 			{
-				LogTrace(LOGTYPE_TRACE, WHERE, "  [%d] SCardSelectApplet errorcode: [0x%02X]", i, dwReturn);
+				LogTrace(LOGTYPE_DEBUG, WHERE, "  [%d] SCardSelectApplet errorcode: [0x%02X]", i, dwReturn);
 				continue;
 			}
 
@@ -418,7 +417,7 @@ DWORD PteidAuthenticateExternal(
 
 			LogTrace(LOGTYPE_INFO, WHERE, "Running SCardControl with ioctl=%08x",externalPinInfo.features.VERIFY_PIN_DIRECT );
 			LogTrace(LOGTYPE_INFO, WHERE, "PIN_VERIFY_STRUCT: ");
-			LogDump(uiCmdLg, (unsigned char*)&verifyCommand);
+			LogDumpHex(uiCmdLg, (unsigned char*)&verifyCommand);
 
 			if (is_gempc == 1)
 				GemPCLoadStrings(pCardData->hScard, pin_id);
@@ -560,7 +559,7 @@ DWORD PteidMSE(PCARD_DATA   pCardData,
   
    //Sleep(1000);
    LogTrace(LOGTYPE_INFO, WHERE, "APDU MSE");
-   LogDump (uiCmdLg, (char *)Cmd);
+   LogDumpHex(uiCmdLg, (char *)Cmd);
   
    dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
@@ -1124,10 +1123,10 @@ DWORD PteidParsePrKDF(PCARD_DATA pCardData, DWORD *cbStream, BYTE *pbStream, WOR
 
    LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
-   /*
-   LogTrace(LOGTYPE_INFO, WHERE, "Contents of PrKDF:");	
-   LogDump(*cbStream, pbStream);
-   */
+
+   LogTrace(LOGTYPE_DEBUG, WHERE, "Contents of PrKDF:");	
+   LogDumpHex(*cbStream, pbStream);
+
 	/********************/
    /* Check Parameters */
    /********************/
@@ -1150,9 +1149,9 @@ DWORD PteidParsePrKDF(PCARD_DATA pCardData, DWORD *cbStream, BYTE *pbStream, WOR
 	 //Ghetto-style ASN-1 parser to obtain the keysize from PrK DF file
 	 if(pbStream[dwCounter] == 0x30) //0x30 means sequence
 	 {
-		 LogTrace(LOGTYPE_TRACE, WHERE, "sequence [0x30]");
+		 LogTrace(LOGTYPE_DEBUG, WHERE, "sequence [0x30]");
 		 dwCounter++; //jump to sequence length
-		 LogTrace(LOGTYPE_TRACE, WHERE, "sequence length [0x%.2X]",pbStream[dwCounter]);
+		 LogTrace(LOGTYPE_DEBUG, WHERE, "sequence length [0x%.2X]",pbStream[dwCounter]);
 		 dwInc = pbStream[dwCounter];
 		 dwCounter += dwInc; //add length (to jump over sequence)
 		 if( dwCounter < (*cbStream))
@@ -1165,14 +1164,14 @@ DWORD PteidParsePrKDF(PCARD_DATA pCardData, DWORD *cbStream, BYTE *pbStream, WOR
 		 else
 		 {
 			 LogTrace(LOGTYPE_ERROR, WHERE, "*cbStream = %d dwCounter = %d",*cbStream,dwCounter);
-			 LogDump(*cbStream,pbStream);
+			 LogDumpHex(*cbStream,pbStream);
 			 CLEANUP(0x00FEFE);		 
 		 }
 	 }
 	 else
 	 {
 		 LogTrace(LOGTYPE_ERROR, WHERE, "Expected 0x30 instead of ox%.2x",pbStream[dwCounter]);
-		 LogDump(*cbStream,pbStream);
+		 LogDumpHex(*cbStream,pbStream);
 		 CLEANUP(0x00FEFE);		 
 	 }
 
@@ -1292,7 +1291,7 @@ DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
 		  if (recvbuf[dwCounter] == 0x81 && recvbuf[dwCounter+1] == 0x02)
 		  {
 			 *out_len = recvbuf[dwCounter+2] * 256 + recvbuf[dwCounter+3];
-			 LogTrace(LOGTYPE_TRACE, WHERE, "out_len parsed from FCI is %d", *out_len);
+			 LogTrace(LOGTYPE_DEBUG, WHERE, "out_len parsed from FCI is %d", *out_len);
 			 break;
 		  }
 		  dwCounter++;
@@ -1302,7 +1301,7 @@ DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
    //We need to parse the PrkD File to get the private key length which is also the signature length
    dwReturn = PteidReadFile(pCardData, 0, out_len, recvbuf);
    
-   LogTrace(LOGTYPE_TRACE, WHERE, "out_len returned is %d", *out_len);
+   LogTrace(LOGTYPE_DEBUG, WHERE, "out_len returned is %d", *out_len);
  
    if (dwReturn != SCARD_S_SUCCESS)
    {
@@ -1397,7 +1396,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", hash_len, (char *)&Cmd[5]);
    
    LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO Hash");
-   LogDump (uiCmdLg, (char *)Cmd);
+   LogDumpHex(uiCmdLg, (char *)Cmd);
 
 #endif
    
@@ -1417,7 +1416,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
       CLEANUP(dwReturn);
    }
    LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO Hash");
-   LogDump (recvlen, (char *)recvbuf);
+   LogDumpHex(recvlen, (char *)recvbuf);
 
    if ((SW1 != 0x90 && SW2 != 0x00) && SW1 != 0x61) {
 	   LogTrace(LOGTYPE_ERROR, WHERE, "PSO: Hash command failed with SW12 = %02x %02x", SW1, SW2);
@@ -1438,7 +1437,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    uiCmdLg = 5;
 
    LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO CDS");
-   LogDump (uiCmdLg, (char *)Cmd);
+   LogDumpHex(uiCmdLg, (char *)Cmd);
    
    recvlen = sizeof(recvbuf);
    dwReturn = SCardTransmit(pCardData->hScard,

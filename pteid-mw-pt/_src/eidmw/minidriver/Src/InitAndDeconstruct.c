@@ -117,7 +117,7 @@ DWORD WINAPI   CardAcquireContext
    }
 	
    LogTrace(LOGTYPE_INFO, WHERE, "ATR input value: ");
-   LogDump(pCardData->cbAtr, pCardData->pbAtr);
+   LogDumpHex(pCardData->cbAtr, pCardData->pbAtr);
 
    for ( iAtr = 0 ; iAtr < SUPPORTED_CARDS ; iAtr++ )
    {

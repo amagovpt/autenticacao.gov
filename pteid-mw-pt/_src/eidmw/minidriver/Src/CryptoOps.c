@@ -337,7 +337,7 @@ DWORD WINAPI   CardSignData
 
 #ifdef _DEBUG
 	LogTrace(LOGTYPE_INFO, WHERE, "Data to be Signed...[%d]", pInfo->cbData);
-	LogDump (pInfo->cbData, (char *)pInfo->pbData);
+	LogDumpHex(pInfo->cbData, (char *)pInfo->pbData);
 #endif
 
 	if (Is_Gemsafe)
@@ -367,7 +367,7 @@ DWORD WINAPI   CardSignData
 
 #ifdef _DEBUG
 	LogTrace(LOGTYPE_INFO, WHERE, "Signature Data...[%d]", pInfo->cbSignedData);
-	LogDump (pInfo->cbSignedData, (char *)pInfo->pbSignedData);
+	LogDumpHex(pInfo->cbSignedData, (char *)pInfo->pbSignedData);
 #endif
 
 cleanup:

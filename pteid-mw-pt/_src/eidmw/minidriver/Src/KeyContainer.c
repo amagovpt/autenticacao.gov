@@ -185,7 +185,7 @@ DWORD WINAPI   CardGetContainerInfo
 	}
 
 #ifdef _DEBUG
-	//LogDump (cbCertif, (char *)pbCertif);
+	//LogDumpHex(cbCertif, (char *)pbCertif);
 	//if (bContainerIndex == 0)
 	//	LogDumpBin ("C:\\SmartCardMinidriverTest\\auth.crt", cbCertif, (char *)pbCertif);
 	//if (bContainerIndex == 1)
@@ -214,8 +214,8 @@ DWORD WINAPI   CardGetContainerInfo
 	pContainerInfo->pbKeyExPublicKey = NULL;
 
 #ifdef _DEBUG
-	LogTrace(LOGTYPE_INFO, WHERE, "SigPublicKey [%d]", pContainerInfo->cbSigPublicKey);
-	LogDump(pContainerInfo->cbSigPublicKey, pContainerInfo->pbSigPublicKey);
+	LogTrace(LOGTYPE_DEBUG, WHERE, "SigPublicKey [%d]", pContainerInfo->cbSigPublicKey);
+	LogDumpHex(pContainerInfo->cbSigPublicKey, pContainerInfo->pbSigPublicKey);
 #endif
 	
 cleanup:
