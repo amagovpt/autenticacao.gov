@@ -247,7 +247,7 @@ Item {
                 id: rectCivilParish
                 width: parent.width
                 height: parent.height
-                Components.LabelTextBoxForm {
+                Components.ScrollView {
                     id: textBoxParish
                     propertyDateText.text: qsTranslate("GAPI","STR_CIVIL_PARISH")
                     propertyDateField.text: ""
@@ -387,7 +387,7 @@ Item {
                 id: rectPlace
                 width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.50
                 height: parent.height
-                Components.LabelTextBoxForm {
+                Components.ScrollView {
                     id: textBoxPlace
                     propertyDateText.text: qsTranslate("GAPI","STR_PLACE")
                     propertyDateField.text: ""
@@ -406,7 +406,7 @@ Item {
                 height: parent.height
                 anchors.left: rectPlace.right
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-                Components.LabelTextBoxForm {
+                Components.ScrollView {
                     id: textBoxLocality
                     propertyDateText.text: qsTranslate("GAPI","STR_LOCALITY")
                     propertyDateField.text: ""
