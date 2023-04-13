@@ -550,7 +550,7 @@ DWORD CardGetGuid(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDa
 		CLEANUP(dwReturn);
    }
 
-	LogTrace(LOGTYPE_INFO, WHERE, "Property: [CP_CARD_GUID] -> [%d]", pCardData->pvVendorSpecific);
+	LogTrace(LOGTYPE_INFO, WHERE, "Property: [CP_CARD_GUID] returning...");
 
 cleanup:
 
@@ -607,12 +607,14 @@ DWORD CardGetSerialNo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD p
 		}
 		vs->bSerialNumberSet = 1;
 	}
-	else 
+	else
 	{
 		*pdwDataLen = sizeof(vs->szSerialNumber);
 	}
 
-	LogTrace(LOGTYPE_INFO, WHERE, "Property: [CP_CARD_SERIAL_NO] -> [%d]", pCardData->pvVendorSpecific);
+	LogTrace(LOGTYPE_INFO, WHERE, "Property: [CP_CARD_SERIAL_NO]: ", pCardData->pvVendorSpecific);
+	LogDumpHex(sizeof(vs->szSerialNumber), vs->szSerialNumber);
+
 	memcpy (pbData, vs->szSerialNumber, sizeof(vs->szSerialNumber));
 cleanup:
    return(dwReturn);
