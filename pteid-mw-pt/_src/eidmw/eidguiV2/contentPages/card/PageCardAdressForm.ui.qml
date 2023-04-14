@@ -3,6 +3,7 @@
  * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
+ * Copyright (C) 2023 Nuno Romeu Lopes - <nuno.lopes@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -247,7 +248,7 @@ Item {
                 id: rectCivilParish
                 width: parent.width
                 height: parent.height
-                Components.ScrollView {
+                Components.ScrollableTextField {
                     id: textBoxParish
                     propertyDateText.text: qsTranslate("GAPI","STR_CIVIL_PARISH")
                     propertyDateField.text: ""
@@ -387,7 +388,7 @@ Item {
                 id: rectPlace
                 width: (parent.width - Constants.SIZE_ROW_H_SPACE) * 0.50
                 height: parent.height
-                Components.ScrollView {
+                Components.ScrollableTextField {
                     id: textBoxPlace
                     propertyDateText.text: qsTranslate("GAPI","STR_PLACE")
                     propertyDateField.text: ""
@@ -406,7 +407,7 @@ Item {
                 height: parent.height
                 anchors.left: rectPlace.right
                 anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-                Components.ScrollView {
+                Components.ScrollableTextField {
                     id: textBoxLocality
                     propertyDateText.text: qsTranslate("GAPI","STR_LOCALITY")
                     propertyDateField.text: ""
