@@ -201,7 +201,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = pt.cartaodecidadao.PteidTokenApp.PteidToken;
+				PRODUCT_BUNDLE_IDENTIFIER = pt.gov.autenticacao.ctk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -220,7 +220,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = pt.cartaodecidadao.PteidTokenApp.PteidToken;
+				PRODUCT_BUNDLE_IDENTIFIER = pt.gov.autenticacao.ctk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
