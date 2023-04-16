@@ -40,16 +40,4 @@
 #endif
 #endif
 
-
-
-/************************/
-/* differences with 2.20*/
-/************************/
-/*#define CK_TRUE   TRUE
-#define CK_FALSE  FALSE
-#define CKM_SHA256_RSA_PKCS            0x00000040
-#define CKM_SHA384_RSA_PKCS            0x00000041
-#define CKM_SHA512_RSA_PKCS            0x00000042
-*/
-
 #endif
