@@ -56,9 +56,6 @@
 
 #define PP_LANG_EN   0x0409
 #define PP_LANG_NL   0x0813
-#define PP_LANG_FR   0x080c
-#define PP_LANG_DE   0x0407
-
 
 /////////////////////////////////// CCID things ///////////////////////////////
 // More info:
