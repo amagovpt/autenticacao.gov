@@ -161,7 +161,6 @@ const unsigned char DLG_BUTTON_NO = 16;
 const unsigned long DLG_LANG_DEFAULT = 0; // this is no USB LANGID code
 const unsigned long DLG_LANG_EN = 0x0409;
 const unsigned long DLG_LANG_NL = 0x0813;
-const unsigned long DLG_LANG_PT = 0x0816;
 
 /*************************************************************************************
  * Pin dialogs
