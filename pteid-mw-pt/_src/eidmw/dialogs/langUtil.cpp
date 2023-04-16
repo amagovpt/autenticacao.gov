@@ -113,18 +113,4 @@ void CLang::Init()
 	ms_InitOk=true;
 }
 
-//const wchar_t *CLang::GetString(const wchar_t *stringRef)
-//{
-//	if(!ms_InitOk) 
-//		Init();
-//
-//	for(unsigned long i=0;i<LANG_NBR_STRING;i++)
-//	{
-//		if(wcscmp(LANG_TABLE[i][0],stringRef)==0)
-//			return LANG_TABLE[i][ms_Lang];
-//	}
-//
-//	return stringRef;
-//}
-
 }
