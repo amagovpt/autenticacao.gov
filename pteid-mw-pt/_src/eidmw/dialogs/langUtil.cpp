@@ -61,8 +61,6 @@ unsigned long CLang::GetLangL()
 		return DLG_LANG_EN;
 	case LANG_NL:
 		return DLG_LANG_NL;
-	//case LANG_PT:
-	//	return DLG_LANG_PT;
 	default:
 		return DLG_LANG_EN;
 	}
@@ -92,9 +90,6 @@ void CLang::SetLangL(unsigned long lang)
 	case DLG_LANG_NL:
 		ms_Lang=LANG_NL;
 		break;
-	//case DLG_LANG_PT:
-	//	ms_Lang=LANG_PT;
-	//	break;
 	default:
 		ms_Lang=LANG_EN;
 		break;
