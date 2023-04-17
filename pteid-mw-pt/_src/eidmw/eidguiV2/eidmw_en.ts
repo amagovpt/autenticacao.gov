@@ -1630,7 +1630,7 @@
     </message>
     <message>
         <source>STR_HELP_DOC_TOPIC_3</source>
-        <translation>Confirm and update the address on the chip of your Citizen Card</translation>
+        <translation>Read your official address using your Citizen Card</translation>
     </message>
     <message>
         <source>STR_HELP_DOC_TOPIC_4</source>

@@ -1636,7 +1636,7 @@
     </message>
     <message>
         <source>STR_HELP_DOC_TOPIC_3</source>
-        <translation>Confirmar e atualizar a morada no chip do seu Cartão de Cidadão</translation>
+        <translation>Consultar a morada do seu Cartão de Cidadão</translation>
     </message>
     <message>
         <source>STR_HELP_DOC_TOPIC_4</source>
