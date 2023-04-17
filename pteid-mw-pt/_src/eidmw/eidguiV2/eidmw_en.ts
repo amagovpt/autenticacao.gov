@@ -1074,10 +1074,6 @@
         <translation>Create report</translation>
     </message>
     <message>
-        <source>STR_LOG_ZIP_DESCRIPTION</source>
-        <translation type="vanished">&lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;</translation>
-    </message>
-    <message>
         <source>STR_LOG_ZIP_LARGE</source>
         <translation>Warning: The created file&apos;s size exceeds 15MB. For this reason, it&apos;s possible some email clients won&apos;t allow it to be annexed to the message.</translation>
     </message>

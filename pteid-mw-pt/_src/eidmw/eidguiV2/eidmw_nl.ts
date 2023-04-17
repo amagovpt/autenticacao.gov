@@ -555,18 +555,6 @@
         <translation>Assinatura</translation>
     </message>
     <message>
-        <source>STR_MENU_SIGN_HELP</source>
-        <translation type="vanished">Ajuda</translation>
-    </message>
-    <message>
-        <source>STR_MENU_SIGN_SIMPLE</source>
-        <translation type="vanished">Simples</translation>
-    </message>
-    <message>
-        <source>STR_MENU_SIGN_ADVANCE</source>
-        <translation type="vanished">Avançada</translation>
-    </message>
-    <message>
         <source>STR_MENU_SECURITY</source>
         <translation>Segurança</translation>
     </message>
