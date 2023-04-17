@@ -46,14 +46,6 @@
         <translation>Erro ao escrever notas pessoais!</translation>
     </message>
     <message>
-        <source>STR_CHANGE_ADDRESS_ERROR_MSG</source>
-        <translation>Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_SUCESS</source>
-        <translation>A morada foi alterada com sucesso.</translation>
-    </message>
-    <message>
         <source>STR_CONNECTION_ERROR</source>
         <translation>Erro na comunicação</translation>
     </message>
@@ -66,10 +58,6 @@
         <translation>Recomenda-se que repita a leitura de morada noutro computador e/ou numa rede doméstica.</translation>
     </message>
     <message>
-        <source>STR_CERTIFICATE_ERROR_CHANGE_ADDRESS</source>
-        <translation>Recomenda-se que repita a confirmação de morada noutro computador e/ou numa rede doméstica.</translation>
-    </message>
-    <message>
         <source>STR_PROXY_AUTH_FAILED</source>
         <translation>O seu servidor de proxy requer autenticação. Por favor verifique as configurações de rede no menu &quot;Configurações da Aplicação&quot;.</translation>
     </message>
@@ -80,26 +68,6 @@
     <message>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Por favor certifique-se que está ligado à internet.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_ERROR</source>
-        <translation>Erro. Ocorreu um erro durante a alteração de morada!</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER</source>
-        <translation>Verifique se introduziu corretamente o número de processo e código de confirmação.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_ERROR_INCOMPLETE</source>
-        <translation>Processo de alteração de morada não foi concluído.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_NOT_CONFIRMED</source>
-        <translation>A morada foi alterada no cartão mas não foi confirmada pelos serviços centrais.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_CHECK_AUTHENTICATION_CERTIFICATE</source>
-        <translation>Verifique que tem o certificado de autenticação válido.</translation>
     </message>
     <message>
         <source>STR_CMD_ERROR_MSG</source>
@@ -118,16 +86,8 @@
         <translation>Erro na assinatura com a Chave Móvel Digital!</translation>
     </message>
     <message>
-        <source>STR_CHANGE_ADDRESS_WAIT_5MIN_ERROR_MSG</source>
-        <translation>Deverá aguardar cerca de &lt;b&gt;5 minutos&lt;/b&gt; e tentar novamente e, caso o erro persista, contactar a Linha Cartão de Cidadão através do número 211 950 500 ou do E-mail: &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt; . (Tenha consigo as mensagens de erro e o número de processo de Alteração de Morada)</translation>
-    </message>
-    <message>
         <source>STR_VERIFY_APP_UPDATE</source>
         <translation>Verifique que tem a última versão da aplicação.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_CHECK_PROCESS_EXPIRED</source>
-        <translation>O prazo de confirmação da alteração de morada expirou. Por favor efetue um novo pedido através dos balcões de atendimento ou do portal &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;ePortugal&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>
@@ -183,10 +143,6 @@
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
         <translation>No entanto, um ou vários selos temporais não foram aplicados. Verifique as configurações do serviço de selos temporais no menu &quot;Configuração de assinaturas&quot;.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGING_ADDRESS</source>
-        <translation>Aguarde o processamento do pedido.&lt;br&gt;&lt;br&gt;A efetuar uma ligação ao serviço de alteração de morada e em seguida será alterada a morada no Cartão de Cidadão.&lt;b&gt;&lt;br&gt;&lt;br&gt;Por favor, não retire o cartão do leitor, não desligue a aplicação e não desligue a internet, enquanto o processo não estiver terminado.&lt;/b&gt;</translation>
     </message>
     <message>
         <source>STR_CMD_LOGIN_SUCESS</source>
@@ -516,18 +472,6 @@
         <source>STR_CERTIFIED_ATTRIBUTES</source>
         <translation type="vanished">Atributos certificados: </translation>
     </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
-        <translation>Ocorreu um erro por uma das seguintes razões:</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>&lt;ul&gt;&lt;li&gt;Não está a usar o Cartão de Cidadão para o qual pediu a alteração de morada&lt;/li&gt;&lt;li&gt;Fez o pedido de alteração de morada a partir de 28 de dezembro de 2022. Tem de confirmar a alteração de morada no &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;portal ePortugal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>STR_VERIFY_INTERNET_SAM</source>
-        <translation>Por favor certifique-se que está ligado à internet.</translation>
-    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -669,14 +613,6 @@
 </context>
 <context>
     <name>PageCardAdress</name>
-    <message>
-        <source>STR_ADDRESS_CHANGE_CANCEL</source>
-        <translation>Cancelar</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_CONFIRM</source>
-        <translation>Confirmar</translation>
-    </message>
     <message>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_TEXT</source>
         <translation>Para concluir um eventual processo de alteração de morada, poderá fazê-lo </translation>

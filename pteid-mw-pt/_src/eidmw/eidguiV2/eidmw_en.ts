@@ -50,14 +50,6 @@
         <translation>Error writing personal notes!</translation>
     </message>
     <message>
-        <source>STR_CHANGE_ADDRESS_ERROR_MSG</source>
-        <translation>Please try again. If this error persists, please have your process number and error code ready, and contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_SUCESS</source>
-        <translation>Address Confirmed successfully.</translation>
-    </message>
-    <message>
         <source>STR_CONNECTION_ERROR</source>
         <oldsource>STR_CONNECTION ERROR</oldsource>
         <translation>Connection Error</translation>
@@ -71,10 +63,6 @@
         <translation>Please try to read the address on another computer and/or on a domestic network.</translation>
     </message>
     <message>
-        <source>STR_CERTIFICATE_ERROR_CHANGE_ADDRESS</source>
-        <translation>Please repeat the address confirmation procedure on another computer and/or on a domestic network.</translation>
-    </message>
-    <message>
         <source>STR_PROXY_AUTH_FAILED</source>
         <translation>Your proxy server requires authentication. Please review your network settings in the &quot;Application Configuration&quot; menu.</translation>
     </message>
@@ -86,26 +74,6 @@
     <message>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Please make sure you are connected to the Internet.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_ERROR</source>
-        <translation>Error in the Address Change operation!</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_CHECK_PROCESS_NUMBER</source>
-        <translation>Please make sure you typed the correct process number and confirmation code.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_ERROR_INCOMPLETE</source>
-        <translation>Address change process is incomplete.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_NOT_CONFIRMED</source>
-        <translation>The address is changed in the card but not confirmed by the State central services.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_CHECK_AUTHENTICATION_CERTIFICATE</source>
-        <translation>Please make sure you have a valid authentication certificate.</translation>
     </message>
     <message>
         <source>STR_CMD_ERROR_MSG</source>
@@ -124,16 +92,8 @@
         <translation>The Chave Móvel Digital service is unresponsive</translation>
     </message>
     <message>
-        <source>STR_CHANGE_ADDRESS_WAIT_5MIN_ERROR_MSG</source>
-        <translation>You should wait about &lt;b&gt;5 minutes&lt;/b&gt; and try again and, if the error persists, contact the Citizen Card Line through the number 211 950 500 or the E-mail: &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;. (Have the error messages and the Change of process process number with you)</translation>
-    </message>
-    <message>
         <source>STR_VERIFY_APP_UPDATE</source>
         <translation>Please make sure you have the latest version of the application.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_CHECK_PROCESS_EXPIRED</source>
-        <translation>The time period available to confirm the address has expired. Please place a new request through the customer service desks or through the  &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;ePortugal&lt;/a&gt; portal.</translation>
     </message>
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>
@@ -185,10 +145,6 @@
     <message>
         <source>STR_TIME_STAMP_FAILED</source>
         <translation>However, one or more of the timestamps could not be applied. Verify the settings for the timestamp service in the menu &quot;Signatures configuration&quot;.</translation>
-    </message>
-    <message>
-        <source>STR_CHANGING_ADDRESS</source>
-        <translation>Wait for processing the request.&lt;br&gt;&lt;br&gt;Making a connection to the change of address service and then changing the address on the Citizen Card. &lt;b&gt;&lt;br&gt;&lt;br&gt;Please do not remove the card from the reader, do not turn off the application and do not turn off the internet until the process is finished.&lt;/b&gt;</translation>
     </message>
     <message>
         <source>STR_CMD_LOGIN_SUCESS</source>
@@ -518,18 +474,6 @@
         <source>STR_CERTIFIED_ATTRIBUTES</source>
         <translation type="vanished">Certified Attributes: </translation>
     </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_UNDEFINED_PROCESS_NUMBER</source>
-        <translation>An error occurred for one of the following reasons:</translation>
-    </message>
-    <message>
-        <source>STR_CHANGE_ADDRESS_UNDEFINED_ERROR_MSG</source>
-        <translation>&lt;ul&gt;&lt;li&gt;You are not using the correct card for this address change process&lt;/li&gt;&lt;li&gt;You have requested the address change since December 28, 2022. The address change must be confirmed at &lt;a href=&quot;https://eportugal.gov.pt/servicos/confirmar-a-alteracao-de-morada-do-cartao-de-cidadao&quot;&gt;portal ePortugal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>STR_VERIFY_INTERNET_SAM</source>
-        <translation>Please be sure you are connected to the internet.</translation>
-    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -659,14 +603,6 @@
 </context>
 <context>
     <name>PageCardAdress</name>
-    <message>
-        <source>STR_ADDRESS_CHANGE_CANCEL</source>
-        <translation>Cancel</translation>
-    </message>
-    <message>
-        <source>STR_ADDRESS_CHANGE_CONFIRM</source>
-        <translation>OK</translation>
-    </message>
     <message>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_TEXT</source>
         <translation>To complete any change of address process, you can do so on the </translation>
