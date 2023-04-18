@@ -1,5 +1,6 @@
 /*-****************************************************************************
 
+ * Copyright (C) 2017-2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2023 Nuno Romeu Lopes - <nuno.lopes@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
