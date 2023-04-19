@@ -36,16 +36,6 @@ CMutex g_mutex;
 static CK_C_INITIALIZE_ARGS_PTR _locking;
 static void *_lock = NULL;
 
-
-void memwash(char *p_in, unsigned int len)
-{
-  for(; len > 0; len--)
-    *p_in++ = 0x00;
-
-  return;
-}
-
-
 void strcpy_n(unsigned char *to, const char *from, size_t n, char padding)
 {
    size_t c = strlen(from) > n ? n : (int) strlen(from);
