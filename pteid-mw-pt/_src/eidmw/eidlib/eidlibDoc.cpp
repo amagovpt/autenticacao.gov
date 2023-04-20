@@ -128,19 +128,18 @@ const unsigned char *PTEID_ByteArray::GetBytes() const
 
 const char *PTEID_ByteArray::GetStringAt(unsigned long ulOffset, unsigned long ulLen) const
 {
-    const char *out;
-
-    BEGIN_TRY_CATCH
+    unsigned char *out = NULL;
 
     CByteArray *pimpl=static_cast<CByteArray *>(m_impl);
-    CByteArray ca = pimpl->GetBytes( ulOffset, ulLen ) ;
-    ca.TrimRight('\0');
+    const unsigned long ba_size = pimpl->Size();
 
-    out = (const char *)ca.GetBytes();
+    if (ulOffset > ba_size || ulOffset+ulLen > ba_size) {
+        throw PTEID_ExBadUsage();
+    }
 
-    END_TRY_CATCH
+    out = pimpl->GetBytes();
 
-    return out;
+    return (const char *) out+ulOffset;
 }
 
 void PTEID_ByteArray::Append(const unsigned char * pucData, unsigned long ulSize)
