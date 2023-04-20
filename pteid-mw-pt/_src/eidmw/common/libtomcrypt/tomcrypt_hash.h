@@ -125,18 +125,6 @@ int sha256_done(hash_state * md, unsigned char *hash);
 int sha256_test(void);
 extern const struct ltc_hash_descriptor sha256_desc;
 
-#ifdef SHA224
-#ifndef SHA256
-   #error SHA256 is required for SHA224
-#endif
-int sha224_init(hash_state * md);
-#define sha224_process sha256_process
-int sha224_done(hash_state * md, unsigned char *hash);
-int sha224_test(void);
-extern const struct ltc_hash_descriptor sha224_desc;
-#endif
-#endif
-
 #ifdef USE_SHA1
 int sha1_init(hash_state * md);
 int sha1_process(hash_state * md, const unsigned char *in, unsigned long inlen);
