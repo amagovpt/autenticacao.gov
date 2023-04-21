@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
- * Copyright (C) 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2023 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -46,24 +46,12 @@ namespace eIDMW
 #define PTEID_FILE_CERT_ROOT					"3F005F00EF11"
 #define PTEID_FILE_CERT_ROOT_SIGN				"3F005F00EF0F"
 
-#define PTEID_FILE_CERTS					"CERTS"					//pseudo file
-#define PTEID_FILE_CERTS_P15				"CERTS_P15"				//pseudo file
-#define PTEID_FILE_CERTS_COUNT			"CERTS_COUNT"			//pseudo file
-#define PTEID_FILE_PINS_P15				"PINS_P15"				//pseudo file
-#define PTEID_FILE_PINS_COUNT			"PINS_COUNT"			//pseudo file
-#define PTEID_FILE_CARDINFO				"CARDINFO"				//pseudo file
-#define PTEID_FILE_CHALLENGE				"CHALLENGE"				//pseudo file
-#define PTEID_FILE_CHALLENGE_RESPONSE	"CHALLENGE_RESPONSE"	//pseudo file
-
-#define PTEID_CARDTYPE_FOREIGNER_CODE_MIN	11
-#define PTEID_CARDTYPE_FOREIGNER_CODE_MAX	18
-
 //Add PTeID-ng Trace defines
 #define PTEIDNG_FIELD_TRACE_POS_VALIDATION				5
 #define PTEIDNG_FIELD_TRACE_LEN_VALIDATION				1
 #define PTEIDNG_ACTIVE_CARD								1
 
-//Add PTeid-ng ID defines - ok
+//Add PTeid-ng ID defines
 #define PTEIDNG_FIELD_ID_POS_FILE						0
 #define PTEIDNG_FIELD_ID_LEN_FILE						15500
 
@@ -122,14 +110,14 @@ namespace eIDMW
 #define PTEIDNG_FIELD_ID_POS_Mrz3						1342
 #define PTEIDNG_FIELD_ID_LEN_Mrz3						30
 
-// martinho - ok
+//Card public key fields
 #define PTEIDNG_FIELD_ID_POS_MODULUS					1372
 #define PTEIDNG_FIELD_ID_LEN_MODULUS					128
 #define PTEIDNG_FIELD_ID_POS_EXPONENT					1500
 #define PTEIDNG_FIELD_ID_LEN_EXPONENT					3
 
 
-// photo data - ok
+// Photo data
 #define PTEIDNG_FIELD_ID_POS_CBEFF						1503
 #define PTEIDNG_FIELD_ID_LEN_CBEFF						34
 #define PTEIDNG_FIELD_ID_POS_FACIALRECHDR				1537
@@ -151,31 +139,6 @@ namespace eIDMW
 #define PTEIDNG_FIELD_PERSODATA_POS_FILE				0
 #define PTEIDNG_FIELD_PERSODATA_LEN_FILE				1000
 
-#define PTEID_FIELD_TAG_ID_Version				0x00
-#define PTEID_FIELD_TAG_ID_CardNr				0x01
-#define PTEID_FIELD_TAG_ID_ChipNr				0x02
-#define PTEID_FIELD_TAG_ID_ValidityBeginDate		0x03
-#define PTEID_FIELD_TAG_ID_ValidityEndDate		0x04
-#define PTEID_FIELD_TAG_ID_IssuingMunicipality	0x05
-#define PTEID_FIELD_TAG_ID_NationalNr			0x06
-#define PTEID_FIELD_TAG_ID_Surname				0x07
-#define PTEID_FIELD_TAG_ID_FirstName_1			0x08
-#define PTEID_FIELD_TAG_ID_Nationality			0x0A
-#define PTEID_FIELD_TAG_ID_LocationOfBirth		0x0B
-#define PTEID_FIELD_TAG_ID_DateOfBirth			0x0C
-#define PTEID_FIELD_TAG_ID_Gender				0x0D
-#define PTEID_FIELD_TAG_ID_Nobility				0x0E
-#define PTEID_FIELD_TAG_ID_DocumentType			0x0F
-#define PTEID_FIELD_TAG_ID_SpecialStatus			0x10
-#define PTEID_FIELD_TAG_ID_PhotoHash				0x11
-#define PTEID_FIELD_TAG_ID_Duplicata				0x12
-#define PTEID_FIELD_TAG_ID_SpecialOrganization	0x13
-#define PTEID_FIELD_TAG_ID_MemberOfFamily		0x14
-
-#define PTEID_FIELD_TAG_ADDR_Version				0x00
-#define PTEID_FIELD_TAG_ADDR_Street				0x01
-#define PTEID_FIELD_TAG_ADDR_ZipCode             0x02
-#define PTEID_FIELD_TAG_ADDR_Municipality        0x03
 
 #define PTEID_FIELD_BYTE_TOKENINFO_GraphicalPersonalisation             37
 #define PTEID_FIELD_BYTE_TOKENINFO_ElectricalPersonalisation            38
@@ -187,10 +150,6 @@ namespace eIDMW
 #define PTEIDNG_FIELD_ROOTCA_PK_POS_EXPONENT_IAS_07		155
 #define PTEIDNG_FIELD_ROOTCA_PK_LEN_EXPONENT			3
 #define PTEIDNG_FIELD_ROOTCA_PK_LEN_MODULUS				128
-
-
-#define CARDTYPE_NAME_PTEID_EID					"eid"
-#define CARDTYPE_NAME_PTEID_FOREIGNER			"foreigner"
 
 #define PTEID_TLV_TAG_VERSION						0x00
 #define PTEID_TLV_TAG_FILE_ID						0x01
@@ -206,35 +165,6 @@ namespace eIDMW
 #define PTEID_TLV_TAG_FILE_CERTS						0x0C
 #define PTEID_TLV_TAG_FILE_PINS						0x0D
 
-#define PTEID_CSV_TAG_VERSION						0
-#define PTEID_CSV_TAG_CARDTYPE						1
-#define PTEID_CSV_TAG_FILE_ID						26
-#define PTEID_CSV_TAG_FILE_IDSIGN					27
-#define PTEID_CSV_TAG_FILE_ADDR						28
-#define PTEID_CSV_TAG_FILE_ADDRSIGN					29
-#define PTEID_CSV_TAG_FILE_PHOTO						30
-#define PTEID_CSV_TAG_FILE_CARDINFO					47
-#define PTEID_CSV_TAG_FILE_TOKENINFO					48
-#define PTEID_CSV_TAG_FILE_CHALLENGE					49
-#define PTEID_CSV_TAG_FILE_CHALLENGE_RESPONSE		50
-#define PTEID_CSV_TAG_FILE_CERTS_COUNT				55
-#define PTEID_CSV_TAG_FILE_CERTS_FIRST				58
-#define PTEID_CSV_TAG_FILE_CERTS_P15_FIRST			59
-#define PTEID_CSV_TAG_FILE_CERTS_STEP				4
-#define PTEID_CSV_TAG_FILE_PINS_STEP					7
-
-#define PTEID_XML_PATH_FILE_ID					"/pteid_card/biographic/files/file_id"
-#define PTEID_XML_PATH_FILE_IDSIGN				"/pteid_card/biographic/files/file_id_sign"
-#define PTEID_XML_PATH_FILE_ADDR					"/pteid_card/biographic/files/file_address"
-#define PTEID_XML_PATH_FILE_ADDRSIGN				"/pteid_card/biographic/files/file_address_sign"
-#define PTEID_XML_PATH_FILE_PHOTO				"/pteid_card/biometric/picture/data"
-#define PTEID_XML_PATH_FILE_CARDINFO				"/pteid_card/scard/files/file_datainfo"
-#define PTEID_XML_PATH_FILE_TOKENINFO			"/pteid_card/scard/files/file_tokeninfo"
-#define PTEID_XML_PATH_FILE_CHALLENGE			"/pteid_card/challenge_response/challenge"
-#define PTEID_XML_PATH_FILE_CHALLENGE_RESPONSE	"/pteid_card/challenge_response/response"
-#define PTEID_XML_PATH_FILE_CERTS				"/pteid_card/cryptographic/certificates/certificate/data"
-#define PTEID_XML_PATH_FILE_CERTS_P15			"/pteid_card/cryptographic/certificates/certificate/p15_struct"
-#define PTEID_XML_PATH_FILE_PINS_P15				"/pteid_card/cryptographic/pins/pin/p15_struct"
 
 /* Root Certificates */
 static const unsigned char _pteid_root_cert[] =
