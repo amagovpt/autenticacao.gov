@@ -19,7 +19,6 @@
         '../eidlib',
       ],
       'defines': [
-        'PTEID_35',
         'EIDMW_EIDLIB_EXPORTS',
         #'SWIGRUNTIME_DEBUG',
       ],

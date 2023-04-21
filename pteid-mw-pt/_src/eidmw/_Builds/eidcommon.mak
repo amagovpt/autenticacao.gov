@@ -11,9 +11,6 @@ CONFIG(release, debug|release):message(Release build!)
 ## libraries
 CONFIG(release, debug|release):RELEASE_BUILD=true
 
-## this is necessary for the version nrs
-DEFINES += 'PTEID_35'
-
 ## Paths to the directory where libraries and binaries are placed.
 ## These should be absolute paths
 isEmpty(PREFIX_DIR){
