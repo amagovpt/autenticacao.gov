@@ -1,6 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2022 José Pinto - <jose.pinto@caixamagica.pt>
+ * Copyright (C) 2023 Nuno Lopes - <nuno.lopes@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -388,13 +389,13 @@ ScapResult<std::vector<ScapAttribute>> load_cache()
 	return result;
 }
 
-static std::vector<ScapAttribute> merge_attributes(const std::vector<ScapAttribute> &dirty, const std::vector<ScapAttribute> &fresh)
+static std::vector<ScapAttribute> merge_attributes(std::vector<ScapAttribute> &dirty, std::vector<ScapAttribute> &fresh)
 {
-	std::unordered_set<ScapAttribute, ScapAttributeHasher> attribute_set;
-	attribute_set.insert(dirty.begin(), dirty.end());
-	attribute_set.insert(fresh.begin(), fresh.end());
+	for (const ScapAttribute &dirty_attribute: dirty)
+		if(std::find(fresh.begin(), fresh.end(), dirty_attribute) == fresh.end())
+			fresh.push_back(dirty_attribute);
 
-	return std::vector<ScapAttribute>(attribute_set.begin(), attribute_set.end());
+	return fresh;
 }
 
 static std::vector<ScapAttribute> handle_cache(const std::string &response)
