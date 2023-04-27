@@ -159,7 +159,6 @@ Item {
                 }
                 Text {
                     id: textMessageTop
-                    height: 25
                     anchors.top: linkCMD.visible ? linkCMD.bottom : progressBar.bottom
                     anchors.topMargin: linkCMD.visible ? Constants.SIZE_ROW_V_SPACE : 3
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -168,6 +167,29 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     width: parent.width
                     wrapMode: Text.WordWrap
+
+                }
+                Item {
+                    id: rectLabelCMDText
+                    width: parent.width
+                    anchors.top: textMessageTop.bottom
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                    Link {
+                        id: labelCMDText
+                        visible: false
+                        width: parent.width
+                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                        propertyText.color: Constants.COLOR_TEXT_LABEL
+                        KeyNavigation.tab: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
+                        KeyNavigation.down: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
+                        KeyNavigation.right: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)      
+                        Keys.onEnterPressed: {
+                            confirmDlg()
+                        }
+                        Keys.onReturnPressed: {
+                            confirmDlg()
+                        }
+                    }
                 }
             }
             Item {
@@ -393,32 +415,6 @@ Item {
                 indeterminate: true
                 visible: false
                 z:1
-            }
-            Item {
-                id: rectLabelCMDText
-                height: 50
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                Link {
-                        id: labelCMDText
-                        visible: false
-                        propertyText.verticalAlignment: Text.AlignVCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        height: 50
-                        width: parent.width
-                        propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                        anchors.fill: parent 
-                        propertyText.color: Constants.COLOR_TEXT_LABEL
-                        KeyNavigation.tab: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
-                        KeyNavigation.down: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)
-                        KeyNavigation.right: checkboxDontAskAgain.visible ? checkboxDontAskAgain : (buttonCancel.visible ? buttonCancel : buttonConfirm)      
-                        Keys.onEnterPressed: {
-                            confirmDlg()
-                        }
-                        Keys.onReturnPressed: {
-                            confirmDlg()
-                        }
-                }
             }
             CheckBox {
                 id: checkboxDontAskAgain
