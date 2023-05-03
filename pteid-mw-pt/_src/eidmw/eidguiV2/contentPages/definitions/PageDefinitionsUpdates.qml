@@ -104,19 +104,15 @@ PageDefinitionsUpdatesForm {
         }
         onSignalAutoUpdateProgress: {
             if(updateType == GAPI.AutoUpdateApp){
-                propertyProgressBar.indeterminate = true
+                propertyProgressBar.indeterminate = false
                 propertyProgressBar.visible = true
-                //propertyProgressBar.value = value
-                if (propertyButtonCancelUpdate.visible == false) {
-                    propertyButtonCancelUpdate.visible = true
-                }
+                propertyProgressBar.value = value
+                propertyButtonCancelUpdate.visible = true
             } else {
                 propertyProgressBarCerts.indeterminate = true
                 propertyProgressBarCerts.visible = true
                 //propertyProgressBarCerts.value = value
-                if (propertyButtonCancelUpdateCerts.visible == false) {
-                    propertyButtonCancelUpdateCerts.visible = true
-                }
+                propertyButtonCancelUpdateCerts.visible = true
             }
         }
         onSignalAutoUpdateSuccess: {

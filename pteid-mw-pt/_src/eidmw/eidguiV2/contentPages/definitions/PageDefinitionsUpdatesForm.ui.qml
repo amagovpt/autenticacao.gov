@@ -267,8 +267,6 @@ Item {
                             width: parent.width
                             anchors.horizontalCenter: parent.horizontalCenter
                             height: 20
-                            to: 100
-                            value: 0
                             visible: false
                             indeterminate: false
                             z: 1
