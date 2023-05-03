@@ -426,7 +426,7 @@ Item {
                 font.capitalization: Font.MixedCase
                 font.bold: activeFocus
                 checked: !controler.getAskToRegisterCmdCertValue()
-                anchors.top: rectLabelCMDText.bottom
+                anchors.top: parent.bottom
                 anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                 Accessible.role: Accessible.CheckBox
                 Accessible.name: text
