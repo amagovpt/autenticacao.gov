@@ -222,15 +222,13 @@ static bool setupInternalSSL(SSL_CTX *ctx, APL_Card *card)
 	X509_STORE *store = SSL_CTX_get_cert_store(ctx);
 
 	loadRootCertsFromCACerts(ctx);
-
+#ifndef _WIN32
     //Change the default RSA_METHOD to use our function for signing
 	RSA_METHOD * current_method = (RSA_METHOD *)RSA_get_default_method();
 
 	RSA_meth_set_sign(current_method, eIDMW::rsa_sign);
 	RSA_meth_set_flags(current_method, RSA_METHOD_FLAG_NO_CHECK);
-
-	RSA_set_default_method(current_method);
-
+#endif
 
 	APL_Certif * cert = loadCertsFromCard(ctx, certs);
 
