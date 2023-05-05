@@ -2369,6 +2369,12 @@ bool GAPI::handleScapError(const ScapResult<T> &result, bool isCompany, bool isE
         emit signalSCAPNoAttributesResponse(error_data, isCompany);
         update_attributes = true;
     }
+	else if (error == ScapError::expired_attributes) {
+		emit signalSCAPServiceFail(ScapAttributesExpiredError, isCompany);
+	}
+	else if (error == ScapError::invalid_attributes) {
+		emit signalSCAPServiceFail(ScapNotValidAttributesError, isCompany);
+	}
     else if (error == ScapError::bad_secret_key) {
         emit signalSCAPServiceFail(ScapSecretKeyError, isCompany);
     }

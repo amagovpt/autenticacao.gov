@@ -174,6 +174,7 @@ PageServicesSignForm {
                 buttonLoadAttr.visible = true
                 buttonCancelAttr.visible = true
             }
+            //XX: this error code is not thrown in the current SCAP implementation
             else if (pdfsignresult === GAPI.ScapAttrPossiblyExpiredWarning) {
                 console.log("ScapAttrPossiblyExpiredWarning")
                 signerror_dialog.propertySignFailDialogText.text =

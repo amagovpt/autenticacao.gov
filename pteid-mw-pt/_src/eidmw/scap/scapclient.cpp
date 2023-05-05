@@ -849,6 +849,11 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 		if (get_signed_hash_response_status != SCAP_OK) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "getSignHashResult: Received status %d", get_signed_hash_response_status);
 			clean_up_temp_documents(documents);
+			std::string code_descr = get_response_code_description(get_signed_hash_response.response);
+			if (code_descr.compare(SCAP_INVALID_CITIZEN_ATTRIBUTES) == 0) {
+				MWLOG(LEV_ERROR, MOD_SCAP, "getSignHashResult: Invalid cached attributes - maybe the provider changed attribute IDs");
+				return ScapError::invalid_attributes;
+			}
 			return ScapError::generic;
 		}
 

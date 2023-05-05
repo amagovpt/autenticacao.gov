@@ -41,6 +41,7 @@ enum class ScapError {
 	sign_pin_cancel,
 	sign_pin_blocked,
 	expired_attributes,
+	invalid_attributes,
 	no_attributes,
 	incomplete_response,
 };

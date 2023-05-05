@@ -34,6 +34,7 @@ namespace eIDMW {
 #define SCAP_INTERNAL_ERROR               500
 
 #define SCAP_INVALID_TOTP_CODE_DESCR      "401_CLIENT_BAD_TOTP"
+#define SCAP_INVALID_CITIZEN_ATTRIBUTES   "401_INVALID_SIGNATURE_TRANSACTION_CITIZEN_ATTRIBUTES"
 #define SCAP_MAX_CLOCK_DIFF               3*60    // 3 minutes of clock drift is allowed in SCAP services
 
 struct ScapProvider;
