@@ -165,7 +165,6 @@ g_init = 0;
 cleanup:
   /* Release and destroy the mutex */
   p11_free_lock();
-  // util_clean_lock(&logmutex);
 log_trace(WHERE, "I: p11_free_lock()");
 log_trace(WHERE, "I: leave, ret = %i",ret);
 return ret;

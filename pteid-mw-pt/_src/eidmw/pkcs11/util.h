@@ -36,7 +36,6 @@ CK_RV p11_lock();
 void p11_unlock();
 void p11_free_lock();
 void util_init_lock(void **lock);
-void util_clean_lock(void **lock);
 void util_lock(void *lock);
 void util_unlock(void *lock);
 void strcpy_n(unsigned char *to, const char *from, size_t n, char padding);
