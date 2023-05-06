@@ -209,9 +209,6 @@ public:
 
 	size_t		CountKeysByPrefix(t_Str szKey, t_Str szFromSection = t_Str(L""));
 
-				// DeleteSection: Deletes a given section.
-	bool		DeleteSection(t_Str szSection);
-				
 				// Key/Section handling methods
 				/////////////////////////////////////////////////////////////////
 
