@@ -545,19 +545,6 @@ t_Str CDataFile::GetString(t_Str szKey, t_Str szSection)
 	return GetValue(szKey, szSection);
 }
 
-// GetFloat
-// Returns the key value as a float type. Returns FLT_MIN if the key is
-// not found.
-float CDataFile::GetFloat(t_Str szKey, t_Str szSection)
-{
-	t_Str szValue = GetValue(szKey, szSection);
-
-	if ( szValue.size() == 0 )
-		return FLT_MIN;
-
-	return (float)atof( utilStringNarrow(szValue).c_str() );
-}
-
 // GetInt
 // Returns the key value as an integer type. Returns INT_MIN if the key is
 // not found.
