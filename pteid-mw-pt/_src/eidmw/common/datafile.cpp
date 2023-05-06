@@ -602,28 +602,6 @@ bool CDataFile::GetBool(t_Str szKey, t_Str szSection)
 	return bValue;
 }
 
-// DeleteSection
-// Delete a specific section. Returns false if the section cannot be 
-// found or true when sucessfully deleted.
-bool CDataFile::DeleteSection(t_Str szSection)
-{
-	if(!LoadAndLock())
-		return false;
-
-	SectionItor s_pos;
-
-	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
-	{
-	  if ( (*s_pos).szName.size() != 0 && CompareNoCase( (*s_pos).szName, szSection ) == 0 ) 
-		{
-			m_Sections.erase(s_pos);
-			return true;
-		}
-	}
-
-	return false;
-}
-
 // DeleteKey
 // Delete a specific key in a specific section. Returns false if the key
 // cannot be found or true when sucessfully deleted.
