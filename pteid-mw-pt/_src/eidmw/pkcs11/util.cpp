@@ -179,14 +179,6 @@ if (*lock == NULL)
    *lock = (void*) new CMutex();
 }
 
-void util_clean_lock(void **lock)
-{
-if(*lock)
-   delete((CMutex*)*lock);
-
-*lock = NULL;
-}
-
 void util_lock(void *lock)
 {
 if(lock)
