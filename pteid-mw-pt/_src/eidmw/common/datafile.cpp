@@ -371,7 +371,6 @@ bool CDataFile::Save()
 	{
 	  bWroteComment = true;
 	  outStream<<"\n"<<CommentStr(Section.szComment)<<"\n";
-	  //	  WriteLn(outStream, L"\n%ls", CommentStr(Section.szComment).c_str());
 	}
 
       if ( Section.szName.size() > 0 )
@@ -973,40 +972,5 @@ void Trim(t_Str& szStr)
 		szStr.erase(nPos, rPos);
 	}
 }
-
-// WriteLn
-// Writes the formatted output to the file stream, returning the number of
-// bytes written.
-
-int WriteLn(FILE * stream, wchar_t* fmt, ...)
-{
-    if(!stream)
-        return 0;
-
-	wchar_t buf[MAX_BUFFER_LEN] = {0}; 
-	int nLength;
-	t_Str szMsg;
-
-	va_list args;
-
-	va_start (args, fmt);
-#ifdef WIN32
-#pragma message( "*** Check parameters for vsnprintf_s() ..." __FILE__ )
-	  nLength = _vsnwprintf_s(buf, MAX_BUFFER_LEN, MAX_BUFFER_LEN, fmt, args);
-#else
-	  nLength = vswprintf(buf, MAX_BUFFER_LEN, fmt, args);
-#endif
-	va_end (args);
-
-
-	if ( buf[nLength] != '\n' && buf[nLength] != '\r' )
-		buf[nLength++] = '\n';
-
-    size_t tmp = fwrite(buf, sizeof( wchar_t ), nLength, stream);
-    tmp = tmp;	// avoid warning
-
-	return nLength;
-}
-
 
 } // namespace eIDMW
