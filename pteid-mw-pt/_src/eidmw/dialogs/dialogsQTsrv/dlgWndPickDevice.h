@@ -44,7 +44,7 @@ private:
     bool m_Code_OK = false;
     DlgDevice m_outDevice = (DlgDevice)-1;
 
-private slots:
+private Q_SLOTS:
     void on_radioDeviceCC_clicked() { m_outDevice = DlgDevice::DLG_CC; };
     void on_radioDeviceCMD_clicked() { m_outDevice = DlgDevice::DLG_CMD; };
 };

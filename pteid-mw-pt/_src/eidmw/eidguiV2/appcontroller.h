@@ -50,7 +50,7 @@ public:
      return "";
     }
 
-public slots:
+public Q_SLOTS:
     void restoreScreen(void);
     Q_INVOKABLE QVariant getCursorPos();
     QString getAppVersion(void);

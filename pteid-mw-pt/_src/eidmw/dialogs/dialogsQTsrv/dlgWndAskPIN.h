@@ -42,7 +42,7 @@ public:
 
 	std::wstring getPIN();
 
-private slots:
+private Q_SLOTS:
 	void on_txtPIN_textChanged( const QString & text );
 
 private:

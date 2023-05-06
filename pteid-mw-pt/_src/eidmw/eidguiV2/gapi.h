@@ -306,7 +306,7 @@ public:
     CERTIFICATES    m_Certificates;
     CMDCertificates *m_cmdCertificates;
 
-public slots:
+public Q_SLOTS:
     // Telemetry
     void updateTelemetry(TelemetryAction action);
     void doUpdateTelemetry(TelemetryAction action);

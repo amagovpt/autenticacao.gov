@@ -64,7 +64,7 @@ public:
     void startUpdate();
     void userCancelledUpdateDownload();
 
-public slots:
+public Q_SLOTS:
 
     // Public slots to process the configuration file
     void cancelDownload();

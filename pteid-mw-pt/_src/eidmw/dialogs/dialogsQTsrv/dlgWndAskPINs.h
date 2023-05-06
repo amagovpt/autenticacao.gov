@@ -64,7 +64,7 @@ private:
 	QRegExpValidator *m_Pin1Validator;
 	QRegExpValidator *m_Pin2Validator;
 
-private slots:
+private Q_SLOTS:
 	void on_txtOldPIN_textChanged( const QString & );
 	void on_txtNewPIN1_textChanged( const QString & );
 	void on_txtNewPIN2_textChanged( const QString & );

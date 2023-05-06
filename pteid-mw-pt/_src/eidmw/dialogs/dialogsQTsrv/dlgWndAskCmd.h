@@ -61,7 +61,7 @@ private:
     QRegExpValidator *m_IdValidator;
     QRegExpValidator *m_CodeValidator;
 
-private slots:
+private Q_SLOTS:
     void on_txtMobile_textChanged( const QString & );
     void on_txtCode_textChanged( const QString & );
     void sendSms();
