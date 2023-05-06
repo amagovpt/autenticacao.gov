@@ -504,17 +504,6 @@ bool CDataFile::SetValueInt(t_Str szKey, t_Str szValue, t_Str szComment, t_Str s
 	return false;
 }
 
-// SetFloat
-// Passes the given float to SetValue as a string
-bool CDataFile::SetFloat(t_Str szKey, float fValue, t_Str szComment, t_Str szSection)
-{
-	char szStr[64];
-
-	_snprintf_s(szStr, 64, "%f", fValue);
-
-	return SetValue(szKey, utilStringWiden(szStr), szComment, szSection);
-}
-
 // SetInt
 // Passes the given int to SetValue as a string 
 bool CDataFile::SetInt(t_Str szKey, int nValue, t_Str szComment, t_Str szSection)
