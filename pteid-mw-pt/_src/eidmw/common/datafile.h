@@ -189,11 +189,6 @@ public:
 	bool		SetValue(t_Str szKey, t_Str szValue, 
 						 t_Str szComment = t_Str(L""), t_Str szSection = t_Str(L""));
 
-				// SetInt: Sets the value of a given key. Will create the
-				// key if it is not found and AUTOCREATE_KEYS is active.
-	bool		SetInt(t_Str szKey, int nValue, 
-						 t_Str szComment = t_Str(L""), t_Str szSection = t_Str(L""));
-
 				// SetLong: Sets the value of a given key. Will create the
 				// key if it is not found and AUTOCREATE_KEYS is active.
 	bool		SetLong(t_Str szKey, long nValue, 
