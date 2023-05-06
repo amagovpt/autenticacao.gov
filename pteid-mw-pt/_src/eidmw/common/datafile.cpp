@@ -437,33 +437,6 @@ bool CDataFile::Close()
   }
 }
 
-// SetKeyComment
-// Set the comment of a given key. Returns true if the key is not found.
-bool CDataFile::SetKeyComment(t_Str szKey, t_Str szComment, t_Str szSection)
-{
-	if(!LoadAndLock())
-		return false;
-
-	KeyItor k_pos;
-	t_Section* pSection;
-
-	if ( (pSection = GetSection(szSection)) == NULL )
-		return false;
-
-	for (k_pos = pSection->Keys.begin(); k_pos != pSection->Keys.end(); k_pos++)
-	{
-		if ( CompareNoCase( (*k_pos).szKey, szKey ) == 0 )
-		{
-			(*k_pos).szComment = szComment;
-			m_bDirty = true;
-			return true;
-		}
-	}
-
-	return false;
-
-}
-
 // SetSectionComment
 // Set the comment for a given section. Returns false if the section
 // was not found.

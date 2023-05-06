@@ -214,9 +214,6 @@ public:
 	bool		SetBool(t_Str szKey, bool bValue, 
 						 t_Str szComment = t_Str(L""), t_Str szSection = t_Str(L""));
 
-				// Sets the comment for a given key.
-	bool		SetKeyComment(t_Str szKey, t_Str szComment, t_Str szSection = t_Str(L""));
-
 				// Sets the comment for a given section
 	bool		SetSectionComment(t_Str szSection, t_Str szComment);
 
