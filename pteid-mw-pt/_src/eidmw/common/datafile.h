@@ -177,8 +177,6 @@ public:
 	t_Str		GetValue(t_Str szKey, t_Str szSection = t_Str(L"")); 
 				// GetString: Returns the value as a t_Str
 	t_Str		GetString(t_Str szKey, t_Str szSection = t_Str(L"")); 
-				// GetFloat: Return the value as a float
-	float		GetFloat(t_Str szKey, t_Str szSection = t_Str(L""));
 				// GetInt: Return the value as an int
 	int			GetInt(t_Str szKey, t_Str szSection = t_Str(L""));
 				// GetInt: Return the value as a long
