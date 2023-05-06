@@ -539,15 +539,6 @@ bool CDataFile::SetLong(t_Str szKey, long nValue, t_Str szComment, t_Str szSecti
 
 }
 
-// SetBool
-// Passes the given bool to SetValue as a string
-bool CDataFile::SetBool(t_Str szKey, bool bValue, t_Str szComment, t_Str szSection)
-{
-	t_Str szValue = bValue ?  L"True" : L"False";
-
-	return SetValue(szKey, szValue, szComment, szSection);
-}
-
 // GetValue
 // Returns the key value as a t_Str object. A return value of
 // t_Str(L"") indicates that the key could not be found.

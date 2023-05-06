@@ -209,11 +209,6 @@ public:
 	bool		SetLong(t_Str szKey, long nValue, 
 				t_Str szComment = t_Str(L""), t_Str szSection = t_Str(L""));
 
-				// SetBool: Sets the value of a given key. Will create the
-				// key if it is not found and AUTOCREATE_KEYS is active.
-	bool		SetBool(t_Str szKey, bool bValue, 
-						 t_Str szComment = t_Str(L""), t_Str szSection = t_Str(L""));
-
 				// DeleteKey: Deletes a given key from a specific section
 	bool		DeleteKey(t_Str szKey, t_Str szFromSection = t_Str(L""));
 
