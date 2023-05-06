@@ -437,30 +437,6 @@ bool CDataFile::Close()
   }
 }
 
-// SetSectionComment
-// Set the comment for a given section. Returns false if the section
-// was not found.
-bool CDataFile::SetSectionComment(t_Str szSection, t_Str szComment)
-{
-	if(!LoadAndLock())
-		return false;
-
-	SectionItor s_pos;
-
-	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
-	{
-		if ( CompareNoCase( (*s_pos).szName, szSection ) == 0 ) 
-		{
-		    (*s_pos).szComment = szComment;
-			m_bDirty = true;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-
 // SetValue
 // Given a key, a value and a section, this function will attempt to locate the
 // Key within the given section, and if it finds it, change the keys value to
