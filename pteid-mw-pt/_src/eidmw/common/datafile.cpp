@@ -503,18 +503,6 @@ bool CDataFile::SetValueInt(t_Str szKey, t_Str szValue, t_Str szComment, t_Str s
 	return false;
 }
 
-// SetInt
-// Passes the given int to SetValue as a string 
-bool CDataFile::SetInt(t_Str szKey, int nValue, t_Str szComment, t_Str szSection)
-{
-	char szStr[64];
-
-	_snprintf_s(szStr, 64, "%d", nValue);
-
-	return SetValue(szKey, utilStringWiden(szStr), szComment, szSection);
-
-}
-
 // SetLong
 // Passes the given long to SetValue as a string 
 bool CDataFile::SetLong(t_Str szKey, long nValue, t_Str szComment, t_Str szSection)
