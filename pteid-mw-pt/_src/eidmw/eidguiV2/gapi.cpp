@@ -2515,7 +2515,7 @@ static std::map<std::string, std::vector<std::string>> format_scap_attr_strings(
         const ScapAttribute &attribute = attributes[i];
 
         std::string provider_name = attribute.provider.name;
-        std::string attr_string = attribute.citizen_name + " - ";
+        std::string attr_string = attribute.citizen_name + " [at_name] ";
         attr_string += attribute.description + " ";
 
         if (showSubAttributes) {

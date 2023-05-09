@@ -1715,11 +1715,11 @@ PageServicesSignForm {
     function append_attributes_to_model(attributes) {
         for (var provider in attributes) {
             for (var i = 0; i < attributes[provider].length; i++) {
-                // we have to receive the attribut ids in the same array for now...
+                // We have to receive the attribute ids in the same array for now...
                 // citizen name - attribute [id] "exampleID"
                 const attribute_and_id = attributes[provider][i].split("[id]")
 
-                const name_attributes = attribute_and_id[0].split("-")
+                const name_attributes = attribute_and_id[0].split("[at_name]")
 
                 entityAttributesModel.append({
                     citizenName: Functions.toTitleCase(name_attributes[0]),
