@@ -2654,7 +2654,7 @@ bool GAPI::isAttributeExpired(std::string& date, std::string& supplier) {
     QRegExp dateFormat("^\\d{4}-\\d{2}-\\d{2}$"); // xsd:date format
     if (date.empty() || dateFormat.indexIn(date.c_str()) == -1) {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
-            "getSCAPAttributesFromCache: Bad date format in validity of attribute supplied by: '%s' -> '%s'", supplier.c_str(), date.c_str());
+            "%s: Bad date format in validity of attribute supplied by: '%s' -> '%s'", __FUNCTION__, supplier.c_str(), date.c_str());
             return false;
     }
 
@@ -2664,7 +2664,7 @@ bool GAPI::isAttributeExpired(std::string& date, std::string& supplier) {
     bool isExpired = today.compare(date) > 0; // today is after validity -> expired
     if (isExpired) {
         PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
-            "getSCAPAttributesFromCache: Attribute supplied by: '%s' may be expired -> '%s'", supplier.c_str(), date.c_str());
+            "%s: Attribute supplied by: '%s' may be expired -> '%s'", __FUNCTION__, supplier.c_str(), date.c_str());
     }
 
     return isExpired;
