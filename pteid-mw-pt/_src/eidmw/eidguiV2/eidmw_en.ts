@@ -447,10 +447,6 @@
         <translation>Verify if the proxy is well configured.</translation>
     </message>
     <message>
-        <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
-        <translation>One or more selected attributes are not active. Please clear a cache and reload its attributes</translation>
-    </message>
-    <message>
         <source>STR_SIGN_OPEN_HELP</source>
         <translation>Open help</translation>
     </message>
@@ -1859,7 +1855,7 @@
     </message>
     <message>
         <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
-        <translation>One or more selected attributes are not active. Please clear a cache and reload its attributes</translation>
+        <translation>One or more selected attributes are not active. Please reload your professional attributes.</translation>
     </message>
     <message>
         <source>STR_SIGN_CMD_CODE_OP</source>

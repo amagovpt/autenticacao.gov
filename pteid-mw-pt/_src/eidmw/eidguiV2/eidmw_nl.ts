@@ -445,10 +445,6 @@
         <translation>Verifique se o proxy está bem configurado.</translation>
     </message>
     <message>
-        <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
-        <translation>Um ou mais atributos selecionados não se encontram ativos. Por favor, limpe a cache e recarregue os seus atributos</translation>
-    </message>
-    <message>
         <source>STR_SIGN_OPEN_HELP</source>
         <translation>Abrir ajuda</translation>
     </message>
@@ -1857,7 +1853,7 @@
     </message>
     <message>
         <source>STR_SCAP_NOT_VALID_ATTRIBUTES</source>
-        <translation>Um ou mais atributos selecionados não se encontram ativos. Por favor, limpe a cache e recarregue os seus atributos</translation>
+        <translation>Um ou mais atributos selecionados não se encontram ativos. Por favor recarregue os seus atributos profissionais.</translation>
     </message>
     <message>
         <source>STR_SIGN_CMD_CODE_OP</source>
