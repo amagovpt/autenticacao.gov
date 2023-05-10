@@ -183,6 +183,10 @@ Rectangle {
                     loaded_persistent_options = false
                 }
 
+                var new_x = propertyPageLoader.propertyBackupCoordX * background_image.width
+                var new_y = (propertyPageLoader.propertyBackupCoordY * background_image.height) - dragSigRect.height
+                setSignPreview(new_x, Math.max(new_y, 0))
+
                 updateSealPreview()
                 dragTarget.lastScreenWidth = background_image.width
                 dragTarget.lastScreenHeight = background_image.height
@@ -525,6 +529,10 @@ Rectangle {
     function saveSealPosition() {
         dragTarget.coord_x = (dragSigRect.x) / background_image.width
         dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
+
+        propertyPageLoader.propertyBackupCoordX = dragTarget.coord_x
+        propertyPageLoader.propertyBackupCoordY = dragTarget.coord_y
+
         dragTarget.lastCoord_x = dragSigRect.x
         dragTarget.lastCoord_y = dragSigRect.y
     }
