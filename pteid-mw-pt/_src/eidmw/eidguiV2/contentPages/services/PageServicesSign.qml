@@ -446,10 +446,6 @@ PageServicesSignForm {
             propertyPageLoader.propertyBackupSealWidth = width
             propertyPageLoader.propertyBackupSealHeight = height
 
-            // The height of the small signature is half of the height of the current configured signature
-            // So we have to double the height to small signature have the height of the preview
-            height = propertyCheckSignReduced.checked ? 2 * height : height
-
             gapi.resizePDFSignSeal(parseInt(width),parseInt(height))
 
             update_seal_font_size()
@@ -680,12 +676,10 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSignReduced = propertyCheckSignReduced.checked
             if (propertyCheckSignReduced.checked) {
-                if (propertyPDFPreview.propertyPDFHeightScaleFactor > 0) {
                     propertyPDFPreview.propertyDragSigRect.height =
-                        propertyPDFPreview.propertySigHeightReducedDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
+                        propertyPDFPreview.propertySigHeightReducedDefault * propertyPDFPreview.propertyPDFScaleFactor
                     propertyPDFPreview.propertyDragSigRect.width =
-                        propertyPDFPreview.propertySigWidthReducedDefault * propertyPDFPreview.propertyPDFWidthScaleFactor
-                }
+                        propertyPDFPreview.propertySigWidthReducedDefault * propertyPDFPreview.propertyPDFScaleFactor
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.2
                 propertyPDFPreview.propertyDragSigReasonText.visible = false
                 propertyPDFPreview.propertyDragSigLocationText.visible = false
@@ -693,9 +687,9 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
             } else {
                 propertyPDFPreview.propertyDragSigRect.height =
-                propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
+                propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFScaleFactor
                 propertyPDFPreview.propertyDragSigRect.width =
-                propertyPDFPreview.propertySigWidthDefault * propertyPDFPreview.propertyPDFWidthScaleFactor
+                propertyPDFPreview.propertySigWidthDefault * propertyPDFPreview.propertyPDFScaleFactor
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
                 propertyPDFPreview.propertyDragSigReasonText.visible = true
                 propertyPDFPreview.propertyDragSigLocationText.visible = true
