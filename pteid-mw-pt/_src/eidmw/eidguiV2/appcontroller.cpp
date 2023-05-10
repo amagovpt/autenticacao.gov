@@ -1123,7 +1123,7 @@ void AppController::setSignatureOptions(const QVariantList &options) {
         file.write(options_json.c_str());
         file.close();
     } else {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s Error writting options file: %s", __FUNCTION__,
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s Error writing options file: %s", __FUNCTION__,
             sign_options_file_path.toStdString().c_str());
     }
 
