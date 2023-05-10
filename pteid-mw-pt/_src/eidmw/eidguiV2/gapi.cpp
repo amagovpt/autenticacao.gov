@@ -2511,11 +2511,14 @@ static std::map<std::string, std::vector<std::string>> format_scap_attr_strings(
         return result;
     }
 
+    //In the SCAP settings page we show sub-attributes but don't need to split citizen name and attribute
+    const std::string separator = showSubAttributes ? " - " : " [at_name] ";
+
     for (size_t i = 0; i < attributes.size(); ++i) {
         const ScapAttribute &attribute = attributes[i];
 
         std::string provider_name = attribute.provider.name;
-        std::string attr_string = attribute.citizen_name + " [at_name] ";
+        std::string attr_string = attribute.citizen_name + separator;
         attr_string += attribute.description + " ";
 
         if (showSubAttributes) {
