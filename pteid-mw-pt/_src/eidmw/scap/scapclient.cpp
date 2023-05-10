@@ -113,7 +113,7 @@ static bool set_extern_certificates(PDFSignature *sig_handler, const std::string
 {
 	std::vector<CByteArray> cert_chain_data = parse_cert_chain(certificate_chain);
 	if (cert_chain_data.empty()) {
-		//TODO: error
+		MWLOG(LEV_ERROR, MOD_SCAP, "Empty certificate chain in SCAP signature!");
 		return false;
 	}
 
@@ -210,7 +210,7 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 	PDFSignature *sig_handler = signature->getPdfSignature();
 
 	if (!set_extern_certificates(sig_handler, transaction.certificate_chain)) {
-		//TODO error
+		return "";
 	}
 
 	std::string reason;
@@ -819,6 +819,10 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 		for (Document &doc: documents) {
 			std::string hash_ba = open_scap_signature(transaction, doc, signature_info,
 				citizen_info, attributes, is_last_signature, is_batch, is_cc);
+			if (hash_ba.empty()) {
+				//Abort the signature operation as the SCAP server didn't return any certificates
+				return ScapError::generic;
+			}
 			hashes.push_back(hash_ba);
 		}
 
