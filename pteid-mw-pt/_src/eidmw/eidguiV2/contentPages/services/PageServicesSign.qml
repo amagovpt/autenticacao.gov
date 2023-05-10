@@ -691,19 +691,17 @@ PageServicesSignForm {
                 propertyPDFPreview.propertyDragSigLocationText.visible = false
                 propertyPDFPreview.propertyDragSigReasonText.text = ""
                 propertyPDFPreview.propertyDragSigLocationText.text = ""
-                propertyPDFPreview.updateSignPreviewSize()
             } else {
                 propertyPDFPreview.propertyDragSigRect.height =
-                    propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
+                propertyPDFPreview.propertySigHeightDefault * propertyPDFPreview.propertyPDFHeightScaleFactor
                 propertyPDFPreview.propertyDragSigRect.width =
-                    propertyPDFPreview.propertySigWidthDefault * propertyPDFPreview.propertyPDFWidthScaleFactor
+                propertyPDFPreview.propertySigWidthDefault * propertyPDFPreview.propertyPDFWidthScaleFactor
                 propertyPDFPreview.propertySigLineHeight = propertyPDFPreview.propertyDragSigRect.height * 0.1
                 propertyPDFPreview.propertyDragSigReasonText.visible = true
                 propertyPDFPreview.propertyDragSigLocationText.visible = true
                 propertyPDFPreview.propertyDragSigReasonText.text = propertyTextFieldReason.text
                 propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
-                    qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
-                propertyPDFPreview.updateSignPreviewSize()
+                qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + propertyTextFieldLocal.text
             }
         }
     }
