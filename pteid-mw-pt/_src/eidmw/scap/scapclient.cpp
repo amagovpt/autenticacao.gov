@@ -234,10 +234,10 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 
 			const std::pair<std::string, std::string> seal_strings = format_scap_seal_strings(attributes);
 
-			sig_handler->setSCAPAttributes(strdup(citizen_info.name.c_str()),
-				strdup(citizen_info.cert_ssn.c_str()),
-				strdup(seal_strings.first.c_str()),
-				strdup(seal_strings.second.c_str()));
+			sig_handler->setSCAPAttributes(_strdup(citizen_info.name.c_str()),
+				_strdup(citizen_info.cert_ssn.c_str()),
+				_strdup(seal_strings.first.c_str()),
+				_strdup(seal_strings.second.c_str()));
 
 			sig_handler->setIsCC(is_cc); //set correct default seal image
 			if (signature_info.use_custom_image) {
