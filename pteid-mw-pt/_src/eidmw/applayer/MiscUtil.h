@@ -46,7 +46,7 @@ namespace eIDMW
 #define PTEID_USER_AGENT "User-Agent: PTeID Middleware v3"
 #define PTEID_USER_AGENT_VALUE "PTeID Middleware v3"
 
-	EIDMW_APL_API std::vector<std::string> toPEM(char *p_certificate, int certificateLen);
+	EIDMW_APL_API std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certificateLen);
 	EIDMW_APL_API char *X509_to_PEM(X509 *x509);
 	X509 *PEM_to_X509(char *pem);
 

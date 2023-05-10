@@ -1090,7 +1090,7 @@ int CMDServices::getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code,
         return ret;
     }
 
-    std::vector<std::string> certs = toPEM((char *)certificate.c_str(), certificate.size());
+    std::vector<std::string> certs = parsePEMCertSequence((char *)certificate.c_str(), certificate.size());
 
     for (size_t i = 0; i != certs.size(); i++)
     {
@@ -1129,7 +1129,7 @@ int CMDServices::getCertificate(CMDProxyInfo proxyInfo, std::string in_userId,
     if (ret != ERR_NONE)
         return ret;
 
-    std::vector<std::string> certs = toPEM(p_certificate, certificateLen );
+    std::vector<std::string> certs = parsePEMCertSequence(p_certificate, certificateLen);
     free(p_certificate);
 
     for (size_t i=0; i != certs.size(); i++)

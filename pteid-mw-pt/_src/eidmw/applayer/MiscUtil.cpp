@@ -203,11 +203,11 @@ void replace_lastdot_inplace(char* str_in)
 }
 
 
-std::vector<std::string> toPEM(char *p_certificate, int certificateLen) {
+std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certificateLen) {
 
 	std::vector<std::string> certs;
 
-    string strCertificate( p_certificate, certificateLen );
+    string strCertificate(certificates_pem, certificateLen);
 
     if (strCertificate.empty()) {
         throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);

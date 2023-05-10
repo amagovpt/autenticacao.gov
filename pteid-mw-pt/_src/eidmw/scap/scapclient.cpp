@@ -90,7 +90,7 @@ static void save_secret_key(const std::string &secret_key, const std::string &ni
 
 static std::vector<CByteArray> parse_cert_chain(const std::string &cert_chain)
 {
-	std::vector<std::string> certs = toPEM((char *)cert_chain.c_str(), cert_chain.size());
+	std::vector<std::string> certs = parsePEMCertSequence((char *)cert_chain.c_str(), cert_chain.size());
 	std::vector<CByteArray> cert_chain_data;
 
 	for (size_t i = 0; i < certs.size(); ++i) {
