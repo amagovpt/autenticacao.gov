@@ -411,6 +411,7 @@ PageServicesSignForm {
 
         onSignalRetrieveStoredSignOptions: (options) => {
             propertyPageLoader.propertyBackupFormatPades = propertyRadioButtonPADES.checked = options[0]
+            propertyRadioButtonXADES.checked = !propertyRadioButtonPADES.checked
             propertyPageLoader.propertyBackupTempSign = propertySwitchSignTemp.checked = options[1]
             propertyPageLoader.propertyBackupAddLTV = propertyCheckboxLTV.checked = options[2]
             propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked = options[3]
