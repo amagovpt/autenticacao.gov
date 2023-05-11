@@ -1,6 +1,6 @@
 /*-****************************************************************************
  *
- *  Copyright (C) 2020-2021 André Guerreiro - <aguerreiro1985@gmail.com>
+ *  Copyright (C) 2020-2023 André Guerreiro - <aguerreiro1985@gmail.com>
  *  Licensed under the EUPL V.1.2
  *
  *  RemoteAddress helper functions for HTTP API requests using libcurl
@@ -67,6 +67,7 @@ void handle_curl_error(CURLcode rc) {
         case CURLE_COULDNT_RESOLVE_HOST:
         case CURLE_COULDNT_CONNECT:
         case CURLE_SEND_ERROR:
+		case CURLE_SSL_CONNECT_ERROR:
         case CURLE_RECV_ERROR:
             throw CMWEXCEPTION(EIDMW_REMOTEADDR_CONNECTION_ERROR);
         case CURLE_PEER_FAILED_VERIFICATION:
