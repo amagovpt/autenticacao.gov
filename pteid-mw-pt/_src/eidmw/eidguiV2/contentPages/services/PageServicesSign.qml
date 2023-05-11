@@ -1687,7 +1687,7 @@ PageServicesSignForm {
     }
 
     function update_image_on_seal() {
-        const image_path = gapi.getCachePath() + "/CustomSignPicture.jpg"
+        var image_path = gapi.getCachePath() + "/CustomSignPicture.jpg"
         if (gapi.getUseCustomSignature() && gapi.customSignImageExist()) {
             if (Qt.platform.os === "windows") {
                 image_path = "file:///" + image_path
