@@ -1061,7 +1061,7 @@ static void add_to_options_object(cJSON *obj, const char *name, const std::vecto
     }
 
     cJSON *json_array = NULL;
-	char * empty = NULL;
+	const char * empty = NULL;
     if ((json_array = cJSON_CreateStringArray(string_vector.size() > 0 ? &string_vector[0] : &empty, string_vector.size())) == NULL) {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to create strings array", __FUNCTION__);
         return;
