@@ -2045,6 +2045,7 @@ PageServicesSignForm {
 
     function determine_output_filename() {
         var outputFile = ""
+        const pades = propertyRadioButtonPADES.checked
         if (dialogSignCMD.isSignSingleFile() || !pades) {
             if (contains_package_asic()) {
                 //FIXME: LINUX and MAC "file:///" ?
