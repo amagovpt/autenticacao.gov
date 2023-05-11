@@ -596,10 +596,6 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupAddLTV = propertyCheckboxLTV.checked
         }
-        onEnabledChanged: {
-            if (!propertyCheckboxLTV.enabled)
-                propertyCheckboxLTV.checked = false
-        }
     }
 
     propertyDropArea {
