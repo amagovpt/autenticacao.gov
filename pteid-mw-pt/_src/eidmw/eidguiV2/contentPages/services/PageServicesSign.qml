@@ -468,6 +468,10 @@ PageServicesSignForm {
         onClicked: Functions.showHelp(!propertyShowHelp)
     }
 
+    propertyRadioButtonXADES {
+        onClicked: propertySwitchAddAttributes.checked = false
+    }
+
     PropertyAnimation {
         id: expandAnimation
         target: propertyRectHelp

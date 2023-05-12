@@ -726,7 +726,7 @@ Item {
                                     anchors.leftMargin: 10
                                     leftPadding: 0
                                     rightPadding: 0
-                                    enabled: !propertySwitchAddAttributes.checked
+                                    enabled: true
                                     font.family: lato.name
                                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                                     font.capitalization: Font.MixedCase
