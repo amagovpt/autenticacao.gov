@@ -419,10 +419,10 @@ PageServicesSignForm {
             propertyPageLoader.propertyBackupReason = propertyTextFieldReason.text = options[5]
             propertyPageLoader.propertyBackupLocal = propertyTextFieldLocal.text = options[6]
             //Don't allow illegal values for seal dimension
-            const min_sig_width =  Constants.SIG_WIDTH_DEFAULT
-            const min_sig_height = propertyPageLoader.propertyBackupSignReduced ? Constants.SIG_HEIGHT_REDUCED : Constants.SIG_HEIGHT_DEFAULT
-            propertyPDFPreview.propertySealWidthTemp = Math.max(options[7], min_sig_width)
-            propertyPDFPreview.propertySealHeightTemp = Math.max(options[8], min_sig_height)
+            const min_sig_width =  Constants.SIG_WIDTH_MINIMUM
+            const min_sig_height = Constants.SIG_HEIGHT_MINIMUM
+            propertyPDFPreview.propertySealWidthTemp =  options[7] < min_sig_width ? SIG_WIDTH_DEFAULT : options[7]
+            propertyPDFPreview.propertySealHeightTemp = options[8] < min_sig_height ? ( propertyPageLoader.propertyBackupSignReduced ? Constants.SIG_HEIGHT_REDUCED : Constants.SIG_HEIGHT_DEFAULT) : options[8]
             propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked = options[9]
             propertyPageLoader.selectedAttributesListBackup = options[10]
             propertyPDFPreview.sealHasChanged = true

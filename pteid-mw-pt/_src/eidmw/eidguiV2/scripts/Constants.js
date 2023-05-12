@@ -31,8 +31,11 @@ var XFA_FORM_PDF_ERROR = -3
 
 //PDF seal dimensions
 const SIG_WIDTH_DEFAULT = 178
+const SIG_WIDTH_MINIMUM = 120
 const SIG_HEIGHT_DEFAULT = 90
 const SIG_HEIGHT_REDUCED = 45
+const SIG_HEIGHT_MINIMUM = 35
+
 
 
 // Certificates Status

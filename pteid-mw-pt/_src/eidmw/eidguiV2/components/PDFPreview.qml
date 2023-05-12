@@ -54,8 +54,8 @@ Rectangle {
     property real propertySigHeightDefault: Constants.SIG_HEIGHT_DEFAULT * propertyConvertPtsToPixel
     property real propertySigHeightReducedDefault: Constants.SIG_HEIGHT_REDUCED * propertyConvertPtsToPixel
 
-    property real propertySigWidthMin: 120 * propertyConvertPtsToPixel
-    property real propertySigHeightMin: 35 * propertyConvertPtsToPixel
+    property real propertySigWidthMin: Constants.SIG_WIDTH_MINIMUM * propertyConvertPtsToPixel
+    property real propertySigHeightMin: Constants.SIG_HEIGHT_MINIMUM * propertyConvertPtsToPixel
 
     property real propertyPDFScaleFactor: 0
     property real propertyLastPDFScaleFactor: 0
