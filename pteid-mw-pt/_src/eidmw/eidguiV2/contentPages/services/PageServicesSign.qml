@@ -2052,11 +2052,9 @@ PageServicesSignForm {
         const pades = propertyRadioButtonPADES.checked
         if (dialogSignCMD.isSignSingleFile() || !pades) {
             if (contains_package_asic()) {
-                //FIXME: LINUX and MAC "file:///" ?
-                const prefix = (Qt.platform.os === "windows" ? "file:///" : "file://")
-                const outputFile = propertyListViewFiles.model.get(0).fileUrl
-                const newSuffix = pades ? "_signed.pdf" : "_xadessign.asics" //FIXME: checking for PAdES when contains_package_asic is true??
-                outputFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
+                outputFile = propertyListViewFiles.model.get(0).fileUrl
+                const newSuffix = "_xadessign.asics"
+                outputFile = Functions.replaceFileSuffix(outputFile, newSuffix)
             } else {
                 outputFile = propertyFileDialogCMDOutput.file.toString()
             }
