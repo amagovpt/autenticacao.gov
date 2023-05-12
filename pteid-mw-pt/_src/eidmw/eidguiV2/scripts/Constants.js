@@ -29,6 +29,12 @@ var UNSUPPORTED_PDF_ERROR = -1
 var ENCRYPTED_PDF_ERROR = -2
 var XFA_FORM_PDF_ERROR = -3
 
+//PDF seal dimensions
+const SIG_WIDTH_DEFAULT = 178
+const SIG_HEIGHT_DEFAULT = 90
+const SIG_HEIGHT_REDUCED = 45
+
+
 // Certificates Status
 var PTEID_CERTIF_STATUS_UNKNOWN = 0     /* Validity unknown */
 var PTEID_CERTIF_STATUS_REVOKED = 1     /* Revoked certificate */

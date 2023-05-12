@@ -49,10 +49,10 @@ Rectangle {
     property real propertySealWidthTemp: 0 
     property real propertySealHeightTemp: 0 
 
-    property real propertySigWidthDefault: 178 * propertyConvertPtsToPixel
-    property real propertySigWidthReducedDefault: 178 * propertyConvertPtsToPixel
-    property real propertySigHeightDefault: 90 * propertyConvertPtsToPixel
-    property real propertySigHeightReducedDefault: 45 * propertyConvertPtsToPixel
+    property real propertySigWidthDefault: Constants.SIG_WIDTH_DEFAULT * propertyConvertPtsToPixel
+    property real propertySigWidthReducedDefault: Constants.SIG_WIDTH_DEFAULT * propertyConvertPtsToPixel
+    property real propertySigHeightDefault: Constants.SIG_HEIGHT_DEFAULT * propertyConvertPtsToPixel
+    property real propertySigHeightReducedDefault: Constants.SIG_HEIGHT_REDUCED * propertyConvertPtsToPixel
 
     property real propertySigWidthMin: 120 * propertyConvertPtsToPixel
     property real propertySigHeightMin: 35 * propertyConvertPtsToPixel
