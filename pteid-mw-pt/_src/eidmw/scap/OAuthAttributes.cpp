@@ -365,7 +365,9 @@ namespace eIDMW
                 curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxyUserAndPwd.c_str());
             }
         }
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); // for DEBUG
+#ifdef DEBUG
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+#endif
 
         CURLcode res = curl_easy_perform(curl);
         if (res != CURLE_OK) {

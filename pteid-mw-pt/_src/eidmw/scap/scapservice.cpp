@@ -138,7 +138,10 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 	curl_easy_setopt(curl, CURLOPT_CURLU, url);
 	//Maximum time the transfer is allowed to complete
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
+
+#ifdef DEBUG
 	curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+#endif
 
 	curl_easy_setopt(curl, CURLOPT_USERNAME, credentials.basic_user.c_str());
 	curl_easy_setopt(curl, CURLOPT_PASSWORD, credentials.basic_pass.c_str());
