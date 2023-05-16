@@ -6,12 +6,12 @@
    </style>
 </head>
 <body>
-<h1>Welcome to the installer of Autenticação.gov 3.10.1</h2>
+<h1>Welcome to the installer of Autenticação.gov 3.11.0</h2>
 
-    <h2>Version 3.10.1 - revision GIT_REVISION</h2>
+    <h2>Version 3.11.0 - revision GIT_REVISION</h2>
     <ul>
-        <li>New feature: SCAP signature in batch mode</li>
-        <li>CMD signature for foreign residents</li>
+        <li>New feature: signature options are saved for future usage</li>
+        <li>Improvements in SCAP signature</li>
         <li>Improvements in remote address reading</li>
    </ul>
 </body>

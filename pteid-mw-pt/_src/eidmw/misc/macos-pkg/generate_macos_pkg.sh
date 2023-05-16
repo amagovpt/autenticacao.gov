@@ -32,7 +32,7 @@ cd $LIB_DIR
 git_revision=`git rev-list --count HEAD`
 popd
 
-VERSION="3.10.1.$git_revision"
+VERSION="3.11.0.$git_revision"
 
 echo "Packaging PTEID version $VERSION"
 echo "IMPORTANT: Don't forget to update the version in apps/Info.plist and release notes in resources dir"
