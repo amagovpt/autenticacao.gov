@@ -5,6 +5,7 @@
  * Copyright (C) 2018-2019 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 José Pinto - <jose.pinto@caixamagica.pt>
+ * Copyright (C) 2023 Nuno Romeu Lopes - <nuno.lopes@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -69,10 +70,6 @@ PageServicesSignForm {
             console.log("Sign advanced - Signal SCAP attributes loaded")
             append_attributes_to_model(institution_attributes)
             append_attributes_to_model(enterprise_attributes)
-
-            for (var i = 0; i < propertyPageLoader.attributeListBackup.length; i++){
-                entityAttributesModel.get(i).checkBoxAttr = propertyPageLoader.attributeListBackup[i]
-            }
 
             for (var i = 0; i < entityAttributesModel.count; ++i) {
                 for (var j = 0; j < propertyPageLoader.selectedAttributesListBackup.length; ++j) {
@@ -421,7 +418,7 @@ PageServicesSignForm {
             //Don't allow illegal values for seal dimension
             const min_sig_width =  Constants.SIG_WIDTH_MINIMUM
             const min_sig_height = Constants.SIG_HEIGHT_MINIMUM
-            propertyPDFPreview.propertySealWidthTemp =  options[7] < min_sig_width ? SIG_WIDTH_DEFAULT : options[7]
+            propertyPDFPreview.propertySealWidthTemp =  options[7] < min_sig_width ? Constants.SIG_WIDTH_DEFAULT : options[7]
             propertyPDFPreview.propertySealHeightTemp = options[8] < min_sig_height ? ( propertyPageLoader.propertyBackupSignReduced ? Constants.SIG_HEIGHT_REDUCED : Constants.SIG_HEIGHT_DEFAULT) : options[8]
             propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked = options[9]
             propertyPageLoader.selectedAttributesListBackup = options[10]
@@ -456,7 +453,20 @@ PageServicesSignForm {
 
             update_wrapped_name();
             update_wrapped_location(propertyTextFieldLocal.text);
-            if (propertySwitchAddAttributes.checked) update_SCAP_info_on_preview();
+            if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked) update_SCAP_info_on_preview();
+        }
+    }
+
+    propertyRadioButtonXADES{
+        onClicked: {
+            switchAddAttributes_NotChecked()
+        }
+    }
+
+    propertyRadioButtonPADES{
+        onClicked: {
+            if (propertySwitchAddAttributes.checked)
+                switchAddAttributes_Checked()
         }
     }
 
@@ -466,10 +476,6 @@ PageServicesSignForm {
 
     propertyArrowHelpMouseArea {
         onClicked: Functions.showHelp(!propertyShowHelp)
-    }
-
-    propertyRadioButtonXADES {
-        onClicked: propertySwitchAddAttributes.checked = false
     }
 
     PropertyAnimation {
@@ -770,7 +776,6 @@ PageServicesSignForm {
                 checked: checkBoxAttr
                 onCheckedChanged: {
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
-                    propertyPageLoader.attributeListBackup[index] = checkboxSel.checked
 
                     propertyPageLoader.selectedAttributesListBackup = []
                     for (var i = 0; i < entityAttributesModel.count; ++i) {
@@ -841,28 +846,10 @@ PageServicesSignForm {
     propertySwitchAddAttributes {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked
-            if (propertySwitchAddAttributes.checked) {
-                propertyBusyIndicator.running = true
-                propertyCheckSignReduced.checked = false
-                propertyTextAttributesMsg.visible = true
-                propertyMouseAreaTextAttributesMsg.enabled = true
-                propertyMouseAreaTextAttributesMsg.z = 1
-                propertyPDFPreview.propertyDragSigCertifiedByText.visible = true
-                propertyPDFPreview.propertyDragSigAttributesText.visible = true
-                gapi.startLoadingAttributesFromCache(false)
-            } else {
-                propertyTextAttributesMsg.visible = false
-                propertyMouseAreaTextAttributesMsg.enabled = false
-                propertyMouseAreaTextAttributesMsg.z = 0
-
-                entityAttributesModel.clear()
-                propertyListViewHeight = 0
-                propertyItemOptions.height = propertyOptionsHeight
-                propertyPDFPreview.propertyDragSigCertifiedByText.visible = false
-                propertyPDFPreview.propertyDragSigAttributesText.visible = false
-                update_image_on_seal()
-                propertyPDFPreview.forceActiveFocus()
-            }
+            if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked)
+                switchAddAttributes_Checked()
+            else
+                switchAddAttributes_NotChecked()
         }
     }
 
@@ -923,7 +910,8 @@ PageServicesSignForm {
                 return
             }
 
-            if (propertySwitchAddAttributes.checked && number_of_attributes_selected() == 0) {
+            if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && number_of_attributes_selected() == 0) {
+                //SCAP switch checked but no attributes selected
                 const titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                 const bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
@@ -1303,12 +1291,6 @@ PageServicesSignForm {
         }
     }
 
-    onIsAnimationFinishedChanged: {
-        if (isAnimationFinished) {
-            load_unfinished_signature()
-        }
-    }
-
     Component.onCompleted: {
         console.log("PageServicesSign onCompleted")
 
@@ -1330,6 +1312,7 @@ PageServicesSignForm {
             gapi.setShortcutFlag(GAPI.ShortcutIdNone)
         } else {
             controler.getSignatureOptions()
+            load_unfinished_signature()
         }
 
         if (!propertyShowHelp)
@@ -1627,7 +1610,6 @@ PageServicesSignForm {
                     font.capitalization: Font.MixedCase
                     onClicked: {
                         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                        propertyPageLoader.attributeListBackup = []
                         gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
                         signerror_dialog.close()
                         jump_to_definitions_SCAP()
@@ -1949,7 +1931,7 @@ PageServicesSignForm {
                 return;
             }
 
-            if (propertySwitchAddAttributes.checked && number_of_attributes_selected() == 0) {
+            if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && number_of_attributes_selected() == 0) {
                 //SCAP switch checked but no attributes selected
                 var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
                 var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
@@ -2184,8 +2166,33 @@ PageServicesSignForm {
         return direction;
     }
 
+    function switchAddAttributes_Checked(){
+        propertyBusyIndicator.running = true
+        propertyCheckSignReduced.checked = false
+        propertyTextAttributesMsg.visible = true
+        propertyMouseAreaTextAttributesMsg.enabled = true
+        propertyMouseAreaTextAttributesMsg.z = 1
+        propertyPDFPreview.propertyDragSigCertifiedByText.visible = true
+        propertyPDFPreview.propertyDragSigAttributesText.visible = true
+        gapi.startLoadingAttributesFromCache(false)
+    }
+
+    function switchAddAttributes_NotChecked(){
+        propertyTextAttributesMsg.visible = false
+        propertyMouseAreaTextAttributesMsg.enabled = false
+        propertyMouseAreaTextAttributesMsg.z = 0
+
+        entityAttributesModel.clear()
+        propertyListViewHeight = 0
+        propertyItemOptions.height = propertyOptionsHeight
+        propertyPDFPreview.propertyDragSigCertifiedByText.visible = false
+        propertyPDFPreview.propertyDragSigAttributesText.visible = false
+        update_image_on_seal()
+        propertyPDFPreview.forceActiveFocus()
+    }
+
     function update_wrapped_name() {
-        const scap_selected = (propertySwitchAddAttributes.checked && number_of_attributes_selected() != 0)
+        const scap_selected = (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && number_of_attributes_selected() != 0)
         const max_lines = scap_selected ? Constants.NAME_SCAP_MAX_LINES : Constants.NAME_MAX_LINES
         const wrapped_name = gapi.getWrappedText(ownerNameBackup, max_lines, Constants.SEAL_NAME_OFFSET)
 
