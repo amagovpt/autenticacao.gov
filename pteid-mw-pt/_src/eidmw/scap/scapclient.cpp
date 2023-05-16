@@ -655,8 +655,10 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 	std::vector<std::string> headers;
 	if (card) {
 
+#ifdef _WIN32
 		setThreadLocalCardInstance(card);
 		setupSSLCallbackFunction();
+#endif
 		connection.reset(card->buildSSLConnection());
 		curl = connection->connect_encrypted();
 
