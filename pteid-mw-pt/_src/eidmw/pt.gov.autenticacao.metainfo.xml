@@ -24,6 +24,7 @@
   <url type="help">https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html</url>
   
   <releases>
+    <release version="3.11.0" date="2023-05-16"/>
     <release version="3.10.1" date="2023-03-29"/>
     <release version="3.10.0" date="2023-03-21"/>
     <release version="3.9.1"  date="2023-01-02"/>
