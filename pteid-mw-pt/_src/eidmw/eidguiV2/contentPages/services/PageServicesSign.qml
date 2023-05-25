@@ -985,7 +985,6 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupFormatPades = propertyRadioButtonPADES.checked
 
-            //TODO: stop clearing and re-adding files to model in this case
             filesModel.clear()
             for (var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; i++) {
                 filesModel.append({
@@ -1722,6 +1721,7 @@ PageServicesSignForm {
         propertyTextFieldReason.text = propertyPageLoader.propertyBackupReason
         propertyTextFieldLocal.text = propertyPageLoader.propertyBackupLocal
 
+        filesModel.clear()
         for (var i = 0; i < propertyPageLoader.propertyBackupfilesModel.count; ++i) {
             filesModel.append(propertyPageLoader.propertyBackupfilesModel.get(i))
         }
