@@ -30,7 +30,6 @@ Loader{
     property bool propertyBackupTempSign: false
     property bool propertyBackupAddLTV: false
     property bool propertyBackupSwitchAddAttributes: false
-    property variant attributeListBackup: []
     property variant selectedAttributesListBackup: []
     property bool propertyBackupSignShow: true
     property double propertyBackupCoordX: 0

@@ -669,7 +669,6 @@ Item {
                                     anchors.left: textFormatSign.right
                                     height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                                     text: qsTranslate("PageServicesSign","STR_SIGN_PDF")
-                                    checked: true
                                     leftPadding: 0
                                     rightPadding: 0
                                     anchors.leftMargin: 10

@@ -744,7 +744,6 @@ Item {
     }
     function loadSCAPAttributes(){
         close()
-        propertyPageLoader.attributeListBackup = []
         gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
         jumpToDefinitionsSCAP()
     }
