@@ -1,9 +1,9 @@
 # External Dependencies Paths - adjust if necessary
 THIRD_PARTY_DEPS=~/mw-thirdparty-libs
 
-OPENSSL_PATH=$THIRD_PARTY_DEPS/openssl/lib
+OPENSSL_PATH=$THIRD_PARTY_DEPS/openssl-3/lib
 CURL_PATH=$THIRD_PARTY_DEPS/libcurl/lib
-XERCES_PATH=$THIRD_PARTY_DEPS/xerces-c-3.2.3/lib
+XERCES_PATH=$THIRD_PARTY_DEPS/xerces-c-3.2.4/lib
 XMLSECURITY_PATH=$THIRD_PARTY_DEPS/xml-security-c/lib
 OPENJPEG_PATH=$THIRD_PARTY_DEPS/openjpeg/lib
 LIBPNG_PATH=$THIRD_PARTY_DEPS/libpng/lib
@@ -26,17 +26,17 @@ function rmdir_if_exists {
 function copy_external_dylibs {
 	DESTDIR=$1
 	echo "Copying External deps into $DESTDIR ..." 
-	cp -af $OPENSSL_PATH/libcrypto.1.1.dylib $DESTDIR
-	cp -af $OPENSSL_PATH/libssl.1.1.dylib $DESTDIR
+	cp -af $OPENSSL_PATH/libcrypto.3.dylib $DESTDIR
+	cp -af $OPENSSL_PATH/libssl.3.dylib $DESTDIR
 	cp -af $CURL_PATH/libcurl.4.dylib $DESTDIR
 	cp -af $XERCES_PATH/libxerces-c-3.2.dylib $DESTDIR
 	cp -af $XMLSECURITY_PATH/libxml-security-c.20.dylib $DESTDIR
 	cp -af $OPENJPEG_PATH/libopenjp2.dylib   $DESTDIR
 	cp -af $OPENJPEG_PATH/libopenjp2.7.dylib $DESTDIR
-	cp -af $OPENJPEG_PATH/libopenjp2.2.3.0.dylib $DESTDIR
+	cp -af $OPENJPEG_PATH/libopenjp2.2.4.0.dylib $DESTDIR
 	cp -af $LIBPNG_PATH/libpng16.16.dylib $DESTDIR
 	cp -af $LIBZIP_PATH/libzip.5.dylib $DESTDIR
-	cp -af $LIBZIP_PATH/libzip.5.3.dylib $DESTDIR
+	cp -af $LIBZIP_PATH/libzip.5.5.dylib $DESTDIR
 	#Dereference the symlink
 	cp     $POPPLER_PATH/libpoppler.101.dylib $DESTDIR
 
