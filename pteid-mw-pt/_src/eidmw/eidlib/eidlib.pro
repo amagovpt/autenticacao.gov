@@ -36,7 +36,7 @@ DEPENDPATH += .
 INCLUDEPATH += . ../applayer ../common ../cardlayer ../dialogs ../CMD/services ../ /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
-macx: INCLUDEPATH += $$DEPS_DIR/openssl/include
+macx: INCLUDEPATH += $$DEPS_DIR/openssl-3/include
 DEFINES += EIDMW_EIDLIB_EXPORTS
 
 # Input
