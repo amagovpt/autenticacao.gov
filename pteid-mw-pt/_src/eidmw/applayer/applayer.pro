@@ -49,8 +49,8 @@ macx:  LIBS += -lopenjp2
 LIBS += ../lib/libpteid-poppler.a
 !macx: LIBS += -Wl,--exclude-libs,ALL 
 
-macx: LIBS += -L $$DEPS_DIR/openssl/lib/ \
-	-L$$DEPS_DIR/xerces-c-3.2.3/lib/ \
+macx: LIBS += -L $$DEPS_DIR/openssl-3/lib/ \
+	-L$$DEPS_DIR/xerces-c-3.2.4/lib/ \
 	-L$$DEPS_DIR/libzip/lib/ \
 	-L$$DEPS_DIR/libpng/lib \
 	-L$$DEPS_DIR/openjpeg/lib \
@@ -60,7 +60,7 @@ macx: LIBS += -Wl,-framework -Wl,CoreFoundation
 macx: LIBS += -Wl,-framework -Wl,SystemConfiguration
 macx: LIBS += -Wl,-framework -Wl,CoreServices
 macx: LIBS += -liconv
-macx: INCLUDEPATH +=$$DEPS_DIR/openssl/include $$DEPS_DIR/libzip/include $$DEPS_DIR/openjpeg/include/openjpeg-2.3/ $$DEPS_DIR/xml-security-c/include/ $$DEPS_DIR/xerces-c-3.2.3/include $$DEPS_DIR/libpng/include
+macx: INCLUDEPATH +=$$DEPS_DIR/openssl-3/include $$DEPS_DIR/libzip/include $$DEPS_DIR/openjpeg/include/openjpeg-2.4/ $$DEPS_DIR/xml-security-c/include/ $$DEPS_DIR/xerces-c-3.2.4/include $$DEPS_DIR/libpng/include
 macx: INCLUDEPATH += /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/
 !macx: INCLUDEPATH += /usr/include/libpng16
 

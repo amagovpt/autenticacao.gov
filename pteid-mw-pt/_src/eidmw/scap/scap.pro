@@ -12,7 +12,7 @@ DEPENDPATH += .
 QT += network
 
 INCLUDEPATH += . ../common ../applayer ../eidlib ../cardlayer
-macx:INCLUDEPATH += $$DEPS_DIR/openssl/include
+macx:INCLUDEPATH += $$DEPS_DIR/openssl-3/include
 macx:INCLUDEPATH += $$DEPS_DIR/cJSON-1.7.15/include
 
 unix: DEFINES += __UNIX__ WITH_OPENSSL

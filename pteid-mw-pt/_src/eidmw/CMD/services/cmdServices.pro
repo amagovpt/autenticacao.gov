@@ -20,7 +20,7 @@ CONFIG -= qt
 DESTDIR = ./../../lib
 DEPENDPATH += .
 
-macx: LIBS += -L$$DEPS_DIR/openssl/lib/ -lz
+macx: LIBS += -L$$DEPS_DIR/openssl-3/lib/ -lz
 
 QMAKE_CXXFLAGS += -fvisibility=hidden
 
@@ -32,7 +32,7 @@ LIBS += -L./../../lib \
         -lcrypto
         
 INCLUDEPATH += . ../../common ../../applayer ../../cardlayer ../../dialogs
-macx:INCLUDEPATH += $$DEPS_DIR/openssl/include
+macx:INCLUDEPATH += $$DEPS_DIR/openssl-3/include
 
 unix: DEFINES += __UNIX__ WITH_OPENSSL
 
