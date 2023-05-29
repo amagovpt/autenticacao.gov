@@ -84,7 +84,7 @@ Instruções para compilação em Windows (Visual Studio 2017)
 É importante assegurar que as dependências são compiladas com a mesma versão de Visual Studio que será usada para compilar o Middleware.
 Será assim necessário compilar as seguintes bibliotecas (versões utilizadas para a última release Windows):
 
-- OpenSSL 1.1.1q - https://www.openssl.org/source/openssl-1.1.1q.tar.gz
+- OpenSSL 3.0.8 - https://download.firedaemon.com/FireDaemon-OpenSSL/openssl-3.0.8.zip
 - xerces-c 3.2.3 - https://xerces.apache.org/xerces-c/build-3.html
 - libcurl 7.80.0 - https://curl.haxx.se/download.html
 - zlib 1.2.11 - https://www.zlib.net/fossils/zlib-1.2.11.tar.gz
