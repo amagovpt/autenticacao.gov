@@ -326,7 +326,7 @@ namespace eIDMW
                 MWLOG(LEV_ERROR, MOD_CMD, "%s: Invalid PIN or OTP.", __FUNCTION__);
                 throw CMWEXCEPTION(EIDMW_ERR_CMD_INVALID_CODE);
 			case SOAP_SSL_ERROR:
-				MWLOG(LEV_ERROR, MOD_CMD, "%: TLS connection error occured.", __FUNCTION__);
+				MWLOG(LEV_ERROR, MOD_CMD, "%s: TLS connection error occured.", __FUNCTION__);
 				throw CMWEXCEPTION(EIDMW_ERR_CMD_CONNECTION);
             case SOAP_TCP_ERROR:
                 MWLOG(LEV_ERROR, MOD_CMD, "%s: connection error occured.", __FUNCTION__);
