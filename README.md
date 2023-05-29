@@ -74,8 +74,6 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 
    A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2 e as bibliotecas do projeto em /usr/local/lib/.
 
-   As dependências para a execução do Middleware na distribuição Ubuntu 20.04 estão disponíveis em "Depends" no seguinte URL: [Dependências](pteid-mw-pt/_src/eidmw/debian/control)
-
 
 ### Windows
 
@@ -85,20 +83,20 @@ Instruções para compilação em Windows (Visual Studio 2017)
 Será assim necessário compilar as seguintes bibliotecas (versões utilizadas para a última release Windows):
 
 - OpenSSL 3.0.8 - https://www.openssl.org/source/openssl-3.0.8.tar.gz
-- xerces-c 3.2.3 - https://xerces.apache.org/xerces-c/build-3.html
+- xerces-c 3.2.4 - https://xerces.apache.org/xerces-c/build-3.html
 - libcurl 7.80.0 - https://curl.haxx.se/download.html
 - zlib 1.2.11 - https://www.zlib.net/fossils/zlib-1.2.11.tar.gz
 - libzip 1.6.1 - https://libzip.org/download/
 - libpng 1.6.37 - http://www.libpng.org/pub/png/libpng.html
 - openjpeg 2.4 - https://www.openjpeg.org/
-- libxml-security-c 2.0.4 - http://archive.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.zip
+- libxml-security-c 2.0.4 - http://archive.apache.org/dist/santuario/c-library/xml-security-c-2.0.4.tar.gz
 - cJSON 1.7.15 - https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.15.zip 
 
 Para compilar a aplicação GUI, projeto disponível em eidmw/eidguiV2, é necessária uma dependência adicional:
 
 - poppler-qt5 0.87 - https://poppler.freedesktop.org/releases.html
 
-Para o caso do Qt5 (versão igual ou superior a 5.12) estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  `https://download.qt.io/archive/online_installers/2.0/`
+Para o caso do Qt5 (versão igual ou superior a 5.12) estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  `https://download.qt.io/archive/online_installers/4.0/`
 
 Ferramentas adicionais a instalar:
 
