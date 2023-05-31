@@ -669,7 +669,6 @@ Item {
                                     anchors.left: textFormatSign.right
                                     height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                                     text: qsTranslate("PageServicesSign","STR_SIGN_PDF")
-                                    checked: true
                                     leftPadding: 0
                                     rightPadding: 0
                                     anchors.leftMargin: 10
@@ -726,7 +725,6 @@ Item {
                                     anchors.leftMargin: 10
                                     leftPadding: 0
                                     rightPadding: 0
-                                    enabled: true
                                     font.family: lato.name
                                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                                     font.capitalization: Font.MixedCase

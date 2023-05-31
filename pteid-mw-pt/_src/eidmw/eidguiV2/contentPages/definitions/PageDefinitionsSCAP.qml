@@ -687,7 +687,6 @@ PageDefinitionsSCAPForm {
             isLoadingAttributes = true
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             propertyBusyIndicatorAttributes.running = true
-            propertyPageLoader.attributeListBackup = []
             gapi.startGettingCompanyAttributes(false)
         }
     }
@@ -696,7 +695,6 @@ PageDefinitionsSCAPForm {
             console.log("ButtonLoadCompanyAttributesOAuth clicked!")
             isLoadingAttributes = true
             propertyBusyIndicatorAttributes.running = true
-            propertyPageLoader.attributeListBackup = []
             gapi.startGettingCompanyAttributes(true)
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             cmdLoadDialog.open()
@@ -711,7 +709,6 @@ PageDefinitionsSCAPForm {
             isLoadingAttributes = true
             var attributeList = getSelectedEntityNames()
             console.log("QML AttributeList: ", attributeList)
-            propertyPageLoader.attributeListBackup = []
             gapi.startGettingEntityAttributes(attributeList, false)
         }
     }
@@ -722,7 +719,6 @@ PageDefinitionsSCAPForm {
             isLoadingAttributes = true
             var attributeList = getSelectedEntityNames()
             console.log("QML AttributeList: ", attributeList)
-            propertyPageLoader.attributeListBackup = []
             gapi.startGettingEntityAttributes(attributeList, true)
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             cmdLoadDialog.open()
@@ -735,7 +731,6 @@ PageDefinitionsSCAPForm {
             companyAttributesModel.clear()
             entityAttributesModel.clear()
             propertyBusyIndicatorAttributes.running = true
-            propertyPageLoader.attributeListBackup = []
             gapi.startRemovingAttributesFromCache()
         }
 
@@ -750,7 +745,6 @@ PageDefinitionsSCAPForm {
             propertyButtonLoadEntityAttributes.enabled = false
             propertyButtonLoadEntityAttributesOAuth.enabled = false
             propertyBusyIndicatorAttributes.running = true
-            propertyPageLoader.attributeListBackup = []
             gapi.startRemovingAttributesFromCache()
         }
     }
