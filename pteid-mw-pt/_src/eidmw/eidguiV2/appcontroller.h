@@ -19,9 +19,6 @@
 #include "Settings.h"
 #include "scapsettings.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkProxy>
-#include <QNetworkReply>
 #include <cjson/cJSON.h>
 
 //MW libraries
@@ -34,6 +31,8 @@
 
 #define STR_LOCALTIME_MAX_SIZE   24
 #define TIMESTAMP_MAX_SIZE       15
+
+using namespace eIDMW;
 
 class AppController : public QObject
 {
@@ -74,6 +73,7 @@ public slots:
     void autoUpdatesCerts(void);
     void startUpdateCerts(void);
 
+    void reportProgress(GAPI::AutoUpdateType type, double value);
     void autoUpdateApp(void);
     void startUpdateApp(void);
 
@@ -191,7 +191,7 @@ signals:
                                    QString arg3,
                                    QString url_list);
     void signalAutoUpdateNews(QVariantMap news_list);
-    void signalAutoUpdateProgress(int updateType/*, int value*/);
+    void signalAutoUpdateProgress(int updateType, double value);
     void signalStartUpdate(int updateType, QString filename);
     void signalAutoUpdateSuccess(int updateType);
 

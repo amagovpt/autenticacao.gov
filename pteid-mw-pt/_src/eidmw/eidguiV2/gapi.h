@@ -648,9 +648,6 @@ private:
     QTimer* m_timerReaderList;
 
     QUrl url;
-    QNetworkProxy proxy;
-    QNetworkAccessManager qnam;
-    QNetworkReply *reply;
     QString m_pac_url;
     bool httpRequestAborted;
     bool httpRequestSuccess;

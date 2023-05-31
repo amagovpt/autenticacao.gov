@@ -15,7 +15,9 @@
 
 
 #include <openssl/dh.h>
-#include <openssl/engine.h>
+#include <openssl/rsa.h>
+#include <openssl/x509.h>
+#include <openssl/err.h>
 #include <openssl/rand.h>
 #include <openssl/des.h>
 #include <openssl/bn.h>

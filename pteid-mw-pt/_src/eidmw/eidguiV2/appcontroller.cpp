@@ -36,7 +36,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <QSysInfo>
-#include <QNetworkProxy>
 #endif
 
 #include "pteidversions.h"
@@ -61,8 +60,7 @@ struct PteidVersion
 };
 
 AppController::AppController(GUISettings& settings,QObject *parent) :
-    QObject(parent)
-  , m_Settings(settings)
+    QObject(parent), m_Settings(settings), certsUpdate(this), appUpdate(this), newsUpdate(this)
 {
     QString strVersion (PTEID_PRODUCT_VERSION);
     m_Settings.setGuiVersion(strVersion);
@@ -289,44 +287,47 @@ bool AppController::LoadTranslationFile(QString NewLanguage)
 void AppController::autoUpdateApp(){
     qDebug() << "C++: Starting autoUpdateApp";
 
-    appUpdate.setAppController(this);
-    appUpdate.initRequest(GAPI::AutoUpdateApp);
+    appUpdate.checkForUpdate(GAPI::AutoUpdateApp);
 }
 
 void AppController::autoUpdatesCerts(){
     qDebug() << "C++: Starting autoUpdates Certs";
 
-    certsUpdate.setAppController(this);
-    certsUpdate.initRequest(GAPI::AutoUpdateCerts);
+    certsUpdate.checkForUpdate(GAPI::AutoUpdateCerts);
 }
 
 void AppController::autoUpdatesNews(){
     qDebug() << "C++: Starting autoUpdates News";
 
-    newsUpdate.setAppController(this);
-    newsUpdate.initRequest(GAPI::AutoUpdateNews);
+    newsUpdate.checkForUpdate(GAPI::AutoUpdateNews);
+}
+
+void AppController::reportProgress(GAPI::AutoUpdateType type, double value) {
+    emit signalAutoUpdateProgress(type, value);
 }
 
 void AppController::startUpdateApp(){
     qDebug() << "C++: startUpdateApp";
     PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
                 "AppController::startUpdateApp: App update started!");
-    appUpdate.startUpdate();
+
+    Concurrent::run(&appUpdate, &AutoUpdates::startUpdate, GAPI::AutoUpdateApp);
 }
 
 void AppController::startUpdateCerts(){
     qDebug() << "C++: startUpdateCerts";
-    certsUpdate.startUpdate();
+
+    Concurrent::run(&certsUpdate, &AutoUpdates::startUpdate, GAPI::AutoUpdateCerts);
 }
 
 void AppController::userCancelledUpdateCertsDownload(){
     qDebug() << "C++: userCancelledUpdateCertsDownload";
-    certsUpdate.userCancelledUpdateDownload();
+    certsUpdate.cancelUpdate();
 }
 
 void AppController::userCancelledUpdateAppDownload(){
     qDebug() << "C++: userCancelledUpdateAppDownload";
-    appUpdate.userCancelledUpdateDownload();
+    appUpdate.cancelUpdate();
 }
 
 QVariant AppController::getCursorPos()

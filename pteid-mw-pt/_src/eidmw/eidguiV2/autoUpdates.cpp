@@ -1,12 +1,15 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2023 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
 #include "autoUpdates.h"
+
+#include <curl/curl.h>
 
 #include <QObject>
 #include <QCursor>
@@ -21,6 +24,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <cstring>
+#include <cstdio>
 #include <time.h>
 
 //MW libraries
@@ -29,6 +33,8 @@
 #include "eidlibException.h"
 #include "Util.h"
 #include "Settings.h"
+#include "Config.h"
+#include "MiscUtil.h"
 
 #include "appcontroller.h"
 #include "gapi.h"
@@ -37,9 +43,7 @@
 #include <windows.h>
 #include <SoftPub.h>
 #include <wintrust.h>
-#include <stdio.h>
 #include <QSysInfo>
-#include <QNetworkProxy>
 #endif
 
 #include "pteidversions.h"
@@ -58,6 +62,11 @@
 
 #define N_RELEASE_NOTES 3
 
+#define UPDATES_OK 200
+
+#define CALLBACK_OK 0
+#define CALLBACK_CANCEL 1
+
 struct PteidVersion
 {
     int major;
@@ -65,132 +74,164 @@ struct PteidVersion
     int release;
 };
 
-using namespace eIDMW;
+namespace eIDMW {
+
+enum class UpdateStatus {
+    ok,
+    generic_error,
+    proxy_auth_req,
+    possible_bad_proxy,
+    cancel
+};
 
 using cJSON_ptr = std::unique_ptr<cJSON, decltype(&::cJSON_Delete)>;
 
-/*
-  AutoUpdates implementation for eidguiV2
-*/
+static size_t curl_write_data(char *data, size_t size, size_t nmemb, void *read_string) {
+    ((std::string*)read_string)->append((char*)data, size * nmemb);
+    return size * nmemb;
+}
 
-void AutoUpdates::initRequest(int updateType){
-    qDebug() << "C++ AUTO UPDATES: initRequest updateType = " << updateType;
+struct report_progress {
+    AppController *controller; // report progress to this AppController
+    GAPI::AutoUpdateType type; // about this update type
+    bool *cancel;
+};
 
-    m_updateType=updateType;
-
-    if(!qnam){
-        qnam = new QNetworkAccessManager(this);
+static size_t progress_callback(void *data, curl_off_t total, curl_off_t current, curl_off_t, curl_off_t) {
+    report_progress *prog = (report_progress *) data;
+    if (*prog->cancel) {
+        return CALLBACK_CANCEL; // return anything other than 0 to signal cancellation.
     }
 
-    if (!qnam || qnam->networkAccessible() == QNetworkAccessManager::NotAccessible){
-        qDebug() << "C++ AUTO UPDATES: startRequest No Internet Connection";
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-            "AutoUpdates::startRequest: No Internet Connection.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);
+    if (total) { //libcurl docs warns about possible unkown(0) total at first
+        AppController *controller = (AppController *) prog->controller;
+
+        double progress = ((double) current / total);
+        controller->reportProgress(prog->type, progress);
+    }
+
+    return CALLBACK_OK;
+}
+
+static UpdateStatus perform_update_request(const std::string &url, std::string &out,
+    CURL *curl = NULL, FILE *fp = NULL, report_progress *prog = NULL) {
+
+    char error_buffer[CURL_ERROR_SIZE] = {0};
+
+    std::string cacerts_location =
+        utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
+
+	curl_global_init(CURL_GLOBAL_DEFAULT);
+    if (!curl && (curl = curl_easy_init()) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "autoupdate", "Failed to initialize curl");
+        return UpdateStatus::generic_error;
+    }
+
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, PTEID_USER_AGENT_VALUE);
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5L);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+    curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buffer);
+    if (fp) {
+        // Writing directly to a file
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+
+
+        curl_easy_setopt(curl, CURLOPT_XFERINFODATA, prog);
+        curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, progress_callback);
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
+    } else {
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &curl_write_data);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
+    }
+
+    curl_easy_setopt(curl, CURLOPT_CAINFO, cacerts_location.c_str());
+    bool using_proxy = false; // applyProxyConfigToCurl(curl, url.c_str());
+
+    UpdateStatus status;
+    CURLcode ret = curl_easy_perform(curl);
+    if (ret == CURLE_ABORTED_BY_CALLBACK) {
+        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "autoupdate", "Update request cancelled by user.\n");
+        *prog->cancel = false;
+        status = UpdateStatus::cancel;
+    }
+    else if (ret != CURLE_OK) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "autoupdate", "Error on request %s. Libcurl returned %s\n",
+            url.c_str(), error_buffer);
+
+        long auth = 0;
+        if (!curl_easy_getinfo(curl, CURLINFO_PROXYAUTH_AVAIL, &auth) && auth) {
+            status = UpdateStatus::proxy_auth_req;
+        } else if (using_proxy) {
+            status = UpdateStatus::possible_bad_proxy;
+        } else {
+            status = UpdateStatus::generic_error;
+        }
+    }
+    else {
+        unsigned int response_code;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+        status = response_code == UPDATES_OK ? UpdateStatus::ok : UpdateStatus::generic_error;
+    }
+
+    //should i cleanup?
+    //curl_easy_cleanup(curl);
+
+    return status;
+}
+
+void AutoUpdates::checkForUpdate(GAPI::AutoUpdateType update_type) {
+    std::string update_verify_url;
+    if (update_type == GAPI::AutoUpdateApp) {
+        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AutoUpdates::started");
+
+        PTEID_Config config(PTEID_PARAM_AUTOUPDATES_VERIFY_URL);
+        update_verify_url.append(config.getString());
+        update_verify_url.append("version.json");
+    }
+    else if (update_type == GAPI::AutoUpdateCerts) {
+        PTEID_Config config(PTEID_PARAM_AUTOUPDATES_CERTS_URL);
+        update_verify_url.append(config.getString());
+        update_verify_url.append("certs.json");
+    } else {
+        PTEID_Config config(PTEID_PARAM_AUTOUPDATES_NEWS_URL);
+        update_verify_url.append(config.getString());
+        update_verify_url.append("news.json");
+    }
+
+    std::string json_data;
+    UpdateStatus status = perform_update_request(update_verify_url, json_data);
+    //TODO: treat and report other error cases
+    if (status != UpdateStatus::ok) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "checkForUpdate() perform_update_request failed");
         return;
     }
 
-    // Auto update App
-    std::string remoteversion;
-    if(m_updateType == GAPI::AutoUpdateApp){
-        // Write inside this type to write to log once.
-        PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui", "AutoUpdates::started");
-
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_VERIFY_URL);
-        remoteversion.append(config.getString());
-        remoteversion.append("version.json");
+    if (update_type == GAPI::AutoUpdateApp) {
+        verifyAppUpdates(json_data);
     }
-    else if(m_updateType == GAPI::AutoUpdateCerts){
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_CERTS_URL);
-        remoteversion.append(config.getString());
-        remoteversion.append("certs.json");
+    else if(update_type == GAPI::AutoUpdateCerts) {
+        verifyCertsUpdates(json_data);
     } else {
-        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_AUTOUPDATES_NEWS_URL);
-        remoteversion.append(config.getString());
-        remoteversion.append("news.json");
+        verifyNewsUpdates(json_data);
     }
-
-    url = remoteversion.c_str();
-
-    QFileInfo fileInfo(url.path());
-    fileName = fileInfo.fileName();
-    if (fileName.isEmpty())
-    {
-         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AutoUpdates::started Fail");
-         getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
-         return;
-    }
-    startRequest(url);
 }
 
-void AutoUpdates::startRequest(QUrl url) {
-    qDebug() << "C++ AUTO UPDATES: startRequest: " << url;
-
-    file = NULL;
-    filedata.clear();
-    httpRequestAborted = false;
-
-    //allow up to 1 minutes to fetch remote version
-    int download_duration = 60000;
-
-    ProxyInfo proxyinfo;
-    proxy = QNetworkProxy(); // reset Proxy
-
-    if (proxyinfo.isAutoConfig())
-    {
-        std::string proxy_host;
-        long proxy_port;
-        proxyinfo.getProxyForHost(url.toString().toUtf8().constData(), &proxy_host, &proxy_port);
-        if (proxy_host.size() > 0)
-        {
-            proxy.setType(QNetworkProxy::HttpProxy);
-            proxy.setHostName(QString::fromStdString(proxy_host));
-            proxy.setPort(proxy_port);
-        }
-    }
-    else if (proxyinfo.isManualConfig())
-    {
-        long proxyinfo_port = 0;
-        try {
-            proxyinfo_port = std::stol(proxyinfo.getProxyPort());
-            proxy.setType(QNetworkProxy::HttpProxy);
-            proxy.setHostName(QString::fromStdString(proxyinfo.getProxyHost()));
-            proxy.setPort(proxyinfo_port);
-            if (proxyinfo.getProxyUser().size() > 0) {
-                proxy.setUser(QString::fromStdString(proxyinfo.getProxyUser()));
-                proxy.setPassword(QString::fromStdString(proxyinfo.getProxyPwd()));
-            }
-        }
-        catch (...) { //Capture 2 types of exceptions thrown by std::stol()
-            eIDMW::PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "%s: Error parsing proxy port to number value. Proxy config not applied!", __FUNCTION__);
-        }
-        
-    }
-    QNetworkProxy::setApplicationProxy(proxy);
-
-    reply = qnam->get(QNetworkRequest(url));
-    QTimer::singleShot(download_duration, this, SLOT(cancelDownload()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(httpError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()),
-            this, SLOT(httpFinished()));
-    connect(reply, SIGNAL(readyRead()),
-            this, SLOT(httpReadyRead()));
-    connect(reply, SIGNAL(downloadProgress(qint64,qint64)),
-            this, SLOT(updateDataReadProgress()));
-    return;
-}
-
-void AutoUpdates::VerifyCertsUpdates(std::string filedata)
+void AutoUpdates::verifyCertsUpdates(const std::string &filedata)
 {
-    qDebug() << "C++ AUTO UPDATES: VerifyCertsUpdates";
+    qDebug() << "C++ AUTO UPDATES: verifyCertsUpdates";
 
     // certs.json parsing
     cJSON_ptr json(cJSON_Parse(filedata.c_str()), ::cJSON_Delete);
     if (!cJSON_IsObject(json.get()))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing certs.json: may be a syntax error.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::GenericError);
         return;
     }
 
@@ -198,19 +239,19 @@ void AutoUpdates::VerifyCertsUpdates(std::string filedata)
     if (!cJSON_IsObject(certs_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing certs.json: Could not get certs object.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::GenericError);
         return;
     }
 
-    ChooseCertificates(certs_json);
+    chooseCertificates(certs_json);
 }
 
-void AutoUpdates::VerifyNewsUpdates(std::string filedata)
+void AutoUpdates::verifyNewsUpdates(const std::string &filedata)
 {
-    qDebug() << "C++ AUTO UPDATES: VerifyNewsUpdates";
+    qDebug() << "C++ AUTO UPDATES: verifyNewsUpdates";
 
     parseNews(filedata);
-    m_news = ChooseNews(); // Filter active news
+    m_news = chooseNews(); // Filter active news
     QVariantMap news_list;
 
     //should be only one
@@ -226,16 +267,16 @@ void AutoUpdates::VerifyNewsUpdates(std::string filedata)
             news.insert("title", QString::fromStdString(entry.title));
             news.insert("text", QString::fromStdString(entry.text));
             news.insert("link", QString::fromStdString(entry.link));
-            news.insert("read", !getAppController()->isToShowNews(QString::number(entry.id)));
+            news.insert("read", !m_app_controller->isToShowNews(QString::number(entry.id)));
             news_list.insert(QString::number(entry.id), news);
         }
-        getAppController()->signalAutoUpdateNews(news_list);
+        m_app_controller->signalAutoUpdateNews(news_list);
         return;
     }
-    getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NoUpdatesAvailable);
+    m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateNews, GAPI::NoUpdatesAvailable);
 }
 
-time_t getTimeFromString(std::string stringTime){
+time_t getTimeFromString(const std::string &stringTime){
     // expects time string to be of format: YYYY-MM-DD
     std::stringstream stream(stringTime);
     std::string segment;
@@ -274,9 +315,9 @@ time_t getTimeFromString(std::string stringTime){
     return mktime(&tm);
 }
 
-std::vector<NewsEntry> AutoUpdates::ChooseNews()
+std::vector<NewsEntry> AutoUpdates::chooseNews()
 {
-    qDebug() << "C++ AUTO UPDATES: ChooseNews";
+    qDebug() << "C++ AUTO UPDATES: chooseNews";
 
     std::vector<NewsEntry> filteredNews;
     NewsEntry entry;
@@ -305,7 +346,7 @@ std::vector<NewsEntry> AutoUpdates::ChooseNews()
     return filteredNews;
 }
 
-void AutoUpdates::parseNews(std::string data){
+void AutoUpdates::parseNews(const std::string &data){
     // parses news.json file into vector of NewsEntry in m_news
     cJSON_ptr json(cJSON_Parse(data.c_str()), ::cJSON_Delete);
     if (!cJSON_IsObject(json.get()))
@@ -422,12 +463,12 @@ int compareVersions(PteidVersion v1, PteidVersion v2)
     return ret;
 }
 
-void AutoUpdates::VerifyAppUpdates(std::string filedata)
+void AutoUpdates::verifyAppUpdates(const std::string &filedata)
 {
-    qDebug() << "C++ AUTO UPDATES: VerifyAppUpdates";
+    qDebug() << "C++ AUTO UPDATES: verifyAppUpdates";
 
-    std::string distrover = VerifyOS("distro");
-    std::string archver = VerifyOS("arch");
+    std::string distrover = verifyOS("distro");
+    std::string archver = verifyOS("arch");
 
     // installed version
     QString ver (WIN_GUI_VERSION_STRING);
@@ -439,7 +480,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsObject(json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: may be a syntax error.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return;
     }
 
@@ -447,7 +488,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsObject(dists_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get distributions object.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return;
     }
 
@@ -455,7 +496,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsObject(dist_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get object for this distribution (%s)", distrover.c_str());
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::LinuxNotSupported);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::LinuxNotSupported);
         return;
     }
 
@@ -463,7 +504,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsString(latestVersion_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get latestVersion for this distribution.", distrover.c_str());
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return;
     }
     remote_version = latestVersion_json->valuestring;
@@ -472,9 +513,9 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (list2.size() < 3)
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-            "AutoUpdates::VerifyAppUpdates: Wrong data returned from server or Proxy HTML error!");
+            "AutoUpdates::verifyAppUpdates: Wrong data returned from server or Proxy HTML error!");
         qDebug() << "C++ AUTO UPDATES VerifyUpdates: Wrong data returned from server or Proxy HTML error!";
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return;
     }
 
@@ -496,7 +537,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (compareVersions(local_version, remote_version) <= 0)
     {
         qDebug() << "C++ AUTO UPDATES: No App updates available at the moment";
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NoUpdatesAvailable);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::NoUpdatesAvailable);
         return;
     }
     qDebug() << "C++ AUTO UPDATES: app updates available";
@@ -505,7 +546,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
     if (!cJSON_IsArray(versions_array_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get array of versions.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return;
     }
     int latestVerIdx;
@@ -515,14 +556,14 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
         if (!cJSON_IsObject(version_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version object at index %d", latestVerIdx);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
             return;
         }
         cJSON *version_number_json = cJSON_GetObjectItem(version_json, "version");
         if (!cJSON_IsString(version_number_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get version number from version at %d", latestVerIdx);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
             return;
         }
         if (strcmp(version_number_json->valuestring, latestVersion_json->valuestring) == 0)
@@ -543,7 +584,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
          || !cJSON_IsArray(version_release_notes_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse some key/value of version object at %d", i);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
             return;
         }
         release_notes += "<p>";
@@ -555,7 +596,7 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
             if (!cJSON_IsString(release_note_json))
             {
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not parse release note %d of version obj %d", rlsNoteIdx, i);
-                getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+                m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
                 return;
             }
             release_notes += QString("- ") + release_note_json->valuestring + QString("<br/>");
@@ -565,10 +606,10 @@ void AutoUpdates::VerifyAppUpdates(std::string filedata)
 
     qDebug() << release_notes;
 
-    ChooseAppVersion(distrover, archver, dist_json);
+    chooseAppVersion(distrover, archver, dist_json);
 }
 
-std::string AutoUpdates::VerifyOS(std::string param)
+std::string AutoUpdates::verifyOS(const std::string &param)
 {
     std::string distrostr;
     std::string archstr;
@@ -653,9 +694,9 @@ done:
         return archstr;
 }
 
-void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *dist_json)
+void AutoUpdates::chooseAppVersion(const std::string &distro, const std::string &arch, cJSON *dist_json)
 {
-    qDebug() << "C++ AUTO UPDATES: ChooseAppVersion";
+    qDebug() << "C++ AUTO UPDATES: chooseAppVersion";
 
     std::string downloadurl;
 
@@ -668,7 +709,7 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
     if (distro == "unsupported")
     {
        qDebug() << "C++ AUTO UPDATES: Your Linux distribution is not supported by Auto-updates";
-       getAppController()->signalAutoUpdateFail(m_updateType, GAPI::LinuxNotSupported);
+       m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::LinuxNotSupported);
        return;
     }
 #endif
@@ -677,34 +718,32 @@ void AutoUpdates::ChooseAppVersion(std::string distro, std::string arch, cJSON *
     if (!cJSON_IsString(package_json))
     {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing version.json: Could not get package_json for this distribution.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return;
     }
     downloadurl.append(package_json->valuestring);
     urlList.clear();
     urlList.append(QString::fromStdString(downloadurl));
-    getdistro = distro;
-    updateWindows();
+    reportAvailableUpdate(GAPI::AutoUpdateApp);
     return;
 }
 
-void AutoUpdates::ChooseCertificates(cJSON *certs_json)
+void AutoUpdates::chooseCertificates(cJSON *certs_json)
 {
-    qDebug() << "C++ AUTO UPDATES: ChooseCertificates";
+    qDebug() << "C++ AUTO UPDATES: chooseCertificates";
 
     urlList.clear();
     hashList.clear();
     fileNames.clear();
-    fileIdx = 0;
     std::string downloadurl;
 
-    eIDMW::PTEID_Config configCert(eIDMW::PTEID_PARAM_AUTOUPDATES_CERTS_URL);
+    PTEID_Config configCert(PTEID_PARAM_AUTOUPDATES_CERTS_URL);
     std::string configurl = configCert.getString();
 
     int certIdx;
     QString cert;
 
-    eIDMW::PTEID_Config certs_dir(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
+    PTEID_Config certs_dir(PTEID_PARAM_GENERAL_CERTS_DIR);
     std::string  certs_dir_str = certs_dir.getString();
     qDebug() << QString::fromUtf8(certs_dir_str.c_str());
 
@@ -714,7 +753,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
         if (!cJSON_IsString(cert_json))
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error parsing certs.json: Could not get cert index = %d", certIdx);
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+            m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::GenericError);
             return;
         }
 
@@ -731,17 +770,17 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
         if (!dir.exists())
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                "AutoUpdates::ChooseCertificates: Certs dir does not exist! %s",certs_dir.getString());
-            qDebug() << "C++: AutoUpdates::ChooseCertificates: Certs dir do not exist!";
-            getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
+                "AutoUpdates::chooseCertificates: Certs dir does not exist! %s",certs_dir.getString());
+            qDebug() << "C++: AutoUpdates::chooseCertificates: Certs dir do not exist!";
+            m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateCerts,GAPI::InstallFailed);
             return;
         }
         if (!dir.isReadable())
         {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                "AutoUpdates::ChooseCertificates: Certs dir is not readable! %s",certs_dir.getString());
-            qDebug() << "C++: AutoUpdates::ChooseCertificates: Certs dir is not readable!";
-            getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
+                "AutoUpdates::chooseCertificates: Certs dir is not readable! %s",certs_dir.getString());
+            qDebug() << "C++: AutoUpdates::chooseCertificates: Certs dir is not readable!";
+            m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::InstallFailed);
             return;
         }
 #ifdef WIN32
@@ -756,7 +795,7 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
             qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
         } else {
             PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                "AutoUpdates::ChooseCertificates: Cert does not exist or invalid:! %s",file_name_temp.c_str());
+                "AutoUpdates::chooseCertificates: Cert does not exist or invalid:! %s",file_name_temp.c_str());
 
             downloadurl.append(configurl);
             downloadurl.append(cert_json->string);
@@ -768,106 +807,96 @@ void AutoUpdates::ChooseCertificates(cJSON *certs_json)
         }
     }
     if(urlList.length() > 0 && hashList.length() > 0){
-        updateWindows();
+        reportAvailableUpdate(GAPI::AutoUpdateCerts);
     } else {
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NoUpdatesAvailable);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::NoUpdatesAvailable);
     }
 }
 
-void AutoUpdates::updateWindows()
+void AutoUpdates::reportAvailableUpdate(GAPI::AutoUpdateType update_type)
 {
     PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                "AutoUpdates::updateWindows: There are updates available! updateType = %d", m_updateType);
+        "AutoUpdates::reportAvailableUpdate: There are updates available! updateType = %d", update_type);
 
-    if(m_updateType == GAPI::AutoUpdateApp){
+    if (update_type == GAPI::AutoUpdateApp) {
         // Show popup about app update
-                getAppController()->signalAutoUpdateAvailable(
-            m_updateType, release_notes, installed_version, remote_version, urlList.at(0));
+        m_app_controller->signalAutoUpdateAvailable(
+            GAPI::AutoUpdateApp, release_notes, installed_version, remote_version, urlList.at(0));
     }
-    else if(m_updateType == GAPI::AutoUpdateCerts){
+    else if (update_type == GAPI::AutoUpdateCerts) {
 #ifdef WIN32
         // Start update certs automatically
-        getAppController()->startUpdateCerts();
+        m_app_controller->startUpdateCerts();
 #else
         // Show popup about certs update because the root password is needed.
-        getAppController()->signalAutoUpdateAvailable(
-            m_updateType, "", "", "", getCertListAsString());
+        m_app_controller->signalAutoUpdateAvailable(
+            GAPI::AutoUpdateCerts, "", "", "", getCertListAsString());
 #endif
     }
-    else if(m_updateType == GAPI::AutoUpdateNews){
-        // Show popup about news
-        getAppController()->signalAutoUpdateAvailable(
-            m_updateType, m_newsTitle, m_newsBody,"", m_newsUrl);
-    }
 }
 
-void AutoUpdates::startUpdate()
+void AutoUpdates::startUpdate(GAPI::AutoUpdateType update_type)
 {
-    url = urlList.at(fileIdx);
-    QFileInfo fileInfo(url.path());
-    fileName = fileInfo.fileName();
-    fileNames.append(fileName);
+    CURL *curl = NULL;
+    QStringList downloaded_files;
+    foreach(QUrl url, urlList) {
+        QFileInfo fileInfo(url.path());
+        QString file_name = fileInfo.fileName();
 
-    if (fileName.isEmpty())
-    {
-         getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        std::string tmp_file_path = (QDir::tempPath() + "/" + file_name).toStdString();
+        FILE *tmp_file = NULL;
+        if ((tmp_file = fopen(tmp_file_path.c_str(), "wb")) == NULL) {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AutoUpdates::startUpdate: Unable to save the file.");
+            m_app_controller->signalAutoUpdateFail(update_type, GAPI::UnableSaveFile);
+            return;
+        }
+
+        m_app_controller->signalStartUpdate(update_type, file_name);
+
+        report_progress prog = {m_app_controller, update_type, &userCanceled};
+
+        std::string empty; //TODO: stop doing this please; dont pass an empty string
+        UpdateStatus status = perform_update_request(url.toString().toStdString(), empty, curl, tmp_file, &prog);
+        fclose(tmp_file);
+        //TODO: report error cases
+        if (status != UpdateStatus::ok) {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "startUpdate() perform_update_request failed");
+            remove(tmp_file_path.c_str());
+            if (status == UpdateStatus::cancel) {
+                m_app_controller->signalAutoUpdateFail(update_type, GAPI::DownloadCancelled);
+                return;
+            }
+        }
+        else {
+            downloaded_files.push_back(file_name);
+        }
     }
-    QFile::remove(fileName);
 
-    std::string tmpfile;
-    tmpfile.append(QDir::tempPath().toStdString());
-    tmpfile.append("/");
-    tmpfile.append(fileName.toStdString());
-
-    file = new QFile(QString::fromUtf8((tmpfile.c_str())));
-    if (!file->open(QIODevice::WriteOnly)) {
-       qDebug() << "C++ AUTO UPDATES: Unable to save the file";
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-           "AutoUpdates::startUpdate: Unable to save the file.");
-        delete file;
-        file = nullptr;
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::UnableSaveFile);
+    if (update_type == GAPI::AutoUpdateApp) {
+        std::string downloaded_pkg = downloaded_files.at(0).toStdString();
+        installAppUpdate(downloaded_pkg);
+    }
+    if (update_type == GAPI::AutoUpdateCerts) {
+        installCertsUpdate(downloaded_files);
+    }
+    else {
+        qDebug() << __FUNCTION__ << " shouldn't be called for AutoUpdateNews or other update_type!";
         return;
     }
 
-    getAppController()->signalStartUpdate(m_updateType, fileName);
-
-    // schedule the request
-    httpUpdateRequestAborted = false;
-    startUpdateRequest(url);
+    return;
 }
 
-void AutoUpdates::startUpdateRequest(QUrl url){
-    qDebug() << "C++ AUTO UPDATES: startUpdateRequest";
+/* Actually apply the app update package in a system-specific way
+   Windows: install using msixec
+   MacOS:   install .pkg file using the GUI Installer app
+   Linux:   just move the package to the Downloads dir (the user will be informed that he needs to install the new package)
 
-    if (qnam->networkAccessible() == QNetworkAccessManager::NotAccessible){
-        qDebug() << "C++ AUTO UPDATES: startUpdateRequest No Internet Connection";
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-            "AutoUpdates::startUpdateRequest: No Internet Connection.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);
-        return;
-    }
-
-    int download_duration = 300000;
-    reply = qnam->get(QNetworkRequest(url));
-    QTimer::singleShot(download_duration, this, SLOT(cancelUpdateDownload()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(httpUpdateError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()),
-            this, SLOT(httpUpdateFinished()));
-    connect(reply, SIGNAL(readyRead()),
-            this, SLOT(httpUpdateReadyRead()));
-    // TODO : For now the Autenticacao.gov server do not send content length header.
-    //        So we are using a indeterminate progress bar.
-    connect(reply, SIGNAL(downloadProgress(qint64,qint64)),
-            this, SLOT(updateUpdateDataReadProgress(/*qint64,qint64*/)));
-}
-
-void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
-    qDebug() << "C++ AUTO UPDATES: RunAppPackage";
+ */
+void AutoUpdates::installAppUpdate(const std::string &pkg) {
+    qDebug() << "C++ AUTO UPDATES: installAppUpdate";
 
     std::string pkgpath;
-    // TODO: test with Ubunto < 17
 
     pkgpath.append(QDir::tempPath().toStdString());
     pkgpath.append("/");
@@ -878,7 +907,7 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
     if (!verifyPackageSignature(pkgpath))
     {
         qDebug() << "Package signature invalid!";
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return;
     }
 
@@ -929,7 +958,7 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
         qDebug() << QString::fromStdString("Error: " + GetLastError());
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
                   "AppController::RunPackage: Failed to start update process: %d.", GetLastError());
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::InstallFailed);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::InstallFailed);
     } else {
         PTEID_ReleaseSDK();
         exit(0);
@@ -939,11 +968,6 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
     // This launches the GUI installation process, the user has to follow the wizard to actually perform the installation
     execl("/usr/bin/open", "open", pkgpath.c_str(), NULL);
 #else
-
-    //Normalize distro string to lowercase
-    std::transform(distro.begin(), distro.end(), distro.begin(), ::tolower);
-
-    std::cout << "pkgpath " << pkgpath << " distro " << distro << std::endl;
 
     QString pkgDestinationPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first();
     pkgDestinationPath.append("/");
@@ -956,11 +980,11 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
     {
         qDebug() << "C++ AUTO UPDATES: Failed to move package to " << pkgDestinationPath.toStdString().c_str();
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AppController::RunPackage: Failed to move package to %s" , pkgDestinationPath.toStdString().c_str());
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::GenericError);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::GenericError);
         return;
     }
 
-    getAppController()->signalAutoUpdateSuccess(m_updateType);
+    m_app_controller->signalAutoUpdateSuccess(GAPI::AutoUpdateApp);
 
 #endif
     qDebug() << "C++ AUTO UPDATES: RunPackage finish";
@@ -969,7 +993,7 @@ void AutoUpdates::RunAppPackage(std::string pkg, std::string distro){
 #ifdef __APPLE__
 
 /* Helper function for the helper function :) */
-QByteArray readOriginalFile(QString &path) {
+QByteArray readOriginalFile(const QString &path) {
     QFile origin_file(path);
 
     if (!origin_file.open(QIODevice::ReadOnly)) {
@@ -1048,10 +1072,10 @@ bool copyFileWithAuthorization(QString &cert_filepath, QString &destination_path
 
 #endif
 
-void AutoUpdates::RunCertsPackage(QStringList certs) {
-    qDebug() << "C++ AUTO UPDATES: RunCertsPackage filename";
+void AutoUpdates::installCertsUpdate(const QStringList &certs) {
+    qDebug() << "C++ AUTO UPDATES: installCertsUpdate filename";
 
-    eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_CERTS_DIR);
+    PTEID_Config config(PTEID_PARAM_GENERAL_CERTS_DIR);
     std::string certs_dir_std = config.getString();
 
 #ifdef WIN32
@@ -1076,7 +1100,7 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
             {
                 bUpdateCertsSuccess = false; // Keep install another files but show popup with error message
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                    "AutoUpdates::RunCertsPackage: failed to validate hash for file: %s", certificateFileName.toStdString().c_str());
+                    "AutoUpdates::installCertsUpdate: failed to validate hash for file: %s", certificateFileName.toStdString().c_str());
                 continue;
             }
 
@@ -1086,11 +1110,11 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
             {
                 bUpdateCertsSuccess = false; // Keep install another files but show popup with error message
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                    "AutoUpdates::RunCertsPackage: Cannot copy file: %s", certificateFileName.toStdString().c_str());
+                    "AutoUpdates::installCertsUpdate: Cannot copy file: %s", certificateFileName.toStdString().c_str());
             }
             else {
                 PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                    "AutoUpdates::RunCertsPackage: Copy file success: %s", certificateFileName.toStdString().c_str());
+                    "AutoUpdates::installCertsUpdate: Copy file success: %s", certificateFileName.toStdString().c_str());
             }
         }
     }
@@ -1101,22 +1125,18 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
         for (int i = 0; i < certs.length(); i++) {
             QString certificate_path = QDir::tempPath() + "/" + certs.at(i);
             if (validateHash(certificate_path, hashList.at(i))) {
-               
                bUpdateCertsSuccess = copyFileWithAuthorization(certificate_path, certs_dir_str);
                if (!bUpdateCertsSuccess)
                   break;
-           
             }
             else {
                 bUpdateCertsSuccess = false;
                 //Hash failure just abort because we don't want to support partially correct updates
                  PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                    "AutoUpdates::RunCertsPackage: invalid hash for downloaded file %s",
+                    "AutoUpdates::installCertsUpdate: invalid hash for downloaded file %s",
                                                  certificate_path.toStdString().c_str());
-                
                 break;
             }
-
         }
     }
 
@@ -1139,48 +1159,48 @@ void AutoUpdates::RunCertsPackage(QStringList certs) {
     }
 
     if(bHaveFilesToCopy) {
-        QProcess *proc = new QProcess(this);
-        proc->setProcessChannelMode(QProcess::MergedChannels);
+        QProcess proc;
+        proc.setProcessChannelMode(QProcess::MergedChannels);
 
         QString cmd = "pkexec /bin/cp " + filesToCopy + certs_dir_str;
-        proc->start(cmd);
+        proc.start(cmd);
 
-        if(!proc->waitForStarted()) //default wait time 30 sec
+        if(!proc.waitForStarted()) //default wait time 30 sec
         {
             qDebug() << "C++ AUTO UPDATES: cannot start process ";
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                      "AutoUpdates::RunCertsPackage: Cannot execute: %s",cmd.toStdString().c_str());
+                      "AutoUpdates::installCertsUpdate: Cannot execute: %s",cmd.toStdString().c_str());
             bUpdateCertsSuccess = false;
         } else {
 
-            proc->waitForFinished();
+            proc.waitForFinished();
 
-            if(proc->exitStatus() == QProcess::NormalExit
-                    && proc->exitCode() == QProcess::NormalExit){
+            if(proc.exitStatus() == QProcess::NormalExit
+                    && proc.exitCode() == QProcess::NormalExit){
                 PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
-                          "AutoUpdates::RunCertsPackage: Copy file(s) success: %s",cmd.toStdString().c_str());
+                          "AutoUpdates::installCertsUpdate: Copy file(s) success: %s",cmd.toStdString().c_str());
             } else {
                 bUpdateCertsSuccess = false;
-                if (proc->exitStatus() == QProcess::NormalExit) {
-                    PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Exit code of pkexec command: %d", proc->exitCode());
+                if (proc.exitStatus() == QProcess::NormalExit) {
+                    PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui", "Exit code of pkexec command: %d", proc.exitCode());
                 }
                 PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                          "AutoUpdates::RunCertsPackage: Cannot copy file(s): %s",cmd.toStdString().c_str());
+                          "AutoUpdates::installCertsUpdate: Cannot copy file(s): %s",cmd.toStdString().c_str());
             }
         }
     }
 #endif
 
     if(bUpdateCertsSuccess){
-        getAppController()->signalAutoUpdateSuccess(m_updateType);
-        getAppController()->updateCertslog();
+        m_app_controller->signalAutoUpdateSuccess(GAPI::AutoUpdateCerts);
+        m_app_controller->updateCertslog();
     } else {
-        getAppController()->signalAutoUpdateFail(m_updateType,GAPI::InstallFailed);
+        m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::InstallFailed);
     }
-    qDebug() << "C++: RunCertsPackage finish";
+    qDebug() << "C++: installCertsUpdate finish";
 }
 
-bool AutoUpdates::validateHash(QString certPath, QString hashString){
+bool AutoUpdates::validateHash(const QString &certPath, const QString &hashString){
 
     QFile f(certPath);
     if (!f.open(QFile::ReadOnly)){
@@ -1207,256 +1227,10 @@ bool AutoUpdates::validateHash(QString certPath, QString hashString){
     }
 }
 
-void AutoUpdates::userCancelledUpdateDownload()
+void AutoUpdates::cancelUpdate()
 {
-    qDebug() << "C++ AUTO UPDATES: userCanceledUpdateDownload";
-
-    httpUpdateRequestAborted = true;
+    qDebug() << "C++ AUTO UPDATES: cancelUpdate";
     userCanceled = true;
-
-    if (reply != NULL){
-        reply->abort();
-    }
-
-    getAppController()->signalAutoUpdateFail(m_updateType, GAPI::DownloadCancelled);
-}
-
-/*
- * Slots to process the configuration file
- */
-void AutoUpdates::cancelDownload()
-{
-    qDebug() << "C++ AUTO UPDATES: cancelDownload";
-    httpRequestAborted = true;
-
-    if (reply != NULL){
-        reply->abort();
-    }
-
-    if (qnam->networkAccessible() == QNetworkAccessManager::NotAccessible){
-        qDebug() << "C++ AUTO UPDATES: cancelDownload No Internet Connection";
-
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);
-    }
-    return;
-}
-
-void AutoUpdates::httpError(QNetworkReply::NetworkError networkError)
-{
-    qDebug() << "C++ AUTO UPDATES type = " << m_updateType <<  "httpError " << networkError;
-    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-        "AutoUpdates type=%d httpError QNetworkReply::NetworkError = %d", m_updateType, networkError);
-
-    switch(networkError){
-        case QNetworkReply::NetworkError::NoError:
-            //no error hence do nothing
-            break;
-        default:
-            cancelDownload();
-            break;
-    }
-    return;
-}
-
-void AutoUpdates::httpFinished()
-{
-    qDebug() << "C++ AUTO UPDATES: httpFinished httpRequestAborted = " << httpRequestAborted;
-    if (httpRequestAborted) {
-        if (file) {
-            file->close();
-            file->remove();
-            delete file;
-            file = 0;
-        }
-        reply->deleteLater();
-        reply = 0;
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-            "AutoUpdates::httpFinished: The update request was aborted.");
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);
-        return;
-    }
-
-    QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    if (reply->error()) {
-        qDebug() << "C++ AUTO UPDATES: reply error";
-        file->remove();
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);
-        QString strLog = QString("AutoUpdates:: Download failed: ");
-        strLog += reply->url().toString();
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", strLog.toStdString().c_str() );
-        return;
-    } else if (!redirectionTarget.isNull()) {
-        QUrl newUrl = url.resolved(redirectionTarget.toUrl());
-        // TODO: ask about redirect.
-        {
-            url = newUrl;
-            reply->deleteLater();
-            filedata.clear();
-            startRequest(url);
-            return;
-        }
-    }
-    qDebug() << "C++ AUTO UPDATES: httpFinished";
-    if(m_updateType == GAPI::AutoUpdateApp){
-        VerifyAppUpdates(filedata);
-    }
-    else if(m_updateType == GAPI::AutoUpdateCerts){
-        VerifyCertsUpdates(filedata);
-    } else {
-        VerifyNewsUpdates(filedata);
-    }
-}
-
-void AutoUpdates::httpReadyRead()
-{
-    qDebug() << "C++ AUTO UPDATES: httpReadyRead";
-    // this slot gets called everytime the QNetworkReply has new data.
-    // We read all of its new data and write it into the file.
-    // That way we use less RAM than when reading it at the finished()
-    // signal of the QNetworkReply
-
-    QByteArray data = reply->readAll();
-    QString qsdata(data);
-    //Write to memory
-    filedata += qsdata.toStdString();
-}
-
-void AutoUpdates::updateDataReadProgress()
-{
-    if (httpRequestAborted)
-        return;
-}
-
- /*
- *  Slots to process the update file
- */
-
-void AutoUpdates::cancelUpdateDownload()
-{
-    qDebug() << "C++ AUTO UPDATES: cancelUpdateDownload";
-
-    httpUpdateRequestAborted = true;
-    userCanceled = false;
-
-    if (reply != NULL){
-        reply->abort();
-    }
-}
-
-void AutoUpdates::httpUpdateError(QNetworkReply::NetworkError networkError)
-{
-    qDebug() << "C++ AUTO UPDATES: httpUpdateError";
-    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-        "AutoUpdates::httpUpdateError: QNetworkReply::NetworkError = %d", networkError);
-
-    switch(networkError){
-        case QNetworkReply::NetworkError::NoError:
-            //no error hence do nothing
-            break;
-        default:
-            cancelUpdateDownload();
-            break;
-    }
-    return;
-}
-
-void AutoUpdates::httpUpdateFinished(){
-    qDebug() << "C++ AUTO UPDATES: httpUpdateFinished";
-    if (httpUpdateRequestAborted)
-    {
-        if (file)
-        {
-            file->close();
-            file->remove();
-            delete file;
-            file = 0;
-            qDebug() << "C++: httpUpdateRequestAborted";
-            PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui",
-                "AutoUpdates::httpUpdateFinished: The update request was aborted.");
-        }
-
-        if (!userCanceled){
-            //network failure occurred when downloading
-            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
-                "AutoUpdates::httpUpdateFinished: Network failure occurred while downloading.");
-            getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);
-        }
-
-        reply->deleteLater();
-        reply = 0;
-        return;
-    }
-    if (!file){
-        reply->deleteLater();
-        reply = 0;
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::DownloadFailed);
-        return;
-    }
-    file->flush();
-    file->close();
-
-    QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    if (reply->error())
-    {
-        file->remove();
-        getAppController()->signalAutoUpdateFail(m_updateType, GAPI::NetworkError);
-    }
-    else if (!redirectionTarget.isNull())
-    {
-        QUrl newUrl = url.resolved(redirectionTarget.toUrl());
-
-        qDebug() << "C++: Redirect";
-        // TODO: ask about redirect.
-            url = newUrl;
-            reply->deleteLater();
-            file->open(QIODevice::WriteOnly);
-            file->resize(0);
-            startRequest(url);
-            return;
-    }
-
-    if (!reply->error()){
-        if(m_updateType == GAPI::AutoUpdateApp){
-            RunAppPackage(fileName.toStdString(), getdistro);
-        } else{
-            if(fileIdx == urlList.length() - 1){
-                qDebug() << "Downloads complete";
-                RunCertsPackage(fileNames);
-            }
-            else{
-                fileIdx++;
-                startUpdate();
-                return;
-            }
-        }
-    }
-
-    reply->deleteLater();
-    reply = 0;
-    delete file;
-    file = 0;
-}
-
-void AutoUpdates::httpUpdateReadyRead()
-{
-    // this slot gets called everytime the QNetworkReply has new data.
-    // We read all of its new data and write it into the file.
-    // That way we use less RAM than when reading it at the finished()
-    // signal of the QNetworkReply
-    if (file)
-        file->write(reply->readAll());
-}
-
-void AutoUpdates::updateUpdateDataReadProgress(/*qint64 bytesRead, qint64 totalBytes*/)
-{
-    qDebug() << "C++ AUTO UPDATES: updateUpdateDataReadProgress";
-    if (httpUpdateRequestAborted)
-        return;
-
-    // if(totalBytes > 0)
-    //    valueFloat = (quint64)((double) (bytesRead * 100 / totalBytes ));
-
-    getAppController()->signalAutoUpdateProgress(m_updateType/*,(int)valueFloat*/);
 }
 
 QString AutoUpdates::getCertListAsString(){
@@ -1475,7 +1249,7 @@ QString AutoUpdates::getCertListAsString(){
     return stringURLs;
 }
 
-bool AutoUpdates::verifyPackageSignature(std::string &pkg) {
+bool AutoUpdates::verifyPackageSignature(const std::string &pkg) {
 #ifdef WIN32
     bool result = false;
     LONG lStatus;
@@ -1628,3 +1402,5 @@ bool AutoUpdates::verifyPackageSignature(std::string &pkg) {
     return true;
 #endif
 }
+
+};

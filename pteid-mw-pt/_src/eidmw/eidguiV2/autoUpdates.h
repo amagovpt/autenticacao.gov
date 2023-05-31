@@ -1,6 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019-2020 Adriano Campos - <adrianoribeirocampos@gmail.com>
+ * Copyright (C) 2023 José Pinto - <jose.pinto@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -9,16 +10,10 @@
 #ifndef AUTOUPDATES_H
 #define AUTOUPDATES_H
 
-#include <QObject>
 #include <QVariant>
 #include <QFile>
 #include <QUrl>
 #include "Settings.h"
-#include "scapsettings.h"
-
-#include <QNetworkAccessManager>
-#include <QNetworkProxy>
-#include <QNetworkReply>
 
 #include <cjson/cJSON.h>
 
@@ -27,6 +22,12 @@
 #include "eidErrors.h"
 #include "eidlibException.h"
 #include "eidlibdefines.h"
+
+#include "gapi.h"
+
+class AppController;
+
+namespace eIDMW {
 
 struct NewsEntry
 {
@@ -38,98 +39,48 @@ struct NewsEntry
     std::string link;
 };
 
-class AppController;
-
-class AutoUpdates : public QObject
+class AutoUpdates
 {
-    Q_OBJECT
 public:
-    AutoUpdates(){}
-    AutoUpdates(AppController* AppController)
-        : m_AppController(AppController)
-    {
-    }
-    ~AutoUpdates() {
-        delete qnam;
-    }
-    void setAppController(AppController* AppController){
-        m_AppController = AppController;
-    }
-    AppController* getAppController(void){
-        return m_AppController;
-    }
+    AutoUpdates(AppController* AppController): m_app_controller(AppController) {};
 
-    void initRequest(int updateType);
-    void startRequest(QUrl url);
-    void startUpdate();
-    void userCancelledUpdateDownload();
-
-public slots:
-
-    // Public slots to process the configuration file
-    void cancelDownload();
-    void httpError(QNetworkReply::NetworkError networkError);
-    void httpFinished();
-    void httpReadyRead();
-    void updateDataReadProgress();
-
-    // Public slots to process the update file
-    void cancelUpdateDownload();
-    void httpUpdateError(QNetworkReply::NetworkError networkError);
-    void httpUpdateFinished();
-    void httpUpdateReadyRead();
-    void updateUpdateDataReadProgress(/*qint64 bytesRead, qint64 totalBytes*/);
+    void checkForUpdate(GAPI::AutoUpdateType type);
+    void startUpdate(GAPI::AutoUpdateType type);
+    void cancelUpdate();
 
 private:
-    AppController*   m_AppController;
-    int m_updateType;
-    QUrl url;
-    QNetworkProxy proxy;
-    QNetworkAccessManager *qnam = NULL;
-    QNetworkReply *reply;
-    QFile *file;
-    int fileIdx = 0;
-    bool httpRequestAborted;
-    bool httpUpdateRequestAborted;
-    bool userCanceled;
-    std::string filedata;
+    void verifyAppUpdates(const std::string &filedata);
+    void verifyCertsUpdates(const std::string &filedata);
+    void verifyNewsUpdates(const std::string &filedata);
+
+    void parseNews(const std::string &filedata);
+    std::vector<NewsEntry> chooseNews();
+    void chooseCertificates(cJSON *certs_json);
+    void chooseAppVersion(const std::string &distro, const std::string &arch, cJSON *dist_json);
+
+    std::string verifyOS(const std::string &param);
+
+    QString getCertListAsString();
+
+    void reportAvailableUpdate(GAPI::AutoUpdateType update_type);
+    void startUpdateRequest(QUrl url);
+    void installAppUpdate(const std::string &pkg);
+    void installCertsUpdate(const QStringList &certs);
+
+    bool validateHash(const QString &certPath, const QString &hash);
+    bool verifyPackageSignature(const std::string &pkg);
+
+    AppController *m_app_controller;
+
+    bool userCanceled = false;
     QStringList urlList;
     QStringList hashList;
-    std::string getdistro;
     QStringList fileNames;
-    QString fileName;
     QString release_notes;
     QString remote_version;
     QString installed_version;
     std::vector<NewsEntry> m_news;
-    QString m_newsTitle;
-    QString m_newsBody;
-    QString m_newsUrl;
-    QString m_newsId;
-
-    // Private methods to process the configuration file
-    void VerifyAppUpdates(std::string filedata);
-    void VerifyCertsUpdates(std::string filedata);
-    void VerifyNewsUpdates(std::string filedata);
-
-    void parseNews(std::string filedata);
-    std::vector<NewsEntry> ChooseNews();
-    void ChooseCertificates(cJSON *certs_json);
-    void ChooseAppVersion(std::string distro, std::string arch, cJSON *dist_json);
-
-    std::string VerifyOS(std::string param);
-
-    QString getCertListAsString();
-
-    void updateWindows();
-
-    // Private methods to process the update file
-    void startUpdateRequest(QUrl url);
-
-    void RunAppPackage(std::string pkg, std::string distro);
-    void RunCertsPackage(QStringList certs);
-    bool validateHash(QString certPath, QString hash);
-    bool verifyPackageSignature(std::string &pkg);
 };
 
+};
 #endif //AUTOUPDATES_H

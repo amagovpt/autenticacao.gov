@@ -41,13 +41,13 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 ### Linux
 
 1. Instalação das dependências.
-   As dependências para a compilação do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 20.04), são as seguintes:
+   As dependências para a compilação do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 22.04), são as seguintes:
 
    ```bash
-   sudo apt install build-essential libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-11-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev
+   sudo apt install build-essential libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-11-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qt5-default qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-nss-dev libcjson-dev
    ```
 
-   As dependências para execução do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 20.04), são as seguintes:
+   As dependências para execução do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 22.04), são as seguintes:
    ```bash
    sudo apt install pcscd qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qt-labs-platform qml-module-qtgraphicaleffects qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qtquick-layouts qml-module-qtquick-templates2 qml-module-qtquick-window2 qml-module-qtquick2 qt5-gtk-platformtheme libnsspem fonts-lato policykit-1
    ```
@@ -74,8 +74,6 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 
    A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2 e as bibliotecas do projeto em /usr/local/lib/.
 
-   As dependências para a execução do Middleware na distribuição Ubuntu 20.04 estão disponíveis em "Depends" no seguinte URL: [Dependências](pteid-mw-pt/_src/eidmw/debian/control)
-
 
 ### Windows
 
@@ -84,21 +82,21 @@ Instruções para compilação em Windows (Visual Studio 2017)
 É importante assegurar que as dependências são compiladas com a mesma versão de Visual Studio que será usada para compilar o Middleware.
 Será assim necessário compilar as seguintes bibliotecas (versões utilizadas para a última release Windows):
 
-- OpenSSL 1.1.1q - https://www.openssl.org/source/openssl-1.1.1q.tar.gz
-- xerces-c 3.2.3 - https://xerces.apache.org/xerces-c/build-3.html
+- OpenSSL 3.0.8 - https://www.openssl.org/source/openssl-3.0.8.tar.gz
+- xerces-c 3.2.4 - https://xerces.apache.org/xerces-c/build-3.html
 - libcurl 7.80.0 - https://curl.haxx.se/download.html
 - zlib 1.2.11 - https://www.zlib.net/fossils/zlib-1.2.11.tar.gz
 - libzip 1.6.1 - https://libzip.org/download/
 - libpng 1.6.37 - http://www.libpng.org/pub/png/libpng.html
 - openjpeg 2.4 - https://www.openjpeg.org/
-- libxml-security-c 2.0.4 - http://archive.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.zip
+- libxml-security-c 2.0.4 - http://archive.apache.org/dist/santuario/c-library/xml-security-c-2.0.4.tar.gz
 - cJSON 1.7.15 - https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.15.zip 
 
 Para compilar a aplicação GUI, projeto disponível em eidmw/eidguiV2, é necessária uma dependência adicional:
 
 - poppler-qt5 0.87 - https://poppler.freedesktop.org/releases.html
 
-Para o caso do Qt5 (versão igual ou superior a 5.12) estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  `https://download.qt.io/archive/online_installers/2.0/`
+Para o caso do Qt5 (versão igual ou superior a 5.12) estão disponíveis binários pré-compilados, poderá ser utilizado o instalador disponível em:  `https://download.qt.io/archive/online_installers/4.0/`
 
 Ferramentas adicionais a instalar:
 

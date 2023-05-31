@@ -28,6 +28,7 @@ class SSLConnection
 
 		EIDMW_APL_API CURL *connect_encrypted();
 
+
 	private:
 		CURL *m_curl;
 		APL_Card *m_card;

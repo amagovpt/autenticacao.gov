@@ -1,5 +1,5 @@
 @echo [INFO] Input PTEID_DIR_OPENSSL=%PTEID_DIR_OPENSSL%
-@set FILE_TO_FIND="bin\libcrypto-1_1.dll" "bin\libssl-1_1.dll" "lib\libcrypto.lib" "lib\libssl.lib"
+@set FILE_TO_FIND="lib\libcrypto.lib" "lib\libssl.lib"
 @echo [INFO] Looking for files: %FILE_TO_FIND%
 
 @set FILE_NOT_FOUND=
