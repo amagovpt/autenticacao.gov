@@ -33,7 +33,6 @@ namespace eIDMW
   const static tCert CertInvalid = {false, "", 0, 0,0,0};
   const static tPrivKey PrivKeyInvalid = {false, "", 0,0,0,0,0,0,0,"", 0,false};
 
-  // Hardcoded Pteid V1 PINs, keys, certs -- to be removed
   bool            bValid;
   std::string     csLabel;
   bool            bFlags[2];
@@ -48,15 +47,6 @@ namespace eIDMW
   unsigned char   ucPadChar;
   tPinEncoding    encoding;
   std::string     csPath;
-
-  const static tPin PinPteidV1       = {true, "Basic PIN",0,1,1,1,0,NO_ID, 4, 8, 12, 1, 0xFF,PIN_ENC_ASCII,"","3F00"};
-  const static tPin pinPteidAuthV2   = {true, "Authentication",0,1,1,1,0,NO_ID, 4, 8, 12, 0x85, 0xFF,PIN_ENC_ASCII,"","3F00"};
-  const static tPin pinPteidSignV2   = {true, "Signature",0,1,1,1,0,NO_ID,4, 8, 12, 0x86, 0xFF,PIN_ENC_ASCII,"","3F00"};
-
-  //const static tPrivKey KeyAuthPteidV1 = {true, "Authentication", 0,0,0,0,0,0,0x82,"3F005F00", 1024 ,true};
-  //const static tPrivKey KeySignPteidV1 = {true, "Signature", 0,0,0,0,0,0,0x83,"3F005F00", 1024,true};
-  //const static tPrivKey KeyAuthPteidV2 = {true, "Authentication", 0,0,0,0,0,0,0x8A,"3F005F00", 1024,true};
-  //const static tPrivKey KeySignPteidV2 = {true, "Signature", 0,0,0,0,0,0,0x89,"3F005F00", 1024,true};
 
   const std::string defaultEFTokenInfo = "3F004F005032";
   const std::string defaultEFODF       = "3F004F005031";
