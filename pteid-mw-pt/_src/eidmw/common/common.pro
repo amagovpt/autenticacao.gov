@@ -17,6 +17,8 @@ message("Compile $$TARGET")
 target.path = $${INSTALL_DIR_LIB}
 INSTALLS += target
 
+QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
+
 SRCDIR = .
 OBJECT_DIR = ..
 
