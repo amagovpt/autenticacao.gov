@@ -5,6 +5,7 @@
  * Copyright (C) 2018-2020 Miguel Figueira - <miguel.figueira@caixamagica.pt>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019-2022 José Pinto - <jose.pinto@caixamagica.pt>
+ * Copyright (C) 2023 Nuno Romeu Lopes - <nuno.lopes@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -3534,12 +3535,15 @@ static std::vector<std::string> string_vector_from_qstringlist(const QList<QStri
 QVariantList GAPI::getSCAPAttributesText(QList<QString> qstring_ids) {
     std::vector<std::string> ids = string_vector_from_qstringlist(qstring_ids);
     std::vector<ScapAttribute> attributes = get_attributes_by_ids(ids);
+    std::string professionalName = get_professional_name(attributes);
+
     const auto formatted_strings = format_scap_seal_strings(attributes);
 
     QVariantList result;
     result.append(QString::fromStdString(formatted_strings.first));
     result.append(QString::fromStdString(formatted_strings.second));
     result.append(m_font_size);
+    result.append(QString::fromStdString(professionalName));
 
     return result;
 }

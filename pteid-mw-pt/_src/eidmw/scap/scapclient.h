@@ -1,7 +1,8 @@
 /*-****************************************************************************
 
  * Copyright (C) 2022-2023 José Pinto - <jose.pinto@caixamagica.pt>
- *
+ * Copyright (C) 2023 Nuno Romeu Lopes - <nuno.lopes@caixamagica.pt>
+ * 
  * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
@@ -118,5 +119,8 @@ attributes_by_provider_map group_by_provider(const std::vector<ScapAttribute> &a
 
 // Format "Certified by" and "Certified Attributes" strings visible in scap signature's seals
 std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<ScapAttribute> &attributes);
+
+// Return professional name if all selected attributes have it
+std::string get_professional_name(const std::vector<ScapAttribute> &attributes);
 
 };

@@ -1,6 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2022-2023 José Pinto - <jose.pinto@caixamagica.pt>
+ * Copyright (C) 2023 Nuno Romeu Lopes - <nuno.lopes@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
 
@@ -145,6 +146,48 @@ static std::string join_attribute_strings(const std::vector<ScapAttribute> &attr
 	return result;
 }
 
+string get_professional_name(const std::vector<ScapAttribute> &attributes)
+{
+	string professional_name = "";
+	bool checkProfessionalName = false;
+
+	for (auto it = attributes.begin(); it != attributes.end(); ++it)  {
+
+		if (it == attributes.begin())  {
+
+			for (const ScapSubAttribute &sub_attribute: it->sub_attributes)  {
+				if(sub_attribute.id == "NomeProfissional")  {
+					professional_name = sub_attribute.value;
+				}
+			}
+
+			//if the first attribute doesn't have professional name
+			if (professional_name.empty())  {
+				return professional_name;
+			}
+		}
+		else  {
+			checkProfessionalName = false;
+
+			for (const ScapSubAttribute &sub_attribute: it->sub_attributes) {
+				if (sub_attribute.id == "NomeProfissional" && 
+					sub_attribute.value == professional_name)  {
+						checkProfessionalName = true;
+					}
+			}
+
+			//all atributes must have the same professional name
+			if (checkProfessionalName == false)  {
+				professional_name = "";
+				return professional_name;
+			}
+		}
+
+	}
+
+	return professional_name;
+}
+
 attributes_by_provider_map group_by_provider(const std::vector<ScapAttribute> &attributes)
 {
 	attributes_by_provider_map grouped;
@@ -234,7 +277,17 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 
 			const std::pair<std::string, std::string> seal_strings = format_scap_seal_strings(attributes);
 
-			sig_handler->setSCAPAttributes(_strdup(citizen_info.name.c_str()),
+			std::string sig_name;
+			std::string professional_name = get_professional_name(attributes);
+
+			if (professional_name.empty()) {
+				sig_name = citizen_info.name;
+			}
+			else {
+				sig_name = professional_name;
+			}
+
+			sig_handler->setSCAPAttributes(_strdup(sig_name.c_str()),
 				_strdup(citizen_info.cert_ssn.c_str()),
 				_strdup(seal_strings.first.c_str()),
 				_strdup(seal_strings.second.c_str()));

@@ -29,6 +29,7 @@ PageServicesSignForm {
     property string ownerNameBackup: ""
     property string ownerAttrBackup: ""
     property string ownerEntitiesBackup: ""
+    property string ownerProfNameBackup: ""
 
     property string current_file: filesModel.get(propertyListViewFiles.currentIndex).fileUrl
 
@@ -302,7 +303,8 @@ PageServicesSignForm {
             console.log("Services Sign Advanced --> Certificate Data Changed")
 
             ownerNameBackup = ownerName
-            update_wrapped_name()
+            update_seal_name()
+
             if (gapi.getUseNumId()){
                 propertyPDFPreview.propertyDragSigNumIdText.text =
                         qsTranslate("GAPI","STR_NIC") + ": " + NIC
@@ -324,8 +326,10 @@ PageServicesSignForm {
             var bodyPopup = ""
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
-                propertyPDFPreview.propertyDragSigSignedByNameText.text =
-                        qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY")
+
+                ownerNameBackup = ""
+                update_seal_name()
+
                 if (gapi.getUseNumId()) {
                     propertyPDFPreview.propertyDragSigNumIdText.text =  qsTranslate("GAPI","STR_NIC") + ": "
                 } else {
@@ -451,7 +455,6 @@ PageServicesSignForm {
 
             update_seal_font_size()
 
-            update_wrapped_name();
             update_wrapped_location(propertyTextFieldLocal.text);
             if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked) update_SCAP_info_on_preview();
         }
@@ -459,14 +462,14 @@ PageServicesSignForm {
 
     propertyRadioButtonXADES{
         onClicked: {
-            switchAddAttributes_NotChecked()
+            switchAddAttributes_notChecked()
         }
     }
 
     propertyRadioButtonPADES{
         onClicked: {
             if (propertySwitchAddAttributes.checked)
-                switchAddAttributes_Checked()
+                switchAddAttributes_checked()
         }
     }
 
@@ -847,9 +850,9 @@ PageServicesSignForm {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked
             if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked)
-                switchAddAttributes_Checked()
+                switchAddAttributes_checked()
             else
-                switchAddAttributes_NotChecked()
+                switchAddAttributes_notChecked()
         }
     }
 
@@ -1959,6 +1962,7 @@ PageServicesSignForm {
                     propertyFileDialogBatchOutput.open()
                 } else {
                     if (contains_package_asic()) {
+                        //TODO: Add error message: "ASiC container must be the only element on the file list"
                         var titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
                         var bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
                         mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
@@ -2166,7 +2170,7 @@ PageServicesSignForm {
         return direction;
     }
 
-    function switchAddAttributes_Checked(){
+    function switchAddAttributes_checked() {
         propertyBusyIndicator.running = true
         propertyCheckSignReduced.checked = false
         propertyTextAttributesMsg.visible = true
@@ -2175,9 +2179,10 @@ PageServicesSignForm {
         propertyPDFPreview.propertyDragSigCertifiedByText.visible = true
         propertyPDFPreview.propertyDragSigAttributesText.visible = true
         gapi.startLoadingAttributesFromCache(false)
+        update_seal_name()
     }
 
-    function switchAddAttributes_NotChecked(){
+    function switchAddAttributes_notChecked() {
         propertyTextAttributesMsg.visible = false
         propertyMouseAreaTextAttributesMsg.enabled = false
         propertyMouseAreaTextAttributesMsg.z = 0
@@ -2188,13 +2193,21 @@ PageServicesSignForm {
         propertyPDFPreview.propertyDragSigCertifiedByText.visible = false
         propertyPDFPreview.propertyDragSigAttributesText.visible = false
         update_image_on_seal()
+        update_wrapped_name(ownerNameBackup)
         propertyPDFPreview.forceActiveFocus()
     }
 
-    function update_wrapped_name() {
-        const scap_selected = (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && number_of_attributes_selected() != 0)
-        const max_lines = scap_selected ? Constants.NAME_SCAP_MAX_LINES : Constants.NAME_MAX_LINES
-        const wrapped_name = gapi.getWrappedText(ownerNameBackup, max_lines, Constants.SEAL_NAME_OFFSET)
+    function update_seal_name() {
+        if (ownerProfNameBackup != "") {
+            update_wrapped_name(ownerProfNameBackup)
+        }
+        else  {
+            update_wrapped_name(ownerNameBackup)
+        }
+    }
+
+    function update_wrapped_name(name) {
+        const wrapped_name = gapi.getWrappedText(name, Constants.NAME_MAX_LINES, Constants.SEAL_NAME_OFFSET)
 
         propertyPDFPreview.propertyDragSigSignedByNameText.text = qsTranslate("PageDefinitionsSignature","STR_CUSTOM_SIGN_BY") + " <b>" +
             wrapped_name.join("<br>") + "</b>";
@@ -2233,18 +2246,22 @@ PageServicesSignForm {
 
             const entitiesText = attributesToWrap[0]
             const attributesText = attributesToWrap[1]
-
-            ownerEntitiesBackup = entitiesText
-            ownerAttrBackup = attributesText
-
-            update_seal_font_size()
+            const fontSize = attributesToWrap[2]
+            const professionalNameText = attributesToWrap[3]
 
             const entities = gapi.getWrappedText(entitiesText, Constants.PROVIDER_SCAP_MAX_LINES, Constants.SEAL_PROVIDER_NAME_OFFSET)
             const attributes = gapi.getWrappedText(attributesText, Constants.ATTR_SCAP_MAX_LINES, Constants.SEAL_ATTR_NAME_OFFSET)
-            const fontSize = attributesToWrap[2]
 
             propertyPDFPreview.propertyDragSigCertifiedByText.text += " <b>" + entities.join("<br>") + "</b>";
             propertyPDFPreview.propertyDragSigAttributesText.text += " <b>" + attributes.join("<br>") + "</b>";
+
+            ownerProfNameBackup = professionalNameText
+            update_seal_name()
+
+            ownerEntitiesBackup = entitiesText
+            ownerAttrBackup = attributesText
+            update_seal_font_size()
+
             propertyPDFPreview.propertyCurrentAttrsFontSize = fontSize
 
             var scap_logo = gapi.getSCAPProviderLogo(attribute_ids)
@@ -2270,7 +2287,13 @@ PageServicesSignForm {
     function update_seal_font_size() {
         const is_reduced = propertyCheckSignReduced.checked
         const reason = propertyTextFieldReason.text
-        const name = ownerNameBackup
+
+        var name = ""
+        if (ownerProfNameBackup != "")
+            name = ownerProfNameBackup
+        else
+            name = ownerNameBackup
+
         const nic = gapi.getUseNumId()
         const date = gapi.getUseDate()
         const location = propertyTextFieldLocal.text
