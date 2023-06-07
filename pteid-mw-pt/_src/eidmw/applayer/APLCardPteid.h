@@ -38,6 +38,7 @@
 #include "ByteArray.h"
 #include "PhotoPteid.h"
 #include "APLPublicKey.h"
+//For the XMLUserData enum type
 #include "eidlib.h"
 
 
@@ -51,7 +52,6 @@ class APL_Certifs;
 class APL_ReaderContext;
 class APL_EidFile_Trace;
 class APL_EidFile_ID;
-class APL_EidFile_IDSign;
 class APL_EidFile_Address;
 class APL_EidFile_Sod;
 class APL_EidFile_TokenInfo;
@@ -146,13 +146,12 @@ public:
 	EIDMW_APL_API virtual const CByteArray& getRawData(APL_RawDataType type);	
 
  	EIDMW_APL_API const CByteArray& getRawData_Id();			/**< Get the id RawData */
-	EIDMW_APL_API const CByteArray& getRawData_IdSig();			/**< Get the IdSig RawData */
-	EIDMW_APL_API const CByteArray& getRawData_Trace();			/**< Get the IdSig RawData */
- 	EIDMW_APL_API const CByteArray& getRawData_Addr();			/**< Get the Addr RawData */
+	EIDMW_APL_API const CByteArray& getRawData_Trace();			/**< Get the Trace file RawData */
+ 	EIDMW_APL_API const CByteArray& getRawData_Addr();			/**< Get the Address RawData */
  	EIDMW_APL_API const CByteArray& getRawData_Sod();			/**< Get the Sod RawData */
  	EIDMW_APL_API const CByteArray& getRawData_CardInfo();		/**< Get the Card Info RawData */
  	EIDMW_APL_API const CByteArray& getRawData_TokenInfo();		/**< Get the Token Info RawData */
- 	EIDMW_APL_API const CByteArray& getRawData_PersoData();		/**< Get the response RawData */
+ 	EIDMW_APL_API const CByteArray& getRawData_PersoData();		/**< Get the persoData RawData */
  	EIDMW_APL_API void doSODCheck(bool check);
 
  	APL_EidFile_Trace *getFileTrace();					/**< Return a pointer to the file Trace (NOT EXPORTED) */
@@ -563,8 +562,6 @@ public:
 	EIDMW_APL_API const char *getPKCS1Support();		/**< Return field PKCS1Support from the Info file */
 	EIDMW_APL_API const char *getKeyExchangeVersion();	/**< Return field KeyExchangeVersion from the Info file */
 	EIDMW_APL_API const char *getAppletLifeCicle();		/**< Return field AppletLifeCicle from the Info file */
-
-	EIDMW_APL_API const CByteArray &getSignature();		/**< Return the signature of the card info */
 
 	EIDMW_APL_API const char *getGraphicalPersonalisation();			/**< Return field GraphicalPersonalisation from the TokenInfo file */
 	EIDMW_APL_API const char *getElectricalPersonalisation();			/**< Return field ElectricalPersonalisation from the TokenInfo file */
