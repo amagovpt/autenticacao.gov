@@ -73,7 +73,7 @@ INCLUDEPATH += . ../common ../pteid-poppler ../cardlayer ../eidlib ../dialogs
 macx: INCLUDEPATH += /usr/local/include
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 
-DEFINES += APPLAYER_EXPORTS
+DEFINES += APPLAYER_EXPORTS OPENSSL_SUPPRESS_DEPRECATED
 # Input
 HEADERS += \
 	APLCardFile.h \
