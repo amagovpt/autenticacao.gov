@@ -912,9 +912,9 @@ void AppController::zipLogs() {
 
     if (zip_close(pZip) < 0)
     {
-        free(pZip);
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AppController::zipLog: zip_close failed with error %s",
             zip_error_strerror(zip_get_error(pZip)));
+        free(pZip);
         emit signalZipLogsFail();
         return;
     }
