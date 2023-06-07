@@ -80,7 +80,6 @@ HEADERS += \
 	APLCard.h \
 	APLCertif.h \
 	APLCrypto.h \
-	APLDoc.h \
 	APLReader.h \
 	APLConfig.h \
 	APLCCXmlDoc.h \
@@ -112,7 +111,6 @@ HEADERS += \
 SOURCES += \
 	APLCertif.cpp        \
 	APLCrypto.cpp        \
-	APLDoc.cpp	        \
 	APLCardPteid.cpp     \
 	APLConfig.cpp	\
 	APLReader.cpp        \

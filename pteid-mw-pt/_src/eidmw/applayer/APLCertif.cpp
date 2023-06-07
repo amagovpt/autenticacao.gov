@@ -267,85 +267,6 @@ bool APL_Certifs::isAllowed()
 }
 
 
-CByteArray APL_Certifs::getXML(bool bNoHeader)
-{
-	char buffer[50];
-	CByteArray xml;
-
-	if(!bNoHeader)
-		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-	xml+="<certificates count=\"";
-	sprintf_s(buffer,sizeof(buffer),"%ld",countAll());
-
-	xml+=buffer;
-	xml+="\">\n";
-	for(unsigned long i=0; i < countAll();i++)
-	{
-		xml+=getCert(i)->getXML(true);
-	}
-	xml+="</certificates>\n";
-
-	return xml;
-}
-
-CByteArray APL_Certifs::getCSV()
-{
-/*
-certificatescount;certificate1;certificate2;...
-*/
-	char buffer[50];
-	CByteArray csv;
-
-	sprintf_s(buffer,sizeof(buffer),"%ld",countAll());
-	csv+=buffer;
-	csv+=CSV_SEPARATOR;
-	for(unsigned long i=0;i<countAll();i++)
-	{
-		csv+=getCert(i)->getCSV();
-	}
-
-	return csv;
-}
-
-CByteArray APL_Certifs::getTLV()
-{
-	//First we add all the certs in a tlv
-	CTLVBuffer tlvNested;
-
-	CByteArray baCount;
-	baCount.AppendLong(countAll());
-	tlvNested.SetTagData(0x00,baCount.GetBytes(),baCount.Size());	//Tag 0x00 contain the number of certificates
-
-	unsigned char j=1;
-	for(unsigned long i=0;i<countAll();i++)
-	{
-		APL_Certif *cert=getCert(i);
-		CByteArray baCert=cert->getTLV();
-		tlvNested.SetTagData(j++,baCert.GetBytes(),baCert.Size());
-	}
-
-	unsigned long ulLen=tlvNested.GetLengthNeeded();
-	unsigned char *pucData= new unsigned char[ulLen];
-	tlvNested.Extract(pucData,ulLen);
-	CByteArray baCerts(pucData,ulLen);
-
-	delete[] pucData;
-
-	//We nest the tlv into the enclosing tlv
-	CTLVBuffer tlv;
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_CERTS,baCerts.GetBytes(),baCerts.Size());
-
-	ulLen=tlv.GetLengthNeeded();
-	pucData= new unsigned char[ulLen];
-	tlv.Extract(pucData,ulLen);
-	CByteArray ba(pucData,ulLen);
-
-	delete[] pucData;
-
-	return ba;
-}
-
 unsigned long APL_Certifs::countFromCard()
 {
 	if(!m_card)
@@ -438,7 +359,7 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn,APL_CertifType type,bo
 	}
 }
 
-APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert_data,const CByteArray *cert_tlv_struct)
+APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert_data)
 {
 	if(!file && !cert_data)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -472,9 +393,6 @@ APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType t
 			if(m_certifs[ulUniqueId]->m_type==APL_CERTIF_TYPE_UNKNOWN)
 				m_certifs[ulUniqueId]->m_type=type;
 
-			if(!m_certifs[ulUniqueId]->m_certP15Ok)
-				m_certifs[ulUniqueId]->setP15TLV(cert_tlv_struct);
-
 			//We put the added cert at the end of order list
 			std::vector<unsigned long>::iterator itrOrder;
 			for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
@@ -491,7 +409,7 @@ APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType t
 		}
 
 		APL_Certif *cert=NULL;
-		cert = new APL_Certif(this,file,type,bOnCard,bHidden,ulIndex,cert_data,cert_tlv_struct);
+		cert = new APL_Certif(this,file,type,bOnCard,bHidden,ulIndex,cert_data);
 		m_certifs[ulUniqueId]=cert;
 		m_certifsOrder.push_back(ulUniqueId);
 
@@ -933,8 +851,7 @@ APL_Certif::APL_Certif(APL_Certifs *store,
 					   bool bOnCard,
 					   bool bHidden,
 					   unsigned long ulIndex,
-					   const CByteArray *cert,
-					   const CByteArray *cert_tlv_struct)
+					   const CByteArray *cert)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 	m_statusCache=AppLayer.getCertStatusCache();
@@ -942,8 +859,6 @@ APL_Certif::APL_Certif(APL_Certifs *store,
 	m_ulIndex=ulIndex;
 
 	m_type=type;
-
-	setP15TLV(cert_tlv_struct);
 
 	m_store=store;
 	if(file)
@@ -983,8 +898,6 @@ APL_Certif::APL_Certif(APL_Certifs *store,const CByteArray &cert,APL_CertifType 
 	m_ulIndex=ANY_INDEX;
 
 	m_type=type;
-
-	setP15TLV(NULL);
 
 	m_store=store;
 	m_certFile=new APL_CardFile_Certificate(store->getCard(),"",&cert);
@@ -1040,247 +953,6 @@ bool APL_Certif::isAllowed()
 	return true;
 }
 
-CByteArray APL_Certif::getXML(bool bNoHeader)
-{
-/*
-	<certificate>
-		<label></label>
-		<status></status>
-		<data encoding="base64">
-		</data>
-		<p15_struct encoding="base64">
-		</p15_struct>
-	</certificate>
-*/
-
-	char buffer[50];
-	CByteArray xml;
-	CByteArray baB64;
-
-	if(!bNoHeader)
-		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-	xml+="<certificate>\n";
-
-	xml+="	<label>";
-		xml+=getLabel();
-	xml+=	"</label>\n";
-
-	xml+="	<status>";
-	sprintf_s(buffer,sizeof(buffer),"%ld",getStatus());
-	xml+=buffer;
-	xml+=	"</status>\n";
-
-	xml+="	<data encoding=\"base64\">\n";
-	if(m_cryptoFwk->b64Encode(getData(),baB64))
-		xml+=		baB64;
-	xml+=	"</data>\n";
-
-	xml+="	<p15_struct encoding=\"base64\">\n";
-	if(m_cryptoFwk->b64Encode(getP15TLV(),baB64))
-		xml+=		baB64;
-	xml+=	"</p15_struct>\n";
-
-	xml+="</certificate>\n";
-
-	return xml;
-}
-
-CByteArray APL_Certif::getCSV()
-{
-/*
-label;status;data;p15_struct
-*/
-
-	char buffer[10];
-	CByteArray csv;
-	CByteArray baB64;
-
-	csv+=getLabel();
-	csv+=CSV_SEPARATOR;
-	sprintf_s(buffer,sizeof(buffer),"%ld",getStatus());
-	csv+=buffer;
-	csv+=CSV_SEPARATOR;
-	if(m_cryptoFwk->b64Encode(getData(),baB64,false))
-		csv+=baB64;
-	csv+=CSV_SEPARATOR;
-	if(m_cryptoFwk->b64Encode(getP15TLV(),baB64,false))
-		csv+=baB64;
-	csv+=CSV_SEPARATOR;
-
-	return csv;
-}
-
-CByteArray APL_Certif::getTLV()
-{
-	CTLVBuffer tlv;
-
-	tlv.SetTagData(0x00,getData().GetBytes(),getData().Size());
-
-	CByteArray baP15=getP15TLV();
-	tlv.SetTagData(0x01,baP15.GetBytes(),baP15.Size());
-
-	unsigned long ulLen=tlv.GetLengthNeeded();
-	unsigned char *pucData= new unsigned char[ulLen];
-	tlv.Extract(pucData,ulLen);
-	CByteArray baCert(pucData,ulLen);
-
-	delete[] pucData;
-
-	return baCert;
-}
-
-CByteArray APL_Certif::getP15TLV()
-{
-	CTLVBuffer tlv;
-/*
-	typedef struct
-	{
-		bool bValid;					0x00
-		std::string csLabel;			0x01
-		unsigned long ulFlags;			0x02
-		unsigned long ulAuthID;			0x03
-		unsigned long ulUserConsent;	0x04
-		unsigned long ulID;   			0x05
-		bool bAuthority;				0x06
-		bool bImplicitTrust;			0x07
-		std::string csPath;				0x08
-	} tCert;
-*/
-	char buffer[50];
-
-	sprintf_s(buffer,sizeof(buffer),"%d",m_certP15.bValid);
-	tlv.SetTagData(0x00,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	sprintf_s(buffer,sizeof(buffer),"%s",m_certP15.csLabel.c_str());
-	tlv.SetTagData(0x01,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	sprintf_s(buffer,sizeof(buffer),"%ld",m_certP15.ulFlags);
-	tlv.SetTagData(0x02,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	sprintf_s(buffer,sizeof(buffer),"%ld",m_certP15.ulAuthID);
-	tlv.SetTagData(0x03,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	sprintf_s(buffer,sizeof(buffer),"%ld",m_certP15.ulUserConsent);
-	tlv.SetTagData(0x04,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	sprintf_s(buffer,sizeof(buffer),"%ld",m_certP15.ulID);
-	tlv.SetTagData(0x05,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	sprintf_s(buffer,sizeof(buffer),"%d",m_certP15.bAuthority);
-	tlv.SetTagData(0x06,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	sprintf_s(buffer,sizeof(buffer),"%d",m_certP15.bImplicitTrust);
-	tlv.SetTagData(0x07,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	sprintf_s(buffer,sizeof(buffer),"%s",m_certP15.csPath.c_str());
-	tlv.SetTagData(0x08,(unsigned char *)buffer,(unsigned long)strlen(buffer));
-
-	unsigned long ulLen=tlv.GetLengthNeeded();
-	unsigned char *pucData= new unsigned char[ulLen];
-	tlv.Extract(pucData,ulLen);
-	CByteArray baCert(pucData,ulLen);
-
-	delete[] pucData;
-
-	return baCert;
-}
-
-void APL_Certif::setP15TLV(const CByteArray *bytearray)
-{
-/*
-	typedef struct
-	{
-		bool bValid;					0x00
-		std::string csLabel;			0x01
-		unsigned long ulFlags;			0x02
-		unsigned long ulAuthID;			0x03
-		unsigned long ulUserConsent;	0x04
-		unsigned long ulID;   			0x05
-		bool bAuthority;				0x06
-		bool bImplicitTrust;			0x07
-		std::string csPath;				0x08
-	} tCert;
-*/
-	if(!bytearray)
-	{
-		m_certP15.bValid			=false;
-		m_certP15.csLabel			="";
-		m_certP15.ulFlags			=0;
-		m_certP15.ulAuthID			=0;
-		m_certP15.ulUserConsent		=0;
-		m_certP15.ulID				=0;
-		m_certP15.bAuthority		=false;
-		m_certP15.bImplicitTrust	=false;
-		m_certP15.csPath			="";
-		m_certP15Ok					=false;
-		return;
-	}
-
-	char *stop;
-	char cBuffer[250];
-	unsigned long ulLen=0;
-	CTLVBuffer oTLVBuffer;
-    oTLVBuffer.ParseTLV(bytearray->GetBytes(), bytearray->Size());
-
-	//bValid
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x00, cBuffer, &ulLen);
-	m_certP15.bValid=(strcmp(cBuffer,"1")==0?true:false);
-
-	//csLabel
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x01, cBuffer, &ulLen);
-	m_certP15.csLabel.clear();
-	m_certP15.csLabel.append(cBuffer);
-
-	//ulFlags
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x02, cBuffer, &ulLen);
-	m_certP15.ulFlags=strtoul(cBuffer,&stop,10);
-
-	//ulAuthID
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x03, cBuffer, &ulLen);
-	m_certP15.ulAuthID=strtoul(cBuffer,&stop,10);
-
-	//ulUserConsent
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x04, cBuffer, &ulLen);
-	m_certP15.ulUserConsent=strtoul(cBuffer,&stop,10);
-
-	//ulID
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x05, cBuffer, &ulLen);
-	m_certP15.ulID=strtoul(cBuffer,&stop,10);
-
-	//bAuthority
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x06, cBuffer, &ulLen);
-	m_certP15.bAuthority=(strcmp(cBuffer,"1")==0?true:false);
-
-	//bImplicitTrust
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x07, cBuffer, &ulLen);
-	m_certP15.bImplicitTrust=(strcmp(cBuffer,"1")==0?true:false);
-
-	//csPath
-    ulLen = sizeof(cBuffer);
-	memset(cBuffer,0,ulLen);
-	oTLVBuffer.FillASCIIData(0x08, cBuffer, &ulLen);
-	m_certP15.csPath.clear();
-	m_certP15.csPath.append(cBuffer);
-
-	m_certP15Ok=true;
-}
 
 APL_CertifType APL_Certif::getType()
 {

@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
- * Copyright (C) 2012, 2016-2021 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2023 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
@@ -343,7 +343,7 @@ unsigned long APL_EIDCard::certificateCount()
 				//If status ok, we add the certificate to the store
 				if(m_fileCertAuthentication->getStatus(false)==CARDFILESTATUS_OK)
 				{
-					if(NULL == (getCertificates()->addCert(m_fileCertAuthentication,APL_CERTIF_TYPE_AUTHENTICATION,true,false,m_certificateCount,NULL,NULL)))
+					if(NULL == (getCertificates()->addCert(m_fileCertAuthentication,APL_CERTIF_TYPE_AUTHENTICATION,true,false,m_certificateCount,NULL)))
 						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 					m_certificateCount++;
 				}
@@ -355,7 +355,7 @@ unsigned long APL_EIDCard::certificateCount()
 				//If status ok, we add the certificate to the store
 				if(m_fileCertSignature->getStatus(true)==CARDFILESTATUS_OK)
 				{
-					if(NULL == (getCertificates()->addCert(m_fileCertSignature,APL_CERTIF_TYPE_SIGNATURE,true,false,m_certificateCount,NULL,NULL)))
+					if(NULL == (getCertificates()->addCert(m_fileCertSignature,APL_CERTIF_TYPE_SIGNATURE,true,false,m_certificateCount,NULL)))
 						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 					m_certificateCount++;
 				}
@@ -367,7 +367,7 @@ unsigned long APL_EIDCard::certificateCount()
 				//If status ok, we add the certificate to the store
 				if(m_fileCertRootAuth->getStatus(true)==CARDFILESTATUS_OK)
 				{
-					if(NULL == (getCertificates()->addCert(m_fileCertRootAuth,APL_CERTIF_TYPE_ROOT_AUTH,true,false,m_certificateCount,NULL,NULL)))
+					if(NULL == (getCertificates()->addCert(m_fileCertRootAuth,APL_CERTIF_TYPE_ROOT_AUTH,true,false,m_certificateCount,NULL)))
 						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 					m_certificateCount++;
 				}
@@ -379,7 +379,7 @@ unsigned long APL_EIDCard::certificateCount()
 				//If status ok, we add the certificate to the store
 				if(m_fileCertRootSign->getStatus(true)==CARDFILESTATUS_OK)
 				{
-					if(NULL == (getCertificates()->addCert(m_fileCertRootSign,APL_CERTIF_TYPE_ROOT_SIGN,true,false,m_certificateCount,NULL,NULL)))
+					if(NULL == (getCertificates()->addCert(m_fileCertRootSign,APL_CERTIF_TYPE_ROOT_SIGN,true,false,m_certificateCount,NULL)))
 						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 					m_certificateCount++;
 				}
@@ -700,18 +700,6 @@ CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 	return xml;
 }
 
-CByteArray APL_CCXML_Doc::getCSV(){
-	CByteArray cb;
-
-	return cb;
-}
-
-CByteArray APL_CCXML_Doc::getTLV(){
-	CByteArray cb;
-
-	return cb;
-}
-
 
 /*****************************************************************************************
 -------------------------------- APL_XmlUserRequestedInfo ---------------------------------------
@@ -813,6 +801,7 @@ APL_DocEId::APL_DocEId(APL_EIDCard *card)
 	m_card=card;
 
 	//m_FirstName.clear();
+	m_cryptoFwk=AppLayer.getCryptoFwk();
 
 	_xmlUInfo = NULL;
 }
@@ -1000,73 +989,6 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	return xml;
 }
 
-CByteArray APL_DocEId::getCSV()
-{
-/*
-version;type;name;surname;gender;date_of_birth;location_of_birth;nobility;nationality;
-	national_nr;special_organization;member_of_family;special_status;logical_nr;chip_nr;
-	date_begin;date_end;issuing_municipality;version;street;zip;municipality;country;
-	file_id;file_address;
-*/
-
-	CByteArray csv;
-
-	csv+=getDocumentVersion();
-	csv+=CSV_SEPARATOR;
-	csv+=getDocumentType();
-	csv+=CSV_SEPARATOR;
-	csv+=getGivenName();
-	csv+=CSV_SEPARATOR;
-	csv+=getSurname();
-	csv+=CSV_SEPARATOR;
-	csv+=getGender();
-	csv+=CSV_SEPARATOR;
-	csv+=getDateOfBirth();
-	csv+=CSV_SEPARATOR;
-	csv+=CSV_SEPARATOR;
-	csv+=getNationality();
-	csv+=CSV_SEPARATOR;
-	csv+=getCivilianIdNumber();
-	csv+=CSV_SEPARATOR;
-
-	csv+=getDocumentPAN();
-	csv+=CSV_SEPARATOR;
-	csv+=getValidityBeginDate();
-	csv+=CSV_SEPARATOR;
-	csv+=getValidityEndDate();
-	csv+=CSV_SEPARATOR;
-
-	csv+=getMRZ1();
-	csv+=CSV_SEPARATOR;
-	csv+=getMRZ2();
-	csv+=CSV_SEPARATOR;
-	csv+=getMRZ3();
-	csv+=CSV_SEPARATOR;
-
-
-	CByteArray baFileB64;
-	if(m_cryptoFwk->b64Encode(m_card->getFileID()->getData(),baFileB64,false))
-		csv+=baFileB64;
-	csv+=CSV_SEPARATOR;
-
-	return csv;
-}
-
-CByteArray APL_DocEId::getTLV()
-{
-	CTLVBuffer tlv;
-
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_ID,m_card->getFileID()->getData().GetBytes(),m_card->getFileID()->getData().Size());
-
-	unsigned long ulLen=tlv.GetLengthNeeded();
-	unsigned char *pucData= new unsigned char[ulLen];
-	tlv.Extract(pucData,ulLen);
-	CByteArray ba(pucData,ulLen);
-
-	delete[] pucData;
-
-	return ba;
-}
 
 const char *APL_DocEId::getValidation()
 {
@@ -1259,21 +1181,6 @@ CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader)
 	return xml;
 }
 
-CByteArray APL_PersonalNotesEId::getCSV()
-{
-	CByteArray csv;
-
-	return csv;
-}
-
-CByteArray APL_PersonalNotesEId::getTLV()
-{
-	CTLVBuffer tlv;
-	CByteArray ba;
-
-	return ba;
-}
-
 const char *APL_PersonalNotesEId::getPersonalNotes(bool forceMap)
 {
 	return m_card->getFilePersoData()->getPersoData(forceMap);
@@ -1407,34 +1314,6 @@ CByteArray APL_AddrEId::getXML(bool bNoHeader)
 	}
 	 */
 	return xml;
-}
-
-CByteArray APL_AddrEId::getCSV()
-{
-	CByteArray csv;
-
-	/*
-	CByteArray baFileB64;
-	if(m_cryptoFwk->b64Encode(m_card->getFileAddress()->getData(),baFileB64,false))
-		csv+=baFileB64;
-	*/
-	return csv;
-}
-
-CByteArray APL_AddrEId::getTLV()
-{
-	CTLVBuffer tlv;
-
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_ADDR,m_card->getFileAddress()->getData().GetBytes(),m_card->getFileAddress()->getData().Size());
-
-	unsigned long ulLen=tlv.GetLengthNeeded();
-	unsigned char *pucData= new unsigned char[ulLen];
-	tlv.Extract(pucData,ulLen);
-	CByteArray ba(pucData,ulLen);
-
-	delete[] pucData;
-
-	return ba;
 }
 
 
@@ -1860,57 +1739,6 @@ APL_SodEid::~APL_SodEid()
 {
 }
 
-CByteArray APL_SodEid::getXML(bool bNoHeader)
-{
-
-	CByteArray xml;
-	CByteArray baB64;
-
-	if(!bNoHeader)
-		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-	xml+="<biometric>\n";
-	xml+="	<picture type=\"jpg\">\n";
-	xml+="		<data encoding=\"base64\">\n";
-	if(m_cryptoFwk->b64Encode(getData(),baB64))
-		xml+=		baB64;
-	xml+="		</data>\n";
-	xml+="		<hash encoding=\"base64\" method=\"md5\">\n";
-	xml+="		</hash>\n";
-	xml+="	</picture>\n";
-	xml+="</biometric>\n";
-
-	return xml;
-}
-
-CByteArray APL_SodEid::getCSV()
-{
-	CByteArray csv;
-	CByteArray baB64;
-
-	if(m_cryptoFwk->b64Encode(getData(),baB64,false))
-		csv+=		baB64;
-	csv+=CSV_SEPARATOR;
-	csv+=CSV_SEPARATOR;
-
-	return csv;
-}
-
-CByteArray APL_SodEid::getTLV()
-{
-	CTLVBuffer tlv;
-
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_SOD,m_card->getFileSod()->getData().GetBytes(),m_card->getFileSod()->getData().Size());
-
-	unsigned long ulLen=tlv.GetLengthNeeded();
-	unsigned char *pucData= new unsigned char[ulLen];
-	tlv.Extract(pucData,ulLen);
-	CByteArray ba(pucData,ulLen);
-
-	delete[] pucData;
-
-	return ba;
-}
 
 const CByteArray& APL_SodEid::getData()
 {
@@ -1931,171 +1759,6 @@ APL_DocVersionInfo::APL_DocVersionInfo(APL_EIDCard *card)
 
 APL_DocVersionInfo::~APL_DocVersionInfo()
 {
-}
-
-CByteArray APL_DocVersionInfo::getXML(bool bNoHeader)
-{
-/*
-	<scard>
-		<serial_nr></serial_nr>
-		<component_code></component_code>
-		<os_nr></os_nr>
-		<os_version></os_version>
-		<softmask_nr></softmask_nr>
-		<softmask_version></softmask_version>
-		<applet_version></applet_version>
-		<global_os_version></global_os_version>
-		<applet_interface_version></applet_interface_version>
-		<PKCS1_support></PKCS1_support>
-		<key_exchange_version></key_exchange_version>
-		<application_lifecycle></application_lifecycle>
-		<graph_perso></graph_perso>
-		<elec_perso></elec_perso>
-		<elec_perso_interface></elec_perso_interface>
-		<files>
-			<file_datainfo encoding="base64">
-			</file_datainfo>
-			<file_tokeninfo encoding="base64">
-			</file_tokeninfo>
-		</files>
-	</scard>
-*/
-
-	CByteArray xml;
-	CByteArray b64;
-
-	if(!bNoHeader)
-		xml+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-	xml+="<scard>\n";
-	xml+="	<serial_nr>";
-	xml+=		getSerialNumber();
-	xml+=	"</serial_nr>\n";
-	xml+="	<component_code>";
-	xml+=		getComponentCode();
-	xml+=	"</component_code>\n";
-	xml+="	<os_nr>";
-	xml+=		getOsNumber();
-	xml+=	"</os_nr>\n";
-	xml+="	<os_version>";
-	xml+=		getOsVersion();
-	xml+=	"</os_version>\n";
-	xml+="	<softmask_nr>";
-	xml+=		getSoftmaskNumber();
-	xml+=	"</softmask_nr>\n";
-	xml+="	<softmask_version>";
-	xml+=		getSoftmaskVersion();
-	xml+=	"</softmask_version>\n";
-	xml+="	<applet_version>";
-	xml+=		getAppletVersion();
-	xml+=	"</applet_version>\n";
-	xml+="	<global_os_version>";
-	xml+=		getGlobalOsVersion();
-	xml+=	"</global_os_version>\n";
-	xml+="	<applet_interface_version>";
-	xml+=		getAppletInterfaceVersion();
-	xml+=	"</applet_interface_version>\n";
-	xml+="	<PKCS1_support>";
-	xml+=		getPKCS1Support();
-	xml+=	"</PKCS1_support>\n";
-	xml+="	<key_exchange_version>";
-	xml+=		getKeyExchangeVersion();
-	xml+=	"</key_exchange_version>\n";
-	xml+="	<application_lifecycle>";
-	xml+=		getAppletLifeCicle();
-	xml+=	"</application_lifecycle>\n";
-	xml+="	<graph_perso>";
-	xml+=		getGraphicalPersonalisation();
-	xml+=	"</graph_perso>\n";
-	xml+="	<elec_perso>";
-	xml+=		getElectricalPersonalisation();
-	xml+=	"</elec_perso>\n";
-	xml+="	<elec_perso_interface>";
-	xml+=		getElectricalPersonalisationInterface();
-	xml+=	"</elec_perso_interface>\n";
-	xml+="	<files>\n";
-	xml+="		<file_datainfo encoding=\"base64\">\n";
-	if(m_cryptoFwk->b64Encode(m_card->getFileInfo()->getData(),b64))
-		xml+=b64;
-	xml+="		</file_datainfo>\n";
-	xml+="		<file_tokeninfo encoding=\"base64\">\n";
-	if(m_cryptoFwk->b64Encode(m_card->getFileTokenInfo()->getData(),b64))
-		xml+=b64;
-	xml+="		</file_tokeninfo>\n";
-	xml+="	</files>\n";
-	xml+="</scard>\n";
-
-	return xml;
-}
-
-CByteArray APL_DocVersionInfo::getCSV()
-{
-/*
-serial_nr;component_code;os_nr;os_version;softmask_nr;softmask_version;applet_version;
-	global_os_version;applet_interface_version;PKCS1_support;key_exchange_version;
-	application_lifecycle;graph_perso;elec_perso;elec_perso_interface;
-*/
-
-	CByteArray csv;
-	CByteArray b64;
-
-	csv+=getSerialNumber();
-	csv+=CSV_SEPARATOR;
-	csv+=getComponentCode();
-	csv+=CSV_SEPARATOR;
-	csv+=getOsNumber();
-	csv+=CSV_SEPARATOR;
-	csv+=getOsVersion();
-	csv+=CSV_SEPARATOR;
-	csv+=getSoftmaskNumber();
-	csv+=CSV_SEPARATOR;
-	csv+=getSoftmaskVersion();
-	csv+=CSV_SEPARATOR;
-	csv+=getAppletVersion();
-	csv+=CSV_SEPARATOR;
-	csv+=getGlobalOsVersion();
-	csv+=CSV_SEPARATOR;
-	csv+=getAppletInterfaceVersion();
-	csv+=CSV_SEPARATOR;
-	csv+=getPKCS1Support();
-	csv+=CSV_SEPARATOR;
-	csv+=getKeyExchangeVersion();
-	csv+=CSV_SEPARATOR;
-	csv+=getAppletLifeCicle();
-	csv+=CSV_SEPARATOR;
-	csv+=getGraphicalPersonalisation();
-	csv+=CSV_SEPARATOR;
-	csv+=getElectricalPersonalisation();
-	csv+=CSV_SEPARATOR;
-	csv+=getElectricalPersonalisationInterface();
-	csv+=CSV_SEPARATOR;
-
-	if(m_cryptoFwk->b64Encode(m_card->getFileInfo()->getData(),b64,false))
-		csv+=b64;
-	csv+=CSV_SEPARATOR;
-
-	if(m_cryptoFwk->b64Encode(m_card->getFileTokenInfo()->getData(),b64,false))
-		csv+=b64;
-	csv+=CSV_SEPARATOR;
-
-	return csv;
-}
-
-CByteArray APL_DocVersionInfo::getTLV()
-{
-	CTLVBuffer tlv;
-
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_CARDINFO,m_card->getFileInfo()->getData().GetBytes(),m_card->getFileInfo()->getData().Size());
-	tlv.SetTagData(PTEID_TLV_TAG_FILE_TOKENINFO,m_card->getFileTokenInfo()->getData().GetBytes(),m_card->getFileTokenInfo()->getData().Size());
-
-	unsigned long ulLen=tlv.GetLengthNeeded();
-	unsigned char *pucData= new unsigned char[ulLen];
-	tlv.Extract(pucData,ulLen);
-	CByteArray ba(pucData,ulLen);
-
-	delete[] pucData;
-
-	return ba;
 }
 
 const char *APL_DocVersionInfo::getSerialNumber()

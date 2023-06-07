@@ -30,24 +30,12 @@
 #include <string>
 #include <map>
 #include "Export.h"
-#include "APLDoc.h"
 #include "APLCard.h"
 #include "P15Objects.h"
 
 namespace eIDMW
 {
-/******************************************************************************//**
-  * Abstract class for cryptographic feature
-  * Inherits from APL_XMLDoc for implementing buildXML()
-  *********************************************************************************/
-class APL_Crypto : public APL_XMLDoc
-{
-public:
-	/**
-	  * Destructor
-	  */
-	EIDMW_APL_API virtual ~APL_Crypto()=0;
-};
+
 
 class APL_Pin;
 /******************************************************************************//**
@@ -55,7 +43,7 @@ class APL_Pin;
   *
   * To get a APL_Pins object, we have to ask it from the APL_SmartCard 
   *********************************************************************************/
-class APL_Pins : public APL_Crypto
+class APL_Pins
 {
 public:
 	/**
@@ -66,10 +54,6 @@ public:
 	EIDMW_APL_API virtual ~APL_Pins();
 
 	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
 	/**
 	  * Return the number of P15 pins on the card
@@ -94,7 +78,7 @@ public:
 	/**
 	  * Add pin in the map for internal use (No need to export)
 	  */
-	APL_Pin *addPin(unsigned long ulIndex,const CByteArray *pin_tlv_struct);
+	APL_Pin *addPin(unsigned long ulIndex);
 
 protected:
 	/**
@@ -116,6 +100,7 @@ private:
 	  * The index is the P15 index
 	  */
 	std::map<unsigned long,APL_Pin *> m_pins;
+	CMutex m_Mutex;									/**< Mutex */
 
 friend APL_Pins *APL_SmartCard::getPins();	/**< This method must access protected constructor */
 };
@@ -125,7 +110,7 @@ friend APL_Pins *APL_SmartCard::getPins();	/**< This method must access protecte
   *
   * To get APL_Pin object, we have to ask it from APL_Pins 
   *********************************************************************************/
-class APL_Pin : public APL_Crypto
+class APL_Pin
 {
 public:
 	/**
@@ -134,10 +119,6 @@ public:
 	EIDMW_APL_API virtual ~APL_Pin();
 
 	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
 	/**
 	  * Return the remaining tries for giving the good pin
@@ -188,7 +169,7 @@ protected:
 	  * @param card is the smart card from which the pin comes
 	  * @param ulIndex is the P15 index of the pin
 	  */
-	APL_Pin(APL_SmartCard *card,unsigned long ulIndex,const CByteArray *pin_tlv_struct);
+	APL_Pin(APL_SmartCard *card, unsigned long ulIndex);
 
 private:
 	APL_Pin(const APL_Pin& pin);				/**< Copy not allowed - not implemented */
@@ -207,7 +188,7 @@ private:
 	long m_triesleft;							/**< tries left (for virtual card) */
 
 friend APL_Pin *APL_Pins::getPinByNumber(unsigned long ulIndex);	/**< This method must access protected constructor */
-friend APL_Pin *APL_Pins::addPin(unsigned long ulIndex,const CByteArray *pin_tlv_struct); /**< This method must access protected constructor */
+friend APL_Pin *APL_Pins::addPin(unsigned long ulIndex); /**< This method must access protected constructor */
 };
 
 }

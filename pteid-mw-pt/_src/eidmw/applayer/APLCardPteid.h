@@ -6,7 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
- * Copyright (C) 2012, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2023 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -34,7 +34,6 @@
 #include "APLReader.h"
 #include "APLCertif.h"
 #include "APLCard.h"
-#include "APLDoc.h"
 #include "ByteArray.h"
 #include "PhotoPteid.h"
 #include "APLPublicKey.h"
@@ -215,7 +214,7 @@ class APL_XmlUserRequestedInfo;
   * Class that represent the custom XML document on a PTEID card as requested
   * To get APL_CCXML_Doc object, we have to ask it from APL_EIDCard
   *********************************************************************************/
-class APL_CCXML_Doc : public APL_XMLDoc
+class APL_CCXML_Doc
 {
 public:
 	/**
@@ -238,8 +237,6 @@ private:
 	APL_CCXML_Doc &operator= (const APL_CCXML_Doc& doc);	/**< Copy not allowed - not implemented */
 	APL_EIDCard *m_card;									/**< Pointer to the card that construct this object*/
 	APL_XmlUserRequestedInfo *m_xmlUserRequestedInfo;		/**< Pointer to the data parameters to generate the xml*/
-	CByteArray getCSV();									/**< Build the CSV document - not implemented*/
-	CByteArray getTLV();									/**< Build the TLV document - not implemented*/
 friend APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo);	/**< This method must access protected constructor */
 };
 
@@ -251,17 +248,14 @@ friend APL_CCXML_Doc& APL_EIDCard::getXmlCCDoc(APL_XmlUserRequestedInfo& userReq
   *
   * To get APL_DocEId object, we have to ask it from APL_EIDCard 
   *********************************************************************************/
-class APL_DocEId : public APL_XMLDoc
+class APL_DocEId
 {
 public:
 	/**
 	  * Destructor
 	  */
 	EIDMW_APL_API virtual ~APL_DocEId();
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
+	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);  /**< Build the XML document */
 
 	EIDMW_APL_API const char *getDocumentVersion();		/**< Return field DocumentVersion from the ID file */
 	EIDMW_APL_API const char *getDocumentType();		/**< Return field DocumentType from the ID file */
@@ -312,6 +306,7 @@ private:
 	
 	//std::string m_FirstName;						/**< Field FirstName1 follow by FirstName2 */
 	APL_XmlUserRequestedInfo *_xmlUInfo;
+	APL_CryptoFwk *m_cryptoFwk;
 
 friend APL_DocEId& APL_EIDCard::getID();	/**< This method must access protected constructor */
 friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses getxml(,) */
@@ -326,7 +321,7 @@ friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses
   *
   * To get APL_AddrEId object, we have to ask it from APL_EIDCard
   *********************************************************************************/
-class APL_AddrEId : public APL_XMLDoc
+class APL_AddrEId
 {
 public:
 	/**
@@ -335,8 +330,6 @@ public:
 	EIDMW_APL_API virtual ~APL_AddrEId();
 
 	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
 	EIDMW_APL_API bool isNationalAddress();				    /**<is the address a portuguese address? */
 	EIDMW_APL_API const char *getCountryCode();				/**<residence country */
@@ -433,13 +426,10 @@ friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses
 };
 
 
-class APL_PersonalNotesEId : public APL_XMLDoc{
+class APL_PersonalNotesEId {
 public:
 	EIDMW_APL_API virtual ~APL_PersonalNotesEId();
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
+	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);  /**< Build the XML document */
 
 	EIDMW_APL_API const char *getPersonalNotes(bool forceMap=false);					/**< Return field AddressVersion from the Address file */
 
@@ -502,17 +492,13 @@ private:
   *
   * To get APL_SodEid object, we have to ask it from APL_EIDCard
   *********************************************************************************/
-class APL_SodEid : public APL_Biometric
+class APL_SodEid
 {
 public:
 	/**
 	  * Destructor
 	  */
 	EIDMW_APL_API virtual ~APL_SodEid();
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
 	EIDMW_APL_API const CByteArray& getData();				/**< Return field Data from the file */
 	//EIDMW_APL_API const CByteArray& getHash();				/**< Return field Hash from the ID file */
@@ -536,7 +522,7 @@ friend APL_SodEid& APL_EIDCard::getSod();	/**< This method must access protected
 /******************************************************************************//**
   * Class for VersionInfo document
   *********************************************************************************/
-class APL_DocVersionInfo : public APL_XMLDoc
+class APL_DocVersionInfo
 {
 public: 
 
@@ -544,10 +530,6 @@ public:
 	  * Destructor
 	  */
 	EIDMW_APL_API virtual ~APL_DocVersionInfo();
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();						/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();						/**< Build the TLV document */
 
 	EIDMW_APL_API const char *getSerialNumber();		/**< Return field SerialNumber from the Info file */
 	EIDMW_APL_API const char *getTokenLabel();			/**< Return field Label from the EFCIA (5032) file */

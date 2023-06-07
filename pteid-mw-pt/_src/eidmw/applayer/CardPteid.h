@@ -29,7 +29,6 @@
 #include <string>
 #include "Export.h"
 #include "APLReader.h"
-#include "APLDoc.h"
 #include "APLCardPteid.h"
 #include "CardFile.h"
 #include "ByteArray.h"

@@ -30,9 +30,6 @@
     <ClCompile Include="APLCrypto.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="APLDoc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="APLPublicKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -135,9 +132,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="APLCrypto.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="APLDoc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="APLPublicKey.h">

@@ -106,7 +106,7 @@ class APL_OcspResponse;
   *
   * To get a APL_Certifs object, we have to ask it from the APL_SmartCard 
   *********************************************************************************/
-class APL_Certifs : public APL_Crypto
+class APL_Certifs
 {
 public:
 	/**
@@ -124,11 +124,6 @@ public:
 	EIDMW_APL_API virtual ~APL_Certifs(void);
 
 	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
-
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	
-	EIDMW_APL_API virtual CByteArray getCSV();						
-	EIDMW_APL_API virtual CByteArray getTLV();						
 
 	/**
 	  * Return the number of P15 certificates on the card
@@ -293,7 +288,7 @@ public:
 	  *
 	  * No need to export
 	  */
-	APL_Certif *addCert(APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert,const CByteArray *cert_tlv_struct);
+	APL_Certif *addCert(APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert);
 
 	/**
 	  * Return the card from where the store comes (could be NULL)
@@ -351,6 +346,7 @@ private:
 
 	std::string m_certExtension;
 	std::string m_certs_dir;
+	CMutex m_Mutex;
 
 friend APL_Certifs *APL_SmartCard::getCertificates();	/**< This method must access protected constructor */
 };
@@ -369,7 +365,7 @@ struct tCertifInfo;
   *
   * To get APL_Certif object, we have to ask it from APL_Certifs 
   *********************************************************************************/
-class APL_Certif : public APL_Crypto
+class APL_Certif
 {
 
 public:
@@ -381,10 +377,6 @@ public:
 	EIDMW_APL_API virtual ~APL_Certif(void);
 
 	EIDMW_APL_API virtual bool isAllowed();							/**< The document is allowed*/
-
-	EIDMW_APL_API virtual CByteArray getXML(bool bNoHeader=false);	/**< Build the XML document */
-	EIDMW_APL_API virtual CByteArray getCSV();			/**< Build the CSV document */
-	EIDMW_APL_API virtual CByteArray getTLV();			/**< Build the TLV document */
 
 	EIDMW_APL_API unsigned long getIndexOnCard() const;	/**< Return Index off the certificate on card */
 	EIDMW_APL_API const char *getLabel();			/**< Return P15 Label */
@@ -561,7 +553,7 @@ protected:
 	  * @param store is the store in which the APL_Certif object is hold
 	  * @param file is the certificate file
 	  */
-	APL_Certif(APL_Certifs *store,APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert,const CByteArray *cert_tlv_struct);
+	APL_Certif(APL_Certifs *store,APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert);
 
 	/**
 	  * Constructor
@@ -580,7 +572,6 @@ private:
 	  */
 	void initInfo();
 
-	CByteArray getP15TLV();						/**< Return the P15 struct in a TLV CByteArray */
 	void setP15TLV(const CByteArray *bytearray);/**< Fill the P15 struct with the TLV CByteArray */
 
 	unsigned long m_ulIndex;							/**< Index of the P15 object on the card */
@@ -611,9 +602,10 @@ private:
 	unsigned long m_countChildren;						/**< The number of children */
 
 	APL_CertifType m_type;
+	CMutex m_Mutex;									/**< Mutex */
 
 friend APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex);				/**< This method must access protected constructor */
-friend APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert,const CByteArray *cert_tlv_struct);	/**< This method must access protected constructor */
+friend APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file,APL_CertifType type,bool bOnCard,bool bHidden,unsigned long ulIndex,const CByteArray *cert);	/**< This method must access protected constructor */
 friend APL_Certif *APL_Certifs::addCert(const CByteArray &cert,APL_CertifType type,bool bHidden);		/**< This method must access protected constructor */
 friend void APL_Certifs::addToSODCAs(const CByteArray &cert);
 };

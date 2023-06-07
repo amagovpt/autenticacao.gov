@@ -536,29 +536,6 @@ static protected CUSTOM_SetEventHelper custom_SetEventHelper = new CUSTOM_SetEve
 ///////////////////////////////////////// PTEID_Card &PTEID_ReaderContext::getCard() /////////////////////////////////////////////
 %warnfilter(844) eIDMW::PTEID_ReaderContext::getCard;
 
-///////////////////////////////////////// PTEID_XMLDoc& PTEID_EIDCard::getDocument(PTEID_DocumentType type) /////////////////////////////////////////////
-%warnfilter(844) eIDMW::PTEID_EIDCard::getDocument;
-%typemap(csout) eIDMW::PTEID_XMLDoc& eIDMW::PTEID_EIDCard::getDocument(eIDMW::PTEID_DocumentType type)
-{
-	switch(type)
-	{
-	case PTEID_DocumentType.PTEID_DOCTYPE_ID:
-		return getID();
-	case PTEID_DocumentType.PTEID_DOCTYPE_ADDRESS:
-		return getAddr();
-	/*case PTEID_DocumentType.PTEID_DOCTYPE_PICTURE:
-		return getPicture();*/
-	case PTEID_DocumentType.PTEID_DOCTYPE_INFO:
-		return getVersionInfo();
-	case PTEID_DocumentType.PTEID_DOCTYPE_PINS:
-		return getPins();
-	case PTEID_DocumentType.PTEID_DOCTYPE_CERTIFICATES:
-		return getCertificates();
-	default:
-		throw new PTEID_ExDocTypeUnknown();
-	}
-}
-
 ///////////////////////////////////////// PTEID_SigningDevice /////////////////////////////////////////////
 /* 
  The returned PTEID_SigningDevice from PTEID_SigningDeviceFactory::getSigningDevice() is wrapped by the
@@ -1091,7 +1068,6 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 //------------------------------------------------------------
 
 %javaexception("PTEID_Exception") getType			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getDocument		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getRawData		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") sendAPDU			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") Sign			JAVA_CODE_THROW
@@ -1142,22 +1118,6 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 //------------------------------------------------------------
 %javaexception("PTEID_Exception") getCCXML			JAVA_CODE_THROW
 
-//------------------------------------------------------------
-// class PTEID_XMLDoc
-//------------------------------------------------------------
-%javaexception("PTEID_Exception") getXML			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getCSV			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") getTLV			JAVA_CODE_THROW
-%javaexception("PTEID_Exception") writeXmlToFile	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") writeCsvToFile	JAVA_CODE_THROW
-%javaexception("PTEID_Exception") writeTlvToFile	JAVA_CODE_THROW
-
-//------------------------------------------------------------
-// class PTEID_Biometric: none
-//------------------------------------------------------------
-//------------------------------------------------------------
-// class PTEID_Crypto: none
-//------------------------------------------------------------
 //------------------------------------------------------------
 // class PTEID_CardVersionInfo
 //------------------------------------------------------------

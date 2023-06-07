@@ -31,10 +31,10 @@
 
 #include "InternalUtil.h"
 
-#include "APLDoc.h"
 #include "APLCrypto.h"
 #include "APLCardPteid.h"
-#include <string.h>
+
+#include <fstream>
 
 //UNIQUE INDEX FOR RETRIEVING OBJECT
 #define INCLUDE_OBJECT_SODEID_DATA	1
@@ -201,8 +201,13 @@ bool PTEID_ByteArray::writeToFile(const char * csFilePath)
 	BEGIN_TRY_CATCH
 
 	CByteArray *pimpl=static_cast<CByteArray *>(m_impl);
-	out=APL_XMLDoc::writeToFile(*pimpl,csFilePath);
+	std::ofstream out_stream(csFilePath, std::ios::binary);
 
+	if (out_stream.is_open()) {
+		out_stream.write((char*)pimpl->GetBytes(), pimpl->Size());
+		out = true;
+	}
+	
 	END_TRY_CATCH
 
 	return out;
@@ -421,94 +426,11 @@ PTEID_ByteArray& PTEID_PublicKey::getCardAuthKeyExponent() {
 	return *out;
 }
 
-/*****************************************************************************************
----------------------------------------- PTEID_XMLDoc -------------------------------------------
-*****************************************************************************************/
-PTEID_XMLDoc::PTEID_XMLDoc(const SDK_Context *context,APL_XMLDoc *impl):PTEID_Object(context,impl)
-{
-}
-
-PTEID_XMLDoc::~PTEID_XMLDoc()
-{
-	if(m_delimpl && m_impl)
-	{
-		APL_XMLDoc *pimpl=static_cast<APL_XMLDoc *>(m_impl);
-		delete pimpl;
-		m_impl=NULL;
-	}
-}
-
-PTEID_ByteArray PTEID_XMLDoc::getXML()
-{
-	//Don't do anything, the previous implementation was broken
-	//Keep it just to maintain the API
-	PTEID_ByteArray out;
-
-	return out;
-}
-
-PTEID_ByteArray PTEID_XMLDoc::getCSV()
-{
-	//Keep it just to maintain the API
-	PTEID_ByteArray out;
-
-	return out;
-}
-
-PTEID_ByteArray PTEID_XMLDoc::getTLV()
-{
-	//Keep it just to maintain the API
-	PTEID_ByteArray out;
-
-	return out;
-}
-
-bool PTEID_XMLDoc::writeXmlToFile(const char * csFilePath)
-{
-	//Don't do anything, the previous implementation was broken
-	//Keep it just to maintain the API
-	return true;
-}
-
-bool PTEID_XMLDoc::writeCsvToFile(const char * csFilePath)
-{
-	//Keep it just to maintain the API
-	return true;
-}
-
-bool PTEID_XMLDoc::writeTlvToFile(const char * csFilePath)
-{
-	//Keep it just to maintain the API
-	return true;
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_Biometric -------------------------------------------
-*****************************************************************************************/
-PTEID_Biometric::PTEID_Biometric(const SDK_Context *context,APL_Biometric *impl):PTEID_XMLDoc(context,impl)
-{
-}
-
-PTEID_Biometric::~PTEID_Biometric()
-{
-}
-
-/*****************************************************************************************
----------------------------------------- PTEID_Crypto -------------------------------------------
-*****************************************************************************************/
-PTEID_Crypto::PTEID_Crypto(const SDK_Context *context,APL_Crypto *impl):PTEID_XMLDoc(context,impl)
-{
-}
-
-PTEID_Crypto::~PTEID_Crypto()
-{
-}
-
 
 /*****************************************************************************************
 ---------------------------------------- PTEID_CCXML_Doc -------------------------------------------
 *****************************************************************************************/
-PTEID_CCXML_Doc::PTEID_CCXML_Doc(const SDK_Context *context,APL_CCXML_Doc *impl):PTEID_XMLDoc(context,impl)
+PTEID_CCXML_Doc::PTEID_CCXML_Doc(const SDK_Context *context,APL_CCXML_Doc *impl): PTEID_Object(context,impl)
 {
 	xmltemp = NULL;
 }
@@ -539,7 +461,7 @@ const char *PTEID_CCXML_Doc::getCCXML(){
 /*****************************************************************************************
 ---------------------------------------- PTEID_CardVersionInfo --------------------------------------
 *****************************************************************************************/
-PTEID_CardVersionInfo::PTEID_CardVersionInfo(const SDK_Context *context,APL_DocVersionInfo *impl):PTEID_XMLDoc(context,impl)
+PTEID_CardVersionInfo::PTEID_CardVersionInfo(const SDK_Context *context,APL_DocVersionInfo *impl): PTEID_Object(context,impl)
 {
 }
 
@@ -774,7 +696,7 @@ const char *PTEID_CardVersionInfo::getElectricalPersonalisationInterface()
 /*****************************************************************************************
 ---------------------------------------- PTEID_EId ---------------------------------------------
 *****************************************************************************************/
-PTEID_EId::PTEID_EId(const SDK_Context *context,APL_DocEId *impl):PTEID_XMLDoc(context,impl)
+PTEID_EId::PTEID_EId(const SDK_Context *context,APL_DocEId *impl): PTEID_Object(context,impl)
 {
 }
 
@@ -1239,7 +1161,7 @@ const char *PTEID_EId::getValidation()
 /*****************************************************************************************
 ---------------------------------------- PTEID_EIdAdress ---------------------------------------------
 *****************************************************************************************/
-PTEID_Address::PTEID_Address(const SDK_Context *context,APL_AddrEId *impl):PTEID_XMLDoc(context,impl)
+PTEID_Address::PTEID_Address(const SDK_Context *context,APL_AddrEId *impl):PTEID_Object(context,impl)
 {
 }
 
@@ -1642,7 +1564,7 @@ const char *PTEID_Address::getForeignPostalCode()
 /*****************************************************************************************
 ---------------------------------------- PTEID_Picture -----------------------------------------
 *****************************************************************************************/
-PTEID_Sod::PTEID_Sod(const SDK_Context *context,APL_SodEid *impl):PTEID_Biometric(context,impl)
+PTEID_Sod::PTEID_Sod(const SDK_Context *context,APL_SodEid *impl):PTEID_Object(context,impl)
 {
 }
 

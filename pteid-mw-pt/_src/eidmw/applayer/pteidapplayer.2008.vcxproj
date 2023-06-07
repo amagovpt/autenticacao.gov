@@ -225,7 +225,6 @@
     <ClCompile Include="APLCertif.cpp" />
     <ClCompile Include="APLConfig.cpp" />
     <ClCompile Include="APLCrypto.cpp" />
-    <ClCompile Include="APLDoc.cpp" />
     <ClCompile Include="APLPublicKey.cpp" />
     <ClCompile Include="APLReader.cpp" />
     <ClCompile Include="CardFile.cpp" />
@@ -263,7 +262,6 @@
     <ClInclude Include="APLCertif.h" />
     <ClInclude Include="APLConfig.h" />
     <ClInclude Include="APLCrypto.h" />
-    <ClInclude Include="APLDoc.h" />
     <ClInclude Include="APLPublicKey.h" />
     <ClInclude Include="APLReader.h" />
     <ClInclude Include="CardFile.h" />

@@ -59,7 +59,7 @@ namespace eIDMW
 /*****************************************************************************************
 ---------------------------------------- PTEID_Certificate ------------------------------------
 *****************************************************************************************/
-PTEID_Certificate::PTEID_Certificate(const SDK_Context *context,APL_Certif *impl):PTEID_Crypto(context,impl)
+PTEID_Certificate::PTEID_Certificate(const SDK_Context *context,APL_Certif *impl):PTEID_Object(context,impl)
 {
 }
 
@@ -437,7 +437,7 @@ unsigned long PTEID_Certificate::getKeyLength()
 /*****************************************************************************************
 ---------------------------------------- PTEID_Certificates ------------------------------------
 *****************************************************************************************/
-PTEID_Certificates::PTEID_Certificates(const SDK_Context *context,APL_Certifs *impl):PTEID_Crypto(context,impl)
+PTEID_Certificates::PTEID_Certificates(const SDK_Context *context,APL_Certifs *impl):PTEID_Object(context,impl)
 {
 }
 
@@ -686,7 +686,7 @@ const unsigned long PTEID_Pin::SIGN_PIN;
 const unsigned long PTEID_Pin::ADDR_PIN;
 #endif
 
-PTEID_Pin::PTEID_Pin(const SDK_Context *context,APL_Pin *impl):PTEID_Crypto(context,impl)
+PTEID_Pin::PTEID_Pin(const SDK_Context *context,APL_Pin *impl):PTEID_Object(context,impl)
 {
 }
 
@@ -934,7 +934,7 @@ bool PTEID_Pin::isVerified() {
 /*****************************************************************************************
 ---------------------------------------- PTEID_Pins -------------------------------------------
 *****************************************************************************************/
-PTEID_Pins::PTEID_Pins(const SDK_Context *context,APL_Pins *impl):PTEID_Crypto(context,impl)
+PTEID_Pins::PTEID_Pins(const SDK_Context *context,APL_Pins *impl): PTEID_Object(context,impl)
 {
 }
 

@@ -314,7 +314,7 @@ class APL_ReaderContext;
   * You get an instance from the static instance() method (or using the define ReaderSet).
   * Then you get a READER							(PTEID_ReaderContext)
   *		-> from this reader, you a CARD				(PTEID_Card or derived class)
-  *			-> from this card, you get DOCUMENT		(PTEID_XMLDoc or derived class)
+  *			-> from this card, you get identity or address objects	(PTEID_EId or PTEID_Address)
   *				-> ...
   *********************************************************************************/
 class PTEID_ReaderSet : public PTEID_Object
@@ -509,7 +509,6 @@ private:
 friend PTEID_ReaderContext &PTEID_ReaderSet::getReader(APL_ReaderContext *pAplReader); /**< For internal use : This method must access protected constructor */
 };
 
-class PTEID_XMLDoc;
 class PTEID_PDFSignature;
 class APL_Card;
 class PTEID_Certificate;
@@ -1155,82 +1154,6 @@ private:
 friend PTEID_CCXML_Doc& PTEID_EIDCard::getXmlCCDoc(PTEID_XmlUserRequestedInfo& userRequestedInfo);
 };
 
-class APL_XMLDoc;
-
-/******************************************************************************//**
-  * Abstract base class for all the documents.
-  *********************************************************************************/
-class PTEID_XMLDoc : public PTEID_Object
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_XMLDoc()=0;				/**< Destructor */
-
-	PTEIDSDK_API virtual PTEID_ByteArray getXML();			/**< Return the document in an XML format */
-	PTEIDSDK_API virtual PTEID_ByteArray getCSV();			/**< Return the document in an CSV format */
-	PTEIDSDK_API virtual PTEID_ByteArray getTLV();			/**< Return the document in an TLV format */
-
-	/**
-	  * Write the xml document into the file csFilePath.
-	  * @return true if succeeded
-	  **/
-	PTEIDSDK_API virtual bool writeXmlToFile(const char * csFilePath);
-
-	/**
-	  * Write the csv document into the file csFilePath.
-	  * @return true if succeeded
-	  **/
-	PTEIDSDK_API virtual bool writeCsvToFile(const char * csFilePath);
-
-	/**
-	  * Write the tlv document into the file csFilePath.
-	  * @return true if succeeded
-	  **/
-	PTEIDSDK_API virtual bool writeTlvToFile(const char * csFilePath);
-
-protected:
-	PTEID_XMLDoc(const SDK_Context *context,APL_XMLDoc *impl);		/**< For internal use : Constructor */
-
-private:
-	PTEID_XMLDoc(const PTEID_XMLDoc& doc);					/**< Copy not allowed - not implemented */
-	PTEID_XMLDoc& operator= (const PTEID_XMLDoc& doc);		/**< Copy not allowed - not implemented */
-
-};
-
-class APL_Biometric;
-
-/******************************************************************************//**
-  * Abstract base class for the biometric documents.
-  *********************************************************************************/
-class PTEID_Biometric : public PTEID_XMLDoc
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_Biometric()=0;				/**< Destructor */
-
-protected:
-	PTEID_Biometric(const SDK_Context *context,APL_Biometric *impl);	/**< For internal use : Constructor */
-
-private:
-	PTEID_Biometric(const PTEID_Biometric& doc);				/**< Copy not allowed - not implemented */
-	PTEID_Biometric& operator= (const PTEID_Biometric& doc);	/**< Copy not allowed - not implemented */
-};
-
-class APL_Crypto;
-
-/******************************************************************************//**
-  * Abstract base class for the cryptographic documents.
-  *********************************************************************************/
-class PTEID_Crypto : public PTEID_XMLDoc
-{
-public:
-	PTEIDSDK_API virtual ~PTEID_Crypto()=0;			/**< Destructor */
-
-protected:
-	PTEID_Crypto(const SDK_Context *context,APL_Crypto *impl);	/**< For internal use : Constructor */
-
-private:
-	PTEID_Crypto(const PTEID_Crypto& doc);				/**< Copy not allowed - not implemented */
-	PTEID_Crypto& operator= (const PTEID_Crypto& doc);	/**< Copy not allowed - not implemented */
-};
 
 class APL_DocVersionInfo;
 
@@ -1238,7 +1161,7 @@ class APL_DocVersionInfo;
   * Class for the info document.
   * You can get such an object from PTEID_EIDCard::getVersionInfo().
   *********************************************************************************/
-class PTEID_CardVersionInfo : public PTEID_XMLDoc
+class PTEID_CardVersionInfo : public PTEID_Object
 {
 public:
 	PTEIDSDK_API  virtual ~PTEID_CardVersionInfo();		/**< Destructor */
@@ -1275,7 +1198,7 @@ class APL_SodEid;
   * Class for the SOD document on an EID Card.
   * You can get such an object from PTEID_EIDCard::getSod().
   *********************************************************************************/
-class PTEID_Sod : public PTEID_Biometric
+class PTEID_Sod : public PTEID_Object
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_Sod();				/**< Destructor */
@@ -1297,7 +1220,7 @@ class APL_DocEId;
   * Class for the ID document on a EID Card.
   * You can get such an object from PTEID_EIDCard::getID().
   *********************************************************************************/
-class PTEID_EId : public PTEID_XMLDoc
+class PTEID_EId : public PTEID_Object
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_EId();						/**< Destructor */
@@ -1349,7 +1272,7 @@ class APL_AddrEId;
   * Class for the Address document on a EID Card.
   * You can get such an object from PTEID_EIDCard::getAddr().
   *********************************************************************************/
-class PTEID_Address : public PTEID_XMLDoc
+class PTEID_Address : public PTEID_Object
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_Address();							/**< Destructor */
@@ -1398,7 +1321,7 @@ friend PTEID_Address& PTEID_EIDCard::getAddr();						/**< For internal use : Thi
 
 class APL_CCXML_Doc;
 
-class PTEID_CCXML_Doc : public PTEID_XMLDoc
+class PTEID_CCXML_Doc : public PTEID_Object
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_CCXML_Doc();					/**< Destructor */
@@ -1421,7 +1344,7 @@ class APL_Pins;
 /******************************************************************************//**
   * Container class for all pins on the card.
   *********************************************************************************/
-class PTEID_Pins : public PTEID_Crypto
+class PTEID_Pins : public PTEID_Object
 {
 public:
 	PTEIDSDK_API virtual ~PTEID_Pins();				/**< Destructor */
@@ -1454,7 +1377,7 @@ class APL_Pin;
 /******************************************************************************//**
   * Class that represent one Pin.
   *********************************************************************************/
-class PTEID_Pin : public PTEID_Crypto
+class PTEID_Pin : public PTEID_Object
 {
 public:
 	/** PIN reference value for the authentication PIN. It can be used as parameter for @ref PTEID_Pins::getPinByPinRef() */
@@ -1545,7 +1468,7 @@ class APL_Certifs;
 /******************************************************************************//**
   * Container class for all certificates on the card.
   *********************************************************************************/
-class PTEID_Certificates : public PTEID_Crypto
+class PTEID_Certificates : public PTEID_Object
 {
 public:
 
@@ -1603,7 +1526,7 @@ class APL_Certif;
 /******************************************************************************//**
   * Class that represents one certificate.
   *********************************************************************************/
-class PTEID_Certificate : public PTEID_Crypto
+class PTEID_Certificate : public PTEID_Object
 {
 public:
 	static const unsigned long CITIZEN_AUTH = 0;
