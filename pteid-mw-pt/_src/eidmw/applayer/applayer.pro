@@ -83,6 +83,7 @@ HEADERS += \
 	APLDoc.h \
 	APLReader.h \
 	APLConfig.h \
+	APLCCXmlDoc.h \
 	CardFile.h \
 	CertStatusCache.h \
 	cryptoFramework.h \

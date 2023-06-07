@@ -259,6 +259,7 @@
     <ClInclude Include="APLCard.h" />
     <ClInclude Include="APLCardFile.h" />
     <ClInclude Include="APLCardPteid.h" />
+    <ClInclude Include="APLCCXmlDoc.h" />
     <ClInclude Include="APLCertif.h" />
     <ClInclude Include="APLConfig.h" />
     <ClInclude Include="APLCrypto.h" />

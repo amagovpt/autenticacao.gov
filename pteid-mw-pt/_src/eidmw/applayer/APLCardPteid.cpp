@@ -40,6 +40,7 @@
 #include "MutualAuthentication.h"
 #include "StringOps.h"
 #include "APLConfig.h"
+#include "APLCCXmlDoc.h"
 #include "RemoteAddress.h"
 #include "RemoteAddressRequest.h"
 
