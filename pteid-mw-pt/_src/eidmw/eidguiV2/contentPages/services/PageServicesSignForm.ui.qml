@@ -673,6 +673,7 @@ Item {
                                     rightPadding: 0
                                     anchors.leftMargin: 10
                                     enabled: true
+                                    checked: true
                                     font.capitalization: Font.MixedCase
                                     opacity: enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                                     Accessible.role: Accessible.RadioButton
