@@ -138,7 +138,7 @@ int main()
 
 				if (PathFileExists(eidmwCacheDirectoryPath.c_str()) && PathFileExists(scapAttributesDirectoryPath.c_str()))
 				{
-					loopFiles(scapAttributesDirectoryPath, L"*.xml", [&](const std::wstring &fullFilePath, const std::wstring &fileName) {
+					loopFiles(scapAttributesDirectoryPath, L"*.json", [&](const std::wstring &fullFilePath, const std::wstring &fileName) {
 						DeleteFile(fullFilePath.c_str());
 						return false;
 					});
