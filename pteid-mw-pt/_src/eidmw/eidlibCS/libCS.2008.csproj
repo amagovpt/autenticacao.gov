@@ -69,9 +69,6 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Address.cs">
       <Link>GeneratedFiles\PTEID_Address.cs</Link>
     </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Biometric.cs">
-      <Link>GeneratedFiles\PTEID_Biometric.cs</Link>
-    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ByteArray.cs">
       <Link>GeneratedFiles\PTEID_ByteArray.cs</Link>
     </Compile>
@@ -101,9 +98,6 @@
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Config.cs">
       <Link>GeneratedFiles\PTEID_Config.cs</Link>
-    </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Crypto.cs">
-      <Link>GeneratedFiles\PTEID_Crypto.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_EId.cs">
       <Link>GeneratedFiles\PTEID_EId.cs</Link>
@@ -221,9 +215,6 @@
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Sod.cs">
       <Link>GeneratedFiles\PTEID_Sod.cs</Link>
-    </Compile>
-    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_XMLDoc.cs">
-      <Link>GeneratedFiles\PTEID_XMLDoc.cs</Link>
     </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_XmlUserRequestedInfo.cs">
       <Link>GeneratedFiles\PTEID_XmlUserRequestedInfo.cs</Link>
