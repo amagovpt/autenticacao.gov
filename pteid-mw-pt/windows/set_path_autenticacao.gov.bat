@@ -2,7 +2,7 @@
 
 ::==============================
 
-@set PTEID_POPPLER_QT5=C:\git\tools\build-scripts\windows\external-libs\poppler-0.87
+@set PTEID_POPPLER_QT5=C:\git\tools\build-scripts\windows\external-libs\poppler-23.06
 
 
 :: Compiled / external libs x86
@@ -29,7 +29,7 @@
 
 @set PTEID_DIR_OPENJPEG=C:\git\tools\build-scripts\windows\external-libs\openjpeg-2.4\Win32
 
-@set PTEID_DIR_JPEG=C:\git\tools\build-scripts\windows\external-libs\poppler-0.87\win32
+@set PTEID_DIR_JPEG=C:\git\tools\build-scripts\windows\external-libs\poppler-23.06\win32
 
 @set PTEID_DIR_CJSON=C:\git\tools\build-scripts\windows\external-libs\cjson-win32
 
@@ -58,7 +58,7 @@
 
 @set PTEID_DIR_OPENJPEG_X64=C:\git\tools\build-scripts\windows\external-libs\openjpeg-2.4\x64
 
-@set PTEID_DIR_JPEG_X64=C:\git\tools\build-scripts\windows\external-libs\poppler-0.87\x64
+@set PTEID_DIR_JPEG_X64=C:\git\tools\build-scripts\windows\external-libs\poppler-23.06\x64
 
 @set PTEID_DIR_CJSON_X64=C:\git\tools\build-scripts\windows\external-libs\cjson-x64
 
