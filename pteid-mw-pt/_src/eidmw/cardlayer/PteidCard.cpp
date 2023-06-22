@@ -747,7 +747,6 @@ bool CPteidCard::SelectApplet()
 	return PteidCardSelectApplet(m_poContext, m_hCard, getProtocolStructure());
 }
 
-
 /**
  * The Pteid card doesn't support select by path (only
  * select by File ID or by AID), so we perform a loop with
@@ -758,19 +757,21 @@ bool CPteidCard::SelectApplet()
  *   Select(CCCC)
  *
  */
-CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
+CByteArray CPteidCard::OldSelectByPath(const std::string & csPath, bool bReturnFileInfo)
 {
+	std::string csPathCopy = csPath;
+	if (csPath.find("3F00") != std::string::npos || csPath.find("3f00") != std::string::npos)
+		csPathCopy.erase(0, 4);
+
+
 	unsigned long ulOffset = 0;
-
-
 	// 1. Do a loop of "Select File by file ID" commands
-
-	unsigned long ulPathLen = (unsigned long)csPath.size() / 2;
+	unsigned long ulPathLen = (unsigned long)csPathCopy.size() / 2;
 	for (ulOffset = 0; ulOffset < ulPathLen; ulOffset += 2)
 	{
 		CByteArray oPath(ulPathLen);
-		oPath.Append(Hex2Byte(csPath, ulOffset));
-		oPath.Append(Hex2Byte(csPath, ulOffset + 1));
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset));
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset + 1));
 
 		CByteArray oResp = SendAPDU(0xA4, 0x00, 0x0C, oPath);
 		unsigned long ulSW12 = getSW12(oResp);
@@ -786,7 +787,38 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 		getSW12(oResp, 0x9000);
 	}
 
-	return CByteArray((unsigned char *)csPath.c_str(), (unsigned long)csPath.size());
+	return CByteArray((unsigned char *)csPathCopy.c_str(), (unsigned long)csPathCopy.size());
+}
+
+// support for apdu 00 A4 08 04 04 5f 00 EF 01
+CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
+{
+	//
+	// Old version of CC
+	// Only accepts path length of 2-4 bytes (1 file from root directory OR 1 DF and 1 file from DF)
+	// Example 1: apdu 00 A4 08 04 02 2f 00 		- selects file 2f00 from root directory 3f00
+	// Example 2: apdu 00 A4 08 04 04 5f 00 ef 12 	- selects file ef12 from DF 5f00 from root directory 3f00
+	// Note: DF MUST NOT BE ROOT DIRECTORY (3f 00). Operations like (apdu 00 A4 08 04 04 3f 00 2f 00) will return 0x6A Operation not supported
+	//
+	std::string csPathCopy = csPath;
+	if (csPath.find("3F00") != std::string::npos || csPath.find("3f00") != std::string::npos)
+		csPathCopy.erase(0, 4);
+
+	unsigned long ulPathLen = (unsigned long)csPathCopy.size() / 2;
+	CByteArray oPath(ulPathLen);
+	for (unsigned long ulOffset = 0; ulOffset < ulPathLen; ulOffset += 2)
+	{
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset));
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset + 1));
+	}
+
+	//
+	// Send APDU and validate response
+	//
+	auto oResp = SendAPDU(0xA4, 0x08, bReturnFileInfo ? 0x00 : 0x0C, oPath);
+	getSW12(oResp, 0x9000);
+
+	return oResp;
 }
 
 tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)

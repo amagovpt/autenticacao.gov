@@ -95,8 +95,9 @@ protected:
     virtual bool SelectApplet();
 		
     virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
+	CByteArray OldSelectByPath(const std::string &csPath, bool bReturnFileInfo);
 
-    virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
+	virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
         std::string & csPin1, std::string & csPin2, const tPrivKey *pKey, void *wndGeometry = 0 );
 
     virtual void SetSecurityEnv(const tPrivKey & key, unsigned long paddingType,
