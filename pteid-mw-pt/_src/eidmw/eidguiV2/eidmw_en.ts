@@ -35,15 +35,15 @@
     </message>
     <message>
         <source>STR_ERROR_CODE</source>
-        <translation>Error code = </translation>
+        <translation type="vanished">Error code = </translation>
     </message>
     <message>
         <source>STR_SCAP_SIGNATURE_ERROR</source>
-        <translation>SCAP signature service error</translation>
+        <translation type="vanished">SCAP signature service error</translation>
     </message>
     <message>
         <source>STR_CMD_SIGNING_SCAP</source>
-        <translation>Signing document with professional attributes</translation>
+        <translation type="vanished">Signing document with professional attributes</translation>
     </message>
     <message>
         <source>STR_PERSONAL_NOTES_ERROR</source>
@@ -68,12 +68,18 @@
     </message>
     <message>
         <source>STR_PROXY_UNSUPPORTED</source>
-        <translation>Your proxy server requires the NTLM/Kerberos protocol which is not supported. Please review your network configurations or run this application in another device.
+        <translation type="vanished">Your proxy server requires the NTLM/Kerberos protocol which is not supported. Please review your network configurations or run this application in another device.
         </translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Please make sure you are connected to the Internet.</translation>
+    </message>
+    <message>
+        <source>STR_PROXY_WARNING</source>
+        <translation>If using a company network, make sure there is no traffic filtering. For more information, refer to the following section of 
+                     &lt;a href=&apos;https://github.com/amagovpt/docs.autenticacao.gov/blob/main/user_manual.md#erro-na-comunicação-em-assinatura-com-chave-móvel-digital&apos;&gt;User Manual&lt;/a&gt;.                    
+        </translation>
     </message>
     <message>
         <source>STR_CMD_ERROR_MSG</source>
@@ -93,7 +99,7 @@
     </message>
     <message>
         <source>STR_VERIFY_APP_UPDATE</source>
-        <translation>Please make sure you have the latest version of the application.</translation>
+        <translation type="vanished">Please make sure you have the latest version of the application.</translation>
     </message>
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>
@@ -439,6 +445,10 @@
         <translation>https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop</translation>
     </message>
     <message>
+        <source>STR_LINK_MANUAL_PROXY</source>
+        <translation>https://github.com/amagovpt/docs.autenticacao.gov/blob/main/user_manual.md#erro-na-comunicação-em-assinatura-com-chave-móvel-digital</translation>
+    </message>
+    <message>
         <source>STR_URL_AUTENTICACAO_GOT_PT</source>
         <translation>https://www.autenticacao.gov.pt</translation>
     </message>
@@ -582,7 +592,7 @@
     <message>
         <source>STR_OAUTH_SUCCESS_SCAP</source>
         <oldsource>STR_OAUTH_SUCCESS</oldsource>
-        <translation>Authentication finished. Please wait while the attributes are loading.</translation>
+        <translation type="vanished">Authentication finished. Please wait while the attributes are loading.</translation>
     </message>
     <message>
         <source>STR_OAUTH</source>
@@ -749,6 +759,14 @@
     <message>
         <source>STR_PRINT_PDF_BUTTON</source>
         <translation>Create PDF</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
+        <translation type="unfinished">Please check your Internet connection.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_GENERIC</source>
+        <translation type="unfinished">Please try again. If this error persists, please contact the Citizen Card support line at telephone number +351 211 950 500 or e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -1146,7 +1164,7 @@
     </message>
     <message>
         <source>STR_SCAP_SERVICE_FAIL_SECOND</source>
-        <translation>Please try again.</translation>
+        <translation type="vanished">Please try again.</translation>
     </message>
     <message>
         <source>STR_SCAP_PING_FAIL_FIRST</source>
@@ -1166,7 +1184,7 @@
     </message>
     <message>
         <source>STR_LOADING_SCAP_ATTRIBUTES</source>
-        <translation>Loading attributes</translation>
+        <translation type="vanished">Loading attributes</translation>
     </message>
     <message>
         <source>STR_SCAP_ENTITY</source>
@@ -1796,7 +1814,7 @@
     </message>
     <message>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG</source>
-        <translation>Unable to sign multiple files with professional attributes</translation>
+        <translation type="vanished">Unable to sign multiple files with professional attributes</translation>
     </message>
     <message>
         <source>STR_SIGN_DROP_MULTI</source>
@@ -2098,6 +2116,10 @@
     <message>
         <source>STR_SCAP_ERROR</source>
         <translation>Error</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_BAD_CREDENTIALS</source>
+        <translation type="unfinished">The installed application does not have support for the professional attributes certification system (SCAP).</translation>
     </message>
 </context>
 <context>

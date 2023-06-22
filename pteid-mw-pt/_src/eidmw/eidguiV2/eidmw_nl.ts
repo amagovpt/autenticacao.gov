@@ -35,11 +35,11 @@
     </message>
     <message>
         <source>STR_SCAP_SIGNATURE_ERROR</source>
-        <translation>Erro na assinatura com atributos profissionais</translation>
+        <translation type="vanished">Erro na assinatura com atributos profissionais</translation>
     </message>
     <message>
         <source>STR_ERROR_CODE</source>
-        <translation>Código de erro = </translation>
+        <translation type="vanished">Código de erro = </translation>
     </message>
     <message>
         <source>STR_PERSONAL_NOTES_ERROR</source>
@@ -63,11 +63,17 @@
     </message>
     <message>
         <source>STR_PROXY_UNSUPPORTED</source>
-        <translation>O seu servidor de proxy requer o protocolo NTLM/Kerberos que não é suportado por esta aplicação. Por favor verifique as configurações de rede ou execute a aplicação noutro equipamento</translation>
+        <translation type="vanished">O seu servidor de proxy requer o protocolo NTLM/Kerberos que não é suportado por esta aplicação. Por favor verifique as configurações de rede ou execute a aplicação noutro equipamento</translation>
     </message>
     <message>
         <source>STR_VERIFY_INTERNET</source>
         <translation>Por favor certifique-se que está ligado à internet.</translation>
+    </message>
+    <message>
+        <source>STR_PROXY_WARNING</source>
+        <translation>Caso esteja numa rede empresarial, assegure-se que não há filtragem do tráfego. Para mais informações, consulte a secção referente do 
+                     &lt;a href=&quot;https://github.com/amagovpt/docs.autenticacao.gov/blob/main/user_manual.md#erro-na-comunicação-em-assinatura-com-chave-móvel-digital&quot;&gt;Manual de Utilização&lt;/a&gt;.
+        </translation>
     </message>
     <message>
         <source>STR_CMD_ERROR_MSG</source>
@@ -79,7 +85,7 @@
     </message>
     <message>
         <source>STR_CMD_SIGNING_SCAP</source>
-        <translation>Assinando com atributos profissionais</translation>
+        <translation type="vanished">Assinando com atributos profissionais</translation>
     </message>
     <message>
         <source>STR_CMD_LOGIN_ERROR</source>
@@ -87,7 +93,7 @@
     </message>
     <message>
         <source>STR_VERIFY_APP_UPDATE</source>
-        <translation>Verifique que tem a última versão da aplicação.</translation>
+        <translation type="vanished">Verifique que tem a última versão da aplicação.</translation>
     </message>
     <message>
         <source>STR_SCAP_CLOCK_ERROR</source>
@@ -437,6 +443,10 @@
         <translation>https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop</translation>
     </message>
     <message>
+        <source>STR_LINK_MANUAL_PROXY</source>
+        <translation>https://github.com/amagovpt/docs.autenticacao.gov/blob/main/user_manual.md#erro-na-comunicação-em-assinatura-com-chave-móvel-digital</translation>
+    </message>
+    <message>
         <source>STR_URL_AUTENTICACAO_GOT_PT</source>
         <translation>https://www.autenticacao.gov.pt</translation>
     </message>
@@ -580,7 +590,7 @@
     <message>
         <source>STR_OAUTH_SUCCESS_SCAP</source>
         <oldsource>STR_OAUTH_SUCCESS</oldsource>
-        <translation>Autenticação concluída. Por favor, aguarde pelo carregamento de atributos.</translation>
+        <translation type="vanished">Autenticação concluída. Por favor, aguarde pelo carregamento de atributos.</translation>
     </message>
     <message>
         <source>STR_OAUTH</source>
@@ -747,6 +757,14 @@
     <message>
         <source>STR_PRINT_PDF_BUTTON</source>
         <translation>Gerar PDF</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_NETWORK_ERROR</source>
+        <translation type="unfinished">Por favor verifique a sua ligação à internet.</translation>
+    </message>
+    <message>
+        <source>STR_REMOTEADDRESS_GENERIC</source>
+        <translation type="unfinished">Por favor tente novamente e, caso o erro persista, contacte a Linha Cartão de Cidadão através do número 211 950 500 ou do e-mail &lt;a href=&quot;mailto:cartaodecidadao@irn.mj.pt&quot;&gt;cartaodecidadao@irn.mj.pt&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -1144,7 +1162,7 @@
     </message>
     <message>
         <source>STR_SCAP_SERVICE_FAIL_SECOND</source>
-        <translation>Por favor volte a tentar.</translation>
+        <translation type="vanished">Por favor volte a tentar.</translation>
     </message>
     <message>
         <source>STR_SCAP_PING_FAIL_FIRST</source>
@@ -1164,7 +1182,7 @@
     </message>
     <message>
         <source>STR_LOADING_SCAP_ATTRIBUTES</source>
-        <translation>A carregar atributos</translation>
+        <translation type="vanished">A carregar atributos</translation>
     </message>
     <message>
         <source>STR_SCAP_ENTITY</source>
@@ -1794,7 +1812,7 @@
     </message>
     <message>
         <source>STR_MULTI_FILE_ATTRIBUTES_WARNING_MSG</source>
-        <translation>Não é possivel assinar multiplos ficheiros com atributos profissionais</translation>
+        <translation type="vanished">Não é possivel assinar multiplos ficheiros com atributos profissionais</translation>
     </message>
     <message>
         <source>STR_SIGN_DROP_MULTI</source>
@@ -2096,6 +2114,10 @@
     <message>
         <source>STR_SCAP_ERROR</source>
         <translation>Erro</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_BAD_CREDENTIALS</source>
+        <translation type="unfinished">A aplicação instalada não possui suporte para o serviço do Sistema de Certificação de Atributos Profissionais.</translation>
     </message>
 </context>
 <context>

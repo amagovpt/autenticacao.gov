@@ -836,10 +836,9 @@ void GAPI::showSignCMDDialog(long error_code)
         break;
     case SOAP_TCP_ERROR:
 	case EIDMW_ERR_CMD_CONNECTION:
+        urlLink =  tr("STR_LINK_MANUAL_PROXY");
         message = tr("STR_CONNECTION_ERROR") + "<br><br>" +
-            tr("STR_VERIFY_INTERNET");
-        if (m_Settings.isProxyConfigured())
-            message.append(" ").append(tr("STR_VERIFY_PROXY"));
+            tr("STR_VERIFY_INTERNET") + "<br>" + tr("STR_PROXY_WARNING");
         break;
 	case EIDMW_ERR_CMD_SERVICE:
         message = tr("STR_CMD_SERVICE_FAIL");
@@ -871,7 +870,12 @@ void GAPI::showSignCMDDialog(long error_code)
         // If there is error show message screen
         if (error_code == EIDMW_TIMESTAMP_ERROR || error_code == EIDMW_LTV_ERROR){
             signalUpdateProgressStatus(message);
-        } else {
+        }
+        else if (error_code == EIDMW_ERR_CMD_CONNECTION){
+            signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
+            signalShowMessage(message, urlLink);
+        } 
+        else {
             message += "<br><br>" + support_string;
             signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
             signalShowMessage(message, urlLink);
