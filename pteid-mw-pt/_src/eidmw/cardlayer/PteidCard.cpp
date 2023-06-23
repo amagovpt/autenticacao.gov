@@ -52,10 +52,10 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const 
 {
 	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
-	CByteArray oCmd(sizeof(GEMSAFE_PTEID_APPLET_AID) + 5);
+	CByteArray oCmd(sizeof(PTEID_1_APPLET_AID) + 5);
 	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-	oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
-	oCmd.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
+	oCmd.Append((unsigned char) sizeof(PTEID_1_APPLET_AID));
+	oCmd.Append(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
 
 	CByteArray oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
 
@@ -842,7 +842,7 @@ tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char*
 // Compatible with older CC where only 1 AID present
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, bool bReturnFileInfo)
 {
-	SelectFile(csPath, GEMSAFE_PTEID_APPLET_AID, bReturnFileInfo);
+	SelectFile(csPath, PTEID_1_APPLET_AID, bReturnFileInfo);
 }
 
 // support for apdu 00 A4 08 04 04 5f 00 EF 01

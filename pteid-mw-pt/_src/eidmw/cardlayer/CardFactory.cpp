@@ -104,9 +104,9 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 				return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 			};
 
-			bool aidStatus = selectAppId(GEMSAFE_PTEID_APPLET_AID);
+			bool aidStatus = selectAppId(PTEID_1_APPLET_AID);
 			if(!aidStatus) {
-				bool nationalDataStatus = selectAppId(GEMSAFE_PTEID_APPLET_NATIONAL_DATA);
+				bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA);
 				if(nationalDataStatus)
 					appletVersion = 3;
 			}
