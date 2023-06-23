@@ -93,8 +93,13 @@ public:
 protected:
 	virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
     virtual bool SelectApplet();
-		
-    virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
+
+	virtual void SelectApplication(const CByteArray & oAID);
+
+	tFileInfo SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo = false);
+	virtual tFileInfo SelectFile(const std::string &csPath, bool bReturnFileInfo = false);
+
+	virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
 	CByteArray OldSelectByPath(const std::string &csPath, bool bReturnFileInfo);
 
 	virtual void showPinDialog(tPinOperation operation, const tPin & Pin,

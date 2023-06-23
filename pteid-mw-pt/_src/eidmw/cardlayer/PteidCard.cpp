@@ -790,6 +790,56 @@ CByteArray CPteidCard::OldSelectByPath(const std::string & csPath, bool bReturnF
 	return CByteArray((unsigned char *)csPathCopy.c_str(), (unsigned long)csPathCopy.size());
 }
 
+void CPteidCard::SelectApplication(const CByteArray & oAID)
+{
+	long lRetVal = 0;
+	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+	CByteArray oCmd(sizeof(oAID) + 5);
+	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
+	oCmd.Append((unsigned char) oAID.Size());
+	oCmd.Append(oAID.GetBytes(), oAID.Size());
+
+	CByteArray oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmd, &lRetVal, getProtocolStructure());
+}
+
+tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo)
+{
+	auto ulPathLen = static_cast<unsigned long>(csPath.size());
+	// path must not contain any incomplete directory or file id
+	if(ulPathLen % 4 != 0 || ulPathLen == 0)
+		throw CMWEXCEPTION(EIDMW_ERR_BAD_PATH);
+
+	// each byte is 2 characters
+	ulPathLen /= 2;
+
+	CAutoLock autolock(this);
+	{
+		// Try to select from current application
+		auto oResp = SelectByPath(csPath, bReturnFileInfo);
+
+		auto ulSW12 = getSW12(oResp);
+		if ((ulSW12 >> 0x8) & 0x6A) // Select File any error
+		{
+			// If failed, try to select the respective application
+			SelectApplication({ oAID, sizeof(oAID) });
+
+			// Select by path again
+			oResp = SelectByPath(csPath, bReturnFileInfo);
+			
+			// Should be expecting 0x9000 (success)
+			getSW12(oResp, 0x9000);
+		}
+	}
+
+	return {0};
+}
+
+// Compatible with older CC where only 1 AID present
+tFileInfo CPteidCard::SelectFile(const std::string &csPath, bool bReturnFileInfo)
+{
+	SelectFile(csPath, GEMSAFE_PTEID_APPLET_AID, bReturnFileInfo);
+}
+
 // support for apdu 00 A4 08 04 04 5f 00 EF 01
 CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
 {
