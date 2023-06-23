@@ -75,15 +75,15 @@ bool CPkiCard::SelectApplet()
 
 void CPkiCard::SelectApplication(const CByteArray & oAID)
 {
-    	CAutoLock autolock(this);
+	CAutoLock autolock(this);
 
 	if (m_selectAppletMode == ALW_SELECT_APPLET)
 		SelectApplet();
 
 	// Select File command to select the Application by AID
-    	CByteArray oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
+	CByteArray oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
 
-			// First try to select the applet
+	// First try to select the applet
 	if (SelectApplet())
 	{
 		m_selectAppletMode = ALW_SELECT_APPLET;
@@ -95,7 +95,7 @@ void CPkiCard::SelectApplication(const CByteArray & oAID)
 
 CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
     unsigned long ulOffset, unsigned long ulMaxLen)
-{
+{	
 	CByteArray oData(ulMaxLen);
 
 	CAutoLock autolock(this);
@@ -588,31 +588,6 @@ tFileInfo CPkiCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
 	}
 
 	return xFileInfo;
-}
-
-// Only called from SelectFile(), no locking is done here
-CByteArray CPkiCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
-{
-    unsigned char ucP2 = bReturnFileInfo ? 0x00 : 0x0C;
-
-    unsigned long ulPathLen = (unsigned long) (csPath.size() / 2);
-
-    CByteArray oPath(ulPathLen);
-    for (unsigned long i = 0; i < ulPathLen; i++)
-        oPath.Append(Hex2Byte(csPath, i));
-
-    CByteArray oResp = SendAPDU(0xA4, 0x00, ucP2, oPath);
-
-    // The file still wasn't found, so let's first try to select the applet
-    if (SelectApplet())
-    {
-        m_selectAppletMode = ALW_SELECT_APPLET;
-        oResp = SendAPDU(0xA4, 0x80, ucP2, oPath);
-    }
-
-	getSW12(oResp, 0x9000);
-
-	return oResp;
 }
 
 CByteArray CPkiCard::ReadBinary(unsigned long ulOffset, unsigned long ulLen)
