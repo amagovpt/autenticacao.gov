@@ -815,6 +815,8 @@ APL_CardType ConvertCardType(tCardType cardType)
 		return APL_CARDTYPE_PTEID_IAS07;
 	case CARD_PTEID_IAS101:
 		return APL_CARDTYPE_PTEID_IAS101;
+	case CARD_PTEID_IAS5:
+		return APL_CARDTYPE_PTEID_IAS5;
 	default:
 		return APL_CARDTYPE_UNKNOWN;
 	}

@@ -89,9 +89,28 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
         	else if (ret.second == SCARD_PROTOCOL_T1)
 				param_structure = SCARD_PCI_T1;
 
-
-			//2018-05 Gemsafe cards are the only ones in use by now
 			int appletVersion = 1;
+
+			const auto selectAppId = [&](const unsigned char* oAID) -> bool
+			{
+				long lRetVal = 0;
+				unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+				CByteArray oCmd(12);
+				oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
+				oCmd.Append(7);
+				oCmd.Append(oAID, sizeof(oAID));
+
+				CByteArray oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
+				return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
+			};
+
+			bool aidStatus = selectAppId(GEMSAFE_PTEID_APPLET_AID);
+			if(!aidStatus) {
+				bool nationalDataStatus = selectAppId(GEMSAFE_PTEID_APPLET_NATIONAL_DATA);
+				if(nationalDataStatus)
+					appletVersion = 3;
+			}
+
 			poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
 
 			CCache::LimitDiskCacheFiles(10);

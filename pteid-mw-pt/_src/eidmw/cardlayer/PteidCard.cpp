@@ -35,9 +35,6 @@
 
 using namespace eIDMW;
 
-static const unsigned char IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
-static const unsigned char GEMSAFE_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
-
 /* martinho - the id must not be changed */
 static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 0x87;
 /* martinho - ANY_ID_BIGGER_THAN_6 will be the ulID in the tPin struct 1-6 are already taken */
@@ -77,14 +74,19 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 		{
 			CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
 
-			bool selected = PteidCardSelectApplet(poContext, hCard, protocol_struct);
+			poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
+			MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
 
-			if (selected) {
-				//We don't support PTEID_IAS101 cards anymore...
-				ulVersion = 1;
-				poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
-				MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
-			}
+			// NOTE: PteidCardSelectAppllet does not support V5 cards
+			// Applet already selected on
+
+			// bool selected = PteidCardSelectApplet(poContext, hCard, protocol_struct);
+			// if (selected) {
+			// 	// We don't support PTEID_IAS101 cards anymore...
+			// 	// ulVersion = 1;
+			// 	poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
+			// 	MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
+			// }
 		}
 	}
 	catch (CMWException &e) {
@@ -108,6 +110,9 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		break;
 	case 2:
 		m_cardType = CARD_PTEID_IAS101;
+		break;
+	case 3:
+		m_cardType = CARD_PTEID_IAS5;
 		break;
 	}
 	try {

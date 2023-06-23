@@ -83,8 +83,9 @@ typedef enum
 
 typedef enum
 {
-	CARD_PTEID_IAS07,
-	CARD_PTEID_IAS101,
+	CARD_PTEID_IAS07, // v3 v4
+	CARD_PTEID_IAS101, // legacy
+    CARD_PTEID_IAS5, // v5 (cc.20)
     CARD_UNKNOWN,
 } tCardType;
 

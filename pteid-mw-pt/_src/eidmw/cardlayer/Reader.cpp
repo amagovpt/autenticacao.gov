@@ -192,6 +192,7 @@ static const inline wchar_t * Type2String(tCardType cardType)
 	{
 	case CARD_PTEID_IAS07:
 	case CARD_PTEID_IAS101:
+	case CARD_PTEID_IAS5:
 		return L"PT eID";;
 	default: return L"unknown";
 	}
