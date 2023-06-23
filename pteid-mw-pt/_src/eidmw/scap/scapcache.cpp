@@ -392,10 +392,11 @@ ScapResult<std::vector<ScapAttribute>> load_cache()
 static std::vector<ScapAttribute> merge_attributes(std::vector<ScapAttribute> &dirty, std::vector<ScapAttribute> &fresh)
 {
 	for (const ScapAttribute &dirty_attribute: dirty)
-		if(std::find(fresh.begin(), fresh.end(), dirty_attribute) == fresh.end())
+		if (dirty_attribute.citizen_name == fresh.front().citizen_name
+		&& std::find(fresh.begin(), fresh.end(), dirty_attribute) == fresh.end())
 			fresh.push_back(dirty_attribute);
 
-	return fresh;
+	return fresh; //attributes to be saved
 }
 
 static std::vector<ScapAttribute> handle_cache(const std::string &response)

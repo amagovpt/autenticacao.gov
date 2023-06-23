@@ -2640,7 +2640,7 @@ void GAPI::getSCAPEntityAttributes(QList<QString> provider_names, bool useOAuth)
 }
 
 void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
-     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "getSCAPCompanyAttributes");
+    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "ScapSignature", "getSCAPCompanyAttributes");
 
     PTEID_EIDCard *card = NULL;
     if (!useOAuth) {
