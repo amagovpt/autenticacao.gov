@@ -842,7 +842,7 @@ tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char*
 // Compatible with older CC where only 1 AID present
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, bool bReturnFileInfo)
 {
-	SelectFile(csPath, PTEID_1_APPLET_AID, bReturnFileInfo);
+	return SelectFile(csPath, PTEID_1_APPLET_AID, bReturnFileInfo);
 }
 
 // support for apdu 00 A4 08 04 04 5f 00 EF 01
