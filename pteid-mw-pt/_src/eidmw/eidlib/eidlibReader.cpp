@@ -643,6 +643,7 @@ PTEID_Card &PTEID_ReaderContext::getCard()
 		{
 		case APL_CARDTYPE_PTEID_IAS07:
 		case APL_CARDTYPE_PTEID_IAS101:
+		case APL_CARDTYPE_PTEID_IAS5:
 			out = new PTEID_EIDCard(&context,pAplCard);
 			//out = new PTEID_EIDCard(&context,pimpl->getEIDCard());
 			break;
@@ -669,7 +670,7 @@ PTEID_EIDCard &PTEID_ReaderContext::getEIDCard()
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	PTEID_CardType type=ConvertCardType(pimpl->getCardType());
 
-	if (type!=PTEID_CARDTYPE_IAS07 && type!=PTEID_CARDTYPE_IAS101) {
+	if (type!=PTEID_CARDTYPE_IAS07 && type != PTEID_CARDTYPE_IAS5 && type!=PTEID_CARDTYPE_IAS101) {
 		throw PTEID_ExCardTypeUnknown();
 	}
 

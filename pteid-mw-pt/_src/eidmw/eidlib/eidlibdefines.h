@@ -50,8 +50,9 @@ namespace eIDMW
 enum PTEID_CardType
 {
 	PTEID_CARDTYPE_UNKNOWN=0,	/**< Unknown card */
-	PTEID_CARDTYPE_IAS07,
-	PTEID_CARDTYPE_IAS101
+	PTEID_CARDTYPE_IAS07,       /*   IAS v0.7 or compatible until IAS v.4    */
+	PTEID_CARDTYPE_IAS101,      /*   IAS 1.01 cards (legacy)  */
+	PTEID_CARDTYPE_IAS5         /*   IAS v5 cards (CC 2)     */
 };
 
 
