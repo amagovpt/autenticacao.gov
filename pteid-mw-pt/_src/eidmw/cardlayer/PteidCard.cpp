@@ -123,9 +123,9 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		//
 		// Get card serial number 
 		//
-		if(m_cardType == CARD_PTEID_IAS5) 		// CPLC Data only available on EID app on PTEID_2 cards
+		if (m_cardType == CARD_PTEID_IAS5) 		// CPLC Data only available on EID app on PTEID_2 cards
 			SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
-		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(12, 8);
+		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
 
 		// Get Card Applet Version
 		m_AppletVersion = ulVersion;
