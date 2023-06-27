@@ -46,8 +46,6 @@
 
 #include "Log.h"
 
-//std::string m_InitSerialNumber;
-
 namespace eIDMW
 {
 
@@ -61,75 +59,6 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	m_isVerified = false;
 	m_SODCheck = true; // by default
 	m_card=card;
-
-	/* File Caching at Applayer Level
-	 * APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-	std::string	m_cachedirpath = conf_dir.getString();
-
-	CPathUtil::checkDir (m_cachedirpath.c_str());
-	std::string contents = m_cachedirpath;
-	contents.append("/");
-	std::string cachefile =	("pteidng-");
-	cachefile.append(m_InitSerialNumber);
-	cachefile.append("-");
-	cachefile.append(csPath);
-	cachefile.append(".bin");
-	contents.append(cachefile);
-
-	try
-	{
-		ifstream chkfile(contents.c_str());
-		//FIX Lenght
-		std::string getPath (cachefile, 25, 12);
-
-		if (getPath == csPath)
-		{
-			if (chkfile)
-			{
-				m_path="";
-				FILE *m_stream;
-				char *buff;
-				unsigned long fileLen;
-				CByteArray cbdata;
-
-#ifdef WIN32
-				fopen_s(&m_stream, contents.c_str(), "rb");
-				_locking( fileno(m_stream), LK_NBLCK, 17000L );
-#else
-				m_stream = fopen(contents.c_str(), "rb");
-#endif
-				fseek(m_stream, 0, SEEK_END);
-				fileLen = ftell(m_stream);
-				fseek(m_stream, 0, SEEK_SET);
-
-				buff=(char *)malloc(fileLen+1);
-
-				fread(buff, fileLen, 1, m_stream);
-#ifdef WIN32
-				_locking( fileno(m_stream), LK_UNLCK, 17000L );
-#endif
-				fclose(m_stream);
-			
-			
-				cbdata.Append((unsigned char*)buff, fileLen);
-				m_data=cbdata;
-				m_keepdata=true;
-
-			} else {
-				m_path=csPath;
-				m_keepdata=false;
-			}
-
-		} else {
-			m_path=csPath;
-			m_keepdata=false;
-		}
-
-	}
-	catch(CMWException& e)
-	{
-		MWLOG(LEV_INFO, MOD_APL, L"LoadData: File cache failed %ls", csPath);
-	}*/
 
 	if(csPath)
 		m_path=csPath;

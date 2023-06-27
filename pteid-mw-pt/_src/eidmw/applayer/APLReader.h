@@ -34,8 +34,6 @@
 #include "ByteArray.h"
 #include "CardLayerConst.h"
 
-extern std::string m_InitSerialNumber;								/**< Field ChipNumber */
-
 namespace eIDMW
 {
 
