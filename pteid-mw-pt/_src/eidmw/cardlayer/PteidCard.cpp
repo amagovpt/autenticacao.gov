@@ -117,15 +117,15 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 	}
 	try {
 		setProtocol(protocol);
-		// Get Card Serial Number
-		m_oCardData = ReadFile("3F004F005032");
+
 		m_ucCLA = 0x00;
 
-		m_oCardData.Chop(2); // remove SW12
-
-		CByteArray parsesrnr;
-		parsesrnr = CByteArray(m_oCardData.GetBytes(), m_oCardData.Size());
-		m_oSerialNr = parsesrnr.GetBytes(7, 8);
+		//
+		// Get card serial number 
+		//
+		if(m_cardType == CARD_PTEID_IAS5) 		// CPLC Data only available on EID app on PTEID_2 cards
+			SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(12, 8);
 
 		// Get Card Applet Version
 		m_AppletVersion = ulVersion;
