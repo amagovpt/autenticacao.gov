@@ -91,23 +91,23 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 
 			int appletVersion = 1;
 
-			const auto selectAppId = [&](const unsigned char* oAID) -> bool
+			const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
 			{
 				long lRetVal = 0;
 				unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
 				CByteArray oCmd(12);
 				oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-				oCmd.Append(7);
-				oCmd.Append(oAID, sizeof(oAID));
+				oCmd.Append((unsigned char)size);
+				oCmd.Append(oAID, size);
 
 				CByteArray oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
 				return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 			};
 
-			bool aidStatus = selectAppId(PTEID_1_APPLET_AID);
-			if(!aidStatus) {
-				bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA);
-				if(nationalDataStatus)
+			bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
+			if (!aidStatus) {
+				bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
+				if (nationalDataStatus)
 					appletVersion = 3;
 			}
 
