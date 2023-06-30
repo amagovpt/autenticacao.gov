@@ -73,6 +73,10 @@ const unsigned int SHA256_LEN = 32;
 const unsigned int SHA384_LEN = 48;
 const unsigned int SHA512_LEN = 64;
 
+static const unsigned char PTEID_1_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
+static const unsigned char PTEID_2_APPLET_NATIONAL_DATA[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x04};
+static const unsigned char PTEID_2_APPLET_EID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x03};
+
 
 typedef enum
 {

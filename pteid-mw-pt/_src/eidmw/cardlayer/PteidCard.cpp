@@ -920,3 +920,42 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
     //Should not happen...
     return dontCache;
 }
+
+
+void CPteidCard::InitEncryptionKey()
+{
+	try
+	{
+		CByteArray hash;
+		if (GetType() == CARD_PTEID_IAS07)
+		{
+			unsigned char apduSelectFile[] = {0x00, 0xA4, 0x00, 0x0C, 0x02, 0x5F, 0x00};
+	
+			// Select file 5F00
+			CByteArray selectFileRes = SendAPDU(
+				CByteArray(apduSelectFile, sizeof(apduSelectFile)));
+
+			// Check select file success
+			getSW12(selectFileRes, 0x9000);
+
+			// Get hash from SOD file
+			m_ucCLA = 0x00;
+			hash = SendAPDU(0xB0, 0x86, 0xD4, 0x10);
+			getSW12(hash, 0x9000);
+		}
+		else
+		{
+			// Get hash from SOD file in national data application
+			m_ucCLA = 0x00;
+			SelectApplication({PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
+			hash = SendAPDU(0xB0, 0x9D, 0xD2, 0x10);
+			getSW12(hash, 0x9000);
+		}
+
+		// Remove 2 last bytes (SW12) and store encryption key
+		hash.Chop(2);
+		m_oCache.setEncryptionKey(hash);
+	} catch (CMWException e)
+	{
+	}
+}

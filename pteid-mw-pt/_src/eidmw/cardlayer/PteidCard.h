@@ -61,10 +61,6 @@ private:
 
 };
 
-static const unsigned char PTEID_1_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
-static const unsigned char PTEID_2_APPLET_NATIONAL_DATA[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x04};
-static const unsigned char PTEID_2_APPLET_EID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x03};
-
 class CPteidCard : public CPkiCard
 {
 public:
@@ -91,6 +87,8 @@ public:
     virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);
     virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft,
     	unsigned long unblockFlags);
+
+	virtual void InitEncryptionKey();
 
 	virtual unsigned long GetSupportedAlgorithms();  
 
