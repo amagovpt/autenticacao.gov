@@ -13,18 +13,17 @@ killall -9 pteiddialogsQTsrv 2> /dev/null
 rm -f /usr/local/lib/libpteid*.dylib
 rm -f /usr/local/lib/libCMDServices.*dylib
 
-rm -f /usr/local/lib/libssl.1.1.dylib
-rm -f /usr/local/lib/libcrypto.1.1.dylib
+rm -f /usr/local/lib/libssl.3.dylib
+rm -f /usr/local/lib/libcrypto.3.dylib
 rm -f /usr/local/lib/libxml-security-c.20.dylib
 rm -f /usr/local/lib/libxerces-c-3.2.dylib
-rm -f /usr/local/lib/libpoppler.101.dylib
+rm -f /usr/local/lib/libpoppler.129.dylib
 rm -f /usr/local/lib/libpng16.16.dylib
 rm -f /usr/local/lib/libopenjp2.7.dylib
 rm -f /usr/local/lib/libopenjp2.dylib
-rm -f /usr/local/lib/libopenjp2.2.3.0.dylib
-rm -f /usr/local/lib/liblcms2.2.dylib
-rm -f /usr/local/lib/libjpeg.9.dylib
-rm -f /usr/local/lib/libtiff.5.dylib
+rm -f /usr/local/lib/libopenjp2.2.4.0.dylib
+rm -f /usr/local/lib/libjpeg.62.dylib
+rm -f /usr/local/lib/libtiff.6.dylib
 rm -f /usr/local/lib/libfreetype.6.dylib
 rm -f /usr/local/lib/libfontconfig.1.dylib
 rm -f /usr/local/lib/libzip.5.3.dylib
