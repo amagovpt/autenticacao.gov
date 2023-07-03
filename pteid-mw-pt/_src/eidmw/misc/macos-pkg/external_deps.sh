@@ -38,19 +38,19 @@ function copy_external_dylibs {
 	cp -af $LIBZIP_PATH/libzip.5.dylib $DESTDIR
 	cp -af $LIBZIP_PATH/libzip.5.5.dylib $DESTDIR
 	#Dereference the symlink
-	cp     $POPPLER_PATH/libpoppler.101.dylib $DESTDIR
+	cp     $POPPLER_PATH/libpoppler.129.dylib $DESTDIR
 
 	cp -af $POPPLER_DEPS/libfreetype.6.dylib $DESTDIR
 	cp -af $POPPLER_DEPS/libfontconfig.1.dylib $DESTDIR
-	cp -af $POPPLER_DEPS/libjpeg.9.dylib $DESTDIR
-	cp -af $POPPLER_DEPS/libtiff.5.dylib $DESTDIR
+	cp -af $POPPLER_DEPS/libjpeg.62.dylib $DESTDIR
+	cp -af $POPPLER_DEPS/libtiff.6.dylib $DESTDIR
 }
 
 function copy_poppler_qt_to_appbundle {
 	DESTDIR=$1
 	cp -af $POPPLER_PATH/libpoppler-qt5.dylib $DESTDIR
 	cp -af $POPPLER_PATH/libpoppler-qt5.1.dylib $DESTDIR
-	cp -af $POPPLER_PATH/libpoppler-qt5.1.25.0.dylib $DESTDIR
+	cp -af $POPPLER_PATH/libpoppler-qt5.1.32.0.dylib $DESTDIR
 }
 
 function copy_appbundle {
