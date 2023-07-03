@@ -32,7 +32,7 @@ do
 done
 
 #Poppler-qt5 library
-codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp apps/Autenticação.gov.app/Contents/Frameworks/libpoppler-qt5.1.25.0.dylib
+codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp apps/Autenticação.gov.app/Contents/Frameworks/libpoppler-qt5.1.32.0.dylib
 
 ENTITLEMENTS_CTK=../../pteid-ctk/PteidToken/PteidToken.entitlements
 #Sign PteidToken extension with its own entitlements file
