@@ -6,6 +6,7 @@
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2014, 2016-2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2023 Daniel Dron - <daniel.dron@caixamagica.pt>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -96,6 +97,34 @@ private:
 	bool isCardActive;
 
 	friend 	APL_EidFile_Trace *APL_EIDCard::getFileTrace();	/**< This method must access protected constructor */
+};
+
+/******************************************************************************//**
+  * Class that represent the file containing MRZ informations on a PTEID card IAS5
+  *
+  * This class is for internal use in APL_EidFile_ID_V2
+ *********************************************************************************/
+class APL_EidFile_MRZ : public APL_CardFile
+{
+public:
+	virtual ~APL_EidFile_MRZ();
+
+	void doSODCheck(bool check);
+
+	const char* getMRZ();
+
+protected:
+	APL_EidFile_MRZ(APL_EIDCard *card);
+
+private:
+	APL_EidFile_MRZ(const APL_EidFile_MRZ &file);			   	/**< Copy not allowed - not implemented */
+	APL_EidFile_MRZ &operator=(const APL_EidFile_MRZ &file); 	/**< Copy not allowed - not implemented */
+
+	virtual tCardFileStatus VerifyFile();
+	virtual void EmptyFields();
+	virtual bool MapFields();
+
+	std::string m_Mrz;
 };
 
 /******************************************************************************//**

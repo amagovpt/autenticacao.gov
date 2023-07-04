@@ -208,6 +208,60 @@ bool APL_EidFile_Trace::isActive(){
 }
 
 /*****************************************************************************************
+---------------------------------------- APL_EidFile_MRZ -----------------------------------------
+*****************************************************************************************/
+APL_EidFile_MRZ::APL_EidFile_MRZ(APL_EIDCard *card) : APL_CardFile(card, PTEID_FILE_MRZ, NULL)
+{
+}
+
+APL_EidFile_MRZ::~APL_EidFile_MRZ()
+{
+}
+
+void APL_EidFile_MRZ::doSODCheck(bool check)
+{
+	m_SODCheck = check;
+	if (check)
+	{
+		m_isVerified = false;
+		m_mappedFields = false;
+	}
+}
+
+const char *APL_EidFile_MRZ::getMRZ()
+{
+	if (ShowData())
+		return m_Mrz.c_str();
+
+	return "";
+}
+
+void APL_EidFile_MRZ::EmptyFields()
+{
+	m_Mrz.clear();
+}
+
+bool APL_EidFile_MRZ::MapFields()
+{
+	CByteArray len_buffer = m_data.GetBytes(4, 1);
+	len_buffer.TrimRight('\0');
+
+	CByteArray buffer = m_data.GetBytes(5, (unsigned long)len_buffer.GetByte(0));
+	buffer.TrimRight('\0');
+	m_Mrz.assign(reinterpret_cast<const char*>(buffer.GetBytes()), buffer.Size());
+
+	return true;
+}
+
+tCardFileStatus APL_EidFile_MRZ::VerifyFile()
+{
+	if(!m_card)
+		return CARDFILESTATUS_ERROR;
+
+	return CARDFILESTATUS_OK;
+}
+
+/*****************************************************************************************
 ---------------------------------------- APL_EidFile_ID -----------------------------------------
 *****************************************************************************************/
 APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ID,NULL)
