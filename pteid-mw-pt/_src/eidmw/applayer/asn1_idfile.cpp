@@ -69,6 +69,9 @@ namespace eIDMW
 		}
 
 		unsigned char *asn1_data = data.GetBytes();
+		if (asn1_data[0] != 0x6D) {
+			fprintf(stderr, "Top-level tag is wrong in IDFILE (DG13): %2x!\n", asn1_data[0]);
+		}
 		//XX: small hack. Force sequence as top-level tag
 		asn1_data[0] = 0x30;
 		
