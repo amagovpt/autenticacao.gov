@@ -31,6 +31,12 @@ PageServicesSignForm {
     property string ownerEntitiesBackup: ""
     property string ownerProfNameBackup: ""
 
+    //control flow variables
+    property bool isSignOptions: false
+    property bool isSwitchAddAttributesOn: false
+    property bool doLogicCheckboxProfName: false
+    property bool updateSealData: false
+
     property string current_file: filesModel.get(propertyListViewFiles.currentIndex).fileUrl
 
     Keys.onRightPressed: {
@@ -94,6 +100,8 @@ PageServicesSignForm {
                 var velocity = Math.min(get_max_flick_velocity(), Constants.FLICK_Y_VELOCITY_MAX_ATTR_LIST)
                 propertyFlickable.flick(0, - velocity)
             }
+            isSignOptions = false
+            isSwitchAddAttributesOn = false
         }
 
         onSignalPdfSignSuccess: (error_code) => {
@@ -411,25 +419,38 @@ PageServicesSignForm {
         target: controler
 
         onSignalRetrieveStoredSignOptions: (options) => {
+            console.log("Retrieving Stored Sign Options")
+            isSignOptions = true
+
             propertyPageLoader.propertyBackupFormatPades = propertyRadioButtonPADES.checked = options[0]
             propertyRadioButtonXADES.checked = !propertyRadioButtonPADES.checked
             propertyPageLoader.propertyBackupTempSign = propertySwitchSignTemp.checked = options[1]
             propertyPageLoader.propertyBackupAddLTV = propertyCheckboxLTV.checked = options[2]
-            propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked = options[3]
-            propertyPageLoader.propertyBackupSignReduced = propertyCheckSignReduced.checked = options[4]
-            propertyPageLoader.propertyBackupReason = propertyTextFieldReason.text = options[5]
-            propertyPageLoader.propertyBackupLocal = propertyTextFieldLocal.text = options[6]
+            propertyPageLoader.propertyBackupAddProfName = propertyCheckboxProfessionalName.checked = options[3]
+            propertyPageLoader.propertyBackupSignShow = propertyCheckSignShow.checked = options[4]
+            propertyPageLoader.propertyBackupSignReduced =  propertyCheckSignReduced.checked = options[5]
+            propertyPageLoader.propertyBackupReason = propertyTextFieldReason.text = options[6]
+            propertyPageLoader.propertyBackupLocal = propertyTextFieldLocal.text = options[7]
+
             //Don't allow illegal values for seal dimension
             const min_sig_width =  Constants.SIG_WIDTH_MINIMUM
             const min_sig_height = Constants.SIG_HEIGHT_MINIMUM
-            propertyPDFPreview.propertySealWidthTemp =  options[7] < min_sig_width ? Constants.SIG_WIDTH_DEFAULT : options[7]
-            propertyPDFPreview.propertySealHeightTemp = options[8] < min_sig_height ? ( propertyPageLoader.propertyBackupSignReduced ? Constants.SIG_HEIGHT_REDUCED : Constants.SIG_HEIGHT_DEFAULT) : options[8]
-            propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked = options[9]
-            propertyPageLoader.selectedAttributesListBackup = options[10]
+            propertyPDFPreview.propertySealWidthTemp = options[8] < min_sig_width ? Constants.SIG_WIDTH_DEFAULT : options[8]
+            propertyPDFPreview.propertySealHeightTemp = options[9] < min_sig_height ? ( propertyPageLoader.propertyBackupSignReduced ? Constants.SIG_HEIGHT_REDUCED : Constants.SIG_HEIGHT_DEFAULT) : options[9]
 
+            propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked = options[10]
+            //Apply checkbox logic if switch AddAttributes is not checked
+            if (!propertySwitchAddAttributes.checked)
+                doLogicCheckboxProfName = true
+
+            propertyPageLoader.selectedAttributesListBackup = options[11]
+
+            //seal variables
             propertyPDFPreview.sealHasChanged = true                                // if seal width and height not set, assigns default values
             propertyPDFPreview.loaded_persistent_options = true                     // loads seal height and width from SignOptions
             propertyPDFPreview.isSignReduced = propertyCheckSignReduced.checked     // if reduced is checked, assigns reduced seal default values
+
+            console.log("Sign Options loaded")
         }
     }
 
@@ -445,6 +466,8 @@ PageServicesSignForm {
     Connections {
         target: propertyPDFPreview
         onUpdateSealData: {
+            updateSealData = true
+
             var width = to_real_seal_size(propertyPDFPreview.propertyDragSigRect.width)
             var height = to_real_seal_size(propertyPDFPreview.propertyDragSigRect.height)
 
@@ -457,6 +480,7 @@ PageServicesSignForm {
 
             update_wrapped_location(propertyTextFieldLocal.text);
             if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked) update_SCAP_info_on_preview();
+            updateSealData = false
         }
     }
 
@@ -606,6 +630,31 @@ PageServicesSignForm {
         }
         onExited: {
             tooltipExitTimer.start()
+        }
+    }
+
+    propertyMouseAreaToolTipProfName{
+        onEntered: {
+            tooltipExitTimer.stop()
+            controlToolTip.close()
+            controlToolTip.text = qsTranslate("PageServicesSign","STR_PROFESSIONAL_NAME_TOOLTIP")
+            controlToolTip.x = propertyCheckboxProfessionalName.mapToItem(controlToolTip.parent,0,0).x
+                    + propertyCheckboxProfessionalName.width + Constants.SIZE_IMAGE_TOOLTIP * 0.5
+                    - controlToolTip.width * 0.5
+            controlToolTip.y = propertyCheckboxProfessionalName.mapToItem(controlToolTip.parent,0,0).y
+                    - controlToolTip.height - Constants.SIZE_SPACE_IMAGE_TOOLTIP
+            controlToolTip.open()
+        }
+        onExited: {
+            tooltipExitTimer.start()
+        }
+    }
+
+    propertyCheckboxProfessionalName {
+        onCheckedChanged: {
+            console.log("checkbox checked changed")
+            propertyPageLoader.propertyBackupAddProfName = propertyCheckboxProfessionalName.checked
+            update_seal_name()
         }
     }
 
@@ -849,10 +898,13 @@ PageServicesSignForm {
     propertySwitchAddAttributes {
         onCheckedChanged: {
             propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked
-            if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked)
+
+            if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked) {
                 switchAddAttributes_checked()
-            else
+            }
+            else {
                 switchAddAttributes_notChecked()
+            }
         }
     }
 
@@ -1197,6 +1249,7 @@ PageServicesSignForm {
                     propertyTextDragMsgImg.text = qsTranslate("PageServicesSign","STR_SIGN_NOT_PREVIEW")
                 }
 
+                propertyCheckboxProfessionalName.enabled = false
                 propertyButtonAdd.forceActiveFocus()
 
                 asicFilesModel.clear()
@@ -1295,10 +1348,10 @@ PageServicesSignForm {
 
     Component.onCompleted: {
         console.log("PageServicesSign onCompleted")
-
         propertyPageLoader.propertyBackupFromSignaturePage = false
         propertyBusyIndicator.running = true
 
+        //start signature from command line
         if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign) {
             var paths = gapi.getShortcutPaths()
             for (var i = 0; i < paths.length; i++) {
@@ -1335,6 +1388,7 @@ PageServicesSignForm {
         signCertExpired = false //FIXME: this boolean is not needed
         gapi.startGettingInfoFromSignCert();
         gapi.startCheckSignatureCertValidity();
+        console.log("End of onCompleted")
     }
 
     Component.onDestruction: {
@@ -1718,6 +1772,7 @@ PageServicesSignForm {
         propertyRadioButtonXADES.checked = !propertyPageLoader.propertyBackupFormatPades
         propertySwitchSignTemp.checked = propertyPageLoader.propertyBackupTempSign
         propertyCheckboxLTV.checked = propertyPageLoader.propertyBackupAddLTV
+        propertyCheckboxProfessionalName.checked = propertyPageLoader.propertyBackupAddProfName
         propertySwitchAddAttributes.checked = propertyPageLoader.propertyBackupSwitchAddAttributes
         propertyCheckSignShow.checked = propertyPageLoader.propertyBackupSignShow
         propertyCheckSignReduced.checked = propertyPageLoader.propertyBackupSignReduced
@@ -2171,6 +2226,13 @@ PageServicesSignForm {
     }
 
     function switchAddAttributes_checked() {
+
+        //Don't apply checkbox logic when switching off/on AddAttributes switch
+        if (!doLogicCheckboxProfName) 
+            isSwitchAddAttributesOn = true
+        else
+            doLogicCheckboxProfName = false
+
         propertyBusyIndicator.running = true
         propertyCheckSignReduced.checked = false
         propertyTextAttributesMsg.visible = true
@@ -2178,6 +2240,7 @@ PageServicesSignForm {
         propertyMouseAreaTextAttributesMsg.z = 1
         propertyPDFPreview.propertyDragSigCertifiedByText.visible = true
         propertyPDFPreview.propertyDragSigAttributesText.visible = true
+
         gapi.startLoadingAttributesFromCache(false)
         update_seal_name()
     }
@@ -2186,6 +2249,7 @@ PageServicesSignForm {
         propertyTextAttributesMsg.visible = false
         propertyMouseAreaTextAttributesMsg.enabled = false
         propertyMouseAreaTextAttributesMsg.z = 0
+        propertyCheckboxProfessionalName.enabled = false
 
         entityAttributesModel.clear()
         propertyListViewHeight = 0
@@ -2198,7 +2262,7 @@ PageServicesSignForm {
     }
 
     function update_seal_name() {
-        if (ownerProfNameBackup != "") {
+        if (propertyCheckboxProfessionalName.checked && ownerProfNameBackup != "") {
             update_wrapped_name(ownerProfNameBackup)
         }
         else  {
@@ -2218,6 +2282,36 @@ PageServicesSignForm {
 
         propertyPDFPreview.propertyDragSigLocationText.text = propertyTextFieldLocal.text === "" ? "" :
             qsTranslate("PageServicesSign", "STR_SIGN_LOCATION") + ": " + wrapped_location.join("<br>");
+    }
+
+    function update_checkbox_professional_name()
+    {
+        if (! (fileLoaded && propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && !updateSealData)
+            || (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && (isSignOptions || isSwitchAddAttributesOn) ))
+
+            if (updateSealData || fileLoaded && isSwitchAddAttributesOn || fileLoaded && isSignOptions) {
+                if (ownerProfNameBackup != "") {
+                    propertyCheckboxProfessionalName.enabled = true
+                }
+                else {
+                    propertyCheckboxProfessionalName.enabled = false
+                }
+            }
+            else {
+                propertyCheckboxProfessionalName.enabled = false
+            }
+        else {
+            // Checkbox Logic
+            // In case Professional Name is applicable, checkbox will be set enabled and checked
+            if (ownerProfNameBackup != "") {
+                propertyCheckboxProfessionalName.enabled = true
+                propertyCheckboxProfessionalName.checked = true
+            }
+            else {
+                propertyCheckboxProfessionalName.enabled = false
+                propertyCheckboxProfessionalName.checked = false
+            }
+        }
     }
 
     function get_max_flick_velocity() {
@@ -2256,7 +2350,7 @@ PageServicesSignForm {
             propertyPDFPreview.propertyDragSigAttributesText.text += " <b>" + attributes.join("<br>") + "</b>";
 
             ownerProfNameBackup = professionalNameText
-            update_seal_name()
+            update_checkbox_professional_name()
 
             ownerEntitiesBackup = entitiesText
             ownerAttrBackup = attributesText

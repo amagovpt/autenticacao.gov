@@ -29,6 +29,7 @@ Loader{
     property bool propertyBackupFormatPades: true
     property bool propertyBackupTempSign: false
     property bool propertyBackupAddLTV: false
+    property bool propertyBackupAddProfName: false
     property bool propertyBackupSwitchAddAttributes: false
     property variant selectedAttributesListBackup: []
     property bool propertyBackupSignShow: true
@@ -164,7 +165,7 @@ Loader{
     function persist_signature_options() {
         console.log(selectedAttributesListBackup)
         controler.setSignatureOptions([propertyBackupFormatPades, propertyBackupTempSign,
-            propertyBackupAddLTV, propertyBackupSignShow, propertyBackupSignReduced, propertyBackupReason,
+            propertyBackupAddLTV, propertyBackupAddProfName, propertyBackupSignShow, propertyBackupSignReduced, propertyBackupReason,
             propertyBackupLocal, propertyBackupSealWidth, propertyBackupSealHeight,
             propertyBackupSwitchAddAttributes, selectedAttributesListBackup])
     }

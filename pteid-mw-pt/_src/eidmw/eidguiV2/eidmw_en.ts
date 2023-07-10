@@ -2026,8 +2026,16 @@
         <translation>Long-Term Validation</translation>
     </message>
     <message>
+        <source>STR_SIGN_WITH_PROFESSIONAL_NAME</source>
+        <translation>Use Professional Name</translation>
+    </message>
+    <message>
         <source>STR_LTV_TOOLTIP</source>
         <translation>The Long Term Validation (LTV) includes validation data of the certificate chain used in the signature which allows future signature verifications to confirm that the signature was valid at generation time.</translation>
+    </message>
+    <message>
+        <source>STR_PROFESSIONAL_NAME_TOOLTIP</source>
+        <translation>In case of having the Professional Name associated with your attribute, will be shown that name on the signature stamp</translation>
     </message>
     <message>
         <source>STR_SCAP_ATTRS_POSSIBLY_EXPIRED</source>

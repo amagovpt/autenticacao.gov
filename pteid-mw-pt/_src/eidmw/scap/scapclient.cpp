@@ -146,9 +146,9 @@ static std::string join_attribute_strings(const std::vector<ScapAttribute> &attr
 	return result;
 }
 
-string get_professional_name(const std::vector<ScapAttribute> &attributes)
+std::string get_professional_name(const std::vector<ScapAttribute> &attributes)
 {
-	string professional_name = "";
+	std::string professional_name = "";
 	bool checkProfessionalName = false;
 
 	for (auto it = attributes.begin(); it != attributes.end(); ++it)  {

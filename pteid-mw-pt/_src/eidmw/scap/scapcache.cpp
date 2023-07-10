@@ -11,8 +11,6 @@
 #include <QDir>
 #include <QFile>
 
-#include <unordered_set>
-
 #include <cjson/cJSON.h>
 
 #include "scapcache.h"

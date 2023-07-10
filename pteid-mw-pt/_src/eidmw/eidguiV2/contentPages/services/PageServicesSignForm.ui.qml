@@ -56,6 +56,7 @@ Item {
     property alias propertyTextFieldLocal: textFieldLocal
     property alias propertySwitchSignTemp: switchSignTemp
     property alias propertyCheckboxLTV : checkboxLTV
+    property alias propertyCheckboxProfessionalName : checkboxProfessionalName
     property alias propertyCheckSignShow: checkSignShow
     property alias propertyCheckSignReduced: checkSignReduced
     property alias propertyRectSignPageOptions: rectSignPageOptions
@@ -65,6 +66,7 @@ Item {
     property alias propertyMouseAreaToolTipPades: mouseAreaToolTipPades
     property alias propertyMouseAreaToolTipXades: mouseAreaToolTipXades
     property alias propertyMouseAreaToolTipLTV: mouseAreaToolTipLTV
+    property alias propertyMouseAreaToolTipProfName: mouseAreaToolTipProfName
     property alias propertySwitchAddAttributes: switchAddAttributes
     property alias propertyTextAttributesMsg: textAttributesMsg
     property alias propertyMouseAreaTextAttributesMsg: mouseAreaTextAttributesMsg
@@ -90,6 +92,7 @@ Item {
                                         + switchSignTemp.height
                                         + checkboxLTV.height
                                         + switchAddAttributes.height
+                                        + checkboxProfessionalName.height
                                         + rectangleEntities.height
                                         + 4 * Constants.SIZE_TEXT_V_SPACE
 
@@ -906,13 +909,49 @@ Item {
                                 Keys.onEnterPressed: toggle_switch(switchAddAttributes)
                                 Keys.onReturnPressed: toggle_switch(switchAddAttributes)
                             }
+                            CheckBox {
+                                id: checkboxProfessionalName
+                                text: qsTranslate("PageServicesSign",
+                                                  "STR_SIGN_WITH_PROFESSIONAL_NAME")
+                                height: Constants.HEIGHT_SWITCH_COMPONENT
+                                anchors.top: switchAddAttributes.bottom
+                                x: 48
+                                enabled: false
+                                font.family: lato.name
+                                font.pixelSize: Constants.SIZE_TEXT_FIELD
+                                font.capitalization: Font.MixedCase
+                                font.bold: activeFocus
+                                Accessible.role: Accessible.CheckBox
+                                Accessible.name: text
+                            }
+                            Item {
+                                id: rectToolTipProfName
+                                width: Constants.SIZE_IMAGE_TOOLTIP
+                                height: Constants.SIZE_IMAGE_TOOLTIP
+                                anchors.leftMargin: - 5
+                                anchors.left: checkboxProfessionalName.right
+                                anchors.top: checkboxProfessionalName.top
+
+                                Image {
+                                    anchors.fill: parent
+                                    antialiasing: true
+                                    fillMode: Image.PreserveAspectFit
+                                    source: "../../images/tooltip_grey.png"
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                }
+                                MouseArea {
+                                    id: mouseAreaToolTipProfName
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                }
+                            }
                             Item {
                                 id: rectangleEntities
                                 width: parent.width
                                 height: listViewEntities.count > 0
                                     ? (propertyListViewHeight + (listViewEntities.count - 1) * Constants.SIZE_LISTVIEW_SPACING)
                                     : textAttributesMsg.height
-                                anchors.top: switchAddAttributes.bottom
+                                anchors.top: checkboxProfessionalName.bottom
                                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                                 MouseArea {
                                     id: mouseAreaTextAttributesMsg

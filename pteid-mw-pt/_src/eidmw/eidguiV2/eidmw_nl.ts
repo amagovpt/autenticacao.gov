@@ -2024,8 +2024,16 @@
         <translation>Validação de longo prazo</translation>
     </message>
     <message>
+        <source>STR_SIGN_WITH_PROFESSIONAL_NAME</source>
+        <translation>Usar Nome Profissional</translation>
+    </message>
+    <message>
         <source>STR_LTV_TOOLTIP</source>
         <translation>A Validação de longo prazo (LTV) inclui provas da validade da cadeia de certificados utilizados na assinatura que permite no futuro confirmar que a assinatura era válida na hora em que o documento foi assinado.</translation>
+    </message>
+    <message>
+        <source>STR_PROFESSIONAL_NAME_TOOLTIP</source>
+        <translation>Caso tenha o Nome Profissional associado ao seu atributo, será mostrado esse nome no selo de assinatura.</translation>
     </message>
     <message>
         <source>STR_SCAP_ATTRS_POSSIBLY_EXPIRED</source>
