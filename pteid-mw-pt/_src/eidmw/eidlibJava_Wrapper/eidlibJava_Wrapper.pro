@@ -13,7 +13,7 @@ VERSION = $${JAVALIB_MAJ}.$${JAVALIB_MIN}.$${JAVALIB_REV}
 message("Compile $$TARGET")
 
 jar.files = ../jar/$${EIDLIBJAR}
-jar.path = $${INSTALL_DIR_LIB}
+jar.path = $${INSTALL_DIR_LIB}/pteid_jni/
 
 ###
 ### Installation setup
