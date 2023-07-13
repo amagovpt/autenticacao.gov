@@ -69,7 +69,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 4. Caso pretenda instalar a aplicação e as bibliotecas que fazem parte do projeto:
 
    ```bash
-   make install && sudo ldconfig
+   sudo make install && sudo ldconfig
    ```
 
    A aplicação utilitária será instalada em: /usr/local/bin/eidguiV2 e as bibliotecas do projeto em /usr/local/lib/.
