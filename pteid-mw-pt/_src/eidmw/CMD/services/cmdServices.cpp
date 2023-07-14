@@ -1154,14 +1154,6 @@ int CMDServices::getCertificate(CMDProxyInfo proxyInfo, std::string in_userId,
     return ERR_NONE;
 }
 
-/*  *********************************************************
-    ***    CMDServices::sendDataToSign()                  ***
-    ********************************************************* */
-/*
-int CMDServices::sendDataToSign(unsigned char * in_hash, std::string docName, std::string in_pin ){
-    return CCMovelSign( in_hash, docName, in_pin );
-}
-*/
 
 /*  *********************************************************
     ***    CMDServices::getSignatures()                    ***
