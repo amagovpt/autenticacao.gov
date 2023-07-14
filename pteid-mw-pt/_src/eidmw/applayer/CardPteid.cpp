@@ -847,6 +847,84 @@ void  APL_EidFile_ID::doSODCheck(bool check){
 }
 
 /*****************************************************************************************
+---------------------------------------- APL_EidFile_PHOTO -----------------------------------------
+*****************************************************************************************/
+APL_EidFile_Photo::APL_EidFile_Photo(APL_EIDCard *card) : APL_CardFile(card,PTEID_FILE_PHOTO,NULL)
+{
+}
+
+APL_EidFile_Photo::~APL_EidFile_Photo()
+{
+}
+
+CByteArray APL_EidFile_Photo::getPhotoRaw()
+{
+	if(ShowData())
+		return m_PhotoRaw;
+	
+	return {""};
+}
+
+void APL_EidFile_Photo::doSODCheck(bool check)
+{
+	m_SODCheck = check;
+	if (check)
+	{
+		m_isVerified = false;
+		m_mappedFields = false;
+	}
+}
+
+void APL_EidFile_Photo::EmptyFields()
+{
+	m_PhotoRaw.ClearContents();
+	m_SODCheck = false;
+	m_isVerified = false;
+	m_mappedFields = false;
+}
+
+tCardFileStatus APL_EidFile_Photo::VerifyFile()
+{
+	if(!m_card)
+		return CARDFILESTATUS_ERROR;
+
+	return CARDFILESTATUS_OK;
+}
+
+bool APL_EidFile_Photo::MapFields()
+{
+	size_t tag_offset{};
+
+	//unsigned char test[] = {0x5F, 0x2E, 0x82};
+	//auto buffer = m_data.ToString();
+	//buffer.find((char*)&*test);
+
+	// find 5F2E tag followed by 0x82.
+	// stop iterating 5 bytes before (0x5F 0x2E 0x82 XX XX)
+	for (size_t i = 0; i < m_data.Size() - 5; i++)
+	{
+		if (m_data.GetByte(i) == 0x5F &&
+			m_data.GetByte(i + 1) == 0x2E &&
+			m_data.GetByte(i + 2) == 0x82)
+		{
+			tag_offset = i;
+			break;
+		}
+	}
+
+	if(tag_offset == 0 || tag_offset >= m_data.Size())
+		return false;
+
+	const auto len = der_get_length(m_data.GetBytes(tag_offset));
+	if(len == 0)
+		return false;
+	
+	m_PhotoRaw.Append(m_data.GetBytes(tag_offset + 5, len));
+
+	return true;
+}
+
+/*****************************************************************************************
 ---------------------------------------- APL_EidFile_ID_V2 -----------------------------------------
 *****************************************************************************************/
 APL_EidFile_ID_V2::APL_EidFile_ID_V2(APL_EIDCard *card) : APL_EidFile_ID(card, PTEID_FILE_ID_V2)
@@ -855,6 +933,17 @@ APL_EidFile_ID_V2::APL_EidFile_ID_V2(APL_EIDCard *card) : APL_EidFile_ID(card, P
 
 APL_EidFile_ID_V2::~APL_EidFile_ID_V2()
 {
+}
+
+bool APL_EidFile_ID_V2::LoadPhotoFile()
+{
+	if (m_EidFile_Photo == nullptr)
+	{
+		APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
+		m_EidFile_Photo = new APL_EidFile_Photo(pcard);
+	}
+
+	return m_EidFile_Photo->getStatus(false) == CARDFILESTATUS_OK;
 }
 
 bool APL_EidFile_ID_V2::LoadMRZFile()
@@ -874,7 +963,7 @@ bool APL_EidFile_ID_V2::ShowData()
 	bool mrz_status = LoadMRZFile();
 
 	// Load Photo File
-	// TODO: 
+	bool photo_status = LoadPhotoFile();
 
 	bool id_status = getStatus(false) == CARDFILESTATUS_OK;
 

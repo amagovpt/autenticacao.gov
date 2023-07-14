@@ -235,10 +235,10 @@ class APL_EidFile_Photo : public APL_CardFile
 {
 public:
 	virtual ~APL_EidFile_Photo();
+
+	CByteArray getPhotoRaw();
 	void doSODCheck(bool check);
 
-
-protected:
 	APL_EidFile_Photo(APL_EIDCard *card);
 
 private:
@@ -248,6 +248,8 @@ private:
 	virtual tCardFileStatus VerifyFile();
 	virtual void EmptyFields();
 	virtual bool MapFields();
+
+	CByteArray m_PhotoRaw;
 };
 
 /******************************************************************************//**
@@ -309,8 +311,10 @@ private:
 	virtual bool ShowData();
 
 	bool LoadMRZFile();
+	bool LoadPhotoFile();
 
 	APL_EidFile_MRZ* m_EidFile_MRZ;
+	APL_EidFile_Photo* m_EidFile_Photo;
 
 friend 	APL_EidFile_ID *APL_EIDCard::getFileID();	/**< This method must access protected constructor */
 };
