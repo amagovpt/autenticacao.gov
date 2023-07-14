@@ -36,6 +36,8 @@
 #include "PhotoPteid.h"
 #include "APLPublicKey.h"
 
+#include "asn1_idfile.h"
+
 namespace eIDMW
 {
 
@@ -100,34 +102,6 @@ private:
 };
 
 /******************************************************************************//**
-  * Class that represent the file containing MRZ informations on a PTEID card IAS5
-  *
-  * This class is for internal use in APL_EidFile_ID_V2
- *********************************************************************************/
-class APL_EidFile_MRZ : public APL_CardFile
-{
-public:
-	virtual ~APL_EidFile_MRZ();
-
-	void doSODCheck(bool check);
-
-	const char* getMRZ();
-
-protected:
-	APL_EidFile_MRZ(APL_EIDCard *card);
-
-private:
-	APL_EidFile_MRZ(const APL_EidFile_MRZ &file);			   	/**< Copy not allowed - not implemented */
-	APL_EidFile_MRZ &operator=(const APL_EidFile_MRZ &file); 	/**< Copy not allowed - not implemented */
-
-	virtual tCardFileStatus VerifyFile();
-	virtual void EmptyFields();
-	virtual bool MapFields();
-
-	std::string m_Mrz;
-};
-
-/******************************************************************************//**
   * Class that represent the file containing ID informations on a PTEID card
   *
   * This class is for internal use in APL_EIDCard
@@ -182,6 +156,7 @@ protected:
 	  *		Used only in APL_EIDCard::getFileID()
 	  */    
 	APL_EidFile_ID(APL_EIDCard *card);
+	APL_EidFile_ID(APL_EIDCard *card, const char *csPath);
 
 private:
 	APL_EidFile_ID(const APL_EidFile_ID& file);				/**< Copy not allowed - not implemented */
@@ -216,6 +191,7 @@ private:
 	  */
 	virtual bool ShowData();
 
+protected:
 	std::string m_DocumentVersion;							/**< Field DocumentVersion */
 	std::string m_Country;									/**< Field Country */
 	std::string m_DocumentType;								/**< Field DocumentType */
@@ -246,6 +222,95 @@ private:
 	std::string m_MRZ3;										/**< Field MRZ block 3 */
 	CByteArray m_PhotoHash;									/**< Field PhotoHash */	
 	APLPublicKey* cardKey;
+
+friend 	APL_EidFile_ID *APL_EIDCard::getFileID();	/**< This method must access protected constructor */
+};
+
+/******************************************************************************//**
+  * Class that represent the file containing biometric information on a PTEID card IAS5
+  *
+  * This class is for internal use in APL_EidFile_ID_V2
+ *********************************************************************************/
+class APL_EidFile_Photo : public APL_CardFile
+{
+public:
+	virtual ~APL_EidFile_Photo();
+	void doSODCheck(bool check);
+
+
+protected:
+	APL_EidFile_Photo(APL_EIDCard *card);
+
+private:
+	APL_EidFile_Photo(const APL_EidFile_Photo &file);			 /**< Copy not allowed - not implemented */
+	APL_EidFile_Photo &operator=(const APL_EidFile_Photo &file); /**< Copy not allowed - not implemented */
+
+	virtual tCardFileStatus VerifyFile();
+	virtual void EmptyFields();
+	virtual bool MapFields();
+};
+
+/******************************************************************************//**
+  * Class that represent the file containing MRZ informations on a PTEID card IAS5
+  *
+  * This class is for internal use in APL_EidFile_ID_V2
+ *********************************************************************************/
+class APL_EidFile_MRZ : public APL_CardFile
+{
+public:
+	virtual ~APL_EidFile_MRZ();
+	void doSODCheck(bool check);
+	const char* getMRZ();
+	APL_EidFile_MRZ(APL_EIDCard *card);
+
+private:
+	APL_EidFile_MRZ(const APL_EidFile_MRZ &file);			   	/**< Copy not allowed - not implemented */
+	APL_EidFile_MRZ &operator=(const APL_EidFile_MRZ &file); 	/**< Copy not allowed - not implemented */
+
+	virtual tCardFileStatus VerifyFile();
+	virtual void EmptyFields();
+	virtual bool MapFields();
+
+	std::string m_Mrz;
+};
+
+class APL_EidFile_ID_V2 : public APL_EidFile_ID
+{
+public:
+	/**
+	 * Destructor
+	 */
+	virtual ~APL_EidFile_ID_V2();
+	
+protected:
+	/**
+	 * Constructor
+	 *		Used only in APL_EIDCard::getFileID()
+	*/
+	APL_EidFile_ID_V2(APL_EIDCard *card);
+
+private:
+	APL_EidFile_ID_V2(const APL_EidFile_ID_V2 &file);			   /**< Copy not allowed - not implemented */
+	APL_EidFile_ID_V2 &operator=(const APL_EidFile_ID_V2 &file); /**< Copy not allowed - not implemented */
+
+	/**
+	 * Check if the ID signature correspond to this file
+	 * @return - if bad signature file => status of signature file
+	 * @return - if signature error => CARDFILESTATUS_ERROR_SIGNATURE
+	 * @return - else => CARDFILESTATUS_ERROR_OK
+	 */
+	virtual tCardFileStatus VerifyFile();
+
+	virtual void MapFieldsInternal();
+
+	/**
+	 * Return true if data can be showned
+	 */
+	virtual bool ShowData();
+
+	bool LoadMRZFile();
+
+	APL_EidFile_MRZ* m_EidFile_MRZ;
 
 friend 	APL_EidFile_ID *APL_EIDCard::getFileID();	/**< This method must access protected constructor */
 };

@@ -220,7 +220,12 @@ APL_EidFile_ID *APL_EIDCard::getFileID()
 	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_FileID)
-			m_FileID=new APL_EidFile_ID(this);
+		{
+			if(m_cardType == APL_CARDTYPE_PTEID_IAS5)
+				m_FileID = new APL_EidFile_ID_V2(this);
+			else
+				m_FileID = new APL_EidFile_ID(this);
+		}
 	}
 
 	return m_FileID;

@@ -870,7 +870,7 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 	//
 	// Send APDU and validate response
 	//
-	auto oResp = SendAPDU(0xA4, 0x08, bReturnFileInfo ? 0x00 : 0x0C, oPath);
+	auto oResp = SendAPDU(0xA4, oPath.Size() > 2 ? 0x08 : 0x00, bReturnFileInfo ? 0x00 : 0x0C, oPath);
 	getSW12(oResp, 0x9000);
 
 	return oResp;

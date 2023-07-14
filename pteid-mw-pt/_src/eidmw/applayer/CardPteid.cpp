@@ -269,6 +269,11 @@ APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_I
 	m_photo = NULL;
 }
 
+APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card, const char *csPath):APL_CardFile(card, csPath, NULL)
+{
+	m_photo = NULL;
+}
+
 APL_EidFile_ID::~APL_EidFile_ID()
 {
 }
@@ -839,6 +844,115 @@ void  APL_EidFile_ID::doSODCheck(bool check){
 		m_isVerified = false;
 		m_mappedFields = false;
 	}
+}
+
+/*****************************************************************************************
+---------------------------------------- APL_EidFile_ID_V2 -----------------------------------------
+*****************************************************************************************/
+APL_EidFile_ID_V2::APL_EidFile_ID_V2(APL_EIDCard *card) : APL_EidFile_ID(card, PTEID_FILE_ID_V2)
+{
+}
+
+APL_EidFile_ID_V2::~APL_EidFile_ID_V2()
+{
+}
+
+bool APL_EidFile_ID_V2::LoadMRZFile()
+{
+	if(m_EidFile_MRZ == nullptr)
+	{
+		APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
+		m_EidFile_MRZ = new APL_EidFile_MRZ(pcard);
+	}
+
+	return m_EidFile_MRZ->getStatus(false) == CARDFILESTATUS_OK;
+}
+
+bool APL_EidFile_ID_V2::ShowData()
+{
+	// Load MRZ file
+	bool mrz_status = LoadMRZFile();
+
+	// Load Photo File
+	// TODO: 
+
+	bool id_status = getStatus(false) == CARDFILESTATUS_OK;
+
+	return mrz_status && id_status; // TODO: && photo_status
+}
+
+tCardFileStatus APL_EidFile_ID_V2::VerifyFile()
+{
+	if(!m_card)
+		return CARDFILESTATUS_ERROR;
+	
+	if(m_isVerified)
+		return CARDFILESTATUS_OK;
+
+	MapFieldsInternal();
+
+	if(m_SODCheck)
+	{
+		// TODO: sod check
+		// printf("DO SOD CHECKING FOR v2 CC!\n");
+		// throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+	}
+	
+	m_isVerified = true;
+	return CARDFILESTATUS_OK;
+}
+
+void APL_EidFile_ID_V2::MapFieldsInternal()
+{
+	const auto id_file = eIDMW::decode_id_data(m_data);
+
+	APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
+	pcard->selectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+
+	// Get CPCL data to use as chip number
+	const unsigned char cplc_apdu[] = {0x00, 0xCA, 0x9F, 0x7F, 0x2D};
+	const auto serial_number = pcard->sendAPDU({cplc_apdu, sizeof(cplc_apdu)}).GetBytes(13, 8);
+	m_ChipNumber.assign((char *)(serial_number.GetBytes()), serial_number.Size());
+
+
+	m_DocumentVersion.assign((char *)(id_file->document_version->data), id_file->document_version->length);
+	m_Country.assign((char *)(id_file->issuing_state->data), id_file->issuing_state->length);
+	m_ValidityBeginDate.assign((char *)(id_file->issuing_date->data), id_file->issuing_date->length);
+	m_ValidityEndDate.assign((char *)(id_file->expire_date->data), id_file->expire_date->length);
+	m_LocalofRequest.assign((char *)(id_file->place_order->data), id_file->place_order->length);
+	m_CivilianIdNumber.assign((char *)(id_file->civil_id->data), id_file->civil_id->length);
+	m_Surname.assign((char *)(id_file->surname->data), id_file->surname->length);
+	m_GivenName.assign((char *)(id_file->givenname->data), id_file->givenname->length);
+	m_Nationality.assign((char *)(id_file->nationality_code->data), id_file->nationality_code->length);
+	m_DateOfBirth.assign((char *)(id_file->date_birth->data), id_file->date_birth->length);
+	m_Gender.assign((char *)(id_file->gender->data), id_file->gender->length);
+	m_DocumentType.assign((char *)(id_file->document_label->data), id_file->document_label->length); // ?
+	m_Height.assign((char *)(id_file->height->data), id_file->height->length);
+	m_DocumentNumber.assign((char *)(id_file->document_number->data), id_file->document_number->length);
+	m_TaxNo.assign((char *)(id_file->tax_id->data), id_file->tax_id->length);
+	m_SocialSecurityNo.assign((char *)(id_file->socialsec_id->data), id_file->socialsec_id->length);
+	m_HealthNo.assign((char *)(id_file->health_id->data), id_file->health_id->length);
+	m_IssuingEntity.assign((char *)(id_file->issuing_entity->data), id_file->issuing_entity->length);
+	m_GivenNameFather.assign((char *)(id_file->father_givenname->data), id_file->father_givenname->length);
+	m_SurnameFather.assign((char *)(id_file->father_surname->data), id_file->father_surname->length);
+	m_GivenNameMother.assign((char *)(id_file->mother_givenname->data), id_file->mother_givenname->length);
+	m_SurnameMother.assign((char *)(id_file->mother_surname->data), id_file->mother_surname->length);
+	m_AccidentalIndications.assign((char *)(id_file->possible_indications->data), id_file->possible_indications->length);
+
+	const auto full_mrz = m_EidFile_MRZ->getMRZ();
+	m_MRZ1.assign(full_mrz, PTEIDNG_FIELD_ID_LEN_Mrz1);
+	m_MRZ2.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz2);
+	m_MRZ3.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz3);
+
+	// key
+
+
+	// TODO: photo
+
+	// we can free the IDFILE now
+	IDFILE_free(id_file);
+
+	m_mappedFields = true;
 }
 
 /*****************************************************************************************
