@@ -236,7 +236,7 @@ class APL_EidFile_Photo : public APL_CardFile
 public:
 	virtual ~APL_EidFile_Photo();
 
-	CByteArray getPhotoRaw();
+	CByteArray& getPhotoRaw();
 	void doSODCheck(bool check);
 
 	APL_EidFile_Photo(APL_EIDCard *card);

@@ -857,12 +857,12 @@ APL_EidFile_Photo::~APL_EidFile_Photo()
 {
 }
 
-CByteArray APL_EidFile_Photo::getPhotoRaw()
+CByteArray& APL_EidFile_Photo::getPhotoRaw()
 {
 	if(ShowData())
 		return m_PhotoRaw;
 	
-	return {""};
+	return EmptyByteArray;
 }
 
 void APL_EidFile_Photo::doSODCheck(bool check)
@@ -885,19 +885,12 @@ void APL_EidFile_Photo::EmptyFields()
 
 tCardFileStatus APL_EidFile_Photo::VerifyFile()
 {
-	if(!m_card)
-		return CARDFILESTATUS_ERROR;
-
-	return CARDFILESTATUS_OK;
+    return !m_card ? CARDFILESTATUS_ERROR : CARDFILESTATUS_OK;
 }
 
 bool APL_EidFile_Photo::MapFields()
 {
 	size_t tag_offset{};
-
-	//unsigned char test[] = {0x5F, 0x2E, 0x82};
-	//auto buffer = m_data.ToString();
-	//buffer.find((char*)&*test);
 
 	// find 5F2E tag followed by 0x82.
 	// stop iterating 5 bytes before (0x5F 0x2E 0x82 XX XX)
@@ -940,7 +933,7 @@ bool APL_EidFile_ID_V2::LoadPhotoFile()
 	if (m_EidFile_Photo == nullptr)
 	{
 		APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
-		m_EidFile_Photo = new APL_EidFile_Photo(pcard);
+        m_EidFile_Photo = new APL_EidFile_Photo(pcard);
 	}
 
 	return m_EidFile_Photo->getStatus(false) == CARDFILESTATUS_OK;
@@ -959,15 +952,11 @@ bool APL_EidFile_ID_V2::LoadMRZFile()
 
 bool APL_EidFile_ID_V2::ShowData()
 {
-	// Load MRZ file
 	bool mrz_status = LoadMRZFile();
-
-	// Load Photo File
 	bool photo_status = LoadPhotoFile();
-
 	bool id_status = getStatus(false) == CARDFILESTATUS_OK;
 
-	return mrz_status && id_status; // TODO: && photo_status
+	return mrz_status && id_status && photo_status;
 }
 
 tCardFileStatus APL_EidFile_ID_V2::VerifyFile()
@@ -982,6 +971,8 @@ tCardFileStatus APL_EidFile_ID_V2::VerifyFile()
 
 	if(m_SODCheck)
 	{
+        // pcard->getFileSod()
+
 		// TODO: sod check
 		// printf("DO SOD CHECKING FOR v2 CC!\n");
 		// throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
@@ -1033,10 +1024,10 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 	m_MRZ2.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz2);
 	m_MRZ3.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz3);
 
-	// key
+	// TODO: key
 
-
-	// TODO: photo
+	// photo
+	m_photo = new PhotoPteid(m_EidFile_Photo->getPhotoRaw());
 
 	// we can free the IDFILE now
 	IDFILE_free(id_file);
@@ -1663,11 +1654,20 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	if (m_isVerified) // no need to check again
 		return CARDFILESTATUS_OK;
 
+	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
+    
+    // TODO: remove this once we have a valid SOD file!
+    // ignore verify SOD file
+    if(pcard->getType() == APL_CARDTYPE_PTEID_IAS5)
+    {
+        // force sod check off for test purposes!
+        m_SODCheck = false;
+        MWLOG(LEV_ERROR, MOD_APL, "EidFile_Sod: Skipping SOD checking for SOD file! This is done for test purposes only!\n");
+    }
 
 	if (!m_SODCheck) // check is not activated
 		return CARDFILESTATUS_OK;
 
-	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
 	PKCS7 *p7 = NULL;
 	char * error_msg = NULL;
