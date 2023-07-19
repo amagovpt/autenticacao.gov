@@ -426,12 +426,12 @@ PageServicesSignForm {
             propertyPDFPreview.propertySealHeightTemp = options[8] < min_sig_height ? ( propertyPageLoader.propertyBackupSignReduced ? Constants.SIG_HEIGHT_REDUCED : Constants.SIG_HEIGHT_DEFAULT) : options[8]
             propertyPageLoader.propertyBackupSwitchAddAttributes = propertySwitchAddAttributes.checked = options[9]
             propertyPageLoader.selectedAttributesListBackup = options[10]
-            propertyPDFPreview.sealHasChanged = true
-            propertyPDFPreview.loaded_persistent_options = true
 
-            //propertyPDFPreview.updateSealData()
+            propertyPDFPreview.sealHasChanged = true                                // if seal width and height not set, assigns default values
+            propertyPDFPreview.loaded_persistent_options = true                     // loads seal height and width from SignOptions
+            propertyPDFPreview.isSignReduced = propertyCheckSignReduced.checked     // if reduced is checked, assigns reduced seal default values
         }
-     }
+    }
 
     Connections {
         target: image_provider_pdf

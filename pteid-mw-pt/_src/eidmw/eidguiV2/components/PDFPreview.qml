@@ -81,6 +81,7 @@ Rectangle {
     property bool sealHasChanged: false
     property bool smallFile: false
     property bool loaded_persistent_options: false
+    property bool isSignReduced: false
     property string propertyFileName: ""
 
     color: Constants.COLOR_MAIN_SOFT_GRAY
@@ -504,10 +505,11 @@ Rectangle {
     //TODO: check for small files
     //TODO: check minimum seal size
     function updateSealPreview() {
-        if (!sealHasChanged) {
+        if (!sealHasChanged || isSignReduced) {
             dragSigRect.width = propertyReducedChecked ? propertySigWidthReducedDefault * propertyPDFScaleFactor : propertySigWidthDefault * propertyPDFScaleFactor
             dragSigRect.height = propertyReducedChecked ? propertySigHeightReducedDefault * propertyPDFScaleFactor : propertySigHeightDefault * propertyPDFScaleFactor
             sealHasChanged = true
+            isSignReduced = false
         }
 
         if (background_image.width != 0 && background_image.height != 0) {
