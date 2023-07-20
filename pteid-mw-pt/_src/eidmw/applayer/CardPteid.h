@@ -461,6 +461,8 @@ public:
 
 	tCardFileStatus VerifyFile();
 
+	const CByteArray& getMrzHash();
+
 	const CByteArray& getAddressHash();
 
 	const CByteArray& getPictureHash();
@@ -477,6 +479,7 @@ protected:
 	  *		Used only in APL_EIDCard::getFileSod()
 	  */    
 	APL_EidFile_Sod(APL_EIDCard *card);
+	APL_EidFile_Sod(APL_EIDCard *card, const char* csPath);
 
 private:
 	APL_EidFile_Sod(const APL_EidFile_Sod& file);				/**< Copy not allowed - not implemented */
@@ -490,6 +493,7 @@ private:
 	  */
 	virtual bool ShowData();
 
+	CByteArray m_mrzHash;
 	CByteArray m_idHash;
 	CByteArray m_addressHash;
 	CByteArray m_pkHash;

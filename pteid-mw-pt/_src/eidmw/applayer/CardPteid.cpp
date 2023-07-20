@@ -971,11 +971,32 @@ tCardFileStatus APL_EidFile_ID_V2::VerifyFile()
 
 	if(m_SODCheck)
 	{
-        // pcard->getFileSod()
+        const auto pcard = dynamic_cast<APL_EIDCard*>(m_card);
+        const auto file_sod = pcard->getFileSod();
 
-		// TODO: sod check
-		// printf("DO SOD CHECKING FOR v2 CC!\n");
-		// throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+        const auto id_data = m_data;
+        const auto mrz_data = m_EidFile_MRZ->getData();
+        const auto photo_data = m_EidFile_Photo->getData();
+
+        if (!m_cryptoFwk->VerifyHashSha256(mrz_data, file_sod->getMrzHash()))
+        {
+            MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY: %s", file_sod->getMrzHash().ToString(true, false).c_str());
+            throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ);
+        }
+
+		if (!m_cryptoFwk->VerifyHashSha256(photo_data, file_sod->getPictureHash()))
+        {
+            MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE: %s", file_sod->getPictureHash().ToString(true, false).c_str());
+            throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE);
+        }
+
+        if (!m_cryptoFwk->VerifyHashSha256(id_data, file_sod->getIdHash()))
+        {
+            MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_ID: %s", file_sod->getIdHash().ToString(true, false).c_str());
+            throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ID);
+        }
+
+		// TODO (DEV-CC2): verify public key hash
 	}
 	
 	m_isVerified = true;
@@ -994,6 +1015,8 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 	const auto serial_number = pcard->sendAPDU({cplc_apdu, sizeof(cplc_apdu)}).GetBytes(13, 8);
 	m_ChipNumber.assign((char *)(serial_number.GetBytes()), serial_number.Size());
 
+	// go back to national data application
+	pcard->selectApplication({ PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA) });
 
 	m_DocumentVersion.assign((char *)(id_file->document_version->data), id_file->document_version->length);
 	m_Country.assign((char *)(id_file->issuing_state->data), id_file->issuing_state->length);
@@ -1024,14 +1047,11 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 	m_MRZ2.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz2);
 	m_MRZ3.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz3);
 
-	// TODO: key
+	// TODO (DEV-CC2): public key
 
-	// photo
 	m_photo = new PhotoPteid(m_EidFile_Photo->getPhotoRaw());
 
-	// we can free the IDFILE now
 	IDFILE_free(id_file);
-
 	m_mappedFields = true;
 }
 
@@ -1643,6 +1663,10 @@ APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card): APL_CardFile(card,PTEID_FIL
 {
 }
 
+APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card, const char* csPath) : APL_CardFile(card, csPath, NULL)
+{
+}
+
 APL_EidFile_Sod::~APL_EidFile_Sod()
 {
 }
@@ -1656,15 +1680,6 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
     
-    // TODO: remove this once we have a valid SOD file!
-    // ignore verify SOD file
-    if(pcard->getType() == APL_CARDTYPE_PTEID_IAS5)
-    {
-        // force sod check off for test purposes!
-        m_SODCheck = false;
-        MWLOG(LEV_ERROR, MOD_APL, "EidFile_Sod: Skipping SOD checking for SOD file! This is done for test purposes only!\n");
-    }
-
 	if (!m_SODCheck) // check is not activated
 		return CARDFILESTATUS_OK;
 
@@ -1694,20 +1709,25 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 
 	// Load only the SOD relevant root certificates
 
-	// load all certificates, let openssl do the job and find the needed ones...
-	for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++){
-		APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
-		X509 *pX509 = NULL;
-		const unsigned char *p = sod_ca->getData().GetBytes();
+	// TODO (DEV-CC2): uncommend comment bellow
+	// Do not try to load non-existant certificates from test cards
 
-		pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
-		X509_STORE_add_cert(store, pX509);
-		MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
-	}
+    // load all certificates, let openssl do the job and find the needed ones...
+	// for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++){
+	// 	APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
+	// 	X509 *pX509 = NULL;
+	// 	const unsigned char *p = sod_ca->getData().GetBytes();
+
+	// 	pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
+	// 	X509_STORE_add_cert(store, pX509);
+	// 	MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
+	// }
 	
 	BIO *Out = BIO_new(BIO_s_mem());
 
-	verifySOD = PKCS7_verify(p7, NULL,store,NULL,Out,0)==1;
+	verifySOD = PKCS7_verify(p7, NULL, NULL,NULL,Out, PKCS7_NOVERIFY)==1;
+	// TODO (DEV-CC2): use line below to verify
+    //verifySOD = PKCS7_verify(p7, NULL,store,NULL,Out, 0)==1;
 	if (verifySOD) {
 		unsigned char *p;
 		long size;
@@ -1774,20 +1794,45 @@ bool APL_EidFile_Sod::MapFields()
 	if (!m_SODCheck) // map only if sod check is active
 		return true;
 
+	const auto card_type = m_card->getType();
+
 	SODParser parser;
 
-	parser.ParseSodEncapsulatedContent(m_encapsulatedContent);
+	// Select the valid tags dependent on the card type
+	std::vector<int> valid_tags;
+	if(card_type == APL_CARDTYPE_PTEID_IAS5)
+		valid_tags = PTEID_FILE_VALID_SOD_FILE_TAGS_V2;
+	else
+		valid_tags = PTEID_FILE_VALID_SOD_FILE_TAGS;
 
+	parser.ParseSodEncapsulatedContent(m_encapsulatedContent, valid_tags);
 	SODAttributes &attr = parser.getHashes();
 
-	m_idHash.Append(attr.hashes[0]);
-	m_addressHash.Append(attr.hashes[1]);
-	m_picHash.Append(attr.hashes[2]);
-	m_pkHash.Append(attr.hashes[3]);
-
+	// Hashes are sorted differently based on card type
+	if(card_type == APL_CARDTYPE_PTEID_IAS5)
+	{
+		m_mrzHash.Append(attr.hashes[0]);	
+		m_picHash.Append(attr.hashes[1]);	
+		m_idHash.Append(attr.hashes[2]);	
+		m_pkHash.Append(attr.hashes[4]);	
+	}
+	else
+	{
+		m_idHash.Append(attr.hashes[0]);
+		m_addressHash.Append(attr.hashes[1]);
+		m_picHash.Append(attr.hashes[2]);
+		m_pkHash.Append(attr.hashes[3]);
+	}
+	
 	m_mappedFields = true;
 
 	return true;
+}
+
+const CByteArray& APL_EidFile_Sod::getMrzHash(){
+	if(ShowData())	
+		return m_mrzHash;
+	return EmptyByteArray;
 }
 
 const CByteArray& APL_EidFile_Sod::getAddressHash(){

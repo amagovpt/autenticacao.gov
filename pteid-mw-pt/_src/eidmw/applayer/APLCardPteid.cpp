@@ -273,7 +273,13 @@ APL_EidFile_Sod *APL_EIDCard::getFileSod()
 		if(!m_FileSod)
 		{
 			CByteArray ba_validityEndDate;     //Validity date field from card ID file
-			m_FileSod=new APL_EidFile_Sod(this);
+			
+            if(m_cardType == APL_CARDTYPE_PTEID_IAS5)
+            {
+                m_FileSod = new APL_EidFile_Sod(this, PTEID_FILE_SOD_V2);
+            } else {
+                m_FileSod = new APL_EidFile_Sod(this);
+            }
 
 			//Read the validity end date directly from cardlayer to avoid recursive calls from APL_EidFile_ID::getValidityEndDate
 			unsigned long bytes_read = 
