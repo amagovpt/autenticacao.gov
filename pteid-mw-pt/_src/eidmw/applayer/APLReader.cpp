@@ -256,7 +256,7 @@ bool APL_ReaderContext::connectCard()
 	{
 		case APL_CARDTYPE_PTEID_IAS07:
 		case APL_CARDTYPE_PTEID_IAS101:
-		case PTEID_CARDTYPE_IAS5:
+		case APL_CARDTYPE_PTEID_IAS5:
 			m_card = new APL_EIDCard(this, cardType);
 			break;
 		default:
