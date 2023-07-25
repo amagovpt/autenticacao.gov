@@ -99,6 +99,9 @@ namespace eIDMW
 			printf("Tax ID: %s\n", ASN1_STRING_get0_data(id_file->tax_id)); */
 		}
 
+		// undo force sequence as top-level tag so SOD verification can be done successfully
+		data.SetByte(0x6D, 0);
+
 		return id_file;
 	}
 
