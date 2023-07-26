@@ -42,6 +42,8 @@ APL_Pins::APL_Pins(APL_SmartCard *card)
 {
 	m_card=card;
 
+	card->selectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+
 	unsigned long ulCount=m_card->pinCount();
 	for(unsigned long i=0;i<ulCount;i++)
 		addPin(i);

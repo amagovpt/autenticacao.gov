@@ -26,6 +26,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "CardLayerConst.h"
 #include "PkiCard.h"
 #include "Log.h"
 #include "Thread.h"
@@ -215,6 +216,10 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry, unsigned long unblockFlags)
 {
+    
+	// TODO (DEV-CC2): make this work for cc2.0
+    if(this->GetType() == CARD_PTEID_IAS5) 
+        SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
 
 	bool bRet = false;
 	std::string csReadPin1, csReadPin2;
