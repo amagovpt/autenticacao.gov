@@ -812,10 +812,10 @@ void CPteidCard::SelectApplication(const CByteArray & oAID)
 
 	CByteArray oResp = m_poContext->m_oPCSC.Transmit(
 		m_hCard, oCmd, &lRetVal, getProtocolStructure());
-	auto ulSW12 = getSW12(oResp);
-	if (ulSW12 == 0x9000) {
-			m_lastSelectedApplication = oAID;
-	}
+	getSW12(oResp);
+
+	// If select application was a success, update the state
+	m_lastSelectedApplication = oAID;
 }
 
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo)
