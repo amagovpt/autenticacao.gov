@@ -52,7 +52,7 @@ namespace eIDMW
 /*****************************************************************************************
 ------------------------------------ APL_CardFile ---------------------------------------
 *****************************************************************************************/
-APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *file)
+APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *file, const CByteArray& appId)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 	m_mappedFields = false;
@@ -64,6 +64,8 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 		m_path=csPath;
 	else
 		m_path="";
+
+    m_appId = appId;
 
 	if(file)
 	{

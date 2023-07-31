@@ -98,6 +98,7 @@ protected:
         const CByteArray & oData, const tPin *pPin = NULL) = 0;
 
 	tSelectAppletMode m_selectAppletMode;
+    CByteArray m_lastSelectedApplication;
 };
 
 }

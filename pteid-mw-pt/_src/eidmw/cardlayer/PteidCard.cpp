@@ -797,14 +797,25 @@ CByteArray CPteidCard::OldSelectByPath(const std::string & csPath, bool bReturnF
 
 void CPteidCard::SelectApplication(const CByteArray & oAID)
 {
+	if (m_lastSelectedApplication.Size() > 0 && oAID.Size() > 0 &&
+		memcmp(oAID.GetBytes(), m_lastSelectedApplication.GetBytes(),
+				oAID.Size()) == 0) {
+			return;
+	}
+
 	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
 	CByteArray oCmd(sizeof(oAID) + 5);
 	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-	oCmd.Append((unsigned char) oAID.Size());
+	oCmd.Append((unsigned char)oAID.Size());
 	oCmd.Append(oAID.GetBytes(), oAID.Size());
 
-	CByteArray oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmd, &lRetVal, getProtocolStructure());
+	CByteArray oResp = m_poContext->m_oPCSC.Transmit(
+		m_hCard, oCmd, &lRetVal, getProtocolStructure());
+	auto ulSW12 = getSW12(oResp);
+	if (ulSW12 == 0x9000) {
+			m_lastSelectedApplication = oAID;
+	}
 }
 
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo)

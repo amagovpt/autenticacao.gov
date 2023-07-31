@@ -210,7 +210,7 @@ bool APL_EidFile_Trace::isActive(){
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_MRZ -----------------------------------------
 *****************************************************************************************/
-APL_EidFile_MRZ::APL_EidFile_MRZ(APL_EIDCard *card) : APL_CardFile(card, PTEID_FILE_MRZ, NULL)
+APL_EidFile_MRZ::APL_EidFile_MRZ(APL_EIDCard *card) : APL_CardFile(card, PTEID_FILE_MRZ, NULL, {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)})
 {
 }
 
@@ -849,7 +849,7 @@ void  APL_EidFile_ID::doSODCheck(bool check){
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_PHOTO -----------------------------------------
 *****************************************************************************************/
-APL_EidFile_Photo::APL_EidFile_Photo(APL_EIDCard *card) : APL_CardFile(card,PTEID_FILE_PHOTO,NULL)
+APL_EidFile_Photo::APL_EidFile_Photo(APL_EIDCard *card) : APL_CardFile(card,PTEID_FILE_PHOTO,NULL, {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)})
 {
 }
 
@@ -922,6 +922,7 @@ bool APL_EidFile_Photo::MapFields()
 *****************************************************************************************/
 APL_EidFile_ID_V2::APL_EidFile_ID_V2(APL_EIDCard *card) : APL_EidFile_ID(card, PTEID_FILE_ID_V2)
 {
+	m_appId = {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)};
 }
 
 APL_EidFile_ID_V2::~APL_EidFile_ID_V2()

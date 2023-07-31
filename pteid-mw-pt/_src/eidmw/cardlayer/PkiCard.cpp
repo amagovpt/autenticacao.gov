@@ -78,20 +78,17 @@ void CPkiCard::SelectApplication(const CByteArray & oAID)
 {
 	CAutoLock autolock(this);
 
-	if (m_selectAppletMode == ALW_SELECT_APPLET)
-		SelectApplet();
-
-	// Select File command to select the Application by AID
+	if (memcmp(oAID.GetBytes(), m_lastSelectedApplication.GetBytes(),
+				sizeof(oAID.Size())) == 0) {
+		return;
+	}
+        // Select File command to select the Application by AID
 	CByteArray oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
 
-	// First try to select the applet
-	if (SelectApplet())
-	{
-		m_selectAppletMode = ALW_SELECT_APPLET;
-		oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
-	}
-
 	getSW12(oResp, 0x9000);
+
+	// If select application was a success, update the state
+	m_lastSelectedApplication = oAID;
 }
 
 CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,

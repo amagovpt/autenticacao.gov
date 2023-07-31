@@ -57,7 +57,7 @@ public:
 	  * @param csPath is the path of the file to be read
 	  * @param file : The content of the file to put in m_data 
 	  */
-	APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *file=NULL);
+	APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *file=NULL, const CByteArray& appId = {PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID)});
 
 	/**
 	  * Destructor 
@@ -114,7 +114,8 @@ protected:
 
 	APL_Card *m_card;				/**< Pointer to card object, needed in constructor, use to read the file */
 	std::string m_path;				/**< Path of the file to be read, needed in constructor */
-	CByteArray m_data;				/**< Content of the file (result of ReadFile) */
+	CByteArray m_appId;				/**< AppId where the file is present */
+    CByteArray m_data;				/**< Content of the file (result of ReadFile) */
 	tCardFileStatus m_status;		/**< Status of the file */
 
 	bool m_keepdata;				/**< m_data could not be read from card or clear (comes from constructor) */
