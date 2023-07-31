@@ -101,6 +101,8 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload)
 	{
 		try
 		{
+			APL_SmartCard *card=dynamic_cast<APL_SmartCard *>(m_card);
+			card->selectApplication(m_appId);
 			//Fill the m_data with the content of the file
 			//MWLOG(LEV_INFO, MOD_APL, L"LoadData: Ask for file %ls", wsPath);	//TODO replace by DEBUG
 			ReadFile();
