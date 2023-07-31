@@ -937,7 +937,24 @@ bool APL_EidFile_ID_V2::LoadPhotoFile()
         m_EidFile_Photo = new APL_EidFile_Photo(pcard);
 	}
 
-	return m_EidFile_Photo->getStatus(false) == CARDFILESTATUS_OK;
+	const auto status = m_EidFile_Photo->getStatus(false) == CARDFILESTATUS_OK;
+	// Early return. Could not load photo file
+	if (status == false)
+		return false;
+
+	m_photo = new PhotoPteid(m_EidFile_Photo->getPhotoRaw());
+	
+	// SOD verification that was delayed and separated from ID & MRZ verification
+	const auto photo_data = m_EidFile_Photo->getData();
+	const auto pcard = dynamic_cast<APL_EIDCard*>(m_card);
+	const auto file_sod = pcard->getFileSod();
+	if (!m_cryptoFwk->VerifyHashSha256(photo_data, file_sod->getPictureHash()))
+	{
+		MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE: %s", file_sod->getPictureHash().ToString(true, false).c_str());
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE);
+	}
+
+	return true;
 }
 
 bool APL_EidFile_ID_V2::LoadMRZFile()
@@ -954,10 +971,9 @@ bool APL_EidFile_ID_V2::LoadMRZFile()
 bool APL_EidFile_ID_V2::ShowData()
 {
 	bool mrz_status = LoadMRZFile();
-	bool photo_status = LoadPhotoFile();
 	bool id_status = getStatus(false) == CARDFILESTATUS_OK;
 
-	return mrz_status && id_status && photo_status;
+	return mrz_status && id_status;
 }
 
 tCardFileStatus APL_EidFile_ID_V2::VerifyFile()
@@ -977,18 +993,11 @@ tCardFileStatus APL_EidFile_ID_V2::VerifyFile()
 
         const auto id_data = m_data;
         const auto mrz_data = m_EidFile_MRZ->getData();
-        const auto photo_data = m_EidFile_Photo->getData();
 
         if (!m_cryptoFwk->VerifyHashSha256(mrz_data, file_sod->getMrzHash()))
         {
             MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY: %s", file_sod->getMrzHash().ToString(true, false).c_str());
             throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ);
-        }
-
-		if (!m_cryptoFwk->VerifyHashSha256(photo_data, file_sod->getPictureHash()))
-        {
-            MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE: %s", file_sod->getPictureHash().ToString(true, false).c_str());
-            throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE);
         }
 
         if (!m_cryptoFwk->VerifyHashSha256(id_data, file_sod->getIdHash()))
@@ -1050,10 +1059,22 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 
 	// TODO (DEV-CC2): public key
 
-	m_photo = new PhotoPteid(m_EidFile_Photo->getPhotoRaw());
-
 	IDFILE_free(id_file);
 	m_mappedFields = true;
+}
+
+PhotoPteid *APL_EidFile_ID_V2::getPhotoObj()
+{
+	if (m_photo) {
+		return m_photo;
+	}
+
+	if (m_EidFile_Photo == nullptr) { 
+		const auto status = LoadPhotoFile();
+		if (!status) return NULL;
+	}
+
+	return m_photo;
 }
 
 /*****************************************************************************************

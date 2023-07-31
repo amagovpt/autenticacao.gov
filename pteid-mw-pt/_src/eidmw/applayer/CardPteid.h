@@ -142,7 +142,6 @@ public:
 	const char *getGivenNameMother();				/**< Return field GivenNameMother */
 	const char *getSurnameMother();					/**< Return field SurnameMother */
 	const char *getParents();						/**< Return field Parents */
-	PhotoPteid *getPhotoObj();						/**< Return object Photo */
 	APLPublicKey *getCardAuthKeyObj();				/**< Return object Authentication Key */
 	const char *getMRZ1();							/**< Return field MRZ block 1*/
 	const char *getMRZ2();							/**< Return field MRZ block 2*/
@@ -150,6 +149,7 @@ public:
 	const char *getAccidentalIndications();			/**< Return field AccidentalIndications */
 	const CByteArray& getPhotoHash();				/**< Return field PhotoHash */
 
+	virtual PhotoPteid *getPhotoObj();						/**< Return object Photo */
 protected:
 	/**
 	  * Constructor
@@ -284,6 +284,13 @@ public:
 	 */
 	virtual ~APL_EidFile_ID_V2();
 	
+	/**
+	 * Initializes, loads, verificates SOD and returns the photo object.
+	 * This is done as a way to defer the loading of the photo file from
+	 * the main APL_EidFile_ID_V2::ShowData.
+	*/
+	virtual PhotoPteid *getPhotoObj();						/**< Return object Photo */
+
 protected:
 	/**
 	 * Constructor
@@ -302,7 +309,7 @@ private:
 	 * @return - else => CARDFILESTATUS_ERROR_OK
 	 */
 	virtual tCardFileStatus VerifyFile();
-
+	
 	virtual void MapFieldsInternal();
 
 	/**
