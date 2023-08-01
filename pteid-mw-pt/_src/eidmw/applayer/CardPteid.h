@@ -125,7 +125,6 @@ public:
 	const char *getGender();						/**< Return field Gender */
 	const char *getDateOfBirth();					/**< Return field DateOfBirth */
 	const char *getNationality();					/**< Return field Nationality */
-	const char *getDocumentPAN();					/**< Return field DocumentPAN */
 	const char *getValidityBeginDate();				/**< Return field ValidityBeginDate */
 	const char *getValidityEndDate();				/**< Return field ValidityEndDate */
 	const char *getLocalofRequest();				/**< Return field LocalofRequest */
@@ -149,6 +148,7 @@ public:
 	const char *getAccidentalIndications();			/**< Return field AccidentalIndications */
 	const CByteArray& getPhotoHash();				/**< Return field PhotoHash */
 
+	virtual const char *getDocumentPAN();					/**< Return field DocumentPAN */
 	virtual PhotoPteid *getPhotoObj();						/**< Return object Photo */
 protected:
 	/**
@@ -290,6 +290,12 @@ public:
 	 * the main APL_EidFile_ID_V2::ShowData.
 	*/
 	virtual PhotoPteid *getPhotoObj();						/**< Return object Photo */
+
+	/**
+	 * Document PAN is now depecrecated for ID_V2.
+	 * Returns empty string
+	*/
+	virtual const char *getDocumentPAN();
 
 protected:
 	/**

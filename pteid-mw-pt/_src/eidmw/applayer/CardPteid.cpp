@@ -1019,17 +1019,6 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 {
 	const auto id_file = eIDMW::decode_id_data(m_data);
 
-	APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
-	pcard->selectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
-
-	// Get CPCL data to use as chip number
-	const unsigned char cplc_apdu[] = {0x00, 0xCA, 0x9F, 0x7F, 0x2D};
-	const auto serial_number = pcard->sendAPDU({cplc_apdu, sizeof(cplc_apdu)}).GetBytes(13, 8);
-	m_ChipNumber.assign((char *)(serial_number.GetBytes()), serial_number.Size());
-
-	// go back to national data application
-	pcard->selectApplication({ PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA) });
-
 	m_DocumentVersion.assign((char *)(id_file->document_version->data), id_file->document_version->length);
 	m_Country.assign((char *)(id_file->issuing_state->data), id_file->issuing_state->length);
 	m_ValidityBeginDate.assign((char *)(id_file->issuing_date->data), id_file->issuing_date->length);
@@ -1041,7 +1030,7 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 	m_Nationality.assign((char *)(id_file->nationality_code->data), id_file->nationality_code->length);
 	m_DateOfBirth.assign((char *)(id_file->date_birth->data), id_file->date_birth->length);
 	m_Gender.assign((char *)(id_file->gender->data), id_file->gender->length);
-	m_DocumentType.assign((char *)(id_file->document_label->data), id_file->document_label->length); // ?
+	m_DocumentType.assign((char *)(id_file->document_label->data), id_file->document_label->length);
 	m_Height.assign((char *)(id_file->height->data), id_file->height->length);
 	m_DocumentNumber.assign((char *)(id_file->document_number->data), id_file->document_number->length);
 	m_TaxNo.assign((char *)(id_file->tax_id->data), id_file->tax_id->length);
@@ -1063,6 +1052,12 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 
 	IDFILE_free(id_file);
 	m_mappedFields = true;
+}
+
+// Deprecated for CC v2
+const char *APL_EidFile_ID_V2::getDocumentPAN()
+{
+	return "";
 }
 
 PhotoPteid *APL_EidFile_ID_V2::getPhotoObj()
