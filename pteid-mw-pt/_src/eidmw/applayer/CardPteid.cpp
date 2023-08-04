@@ -923,6 +923,8 @@ bool APL_EidFile_Photo::MapFields()
 APL_EidFile_ID_V2::APL_EidFile_ID_V2(APL_EIDCard *card) : APL_EidFile_ID(card, PTEID_FILE_ID_V2)
 {
 	m_appId = {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)};
+    m_EidFile_MRZ = nullptr;
+    m_EidFile_Photo = nullptr;
 }
 
 APL_EidFile_ID_V2::~APL_EidFile_ID_V2()
