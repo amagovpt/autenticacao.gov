@@ -208,6 +208,9 @@ namespace eIDMW
   }
 
   void CPKCS15::ReadLevel1(){
+    if (m_poCard->GetType() == CARD_PTEID_IAS5)
+      m_poCard->SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+    
     // read info in 3f002f00
     if(m_xDir.path == "") { m_xDir.path = "3F002F00";}
     
