@@ -1,20 +1,12 @@
+/* Copyright (c) OASIS Open 2016,2019. All Rights Reserved./
+ * /Distributed under the terms of the OASIS IPR Policy,
+ * [http://www.oasis-open.org/policies-guidelines/ipr], AS-IS, WITHOUT ANY
+ * IMPLIED OR EXPRESS WARRANTY; there is no warranty of MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE or NONINFRINGEMENT of the rights of others.
+ */
 
-/* pkcs11.h include file for PKCS #11. */
-/* $Revision: 1.4 $ */
-
-/* License to copy and use this software is granted provided that it is
- * identified as "RSA Security Inc. PKCS #11 Cryptographic Token Interface
- * (Cryptoki)" in all material mentioning or referencing this software.
-
- * License is also granted to make and use derivative works provided that
- * such works are identified as "derived from the RSA Security Inc. PKCS #11
- * Cryptographic Token Interface (Cryptoki)" in all material mentioning or
- * referencing the derived work.
-
- * RSA Security Inc. makes no representations concerning either the
- * merchantability of this software or the suitability of this software for
- * any particular purpose. It is provided "as is" without express or implied
- * warranty of any kind.
+/* Latest version of the specification:
+ * http://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/pkcs11-base-v3.0.html
  */
 
 #ifndef _PKCS11_H_
@@ -25,20 +17,19 @@ extern "C" {
 #endif
 
 /* Before including this file (pkcs11.h) (or pkcs11t.h by
- * itself), 6 platform-specific macros must be defined.  These
+ * itself), 5 platform-specific macros must be defined.  These
  * macros are described below, and typical definitions for them
  * are also given.  Be advised that these definitions can depend
  * on both the platform and the compiler used (and possibly also
  * on whether a Cryptoki library is linked statically or
  * dynamically).
  *
- * In addition to defining these 6 macros, the packing convention
+ * In addition to defining these 5 macros, the packing convention
  * for Cryptoki structures should be set.  The Cryptoki
  * convention on packing is that structures should be 1-byte
  * aligned.
  *
- * If you're using Microsoft Developer Studio 5.0 to produce
- * Win32 stuff, this might be done by using the following
+ * If you're using Windows this might be done by using the following
  * preprocessor directive before including pkcs11.h or pkcs11t.h:
  *
  * #pragma pack(push, cryptoki, 1)
@@ -47,13 +38,6 @@ extern "C" {
  * pkcs11.h or pkcs11t.h:
  *
  * #pragma pack(pop, cryptoki)
- *
- * If you're using an earlier version of Microsoft Developer
- * Studio to produce Win16 stuff, this might be done by using
- * the following preprocessor directive before including
- * pkcs11.h or pkcs11t.h:
- *
- * #pragma pack(1)
  *
  * In a UNIX environment, you're on your own for this.  You might
  * not need to do (or be able to do!) anything.
@@ -67,54 +51,16 @@ extern "C" {
  *
  * typedef CK_BYTE CK_PTR CK_BYTE_PTR;
  *
- * If you're using Microsoft Developer Studio 5.0 to produce
- * Win32 stuff, it might be defined by:
+ * If you're using Windows, it might be defined by:
  *
  * #define CK_PTR *
- *
- * If you're using an earlier version of Microsoft Developer
- * Studio to produce Win16 stuff, it might be defined by:
- *
- * #define CK_PTR far *
  *
  * In a typical UNIX environment, it might be defined by:
  *
  * #define CK_PTR *
  *
  *
- * 2. CK_DEFINE_FUNCTION(returnType, name): A macro which makes
- * an exportable Cryptoki library function definition out of a
- * return type and a function name.  It should be used in the
- * following fashion to define the exposed Cryptoki functions in
- * a Cryptoki library:
- *
- * CK_DEFINE_FUNCTION(CK_RV, C_Initialize)(
- *   CK_VOID_PTR pReserved
- * )
- * {
- *   ...
- * }
- *
- * If you're using Microsoft Developer Studio 5.0 to define a
- * function in a Win32 Cryptoki .dll, it might be defined by:
- *
- * #define CK_DEFINE_FUNCTION(returnType, name) \
- *   returnType __declspec(dllexport) name
- *
- * If you're using an earlier version of Microsoft Developer
- * Studio to define a function in a Win16 Cryptoki .dll, it
- * might be defined by:
- *
- * #define CK_DEFINE_FUNCTION(returnType, name) \
- *   returnType __export _far _pascal name
- *
- * In a UNIX environment, it might be defined by:
- *
- * #define CK_DEFINE_FUNCTION(returnType, name) \
- *   returnType name
- *
- *
- * 3. CK_DECLARE_FUNCTION(returnType, name): A macro which makes
+ * 2. CK_DECLARE_FUNCTION(returnType, name): A macro which makes
  * an importable Cryptoki library function declaration out of a
  * return type and a function name.  It should be used in the
  * following fashion:
@@ -123,18 +69,11 @@ extern "C" {
  *   CK_VOID_PTR pReserved
  * );
  *
- * If you're using Microsoft Developer Studio 5.0 to declare a
- * function in a Win32 Cryptoki .dll, it might be defined by:
+ * If you're using Windows to declare a function in a Win32 Cryptoki .dll, 
+ * it might be defined by:
  *
  * #define CK_DECLARE_FUNCTION(returnType, name) \
  *   returnType __declspec(dllimport) name
- *
- * If you're using an earlier version of Microsoft Developer
- * Studio to declare a function in a Win16 Cryptoki .dll, it
- * might be defined by:
- *
- * #define CK_DECLARE_FUNCTION(returnType, name) \
- *   returnType __export _far _pascal name
  *
  * In a UNIX environment, it might be defined by:
  *
@@ -142,7 +81,7 @@ extern "C" {
  *   returnType name
  *
  *
- * 4. CK_DECLARE_FUNCTION_POINTER(returnType, name): A macro
+ * 3. CK_DECLARE_FUNCTION_POINTER(returnType, name): A macro
  * which makes a Cryptoki API function pointer declaration or
  * function pointer type declaration out of a return type and a
  * function name.  It should be used in the following fashion:
@@ -160,18 +99,11 @@ extern "C" {
  * typedef CK_DECLARE_FUNCTION_POINTER(CK_RV, funcPtrType)(args);
  * funcPtrType funcPtr;
  *
- * If you're using Microsoft Developer Studio 5.0 to access
+ * If you're using Windows to access
  * functions in a Win32 Cryptoki .dll, in might be defined by:
  *
  * #define CK_DECLARE_FUNCTION_POINTER(returnType, name) \
  *   returnType __declspec(dllimport) (* name)
- *
- * If you're using an earlier version of Microsoft Developer
- * Studio to access functions in a Win16 Cryptoki .dll, it might
- * be defined by:
- *
- * #define CK_DECLARE_FUNCTION_POINTER(returnType, name) \
- *   returnType __export _far _pascal (* name)
  *
  * In a UNIX environment, it might be defined by:
  *
@@ -179,7 +111,7 @@ extern "C" {
  *   returnType (* name)
  *
  *
- * 5. CK_CALLBACK_FUNCTION(returnType, name): A macro which makes
+ * 4. CK_CALLBACK_FUNCTION(returnType, name): A macro which makes
  * a function pointer type for an application callback out of
  * a return type for the callback and a name for the callback.
  * It should be used in the following fashion:
@@ -193,17 +125,10 @@ extern "C" {
  * typedef CK_CALLBACK_FUNCTION(CK_RV, myCallbackType)(args);
  * myCallbackType myCallback;
  *
- * If you're using Microsoft Developer Studio 5.0 to do Win32
- * Cryptoki development, it might be defined by:
+ * If you're using Windows, it might be defined by:
  *
  * #define CK_CALLBACK_FUNCTION(returnType, name) \
  *   returnType (* name)
- *
- * If you're using an earlier version of Microsoft Developer
- * Studio to do Win16 development, it might be defined by:
- *
- * #define CK_CALLBACK_FUNCTION(returnType, name) \
- *   returnType _far _pascal (* name)
  *
  * In a UNIX environment, it might be defined by:
  *
@@ -211,7 +136,7 @@ extern "C" {
  *   returnType (* name)
  *
  *
- * 6. NULL_PTR: This macro is the value of a NULL pointer.
+ * 5. NULL_PTR: This macro is the value of a NULL pointer.
  *
  * In any ANSI/ISO C environment (and in many others as well),
  * this should best be defined by
@@ -223,12 +148,9 @@ extern "C" {
 
 
 /* All the various Cryptoki types and #define'd values are in the
- * file pkcs11t.h. */
-//#if defined( INC_ALL )
-  #include "pkcs11t.h"
-//#else
-//  #include "pkcs11t.h"
-//#endif /* Compiler-specific includes */
+ * file pkcs11t.h.
+ */
+#include "pkcs11t.h"
 
 #define __PASTE(x,y)      x##y
 
@@ -243,12 +165,9 @@ extern "C" {
   extern CK_DECLARE_FUNCTION(CK_RV, name)
 
 /* pkcs11f.h has all the information about the Cryptoki
- * function prototypes. */
-//#if defined( INC_ALL )
-  #include "pkcs11f.h"
-//#else
-//  #include "device/pkcs11f.h"
-//#endif /* Compiler-specific includes */
+ * function prototypes.
+ */
+#include "pkcs11f.h"
 
 #undef CK_NEED_ARG_LIST
 #undef CK_PKCS11_FUNCTION_INFO
@@ -266,12 +185,9 @@ extern "C" {
   typedef CK_DECLARE_FUNCTION_POINTER(CK_RV, __PASTE(CK_,name))
 
 /* pkcs11f.h has all the information about the Cryptoki
- * function prototypes. */
-//#if defined( INC_ALL )
-  #include "pkcs11f.h"
-//#else
-//  #include "device/pkcs11f.h"
-//#endif /* Compiler-specific includes */
+ * function prototypes.
+ */
+#include "pkcs11f.h"
 
 #undef CK_NEED_ARG_LIST
 #undef CK_PKCS11_FUNCTION_INFO
@@ -289,22 +205,36 @@ extern "C" {
 #define CK_PKCS11_FUNCTION_INFO(name) \
   __PASTE(CK_,name) name;
 
+/* Create the 3.0 Function list */
+struct CK_FUNCTION_LIST_3_0 {
+
+  CK_VERSION    version;  /* Cryptoki version */
+
+/* Pile all the function pointers into the CK_FUNCTION_LIST. */
+/* pkcs11f.h has all the information about the Cryptoki
+ * function prototypes.
+ */
+#include "pkcs11f.h"
+
+};
+
+#define CK_PKCS11_2_0_ONLY 1
+
+/* Continue to define the old CK_FUNCTION_LIST */
 struct CK_FUNCTION_LIST {
 
   CK_VERSION    version;  /* Cryptoki version */
 
 /* Pile all the function pointers into the CK_FUNCTION_LIST. */
 /* pkcs11f.h has all the information about the Cryptoki
- * function prototypes. */
-//#if defined( INC_ALL )
-  #include "pkcs11f.h"
-//#else
-//  #include "device/pkcs11f.h"
-//#endif /* Compiler-specific includes */
+ * function prototypes.
+ */
+#include "pkcs11f.h"
 
 };
 
 #undef CK_PKCS11_FUNCTION_INFO
+#undef CK_PKCS11_2_0_ONLY
 
 
 #undef __PASTE
@@ -313,4 +243,5 @@ struct CK_FUNCTION_LIST {
 }
 #endif
 
-#endif
+#endif /* _PKCS11_H_ */
+
