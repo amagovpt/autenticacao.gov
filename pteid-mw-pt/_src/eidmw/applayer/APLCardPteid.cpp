@@ -434,6 +434,11 @@ APL_PersonalNotesEId& APL_EIDCard::getPersonalNotes()
 			CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 			if(!m_personal)
 			{
+				if(m_cardType == APL_CARDTYPE_PTEID_IAS5)
+            	{
+					throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+				}
+
 				m_personal=new APL_PersonalNotesEId(this);
 			}
 		}
