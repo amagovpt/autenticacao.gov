@@ -96,6 +96,33 @@ namespace eIDMW
     m_poCard = poCard;
   }
 
+  std::vector<tCert> hardcodedCertificates() {
+       std::vector<tCert> certs =  {{true,  "CITIZEN AUTHENTICATION CERTIFICATE",  0,  0, 0,  69, false,  false,  "3F005F00EF02"},
+        {true,  "CITIZEN SIGNATURE CERTIFICATE",  0,  0,  0, 70,  false,  false,  "3F005F00EF04"}, 
+        {true,  "SIGNATURE SUB CA",  0,  0,  0, 81,  false,  false,  "3F005F00EF08"},
+        {true,  "AUTHENTICATION SUB CA",  0,  0,  0, 82,  false,  false,  "3F005F00EF06"},
+        {true,  "ROOT CA",  0,  0,  0,  80, false,  false,  "3F005F00EF0A"}};
+
+     return certs;
+  }
+
+  std::vector<tPrivKey> hardcodedKeys() {
+
+    std::vector<tPrivKey> keys = { {true, "CITIZEN AUTHENTICATION KEY",  0, 1, 0, 69, 4, 0,   6,  "", 32, true},
+                                   {true, "CITIZEN SIGNATURE KEY",       0, 2, 1, 70, 512, 0, 8, "", 32, true}};
+
+    return keys;
+  }
+
+  std::vector<tPin> hardcodedPINs() {
+    std::vector<tPin> pins = { {true, "AUTHENTICATION PIN", 388, 1, 0, 1, 0, 0, 4, 8, 8, 0x81, 0xFF, PIN_ENC_ASCII, "","" },
+                               {true, "SIGNATURE PIN",      388, 1, 0, 2, 0, 0, 4, 8, 8, 0x82, 0xFF, PIN_ENC_ASCII, "","" },
+                               {true, "ADDRESS PIN",        388, 1, 0, 3, 0, 0, 4, 8, 8, 0x83, 0xFF, PIN_ENC_ASCII, "","" },
+            };
+
+    return pins;
+  }
+
 
   std::string CPKCS15::GetSerialNr()
   {
@@ -261,22 +288,37 @@ namespace eIDMW
      
       switch(name){
       case AODF:
-          ReadFile(&m_xAODF,2);
-          // parse
-          //Trim trailing NUL bytes (the actual ASN.1 content is 168 bytes)
-          m_xAODF.byteArray.TrimRight();
-          m_oPins = m_poParser->ParseAodf(m_xAODF.byteArray);
+          
+          if (m_poCard->GetType() == CARD_PTEID_IAS5) {
+            m_oPins = hardcodedPINs();
+          }
+          else {
+              ReadFile(&m_xAODF,2);
+              // parse
+              //Trim trailing NUL bytes (the actual ASN.1 content is 168 bytes)
+              m_xAODF.byteArray.TrimRight();
+              m_oPins = m_poParser->ParseAodf(m_xAODF.byteArray);
+          }
           break;
       case CDF:
-          ReadFile(&m_xCDF,2);
-          // parse
-          m_oCertificates = m_poParser->ParseCdf(m_xCDF.byteArray);
-          // correct
+          if (m_poCard->GetType() == CARD_PTEID_IAS5) {
+            m_oCertificates = hardcodedCertificates();
+          }
+          else {
+              ReadFile(&m_xCDF,2);
+              // parse
+              m_oCertificates = m_poParser->ParseCdf(m_xCDF.byteArray);
+          }
           break;
       case PRKDF:
-          ReadFile(&m_xPrKDF,2);
-          // parse
-          m_oPrKeys = m_poParser->ParsePrkdf(m_xPrKDF.byteArray);
+          if (m_poCard->GetType() == CARD_PTEID_IAS5) {
+            m_oPrKeys = hardcodedKeys();
+          }
+          else {
+              ReadFile(&m_xPrKDF,2);
+              // parse
+              m_oPrKeys = m_poParser->ParsePrkdf(m_xPrKDF.byteArray);
+          }
           break;
       default:
           // error: this method can only be called with AODF, CDF or PRKDF
