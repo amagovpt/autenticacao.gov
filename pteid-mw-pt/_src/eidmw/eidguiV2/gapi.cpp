@@ -2756,6 +2756,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                 switch (CardType)
                 {
                 case PTEID_CARDTYPE_IAS07:
+                case PTEID_CARDTYPE_IAS5:
                 {
                     PTEID_EIDCard& Card = readerContext.getEIDCard();
                     new_card = &Card;
@@ -2784,6 +2785,7 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                     switch (CardType)
                     {
                     case PTEID_CARDTYPE_IAS07:
+                    case PTEID_CARDTYPE_IAS5:
                     {
                         PTEID_EIDCard& Card = readerContext.getEIDCard();
                         new_card = &Card;
@@ -3030,8 +3032,9 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                 PTEID_CardType cardType = readerContext.getCardType();
                 switch (cardType)
                 {
-                case PTEID_CARDTYPE_IAS07:
                 case PTEID_CARDTYPE_IAS101:
+                case PTEID_CARDTYPE_IAS07:
+                case PTEID_CARDTYPE_IAS5:
                 {
                     PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Will try to ImportCertificates...");
                     bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
@@ -3043,7 +3046,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                     break;
                 }
                 case PTEID_CARDTYPE_UNKNOWN:
-                    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Unknown Card - skipping ImportCertificates()");
+                    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "unknown Card - skipping ImportCertificates()");
                     break;
                 }
             }
