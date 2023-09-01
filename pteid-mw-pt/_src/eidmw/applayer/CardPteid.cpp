@@ -890,6 +890,10 @@ tCardFileStatus APL_EidFile_Photo::VerifyFile()
 
 bool APL_EidFile_Photo::MapFields()
 {
+    fprintf(stderr, "Called %s!\n", __FUNCTION__);
+    if (m_mappedFields)
+        return true;
+
 	size_t tag_offset{};
 
 	// find 5F2E tag followed by 0x82.
@@ -905,15 +909,18 @@ bool APL_EidFile_Photo::MapFields()
 		}
 	}
 
-	if(tag_offset == 0 || tag_offset >= m_data.Size())
+	if (tag_offset == 0 || tag_offset >= m_data.Size())
 		return false;
 
 	const auto len = der_get_length(m_data.GetBytes(tag_offset));
 	if(len == 0)
 		return false;
+    //Skip the 3 data blocks defined in ISO/IEC 19794-5 spec
+    unsigned long photo_offset = tag_offset + 5 + PTEIDNG_FIELD_ID_LEN_FACIALRECHDR + PTEIDNG_FIELD_ID_LEN_FACIALINFO + PTEIDNG_FIELD_ID_LEN_IMAGEINFO;
 	
-	m_PhotoRaw.Append(m_data.GetBytes(tag_offset + 5, len));
+	m_PhotoRaw.Append(m_data.GetBytes(photo_offset));
 
+    m_mappedFields = true;
 	return true;
 }
 
@@ -946,15 +953,17 @@ bool APL_EidFile_ID_V2::LoadPhotoFile()
 
 	m_photo = new PhotoPteid(m_EidFile_Photo->getPhotoRaw());
 	
-	// SOD verification that was delayed and separated from ID & MRZ verification
-	const auto photo_data = m_EidFile_Photo->getData();
-	const auto pcard = dynamic_cast<APL_EIDCard*>(m_card);
-	const auto file_sod = pcard->getFileSod();
-	if (!m_cryptoFwk->VerifyHashSha256(photo_data, file_sod->getPictureHash()))
-	{
-		MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE: %s", file_sod->getPictureHash().ToString(true, false).c_str());
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE);
-	}
+    if (m_SODCheck) {
+    	// SOD verification that was delayed and separated from ID & MRZ verification
+    	const auto photo_data = m_EidFile_Photo->getData();
+    	const auto pcard = dynamic_cast<APL_EIDCard*>(m_card);
+    	const auto file_sod = pcard->getFileSod();
+    	if (!m_cryptoFwk->VerifyHashSha256(photo_data, file_sod->getPictureHash()))
+    	{
+    		MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE: %s", file_sod->getPictureHash().ToString(true, false).c_str());
+    		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE);
+    	}
+    }
 
 	return true;
 }
