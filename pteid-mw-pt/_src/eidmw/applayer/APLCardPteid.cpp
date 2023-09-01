@@ -272,21 +272,21 @@ APL_EidFile_Sod *APL_EIDCard::getFileSod()
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_FileSod)
 		{
-			CByteArray ba_validityEndDate;     //Validity date field from card ID file
 			
-            if(m_cardType == APL_CARDTYPE_PTEID_IAS5)
-            {
+            if (m_cardType == APL_CARDTYPE_PTEID_IAS5) {
                 m_FileSod = new APL_EidFile_Sod(this, PTEID_FILE_SOD_V2);
-            } else {
+            }
+            else {
+                CByteArray ba_validityEndDate;     //Validity date field from card ID file
+                //Read the validity end date directly from cardlayer to avoid recursive calls from APL_EidFile_ID::getValidityEndDate
+                unsigned long bytes_read = 
+                  this->readFile(PTEID_FILE_ID, ba_validityEndDate, PTEIDNG_FIELD_ID_POS_ValidityEndDate, PTEIDNG_FIELD_ID_LEN_ValidityEndDate);
+
+                ba_validityEndDate.TrimRight('\0');
                 m_FileSod = new APL_EidFile_Sod(this);
+                MWLOG(LEV_DEBUG, MOD_APL, "ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
             }
 
-			//Read the validity end date directly from cardlayer to avoid recursive calls from APL_EidFile_ID::getValidityEndDate
-			unsigned long bytes_read = 
-				  this->readFile(PTEID_FILE_ID, ba_validityEndDate, PTEIDNG_FIELD_ID_POS_ValidityEndDate, PTEIDNG_FIELD_ID_LEN_ValidityEndDate);
-
-			ba_validityEndDate.TrimRight('\0');
-			MWLOG(LEV_DEBUG, MOD_APL, "ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
 		}
 	}
 	return m_FileSod;
