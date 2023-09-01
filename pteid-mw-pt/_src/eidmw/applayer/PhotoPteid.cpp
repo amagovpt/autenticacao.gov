@@ -37,6 +37,7 @@ namespace eIDMW {
 	PhotoPteid::PhotoPteid(CByteArray &_photo)
 	{
 		photoRAW = new CByteArray(_photo);
+        photoPNG = NULL;
 	}
 
 	PhotoPteid::~PhotoPteid(){
