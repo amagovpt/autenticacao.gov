@@ -116,8 +116,6 @@ protected:
 
 	CByteArray m_oCardData;
 	CByteArray m_oSerialNr;
-    unsigned char m_ucAppletVersion;
-    unsigned int m_AppletVersion;
 
 };
 

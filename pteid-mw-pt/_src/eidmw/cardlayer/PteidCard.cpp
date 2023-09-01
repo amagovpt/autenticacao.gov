@@ -24,14 +24,17 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+
+#include <openssl/ec.h>
+#include <openssl/err.h>
+#ifdef __GNUC__
+#include <termios.h>
+#endif
+
 #include "PteidCard.h"
 #include "Log.h"
 #include "Config.h"
 #include "CardLayer.h"
-
-#ifdef __GNUC__
-#include <termios.h>
-#endif
 
 using namespace eIDMW;
 
@@ -126,9 +129,6 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		if (m_cardType == CARD_PTEID_IAS5) 		// CPLC Data only available on EID app on PTEID_2 cards
 			SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
-
-		// Get Card Applet Version
-		m_AppletVersion = ulVersion;
 	}
 	catch (CMWException e) {
 		MWLOG(LEV_CRIT, MOD_CAL, "Failed to get CardData: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
@@ -548,7 +548,7 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
     MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::PinCmd called with operation=%d", (int)operation);
 
 	pteidPin.encoding = PIN_ENC_ASCII; //PT uses ASCII only for PIN
-	if (m_AppletVersion == 1 ) {
+	if (GetType() == CARD_PTEID_IAS07 || GetType() == CARD_PTEID_IAS5) {
 		pincheck = CPkiCard::PinCmd(operation, pteidPin, csPin1, csPin2,
                                 ulRemaining, pKey,bShowDlg, wndGeometry, unblockFlags);
 	} else {
@@ -586,8 +586,26 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long paddingType,
     CByteArray oResp;
 
     m_ucCLA = 0x00;
+    if (m_cardType == CARD_PTEID_IAS5) {
+        oDatagem.Append(0x80);
+        oDatagem.Append(0x01);
+        //Algorithm: ECDSA
+        if (ulInputLen == SHA256_LEN)
+            ucAlgo = 0x44;
+        else if (ulInputLen == SHA384_LEN)
+            ucAlgo = 0x54;
+        else if (ulInputLen == SHA512_LEN)
+            ucAlgo = 0x64;
+        else if (ulInputLen == SHA1_LEN)
+            ucAlgo = 0x14;
+        oDatagem.Append(ucAlgo);
+        oDatagem.Append(0x84);
+        oDatagem.Append(0x01);
+        oDatagem.Append((unsigned char) key.ulKeyRef);
+        oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
 
-	if (m_AppletVersion == 1) {
+    }
+	else if (m_cardType == CARD_PTEID_IAS07) {
 		oDatagem.Append(0x80);
 		oDatagem.Append(0x01);
 		//Algorithm: RSA with PKCS#1 Padding
@@ -645,6 +663,56 @@ void KeepAliveThread::Run() {
 	MWLOG(LEV_DEBUG, MOD_CAL, "Stopping KeepAliveThread");
 }
 
+CByteArray encode_ECDSA_signature(const CByteArray &raw_signature) {
+
+    if (raw_signature.Size() % 2 != 0) {
+       throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+    }
+
+    const int key_length = raw_signature.Size() / 2;
+
+    CByteArray sig_r = raw_signature.GetBytes(0, key_length);
+    CByteArray sig_s = raw_signature.GetBytes(key_length);
+
+    CByteArray encoded_sig;
+    unsigned char *der_data = NULL;
+    int der_length = 0;
+
+    ECDSA_SIG *ecdsa_sig = ECDSA_SIG_new();
+    if (ecdsa_sig == NULL) {
+        return encoded_sig;
+    }
+
+    // Set the r and s values from raw bigintegers
+    BIGNUM *r = BN_bin2bn(sig_r.GetBytes(), sig_r.Size(), NULL);
+    BIGNUM *s = BN_bin2bn(sig_s.GetBytes(), sig_s.Size(), NULL);
+
+    if (r == NULL || s == NULL) {
+        ERR_print_errors_fp(stderr);
+        goto cleanup;
+    }
+
+    // Set the r and s values in the ECDSA signature structure
+    if (!ECDSA_SIG_set0(ecdsa_sig, r, s)) {
+        ERR_print_errors_fp(stderr);
+        goto cleanup;
+    }
+
+    der_length = i2d_ECDSA_SIG(ecdsa_sig, &der_data);
+    if (der_length < 0) {
+        ERR_print_errors_fp(stderr);
+        goto cleanup;
+    }
+    encoded_sig.Append(der_data, der_length);
+
+cleanup:
+    if (ecdsa_sig != NULL) {
+        ECDSA_SIG_free(ecdsa_sig);
+    }
+
+    return encoded_sig;
+}
+
 CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingType,
     const CByteArray & oData, const tPin *pPin)
 {
@@ -696,7 +764,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingT
 
     CByteArray oResp, oResp1;
 
-    if (m_AppletVersion == 1) {
+    if (GetType() == CARD_PTEID_IAS07 || GetType() == CARD_PTEID_IAS5) {
     	// PSO: Hash GEMSAFE
     	oResp1 = SendAPDU(0x2A, 0x90, 0xA0, oData1);
 
@@ -733,7 +801,12 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingT
     // Remove SW1-SW2 from the response
     oResp.Chop(2);
 
-    return oResp;
+    if (m_cardType == CARD_PTEID_IAS5) {
+        return encode_ECDSA_signature(oResp);
+    }
+    else {
+        return oResp;
+    }
 }
 
 bool CPteidCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
