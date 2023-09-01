@@ -21,12 +21,14 @@ namespace eIDMW
 
 
 struct ICCPublicKey_st {
+    ASN1_OBJECT * curve_oid;
 	ASN1_STRING * pk_p;
 	ASN1_STRING * pk_a;
 	ASN1_STRING * pk_b;
 	ASN1_STRING * pk_g;
 	ASN1_STRING * pk_n;
 	ASN1_STRING * pk_q;
+	ASN1_STRING * pk_cofactor;
 };
 
 typedef struct ICCPublicKey_st ICC_PUBLICKEY;
