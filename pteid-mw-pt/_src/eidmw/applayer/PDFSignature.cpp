@@ -331,7 +331,8 @@ namespace eIDMW
 		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: getCitizenCertificate() This should only be called for Card Signature!");
 
 		CByteArray certData;
-		m_card->readFile(PTEID_FILE_CERT_SIGNATURE, certData);
+		m_card->readFile(m_card->getType() == APL_CARDTYPE_PTEID_IAS5 ? 
+                         PTEID_FILE_CERT_SIGNATURE_V2 : PTEID_FILE_CERT_SIGNATURE, certData);
 
 		return certData;
 	}
