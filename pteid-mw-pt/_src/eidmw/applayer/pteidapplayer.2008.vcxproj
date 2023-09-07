@@ -227,6 +227,7 @@
     <ClCompile Include="APLCrypto.cpp" />
     <ClCompile Include="APLPublicKey.cpp" />
     <ClCompile Include="APLReader.cpp" />
+    <ClCompile Include="asn1_idfile.cpp" />
     <ClCompile Include="CardFile.cpp" />
     <ClCompile Include="CardPteid.cpp" />
     <ClCompile Include="CertStatusCache.cpp" />
