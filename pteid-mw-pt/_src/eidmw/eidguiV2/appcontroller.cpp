@@ -931,11 +931,14 @@ void AppController::getSignatureOptions() {
 
     QString sign_options_file_path = m_Settings.getPteidCachedir() + "/SignOptions.json";
     QFile file(sign_options_file_path);
+    if (!file.exists()) {
+        return;
+    }
     if (file.open(QIODevice::ReadOnly)) {
         content = file.readAll().toStdString();
         file.close();
     } else {
-        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s Error writting options file: %s", __FUNCTION__,
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s Error reading SignOptions file: %s", __FUNCTION__,
             sign_options_file_path.toStdString().c_str());
         return;
     }
