@@ -243,10 +243,10 @@ bool APL_Pin::changePin(const char *csPin1,const char *csPin2,unsigned long &ulR
 
 bool APL_Pin::unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, unsigned long flags) {
 
-	if (m_card->getType() == APL_CARDTYPE_PTEID_IAS07){ //gemsafe
+	if (m_card->getType() == APL_CARDTYPE_PTEID_IAS07 || m_card->getType() == APL_CARDTYPE_PTEID_IAS5) {
 		return m_card->getCalReader()->unlockPIN(m_pinP15, NULL, pszPuk, pszNewPin, triesLeft, flags);
 
-	} else if (m_card->getType() == APL_CARDTYPE_PTEID_IAS101){ //ias
+	} else if (m_card->getType() == APL_CARDTYPE_PTEID_IAS101) {
 		tPin puk;
 		for (unsigned long idx=0; idx < m_card->pinCount(); idx++){
 			puk = m_card->getPin(idx); // get the puk for this pin

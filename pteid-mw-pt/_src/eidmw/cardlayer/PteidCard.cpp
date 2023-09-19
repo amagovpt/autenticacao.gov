@@ -243,6 +243,7 @@ CByteArray CPteidCard::RootCAPubKey(){
 			oResp.Chop(2); ////remove the SW12 bytes
 		}
 		break;
+        //TODO: changes needed for IAS5
 		case CARD_PTEID_IAS07:
 		{
 			unsigned char apdu_cvc_pubkey_mod[] = {0x00, 0xCB, 0x00,
@@ -345,7 +346,7 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 			if (PinCmd(PIN_OP_VERIFY, *puk, pszPuk, "", ulRemaining, NULL))      // Verify PUK
 				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", triesLeft, NULL); // Reset PIN
 		}
-		else if (m_cardType == CARD_PTEID_IAS07) {
+		else if (m_cardType == CARD_PTEID_IAS07 || m_cardType == CARD_PTEID_IAS5) {
 
 			std::string pin_str;
 			if (pszNewPin != NULL)
