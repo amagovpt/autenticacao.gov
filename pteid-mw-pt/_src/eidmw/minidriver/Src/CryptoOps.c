@@ -325,8 +325,8 @@ DWORD WINAPI   CardSignData
 		}
 		else
 		{
-			LogTrace(LOGTYPE_ERROR, WHERE, "[pInfo->pPaddingInfo] unsupported...");
-			CLEANUP(SCARD_E_INVALID_PARAMETER);
+				LogTrace(LOGTYPE_ERROR, WHERE, "[pInfo->pPaddingInfo] unsupported...");
+				CLEANUP(SCARD_E_INVALID_PARAMETER);
 			/*uiHashAlgo = HASH_ALGO_NONE;*/
 		}
 
@@ -340,24 +340,24 @@ DWORD WINAPI   CardSignData
 	LogDumpHex(pInfo->cbData, (char *)pInfo->pbData);
 #endif
 
-	if (Is_Gemsafe)
+	if (card_type == GEMSAFE_CARD || card_type == IAS_V5_CARD)
 	{
 		dwReturn = PteidSignDataGemsafe(pCardData, 
-		pInfo->bContainerIndex,
-		pInfo->cbData, 
-		pInfo->pbData, 
-		&(pInfo->cbSignedData), 
-		&(pInfo->pbSignedData), PssPadInfo != NULL);
+			pInfo->bContainerIndex,
+			pInfo->cbData, 
+			pInfo->pbData, 
+			&(pInfo->cbSignedData), 
+			&(pInfo->pbSignedData), PssPadInfo != NULL);
 
 	}
-	else
+	else if (card_type == IAS_CARD)
 	{
-	dwReturn = PteidSignData(pCardData, 
-		pInfo->bContainerIndex,
-		pInfo->cbData, 
-		pInfo->pbData, 
-		&(pInfo->cbSignedData), 
-		&(pInfo->pbSignedData));
+		dwReturn = PteidSignData(pCardData, 
+			pInfo->bContainerIndex,
+			pInfo->cbData, 
+			pInfo->pbData, 
+			&(pInfo->cbSignedData), 
+			&(pInfo->pbSignedData));
 	}
 	if ( dwReturn != 0 )
 	{

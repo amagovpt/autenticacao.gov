@@ -153,7 +153,7 @@ DWORD PteidAuthenticate(PCARD_DATA  pCardData,
    Cmd[0] = 0x00;
    Cmd[1] = 0x20;  /* VERIFY COMMAND */
    Cmd[2] = 0x00;
-   if (Is_Gemsafe)
+   if (card_type == GEMSAFE_CARD || card_type == IAS_V5_CARD)
 	   Cmd[3] = 0x81 + pin_id; /* PIN ID  */
    else
    {
@@ -165,7 +165,7 @@ DWORD PteidAuthenticate(PCARD_DATA  pCardData,
 
    Cmd[4] = 0x08;  /* PIN Length (including padding) */
 
-   if (Is_Gemsafe)
+   if (card_type == GEMSAFE_CARD || card_type == IAS_V5_CARD)
 	   paddingChar = 0xFF;
    else
 	   paddingChar = 0x2F;
@@ -368,7 +368,7 @@ DWORD PteidAuthenticateExternal(
 	/* Log On */
 	/**********/
 
-	if (Is_Gemsafe == 0 && pin_id == 0)
+	if (card_type == IAS_CARD && pin_id == 0)
 		pin_ref = 0x01;
 	else 
 		pin_ref = 0x81 + pin_id;
@@ -519,7 +519,7 @@ DWORD PteidMSE(PCARD_DATA   pCardData,
    Cmd [0] = 0x00;
    Cmd [1] = 0x22; //MSE
    Cmd [2] = 0x41;
-   if (Is_Gemsafe)
+   if (card_type == GEMSAFE_CARD)
    {
 	   Cmd [3] = 0xB6;
 	   Cmd [4] = 0x06; //Length of data
@@ -538,7 +538,7 @@ DWORD PteidMSE(PCARD_DATA   pCardData,
 	   uiCmdLg = 11;
 
    }
-   else
+   else if (card_type == IAS_CARD)
    {
 	   Cmd [3] = 0xA4;
 	   Cmd [4] = 0x09; //Length of data
@@ -650,7 +650,7 @@ DWORD    PteidChangePIN
       CLEANUP(SCARD_W_WRONG_CHV);
    }
 
-   if (!Is_Gemsafe)
+   if (card_type == IAS_CARD)
    {
 		dwReturn = PteidAuthenticate(pCardData, pbCurrentAuthenticator, cbCurrentAuthenticator,
 			pcAttemptsRemaining, 1);
@@ -658,7 +658,7 @@ DWORD    PteidChangePIN
 			CLEANUP(dwReturn);
    }
 
-   if (Is_Gemsafe)
+   if (card_type == IAS_V5_CARD || card_type == GEMSAFE_CARD)
 	   paddingChar = 0xFF;
    else
 	   paddingChar = 0x2F;
@@ -668,20 +668,20 @@ DWORD    PteidChangePIN
    /* Change PIN code: Old PIN + New PIN + Padding */
    Cmd[0] = 0x00;
    Cmd[1] = 0x24;   /* CHANGE REFERENCE DATA COMMAND    */
-   if (Is_Gemsafe)
+   if (card_type == IAS_V5_CARD || card_type == GEMSAFE_CARD)
 	   Cmd[2] = 0x00;
    else
 	   Cmd[2] = 0x01; 
-   if (Is_Gemsafe)
+   if (card_type == IAS_V5_CARD || card_type == GEMSAFE_CARD)
 	   Cmd[3] = 0x81;  //PIN Reference
    else
        Cmd[3] = 0x01; 
-   if(!Is_Gemsafe)
+   if(card_type == IAS_CARD)
 	Cmd[4] = 0x08; //Just the new PIN
    else
 	Cmd[4] = 0x10; // Old and new PIN
 	
-   if(Is_Gemsafe)
+   if(card_type == IAS_V5_CARD || card_type == GEMSAFE_CARD)
    {
 	   while(i < 8)
 	   {
@@ -693,7 +693,7 @@ DWORD    PteidChangePIN
 	   }
    }
 
-   if (!Is_Gemsafe)
+   if (card_type == IAS_CARD)
 	   j = -8;
 
    while( i < 16)
@@ -704,7 +704,7 @@ DWORD    PteidChangePIN
 		   Cmd[4+i+j] = paddingChar;
 	   i++;
    }
-   if(Is_Gemsafe)	 
+   if(card_type == IAS_V5_CARD || card_type == GEMSAFE_CARD)	 
 	   uiCmdLg = 21;
    else
 	   uiCmdLg = 13; 
@@ -1240,7 +1240,10 @@ DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
     //Obtain the file FCI template
     Cmd[3] = 0x00;
     Cmd[5] = 0xEF;
-    Cmd[6] = 0x0D;
+	 if (card_type == IAS_V5_CARD)
+		Cmd[6] = 0x0E;
+	 else
+		Cmd[6] = 0x0D;
 
     dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
@@ -1456,7 +1459,7 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    SW1 = recvbuf[recvlen - 2];
    SW2 = recvbuf[recvlen - 1];
 
-   *pcbSignature = g_keySize / 8; //g_keySize == 2048 ? 0x100 : 0x80;
+		*pcbSignature = g_keySize / 8; //g_keySize == 2048 ? 0x100 : 0x80;
 
    /* Allocate memory for the target buffer and the intermediate little-endian signature buffer */
    le_sig = pCardData->pfnCspAlloc(*pcbSignature);
@@ -1753,8 +1756,8 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
 	   CLEANUP(SCARD_S_SUCCESS);
    }
    *ppbCertif = pCardData->pfnCspAlloc(cbCertif);
-   
-   
+
+
    vs = (VENDOR_SPECIFIC*)pCardData->pvVendorSpecific;
 
    if (!runningUnderService())
@@ -1818,16 +1821,16 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
 	if (!checkStatusCode(WHERE" -> select Specific Dir", dwReturn, SW1, SW2))
 		CLEANUP(dwReturn);
 	
-	if (!Is_Gemsafe)
+	if (card_type == IAS_CARD)
 	{
-	Cmd[2] = 0x09; 
-    Cmd[3] = 0x00;
+		Cmd[2] = 0x09; 
+		Cmd[3] = 0x00;
 	}
 	Cmd[4] = 0x02;
 	Cmd[5] = 0xEF;
-    Cmd[6] = translateCertType(dwCertSpec);
+	Cmd[6] = translateCertType(dwCertSpec);
 
-    memset(recvbuf, 0, sizeof(recvbuf));
+   memset(recvbuf, 0, sizeof(recvbuf));
 	dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
                             Cmd, 
@@ -1889,6 +1892,7 @@ DWORD PteidSelectApplet(PCARD_DATA  pCardData)
 	unsigned long     recvlen = sizeof(recvbuf);
 	BYTE              SW1, SW2;
 	BYTE IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
+	BYTE IAS_V5_PTEID_APPLET_AID[] = { 0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x03 };
 	BYTE GEMSAFE_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
 	BYTE              cAppletID = sizeof(IAS_PTEID_APPLET_AID);
 	
@@ -1900,13 +1904,16 @@ DWORD PteidSelectApplet(PCARD_DATA  pCardData)
 	Cmd [0] = 0x00;
 	Cmd [1] = 0xA4; /* SELECT COMMAND 00 A4 04 0C 07 */
 	Cmd [2] = 0x04;
-	if (Is_Gemsafe)
+	if (card_type == GEMSAFE_CARD || IAS_V5_CARD)
 		Cmd [3] = 0x00;
 	else 
 		Cmd [3] = 0x0C;
 	Cmd [4] = 0x07;
-	if (Is_Gemsafe)
+
+	if (card_type == GEMSAFE_CARD)
 		memcpy(&Cmd[5], GEMSAFE_APPLET_AID, sizeof(GEMSAFE_APPLET_AID));
+	else if (card_type == IAS_V5_CARD)
+		memcpy(&Cmd[5], IAS_V5_PTEID_APPLET_AID, sizeof(IAS_V5_PTEID_APPLET_AID));
 	else
 		memcpy(&Cmd[5], IAS_PTEID_APPLET_AID, cAppletID);
 
@@ -2041,7 +2048,7 @@ DWORD createVerifyCommandGemPC(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned in
     pVerifyCommand->abData[2] = 0x00; // P1
     pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
-	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
+	padding = card_type != IAS_CARD ? 0xFF: 0x2F;
 	pVerifyCommand->abData[5] = padding;
     pVerifyCommand->abData[6] = padding; // Pin[1]
     pVerifyCommand->abData[7] = padding; // Pin[2]
@@ -2086,7 +2093,7 @@ DWORD createVerifyCommandACR83(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned in
     pVerifyCommand->abData[2] = 0x00; // P1
     pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
-	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
+	padding = card_type != IAS_CARD ? 0xFF: 0x2F;
 	pVerifyCommand->abData[5] = padding;
     pVerifyCommand->abData[6] = padding; // Pin[1]
     pVerifyCommand->abData[7] = padding; // Pin[2]
@@ -2138,7 +2145,7 @@ DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin
     pVerifyCommand->abData[2] = 0x00; // P1
     pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
-	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
+	padding = card_type != IAS_CARD ? 0xFF: 0x2F;
 	
     pVerifyCommand->abData[5] = padding; // Pin[1]
     pVerifyCommand->abData[6] = padding; // Pin[2]

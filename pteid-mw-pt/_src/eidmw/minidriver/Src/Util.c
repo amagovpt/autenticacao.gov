@@ -76,16 +76,16 @@ BYTE translateCertType(DWORD dwCertSpec)
 	switch (dwCertSpec)
 	{
 	case CERT_AUTH:
-		return 0x09;
+		return card_type == IAS_V5_CARD ? 0x02 : 0x09;
 
 	case CERT_NONREP:
-		return 0x08;
+		return card_type == IAS_V5_CARD ? 0x04 : 0x08;
 
 	case CERT_CA:
-		return 0x0F;
+		return card_type == IAS_V5_CARD ? 0x02 : 0x0F;
 		
 	case CERT_ROOTCA:
-		return 0x10;
+		return card_type == IAS_V5_CARD ? 0x0A : 0x10;
 	}
 
 	//It should never happen...
