@@ -214,7 +214,7 @@ DWORD WINAPI   CardSignData
 		CLEANUP(SCARD_E_NO_KEY_CONTAINER);
 	}
 
-	if ( pInfo->dwKeySpec != AT_SIGNATURE )
+	if ( pInfo->dwKeySpec != AT_SIGNATURE && (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE)) )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->dwKeySpec]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
@@ -325,8 +325,11 @@ DWORD WINAPI   CardSignData
 		}
 		else
 		{
+			if (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE))
+			{
 				LogTrace(LOGTYPE_ERROR, WHERE, "[pInfo->pPaddingInfo] unsupported...");
 				CLEANUP(SCARD_E_INVALID_PARAMETER);
+			}
 			/*uiHashAlgo = HASH_ALGO_NONE;*/
 		}
 

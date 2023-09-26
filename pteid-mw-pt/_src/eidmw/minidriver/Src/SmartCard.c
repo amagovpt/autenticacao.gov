@@ -489,6 +489,21 @@ BYTE getGemaltoAlgoID(DWORD hash_len) {
 	}
 }
 
+BYTE getIASv5AlgoId(DWORD hash_len) {
+	switch (hash_len) {
+	case SHA1_LEN:
+		return 0x14;
+	case SHA512_LEN:
+		return 0x64;
+	case SHA384_LEN:
+		return 0x54;
+	case SHA256_LEN:
+		return 0x44;
+	default:
+		return 0x02;
+	}
+}
+
 
 /****************************************************************************************************/
 
@@ -556,6 +571,22 @@ DWORD PteidMSE(PCARD_DATA   pCardData,
 	   Cmd [13] = 0x02; //(RSA-PKCS#1)
 	   uiCmdLg = 14;
    }
+	else if (card_type == IAS_V5_CARD)
+	{
+		Cmd[3] = 0xB6;
+		Cmd[4] = 0x06;// length of data
+		Cmd[5] = 0x80;
+		Cmd[6] = 0x01;
+		Cmd[7] = getIASv5AlgoId(hash_length);
+		Cmd[8] = 0x84;
+		Cmd[9] = 0x01;
+		if (key_id == 0)
+			Cmd[10] = 0x06;
+		else
+			Cmd[10] = 0x08;
+		uiCmdLg = 11;
+		
+	}
   
    //Sleep(1000);
    LogTrace(LOGTYPE_INFO, WHERE, "APDU MSE");
@@ -1431,11 +1462,17 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 	   }
    }
   
+	unsigned char exp_sig_length = 0;
+	if (card_type == IAS_V5_CARD)
+		exp_sig_length = 0x40;
+	else
+		exp_sig_length = g_keySize == 1024 ? 0x80 : 0x00;
+
    Cmd [0] = 0x00;
    Cmd [1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
    Cmd [2] = 0x9E;
    Cmd [3] = 0x9A;
-   Cmd [4] = g_keySize == 1024 ? 0x80 : 0x00;  /* Length of expected signature */
+	Cmd [4] = exp_sig_length;  /* Length of expected signature */
    
    uiCmdLg = 5;
 
@@ -1459,11 +1496,16 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
    SW1 = recvbuf[recvlen - 2];
    SW2 = recvbuf[recvlen - 1];
 
+	if (card_type == IAS_V5_CARD)
+		*pcbSignature = exp_sig_length;
+	else
 		*pcbSignature = g_keySize / 8; //g_keySize == 2048 ? 0x100 : 0x80;
 
-   /* Allocate memory for the target buffer and the intermediate little-endian signature buffer */
-   le_sig = pCardData->pfnCspAlloc(*pcbSignature);
+	if (card_type == GEMSAFE_CARD)
+		/* Allocate memory for the intermediate little-endian signature buffer */
+		le_sig = pCardData->pfnCspAlloc(*pcbSignature);
 
+   /* Allocate memory for the target signature buffer */
    *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature);
 
    if (*ppbSignature == NULL)
@@ -1510,16 +1552,22 @@ DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned
 	   }
    }
 
-   memcpy(le_sig + signature_len, recvbuf, recvlen - 2);
-   
-   //Convert the signature to big-endian with the result in ppbSignature
-   for ( i = 0 ; i < *pcbSignature ; i++ )
-   {
-      (*ppbSignature)[i] = le_sig[*pcbSignature - i - 1];
-   }
+	if (card_type == IAS_V5_CARD)
+		memcpy(*ppbSignature, recvbuf, recvlen - 2);
+	else
+	{
+		//Convert the signature to big-endian with the result in ppbSignature
+		memcpy(le_sig + signature_len, recvbuf, recvlen - 2);
+		for (i = 0; i < *pcbSignature; i++)
+		{
+			(*ppbSignature)[i] = le_sig[*pcbSignature - i - 1];
+		}
+	}
+	
 
 cleanup:
-   pCardData->pfnCspFree(le_sig);
+	if (card_type == GEMSAFE_CARD)
+		pCardData->pfnCspFree(le_sig);
    return (dwReturn);
 }
 
@@ -1777,7 +1825,7 @@ DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, P
 		memcpy(*ppbCertif, auth_certificate, sizeof(auth_certificate));
 		return 0;
 	}
-
+   
    vs = (VENDOR_SPECIFIC*)pCardData->pvVendorSpecific;
 
    if (!runningUnderService())
