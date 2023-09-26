@@ -92,6 +92,89 @@ BYTE translateCertType(DWORD dwCertSpec)
 	return 0x00;
 }
 
+#define where "PteidGetIASv5PubKey"
+extern DWORD PteidGetIASv5PubKey(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbPubKey, PBYTE *ppbPubKey)
+{
+	DWORD						dwReturn = 0;
+	DWORD						cbDecoded = 0;
+
+	SCARD_IO_REQUEST			ioSendPci = *g_pioSendPci;
+
+	unsigned char				Cmd[128];
+	unsigned int				uiCmdLg = 0;
+
+	unsigned char				recvbuf[1024];
+	unsigned long				recvlen = sizeof(recvbuf);
+
+	DWORD select_result = PteidSelectApplet(pCardData);
+
+	// apdu 00 CB 00 FF 0A B6 03 83 01 06 7F 49 02 86 00 00
+	Cmd[0] = 0x00;
+	Cmd[1] = 0xCB;
+	Cmd[2] = 0x00;
+	Cmd[3] = 0xFF;
+	Cmd[4] = 0x0A;
+	Cmd[5] = 0xB6;
+	Cmd[6] = 0x03;
+	Cmd[7] = 0x83;
+	Cmd[8] = 0x01;
+	if (dwCertSpec == 2)
+		Cmd[9] = 0x06;
+	else
+		Cmd[9] = 0x08;
+	Cmd[10] = 0x7F;
+	Cmd[11] = 0x49;
+	Cmd[12] = 0x02;
+	Cmd[13] = 0x86;
+	Cmd[14] = 0x00;
+	Cmd[15] = 0x00;
+	uiCmdLg = 16;
+
+	memset(recvbuf, 0x00, 1024);
+	dwReturn = SCardTransmit(pCardData->hScard,
+		&ioSendPci,
+		Cmd,
+		uiCmdLg,
+		NULL,
+		recvbuf,
+		&recvlen);
+
+	unsigned char SW1 = recvbuf[recvlen - 2];
+	unsigned char SW2 = recvbuf[recvlen - 1];
+
+	if (SW1 == 0x61)
+	{
+
+		Cmd[0] = 0x00;
+		Cmd[1] = 0xC0; /* GET RESPONSE command */
+		Cmd[2] = 0x00;
+		Cmd[3] = 0x00;
+		Cmd[4] = SW2;
+
+		uiCmdLg = 5;
+		//Make all the buffer available to the next SCardTransmit call
+		recvlen = sizeof(recvbuf);
+
+		dwReturn = SCardTransmit(pCardData->hScard,
+			&ioSendPci,
+			Cmd,
+			uiCmdLg,
+			NULL,
+			recvbuf,
+			&recvlen);
+
+		*pcbPubKey = sizeof(BCRYPT_ECCKEY_BLOB) + 64;
+		*ppbPubKey = pCardData->pfnCspAlloc(*pcbPubKey);
+		((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->dwMagic = BCRYPT_ECDSA_PUBLIC_P256_MAGIC;
+		((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->cbKey = 32;
+
+		memcpy((*ppbPubKey) + sizeof(BCRYPT_ECCKEY_BLOB), recvbuf + 11, 64);
+	}
+
+	return (dwReturn);
+}
+#undef WHERE
+
 
 #define WHERE "PteidGetPubKey"
 DWORD PteidGetPubKey(PCARD_DATA  pCardData, DWORD cbCertif, PBYTE pbCertif, DWORD *pcbPubKey, PBYTE *ppbPubKey)

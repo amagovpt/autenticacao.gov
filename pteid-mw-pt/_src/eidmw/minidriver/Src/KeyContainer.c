@@ -174,14 +174,20 @@ DWORD WINAPI   CardGetContainerInfo
 		dwCertSpec = CERT_NONREP;
 	}
 
-	dwReturn = PteidReadCert(pCardData, dwCertSpec, &cbCertif, &pbCertif);
-	if ( dwReturn != SCARD_S_SUCCESS )
+	/*
+	* Public key is not being read from certificate on IAS v5 cards
+	*/
+	if (card_type != IAS_V5_CARD)
 	{
-		if (bContainerIndex == 0)
-			LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
-		if (bContainerIndex == 1)
-			LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
-		CLEANUP(SCARD_E_UNEXPECTED);
+		dwReturn = PteidReadCert(pCardData, dwCertSpec, &cbCertif, &pbCertif);
+		if (dwReturn != SCARD_S_SUCCESS)
+		{
+			if (bContainerIndex == 0)
+				LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
+			if (bContainerIndex == 1)
+				LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
+			CLEANUP(SCARD_E_UNEXPECTED);
+		}
 	}
 
 #ifdef _DEBUG
@@ -196,7 +202,13 @@ DWORD WINAPI   CardGetContainerInfo
 	pContainerInfo->dwVersion  = CONTAINER_INFO_CURRENT_VERSION;
 	pContainerInfo->dwReserved = 0;
 	
-	dwReturn = PteidGetPubKey(pCardData, 
+	if (card_type == IAS_V5_CARD)
+		dwReturn = PteidGetIASv5PubKey(pCardData,
+			dwCertSpec,
+			&(pContainerInfo->cbSigPublicKey),
+			&(pContainerInfo->pbSigPublicKey));
+	else 
+		dwReturn = PteidGetPubKey(pCardData, 
 			cbCertif, 
 			pbCertif, 
 			&(pContainerInfo->cbSigPublicKey), 
