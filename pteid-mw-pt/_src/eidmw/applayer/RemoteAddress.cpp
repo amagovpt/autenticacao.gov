@@ -116,9 +116,9 @@ RA_SignChallengeResponse parseSignChallengeResponse(const char * json_str) {
 int parseRemoteAddressErrorCode(const char * json_str) {
     int error_code = -1;
     cJSON *error = cJSON_Parse(json_str);
-    if (error == NULL)
-    {
+    if (error == NULL) {
         MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+        return error_code;
     }
     cJSON * item = cJSON_GetObjectItem(error, "code");
 
