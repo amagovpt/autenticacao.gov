@@ -119,9 +119,9 @@ extern DWORD PteidGetIASv5PubKey(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD 
 	Cmd[7] = 0x83;
 	Cmd[8] = 0x01;
 	if (dwCertSpec == 2)
-		Cmd[9] = 0x06;
-	else
 		Cmd[9] = 0x08;
+	else
+		Cmd[9] = 0x06;
 	Cmd[10] = 0x7F;
 	Cmd[11] = 0x49;
 	Cmd[12] = 0x02;
