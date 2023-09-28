@@ -39,7 +39,9 @@
 CARD_ATR  CardAtr[] = 
             {
 			    //IAS v5 cards
+             //TODO: Confirm this ATRs with INCM: probably the second value will be the final one
 			   {{0x3b,0x7f,0x96,0x00,0x00,0x80,0x31,0x80,0x65,0xb0,0x85,0x05,0x00,0x11,0x12,0x0f,0xff,0x82,0x90,0x00}, 20},
+               {{0x3b,0xff,0x96,0x00,0x00,0x81,0x31,0xfe,0x43,0x80,0x31,0x80,0x65,0xb0,0x85,0x05,0x00,0x11,0x12,0x0f,0xff,0x82,0x90,0x00,0xe1}, 25},
 				//IAS cards
 			   {{0x3B,0x65,0x00,0x00,0xd0,0x00,0x54,0x01,0x31}, 9},
 			   {{0x3B,0x65,0x00,0x00,0xd0,0x00,0x54,0x01,0x32}, 9},
@@ -119,6 +121,7 @@ DWORD WINAPI   CardAcquireContext
    }
 	
    LogTrace(LOGTYPE_INFO, WHERE, "ATR input value: ");
+   
    LogDumpHex(pCardData->cbAtr, pCardData->pbAtr);
 
    for ( iAtr = 0 ; iAtr < SUPPORTED_CARDS ; iAtr++ )
@@ -127,12 +130,12 @@ DWORD WINAPI   CardAcquireContext
       {
          if ( memcmp(pCardData->pbAtr, CardAtr[iAtr].pbAtr, pCardData->cbAtr) == 0 )
          {
-				if (iAtr == 0)
+				if (iAtr < 2)
 				{
 					card_type = IAS_V5_CARD;
 					LogTrace(LOGTYPE_INFO, WHERE, "IAS v5 Card Detected");
 				}
-				else if (iAtr > 3)
+				else if (iAtr > 5)
 				{
 					card_type = GEMSAFE_CARD;
 					LogTrace(LOGTYPE_INFO, WHERE, "Gemsafe Card Detected");
