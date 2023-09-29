@@ -799,7 +799,7 @@ BOOL checkStatusCode(const char * context, DWORD dwReturn, BYTE SW1, BYTE SW2)
 	}
 	if ((SW1 != 0x90) || (SW2 != 0x00))
 	{
-		LogTrace(LOGTYPE_ERROR, context, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
+		LogTrace(LOGTYPE_ERROR, context, "Card returned SW12: [0x%02X][0x%02X]", SW1, SW2);
 		return FALSE;
 	}
 
