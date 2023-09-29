@@ -25,7 +25,6 @@
 #define __UTIL_H__
 extern void				bin2AsciiHex(const unsigned char * pData, char * out, unsigned long ulLen); 
 extern DWORD            PteidGetPubKey(PCARD_DATA  pCardData, DWORD cbCertif, PBYTE pbCertif, DWORD *pcbPubKey, PBYTE *ppbPubKey);
-extern DWORD            PteidGetIASv5PubKey(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbPubKey, PBYTE *ppbPubKey);
 extern DWORD            PteidCreateMSRoots(PCARD_DATA  pCardData, DWORD *pcbMSRoots, PBYTE *ppbMSRoots);
 extern BYTE				translateCertType(DWORD dwCertSpec);
 extern BOOL runningUnderService();

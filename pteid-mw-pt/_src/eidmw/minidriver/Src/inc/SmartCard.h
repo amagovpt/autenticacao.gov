@@ -205,4 +205,9 @@ extern DWORD createVerifyCommandACR83
 					PPIN_VERIFY_STRUCTURE pVerifyCommand, 
 					unsigned int pin_ref
 				);
+extern DWORD PteidGetIASv5PubKey(
+	             PCARD_DATA  pCardData,
+	             DWORD dwCertSpec,
+	             DWORD *pcbPubKey,
+	             PBYTE *ppbPubKey);
 #endif
