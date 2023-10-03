@@ -978,7 +978,27 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 
    *pdwSerialNumber = 0;
 
+	if (card_type == IAS_V5_CARD)
+	{
+		Cmd[0] = 0x00;
+		Cmd[1] = 0xCA;
+		Cmd[2] = 0x9F;
+		Cmd[3] = 0x7F;
+		Cmd[4] = 0x2D;
+		uiCmdLg = 5;
 
+		dwReturn = SCardTransmit(pCardData->hScard, &ioSendPci, Cmd, uiCmdLg, NULL, recvbuf, &recvlen);
+		SW1 = recvbuf[recvlen - 2];
+		SW2 = recvbuf[recvlen - 1];
+
+		if (!checkStatusCode(WHERE" -> get CPLC data", dwReturn, SW1, SW2))
+			CLEANUP(dwReturn);
+
+		*pdwSerialNumber = 8;
+		memcpy(pbSerialNumber, recvbuf + 13, 8);
+
+		return (dwReturn);
+	}
 
    /***************/
    /* Select File */
