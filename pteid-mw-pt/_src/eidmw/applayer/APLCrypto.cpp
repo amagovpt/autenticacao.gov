@@ -41,8 +41,9 @@ namespace eIDMW
 APL_Pins::APL_Pins(APL_SmartCard *card)
 {
 	m_card=card;
-
-	card->selectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+    if (card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+        card->selectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+    }
 
 	unsigned long ulCount=m_card->pinCount();
 	for(unsigned long i=0;i<ulCount;i++)
