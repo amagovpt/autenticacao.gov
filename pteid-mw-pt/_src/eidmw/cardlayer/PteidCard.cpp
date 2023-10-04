@@ -126,8 +126,12 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		//
 		// Get card serial number 
 		//
-		if (m_cardType == CARD_PTEID_IAS5) 		// CPLC Data only available on EID app on PTEID_2 cards
+		if (m_cardType == CARD_PTEID_IAS5) 		// CPLC Data only available on EID app on PTEID_2 cards {
 			SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+        else {
+            //The IAS v4 application was already selected in CardFactory
+            m_lastSelectedApplication = { PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) };
+        }
 		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
 	}
 	catch (CMWException e) {
@@ -886,10 +890,10 @@ void CPteidCard::SelectApplication(const CByteArray & oAID)
 
 	CByteArray oResp = m_poContext->m_oPCSC.Transmit(
 		m_hCard, oCmd, &lRetVal, getProtocolStructure());
-	getSW12(oResp);
-
-	// If select application was a success, update the state
-	m_lastSelectedApplication = oAID;
+	if (getSW12(oResp) == 0x9000) {
+	   // If select application was a success, update the state
+	   m_lastSelectedApplication = oAID;
+    }
 }
 
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo)
