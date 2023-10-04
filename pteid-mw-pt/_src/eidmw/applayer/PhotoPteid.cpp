@@ -37,6 +37,11 @@ namespace eIDMW {
 	PhotoPteid::PhotoPteid(CByteArray &_photo)
 	{
 		photoRAW = new CByteArray(_photo);
+        //TODO: these 4 fields should be parsed in APL_EidFile_Photo::MapFields
+        cbeff = new CByteArray();
+        facialrechdr = new CByteArray();
+        facialinfo = new CByteArray();
+        imageinfo = new CByteArray();
         photoPNG = NULL;
 	}
 
