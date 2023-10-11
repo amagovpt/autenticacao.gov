@@ -659,6 +659,8 @@ private:
     WindowGeometry m_wndGeometry;
     QWindow *m_mainWnd;
 
+    QString g_systemArchitecture;
+
 protected:
     QTranslator m_translator;
 };

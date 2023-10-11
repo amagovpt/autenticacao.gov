@@ -23,6 +23,7 @@
 #include <QPrinterInfo>
 #include <QWindow>
 #include <QUuid>
+#include <QProcess>
 #include "qpainter.h"
 
 #include "CMDSignature.h"
@@ -46,6 +47,11 @@
 #include "CurlUtil.h"
 #include "proxyinfo.h"
 #include "concurrent.h"
+
+#ifdef __APPLE__
+   #include <sys/types.h> 
+   #include <sys/sysctl.h>
+#endif
 
 #include "pteidversions.h"
 
@@ -87,6 +93,34 @@ const char* GAPI::telemetryActionToString(TelemetryAction action)
         case TelemetryAction::PrintPDF:         return "app/printpdf/";
         default:                                return "app/unknown/";
     }
+}
+
+#ifdef __APPLE__
+// Uses sysctl to find if the process is being translated by Rosetta
+int processIsTranslated()
+{
+   int ret = 0;
+   size_t size = sizeof(ret);
+   if (sysctlbyname("sysctl.proc_translated", &ret, &size, NULL, 0) == -1) 
+   {
+      if (errno == ENOENT)
+         return 0;
+      return -1;
+   }
+   return ret;
+}
+#endif
+
+// Obtains the system Architecture
+QString getSystemArchitecture()
+{
+    QString system_architecture = QSysInfo::currentCpuArchitecture().toStdString().c_str();
+
+#ifdef __APPLE__
+    system_architecture = processIsTranslated() ? "arm64": "x86_64";
+#endif
+
+    return system_architecture;
 }
 
 GAPI::TelemetryStatus GAPI::getTelemetryStatus()
@@ -165,11 +199,12 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
 		std::string url_std_string = url.toStdString();
         curl_easy_setopt(curl, CURLOPT_URL, url_std_string.c_str());
 
-        //
+        // Obtains System Architecture
+        g_systemArchitecture = (g_systemArchitecture.isEmpty()) ? getSystemArchitecture() : g_systemArchitecture;
+        
         // Create user-agent header with the following structure
-        // AutenticacaoGov/<version> (<OS Name> <OS version>)
-        //
-        QString user_agent = QString(TEL_APP_USER_AGENT) + PTEID_PRODUCT_VERSION + " (" + QSysInfo::prettyProductName().toStdString().c_str() + ")";
+        // AutenticacaoGov/<version> (<OS Name> <OS version> <OS System Architecture>)
+        QString user_agent = QString(TEL_APP_USER_AGENT) + PTEID_PRODUCT_VERSION + " (" + QSysInfo::prettyProductName().toStdString().c_str() + " " + g_systemArchitecture + ")";
         curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent.toStdString().c_str());
         //Validate TLS server certificate using our certificate bundle
         std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
