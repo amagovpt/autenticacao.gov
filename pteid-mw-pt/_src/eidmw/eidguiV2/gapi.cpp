@@ -2204,6 +2204,30 @@ void PDFPreviewImageProvider::doCloseAllDocs() {
     renderMutex.unlock();
 }
 
+bool GAPI::isNotesSupported()
+{
+    BEGIN_TRY_CATCH;
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return false;
+
+    try{
+        // try read personal notes
+        card->readPersonalNotes();
+    } catch (PTEID_Exception e)
+    {
+        if (e.GetError() == EIDMW_ERR_NOT_SUPPORTED)
+            return false;
+        else
+            throw e;
+    };
+
+    END_TRY_CATCH
+
+    return true;
+}
+
 void GAPI::startCardReading() {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "StartCardReading connectToCard");
     QFuture<void> future = Concurrent::run(this, &GAPI::connectToCard);

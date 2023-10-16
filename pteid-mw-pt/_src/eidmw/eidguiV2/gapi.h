@@ -318,6 +318,9 @@ public slots:
     const char *telemetryActionToString(TelemetryAction action);
     static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 
+    // get notes functionality support
+    bool isNotesSupported();
+
     // Slots to Gui request values
     QVariantList getRetReaderList(void);
     int getReaderIndex(void);

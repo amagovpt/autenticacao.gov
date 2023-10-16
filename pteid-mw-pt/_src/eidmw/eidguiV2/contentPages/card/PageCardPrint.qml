@@ -274,7 +274,7 @@ PageCardPrintForm {
             propertySwitchBasic.enabled = true
             propertySwitchAdditional.enabled = true
             propertySwitchAddress.enabled = true
-            propertySwitchNotes.enabled = true
+            propertySwitchNotes.enabled = gapi.isNotesSupported()
             propertySwitchPrintDate.enabled = true
             propertySwitchPdfSign.enabled = true
 
