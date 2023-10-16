@@ -70,7 +70,7 @@ Item {
                                 ? Constants.SIZE_TEXT_LABEL_FOCUS
                                 : Constants.SIZE_TEXT_LABEL
                 font.family: lato.name
-                font.bold: notesText.activeFocus ? true : false
+                font.bold: warningRectText.activeFocus ? true : false
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
                 Accessible.role: Accessible.Column
