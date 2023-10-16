@@ -701,7 +701,7 @@
     </message>
     <message>
         <source>STR_NOTES_NOT_SUPPORTED_DESCRIPTION_PAGE</source>
-        <translation>This functionality is no longer supported for newer versions of the citizenship cards.</translation>
+        <translation>This feature is not available in this Citizen Card.</translation>
     </message>
 </context>
 <context>

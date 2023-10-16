@@ -699,7 +699,7 @@
     </message>
     <message>
         <source>STR_NOTES_NOT_SUPPORTED_DESCRIPTION_PAGE</source>
-        <translation>Esta funcionalidade já não se encontra disponível para novas versões do cartão de cidadão.</translation>
+        <translation>Esta funcionalidade não está disponível neste Cartão de Cidadão.</translation>
     </message>
 </context>
 <context>
