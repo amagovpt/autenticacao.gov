@@ -613,85 +613,25 @@ std::string AutoUpdates::verifyOS(const std::string &param)
 {
     std::string distrostr;
     std::string archstr;
-    QRegExp rx;
-    QStringList list;
-    QString content;
-    QFile osFile("/etc/os-release");
 
     if( QSysInfo::WordSize == 64 )
         archstr = "x86_64";
     else
         archstr = "i386";
+    
     if (param == "arch")
-    {
-        goto done;
-    }
+        return archstr;
 
 #ifdef WIN32
     distrostr = "windows";
     distrostr += QSysInfo::WordSize == 64 ? "64" : "32";
 #elif __APPLE__
     distrostr = "osx";
-#else
-
-
-    if (!osFile.exists())
-    {
-        qDebug() << "Not Linux or too old distro!";
-        distrostr = "unsupported";
-        goto done;
-    }
-
-    if (!osFile.open(QFile::ReadOnly | QFile::Text))
-        goto done;
-
-    rx = QRegExp("NAME=\"?(\\w+)\"?");
-    content = osFile.readAll();
-    rx.indexIn(content);
-    list = rx.capturedTexts();
-    if (list.size() > 1)
-    {
-        distrostr = list.at(1).toStdString();
-    }
-
-    //Normalize distro string to lowercase
-    std::transform(distrostr.begin(), distrostr.end(), distrostr.begin(), ::tolower);
-
-    if (distrostr == "ubuntu") // distinguish ubuntu16, ubuntu18, ...
-    {
-        rx = QRegExp("VERSION_ID=\"(\\d{2}.\\d{2})\"");
-        rx.setMinimal(true);
-        rx.indexIn(content);
-        list = rx.capturedTexts();
-        if (list.size() > 1)
-        {
-            std::string ubuntuVersion = list.at(1).toStdString();
-            std::size_t pos = ubuntuVersion.find(".");
-            if (pos != std::string::npos)
-            {
-                ubuntuVersion = ubuntuVersion.substr(0, pos);
-            }
-            distrostr += ubuntuVersion;
-            qDebug() << "Ubuntu version: " << distrostr.c_str();
-        }
-    }
-    else
-    {
-        // os-release name for openSUSE can have more characters such as version name
-        if (distrostr.find("opensuse") != std::string::npos)
-        {
-            distrostr = "suse";
-        }
-
-        distrostr += QSysInfo::WordSize == 64 ? "64" : "32";
-    }
+#elif __linux__
+    distrostr = "kde";
+    distrostr += QSysInfo::WordSize == 64 ? "64" : "32";
 #endif
-
-done:
-    if (param == "distro")
-        return distrostr;
-    else
-        return archstr;
+    return distrostr;
 }
 
 void AutoUpdates::chooseAppVersion(const std::string &distro, const std::string &arch, cJSON *dist_json)
