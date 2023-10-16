@@ -502,6 +502,7 @@ signals:
     void signalGenericError(const QString error_code);
     void signalSaveCardPhotoFinished(bool success);
     void signalPersoDataLoaded(const QString& persoNotes);
+    void signalPersonalDataNotSupported();
     void signalPdfSignSuccess(int error_code);
     void signalPdfSignFail(int error_code, int index);
     void signalPdfBatchSignFail(int error_code, const QString &filename);

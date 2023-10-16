@@ -695,6 +695,14 @@
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Stay</translation>
     </message>
+    <message>
+        <source>STR_NOTES_PAGE_NOT_SUPPORTED</source>
+        <translation>Not supported</translation>
+    </message>
+    <message>
+        <source>STR_NOTES_NOT_SUPPORTED_DESCRIPTION_PAGE</source>
+        <translation>This functionality is no longer supported for newer versions of the citizenship cards.</translation>
+    </message>
 </context>
 <context>
     <name>PageCardPrint</name>

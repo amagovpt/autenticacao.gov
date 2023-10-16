@@ -294,6 +294,9 @@ APL_EidFile_Sod *APL_EIDCard::getFileSod()
 
 APL_EidFile_PersoData *APL_EIDCard::getFilePersoData()
 {
+	if (m_cardType == APL_CARDTYPE_PTEID_IAS5)
+		throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+
 	if(!m_FilePersoData)
 	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation

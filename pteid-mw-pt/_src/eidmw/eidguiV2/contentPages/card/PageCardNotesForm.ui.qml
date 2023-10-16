@@ -20,6 +20,9 @@ import "../../components" as Components
 Item {
     anchors.fill: parent
 
+    property alias propertyRowText: rowText
+    property alias propertyWarningTextItem: warningTextItem
+    property alias propertyRowNotesCount: rowNotesCount
     property alias propertyFlickNotes: flickable
     property alias propertyEditNotes: edit
     property alias propertyBusyIndicator: busyIndicator
@@ -43,6 +46,63 @@ Item {
         anchors.centerIn: parent
         // BusyIndicator should be on top of all other content
         z: 1
+    }
+
+    Item {
+        id: warningTextItem
+        visible: false
+        width: parent.width
+        height: parent.height * Constants.PAGE_NOTES_TEXT_V_RELATIVE
+        anchors.top: rowTop.bottom
+        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+
+        Rectangle {
+            id: warningRectText
+            width: parent.width
+            height: parent.height
+            opacity: 1
+
+            Text {
+                id: warningNotesText
+                text: qsTranslate("PageCardNotes", "STR_NOTES_PAGE_NOT_SUPPORTED")
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                font.bold: notesText.activeFocus ? true : false
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                Accessible.role: Accessible.Column
+                Accessible.name: text
+                KeyNavigation.tab: warningNotesTextDescription
+                KeyNavigation.down: warningNotesTextDescription
+                KeyNavigation.right: warningNotesTextDescription
+                KeyNavigation.backtab: warningNotesTextDescription
+                KeyNavigation.up: warningNotesTextDescription
+            }
+            Text {
+                id: warningNotesTextDescription
+                text: qsTranslate("PageCardNotes", "STR_NOTES_NOT_SUPPORTED_DESCRIPTION_PAGE")
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                font.bold: notesTextDescription.activeFocus ? true : false
+                color: Constants.COLOR_MAIN_BLACK
+                anchors.top: warningNotesText.bottom
+                anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                width: parent.width - Constants.SIZE_TEXT_FIELD_H_SPACE
+                wrapMode: Text.Wrap
+                Accessible.multiLine: true
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
+                KeyNavigation.tab: warningNotesText
+                KeyNavigation.down: warningNotesText
+                KeyNavigation.right: warningNotesText
+                KeyNavigation.backtab: warningNotesText
+                KeyNavigation.up: warningNotesText
+            }
+        }
     }
 
     Item {

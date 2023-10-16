@@ -693,6 +693,14 @@
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Permanecer</translation>
     </message>
+    <message>
+        <source>STR_NOTES_PAGE_NOT_SUPPORTED</source>
+        <translation>Não suportado</translation>
+    </message>
+    <message>
+        <source>STR_NOTES_NOT_SUPPORTED_DESCRIPTION_PAGE</source>
+        <translation>Esta funcionalidade já não se encontra disponível para novas versões do cartão de cidadão.</translation>
+    </message>
 </context>
 <context>
     <name>PageCardPrint</name>

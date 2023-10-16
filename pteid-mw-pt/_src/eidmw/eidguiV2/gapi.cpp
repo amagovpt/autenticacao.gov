@@ -556,7 +556,17 @@ void GAPI::getPersoDataFile() {
     getCardInstance(card);
     if (card == NULL) return;
 
-    emit signalPersoDataLoaded(QString(card->readPersonalNotes()));
+    try{
+        emit signalPersoDataLoaded(QString(card->readPersonalNotes()));
+    } catch (PTEID_Exception e)
+    {
+        if (e.GetError() == EIDMW_ERR_NOT_SUPPORTED)
+        {
+            signalPersonalDataNotSupported();
+        }
+        else
+            throw e;
+    };
 
     END_TRY_CATCH
 
