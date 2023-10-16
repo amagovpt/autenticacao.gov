@@ -3,6 +3,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "MutualAuthentication.h"
 #include "ByteArray.h"
 #include "cJSON.h"
@@ -52,12 +53,24 @@ namespace eIDMW
             }
     };
 
+    class RA_ECDH2Response {
+        public:
+            std::vector<std::string> external_auth_apdus;
+            int error_code;
+            char *error_msg;
+
+            RA_ECDH2Response() { error_code = 0; error_msg = NULL; }
+    };
+
     CByteArray getSodData(APL_EIDCard *card);
     CByteArray getAuthCert(APL_EIDCard *card);
 
     RA_DHParamsResponse parseDHParamsResponse(const char * json_str);
     RA_SignChallengeResponse parseSignChallengeResponse(const char * json_str);
     RA_GetAddressResponse *validateReadAddressResponse(const char * json_str);
+
+    std::string parseECDH1Response(const char *json_str);
+    RA_ECDH2Response parseECDH2Response(const char * json_str);
 
     cJSON * buildIDObject(APL_EidFile_ID &id_file);
     cJSON * buildAddressObject(APL_EidFile_Address &addr);
@@ -67,6 +80,10 @@ namespace eIDMW
                        CByteArray &sod, CByteArray &auth_cert);
     char * build_json_obj_sign_challenge(char *challenge, char * kicc);
     char * build_json_obj_read_address(CByteArray & set_se_response, CByteArray &internal_authenticate_response);
+
+    //JSON object building functions for new CC2 Remote Address protocol
+    char * build_json_ecdh1(CByteArray &ecdh_params, CByteArray &id_file, CByteArray &sod, CByteArray &auth_cert, std::string &icc_serial);
+    char * build_json_ecdh2(char *ecdh_kicc);
 
 
 }

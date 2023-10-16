@@ -131,6 +131,54 @@ int parseRemoteAddressErrorCode(const char * json_str) {
     return error_code;
 }
 
+std::string parseECDH1Response(const char * json_str) {
+    cJSON *ecdh = cJSON_Parse(json_str);
+    std::string kifd;
+
+    cJSON *item = NULL;
+    if (ecdh == NULL)
+    {
+        MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+        MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
+        return kifd;
+    }
+    item = cJSON_GetObjectItem(ecdh, "ecdh_kifd");
+
+    if (cJSON_IsString(item) && (item->valuestring != NULL)) {
+        kifd.append(item->valuestring);
+    }
+
+    return kifd;
+}
+
+RA_ECDH2Response parseECDH2Response(const char * json_str) {
+    RA_ECDH2Response resp;
+    cJSON *ecdh = cJSON_Parse(json_str);
+    std::string kifd;
+
+    cJSON *apdu_array = NULL;
+    if (ecdh == NULL)
+    {
+        MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+        MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
+        return resp;
+    }
+    apdu_array = cJSON_GetObjectItem(ecdh, "external_auth_apdus");
+
+    //TODO: error handling: external_auth_apdus can be null/empty
+    if (cJSON_IsArray(apdu_array)) {
+        for (int i=0; i < cJSON_GetArraySize(apdu_array); i++) {
+            cJSON * item = cJSON_GetArrayItem(apdu_array, i);
+            if (cJSON_IsString(item))
+                resp.external_auth_apdus.push_back(item->valuestring);
+        }
+    }
+
+    cJSON_Delete(ecdh);
+
+    return resp;
+}
+
 
 RA_DHParamsResponse parseDHParamsResponse(const char * json_str) {
 
@@ -221,6 +269,35 @@ RA_GetAddressResponse * validateReadAddressResponse(const char * json_str) {
     resp->parent_json = cjson_obj;
     return resp;
 }
+
+char * build_json_ecdh1(CByteArray &ecdh_params, CByteArray &id_file,
+                   CByteArray &sod, CByteArray &auth_cert, std::string &icc_serial) {
+    cJSON *parent = cJSON_CreateObject();
+
+    cJSON_AddItemToObject(parent,"ecdh_params", cJSON_CreateString(byteArrayToHexString(ecdh_params)));
+    cJSON_AddItemToObject(parent,"sod", cJSON_CreateString(byteArrayToHexString(sod)));
+    cJSON_AddItemToObject(parent,"auth_cert", cJSON_CreateString(byteArrayToHexString(auth_cert)));
+    cJSON_AddItemToObject(parent,"id_dg13", cJSON_CreateString(byteArrayToHexString(id_file)));
+    cJSON_AddItemToObject(parent,"icc_serial", cJSON_CreateString(icc_serial.c_str()));
+
+    char * json_str = cJSON_PrintUnformatted(parent);
+    cJSON_Delete(parent);
+
+    return json_str;
+
+}
+
+char * build_json_ecdh2(char * ecdh_kicc) {
+    cJSON *parent = cJSON_CreateObject();
+
+    cJSON_AddItemToObject(parent,"ecdh_kicc", cJSON_CreateString(ecdh_kicc));
+
+    char * json_str = cJSON_PrintUnformatted(parent);
+    cJSON_Delete(parent);
+
+    return json_str;
+}
+
 
 cJSON * buildIDObject(APL_EidFile_ID &id_file) {
     cJSON *parent = cJSON_CreateObject();

@@ -378,6 +378,7 @@ private:
 	APL_AddrEId &operator= (const APL_AddrEId& doc);	/**< Copy not allowed - not implemented */
 
 	void loadRemoteAddress();
+    void loadRemoteAddress_CC2();
 	void mapNationalFields(cJSON * json_obj);
 	void mapForeignFields(cJSON * json_obj);
 

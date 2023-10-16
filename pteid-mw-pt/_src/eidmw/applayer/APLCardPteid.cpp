@@ -1407,6 +1407,91 @@ void APL_AddrEId::mapForeignFields(cJSON * json_obj) {
 
 }
 
+void APL_AddrEId::loadRemoteAddress_CC2() {
+    const std::string ENDPOINT_DH =  "/readaddressCC2/ecdh1";
+    const std::string ENDPOINT_DH2 = "/readaddressCC2/ecdh2";
+    
+    std::string url_endpoint_ecdh1, url_endpoint_ecdh2;
+    long exception_code = 0;
+
+    APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
+
+    if (!CConfig::isTestModeEnabled()) {
+        url_endpoint_ecdh1 += conf_baseurl.getString();
+        url_endpoint_ecdh2 += conf_baseurl.getString();
+    }
+    else {
+        APL_Config conf_baseurl_t(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST);
+        url_endpoint_ecdh1 += conf_baseurl_t.getString();
+        url_endpoint_ecdh2 += conf_baseurl_t.getString();
+    }
+
+    url_endpoint_ecdh1 += ENDPOINT_DH;
+    url_endpoint_ecdh2 += ENDPOINT_DH2;
+
+    MutualAuthentication mutual_authentication(m_card);
+    //Read ecdh_params from card
+    CByteArray dummy_dh_params = mutual_authentication.getECDHParams();
+    
+    CByteArray dg13_data;
+    CByteArray sod_data = getSodData(m_card);
+    CByteArray authCert_data;
+
+    std::string serialNumber = m_card->getTokenSerialNumber();
+
+    m_card->readFile(PTEID_FILE_ID_V2, dg13_data);
+
+    m_card->selectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+
+    m_card->readFile(PTEID_FILE_CERT_AUTHENTICATION_V2, authCert_data);
+
+    char * json_str = build_json_ecdh1(dummy_dh_params, dg13_data, sod_data, authCert_data, serialNumber);
+
+    //1st POST
+    PostResponse resp = post_json_remoteaddress(url_endpoint_ecdh1.c_str(), json_str, NULL);
+
+    MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (1) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
+    std::string cookie = parseCookieFromHeaders(resp.http_headers);
+
+    if (cookie.size() > 0) {
+        MWLOG(LEV_DEBUG, MOD_APL, "%s: Received cookie: %s", __FUNCTION__, cookie.c_str());
+    }
+
+    std::string ecdh1_kifd = parseECDH1Response(resp.http_response.c_str());
+
+    if (ecdh1_kifd.empty()) {
+
+        throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+
+    char * kicc = mutual_authentication.generalAuthenticate(ecdh1_kifd.c_str());
+
+    if (!kicc) {
+        MWLOG(LEV_DEBUG, MOD_APL, "%s: Address loading aborted in generalAuthenticate!", __FUNCTION__);
+        throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+
+    json_str = build_json_ecdh2(kicc);
+
+    //1st POST
+    PostResponse resp2 = post_json_remoteaddress(url_endpoint_ecdh2.c_str(), json_str, cookie.c_str());
+
+    MWLOG(LEV_DEBUG, MOD_APL, "%s: 2nd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp2.http_code, resp2.http_response.c_str());
+
+    RA_ECDH2Response ecdh2_obj = parseECDH2Response(resp2.http_response.c_str());
+
+    if (ecdh2_obj.external_auth_apdus.size() == 0) {
+        MWLOG(LEV_DEBUG, MOD_APL, "%s: 2nd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp2.http_code, resp2.http_response.c_str());
+        throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+
+    auto resp_external_auth = mutual_authentication.sendSequenceOfPrebuiltAPDUs(ecdh2_obj.external_auth_apdus);
+
+    fprintf(stderr, "Address loading feature still incomplete, throwing CMWException!\n");
+    throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
+
+}
+
 void APL_AddrEId::loadRemoteAddress() {
 	const std::string ENDPOINT_DH = "/readaddress/sendDHParams";
 	const std::string ENDPOINT_SIGNCHALLENGE = "/readaddress/signChallenge";
@@ -1418,6 +1503,11 @@ void APL_AddrEId::loadRemoteAddress() {
 	if (remoteAddressLoaded) {
 		return;
 	}
+
+    if (m_card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+        loadRemoteAddress_CC2();
+        return;
+    }
 
 	APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
 

@@ -1689,10 +1689,14 @@ void APL_EidFile_Address::doSODCheck(bool check){
 *****************************************************************************************/
 APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card): APL_CardFile(card,PTEID_FILE_SOD,NULL)
 {
+
 }
 
 APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card, const char* csPath) : APL_CardFile(card, csPath, NULL)
 {
+    if (card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+        m_appId = {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)};
+    }
 }
 
 APL_EidFile_Sod::~APL_EidFile_Sod()
