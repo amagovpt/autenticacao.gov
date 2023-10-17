@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?define var.QMLDIR=$(env.PTEID_DIR_QML_x64) ?>
-  <?define var.QMLDIROUTPUT=..\..\..\_Binaries35\x64\Release\qml-app\ ?>
+  <?define var.QMLDIROUTPUT=..\..\..\_Binaries35\x64\Release\ ?>
   <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_5_X64)\plugins\printsupport\?>
   <?define var.PTEID_BUILD_FOLDER_X64=..\..\..\_Binaries35\x64\Release\ ?>
   <Fragment>
