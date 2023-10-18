@@ -109,7 +109,7 @@ Ferramentas adicionais a instalar:
 - Java JDK
 - Wix - disponível em https://wixtoolset.org/releases/
 - Wix Visual Studio Extension - https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2017Extension
-
+- Git for Windows - disponível em https://gitforwindows.org/
 
 Após configurado o ambiente conforme acima descrito, efetuar os seguintes passos:
 
