@@ -276,6 +276,7 @@ bool CDataFile::Load(bool bLock)
 	      if ( szLine.size() > 0 ) // we have a key, add this key/value pair
 		{
 		  t_Str szKey = GetNextWord(szLine);
+		  Trim(szLine);
 		  t_Str szValue = szLine;
 
 		  if ( szKey.size() > 0 && szValue.size() > 0 )
