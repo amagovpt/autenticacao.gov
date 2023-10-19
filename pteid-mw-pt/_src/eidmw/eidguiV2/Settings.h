@@ -414,6 +414,15 @@ public:
 			m_pteid_cachedir = config.getString();
 #endif
         }
+
+        //----------------------------------------------------------
+        // check disabled configurations by admin
+        //----------------------------------------------------------
+        {
+            eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_ADMIN_CONFIG_OPTIONS);
+            long adminConfiguration = config.getLong();
+            setAdminConfiguration(adminConfiguration);
+        }
     }
     //------------------------------------------------------
     // dtor
@@ -896,6 +905,14 @@ public:
         config.setLong(m_iSignSealOptions);
     }
 
+    void setAdminConfiguration(bool adminConfiguration) {
+        m_showAdminConfiguration = adminConfiguration;
+    }
+
+    bool getAdminConfiguration(void) {
+        return m_showAdminConfiguration;
+    }
+
 private:
 
     //Proxy Settings
@@ -913,6 +930,7 @@ private:
     QString m_telemetry_id;
     QString m_telemetry_host;
     long    m_telemetry_status;
+    bool    m_showAdminConfiguration;
     bool    m_bShowAnimations;         //!< the GUI Animations
     int     m_bUseSystemScale;      //!< use the system scale
     int     m_iApplicationScale;    //!< the GUI scale

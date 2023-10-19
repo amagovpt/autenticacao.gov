@@ -1134,3 +1134,8 @@ void AppController::setSignatureOptions(const QVariantList &options) {
 
     return;
 }
+
+bool AppController::getAdminConfiguration()
+{
+    return m_Settings.getAdminConfiguration();
+}

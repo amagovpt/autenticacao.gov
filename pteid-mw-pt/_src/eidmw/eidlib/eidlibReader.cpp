@@ -896,6 +896,8 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 	case PTEID_PARAM_CMD_PASSWORD:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CMD_PASSWORD);			break;
 
+    case PTEID_PARAM_GUITOOL_ADMIN_CONFIG_OPTIONS:
+        m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_ADMIN_CONFIGURATION, APL_Config::SYSTEM_ONLY);	break;
 	default:
 		throw PTEID_ExParamRange();
 	}

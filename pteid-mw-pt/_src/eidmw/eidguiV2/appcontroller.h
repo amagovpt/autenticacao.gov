@@ -157,6 +157,8 @@ public slots:
     void getSignatureOptions();
     void setSignatureOptions(const QVariantList &options);
 
+    bool getAdminConfiguration();
+
 private:
     GUISettings&    m_Settings;
     bool LoadTranslationFile(QString NewLanguage );
