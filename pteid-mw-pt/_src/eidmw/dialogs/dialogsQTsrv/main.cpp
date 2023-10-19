@@ -61,6 +61,7 @@ DlgDisplayPinpadInfoArguments *oInfoData = NULL;
 DlgCMDMessageArguments *oCmdMsgData = NULL;
 dlgWndPinpadInfo *dlgInfo = NULL;
 QDialog *dlg = NULL;
+dlgWndAskCmd *c_dlg = nullptr;
 SharedMem *oShMemory = NULL;
 
 pid_t getPidFromParentid(pid_t parentid, const char *CommandLineToFind);
@@ -88,6 +89,10 @@ void sigint_handler(int sig) {
 			// pinpad
 			delete dlg;
 		}
+	}
+	if (c_dlg) {
+		delete c_dlg;
+		c_dlg = nullptr;
 	}
 	if (oShMemory) {
 		oCmdMsgData->returnValue = DLG_OK;
@@ -603,7 +608,7 @@ int main(int argc, char *argv[]) {
 			  (oData->isValidateOtp ? "true" : "false"), wcslen(oData->inOutId));
 
 		bool askForId = oData->askForId || (wcslen(oData->inOutId) == 0);
-		dlgWndAskCmd *dlg = NULL;
+		c_dlg = nullptr;
 		try {
 			size_t ulOutCodeBufferLen = sizeof(oData->Code) / sizeof(wchar_t);
 			if ((!oData->isValidateOtp && ulOutCodeBufferLen < 9) || (oData->isValidateOtp && ulOutCodeBufferLen < 7)) {
@@ -625,35 +630,35 @@ int main(int argc, char *argv[]) {
 				// userName.append(csUserName, ulUserNameBufferLen);
 			} else {
 				if (oData->operation == DlgCmdOperation::DLG_CMD_SIGNATURE) {
-					sMessage += GETQSTRING_DLG(InsertOtpSignature);
+					sMessage += GETQSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
 				} else if (oData->operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE) {
 					sMessage += GETQSTRING_DLG(InsertOtpCert);
 				}
 			}
 
-			dlg = new dlgWndAskCmd(oData->operation, oData->isValidateOtp, sMessage, &userId, &userName,
-								   oData->callbackWasCalled, askForId, NULL, &parentWndGeometry);
+			c_dlg = new dlgWndAskCmd(oData->operation, oData->isValidateOtp, sMessage, &userId, &userName,
+									 oData->callbackWasCalled, askForId, NULL, &parentWndGeometry);
 
-			if (dlg->exec()) {
-				if (dlg->callCallback()) {
+			if (c_dlg->exec()) {
+				if (c_dlg->callCallback()) {
 					oData->returnValue = DLG_CALLBACK;
 				} else {
 					oData->returnValue = DLG_OK;
 				}
 
 				if (askForId) {
-					wcscpy_s(oData->inOutId, sizeof(oData->inOutId) / sizeof(wchar_t), dlg->getId().c_str());
+					wcscpy_s(oData->inOutId, sizeof(oData->inOutId) / sizeof(wchar_t), c_dlg->getId().c_str());
 				}
 
-				wcscpy_s(oData->Code, sizeof(oData->Code) / sizeof(wchar_t), dlg->getCode().c_str());
+				wcscpy_s(oData->Code, sizeof(oData->Code) / sizeof(wchar_t), c_dlg->getCode().c_str());
 
-				delete dlg;
-				dlg = NULL;
+				delete c_dlg;
+				c_dlg = nullptr;
 				oShMemory.Detach((void *)oData);
 				return 0;
 			}
-			delete dlg;
-			dlg = NULL;
+			delete c_dlg;
+			c_dlg = nullptr;
 		} catch (...) {
 			if (dlg)
 				delete dlg;

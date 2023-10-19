@@ -131,6 +131,8 @@ IDI_ICON2               ICON                    "Images\\error.ico"
 //
 
 IDB_BITMAP3             BITMAP                  "Images\\autenticacao.bmp"
+IDB_BITMAP4             BITMAP                  "Images\\fingerprint.bmp"
+IDB_BITMAP5             BITMAP                  "Images\\person.bmp"
 
 #endif    // Portuguese (Portugal) resources
 /////////////////////////////////////////////////////////////////////////////

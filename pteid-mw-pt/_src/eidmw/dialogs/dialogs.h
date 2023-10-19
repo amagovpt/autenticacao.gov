@@ -158,6 +158,7 @@ const unsigned long DLG_LANG_DEFAULT = 0; // this is no USB LANGID code
 const unsigned long DLG_LANG_EN = 0x0409;
 const unsigned long DLG_LANG_NL = 0x0813;
 
+
 /*************************************************************************************
  * Pin dialogs
  *************************************************************************************/
@@ -233,8 +234,12 @@ DLGS_EXPORT DlgRet DlgDisplayPinpadInfo(DlgPinOperation operation, const wchar_t
 DLGS_EXPORT void DlgClosePinpadInfo(unsigned long ulHandle);
 
 /************************************************************************************
- * CMD dialogs
- ************************************************************************************/
+* CMD dialogs
+************************************************************************************/
+/**
+* Close the CMD OTP Input dialog
+*/
+DLGS_EXPORT void DlgCloseAskInputCMD();
 
 /**
  * Show CMD dialog to obtain CMD PIN or OTP during signature.
@@ -387,11 +392,15 @@ struct WndGeometry {
 };
 typedef struct WndGeometry Type_WndGeometry;
 
-void InitializeRand();
-std::string RandomFileName();
-std::string CreateRandomFile();
-void DeleteFile(const char *csFilename);
-void CallQTServer(const DlgFunctionIndex index, const char *csFilename, void *wndGeometry = 0);
+ void InitializeRand();
+ std::string RandomFileName();
+ std::string CreateRandomFile();
+ void DeleteFile(const char *csFilename);
+ void CallQTServer(    const DlgFunctionIndex index
+                    ,  const char *csFilename
+                    , void *wndGeometry = 0 );
+ void CallQTServerInput(    const DlgFunctionIndex index
+                    ,  const char *csFilename);
 
 DLGS_EXPORT bool getWndCenterPos(Type_WndGeometry *pWndGeometry, int desktop_width, int desktop_height, int wnd_width,
 								 int wnd_height, Type_WndGeometry *outWndGeometry);

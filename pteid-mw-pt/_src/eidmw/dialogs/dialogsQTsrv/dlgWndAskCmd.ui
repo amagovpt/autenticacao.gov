@@ -31,6 +31,97 @@
    <property name="styleSheet">
     <string notr="true"/>
    </property>
+
+  <widget class="QWidget" name="rectFingerPrintIcon">
+    <property name="geometry">
+      <rect>
+      <x>25</x>
+      <y>230</y>
+      <width>430</width>
+      <height>80</height>
+      </rect>
+    </property>
+    <property name="visible">
+      <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+    </property>
+ 
+    <widget class="QLabel" name="lblBiometryTxt">
+      <property name="geometry">
+        <rect>
+        <x>60</x>
+        <y>0</y>
+        <width>360</width>
+        <height>85</height>
+        </rect>
+      </property>
+      <property name="text">
+      <string/>
+      </property>
+      <property name="wordWrap">
+        <bool>true</bool>
+      </property>
+      <property name="visible">
+        <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+        <string notr="true">color : #000000; font-size:12pt; margin: 12px; border: transparent;</string>
+      </property>
+    </widget>
+  </widget> 
+
+   <widget class="QLabel" name="lblFingerPrintIcon">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>250</y>
+      <width>50</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+
+   <widget class="QLabel" name="lblPersonIcon">
+    <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>180</y>
+       <width>57</width>
+       <height>30</height>
+      </rect> 
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+
+   <widget class="QLabel" name="lblOTPTxt">
+    <property name="geometry">
+      <rect>
+      <x>85</x>
+      <y>160</y>
+      <width>360</width>
+      <height>85</height>
+      </rect>
+    </property>
+    <property name="text">
+    <string/>
+    </property>
+    <property name="wordWrap">
+      <bool>true</bool>
+    </property>
+    <property name="visible">
+      <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+      <string notr="true">color : #000000; font-size:12pt; margin: 12px; border: transparent;</string>
+    </property>
+  </widget>
+
    <widget class="QLabel" name="lblHeader">
    <property name="text">
      <string>Attention: You are about to make a legally binding electronic signature with Digital Mobile Key.</string>
@@ -144,7 +235,7 @@
     <property name="geometry">
       <rect>
       <x>25</x>
-      <y>225</y>
+      <y>380</y>
       <width>430</width>
       <height>80</height>
       </rect>
@@ -153,7 +244,7 @@
       <bool>false</bool>
     </property>
     <property name="styleSheet">
-      <string notr="true">border: 2px solid #f1f2f2;</string>
+      <!--string notr="true">border: 2px solid #f1f2f2;</string-->
     </property>
 
     <widget class="QLabel" name="lblSendSms">
@@ -166,21 +257,21 @@
       <property name="geometry">
         <rect>
         <x>0</x>
-        <y>0</y>
-        <width>240</width>
+        <y>10</y>
+        <width>260</width>
         <height>80</height>
         </rect>
       </property>
       <property name="styleSheet">
-        <string notr="true">color : #000000; margin: 13px; border: transparent;</string>
+        <string notr="true">color : #000000; font-size: 12pt ;border: transparent;</string>
       </property>
       </widget>
 
       <widget class="QPushButton" name="btnSendSms">
         <property name="geometry">
           <rect>
-          <x>238</x>
-          <y>25</y>
+          <x>260</x>
+          <y>35</y>
           <width>180</width>
           <height>30</height>
           </rect>
@@ -261,9 +352,9 @@
      <string>background: rgba(0,0,0,0); color: #FF0000; font-size:12pt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lblCaution">
+   <widget class="QLabel" name="lblChoice">
    <property name="text">
-     <string>Attention: You are about to make a legally binding electronic signature with Digital Mobile Key.</string>
+     <string>You have two ways to validate your signature:</string>
     </property>
     <property name="wordWrap">
       <bool>true</bool>
@@ -271,7 +362,7 @@
    <property name="geometry">   
     <rect>
      <x>25</x>
-     <y>370</y>
+     <y>35</y>
      <width>430</width>
      <height>71</height>
     </rect>

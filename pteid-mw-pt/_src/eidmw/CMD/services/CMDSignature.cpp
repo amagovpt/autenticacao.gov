@@ -20,8 +20,12 @@
 #include "Crypto.h"
 #include "eidErrors.h"
 #include "cmdSignatureClient.h"
+#include <mutex>
+#include <chrono>
 
 #define MAX_DOCNAME_LENGTH 44
+// 5 Minutes
+#define TIMEOUT_PERIOD 300
 
 namespace eIDMW {
 
@@ -128,6 +132,7 @@ char *CMDSignature::getCertificateCitizenID() {
 }
 
 int CMDSignature::cli_getCertificate(std::string in_userId) {
+	// Clears Certificates
 	m_certificates.clear();
 	if (m_pdf_handlers.empty() && m_array_handler.Size() == 0) {
 		MWLOG_ERR("NULL handler");
@@ -139,19 +144,23 @@ int CMDSignature::cli_getCertificate(std::string in_userId) {
 			return ERR_NULL_PDF_HANDLER;
 		}
 	}
-
+	// m_certificates is going to be updated by the method
+	// cmdServices is the class that makes the SOAP requests
 	int ret = cmdService->getCertificate(m_proxyInfo, in_userId, m_certificates);
 
 	if (ret != ERR_NONE)
 		return ret;
 
+	// if m_certificates is empty then it failed
 	if (0 == m_certificates.size()) {
 		MWLOG_ERR("getCertificate failed\n");
 		return ERR_GET_CERTIFICATE;
 	}
-
+	// If pdfs exists
 	if (m_pdf_handlers.size() > 0) {
+		// For each pdf
 		for (size_t i = 0; i < m_pdf_handlers.size(); i++) {
+
 			PDFSignature *pdf = m_pdf_handlers[i];
 			if (NULL == pdf) {
 				MWLOG_ERR("NULL Pdf\n");
@@ -176,7 +185,7 @@ int CMDSignature::cli_getCertificate(std::string in_userId) {
 }
 
 int CMDSignature::cli_sendDataToSign(std::string in_pin) {
-
+	// Verifies if the handlers are empty. If they are 0
 	if (m_pdf_handlers.empty() && m_array_handler.Size() == 0) {
 		MWLOG_ERR("NULL handler");
 		return ERR_NULL_PDF_HANDLER;
@@ -299,6 +308,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::str
 		mobile += *mobileNumber;
 	}
 
+	// Opens a dialog that requests a PIN
 	DlgRet ret =
 		CMDSignatureClient::openAuthenticationDialogPIN(DlgCmdOperation::DLG_CMD_SIGNATURE, &pin, &mobile, userName);
 
@@ -311,16 +321,22 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::str
 		return ERR_OP_CANCELLED;
 	else if (ret != ERR_NONE)
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+
+	// std::bind generates a binder
 	std::function<void(void)> cancelRequestCallback = std::bind(&CMDSignature::cancelRequest, this);
+	// CancelRequest closes the socket
 	CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, false, &cancelRequestCallback);
 
 	m_showProgressDialog = CMDSignatureClient::shouldShowProgressDialogs();
 
+	// If the dialog was shown
 	if (m_showProgressDialog) {
 		progressDlgThread.Start();
 	}
 	try {
+		// Sends the signOpen
 		int result = signOpen(proxyinfo, mobile, pin, in_hash, docname);
+		// After signOpen has a response then, the progress dialog is stopped.
 		if (m_showProgressDialog) {
 			progressDlgThread.Stop();
 
@@ -386,19 +402,24 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, const char *location,
 						   const char *reason, const char *outfile_path) {
 	m_userId = in_userId;
+	// Deletes cmdService if it exists
 	if (cmdService) {
 		delete cmdService;
 	}
+	// Creates a new CMD Services
 	cmdService = new CMDServices(m_basicAuthUser, m_basicAuthPassword, m_applicationId);
+	// Creates a new proxy info, which is necessary for each SOAP method
 	m_proxyInfo = proxyinfo;
 	MWLOG(LEV_DEBUG, MOD_CMD, L"Requesting GetCertificate endpoint");
+	// Gets Certificate
 	int ret = cli_getCertificate(in_userId);
 	if (ret != ERR_NONE)
 		return ret;
-
+	// Verifies the size of the pdf handles
 	if (m_pdf_handlers.size() > 0) {
-
+		// An array of filnames
 		std::vector<std::string *> filenames;
+		// For each pdf handler
 		for (size_t i = 0; i < m_pdf_handlers.size(); i++) {
 			PDFSignature *pdf = m_pdf_handlers[i];
 			// output filename should not be trimmed
@@ -433,7 +454,8 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 		if (isDBG) {
 			printf(" Sign String\n");
 			assert(m_docname_handle.size() <= UINT_MAX);
-			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(), (unsigned int) m_docname_handle.size());
+			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(),
+					  (unsigned int)m_docname_handle.size());
 		}
 	}
 	MWLOG(LEV_DEBUG, MOD_CMD, L"Requesting CCMovelSign endpoint");
@@ -441,7 +463,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 	return ret;
 }
 
-int CMDSignature::cli_getSignatures(std::string in_code, std::vector<CByteArray *> out_sign) {
+int CMDSignature::cli_getSignatures(std::vector<CByteArray *> out_sign, std::string in_code) {
 	if (m_pdf_handlers.empty() && m_array_handler.Size() == 0) {
 		MWLOG_ERR("NULL pdf_handlers");
 		return ERR_NULL_PDF_HANDLER;
@@ -454,9 +476,10 @@ int CMDSignature::cli_getSignatures(std::string in_code, std::vector<CByteArray 
 	}
 
 	/* printData */
+	// If it is in debug mode
 	if (isDBG) {
 		assert(in_code.size() <= UINT_MAX);
-		printData((char *)"\nReceived code: ", (unsigned char *)in_code.c_str(), (unsigned int) in_code.size());
+		printData((char *)"\nReceived code: ", (unsigned char *)in_code.c_str(), (unsigned int)in_code.size());
 	}
 
 	std::vector<CByteArray *> cbVector;
@@ -464,14 +487,24 @@ int CMDSignature::cli_getSignatures(std::string in_code, std::vector<CByteArray 
 		cbVector.push_back(new CByteArray());
 	}
 
-	int ret = cmdService->getSignatures(m_proxyInfo, in_code, cbVector);
+	int ret = 0;
+	if (in_code == "") {
 
+		ret = cmdService->getSignatures(m_proxyInfo, cbVector);
+	} else {
+		// This method will result in sending the validateOTP SOAP request
+		ret = cmdService->getSignatures(m_proxyInfo, in_code, cbVector);
+	}
+
+	// If the request got an error
 	if (ret != ERR_NONE) {
+		// Delete and free the cbVector and return the error code
 		for (size_t i = 0; i < cbVector.size(); i++)
 			delete cbVector[i];
 		return ret;
 	}
 
+	// Retrieves the cbVector and copies if to out_sgn
 	for (size_t i = 0; i < out_sign.size(); i++) {
 		out_sign[i]->ClearContents();
 		out_sign[i]->Append((const unsigned char *)cbVector[i]->GetBytes(), cbVector[i]->Size());
@@ -482,15 +515,32 @@ int CMDSignature::cli_getSignatures(std::string in_code, std::vector<CByteArray 
 }
 
 int CMDSignature::signClose() {
+	// The variable that will contain the OTP
 	std::string otp;
+	//The function pointer containing the fsmsCallback
 	std::function<void(void)> fSmsCallback = std::bind(&CMDServices::forceSMS, cmdService, m_proxyInfo, m_userId);
+	// Creates the pooling thread that will be used for SignDocumentPooling
+	CMDPoolingThread poolingThread(this);
+	poolingThread.Start();
+
 	DlgRet ret = CMDSignatureClient::openAuthenticationDialogOTP(DlgCmdOperation::DLG_CMD_SIGNATURE, &otp,
 																 &m_docname_handle, &fSmsCallback);
+	if (poolingThread.m_isRunning) {
+		poolingThread.Stop();
+	}
 
-	if (ret == DLG_CANCEL)
+	if (ret == DLG_CANCEL) {
+		if (poolingThread.getReturn() == ERR_NONE) {
+			return poolingThread.getReturn();
+		}
 		return ERR_OP_CANCELLED;
-	else if (ret != ERR_NONE)
+	} else if (ret != ERR_NONE) {
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	} else {
+		if (poolingThread.getReturn() == ERR_NONE) {
+			return poolingThread.getReturn();
+		}
+	}
 
 	std::function<void(void)> cancelRequestCallback = std::bind(&CMDSignature::cancelRequest, this);
 	CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, true, &cancelRequestCallback);
@@ -516,7 +566,7 @@ int CMDSignature::signClose() {
 	}
 }
 
-int CMDSignature::signClose(std::string in_code) {
+int CMDSignature::signDocumentPooling() {
 	std::vector<CByteArray *> signatures;
 	if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0) {
 		for (size_t i = 0; i < (std::max)(m_pdf_handlers.size(), std::size_t{1}); i++) {
@@ -526,7 +576,11 @@ int CMDSignature::signClose(std::string in_code) {
 		return ERR_NULL_HANDLER;
 	}
 
-	int ret = cli_getSignatures(in_code, signatures);
+	/*
+	   Gets the signatures.
+	   Create another function for a get Signatures, but with the SignDocumentPooling
+	*/
+	int ret = cli_getSignatures(signatures);
 
 	if (ret != ERR_NONE) {
 		for (size_t i = 0; i < m_pdf_handlers.size(); i++)
@@ -576,7 +630,8 @@ int CMDSignature::signClose(std::string in_code) {
 		if (isDBG) {
 			printf("Sign Close String\n");
 			assert(m_docname_handle.size() <= UINT_MAX);
-			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(), (unsigned int) m_docname_handle.size());
+			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(),
+					  (unsigned int)m_docname_handle.size());
 		}
 
 		m_signature = CByteArray(signatures[0]->GetBytes(), signatures[0]->Size());
@@ -585,6 +640,80 @@ int CMDSignature::signClose(std::string in_code) {
 	return ERR_NONE;
 }
 
+// SignClose receives the signatures
+int CMDSignature::signClose(std::string in_code) {
+	std::vector<CByteArray *> signatures;
+	if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0) {
+		for (size_t i = 0; i < (std::max)(m_pdf_handlers.size(), std::size_t{1}); i++) {
+			signatures.push_back(new CByteArray());
+		}
+	} else {
+		return ERR_NULL_HANDLER;
+	}
+
+	/*
+	   Gets the signatures.
+	   Create another function for a get Signatures, but with the SignDocumentPooling
+	*/
+	int ret = cli_getSignatures(signatures, in_code);
+
+	if (ret != ERR_NONE) {
+		for (size_t i = 0; i < m_pdf_handlers.size(); i++)
+			delete signatures[i];
+		return ret;
+	}
+
+	if (m_pdf_handlers.size()) {
+		bool throwTimestampError = false;
+		bool throwLTVError = false;
+		int ret_had_errors = ERR_NONE;
+		for (size_t i = 0; i < m_pdf_handlers.size(); i++) {
+			try {
+				PDFSignature *pdf = m_pdf_handlers[i];
+				// TODO: look for signature with right id and match it
+				CByteArray signature_cba(signatures[i]->GetBytes(), signatures[i]->Size());
+
+				ret = pdf->signClose(signature_cba);
+			} catch (CMWException &e) {
+				if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR) {
+					throw CMWEXCEPTION(e.GetError());
+				}
+				if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
+					throwTimestampError = true;
+				else
+					throwLTVError = true;
+			}
+
+			if (ret != ERR_NONE) {
+				ret_had_errors = ret;
+				MWLOG_ERR("SignClose failed");
+			}
+			if (isDBG) {
+				printData((char *)"\nSignature: ", (unsigned char *)signatures[i]->GetBytes(), signatures[i]->Size());
+			}
+		}
+
+		if (throwLTVError)
+			throw CMWEXCEPTION(EIDMW_LTV_ERROR);
+
+		if (throwTimestampError)
+			throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
+
+		if (ret_had_errors != ERR_NONE)
+			return ERR_SIGN_CLOSE;
+	} else {
+		if (isDBG) {
+			printf("Sign Close String\n");
+			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
+		}
+
+		m_signature = CByteArray(signatures[0]->GetBytes(), signatures[0]->Size());
+	}
+
+	return ERR_NONE;
+}
+
+// Calls the function that will send the forceSMS SOAP request
 int CMDSignature::sendSms() { return cmdService->forceSMS(m_proxyInfo, m_userId); }
 
 } // namespace eIDMW

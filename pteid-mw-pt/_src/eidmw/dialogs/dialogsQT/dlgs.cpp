@@ -53,6 +53,8 @@ unsigned long dlgPinPadInfoCollectorIndex = 0;
 std::map<unsigned long, DlgRunningProc *> dlgCMDMsgCollector;
 unsigned long dlgCMDMsgCollectorIndex = 0;
 
+pid_t current_dlg_pid = 0;
+
 std::string csServerName = "pteiddialogsQTsrv";
 
 bool bRandInitialized = false;
@@ -379,7 +381,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 			wcsncpy(oData->inOutId, csInOutId, ulOutIdLen);
 		}
 
-		CallQTServer(DLG_ASK_CMD_INPUT, csReadableFilePath.c_str(), NULL);
+		// CallQTServer(DLG_ASK_CMD_INPUT,csReadableFilePath.c_str(), NULL);
+		CallQTServerInput(DLG_ASK_CMD_INPUT, csReadableFilePath.c_str());
 		lRet = oData->returnValue;
 
 		/* If the callback button to send the sms was pressed, call callback and reopen the dialog.
@@ -387,7 +390,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 		if (oData->returnValue == DLG_CALLBACK) {
 			(*fSendSmsCallback)();
 			oData->callbackWasCalled = true;
-			CallQTServer(DLG_ASK_CMD_INPUT, csReadableFilePath.c_str(), NULL);
+			// CallQTServer(DLG_ASK_CMD_INPUT,csReadableFilePath.c_str(), NULL );
+			CallQTServerInput(DLG_ASK_CMD_INPUT, csReadableFilePath.c_str());
 			lRet = oData->returnValue;
 		}
 
@@ -577,6 +581,17 @@ DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle) {
 	}
 }
 
+DLGS_EXPORT void eIDMW::DlgCloseAskInputCMD() {
+	// If the current_dlg_pid is different than 0
+	if (current_dlg_pid != 0) {
+		// If the process is running
+		if (!kill(current_dlg_pid, 0)) {
+			// Kills the process
+			kill(current_dlg_pid, SIGINT);
+		}
+	}
+}
+
 /***************************
  *       Helper Functions
  ***************************/
@@ -656,12 +671,42 @@ void eIDMW::CallQTServer(const DlgFunctionIndex index, const char *csFilename, v
 				pWndGeometry->height);
 	}
 
+	std::cout << csCommand << std::endl;
 	int code = system(csCommand);
 	if (code != 0) {
 		MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServer %i %s : %s ", index,
 			  csFilename, strerror(errno));
 		if (!g_bSystemCallsFail)
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	}
+	return;
+}
+
+void eIDMW::CallQTServerInput(const DlgFunctionIndex index, const char *csFilename) {
+
+	char csPath[150];
+	std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
+#ifdef __APPLE__
+	csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/";
+#endif
+
+	sprintf(csPath, "%s/%s", csServerPath.c_str(), csServerName.c_str());
+
+	std::vector<const char *> argv;
+	argv.push_back(csServerName.c_str());
+	argv.push_back(std::to_string(index).c_str());
+	argv.push_back(csFilename);
+	argv.push_back(NULL);
+
+	int pid = fork();
+	if (pid == 0) {
+		// Execs the process
+		execv(csPath, const_cast<char *const *>(argv.data()));
+	} else {
+		current_dlg_pid = pid;
+		// Waits for the execv to end;
+		wait(NULL);
+		current_dlg_pid = 0;
 	}
 	return;
 }

@@ -30,15 +30,20 @@ using namespace eIDMW;
 
 class dlgWndAskCmd : public Win32Dialog {
 	PteidControls::TextData titleData, headerData, linkData, boxTextData, mobileNumberFieldData, docIdTextData,
-		sendSmsTextData, cautionData;
+		sendSmsTextData, biometryTextData, cautionData, choiceTitleData, OTPTextData;
 	PteidControls::TextFieldData textFieldCodeData, textFieldIdData;
 	PteidControls::ButtonData okBtnProcData, cancelBtnProcData, sendSmsBtnData;
 	PteidControls::ComboBoxData mobilePrefixData;
 
 	void GetResult();
 	HWND hStaticBox;
-	HWND hSendSmsBox;
+	HWND hOTPBox;
+	HWND hBiometryBox;
+	HWND hSendSMSBox;
 	bool m_askForId;
+	HBITMAP m_hFingerprintIcon;
+	HBITMAP m_hPersonIcon;
+	bool m_isValidateOtp;
 
 	std::function<void(void)> *m_fSendSmsCallback;
 
@@ -54,4 +59,8 @@ public:
 	virtual LRESULT ProcecEvent(UINT uMsg,		// Message For This Window
 								WPARAM wParam,	// Additional Message Information
 								LPARAM lParam); // Additional Message Information
+
+	void stopExec();
+	void DrawFingerprintIcon(HDC hdc, HWND hwnd);
+	void DrawPersonIcon(HDC hdc, HWND hwnd);
 };

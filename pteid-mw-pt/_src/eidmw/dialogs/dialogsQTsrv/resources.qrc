@@ -1,6 +1,8 @@
 <RCC>
   <qresource>
     <file>images/autenticacao.bmp</file>
+    <file>images/person.bmp</file>
+    <file>images/fingerprint.bmp</file>
     <file>images/downarrow.png</file>
     <file>images/error.ico</file>
     <file>images/appicon.ico</file>

@@ -44,6 +44,12 @@
     <ClCompile Include="cmdSignatureClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="struct_timeval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="struct_tm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cmdErrors.h">
@@ -74,6 +80,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cmdSignatureClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="struct_timeval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="struct_tm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

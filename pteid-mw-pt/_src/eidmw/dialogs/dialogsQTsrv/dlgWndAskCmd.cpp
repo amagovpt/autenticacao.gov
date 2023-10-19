@@ -36,9 +36,11 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, QStrin
 	ui.setupUi(this);
 
 	/* the otp dialog is taller by otpDialogStretch px.*/
-	int otpDialogStretch = 70;
+	int otpDialogStretch = 40;
 	int otpCautionStretch = 40;
-	int height = (isValidateOtp ? this->height() + otpDialogStretch + otpCautionStretch : this->height());
+	int biometryStretch = 70;
+	int height =
+		(isValidateOtp ? this->height() + otpDialogStretch + otpCautionStretch + biometryStretch : this->height());
 	setFixedSize(this->width(), height);
 
 	// TODO: this should come from a pin info struct. (same for Win32 dialogs)
@@ -101,25 +103,22 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, QStrin
 		ui.lblCode->move(ui.lblCode->x(), ui.lblCode->y() - 20);
 	}
 
-	// DOCUMENT IDENTIFIER BOX
-	if (isValidateOtp) {
-		if (operation == DlgCmdOperation::DLG_CMD_SIGNATURE) {
-			ui.lblDocumentId->setVisible(true);
-			QString documentIdLabel = QString::fromWCharArray(GETSTRING_DLG(SigningDataWithIdentifier));
-			documentIdLabel += "<br><b>\"";
-			documentIdLabel += QString::fromWCharArray(inOutId->c_str());
-			documentIdLabel += "\"</b>";
-			ui.lblDocumentId->setText(documentIdLabel);
-		} else if (operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE) {
-			ui.lblHeader->move(ui.lblHeader->x(),
-							   ui.lblHeader->y() + 70); // there is no id box => fill the space by moving header down
-		}
-	}
-
 	// ICON
 	QPixmap pix(":/images/autenticacao.bmp");
 	ui.lblIcon->setPixmap(pix);
 	ui.lblIcon->setScaledContents(true);
+
+	// FingerPrint ICON
+	QPixmap pixFinger(":/images/fingerprint.bmp");
+	QPixmap pixPerson(":/images/person.bmp");
+	ui.lblFingerPrintIcon->setPixmap(pixFinger);
+	ui.lblPersonIcon->setPixmap(pixPerson);
+	ui.lblFingerPrintIcon->setScaledContents(true);
+	ui.lblPersonIcon->setScaledContents(true);
+	if (!isValidateOtp || operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE) {
+		ui.lblFingerPrintIcon->setVisible(false);
+		ui.lblPersonIcon->setVisible(false);
+	}
 
 	// ENTER YOUR MOBILE
 	if (!isValidateOtp) {
@@ -176,16 +175,20 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, QStrin
             image: url(:/images/downarrow.png); width: 10px; }");
 	} else {
 		m_Id_OK = true;
-		QString sendSmsLabel = QString::fromWCharArray(GETSTRING_DLG(ToSendSmsPress));
-		sendSmsLabel += " \"";
-		sendSmsLabel += QString::fromWCharArray(GETSTRING_DLG(SendSms));
-		sendSmsLabel += "\".";
+		QString sendSmsLabel = QString::fromWCharArray(GETSTRING_DLG(IfNotReceived));
 		ui.lblClickToActivate->setVisible(false);
 		ui.lblSendSms->setText(sendSmsLabel);
+		QString BiometryTxt = QString::fromWCharArray(GETSTRING_DLG(BiometricAppInfo));
+		ui.lblBiometryTxt->setText(BiometryTxt);
+		ui.lblBiometryTxt->setVisible(true);
+		QString OTPTxt = QString::fromWCharArray(GETSTRING_DLG(InsertOtpSignature));
+		ui.lblOTPTxt->setText(OTPTxt);
+		ui.lblOTPTxt->setVisible(true);
 		ui.lblMobile->setVisible(false);
 		ui.txtMobile->setVisible(false);
 		ui.listCountryCode->setVisible(false);
 		ui.rectSendSms->setVisible(true);
+		ui.rectFingerPrintIcon->setVisible(true);
 		QString btnSmsText = QString::fromWCharArray(GETSTRING_DLG(SendSms));
 		ui.btnSendSms->setText(btnSmsText);
 		ui.btnSendSms->setStyleSheet(
@@ -219,12 +222,14 @@ QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
 	// CAUTION MESSAGE
 	if (isValidateOtp) {
-		QString Caution;
-		Caution += QString::fromWCharArray(GETSTRING_DLG(Caution));
-		Caution += " ";
-		Caution += QString::fromWCharArray(GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd));
-		ui.lblCaution->setText(Caution);
-		ui.lblCaution->setAccessibleName(Caution);
+		QString Choice;
+		Choice += QString::fromWCharArray(GETSTRING_DLG(ChoiceCMD));
+		ui.lblChoice->setText(Choice);
+		ui.lblChoice->setAccessibleName(Choice);
+		// Moved down to accomodate space for the biometry warning
+		ui.lblChoice->move(ui.lblChoice->x(), ui.lblChoice->y() + biometryStretch);
+	} else {
+		ui.lblChoice->setVisible(false);
 	}
 
 	// OK BUTTON
@@ -241,11 +246,13 @@ QPushButton:hover{background-color: #C6C7C7}");
 
 	/* If validate otp dialog, move some widgets down since the dialog is taller (make room for "send SMS" button).*/
 	if (isValidateOtp) {
-		ui.widget->resize(ui.widget->width(), ui.widget->height() + otpDialogStretch + otpCautionStretch);
-		ui.btnOk->move(ui.btnOk->x(), ui.btnOk->y() + otpDialogStretch + otpCautionStretch);
-		ui.btnCancel->move(ui.btnCancel->x(), ui.btnCancel->y() + otpDialogStretch + otpCautionStretch);
-		ui.txtCode->move(ui.txtCode->x(), ui.txtCode->y() + otpDialogStretch + 10);
-		ui.lblCode->move(ui.lblCode->x(), ui.lblCode->y() + otpDialogStretch + 10);
+		ui.widget->resize(ui.widget->width(),
+						  ui.widget->height() + otpDialogStretch + otpCautionStretch + biometryStretch);
+		ui.btnOk->move(ui.btnOk->x(), ui.btnOk->y() + otpDialogStretch + otpCautionStretch + biometryStretch);
+		ui.btnCancel->move(ui.btnCancel->x(),
+						   ui.btnCancel->y() + otpDialogStretch + otpCautionStretch + biometryStretch);
+		ui.txtCode->move(ui.txtCode->x(), ui.txtCode->y() + otpDialogStretch + biometryStretch);
+		ui.lblCode->move(ui.lblCode->x(), ui.lblCode->y() + otpDialogStretch + biometryStretch);
 	}
 
 	Type_WndGeometry WndGeometry;

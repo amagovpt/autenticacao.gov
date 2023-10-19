@@ -17,6 +17,7 @@
 #include "APLCertif.h"
 #include "dialogs.h"
 #include "Thread.h"
+#include <mutex>
 
 using namespace eIDMW;
 
@@ -108,6 +109,29 @@ private:
 	bool m_isOtp;
 	bool m_wasCancelled = false;
 	std::function<void(void)> *m_fCancelCallback = NULL;
+	unsigned long m_dlgHandle = 0;
+	unsigned long m_oldDlgHandle = 0;
+};
+
+/* Do signDocumentPooling in a different thread. */
+class CMDPoolingThread : public CThread {
+public:
+	CMDPoolingThread(CMDSignature *m_signature);
+
+	void Run() override;
+
+	void Stop(unsigned long ulSleepFrequency = 100) override;
+
+	bool wasCancelled() { return m_wasCancelled; };
+
+	int getReturn() { return m_return; };
+
+private:
+	DlgCmdOperation m_operation;
+
+	bool m_wasCancelled = false;
+	CMDSignature *m_signature;
+	int m_return = ERR_ADDR_USER_BASE;
 	unsigned long m_dlgHandle = 0;
 	unsigned long m_oldDlgHandle = 0;
 };

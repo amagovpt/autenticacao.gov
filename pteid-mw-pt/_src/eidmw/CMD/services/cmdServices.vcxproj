@@ -243,6 +243,8 @@
     <ClCompile Include="soapC.cpp" />
     <ClCompile Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp" />
     <ClCompile Include="stdsoap2.cpp" />
+    <ClCompile Include="struct_timeval.cpp" />
+    <ClCompile Include="struct_tm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cmdCertificates.h" />
@@ -255,6 +257,8 @@
     <ClInclude Include="soapStub.h" />
     <ClInclude Include="soapBasicHttpBinding_USCORECCMovelSignatureProxy.h" />
     <ClInclude Include="stdsoap2.h" />
+    <ClInclude Include="struct_timeval.h" />
+    <ClInclude Include="struct_tm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

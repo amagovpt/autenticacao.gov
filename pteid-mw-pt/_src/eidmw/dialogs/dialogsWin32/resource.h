@@ -31,6 +31,8 @@
 #define IDI_ICON1 143
 #define IDI_ICON2 145
 #define IDB_BITMAP3 146
+#define IDB_BITMAP4 148
+#define IDB_BITMAP5 149
 #define SVN_REVISION 6483
 
 // Next default values for new objects

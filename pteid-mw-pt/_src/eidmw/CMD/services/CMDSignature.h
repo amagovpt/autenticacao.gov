@@ -69,6 +69,7 @@ public:
 							  std::string *mobileCache = NULL); // mobileNumber used for placeholder (cache)
 
 	PTEIDCMD_API int signClose();
+	PTEIDCMD_API int signDocumentPooling();
 	PTEIDCMD_API int signClose(std::string in_code);
 	PTEIDCMD_API void cancelRequest();
 	PTEIDCMD_API int sendSms();
@@ -103,12 +104,14 @@ private:
 	CMDProxyInfo m_proxyInfo;
 	int cli_getCertificate(std::string in_userId);
 	int cli_sendDataToSign(std::string in_pin);
-	int cli_getSignatures(std::string in_code, std::vector<CByteArray *> out_sign);
+	// Get Signatures used 
+	int cli_getSignatures(std::vector<CByteArray *> out_sign, std::string in_code = "");
 
 	std::string m_basicAuthUser;
 	std::string m_basicAuthPassword;
 	std::string m_applicationId;
 };
+
 } // namespace eIDMW
 
 #endif

@@ -63,41 +63,48 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 	// Added for accessibility
 	tmpTitle += Header.c_str();
 
-	int Height = (isValidateOtp ? 490 : 360);
+	int Height = (isValidateOtp ? 450 : 360);
 	int Width = 430;
+	m_isValidateOtp = isValidateOtp;
 
 	if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent)) {
+		// After creating the window, a rectangle representing the window is created
 		RECT clientRect;
 		GetClientRect(m_hWnd, &clientRect);
 
 		int contentX = (int)(clientRect.right * 0.05);
 		int contentWidth = (int)(clientRect.right - 2 * contentX);
 		int paddingY = contentX;
-		int titleHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.12 : 0.14));
+		int titleHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.1 : 0.14));
 		int titleWidth = (int)(contentWidth * 0.9);
 		int headerY = (int)(titleHeight + paddingY);
-		int textBoxY = (int)(clientRect.bottom * (isValidateOtp ? 0.25 : 0.25));
-		int boxHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.18 : 0.23));
+		int boxHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.13 : 0.23));
 		int linkY = (int)(clientRect.bottom * 0.20);
 		int editIdX = (int)(clientRect.right * 0.6);
 		int editIdY = (int)(clientRect.bottom * 0.30);
 		int boxSeparationSpace = (int)(clientRect.right * 0.02);
-		int editCodeY = (int)(clientRect.bottom * (isValidateOtp ? 0.6 : 0.5));
+		int editCodeY = (int)(clientRect.bottom * (isValidateOtp ? 0.56 : 0.5));
 		int editLabelHeight = (int)(clientRect.bottom * 0.06);
-		int editFieldHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.135 : 0.165));
+		int editFieldHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.140 : 0.165));
 		int buttonWidth = (int)(clientRect.right * 0.43);
 		int buttonHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.066 : 0.08));
 		int buttonY = (int)(clientRect.bottom - paddingY - buttonHeight);
-		// send SMS box
-		int sendSmsBoxY = (int)(textBoxY + boxHeight + paddingY);
-		int sendSmsButtonX = (int)(1.5 * contentX + contentWidth - buttonWidth);
-
-		int cautionY = (int)(buttonY - paddingY * 2);
+		// Choice Text
+		int choiceY = (int)(clientRect.bottom * 0.24);
+		// OTP box
+		int OTPBoxY = (int)((isValidateOtp ? choiceY + paddingY : clientRect.bottom * 0.25));
+		// Biometry box
+		int biometryBoxY = (int)(OTPBoxY + boxHeight / 2 + paddingY);
+		int biometryBoxHeight = (int)(clientRect.bottom * (isValidateOtp ? 0.18 : 0.23));
+		//  SENDSMS link
+		int smsTextY = (int)(editCodeY + editFieldHeight + 1.5 * paddingY);
+		// int cautionY = (int)(buttonY - paddingY * 2);
 
 		// TITLE
 		std::wstring title;
 		switch (operation) {
 		case DlgCmdOperation::DLG_CMD_SIGNATURE:
+			// ASSINAR COM CMD
 			title.append(GETSTRING_DLG(SigningWith)).append(L" ").append(GETSTRING_DLG(CMD));
 			break;
 		case DlgCmdOperation::DLG_CMD_GET_CERTIFICATE:
@@ -124,27 +131,16 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 			}
 			HWND hHeader = PteidControls::CreateText(contentX, headerY, contentWidth, titleHeight, m_hWnd,
 													 (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
-
-			// CAUTION
-			std::wstring cautionText;
-			cautionData.font = PteidControls::StandardFontBold;
-			cautionText = GETSTRING_DLG(Caution);
-			cautionText += L" ";
-			cautionText += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
-			cautionData.text = cautionText.c_str();
-			HWND hCaution = PteidControls::CreateText(contentX, cautionY, contentWidth, titleHeight, m_hWnd,
-													  (HMENU)IDC_STATIC_HEADER, m_hInstance, &cautionData);
 		}
 
 		// BOX W/ TEXT
 		if (!m_askForId && operation == DlgCmdOperation::DLG_CMD_SIGNATURE) {
-			// box
-			hStaticBox = CreateWindow(L"STATIC", NULL, WS_CHILD | WS_VISIBLE, contentX, textBoxY, contentWidth,
-									  boxHeight, m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
-
 			// text
-			std::wstring boxText;
 			if (!isValidateOtp) {
+				std::wstring boxText;
+				int textBoxY = (int)(clientRect.bottom * 0.25);
+				hStaticBox = CreateWindow(L"STATIC", NULL, WS_CHILD | WS_VISIBLE, contentX, textBoxY, contentWidth,
+					boxHeight, m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
 				*userName = userName->substr(0, MAX_USERNAME_LENGTH);
 				boxText = GETSTRING_DLG(TheChosenCertificateIsFrom);
 				boxText += L" ";
@@ -154,26 +150,10 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 				boxText += L" ";
 				boxText += inId->c_str();
 				boxText += L".";
-			} else {
-				boxText += GETSTRING_DLG(SigningDataWithIdentifier);
-			}
-
-			boxTextData.text = boxText.c_str();
-			HWND hBoxText = PteidControls::CreateText(
-				(int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.12), (int)(contentWidth * 0.94),
-				(int)(boxHeight * 0.75), m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &boxTextData);
-
-			// docId
-			if (isValidateOtp) {
-				std::wstring docId;
-				docId.append(L"\"").append(*inId).append(L"\"");
-
-				docIdTextData.font = PteidControls::StandardFontBold;
-				docIdTextData.text = docId.c_str();
-				HWND hDocIdText =
-					PteidControls::CreateText((int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.33),
-											  (int)(contentWidth * 0.94), (int)(boxHeight * 0.65), m_hWnd,
-											  (HMENU)IDC_STATIC_OTP, m_hInstance, &docIdTextData);
+				boxTextData.text = boxText.c_str();
+				HWND hBoxText = PteidControls::CreateText(
+					(int)(contentX + contentWidth * 0.03), (int)(textBoxY + boxHeight * 0.12), (int)(contentWidth * 0.94),
+					(int)(boxHeight * 0.75), m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &boxTextData);
 			}
 		}
 		// INSERT USERID TEXT EDIT
@@ -229,25 +209,37 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 			SetFocus(textFieldIdData.getMainWnd());
 		}
 
-		// SEND SMS BOX
+		// OTP BOX
 		if (isValidateOtp) {
-			hSendSmsBox = CreateWindow(L"STATIC", NULL, WS_CHILD | WS_VISIBLE, contentX, sendSmsBoxY, contentWidth,
-									   buttonHeight + 2 * paddingY, m_hWnd, (HMENU)IDC_SEND_SMS_BOX, m_hInstance, NULL);
+			hOTPBox = CreateWindow(L"STATIC", NULL, WS_CHILD, contentX, OTPBoxY, contentWidth,
+								   buttonHeight + 2 * paddingY, m_hWnd, (HMENU)IDC_SEND_SMS_BOX, m_hInstance, NULL);
 
-			std::wstring sendSmsText;
+			/*std::wstring sendSmsText;
 			sendSmsText = GETSTRING_DLG(ToSendSmsPress);
 			sendSmsText += L" \"";
 			sendSmsText += GETSTRING_DLG(SendSms);
 			sendSmsText += L"\".";
 			sendSmsTextData.text = sendSmsText.c_str();
-			HWND hSendSmsText = PteidControls::CreateText(
-				(int) (1.5 * contentX), (int) (sendSmsBoxY + 0.77 * paddingY), contentWidth - buttonWidth - contentX,
-				buttonHeight + 2 * paddingY, m_hWnd, (HMENU)IDC_SEND_SMS_TEXT, m_hInstance, &sendSmsTextData);
+			*/
+			std::wstring OTPText;
+			OTPText = GETSTRING_DLG(InsertOTP);
+			OTPTextData.text = OTPText.c_str();
+			HWND hOTPText = PteidControls::CreateText(contentX + contentWidth * 0.15, OTPBoxY + 0.5 * paddingY,
+													  contentWidth * 0.75, buttonHeight + 2 * paddingY, m_hWnd,
+													  (HMENU)IDC_SEND_SMS_TEXT, m_hInstance, &OTPTextData);
+		}
 
-			sendSmsBtnData.text = GETSTRING_DLG(SendSms);
-			HWND hSendSmsButton =
-				PteidControls::CreateButton(sendSmsButtonX, sendSmsBoxY + paddingY, buttonWidth - contentX,
-											buttonHeight, m_hWnd, (HMENU)IDB_SEND_SMS, m_hInstance, &sendSmsBtnData);
+		// BIOMETRY BOX
+		if (isValidateOtp) {
+			// CreateWindowA(lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance,
+			// lpParam)
+			hBiometryBox = CreateWindow(L"STATIC", NULL, WS_CHILD, contentX, biometryBoxY, contentWidth,
+										biometryBoxHeight, m_hWnd, (HMENU)IDC_STATIC_BOX, m_hInstance, NULL);
+			std::wstring biometryText = GETSTRING_DLG(BiometricAppInfo);
+			biometryTextData.text = biometryText.c_str();
+			HWND hBiometryText = PteidControls::CreateText(
+				contentX + contentWidth * 0.15, biometryBoxY + 0.5 * paddingY, contentWidth * 0.75,
+				buttonHeight + 4 * paddingY, m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &biometryTextData);
 		}
 
 		// CODE TEXT EDIT
@@ -281,6 +273,40 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 		HWND OK_Btn =
 			PteidControls::CreateButton((int)(clientRect.right - buttonWidth - contentX), buttonY, buttonWidth,
 										buttonHeight, m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
+
+		if (isValidateOtp) {
+			int fingerprintIconWidth = 40;
+			int fingerprintIconHeight = 42;
+			ScaleDimensions(&fingerprintIconWidth, &fingerprintIconHeight);
+			m_hFingerprintIcon = (HBITMAP)LoadImage(m_hInstance, MAKEINTRESOURCE(IDB_BITMAP4), IMAGE_BITMAP,
+													fingerprintIconWidth, fingerprintIconHeight, NULL);
+
+			int personIconWidth = 40;
+			int personIconHeight = 21;
+			ScaleDimensions(&personIconWidth, &personIconHeight);
+			m_hPersonIcon = (HBITMAP)LoadImage(m_hInstance, MAKEINTRESOURCE(IDB_BITMAP5), IMAGE_BITMAP, personIconWidth,
+											   personIconHeight, NULL);
+
+			std::wstring choiceText = GETSTRING_DLG(ChoiceCMD);
+			choiceTitleData.text = choiceText.c_str();
+			choiceTitleData.font = PteidControls::StandardFontBold;
+
+			HWND hChoiceText = PteidControls::CreateText(contentX, choiceY, contentWidth, paddingY, m_hWnd,
+														 (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &choiceTitleData);
+
+			std::wstring sendSmsText;
+			sendSmsText = GETSTRING_DLG(IfNotReceived);
+			sendSmsTextData.text = sendSmsText.c_str();
+
+			HWND hSendSMSText =
+				PteidControls::CreateText(contentX, smsTextY + buttonHeight * 0.25, contentWidth, paddingY, m_hWnd,
+										  (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &sendSmsTextData);
+
+			sendSmsBtnData.text = GETSTRING_DLG(SendSms);
+			HWND hSendSmsButton =
+				PteidControls::CreateButton(contentX + contentWidth - buttonWidth * 0.85, smsTextY, buttonWidth * 0.85,
+											buttonHeight, m_hWnd, (HMENU)IDB_SEND_SMS, m_hInstance, &sendSmsBtnData);
+		}
 	}
 }
 
@@ -374,11 +400,11 @@ LRESULT dlgWndAskCmd::ProcecEvent(UINT uMsg,	 // Message For This Window
 		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskCmd::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam,
 			  lParam);
 		SetBkColor(hdcStatic, TRANSPARENT);
-		if ((HWND)lParam == hStaticBox || (HWND)lParam == hSendSmsBox) {
+		if ((HWND)lParam == hStaticBox || (HWND)lParam == hOTPBox) {
 			if (m_hbrBkgnd != NULL) {
 				DeleteObject(m_hbrBkgnd);
 			}
-			m_hbrBkgnd = CreateSolidBrush(((HWND)lParam == hSendSmsBox ? WHITE : LIGHTGREY));
+			m_hbrBkgnd = CreateSolidBrush(((HWND)lParam == hOTPBox ? WHITE : LIGHTGREY));
 			return (INT_PTR)m_hbrBkgnd;
 		}
 
@@ -402,15 +428,14 @@ LRESULT dlgWndAskCmd::ProcecEvent(UINT uMsg,	 // Message For This Window
 		HPEN pen = CreatePen(PS_INSIDEFRAME, penWidth, LIGHTGREY);
 		SelectObject(m_hDC, pen);
 		SetBkMode(m_hDC, TRANSPARENT);
-		RECT rectSmsBoxInClientCoord;
-		GetClientRect(hSendSmsBox, &rectSmsBoxInClientCoord);
-		MapWindowPoints(hSendSmsBox, m_hWnd, (LPPOINT)&rectSmsBoxInClientCoord, 2);
-		Rectangle(m_hDC, rectSmsBoxInClientCoord.left - penWidth, rectSmsBoxInClientCoord.top - penWidth,
-				  rectSmsBoxInClientCoord.right + penWidth, rectSmsBoxInClientCoord.bottom + penWidth);
+		if (m_isValidateOtp) {
+
+			DrawFingerprintIcon(m_hDC, m_hWnd);
+			DrawPersonIcon(m_hDC, m_hWnd);
+		}
 		DeleteObject(pen);
 
 		EndPaint(m_hWnd, &ps);
-
 		SetForegroundWindow(m_hWnd);
 
 		return 0;
@@ -469,4 +494,48 @@ LRESULT dlgWndAskCmd::ProcecEvent(UINT uMsg,	 // Message For This Window
 		break;
 	}
 	return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
+}
+
+void dlgWndAskCmd::stopExec() {
+	m_ModalHold = false;
+	PostMessage(m_hWnd, WM_CLOSE, 0, 0);
+}
+
+void dlgWndAskCmd::DrawFingerprintIcon(HDC hdc, HWND hwnd) {
+	BITMAP bitmap;
+	HDC hdcMem = CreateCompatibleDC(m_hDC);
+	HGDIOBJ oldBitmap = SelectObject(hdcMem, m_hFingerprintIcon);
+
+	RECT rectBiometryBoxInClientCoord;
+	GetClientRect(hBiometryBox, &rectBiometryBoxInClientCoord);
+	MapWindowPoints(hBiometryBox, m_hWnd, (LPPOINT)&rectBiometryBoxInClientCoord, 2);
+	int iconMarginX = 30;
+	int iconMarginY = 15;
+	ScaleDimensions(&iconMarginX, &iconMarginY);
+
+	GetObject(m_hFingerprintIcon, sizeof(bitmap), &bitmap);
+	BitBlt(m_hDC, rectBiometryBoxInClientCoord.left, rectBiometryBoxInClientCoord.top + iconMarginY, bitmap.bmWidth,
+		   bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+
+	SelectObject(hdcMem, oldBitmap);
+	DeleteObject(hdcMem);
+}
+
+void dlgWndAskCmd::DrawPersonIcon(HDC hdc, HWND hwnd) {
+	BITMAP bitmap;
+	HDC hdcMem = CreateCompatibleDC(m_hDC);
+	HGDIOBJ oldBitmap = SelectObject(hdcMem, m_hPersonIcon);
+
+	RECT rectOTPBoxInClientCoord;
+	GetClientRect(hOTPBox, &rectOTPBoxInClientCoord);
+	MapWindowPoints(hOTPBox, m_hWnd, (LPPOINT)&rectOTPBoxInClientCoord, 2);
+	int iconMarginX = 21;
+	int iconMarginY = 15;
+	ScaleDimensions(&iconMarginX, &iconMarginY);
+
+	GetObject(m_hPersonIcon, sizeof(bitmap), &bitmap);
+	BitBlt(m_hDC, rectOTPBoxInClientCoord.left, rectOTPBoxInClientCoord.top + iconMarginY, bitmap.bmWidth,
+		   bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
+	SelectObject(hdcMem, oldBitmap);
+	DeleteObject(hdcMem);
 }

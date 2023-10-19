@@ -51,6 +51,8 @@ unsigned long dlgPinPadInfoCollectorIndex = 0;
 
 dlgWndCmdMsg *dlgCMDMsg = NULL;
 
+dlgWndAskCmd *dlgCMDAsk = NULL;
+
 std::wstring lang1 = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
 HWND appWindow = NULL;
@@ -411,6 +413,13 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo(unsigned long ulHandle) {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgClosePinpadInfo() returns");
 }
 
+DLGS_EXPORT void eIDMW::DlgCloseAskInputCMD() {
+	if (dlgCMDAsk) {
+		MWLOG(LEV_DEBUG, MOD_DLG, "Will send the stop signal");
+		dlgCMDAsk->stopExec();
+	}
+}
+
 DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValidateOtp, wchar_t *csOutCode,
 										 unsigned long ulOutCodeBufferLen, wchar_t *csInOutId, unsigned long csOutIdLen,
 										 const wchar_t *csUserName, unsigned long ulUserNameBufferLen,
@@ -419,7 +428,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 
 	CLang::ResetInit(); // Reset language to take into account last change
 
-	dlgWndAskCmd *dlg = NULL;
+	dlgCMDAsk = NULL;
 	bool askForId = (csOutIdLen != 0);
 
 	try {
@@ -443,28 +452,35 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 			}
 		} else {
 			if (operation == DlgCmdOperation::DLG_CMD_SIGNATURE) {
-				sMessage += GETSTRING_DLG(InsertOtpSignature);
+				sMessage += GETSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
 			} else if (operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE) {
 				sMessage += GETSTRING_DLG(InsertOtpCert);
 			}
 		}
 
-		dlg = new dlgWndAskCmd(operation, isValidateOtp, sMessage, &userId, &userName, appWindow, fSendSmsCallback,
-							   askForId);
-		if (dlg->exec()) {
-			eIDMW::DlgRet dlgResult = dlg->dlgResult;
-			wcscpy_s(csOutCode, ulOutCodeBufferLen, dlg->OutCodeResult);
+		dlgCMDAsk = new dlgWndAskCmd(operation, isValidateOtp, sMessage, &userId, &userName, appWindow,
+									 fSendSmsCallback, askForId);
+		if (dlgCMDAsk->exec()) {
+			eIDMW::DlgRet dlgResult = dlgCMDAsk->dlgResult;
+			wcscpy_s(csOutCode, ulOutCodeBufferLen, dlgCMDAsk->OutCodeResult);
 			if (askForId)
-				wcscpy_s(csInOutId, csOutIdLen, dlg->OutIdResult);
+				wcscpy_s(csInOutId, csOutIdLen, dlgCMDAsk->OutIdResult);
 
-			delete dlg;
+			delete dlgCMDAsk;
+			dlgCMDAsk = NULL;
+			MWLOG(LEV_DEBUG, MOD_DLG, L" DELETED DLG");
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMD() returns DLG_OK");
 			return DLG_OK;
 		}
-		delete dlg;
+		delete dlgCMDAsk;
+		dlgCMDAsk = NULL;
+		MWLOG(LEV_DEBUG, MOD_DLG, L" DELETED DLG");
 	} catch (...) {
-		if (dlg)
-			delete dlg;
+		if (dlgCMDAsk) {
+			delete dlgCMDAsk;
+			dlgCMDAsk = NULL;
+			MWLOG(LEV_DEBUG, MOD_DLG, L" DELETED DLG");
+		}
 		MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_ERR");
 		return DLG_ERR;
 	}

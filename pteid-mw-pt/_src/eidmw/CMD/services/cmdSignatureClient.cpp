@@ -117,7 +117,7 @@ CByteArray &CMDSignatureClient::SignXades(const char *output_path, const char *c
 	if (m_shouldMobileCache) {
 		// get cache
 		m_mobileNumber = m_mobileNumberCached;
-		// MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::SignXades using cached mobile number");
+		MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::SignXades using cached mobile number");
 	}
 
 	DlgRet ret = openAuthenticationDialogPIN(DlgCmdOperation::DLG_CMD_SIGNATURE, &m_pin, &m_mobileNumber);
@@ -190,15 +190,22 @@ void CMDSignatureClient::SignASiC(const char *path, APL_SignatureLevel level) {
 
 int CMDSignatureClient::SignPDF(PDFSignature &pdf_sig, const char *location, const char *reason,
 								const char *outfile_path) {
+	// Verifies if there is any missing credentials
 	handleMissingCredentials();
 
+	// Creates a CmdSignature from the credentials
 	CMDSignature cmdSignature(m_basicAuthUser, m_basicAuthPassword, m_applicationId);
 
+	// Builds proxy
 	CMDProxyInfo cmd_proxyinfo = CMDProxyInfo::buildProxyInfo();
+	// Creates a vector of PDF Signatures
 	std::vector<PDFSignature *> pdfSignatures;
+	// Obtains the number of the batch
 	const size_t batch_size = pdf_sig.getCurrentBatchSize();
 
+	// If the batch size equals 0
 	if (batch_size == 0) {
+		// Adds pdf handler
 		cmdSignature.add_pdf_handler(&pdf_sig);
 	} else if (batch_size > MAX_CMD_SIGN_NUM) {
 		// If the batch is larger than the max number
@@ -207,16 +214,20 @@ int CMDSignatureClient::SignPDF(PDFSignature &pdf_sig, const char *location, con
 		}
 		handleErrorCode(ERR_DOC_NUM_EXCEEDED, false);
 	} else {
+		// Enables batch mode
 		cmdSignature.enableBatchMode();
+		// For each pdf_signature in the batch
 		for (size_t i = 0; i < batch_size; i++) {
-
+			// Copies in the PDF Signature
 			PDFSignature *sig = pdf_sig.getSpecialCopy(i);
+			// Adds it in the vector
 			pdfSignatures.push_back(sig);
+			// Adds pdf handler
 			cmdSignature.add_pdf_handler(sig);
 		}
 	}
-
 	try {
+		// Mobile Cache
 		std::string *mobileCache = NULL;
 		if (m_shouldMobileCache) {
 			MWLOG(LEV_DEBUG, MOD_CMD, "CMDSignatureClient::SignPDF using cached mobile number");
@@ -232,13 +243,15 @@ int CMDSignatureClient::SignPDF(PDFSignature &pdf_sig, const char *location, con
 		handleErrorCode(ret, true);
 
 		updateCertificateCache(&(cmdSignature.m_certificates));
-
 		for (PDFSignature *sig : pdfSignatures) {
 			delete sig;
 		}
 		return ret; // FIXME: review codes (map CMD error codes?)
 
-	} catch (...) {
+	}
+	// If an error happens
+	catch (...) {
+		// Deletes the data
 		for (PDFSignature *sig : pdfSignatures) {
 			delete sig;
 		}
@@ -462,10 +475,10 @@ DlgRet CMDSignatureClient::openAuthenticationDialogOTP(DlgCmdOperation operation
 	std::u32string u32_docId = stringWidenUTF32(*docId);
 	std::wstring docIdW((wchar_t *)u32_docId.c_str());
 #endif
-
+	// The dialog that receive input for DlgAskInputCMD
 	DlgRet ret = DlgAskInputCMD(operation, true, otpBuffer, otpBufferLength, (wchar_t *)docIdW.c_str(), 0, NULL, 0,
 								fSendSmsCallback);
-
+	// Assign the OTP obtained from the Dialog
 	out_otp->assign(utilStringNarrow(otpBuffer));
 	return ret;
 }
@@ -515,6 +528,27 @@ void CMDProgressDlgThread::Stop(unsigned long ulSleepFrequency) {
 
 	DlgCloseCMDMessage(m_dlgHandle);
 	WaitTillStopped();
+}
+
+CMDPoolingThread::CMDPoolingThread(CMDSignature *signature) {
+	m_signature = signature;
+	m_wasCancelled = false;
+}
+
+void CMDPoolingThread::Run() {
+	while (m_return != ERR_NONE && m_wasCancelled == false) {
+		CThread::SleepMillisecs(1000);
+		m_return = m_signature->signDocumentPooling();
+	}
+	if (m_wasCancelled == false) {
+		DlgCloseAskInputCMD();
+	}
+}
+
+void CMDPoolingThread::Stop(unsigned long ulSleepFrequency) {
+	m_wasCancelled = true;
+	// Waits for the thread to finish
+	WaitTillStopped(ulSleepFrequency);
 }
 
 } // namespace eIDMW

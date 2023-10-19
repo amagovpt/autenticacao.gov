@@ -41,9 +41,10 @@ public:
 				 QWidget *parent = NULL, Type_WndGeometry *wndGeometry = NULL);
 	~dlgWndAskCmd();
 
-	std::wstring getId();
-	std::wstring getCode() { return QString(ui.txtCode->text()).toStdWString(); };
-	bool callCallback() { return m_callCallback; };
+    std::wstring getId();
+    std::wstring getCode(){ return QString(ui.txtCode->text()).toStdWString(); };
+    bool callCallback() { return m_callCallback; };
+    void close();
 
 private:
 	Ui::dlgWndAskCmdClass ui;

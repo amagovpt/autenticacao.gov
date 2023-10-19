@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <openssl/x509.h>
+#include <mutex>
 #include "soapH.h"
 #include "ByteArray.h"
 #include "Log.h"
@@ -52,18 +53,26 @@ public:
 	int askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId, std::string in_pin);
 
 	// CCMovelSign
-	int ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std::string docName, std::string in_pin);
+	int ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std::string docName, std::string in_pin,
+					bool IsBiometricValidationEnable = true);
 
 	// CCMovelMultipleSign
 	int ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigned char *> in_hashs,
-							std::vector<std::string> docNames, std::string in_pin);
+							std::vector<std::string> docNames, std::string in_pin,
+							bool IsBiometricValidationEnable = true);
 
 	// ForceSMS
 	int forceSMS(CMDProxyInfo proxyInfo, std::string in_userId);
+	int forceSMS_mutex(CMDProxyInfo proxyInfo, std::string in_userId, std::mutex *mutex);
 
-	// ValidateOtp
-	int getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_signature);
-	int getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray> &out_certificate);
+	// ValidateOtp and SignatureDocumentPooling
+	// This getSignatures is used for the ValidateOTP
+	int getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_signature,
+					  bool isBiometric = false);
+	// This getSignatures is used for the SignatureDocumentPooling
+	int getSignatures(CMDProxyInfo proxyInfo, std::vector<CByteArray *> out_signature);
+	int getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray> &out_certificate,
+						  bool isBiometric = false);
 
 	static std::string getEndpoint();
 
@@ -98,28 +107,29 @@ private:
 
 	// CCMovelSign
 	_ns2__CCMovelSign *get_CCMovelSignRequest(soap *sp, std::string in_applicationID, std::string *docName,
-											  unsigned char *in_hash, std::string *in_pin, std::string *in_userId);
+											  unsigned char *in_hash, std::string *in_pin, std::string *in_userId,
+											  bool *IsBiometricValidationEnable);
 
 	int checkCCMovelSignResponse(_ns2__CCMovelSignResponse *response);
 
 	// CCMovelMultipleSign
-	_ns2__CCMovelMultipleSign *get_CCMovelMultipleSignRequest(soap *sp, std::string in_applicationID,
-															  std::vector<std::string *> docNames,
-															  std::vector<unsigned char *> in_hashes,
-															  std::vector<std::string *> ids, std::string *in_pin,
-															  std::string *in_userId);
+	_ns2__CCMovelMultipleSign *
+	get_CCMovelMultipleSignRequest(soap *sp, std::string in_applicationID, std::vector<std::string *> docNames,
+								   std::vector<unsigned char *> in_hashes, std::vector<std::string *> ids,
+								   std::string *in_pin, std::string *in_userId, bool *IsBiometricValidationEnable);
 
 	int checkCCMovelMultipleSignResponse(_ns2__CCMovelMultipleSignResponse *response);
 
 	// ValidateOtp
 	int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::vector<unsigned char *> *outSignature,
-					std::vector<unsigned int> *outSignatureLen);
-	int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::string *outCertificate);
+					std::vector<unsigned int> *outSignatureLen, bool isBiometric);
+	int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::string *outCertificate, bool isBiometric);
 
-	int sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns2__ValidateOtpResponse &response);
+	int sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns2__ValidateOtpResponse &response,
+						bool isBiometric);
 
 	_ns2__ValidateOtp *get_ValidateOtpRequest(soap *sp, std::string in_applicationID, std::string *in_code,
-											  std::string *in_processId);
+											  std::string *in_processId, bool *isBiometric);
 
 	int checkValidateOtpResponse(_ns2__ValidateOtpResponse *response);
 
@@ -137,6 +147,17 @@ private:
 
 	// ForceSMS
 	int checkForceSmsResponse(_ns2__ForceSMSResponse *response);
+
+	// SignatureDocumentPooling
+	_ns2__SignDocumentPooling *get_SignDocumentPoolingRequest(soap *sp, std::string in_applicationID,
+															  std::string *in_processId);
+
+	int signatureDocumentPooling(CMDProxyInfo proxyInfo, std::vector<unsigned char *> *outSignature,
+								 std::vector<unsigned int> *outSignatureLen);
+
+	int sendSignatureDocumentPooling(CMDProxyInfo proxyInfo, _ns2__SignDocumentPoolingResponse &response);
+
+	int checkSignatureDocumentPoolingResponse(_ns2__SignDocumentPoolingResponse *response);
 };
 
 } // namespace eIDMW

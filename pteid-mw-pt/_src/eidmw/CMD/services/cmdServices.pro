@@ -50,7 +50,9 @@ HEADERS += \
             soapStub.h \
             soapBasicHttpBinding_USCORECCMovelSignatureProxy.h \
             stdsoap2.h \
-            credentials.h
+            credentials.h \
+            struct_tm.h \
+            struct_timeval.h
 
 SOURCES += \
             cmdServices.cpp \
@@ -60,4 +62,6 @@ SOURCES += \
             soapC.cpp \
             soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp \
             stdsoap2.cpp \
-            credentials.cpp
+            credentials.cpp \
+            struct_tm.cpp \
+            struct_timeval.cpp
