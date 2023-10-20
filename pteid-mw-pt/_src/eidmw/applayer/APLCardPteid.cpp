@@ -1407,27 +1407,63 @@ void APL_AddrEId::mapForeignFields(cJSON * json_obj) {
 
 }
 
+long APL_AddrEId::validateRemoteAddressData(const char * json_response, const std::string &endpoint) {
+   long exception_code = 0;
+   std::unique_ptr<RA_GetAddressResponse> getaddr_resp(validateReadAddressResponse(json_response));
+   if (getaddr_resp->address_obj != NULL) {
+       remoteAddressLoaded = true;
+       if (!getaddr_resp->is_foreign_address) {
+           mapNationalFields(getaddr_resp->address_obj);
+       }
+       else {
+           mapForeignFields(getaddr_resp->address_obj);
+       }
+   }
+   else {
+       const int INVALID_STATE_ERR = 1015;
+       if (getaddr_resp->error_code == INVALID_STATE_ERR) {
+           MWLOG(LEV_ERROR, MOD_APL, "Card in invalid state for address reading. Error code %d", INVALID_STATE_ERR);
+           exception_code = EIDMW_REMOTEADDR_INVALID_STATE;
+       }
+       else {
+           MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no HTTP error code but empty/malformed response", endpoint.c_str());
+           exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
+       }
+   }
+   return exception_code;
+}
+
 void APL_AddrEId::loadRemoteAddress_CC2() {
+    //TODO: The URL building code should be in a seperate function
     const std::string ENDPOINT_DH =  "/readaddressCC2/ecdh1";
     const std::string ENDPOINT_DH2 = "/readaddressCC2/ecdh2";
+    const std::string ENDPOINT_MA1 = "/readaddressCC2/mutualauth1";
+    const std::string ENDPOINT_MA2 = "/readaddressCC2/mutualauth2";
     
-    std::string url_endpoint_ecdh1, url_endpoint_ecdh2;
+    std::string url_endpoint_ecdh1, url_endpoint_ecdh2, url_endpoint_mutual_auth1, url_endpoint_mutual_auth2;
     long exception_code = 0;
 
     APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
 
     if (!CConfig::isTestModeEnabled()) {
         url_endpoint_ecdh1 += conf_baseurl.getString();
-        url_endpoint_ecdh2 += conf_baseurl.getString();
+        url_endpoint_ecdh2 += url_endpoint_ecdh1;
+        url_endpoint_mutual_auth1 += url_endpoint_ecdh1;
+        url_endpoint_mutual_auth2 += url_endpoint_ecdh1;
+
     }
     else {
         APL_Config conf_baseurl_t(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST);
         url_endpoint_ecdh1 += conf_baseurl_t.getString();
-        url_endpoint_ecdh2 += conf_baseurl_t.getString();
+        url_endpoint_ecdh2 += url_endpoint_ecdh1;
+        url_endpoint_mutual_auth1 += url_endpoint_ecdh1;
+        url_endpoint_mutual_auth2 += url_endpoint_ecdh1;
     }
 
     url_endpoint_ecdh1 += ENDPOINT_DH;
     url_endpoint_ecdh2 += ENDPOINT_DH2;
+    url_endpoint_mutual_auth1 += ENDPOINT_MA1;
+    url_endpoint_mutual_auth2 += ENDPOINT_MA2;
 
     MutualAuthentication mutual_authentication(m_card);
     //Read ecdh_params from card
@@ -1447,7 +1483,7 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 
     char * json_str = build_json_ecdh1(dummy_dh_params, dg13_data, sod_data, authCert_data, serialNumber);
 
-    //1st POST
+    //Step 1 of the protocol
     PostResponse resp = post_json_remoteaddress(url_endpoint_ecdh1.c_str(), json_str, NULL);
 
     MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (1) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
@@ -1473,7 +1509,7 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 
     json_str = build_json_ecdh2(kicc);
 
-    //1st POST
+    //Step 2 of the protocol
     PostResponse resp2 = post_json_remoteaddress(url_endpoint_ecdh2.c_str(), json_str, cookie.c_str());
 
     MWLOG(LEV_DEBUG, MOD_APL, "%s: 2nd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp2.http_code, resp2.http_response.c_str());
@@ -1487,8 +1523,29 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 
     auto resp_external_auth = mutual_authentication.sendSequenceOfPrebuiltAPDUs(ecdh2_obj.external_auth_apdus);
 
-    fprintf(stderr, "Address loading feature still incomplete, throwing CMWException!\n");
-    throw CMWEXCEPTION(EIDMW_REMOTEADDR_UNKNOWN_ERROR);
+    json_str = build_json_mutualauth_1(resp_external_auth);
+    //TODO: verify if we have any error in the resp
+    //Step 3 of the protocol
+    PostResponse resp3 = post_json_remoteaddress(url_endpoint_mutual_auth1.c_str(), json_str, cookie.c_str());
+    MWLOG(LEV_DEBUG, MOD_APL, "%s: 3rd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp3.http_code, resp3.http_response.c_str());
+
+    RA_MutualAuthResponse mutualauth1_obj = parseMutualAuthResponse1(resp3.http_response.c_str());
+
+    auto resp_internal_auth = mutual_authentication.remoteAddressStep3(
+        mutualauth1_obj.signed_challenge_command, mutualauth1_obj.internal_auth_commands,
+        mutualauth1_obj.pin_status_command);
+
+    json_str = build_json_mutualauth_2(resp_internal_auth);
+
+    //Step 4 of the protocol: returns address data if all goes well
+    PostResponse resp4 = post_json_remoteaddress(url_endpoint_mutual_auth2.c_str(), json_str, cookie.c_str());
+    MWLOG(LEV_DEBUG, MOD_APL, "%s: 4th POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp4.http_code, resp4.http_response.c_str());
+
+    exception_code = validateRemoteAddressData(resp4.http_response.c_str(), ENDPOINT_MA2);
+
+    if (exception_code != 0) {
+        throw CMWEXCEPTION(exception_code);
+    }
 
 }
 
@@ -1630,28 +1687,7 @@ void APL_AddrEId::loadRemoteAddress() {
             
 			MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (3) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
 
-			std::unique_ptr<RA_GetAddressResponse> getaddr_resp(validateReadAddressResponse(resp.http_response.c_str()));
-			if (getaddr_resp->address_obj != NULL) {
-				remoteAddressLoaded = true;
-				if (!getaddr_resp->is_foreign_address) {
-					mapNationalFields(getaddr_resp->address_obj);
-				}
-				else {
-					mapForeignFields(getaddr_resp->address_obj);
-				}
-
-			}
-			else {
-				const int INVALID_STATE_ERR = 1015;
-				if (getaddr_resp->error_code == INVALID_STATE_ERR) {
-					MWLOG(LEV_ERROR, MOD_APL, "Card in invalid state for address reading. Error code %d", INVALID_STATE_ERR);
-					exception_code = EIDMW_REMOTEADDR_INVALID_STATE;
-				}
-				else {
-					MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no HTTP error code but empty/malformed response", ENDPOINT_READADDRESS.c_str());
-					exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
-				}
-			}
+			exception_code = validateRemoteAddressData(resp.http_response.c_str(), ENDPOINT_READADDRESS);
 		}
 
 	}

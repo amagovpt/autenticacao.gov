@@ -379,6 +379,7 @@ private:
 
 	void loadRemoteAddress();
     void loadRemoteAddress_CC2();
+    long validateRemoteAddressData(const char * json_response, const std::string &endpoint);
 	void mapNationalFields(cJSON * json_obj);
 	void mapForeignFields(cJSON * json_obj);
 

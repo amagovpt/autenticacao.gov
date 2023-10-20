@@ -1,5 +1,5 @@
 /*-****************************************************************************
- * Copyright (C) 2020-2021 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2020-2023 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
  *
@@ -154,7 +154,6 @@ std::string parseECDH1Response(const char * json_str) {
 RA_ECDH2Response parseECDH2Response(const char * json_str) {
     RA_ECDH2Response resp;
     cJSON *ecdh = cJSON_Parse(json_str);
-    std::string kifd;
 
     cJSON *apdu_array = NULL;
     if (ecdh == NULL)
@@ -175,6 +174,45 @@ RA_ECDH2Response parseECDH2Response(const char * json_str) {
     }
 
     cJSON_Delete(ecdh);
+
+    return resp;
+}
+
+RA_MutualAuthResponse parseMutualAuthResponse1(const char *json_str) {
+    RA_MutualAuthResponse resp;
+    cJSON *mutual_auth = cJSON_Parse(json_str);
+
+    cJSON *apdu_array = NULL;
+    if (mutual_auth == NULL)
+    {
+        MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+        MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
+        return resp;
+    }
+
+    apdu_array = cJSON_GetObjectItem(mutual_auth, "internal_auth_commands");
+
+    //TODO: error handling: internal_auth_commands can be null/empty
+    if (cJSON_IsArray(apdu_array)) {
+        for (int i=0; i < cJSON_GetArraySize(apdu_array); i++) {
+            cJSON * item = cJSON_GetArrayItem(apdu_array, i);
+            if (cJSON_IsString(item))
+                resp.internal_auth_commands.push_back(item->valuestring);
+        }
+    }
+
+    cJSON* item = cJSON_GetObjectItem(mutual_auth, "signed_challenge_command");
+
+    if (cJSON_IsString(item) && (item->valuestring != NULL)) {
+        resp.signed_challenge_command.append(item->valuestring);
+    }
+    item = cJSON_GetObjectItem(mutual_auth, "pin_status_command");
+
+    if (cJSON_IsString(item) && (item->valuestring != NULL)) {
+        resp.pin_status_command.append(item->valuestring);
+    }
+
+    cJSON_Delete(mutual_auth);
 
     return resp;
 }
@@ -233,7 +271,7 @@ RA_GetAddressResponse * validateReadAddressResponse(const char * json_str) {
     if (cjson_obj == NULL)
     {
         MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for ReadAddressResponse!");
-        MWLOG(LEV_DEBUG, MOD_APL, "DHParamsResponse - malformed JSON data: %s", json_str);
+        MWLOG(LEV_DEBUG, MOD_APL, "ReadAddressResponse - malformed JSON data: %s", json_str);
         resp->error_code = -1;
         return resp;
     }
@@ -242,7 +280,7 @@ RA_GetAddressResponse * validateReadAddressResponse(const char * json_str) {
 
     if (!cJSON_IsObject(item)) {
         //Error response: get Error Status and write it to resp
-        parseErrorStatusForGetAddress(item, resp);
+        parseErrorStatusForGetAddress(cjson_obj, resp);
         resp->parent_json = cjson_obj;
         return resp;
     }
@@ -296,6 +334,31 @@ char * build_json_ecdh2(char * ecdh_kicc) {
     cJSON_Delete(parent);
 
     return json_str;
+}
+
+char *buildArrayOfStringsJSON(const char *array_name, std::vector<std::string> string_v) {
+    cJSON *parent = cJSON_CreateObject();
+    cJSON * array = cJSON_CreateArray();
+
+    for (auto s: string_v) {
+        cJSON_AddItemToArray(array, cJSON_CreateString(s.c_str()));
+    }
+    cJSON_AddItemToObject(parent, array_name, array);
+
+    char * json_str = cJSON_PrintUnformatted(parent);
+    cJSON_Delete(parent);
+
+    return json_str;
+}
+
+char * build_json_mutualauth_1(std::vector<std::string> ecdh_apdu_responses) {
+
+    return buildArrayOfStringsJSON("external_auth_responses", ecdh_apdu_responses);
+}
+
+char * build_json_mutualauth_2(std::vector<std::string> internal_auth_apdu_responses) {
+    //TODO: review this
+    return buildArrayOfStringsJSON("internal_auth_responses", internal_auth_apdu_responses);
 }
 
 

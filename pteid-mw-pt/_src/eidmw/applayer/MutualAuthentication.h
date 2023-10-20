@@ -79,6 +79,7 @@ public:
     char * generalAuthenticate(const char * ecdh_kifd);
 	char *sendPrebuiltAPDU(const char *apdu_string);
 	std::vector<std::string> sendSequenceOfPrebuiltAPDUs(std::vector<std::string> &apdu_array);
+    std::vector<std::string> remoteAddressStep3(std::string &signed_challenge, std::vector<std::string> &internal_auth, const std::string &pin_status);
 
 private:
 	char * _getDH_Param(unsigned char specific_byte, unsigned long offset);
