@@ -186,12 +186,14 @@ std::string CPteidCard::GetAppletVersion() {
 
 }
 
-unsigned long CPteidCard::PinStatus(const tPin & Pin)
-{
+unsigned long CPteidCard::PinStatus(const tPin & Pin) {
 	unsigned long ulSW12 = 0;
 
 	try
 	{
+        if (this->GetType() == CARD_PTEID_IAS5) {
+            SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+        }
 
 		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
 		ulSW12 = getSW12(oResp);
@@ -204,7 +206,7 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
 	catch(...)
 	{
 		//m_ucCLA = 0x00;
-		MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus", ulSW12);
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus: %04x", ulSW12);
 		throw;
 	}
 }
@@ -213,6 +215,9 @@ bool CPteidCard::isPinVerified(const tPin & Pin) {
 
 	try
 	{
+        if (this->GetType() == CARD_PTEID_IAS5) {
+            SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+        }
 		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char)Pin.ulPinRef, 0);
 		unsigned long ulSW12 = getSW12(oResp);
 		MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12);
@@ -295,6 +300,7 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockAc
 			padChar = 0x2F;
 			break;
 		case CARD_PTEID_IAS07:
+        case CARD_PTEID_IAS5:
 			padChar = 0xFF;
 			break;
 		default:
