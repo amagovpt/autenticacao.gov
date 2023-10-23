@@ -96,13 +96,17 @@ std::wstring getPinName( DlgPinUsage usage, const wchar_t *inPinName ){
         case DLG_PIN_ADDRESS:
             PinName = GETSTRING_DLG(AddressPin);
             break;
-
+		case DLG_PIN_ACTIVATE:
+			PinName = GETSTRING_DLG(ActivationPinOf);
+			PinName += L" "; 
+			PinName += GETSTRING_DLG(CitizenCard);
+			break;
         default:
             if ( inPinName == NULL ) {
                 PinName = GETSTRING_DLG(UnknownPin);
             }
 			else {
-                 if( wcslen( inPinName ) == 0 ){
+                 if ( wcslen( inPinName ) == 0) {
                     PinName = GETSTRING_DLG(Pin);
                 } else {
                     PinName = inPinName;
@@ -159,7 +163,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation,
 				title = GETSTRING_DLG(ReadAddressFrom);
 				break;
 			case DLG_PIN_ACTIVATE:
-				title = GETSTRING_DLG(ActivationPinOf);
+				title = GETSTRING_DLG(Activate);
+				break;
 			default:
 				sMessage += L"----Default PIN Type????----";
 				sMessage += L"\n";
