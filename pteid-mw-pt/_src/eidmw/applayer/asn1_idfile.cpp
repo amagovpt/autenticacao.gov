@@ -14,6 +14,8 @@
 #include <openssl/err.h>
 #include <openssl/asn1.h>
 
+#include "Log.h"
+
 #include "asn1_idfile.h"
 
 namespace eIDMW
@@ -66,13 +68,13 @@ namespace eIDMW
 	IDFILE *decode_id_data(CByteArray &data) {
 
 		if (data.Size() == 0) {
-			fprintf(stderr, "%s: Empty data array!\n", __FUNCTION__);
+			MWLOG(LEV_ERROR, MOD_APL, "%s: Empty data array!", __FUNCTION__);
 			return NULL;
 		}
 
 		unsigned char *asn1_data = data.GetBytes();
 		if (asn1_data[0] != 0x6D) {
-			fprintf(stderr, "Top-level tag is wrong in IDFILE (DG13): %2x!\n", asn1_data[0]);
+			MWLOG(LEV_ERROR, MOD_APL, "%s: Top-level tag is wrong in IDFILE (DG13): %2x!", __FUNCTION__, asn1_data[0]);
 		}
 		//XX: small hack. Force sequence as top-level tag
 		asn1_data[0] = 0x30;
@@ -80,7 +82,7 @@ namespace eIDMW
 		IDFILE * id_file = d2i_IDFILE(NULL, (const unsigned char**)&asn1_data, data.Size());
 
 		if (id_file == NULL) {
-			fprintf(stderr, "Failed to decode IDFile structure!\n");
+			MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to decode IDFile structure!", __FUNCTION__);
 
 			unsigned long errCode;
 			const char* errString;
@@ -88,12 +90,10 @@ namespace eIDMW
 			int errLine;
 			errCode = ERR_get_error_line_data(&errFile, &errLine, NULL, NULL);
 			errString = ERR_error_string(errCode, NULL);
-			fprintf(stderr, "OpenSSL Error: %s\n", errString);
-			fprintf(stderr, "File: %s\n", errFile);
-			fprintf(stderr, "Line: %d\n", errLine);
+			MWLOG(LEV_ERROR, MOD_APL, "%s: openssl error: %s generated in %s line %d", errString, errFile, errLine);
 		}
 		else {
-			fprintf(stderr, "DBG: %s: The decoder consumed %ld bytes\n", __FUNCTION__, asn1_data-data.GetBytes());
+			MWLOG(LEV_DEBUG, MOD_APL, "%s: The decoder consumed %ld bytes", __FUNCTION__, asn1_data-data.GetBytes());
 
 			/* Extract data from ASN1_STRINGs. ASN1_STRING_get0_data returns internal pointer so the returned string will not survive after a call to IDFILE_free()
 			printf("Label: %s\n", ASN1_STRING_get0_data(id_file->document_label));
