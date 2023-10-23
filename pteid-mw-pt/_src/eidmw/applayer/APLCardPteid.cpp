@@ -207,8 +207,12 @@ APL_EIDCard::~APL_EIDCard()
 
 APL_EidFile_Trace *APL_EIDCard::getFileTrace()
 {
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-		m_FileTrace=new APL_EidFile_Trace(this);
+	CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
+	CByteArray appID = { PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) };
+	if (m_cardType == APL_CARDTYPE_PTEID_IAS5) {
+		appID = { PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) };
+	}
+	m_FileTrace = new APL_EidFile_Trace(this, appID);
 
 
 	return m_FileTrace;

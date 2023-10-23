@@ -63,9 +63,9 @@ public:
 protected:
 	/**
 	  * Constructor
-	  *		Used only in APL_EIDCard::getFileID()
+	  *		Used only in APL_EIDCard::getFileTrace()
 	  */
-	APL_EidFile_Trace(APL_EIDCard *card);
+	APL_EidFile_Trace(APL_EIDCard *card, CByteArray &appID);
 
 private:
 	APL_EidFile_Trace(const APL_EidFile_Trace& file);				/**< Copy not allowed - not implemented */

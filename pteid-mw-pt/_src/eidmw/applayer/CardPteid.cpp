@@ -57,7 +57,7 @@ namespace eIDMW
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_TRACE -----------------------------------------
 *****************************************************************************************/
-APL_EidFile_Trace::APL_EidFile_Trace(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_TRACE,NULL)
+APL_EidFile_Trace::APL_EidFile_Trace(APL_EIDCard *card, CByteArray &appID):APL_CardFile(card, PTEID_FILE_TRACE, NULL, appID)
 {
 }
 
