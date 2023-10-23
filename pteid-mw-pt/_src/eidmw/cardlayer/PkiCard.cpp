@@ -313,7 +313,7 @@ bad_pin:
 
 	// Wrong PIN with no user interaction: return false and don't ask for retries
 	// For PIN unlock we don't ask for retries
-	if (!bRet && !bShowDlg || operation == PIN_OP_RESET)
+	if (!bRet && !bShowDlg || operation == PIN_OP_RESET || operation == PIN_OP_RESET_NO_PUK)
 	{
 	    return bRet;
 	}
