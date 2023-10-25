@@ -1470,9 +1470,8 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     url_endpoint_mutual_auth2 += ENDPOINT_MA2;
 
     MutualAuthentication mutual_authentication(m_card);
-    //Read ecdh_params from card
-    CByteArray dummy_dh_params = mutual_authentication.getECDHParams();
-    
+
+	m_card->selectApplication({ PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA) });
     CByteArray dg13_data;
     CByteArray sod_data = getSodData(m_card);
     CByteArray authCert_data;
@@ -1482,10 +1481,12 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     m_card->readFile(PTEID_FILE_ID_V2, dg13_data);
 
     m_card->selectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+	//Read ecdh_params from card
+	CByteArray ecdh_params = mutual_authentication.getECDHParams();
 
     m_card->readFile(PTEID_FILE_CERT_AUTHENTICATION_V2, authCert_data);
 
-    char * json_str = build_json_ecdh1(dummy_dh_params, dg13_data, sod_data, authCert_data, serialNumber);
+    char * json_str = build_json_ecdh1(ecdh_params, dg13_data, sod_data, authCert_data, serialNumber);
 
     //Step 1 of the protocol
     PostResponse resp = post_json_remoteaddress(url_endpoint_ecdh1.c_str(), json_str, NULL);
