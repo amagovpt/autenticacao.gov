@@ -94,12 +94,6 @@ public:
 	  */
  	EIDMW_APL_API virtual unsigned long readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset=0, unsigned long  ulMaxLength=0);
 
-	/**
-	  * Return the number of certificate on the card
-	  */
-	EIDMW_APL_API virtual unsigned long certificateCount();
-
-
 	EIDMW_APL_API APL_CCXML_Doc& getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo);
 
 
