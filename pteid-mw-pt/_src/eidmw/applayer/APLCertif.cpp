@@ -823,7 +823,13 @@ APL_Certif::APL_Certif(APL_SmartCard *card,APL_Certifs *store,unsigned long ulIn
 	m_certP15Ok=true;
 
 	m_store=store;
-	m_certFile=new APL_CardFile_Certificate(card,m_certP15.csPath.c_str());
+	if (card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+		CByteArray CC2_EID = { PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) };
+		m_certFile = new APL_CardFile_Certificate(card, m_certP15.csPath.c_str(), NULL, CC2_EID);
+	}
+	else {
+		m_certFile = new APL_CardFile_Certificate(card, m_certP15.csPath.c_str());
+	}
 	m_delCertFile=true;
 
 	m_initInfo=false;

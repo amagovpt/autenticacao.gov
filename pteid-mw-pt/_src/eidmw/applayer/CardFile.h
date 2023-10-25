@@ -148,7 +148,7 @@ public:
 	  * @param csPath is the path of the file to be read
 	  * @param file : The content of the file to put in m_data 
 	  */
-	APL_CardFile_Certificate(APL_SmartCard *card,const char *csPath,const CByteArray *file=NULL);
+	APL_CardFile_Certificate(APL_SmartCard *card,const char *csPath,const CByteArray *file=NULL, const CByteArray& appId = { PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) });
 
 	/**
 	  * Destructor 

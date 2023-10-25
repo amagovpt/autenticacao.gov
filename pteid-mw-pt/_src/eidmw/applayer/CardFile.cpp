@@ -181,7 +181,7 @@ const CByteArray& APL_CardFile::getData()
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_Certificate -----------------------------------------
 *****************************************************************************************/
-APL_CardFile_Certificate::APL_CardFile_Certificate(APL_SmartCard *card,const char *csPath,const CByteArray *file):APL_CardFile(card,csPath,file)
+APL_CardFile_Certificate::APL_CardFile_Certificate(APL_SmartCard *card,const char *csPath,const CByteArray *file, const CByteArray& appID):APL_CardFile(card,csPath,file, appID)
 {
 	m_ulUniqueId=0;
 }
