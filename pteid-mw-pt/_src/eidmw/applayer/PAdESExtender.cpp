@@ -15,7 +15,7 @@
 #include "MWException.h"
 #include "eidErrors.h"
 #include "APLCertif.h"
-#include "TsaClient.h"
+#include "TSAClient.h"
 #include "MiscUtil.h"
 #include "sign-pkcs7.h"
 #include "CRLFetcher.h"

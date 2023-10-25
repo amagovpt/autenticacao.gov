@@ -21,7 +21,7 @@
 #include "ByteArray.h"
 #include "APLCard.h"
 #include "APLCertif.h"
-#include "TsaClient.h"
+#include "TSAClient.h"
 
 #include "CardPteidDef.h"
 #include "cryptoFwkPteid.h"

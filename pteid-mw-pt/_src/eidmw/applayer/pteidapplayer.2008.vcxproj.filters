@@ -81,7 +81,7 @@
     <ClCompile Include="SSLConnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TsaClient.cpp">
+    <ClCompile Include="TSAClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="XadesSignature.cpp">
@@ -191,7 +191,7 @@
     <ClInclude Include="SSLConnection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TsaClient.h">
+    <ClInclude Include="TSAClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="XadesSignature.h">

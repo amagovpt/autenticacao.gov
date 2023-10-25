@@ -248,7 +248,7 @@
     <ClCompile Include="sign-pkcs7.cpp" />
     <ClCompile Include="SODParser.cpp" />
     <ClCompile Include="SSLConnection.cpp" />
-    <ClCompile Include="TsaClient.cpp" />
+    <ClCompile Include="TSAClient.cpp" />
     <ClCompile Include="XadesSignature.cpp" />
     <ClCompile Include="XercesUtils.cpp" />
     <ClCompile Include="RemoteAddress.cpp" />
@@ -286,7 +286,7 @@
     <ClInclude Include="SSLConnection.h" />
     <ClInclude Include="RemoteAddress.h" />
     <ClInclude Include="RemoteAddressRequest.h" />
-    <ClInclude Include="TsaClient.h" />
+    <ClInclude Include="TSAClient.h" />
     <ClInclude Include="XadesSignature.h" />
   </ItemGroup>
   <ItemGroup>

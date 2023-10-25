@@ -41,7 +41,7 @@
 #include "XercesUtils.h"
 
 //for Timestamping
-#include "TsaClient.h"
+#include "TSAClient.h"
 
 #include <zip.h>
 

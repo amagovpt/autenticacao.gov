@@ -20,7 +20,7 @@
 #include "CurlUtil.h"
 #include "Util.h"
 #include "Log.h"
-#include "TsaClient.h"
+#include "TSAClient.h"
 
 namespace eIDMW
 {

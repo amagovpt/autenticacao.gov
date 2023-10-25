@@ -38,7 +38,7 @@
 #include <openssl/bio.h>
 #include <openssl/x509.h>
 #include "sign-pkcs7.h"
-#include "TsaClient.h"
+#include "TSAClient.h"
 
 namespace eIDMW
 {
