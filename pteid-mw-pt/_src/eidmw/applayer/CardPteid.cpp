@@ -890,7 +890,6 @@ tCardFileStatus APL_EidFile_Photo::VerifyFile()
 
 bool APL_EidFile_Photo::MapFields()
 {
-    fprintf(stderr, "Called %s!\n", __FUNCTION__);
     if (m_mappedFields)
         return true;
 
@@ -1016,8 +1015,6 @@ tCardFileStatus APL_EidFile_ID_V2::VerifyFile()
             MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_ID: %s", file_sod->getIdHash().ToString(true, false).c_str());
             throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ID);
         }
-
-		// TODO (DEV-CC2): verify public key hash
 	}
 	
 	m_isVerified = true;
@@ -1057,7 +1054,7 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 	m_MRZ2.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz2);
 	m_MRZ3.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz3);
 
-	// TODO (DEV-CC2): public key
+	// TODO (DEV-CC2): parse public key from DG13 data to make it available in eidlib
 
 	IDFILE_free(id_file);
 	m_mappedFields = true;
