@@ -209,6 +209,33 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_PERMISSION_DENIED:
 				error_message = "Search permission is denied for a component of the path prefix of path";
 				break;
+			case EIDMW_ERR_FILE_IO_ERROR:
+				error_message = "Error writing on the file";
+				break;
+			case EIDMW_ERR_INTR_PROCESS:
+				error_message = "Process was interrupted";
+				break;
+			case EIDMW_ERR_FILE_TOO_LONG:
+				error_message = "File name is too long";
+				break;
+			case EIDMW_ERR_FILE_OP_FL_SYSTEM:
+				error_message = "Too many files opened on the system";
+				break;
+			case EIDMW_ERR_FILE_OP_FL_PROCESS:
+				error_message = "Too many files opened in this process";
+				break;
+			case EIDMW_ERR_FILE_NO_SPC:
+				error_message = "Disk is full";
+				break;
+			case EIDMW_ERR_FILE_OP_NOT_PERM:
+				error_message = "Operation not permitted";
+				break;
+			case EIDMW_ERR_FILE_READ_ONLY:
+				error_message = "This is a read only file";
+				break;
+			case EIDMW_ERR_FILE_DEV:
+				error_message = "Can't move a file by renaming it";
+				break;
 			case EIDMW_INVALID_PATH:
 				error_message = "The path provided is invalid";
 				break;

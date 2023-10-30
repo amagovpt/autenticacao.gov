@@ -480,6 +480,22 @@
         <source>STR_CERTIFIED_ATTRIBUTES</source>
         <translation type="vanished">Certified Attributes: </translation>
     </message>
+    <message>
+        <source>STR_SIGN_FILE_READ_ONLY</source>
+        <translation>Failed to write on a read only file.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_NO_SPACE</source>
+        <translation>Failed to write the file, no space on the disk.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_TOO_LONG_FILENAME</source>
+        <translation>Failed to write the file, name is too long.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_TOO_MANY_OPEN_FILES</source>
+        <translation>Failed to write the file, too many open files.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -2120,6 +2136,22 @@
     <message>
         <source>STR_SCAP_BAD_CREDENTIALS</source>
         <translation type="unfinished">The installed application does not have support for the professional attributes certification system (SCAP).</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_READ_ONLY</source>
+        <translation>Failed to write on a read only file.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_NO_SPACE</source>
+        <translation>Failed to write the file, no space on the disk.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_TOO_LONG_FILENAME</source>
+        <translation>Failed to write the file, name is too long.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_TOO_MANY_OPEN_FILES</source>
+        <translation>Failed to write the file, too many open files.</translation>
     </message>
 </context>
 <context>

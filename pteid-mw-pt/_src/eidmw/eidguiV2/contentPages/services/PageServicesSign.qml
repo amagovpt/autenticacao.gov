@@ -132,11 +132,29 @@ PageServicesSignForm {
             }
 
             var generic_text = ""
-            if (error_code == GAPI.SignFilePermissionFailed) {
+            switch(error_code) {
+            case GAPI.SignFilePermissionFailed:
                 generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
-            } else if (error_code == GAPI.PDFFileUnsupported) {
+                break;
+            case GAPI.PDFFileUnsupported:
                 generic_text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
-            } else {
+                break;
+            case GAPI.TooLongFilename:
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
+                break;
+            case GAPI.FileReadOnly:
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_READ_ONLY")
+                break;
+            case GAPI.FileNoSpace:
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_NO_SPACE")
+                break;
+            case GAPI.TooLongFilename:
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_TOO_LONG_FILENAME")
+                break;
+            case GAPI.TooManyOpenFiles:
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_TOO_MANY_OPEN_FILES")
+                break;
+            default:
                 generic_text = qsTranslate("PageServicesSign","STR_SIGN_GENERIC_ERROR") + " " + error_code
             }
 

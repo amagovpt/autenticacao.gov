@@ -34,4 +34,20 @@
 
 #define errFileIO          10   // file I/O error
 
+#define errFileINTR		   11 // process interrupted
+
+#define errFileNAMETOOLONG 12 // too long of a file name
+
+#define errFileOPFLSYSTEM  13 // too many files opened in the SYSTEM
+
+#define errFileOPFLPROCES  14 // too many files opened in the PROCESS
+
+#define errFileNOSPC 	   15 // Disk is Full
+
+#define errFilePERM		   16 // operation is not permited
+
+#define errFileREADONLY    17 // file is read only
+
+#define errFileDEV		   18 // trying to move a file by renaming it
+
 #endif
