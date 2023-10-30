@@ -10,6 +10,7 @@
 ****************************************************************************-*/
 
 #include <QApplication>
+#include <QDateTime>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
@@ -23,6 +24,11 @@
 #include <QDesktopWidget> 
 #include <QCommandLineParser> 
 #include "pteidversions.h"
+#include "LogBase.h"
+
+#include <stdio.h>
+
+#include <iostream>
 
 using namespace eIDMW;
 
@@ -107,6 +113,20 @@ int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settin
     }
 #endif
     return SUCCESS_EXIT_CODE;
+}
+
+FILE* handleSTDErr()
+{
+    std::wstring location;
+	eIDMW::CLogger::instance().getFileFromStdErr(location);
+	QString path = QString::fromWCharArray(location.c_str());
+
+	FILE *file = NULL;
+
+	file = freopen(path.toStdString().c_str(), "a", stderr);
+
+	std::cerr << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz: ").toStdString() << "Message sent to the error stream!" << std::endl;
+	return file;
 }
 
 void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
@@ -227,6 +247,7 @@ int main(int argc, char *argv[])
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui", "OpenGL option : %d", tGraphicsAccel);
 
+	FILE * errFile = handleSTDErr();
     SingleApplication app(argc, argv);
 
     // Parse command line arguments
@@ -300,6 +321,8 @@ int main(int argc, char *argv[])
             qDebug() << "Error restarting application: could not start process.";
         }
     }
+
+	fclose(errFile);
 
     return retValue;
 }
