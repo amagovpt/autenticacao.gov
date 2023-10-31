@@ -584,6 +584,9 @@ unsigned long CPteidCard::GetSupportedAlgorithms()
 		//supported algorithms
 		if (major_version == '4')
 			ulAlgos |= SIGN_ALGO_SHA384_RSA_PKCS | SIGN_ALGO_SHA512_RSA_PKCS | SIGN_ALGO_RSA_PSS;
+	} else if (m_cardType == CARD_PTEID_IAS5) {
+		ulAlgos |= SIGN_ALGO_ECDSA | SIGN_ALGO_ECDSA_SHA1 | SIGN_ALGO_ECDSA_SHA224 | SIGN_ALGO_ECDSA_SHA256 |
+			SIGN_ALGO_ECDSA_SHA384 | SIGN_ALGO_ECDSA_SHA512;
 	}
 
 	return ulAlgos;
@@ -895,7 +898,7 @@ void CPteidCard::SelectApplication(const CByteArray & oAID)
 	oCmd.Append(oAID.GetBytes(), oAID.Size());
 
 	CByteArray oResp = SendAPDU(oCmd);
-	
+
 	if (getSW12(oResp) == 0x9000) {
 	   // If select application was a success, update the state
 	   m_lastSelectedApplication = oAID;
