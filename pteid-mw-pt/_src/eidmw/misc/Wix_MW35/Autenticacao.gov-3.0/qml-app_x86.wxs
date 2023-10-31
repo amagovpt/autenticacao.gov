@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?define var.QMLDIR=$(env.PTEID_DIR_QML) ?>
-  <?define var.QMLDIROUTPUT=..\..\..\_Binaries35\Win32\Release\qml-app\ ?>
+  <?define var.QMLDIROUTPUT=..\..\..\_Binaries35\Win32\Release\ ?>
   <?define var.PTEID_BUILD_FOLDER_X86=..\..\..\_Binaries35\Win32\Release\ ?>
   <Fragment>
     <DirectoryRef Id="APPLICATIONFOLDER">
