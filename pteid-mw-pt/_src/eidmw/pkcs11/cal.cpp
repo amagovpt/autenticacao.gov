@@ -833,6 +833,11 @@ try
    CReader &oReader = oCardLayer->getReader(szReader);
    cert = oReader.GetCertByID(*pID);
 
+   // Select EID app before reading certificate
+   if(oReader.GetCardType() == CARD_PTEID_IAS5) {
+      oReader.SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+   }
+
    //bValid duidt aan if cert met deze ID
    if (cert.bValid)
 	   oCertData = oReader.ReadFile(cert.csPath);
