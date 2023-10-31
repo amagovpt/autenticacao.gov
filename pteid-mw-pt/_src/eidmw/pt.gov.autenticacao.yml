@@ -1,6 +1,6 @@
 app-id: pt.gov.autenticacao
 runtime: org.kde.Platform
-runtime-version: '5.15-21.08'
+runtime-version: '5.15-22.08'
 sdk: org.kde.Sdk
 command: eidguiV2
 finish-args:
@@ -12,6 +12,7 @@ finish-args:
   - --filesystem=home
   - --share=ipc
   - --share=network
+  - --filesystem=/tmp
 modules:
   - name: pcsc-lite
     config-opts:
