@@ -894,8 +894,8 @@ void CPteidCard::SelectApplication(const CByteArray & oAID)
 	oCmd.Append((unsigned char)oAID.Size());
 	oCmd.Append(oAID.GetBytes(), oAID.Size());
 
-	CByteArray oResp = m_poContext->m_oPCSC.Transmit(
-		m_hCard, oCmd, &lRetVal, getProtocolStructure());
+	CByteArray oResp = SendAPDU(oCmd);
+	
 	if (getSW12(oResp) == 0x9000) {
 	   // If select application was a success, update the state
 	   m_lastSelectedApplication = oAID;
