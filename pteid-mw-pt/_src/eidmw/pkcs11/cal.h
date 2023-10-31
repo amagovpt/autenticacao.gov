@@ -44,7 +44,13 @@ extern "C" {
    {  CKM_RSA_PKCS_PSS,       1024, 3072, CKF_HW | CKF_SIGN  },  \
    {  CKM_SHA256_RSA_PKCS_PSS, 1024, 3072, CKF_HW | CKF_SIGN },  \
    {  CKM_SHA384_RSA_PKCS_PSS, 1024, 3072, CKF_HW | CKF_SIGN },  \
-   {  CKM_SHA512_RSA_PKCS_PSS, 1024, 3072, CKF_HW | CKF_SIGN }  \
+   {  CKM_SHA512_RSA_PKCS_PSS, 1024, 3072, CKF_HW | CKF_SIGN },  \
+   {  CKM_ECDSA,              256, 256   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA1,         256, 256   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA224,       256, 256   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA256,       256, 256   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA384,       256, 256   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA512,       256, 256   , CKF_HW | CKF_SIGN }, \
 }
 
 

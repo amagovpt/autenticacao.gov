@@ -315,6 +315,15 @@ if (pMechanismList == NULL)
    if (algos & SIGN_ALGO_SHA256_RSA_PKCS)    *pulCount +=1;
    if (algos & SIGN_ALGO_SHA384_RSA_PKCS)    *pulCount +=1;
    if (algos & SIGN_ALGO_SHA512_RSA_PKCS)    *pulCount +=1;
+
+   // ECDSA algos
+   if (algos & SIGN_ALGO_ECDSA)              *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA1)         *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA224)       *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA256)       *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA384)       *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA512)       *pulCount +=1;
+
    //4 variants of RSA-PSS
    if (algos & SIGN_ALGO_RSA_PSS)            *pulCount +=4;
    return (CKR_OK);
@@ -398,6 +407,50 @@ if (algos & SIGN_ALGO_RSA_PSS)
    else
 	   return (CKR_BUFFER_TOO_SMALL);
    }
+if (algos & SIGN_ALGO_ECDSA)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA1)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA1;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA224)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA224;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA256)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA256;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA384)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA384;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA512)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA512;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+
+
 
 return (ret);
 }
