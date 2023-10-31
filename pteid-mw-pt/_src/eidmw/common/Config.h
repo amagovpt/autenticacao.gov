@@ -227,7 +227,6 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GUITOOL_SHOWSIGNOPTIONS   L"show_signature_options"   //number; 0=no(default), 1=yes
 #define EIDMW_CNF_GUITOOL_SHOWSIGNHELP      L"show_signature_help"      //number; 0=no, 1=yes(default)
 #define EIDMW_CNF_GUITOOL_SIGNSEALOPTIONS   L"signature_seal_options"   //number; 0=both options disabled, 1=only use num id, 2=only use date, 3=both options enabled(default)
-#define EIDMW_CNF_GUITOOL_ADMIN_CONFIGURATION     L"admin_config"       //number; 0=admin configurations are disabled(default), 1=configurations are enabled
 
 #define EIDMW_CNF_SECTION_XSIGN             L"xsign"                    //section for xsign
 #define EIDMW_CNF_XSIGN_TSAURL              L"tsa_url"                  //string URL of the Timestamp Server
@@ -242,6 +241,7 @@ replace $install by string in install parameter
 
 #define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL      L"remoteaddr_url"          //string
 #define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_TST  L"remoteaddr_url_test"     //string
+#define EIDMW_CNF_GENERAL_ADMIN_CONFIGURATION     L"admin_config"       //number; 0=admin configuration is disabled(default), 1=admin configuration is enabled
 
 namespace eIDMW
 {
