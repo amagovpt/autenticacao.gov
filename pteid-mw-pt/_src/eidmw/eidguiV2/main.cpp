@@ -321,8 +321,9 @@ int main(int argc, char *argv[])
             qDebug() << "Error restarting application: could not start process.";
         }
     }
-
-	fclose(errFile);
+    if (errFile != NULL) {
+        fclose(errFile);
+    }
 
     return retValue;
 }
