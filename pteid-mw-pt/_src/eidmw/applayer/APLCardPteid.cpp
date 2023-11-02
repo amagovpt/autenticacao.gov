@@ -1340,7 +1340,7 @@ void APL_AddrEId::mapForeignFields(cJSON * json_obj) {
 
 }
 
-long APL_AddrEId::validateRemoteAddressData(const char * json_response, const std::string &endpoint) {
+long APL_AddrEId::validateRemoteAddressData(const char * json_response, RemoteAddressProtocol protocol) {
    long exception_code = 0;
    std::unique_ptr<RA_GetAddressResponse> getaddr_resp(validateReadAddressResponse(json_response));
    if (getaddr_resp->address_obj != NULL) {
@@ -1359,44 +1359,63 @@ long APL_AddrEId::validateRemoteAddressData(const char * json_response, const st
            exception_code = EIDMW_REMOTEADDR_INVALID_STATE;
        }
        else {
-           MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no HTTP error code but empty/malformed response", endpoint.c_str());
+           MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for readAddress endpoint in protocol %d, no HTTP error code but empty/malformed response", protocol);
            exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
        }
    }
    return exception_code;
 }
 
-void APL_AddrEId::loadRemoteAddress_CC2() {
-    //TODO: The URL building code should be in a seperate function
-    const std::string ENDPOINT_DH =  "/readaddressCC2/ecdh1";
+
+
+std::string buildRemoteAddressURL(RemoteAddressProtocol protocol, int endpoint) {
+    const std::string ENDPOINT_DH1 =  "/readaddressCC2/ecdh1";
     const std::string ENDPOINT_DH2 = "/readaddressCC2/ecdh2";
     const std::string ENDPOINT_MA1 = "/readaddressCC2/mutualauth1";
     const std::string ENDPOINT_MA2 = "/readaddressCC2/mutualauth2";
-    
-    std::string url_endpoint_ecdh1, url_endpoint_ecdh2, url_endpoint_mutual_auth1, url_endpoint_mutual_auth2;
-    long exception_code = 0;
+
+    const std::string ENDPOINT_DH = "/readaddress/sendDHParams";
+    const std::string ENDPOINT_SIGNCHALLENGE = "/readaddress/signChallenge";
+    const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
 
     APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
+    std::string ra_url;
 
-    if (!CConfig::isTestModeEnabled()) {
-        url_endpoint_ecdh1 += conf_baseurl.getString();
-        url_endpoint_ecdh2 += url_endpoint_ecdh1;
-        url_endpoint_mutual_auth1 += url_endpoint_ecdh1;
-        url_endpoint_mutual_auth2 += url_endpoint_ecdh1;
-
+    if (CConfig::isTestModeEnabled()) {
+        APL_Config conf_baseurl_t(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST);
+        ra_url += conf_baseurl_t.getString();
     }
     else {
-        APL_Config conf_baseurl_t(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST);
-        url_endpoint_ecdh1 += conf_baseurl_t.getString();
-        url_endpoint_ecdh2 += url_endpoint_ecdh1;
-        url_endpoint_mutual_auth1 += url_endpoint_ecdh1;
-        url_endpoint_mutual_auth2 += url_endpoint_ecdh1;
+        ra_url += conf_baseurl.getString();
     }
 
-    url_endpoint_ecdh1 += ENDPOINT_DH;
-    url_endpoint_ecdh2 += ENDPOINT_DH2;
-    url_endpoint_mutual_auth1 += ENDPOINT_MA1;
-    url_endpoint_mutual_auth2 += ENDPOINT_MA2;
+    switch (endpoint) {
+        case 1:
+            ra_url +=  (protocol == CC1_PROTOCOL ? ENDPOINT_DH : ENDPOINT_DH1);
+            break;
+        case 2:
+            ra_url +=  (protocol == CC1_PROTOCOL ? ENDPOINT_SIGNCHALLENGE : ENDPOINT_DH2);
+            break;
+        case 3:
+            ra_url +=  (protocol == CC1_PROTOCOL ? ENDPOINT_READADDRESS : ENDPOINT_MA1);
+            break;
+        case 4:
+            if (protocol == CC2_PROTOCOL) {
+                ra_url += ENDPOINT_MA2;
+            }
+            break;
+    }
+
+    return ra_url;
+}
+
+void APL_AddrEId::loadRemoteAddress_CC2() {
+
+    std::string url_endpoint_ecdh1 = buildRemoteAddressURL(CC2_PROTOCOL, 1);
+    std::string url_endpoint_ecdh2 = buildRemoteAddressURL(CC2_PROTOCOL, 2);
+    std::string url_endpoint_mutual_auth1 = buildRemoteAddressURL(CC2_PROTOCOL, 3);
+    std::string url_endpoint_mutual_auth2 = buildRemoteAddressURL(CC2_PROTOCOL, 4);
+    long exception_code = 0;
 
     MutualAuthentication mutual_authentication(m_card);
 
@@ -1414,6 +1433,8 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 	CByteArray ecdh_params = mutual_authentication.getECDHParams();
 
     m_card->readFile(PTEID_FILE_CERT_AUTHENTICATION_V2, authCert_data);
+    //TODO: send VERIFY command with cached PIN
+    //m_card->verifyAddressPin();
 
     char * json_str = build_json_ecdh1(ecdh_params, dg13_data, sod_data, authCert_data, serialNumber);
 
@@ -1475,7 +1496,7 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     PostResponse resp4 = post_json_remoteaddress(url_endpoint_mutual_auth2.c_str(), json_str, cookie.c_str());
     MWLOG(LEV_DEBUG, MOD_APL, "%s: 4th POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp4.http_code, resp4.http_response.c_str());
 
-    exception_code = validateRemoteAddressData(resp4.http_response.c_str(), ENDPOINT_MA2);
+    exception_code = validateRemoteAddressData(resp4.http_response.c_str(), CC2_PROTOCOL);
 
     if (exception_code != 0) {
         throw CMWEXCEPTION(exception_code);
@@ -1484,11 +1505,6 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 }
 
 void APL_AddrEId::loadRemoteAddress() {
-	const std::string ENDPOINT_DH = "/readaddress/sendDHParams";
-	const std::string ENDPOINT_SIGNCHALLENGE = "/readaddress/signChallenge";
-	const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
-
-	std::string url_endpoint_dh, url_endpoint_signchallenge, url_endpoint_readaddress;
 	long exception_code = 0;
 
 	if (remoteAddressLoaded) {
@@ -1500,25 +1516,10 @@ void APL_AddrEId::loadRemoteAddress() {
         return;
     }
 
-	APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
-
-	if (!CConfig::isTestModeEnabled()) {
-		url_endpoint_dh += conf_baseurl.getString();
-		url_endpoint_readaddress += conf_baseurl.getString();
-		url_endpoint_signchallenge += conf_baseurl.getString();
-	}
-	else {
-		APL_Config conf_baseurl_t(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST);
-		url_endpoint_dh += conf_baseurl_t.getString();
-		url_endpoint_readaddress += conf_baseurl_t.getString();
-		url_endpoint_signchallenge += conf_baseurl_t.getString();
-	}
-
-	url_endpoint_dh += ENDPOINT_DH;
-	url_endpoint_signchallenge += ENDPOINT_SIGNCHALLENGE;
-	url_endpoint_readaddress += ENDPOINT_READADDRESS;
+    std::string url_endpoint_dh = buildRemoteAddressURL(CC1_PROTOCOL, 1);
+    std::string url_endpoint_signchallenge = buildRemoteAddressURL(CC1_PROTOCOL, 2);
+    std::string url_endpoint_readaddress = buildRemoteAddressURL(CC1_PROTOCOL, 3);
 	
-
 	MutualAuthentication mutual_authentication(m_card);
 	DHParams dh_params;
 
@@ -1621,7 +1622,7 @@ void APL_AddrEId::loadRemoteAddress() {
             
 			MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (3) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
 
-			exception_code = validateRemoteAddressData(resp.http_response.c_str(), ENDPOINT_READADDRESS);
+			exception_code = validateRemoteAddressData(resp.http_response.c_str(), CC1_PROTOCOL);
 		}
 
 	}

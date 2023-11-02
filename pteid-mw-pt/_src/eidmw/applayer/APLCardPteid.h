@@ -307,6 +307,12 @@ friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses
 };
 
 
+enum RemoteAddressProtocol {
+    CC1_PROTOCOL = 1,
+    CC2_PROTOCOL = 2
+};
+
+
 /******************************************************************************//**
   * Class that represent the document Address on a PTEID card
   *
@@ -373,7 +379,7 @@ private:
 
 	void loadRemoteAddress();
     void loadRemoteAddress_CC2();
-    long validateRemoteAddressData(const char * json_response, const std::string &endpoint);
+    long validateRemoteAddressData(const char * json_response, RemoteAddressProtocol endpoint);
 	void mapNationalFields(cJSON * json_obj);
 	void mapForeignFields(cJSON * json_obj);
 
