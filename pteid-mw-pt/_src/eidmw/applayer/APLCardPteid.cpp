@@ -1416,6 +1416,7 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     std::string url_endpoint_mutual_auth1 = buildRemoteAddressURL(CC2_PROTOCOL, 3);
     std::string url_endpoint_mutual_auth2 = buildRemoteAddressURL(CC2_PROTOCOL, 4);
     long exception_code = 0;
+    const unsigned long ADDRESS_PIN_IDX = 2;
 
     MutualAuthentication mutual_authentication(m_card);
 
@@ -1433,8 +1434,16 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 	CByteArray ecdh_params = mutual_authentication.getECDHParams();
 
     m_card->readFile(PTEID_FILE_CERT_AUTHENTICATION_V2, authCert_data);
-    //TODO: send VERIFY command with cached PIN
-    //m_card->verifyAddressPin();
+
+    //Send VERIFY command for Address PIN with cached value
+    //In CC2 we can't guarantee that the verified state from a previous call to verify address PIN is kept in the card
+    /*unsigned long ulRemaining = 0;
+    m_card->getCalReader()->setSSO(true);
+    m_card->getCalReader()->PinCmd(PIN_OP_VERIFY, m_card->getPin(ADDRESS_PIN_IDX), "", "", ulRemaining);
+    MWLOG(LEV_DEBUG, MOD_APL, "Verified address PIN with cached value. Tries left: %lu", ulRemaining);
+
+    //Clear cached PIN
+    m_card->getCalReader()->setSSO(false); */
 
     char * json_str = build_json_ecdh1(ecdh_params, dg13_data, sod_data, authCert_data, serialNumber);
 

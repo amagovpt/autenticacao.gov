@@ -555,12 +555,22 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
     // There's a path in the EF(AODF) for the PINs, but it's
     // not necessary, so we can save a Select File command
     pteidPin.csPath = "";
+    std::string pin1 = csPin1;
 
-    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::PinCmd called with operation=%d", (int)operation);
+    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::PinCmd called with operation=%d for pinRef: %lu", (int)operation, Pin.ulPinRef);
+    if (m_poContext->m_bSSO) {
+        /* Verify with cached PIN is supported for CC2 and address PIN only */
+        if (operation == PIN_OP_VERIFY && Pin.ulPinRef == 0x83 && GetType() == CARD_PTEID_IAS5) {
+            if (m_verifiedPINs.find(Pin.ulID) != m_verifiedPINs.end())
+            {
+                pin1 = m_verifiedPINs[Pin.ulID];
+            }
+        }
+    }
 
 	pteidPin.encoding = PIN_ENC_ASCII; //PT uses ASCII only for PIN
 	if (GetType() == CARD_PTEID_IAS07 || GetType() == CARD_PTEID_IAS5) {
-		pincheck = CPkiCard::PinCmd(operation, pteidPin, csPin1, csPin2,
+		pincheck = CPkiCard::PinCmd(operation, pteidPin, pin1, csPin2,
                                 ulRemaining, pKey,bShowDlg, wndGeometry, unblockFlags);
 	} else {
 		pincheck = CPkiCard::PinCmdIAS(operation, pteidPin, csPin1, csPin2, ulRemaining,
@@ -747,9 +757,9 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingT
 		{
 			cached_pin = m_verifiedPINs[pPin->ulID];
 
-    			MWLOG(LEV_DEBUG, MOD_CAL, "Using cached pin for %s", pPin->csLabel.c_str());
+    		MWLOG(LEV_DEBUG, MOD_CAL, "Using cached pin for %s", pPin->csLabel.c_str());
 		}
-        	bOK = PinCmd(PIN_OP_VERIFY, *pPin, cached_pin, "", ulRemaining, &key);
+        bOK = PinCmd(PIN_OP_VERIFY, *pPin, cached_pin, "", ulRemaining, &key);
 	}
 	else
 	{
