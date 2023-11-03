@@ -185,7 +185,7 @@ Rectangle {
                 }
 
                 var new_x = propertyPageLoader.propertyBackupCoordX * background_image.width
-                var new_y = (propertyPageLoader.propertyBackupCoordY * background_image.height) - dragSigRect.height
+                var new_y = (propertyPageLoader.propertyBackupCoordY * background_image.height)
                 setSignPreview(new_x, Math.max(new_y, 0))
 
                 updateSealPreview()
@@ -533,7 +533,7 @@ Rectangle {
         dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
 
         propertyPageLoader.propertyBackupCoordX = dragTarget.coord_x
-        propertyPageLoader.propertyBackupCoordY = dragTarget.coord_y
+        propertyPageLoader.propertyBackupCoordY = dragSigRect.y / background_image.height
 
         dragTarget.lastCoord_x = dragSigRect.x
         dragTarget.lastCoord_y = dragSigRect.y
