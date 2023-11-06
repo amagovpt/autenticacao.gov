@@ -20,6 +20,7 @@ import "../../scripts/Functions.js" as Functions
 import eidguiV2 1.0
 
 PageDefinitionsAppForm {
+    property bool adminConfiguration: controler.getAdminConfiguration()
 
     Keys.onPressed: {
         console.log("PageDefinitionsAppForm onPressed:" + event.key)
@@ -327,6 +328,16 @@ PageDefinitionsAppForm {
         propertyCheckboxAutProxy.checked = controler.getProxyUsernameValue().length > 0 ? true : false
         propertyTextFieldAutUser.text = controler.getProxyUsernameValue()
         propertyTextFieldAutPass.text = controler.getProxyPwdValue()
+
+        if(adminConfiguration === true) {
+            propertyCheckboxProxy.enabled = !adminConfiguration
+            propertyCheckboxSystemProxy.enabled = !adminConfiguration
+            propertyCheckboxAutProxy.enabled = !adminConfiguration
+            propertyTextFieldAutUser.enabled = !adminConfiguration
+            propertyTextFieldAutPass.enabled = !adminConfiguration
+            propertyTextFieldAdress.enabled = !adminConfiguration
+            propertyTextFieldPort.enabled = !adminConfiguration
+        }
 
         console.log("Page definitions onCompleted finished")
         if(mainFormID.propertyPageLoader.propertyForceFocus)

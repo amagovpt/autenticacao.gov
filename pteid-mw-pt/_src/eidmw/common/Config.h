@@ -241,6 +241,7 @@ replace $install by string in install parameter
 
 #define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL      L"remoteaddr_url"          //string
 #define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_TST  L"remoteaddr_url_test"     //string
+#define EIDMW_CNF_GENERAL_ADMIN_CONFIGURATION     L"admin_config"       //number; 0=admin configuration is disabled(default), 1=admin configuration is enabled
 
 namespace eIDMW
 {
@@ -411,6 +412,7 @@ public:
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSIGNOPTIONS;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SHOWSIGNHELP;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_SIGNSEALOPTIONS;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GUITOOL_ADMIN_CONFIGURATION;
 
     //XSIGN
     static const struct Param_Str EIDMW_CONFIG_PARAM_XSIGN_TSAURL;

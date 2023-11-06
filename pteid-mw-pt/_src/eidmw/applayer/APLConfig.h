@@ -39,8 +39,17 @@ namespace eIDMW
 class APL_Config
 {
 public:
-	EIDMW_APL_API APL_Config(const CConfig::Param_Str param);
-	EIDMW_APL_API APL_Config(const CConfig::Param_Num param);
+    enum tLookupBehaviour
+    {
+        NORMAL=0,
+        USER_ONLY,
+        SYSTEM_ONLY
+    };
+
+    EIDMW_APL_API APL_Config(const CConfig::Param_Str& param);
+    EIDMW_APL_API APL_Config(const CConfig::Param_Num& param);
+    EIDMW_APL_API APL_Config(const CConfig::Param_Num& param, tLookupBehaviour behaviour);
+    EIDMW_APL_API APL_Config(const CConfig::Param_Str& param, tLookupBehaviour behaviour);
 
     EIDMW_APL_API APL_Config(const char *csName, const char *czSection, const char *csDefaultValue);
     EIDMW_APL_API APL_Config(const char *csName, const wchar_t *czSection, const wchar_t *csDefaultValue);
@@ -62,12 +71,6 @@ public:
 	EIDMW_APL_API void setLong(long lValue, bool system=false);
     EIDMW_APL_API static void setTestMode(bool bTestMode);
     
-	enum tLookupBehaviour
-    {
-		NORMAL=0,
-        USER_ONLY,
-		SYSTEM_ONLY
-    };
 
 	EIDMW_APL_API void ChangeLookupBehaviour(tLookupBehaviour eBehaviour);
 

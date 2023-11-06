@@ -217,6 +217,42 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
     }
 }
 
+void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QString file = context.file ? context.file : "";
+    QString function = context.function ? context.function : "";
+    PTEID_LogLevel msgLvl;
+
+    switch (type) {
+    case QtDebugMsg:
+        qDebug().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_DEBUG;
+        break;
+    case QtInfoMsg:
+        qInfo().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_INFO;
+        break;
+    case QtWarningMsg:
+        qWarning().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_WARNING;
+        break;
+    case QtCriticalMsg:
+        qCritical().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_CRITICAL;
+        break;
+    case QtFatalMsg:
+    default:
+        qCritical().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_CRITICAL;
+    }
+
+    QString message = QString ("%1 - %2 - %3 - %4").arg(file, function)
+                                                   .arg(context.line)
+                                                   .arg(msg);
+
+    PTEID_LOG(msgLvl, "QT-messages", message.toStdString().c_str());
+}
+
 int main(int argc, char *argv[])
 {
     int retValue = SUCCESS_EXIT_CODE;
@@ -249,6 +285,8 @@ int main(int argc, char *argv[])
 
 	FILE * errFile = handleSTDErr();
     SingleApplication app(argc, argv);
+
+    qInstallMessageHandler(myMessageOutput);
 
     // Parse command line arguments
     QCommandLineParser parser;

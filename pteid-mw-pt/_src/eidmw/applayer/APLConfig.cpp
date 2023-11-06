@@ -92,7 +92,7 @@ std::string getHostFromUrl(const char *csUrl);
 /*****************************************************************************************
 ------------------------------------ APL_Config ---------------------------------------
 *****************************************************************************************/
-APL_Config::APL_Config(const CConfig::Param_Str param)
+APL_Config::APL_Config(const CConfig::Param_Str& param)
 {
 	m_eBehaviour=NORMAL;
 
@@ -110,7 +110,7 @@ APL_Config::APL_Config(const CConfig::Param_Str param)
 	m_numtype=false;
 }
 
-APL_Config::APL_Config(const CConfig::Param_Num param)
+APL_Config::APL_Config(const CConfig::Param_Num& param)
 {
 	m_eBehaviour=NORMAL;
 
@@ -126,6 +126,18 @@ APL_Config::APL_Config(const CConfig::Param_Num param)
 	m_lvalue=m_ldefvalue;
 
 	m_numtype=true;
+}
+
+APL_Config::APL_Config(const CConfig::Param_Num& param, tLookupBehaviour behaviour)
+    : APL_Config(param)
+{
+    m_eBehaviour = behaviour;
+}
+
+APL_Config::APL_Config(const CConfig::Param_Str& param, tLookupBehaviour behaviour)
+    : APL_Config(param)
+{
+    m_eBehaviour = behaviour;
 }
 
 APL_Config::APL_Config(const char *csName, const char *czSection, const char *csDefaultValue)
@@ -315,16 +327,25 @@ void APL_Config::setTestMode(bool bTestMode)
 
 void APL_Config::getSpecialValue()
 {
+    if(wcscmp(m_section.c_str(),EIDMW_CNF_SECTION_PROXY)==0)
+    {
+        auto adminConfig = CConfig::GetLong(CConfig::SYSTEM, CConfig::EIDMW_CONFIG_PARAM_GUITOOL_ADMIN_CONFIGURATION.csParam,
+                                            CConfig::EIDMW_CONFIG_PARAM_GUITOOL_ADMIN_CONFIGURATION.csSection,
+                                            CConfig::EIDMW_CONFIG_PARAM_GUITOOL_ADMIN_CONFIGURATION.lDefault);
+
+        CConfig::tLocation location = adminConfig == 0 ? CConfig::USER : CConfig::SYSTEM;
 	if(m_numtype)
 	{
 		//EIDMW_CNF_PROXY_PORT
-		if(wcscmp(m_section.c_str(),EIDMW_CNF_SECTION_PROXY)==0 && wcscmp(m_name.c_str(),EIDMW_CNF_PROXY_PORT)==0)
+            if(wcscmp(m_name.c_str(),EIDMW_CNF_PROXY_PORT)==0)
 		{
 			//Proxy Host, Port and PacFile are linked together
 			//If host = none then the 3 params keep their default value
 			//If pac is not the default one, the host and port are.
-			std::wstring	host=CConfig::GetString(EIDMW_CNF_PROXY_HOST,m_section,CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST.csDefault);
+                std::wstring	host=CConfig::GetString(location, EIDMW_CNF_PROXY_HOST,m_section,CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST.csDefault);
 			std::wstring	pac =CConfig::GetString(EIDMW_CNF_PROXY_PACFILE,m_section,CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE.csDefault);
+                m_lvalue=CConfig::GetLong(location, CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT.csParam, CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT.csSection,
+                                            CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT.lDefault);
 			if(host.compare(L"none")==0)
 			{
 				m_lvalue=CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT.lDefault;
@@ -341,17 +362,23 @@ void APL_Config::getSpecialValue()
 					getProxySystemWide(L"", m_ldefvalue, L"", NULL, &m_lvalue, NULL);
 			}
 		}
+            else if(wcscmp(m_name.c_str(), EIDMW_CNF_PROXY_USE_SYSTEM)==0)
+            {
+                m_lvalue=CConfig::GetLong(location, CConfig::EIDMW_CONFIG_PARAM_PROXY_USE_SYSTEM.csParam, CConfig::EIDMW_CONFIG_PARAM_PROXY_USE_SYSTEM.csSection,
+                                            CConfig::EIDMW_CONFIG_PARAM_PROXY_USE_SYSTEM.lDefault);
+            }
 	}
 	else
 	{
 		//EIDMW_CNF_PROXY_HOST
-		if(wcscmp(m_section.c_str(),EIDMW_CNF_SECTION_PROXY)==0 && wcscmp(m_name.c_str(),EIDMW_CNF_PROXY_HOST)==0)
+            if(wcscmp(m_name.c_str(),EIDMW_CNF_PROXY_HOST)==0)
 		{
 			//Proxy Host, Port and PacFile are linked together
 			//If host = none then the 3 params keep their default value
 			//If pac is not the default one, the host and port are.
 			std::wstring	pac =CConfig::GetString(EIDMW_CNF_PROXY_PACFILE,m_section,CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE.csDefault);
-			long			port=CConfig::GetLong(EIDMW_CNF_PROXY_PORT,m_section,CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT.lDefault);
+                long			port=CConfig::GetLong(location, EIDMW_CNF_PROXY_PORT,m_section,CConfig::EIDMW_CONFIG_PARAM_PROXY_PORT.lDefault);
+                m_strwvalue = CConfig::GetString(location, EIDMW_CNF_PROXY_HOST,m_section,CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST.csDefault);
 			if(m_strwvalue.compare(L"none")==0)
 			{
 				m_strwvalue=CConfig::EIDMW_CONFIG_PARAM_PROXY_HOST.csDefault;
@@ -369,7 +396,7 @@ void APL_Config::getSpecialValue()
 			}
 		}
 		//EIDMW_CNF_PROXY_PACFILE
-		else if(wcscmp(m_section.c_str(),EIDMW_CNF_SECTION_PROXY)==0 && wcscmp(m_name.c_str(),EIDMW_CNF_PROXY_PACFILE)==0)
+            else if(wcscmp(m_name.c_str(),EIDMW_CNF_PROXY_PACFILE)==0)
 		{
 			//Proxy Host, Port and PacFile are linked together
 			//If host = none then the 3 params keep their default value
@@ -392,6 +419,15 @@ void APL_Config::getSpecialValue()
 					getProxySystemWide(L"", 0, m_strdefvalue.c_str(), NULL, NULL, &m_strwvalue);
 			}
 		}
+            else if(wcscmp(m_name.c_str(),EIDMW_CNF_PROXY_USERNAME)==0)
+            {
+                m_strwvalue = CConfig::GetString(location, CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME.csParam, m_section, CConfig::EIDMW_CONFIG_PARAM_PROXY_USERNAME.csDefault);
+            }
+            else if(wcscmp(m_name.c_str(),EIDMW_CNF_PROXY_PASSWORD)==0)
+            {
+                m_strwvalue = CConfig::GetString(location, CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD.csParam, m_section, CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD.csDefault);
+            }
+        }
 	}
 }
 

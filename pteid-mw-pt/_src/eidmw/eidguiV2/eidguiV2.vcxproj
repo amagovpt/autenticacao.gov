@@ -123,7 +123,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -180,7 +180,7 @@ echo "**************************************************************************
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
-      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -234,7 +234,7 @@ echo "**************************************************************************
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -273,7 +273,7 @@ echo "**************************************************************************
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\qml-app\pteidguiV2.exe</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
