@@ -14,6 +14,8 @@
 #include <QDateTime>
 #include <QImage>
 
+#include <regex>
+
 #include "scapclient.h"
 #include "scapservice.h"
 #include "scapsettings.h"
@@ -50,15 +52,19 @@ static std::string generate_process_id()
 
 static std::string get_nic_from_subject_sn(const std::string &subject_serial_number)
 {
-	// remove "BI" prefix and checkdigit from NIC
-	size_t offset = 0;
-	size_t nic_length = 8;
+	// remove any textual prefix and checkdigit from NIC
+	// Regex for 8-digit NIC number
+	std::regex nic_pattern("\\d{8}");
 
-	if (subject_serial_number.find("BI") == 0) {
-		offset = 2;
+	std::smatch match;
+
+	if (std::regex_search(subject_serial_number, match, nic_pattern)) {
+		return match[0];
+	} else {
+		MWLOG(LEV_ERROR, MOD_SCAP, "No NIC found in subject SN: %s", subject_serial_number.c_str());
+		return "";
 	}
 
-	return subject_serial_number.substr(offset, nic_length);
 }
 
 static std::string get_nic_from_cert(PTEID_Certificate &certificate)
