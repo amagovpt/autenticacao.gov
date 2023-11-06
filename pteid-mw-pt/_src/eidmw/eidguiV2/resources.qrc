@@ -111,5 +111,6 @@
         <file>images/icons-resize.png</file>
         <file>images/titleBar/quit_hover_blue.png</file>
         <file>images/zip.png</file>
+        <file>images/icons-resize-disabled.png</file>
     </qresource>
 </RCC>

@@ -218,6 +218,7 @@ Rectangle {
                     width: Constants.FOCUS_BORDER; height: parent.height
                     anchors.left: parent.right
                     clip: false
+                    enabled: !propertyCheckSignReduced.checked
 
                     MouseArea {
                         id: mouseRegioncontainerMouseMovCalcRight
@@ -258,7 +259,8 @@ Rectangle {
                     z:10
                     width: parent.width ; height: Constants.FOCUS_BORDER
                     anchors.top: dragSigRect.bottom
-                    clip: false 
+                    clip: false
+                    enabled: !propertyCheckSignReduced.checked
 
                     MouseArea {
                         id: mouseRegioncontainerMouseMovCalcBottom
@@ -489,7 +491,8 @@ Rectangle {
                 anchors.horizontalCenter: dragSigRect.right
 
                 visible: fileLoaded && dragSigRect.visible
-                source: "qrc:/images/icons-resize.png"
+                enabled: !propertyCheckSignReduced.checked
+                source: enabled ? "qrc:/images/icons-resize.png" : "qrc:/images/icons-resize-disabled.png"
             }
 
             onWidthChanged: {
