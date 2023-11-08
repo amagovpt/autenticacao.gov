@@ -18,6 +18,7 @@
 #include "MWException.h"
 #include "Log.h"
 #include "MiscUtil.h"
+#include "eidErrors.h"
 #include "ByteArray.h"
 #include "APLCard.h"
 #include "APLCertif.h"
@@ -78,12 +79,68 @@ char * BinaryToHexString(unsigned char * argbuf, unsigned int len)
 }
 
 
+CByteArray encode_ECDSA_signature(const CByteArray &raw_signature) {
+
+    if (raw_signature.Size() % 2 != 0) {
+       throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+    }
+
+    const int key_length = raw_signature.Size() / 2;
+
+    CByteArray sig_r = raw_signature.GetBytes(0, key_length);
+    CByteArray sig_s = raw_signature.GetBytes(key_length);
+
+    CByteArray encoded_sig;
+    unsigned char *der_data = NULL;
+    int der_length = 0;
+
+    ECDSA_SIG *ecdsa_sig = ECDSA_SIG_new();
+    if (ecdsa_sig == NULL) {
+        return encoded_sig;
+    }
+
+    // Set the r and s values from raw bigintegers
+    BIGNUM *r = BN_bin2bn(sig_r.GetBytes(), sig_r.Size(), NULL);
+    BIGNUM *s = BN_bin2bn(sig_s.GetBytes(), sig_s.Size(), NULL);
+
+    if (r == NULL || s == NULL) {
+        ERR_print_errors_fp(stderr);
+        goto cleanup;
+    }
+
+    // Set the r and s values in the ECDSA signature structure
+    if (!ECDSA_SIG_set0(ecdsa_sig, r, s)) {
+        ERR_print_errors_fp(stderr);
+        goto cleanup;
+    }
+
+    der_length = i2d_ECDSA_SIG(ecdsa_sig, &der_data);
+    if (der_length < 0) {
+        ERR_print_errors_fp(stderr);
+        goto cleanup;
+    }
+    encoded_sig.Append(der_data, der_length);
+
+cleanup:
+    if (ecdsa_sig != NULL) {
+        ECDSA_SIG_free(ecdsa_sig);
+    }
+
+    return encoded_sig;
+}
+
+
 CByteArray PteidSign(APL_Card *card, CByteArray &to_sign)
 {
 	//True for the signatureKey and SHA-256 params
 	CByteArray output = card->Sign(to_sign, true, SIGN_ALGO_RSA_PKCS);
 
-	return output;
+    if (card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+        return encode_ECDSA_signature(output);
+    }
+    else {
+	   return output;
+    }
 }
 
 

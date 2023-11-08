@@ -687,56 +687,6 @@ void KeepAliveThread::Run() {
 	MWLOG(LEV_DEBUG, MOD_CAL, "Stopping KeepAliveThread");
 }
 
-CByteArray encode_ECDSA_signature(const CByteArray &raw_signature) {
-
-    if (raw_signature.Size() % 2 != 0) {
-       throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-    }
-
-    const int key_length = raw_signature.Size() / 2;
-
-    CByteArray sig_r = raw_signature.GetBytes(0, key_length);
-    CByteArray sig_s = raw_signature.GetBytes(key_length);
-
-    CByteArray encoded_sig;
-    unsigned char *der_data = NULL;
-    int der_length = 0;
-
-    ECDSA_SIG *ecdsa_sig = ECDSA_SIG_new();
-    if (ecdsa_sig == NULL) {
-        return encoded_sig;
-    }
-
-    // Set the r and s values from raw bigintegers
-    BIGNUM *r = BN_bin2bn(sig_r.GetBytes(), sig_r.Size(), NULL);
-    BIGNUM *s = BN_bin2bn(sig_s.GetBytes(), sig_s.Size(), NULL);
-
-    if (r == NULL || s == NULL) {
-        ERR_print_errors_fp(stderr);
-        goto cleanup;
-    }
-
-    // Set the r and s values in the ECDSA signature structure
-    if (!ECDSA_SIG_set0(ecdsa_sig, r, s)) {
-        ERR_print_errors_fp(stderr);
-        goto cleanup;
-    }
-
-    der_length = i2d_ECDSA_SIG(ecdsa_sig, &der_data);
-    if (der_length < 0) {
-        ERR_print_errors_fp(stderr);
-        goto cleanup;
-    }
-    encoded_sig.Append(der_data, der_length);
-
-cleanup:
-    if (ecdsa_sig != NULL) {
-        ECDSA_SIG_free(ecdsa_sig);
-    }
-
-    return encoded_sig;
-}
-
 CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingType,
     const CByteArray & oData, const tPin *pPin)
 {
@@ -824,13 +774,8 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingT
 
     // Remove SW1-SW2 from the response
     oResp.Chop(2);
-
-    if (m_cardType == CARD_PTEID_IAS5) {
-        return encode_ECDSA_signature(oResp);
-    }
-    else {
-        return oResp;
-    }
+    
+    return oResp;
 }
 
 bool CPteidCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
