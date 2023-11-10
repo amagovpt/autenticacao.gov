@@ -313,11 +313,8 @@ private:
 	void loadFromFile();									/**< Load all the certificates from the certificates directory */
 	void init(APL_SmartCard *card);
 
-	void resetIssuers(); /**< Reset issuer pointer in the certifactes from the store */
-	void resetRoots();	/**< Reset root flag in the certifactes from the store */
-	void resetTests();	/**< Reset test flag in the certifactes from the store */
-
-	void initMyCerts();
+	void resetIssuers(); /**< Reset issuer pointer in the certificates from the store */
+	void resetRoots();	/**< Reset root flag in the certificates from the store */
 
 	/**
 	 * This is a callback function for the scanDir
@@ -535,7 +532,6 @@ public:
 
 	void resetIssuer();	/**< reset m_issuer pointer */
 	void resetRoot();	/**< reset m_root flag */
-	void resetTest();	/**< reset m_test flag */
 
 protected:
 
