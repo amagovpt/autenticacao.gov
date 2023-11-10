@@ -71,13 +71,13 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	{
 		m_data=*file;
 		m_keepdata=true;
+        m_status = CARDFILESTATUS_OK;
 	}
 	else
 	{
 		m_keepdata=false;
+        m_status=CARDFILESTATUS_UNREAD;
 	}
-
-	m_status=CARDFILESTATUS_UNREAD;
 
 }
 
@@ -172,10 +172,12 @@ bool APL_CardFile::ShowData()
 
 const CByteArray& APL_CardFile::getData()
 {
-	if(ShowData())
-		return m_data;
-
-	return EmptyByteArray;
+    bool status_ok = m_keepdata;
+	if(!m_keepdata) {
+        status_ok = ShowData();
+    }
+	
+    return status_ok ? m_data : EmptyByteArray;
 }
 
 /*****************************************************************************************
