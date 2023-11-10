@@ -326,11 +326,14 @@ namespace eIDMW
 		return sig_rect;
 	}
 
-	CByteArray PDFSignature::getCitizenCertificate()
-	{
-		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: getCitizenCertificate() This should only be called for Card Signature!");
+	CByteArray PDFSignature::getCitizenCertificate() {
+		MWLOG(LEV_DEBUG, MOD_APL, "%s This should only be called for Card Signature!", __FUNCTION__);
 
-		CByteArray certData;
+        if (m_card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+            APL_SmartCard *pcard = dynamic_cast<APL_SmartCard *>(m_card);
+            pcard->selectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+        }
+        CByteArray certData;
 		m_card->readFile(m_card->getType() == APL_CARDTYPE_PTEID_IAS5 ? 
                          PTEID_FILE_CERT_SIGNATURE_V2 : PTEID_FILE_CERT_SIGNATURE, certData);
 
