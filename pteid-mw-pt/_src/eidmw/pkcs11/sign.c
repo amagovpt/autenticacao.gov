@@ -374,7 +374,13 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
       case CKM_SHA512_RSA_PKCS:
       case CKM_SHA256_RSA_PKCS_PSS:
       case CKM_SHA384_RSA_PKCS_PSS:
+      case CKM_ECDSA_SHA1:
+      case CKM_ECDSA_SHA224:
+      case CKM_ECDSA_SHA256:
+      case CKM_ECDSA_SHA384:
+      case CKM_ECDSA_SHA512:
       case CKM_SHA512_RSA_PKCS_PSS: ihash = 1; break;
+      case CKM_ECDSA:
       case CKM_RSA_PKCS_PSS:
       case CKM_RSA_PKCS:            ihash = 0; break;
       default: 

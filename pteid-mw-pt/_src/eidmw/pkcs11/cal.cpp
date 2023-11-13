@@ -1033,6 +1033,12 @@ try
       case CKM_SHA384_RSA_PKCS:        algo = SIGN_ALGO_SHA384_RSA_PKCS;     break;
       case CKM_SHA512:
       case CKM_SHA512_RSA_PKCS:        algo = SIGN_ALGO_SHA512_RSA_PKCS;     break;
+      case CKM_ECDSA:                  algo = SIGN_ALGO_ECDSA;               break;      
+      case CKM_ECDSA_SHA1:             algo = SIGN_ALGO_ECDSA_SHA1;          break;      
+      case CKM_ECDSA_SHA224:           algo = SIGN_ALGO_ECDSA_SHA224;        break;      
+      case CKM_ECDSA_SHA256:           algo = SIGN_ALGO_ECDSA_SHA256;        break;      
+      case CKM_ECDSA_SHA384:           algo = SIGN_ALGO_ECDSA_SHA384;        break;      
+      case CKM_ECDSA_SHA512:           algo = SIGN_ALGO_ECDSA_SHA512;        break;      
       case CKM_RSA_PKCS_PSS:
 	  case CKM_SHA384_RSA_PKCS_PSS:
 	  case CKM_SHA512_RSA_PKCS_PSS:
