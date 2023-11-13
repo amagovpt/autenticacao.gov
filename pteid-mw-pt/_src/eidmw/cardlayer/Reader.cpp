@@ -561,7 +561,7 @@ CByteArray CReader::Sign(const tPrivKey & key, unsigned long paddingType,
 
 	oAID_Data.Append(oData);
 
-	if (ulSupportedAlgos & SIGN_ALGO_RSA_PKCS)
+	if (ulSupportedAlgos & SIGN_ALGO_RSA_PKCS || ulSupportedAlgos & SIGN_ALGO_ECDSA)
 	{
 		return m_poCard->Sign(key, GetPinByID(key.ulAuthID),
 				paddingType, oAID_Data);
