@@ -583,13 +583,14 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
 
 unsigned long CPteidCard::GetSupportedAlgorithms()
 {
-	unsigned long ulAlgos =
-		SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS | SIGN_ALGO_SHA256_RSA_PKCS;
+	unsigned long ulAlgos = 0;
 		
 	if (m_cardType == CARD_PTEID_IAS07) {
 		std::string applet_version = GetAppletVersion();
 		char major_version = applet_version[0] == 'v' ? applet_version[1] : applet_version[0];
 			
+		ulAlgos |= SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS | SIGN_ALGO_SHA256_RSA_PKCS;
+		
 		//We could assume that future versions also support these but it's best to be conservative about
 		//supported algorithms
 		if (major_version == '4')
