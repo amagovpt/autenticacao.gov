@@ -66,6 +66,7 @@ extern "C" {
 	{ CKA_SIGN_RECOVER,     ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_DECRYPT,          ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_UNWRAP,           ( CK_VOID_PTR ) NULL, 0 },   \
+   { CKA_EC_PARAMS,        ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_MODULUS,          ( CK_VOID_PTR ) NULL, 0 },   \
    { CKA_MODULUS_BITS,     ( CK_VOID_PTR ) NULL, 0 },   \
    { CKA_EXTRACTABLE,      ( CK_VOID_PTR ) NULL, 0 },   \

@@ -618,6 +618,10 @@ try
    {
    	CReader &oReader = oCardLayer->getReader(szReader);
 	oReader.PrivKeyCount();
+   
+   if(oReader.GetCardType() == CARD_PTEID_IAS5) {
+      keytype = CKK_EC;
+   }
 
    for (i=0; i < oReader.PrivKeyCount(); i++)
       {
@@ -848,6 +852,8 @@ tCert cert;
 tPrivKey key;
 std::string szReader;
 P11_SLOT *pSlot = NULL;
+CK_KEY_TYPE keytype = CKK_RSA;
+unsigned char ec_params[12] = {0x30, 0x0A};
 
 pSlot = p11_get_slot(hSlot);
 if (pSlot == NULL)
@@ -888,6 +894,7 @@ try
 
    // Select EID app before reading certificate
    if(oReader.GetCardType() == CARD_PTEID_IAS5) {
+      keytype = CKK_EC;
       oReader.SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
    }
 
@@ -916,6 +923,30 @@ try
 
    pCertObject->state = P11_CACHED;
 
+   // Read public key file directly from card
+   if (oReader.GetCardType() == CARD_PTEID_IAS5) {
+      // pID = type
+      unsigned char recvbuf[1024];
+      unsigned long recvlen = sizeof(recvbuf);
+      unsigned char cmd[16] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x06, 0x00, 0x00};
+                               
+      if (*pID == 0x45)
+         cmd[9] = 0x08; // Sign
+      else
+         cmd[9] = 0x06; // Auth
+
+      // EC parameters
+      auto result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
+      unsigned char oId_len = result_buff.GetByte(9) + 2; // len + 2 to account for tag and len bytes
+      unsigned char* oId_off = result_buff.GetBytes() + 8;
+
+      if (oId_len + 2 > sizeof(ec_params)) {
+         log_trace(WHERE, "E: EC params too large");
+         return (CKR_FUNCTION_FAILED);
+      }
+
+      memcpy(ec_params + 2, oId_off, oId_len);
+   }
 
    if (pPrivKeyObject)
       {
@@ -929,11 +960,17 @@ try
       ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_SIGN_RECOVER, (CK_VOID_PTR) &bfalse, sizeof(CK_BBOOL));
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_UNWRAP, (CK_VOID_PTR) &bfalse, sizeof(CK_BBOOL));
+
+      if(keytype == CKK_RSA) {
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, (CK_ULONG) certinfo.l_mod);
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, (CK_ULONG)certinfo.l_exp);
       if (ret) goto cleanup;
+      } else if (keytype == CKK_EC) {
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params, sizeof(ec_params));
+         if (ret) goto cleanup;
+      }
 
       pPrivKeyObject->state = P11_CACHED;
       }
