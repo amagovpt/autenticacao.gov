@@ -939,11 +939,19 @@ try
 
       auto result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
       int ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
+      if (ret) {
+         log_trace(WHERE, "E: Error parsing ASN1 EC param");
+         return (CKR_FUNCTION_FAILED);
+      }
       memcpy(ec_params, item.p_raw, item.l_raw);
 
       cmd[13] = 0x86;
       result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
       ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
+            if (ret) {
+         log_trace(WHERE, "E: Error parsing ASN1 EC param");
+         return (CKR_FUNCTION_FAILED);
+      }
       memcpy(ec_point, item.p_data, item.l_data);
    }
 
