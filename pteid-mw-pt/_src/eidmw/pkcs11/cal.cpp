@@ -657,7 +657,9 @@ try
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_ALWAYS_AUTHENTICATE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
       if (ret) goto cleanup;
-			ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_DERIVE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
+      ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_DERIVE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
+      if (ret) goto cleanup;
+      ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_LOCAL, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
       if (ret) goto cleanup;
       /**************************************************/
       /* Public key corresponding to private key object */
@@ -900,7 +902,6 @@ try
       oReader.SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
    }
 
-   //bValid duidt aan if cert met deze ID
    if (cert.bValid)
 	   oCertData = oReader.ReadFile(cert.csPath);
    else
@@ -928,8 +929,6 @@ try
    // Read public key file directly from card
    if (oReader.GetCardType() == CARD_PTEID_IAS5) {
       // pID = type
-      unsigned char recvbuf[1024];
-      unsigned long recvlen = sizeof(recvbuf);
       unsigned char cmd[16] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x06, 0x00, 0x00};
                                
       if (*pID == 0x45)
