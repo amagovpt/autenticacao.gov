@@ -96,6 +96,8 @@ extern "C" {
 	{ CKA_VERIFY,           ( CK_VOID_PTR ) NULL, 0 },  \
 	{ CKA_WRAP,             ( CK_VOID_PTR ) NULL, 0 },  \
    { CKA_VALUE,          ( CK_VOID_PTR ) NULL, 0 },  \
+   { CKA_EC_PARAMS,        ( CK_VOID_PTR ) NULL, 0 },   \
+   { CKA_EC_POINT,         ( CK_VOID_PTR ) NULL, 0 },   \
    { CKA_MODULUS,          ( CK_VOID_PTR ) NULL, 0 },  \
    { CKA_MODULUS_BITS,     ( CK_VOID_PTR ) NULL, 0 },  \
 	{ CKA_PUBLIC_EXPONENT,  ( CK_VOID_PTR ) NULL, 0 },  \

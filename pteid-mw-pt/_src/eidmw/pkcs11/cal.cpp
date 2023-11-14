@@ -855,6 +855,7 @@ P11_SLOT *pSlot = NULL;
 CK_KEY_TYPE keytype = CKK_RSA;
 ASN1_ITEM item;
 unsigned char ec_params[10];
+unsigned char ec_point[65];
 
 pSlot = p11_get_slot(hSlot);
 if (pSlot == NULL)
@@ -936,17 +937,14 @@ try
       else
          cmd[9] = 0x06; // Auth
 
-      // EC parameters
       auto result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
       int ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
       memcpy(ec_params, item.p_raw, item.l_raw);
 
-      if (oId_len + 2 > sizeof(ec_params)) {
-         log_trace(WHERE, "E: EC params too large");
-         return (CKR_FUNCTION_FAILED);
-      }
-
-      memcpy(ec_params + 2, oId_off, oId_len);
+      cmd[13] = 0x86;
+      result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
+      ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
+      memcpy(ec_point, item.p_data, item.l_data);
    }
 
    if (pPrivKeyObject)
@@ -963,11 +961,11 @@ try
       ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_UNWRAP, (CK_VOID_PTR) &bfalse, sizeof(CK_BBOOL));
 
       if(keytype == CKK_RSA) {
-      if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, (CK_ULONG) certinfo.l_mod);
-      if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, (CK_ULONG)certinfo.l_exp);
-      if (ret) goto cleanup;
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, (CK_ULONG) certinfo.l_mod);
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, (CK_ULONG)certinfo.l_exp);
+         if (ret) goto cleanup;
       } else if (keytype == CKK_EC) {
          ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params, sizeof(ec_params));
          if (ret) goto cleanup;
@@ -988,12 +986,19 @@ try
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_WRAP, (CK_VOID_PTR) &bfalse, sizeof(CK_BBOOL));
       if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, certinfo.l_mod);
-      if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_VALUE, (CK_VOID_PTR) certinfo.pkinfo, certinfo.l_pkinfo);
-      if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, certinfo.l_exp);
-      if (ret) goto cleanup;
+      if(keytype == CKK_RSA) {
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, certinfo.l_mod);
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_VALUE, (CK_VOID_PTR) certinfo.pkinfo, certinfo.l_pkinfo);
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, certinfo.l_exp);
+         if (ret) goto cleanup;
+      } else if (keytype == CKK_EC) {
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params, sizeof(ec_params));
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_POINT, (CK_VOID_PTR)ec_point, sizeof(ec_point));
+         if (ret) goto cleanup;
+      }
       //TODO test if we can set the trusted flag...
       ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_TRUSTED, (CK_VOID_PTR) &btrue, sizeof(btrue));
       if (ret) goto cleanup;
