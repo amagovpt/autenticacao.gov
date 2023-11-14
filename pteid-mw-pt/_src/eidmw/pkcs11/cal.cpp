@@ -853,7 +853,8 @@ tPrivKey key;
 std::string szReader;
 P11_SLOT *pSlot = NULL;
 CK_KEY_TYPE keytype = CKK_RSA;
-unsigned char ec_params[12] = {0x30, 0x0A};
+ASN1_ITEM item;
+unsigned char ec_params[10];
 
 pSlot = p11_get_slot(hSlot);
 if (pSlot == NULL)
@@ -937,8 +938,8 @@ try
 
       // EC parameters
       auto result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
-      unsigned char oId_len = result_buff.GetByte(9) + 2; // len + 2 to account for tag and len bytes
-      unsigned char* oId_off = result_buff.GetBytes() + 8;
+      int ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
+      memcpy(ec_params, item.p_raw, item.l_raw);
 
       if (oId_len + 2 > sizeof(ec_params)) {
          log_trace(WHERE, "E: EC params too large");
