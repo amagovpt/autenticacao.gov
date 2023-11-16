@@ -932,9 +932,9 @@ try
       unsigned char cmd[16] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x06, 0x00, 0x00};
                                
       if (*pID == 0x45)
-         cmd[9] = 0x08; // Sign
-      else
          cmd[9] = 0x06; // Auth
+      else
+         cmd[9] = 0x08; // Sign
 
       auto result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
       int ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
@@ -948,7 +948,7 @@ try
       result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
       ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
             if (ret) {
-         log_trace(WHERE, "E: Error parsing ASN1 EC param");
+         log_trace(WHERE, "E: Error parsing ASN1 EC point");
          return (CKR_FUNCTION_FAILED);
       }
       memcpy(ec_point, item.p_data, item.l_data);
