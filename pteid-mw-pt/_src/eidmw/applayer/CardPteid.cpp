@@ -1025,6 +1025,10 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 {
 	const auto id_file = eIDMW::decode_id_data(m_data);
 
+    if (id_file == NULL) {
+        throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+    }
+
 	m_DocumentVersion.assign((char *)(id_file->document_version->data), id_file->document_version->length);
 	m_Country.assign((char *)(id_file->issuing_state->data), id_file->issuing_state->length);
 	m_ValidityBeginDate.assign((char *)(id_file->issuing_date->data), id_file->issuing_date->length);
@@ -1047,7 +1051,10 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 	m_SurnameFather.assign((char *)(id_file->father_surname->data), id_file->father_surname->length);
 	m_GivenNameMother.assign((char *)(id_file->mother_givenname->data), id_file->mother_givenname->length);
 	m_SurnameMother.assign((char *)(id_file->mother_surname->data), id_file->mother_surname->length);
-	m_AccidentalIndications.assign((char *)(id_file->possible_indications->data), id_file->possible_indications->length);
+	//Optional field in ID file
+	if (id_file->possible_indications != NULL) {
+		m_AccidentalIndications.assign((char *)(id_file->possible_indications->data), id_file->possible_indications->length);
+	}
 
 	const auto full_mrz = m_EidFile_MRZ->getMRZ();
 	m_MRZ1.assign(full_mrz, PTEIDNG_FIELD_ID_LEN_Mrz1);
