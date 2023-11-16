@@ -857,7 +857,7 @@ P11_SLOT *pSlot = NULL;
 CK_KEY_TYPE keytype = CKK_RSA;
 ASN1_ITEM item;
 unsigned char ec_params[10];
-unsigned char ec_point[65];
+unsigned char ec_point[67];
 
 pSlot = p11_get_slot(hSlot);
 if (pSlot == NULL)
@@ -951,7 +951,10 @@ try
          log_trace(WHERE, "E: Error parsing ASN1 EC point");
          return (CKR_FUNCTION_FAILED);
       }
-      memcpy(ec_point, item.p_data, item.l_data);
+
+      ec_point[0] = 0x4; // OCTET_STRING tag
+      ec_point[1] = item.l_data; // OCTET_STRING length
+      memcpy(ec_point + 2, item.p_data, item.l_data);
    }
 
    if (pPrivKeyObject)
