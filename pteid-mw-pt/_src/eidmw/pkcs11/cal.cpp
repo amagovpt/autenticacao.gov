@@ -856,8 +856,8 @@ std::string szReader;
 P11_SLOT *pSlot = NULL;
 CK_KEY_TYPE keytype = CKK_RSA;
 ASN1_ITEM item;
-unsigned char ec_params[10];
-unsigned char ec_point[67];
+CByteArray ec_params;
+CByteArray ec_point;
 
 pSlot = p11_get_slot(hSlot);
 if (pSlot == NULL)
@@ -942,7 +942,7 @@ try
          log_trace(WHERE, "E: Error parsing ASN1 EC param");
          return (CKR_FUNCTION_FAILED);
       }
-      memcpy(ec_params, item.p_raw, item.l_raw);
+      ec_params.Append(item.p_raw, item.l_raw);
 
       cmd[13] = 0x86;
       result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
@@ -952,9 +952,9 @@ try
          return (CKR_FUNCTION_FAILED);
       }
 
-      ec_point[0] = 0x4; // OCTET_STRING tag
-      ec_point[1] = item.l_data; // OCTET_STRING length
-      memcpy(ec_point + 2, item.p_data, item.l_data);
+      ec_point.Append(0x4); // OCTET_STRING tag
+      ec_point.Append(item.l_data); // OCTET_STRING length
+      ec_point.Append(item.p_data, item.l_data);
    }
 
    if (pPrivKeyObject)
@@ -977,7 +977,7 @@ try
          ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, (CK_ULONG)certinfo.l_exp);
          if (ret) goto cleanup;
       } else if (keytype == CKK_EC) {
-         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params, sizeof(ec_params));
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params.GetBytes(), ec_params.Size());
          if (ret) goto cleanup;
       }
 
@@ -1004,9 +1004,9 @@ try
          ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, certinfo.l_exp);
          if (ret) goto cleanup;
       } else if (keytype == CKK_EC) {
-         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params, sizeof(ec_params));
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params.GetBytes(), ec_params.Size());
          if (ret) goto cleanup;
-         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_POINT, (CK_VOID_PTR)ec_point, sizeof(ec_point));
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_POINT, (CK_VOID_PTR)ec_point.GetBytes(), ec_point.Size());
          if (ret) goto cleanup;
       }
       //TODO test if we can set the trusted flag...
