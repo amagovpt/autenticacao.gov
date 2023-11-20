@@ -166,11 +166,11 @@ DWORD WINAPI   CardGetContainerInfo
     * Authentication Certificate
     */
 	if (bContainerIndex == 0) {
-		LogTrace(LOGTYPE_INFO, WHERE, "Creating Authentication Certif...");
+		LogTrace(LOGTYPE_INFO, WHERE, "Creating Authentication public key container...");
 		dwCertSpec = CERT_AUTH;
 	}
 	if (bContainerIndex == 1) {
-		LogTrace(LOGTYPE_INFO, WHERE, "Creating Non-Repudiation Certif...");
+		LogTrace(LOGTYPE_INFO, WHERE, "Creating Signature public key container");
 		dwCertSpec = CERT_NONREP;
 	}
 

@@ -228,9 +228,14 @@ DWORD WINAPI   CardSignData
 
 	if ( ( pInfo->dwSigningFlags & CARD_BUFFER_SIZE_ONLY ) == CARD_BUFFER_SIZE_ONLY)
 	{
-		LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_BUFFER_SIZE_ONLY");
+		LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_BUFFER_SIZE_ONLY for card_type: %d", card_type);
 		//TODO: hardcoded signature length
-		pInfo->cbSignedData = g_keySize / 8;
+		if (card_type == IAS_V5_CARD) {
+			pInfo->cbSignedData = 64;
+		}
+		else {
+			pInfo->cbSignedData = g_keySize / 8;
+		}
 		CLEANUP(SCARD_S_SUCCESS);
 	}
 

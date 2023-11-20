@@ -867,11 +867,18 @@ extern DWORD PteidGetIASv5PubKey(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD 
 
 	unsigned char				Cmd[128];
 	unsigned int				uiCmdLg = 0;
+	//NIST P256 keys
+	const int                   PUBKEY_LEN = 64;
+	// This offset skips the GET DATA response tag structure and the "04" uncompressed point byte
+	// It's only valid for EC keys up to 128 bytes
+	const int                   PUBKEY_OFFSET = 11;
 
 	unsigned char				recvbuf[1024];
 	unsigned long				recvlen = sizeof(recvbuf);
 
 	DWORD select_result = PteidSelectApplet(pCardData);
+
+	LogTrace(LOGTYPE_INFO, WHERE, "Reading public key for dwCertSpec=%d", dwCertSpec);
 
 	// apdu 00 CB 00 FF 0A B6 03 83 01 06 7F 49 02 86 00 00
 	Cmd[0] = 0x00;
@@ -935,12 +942,18 @@ extern DWORD PteidGetIASv5PubKey(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD 
 		return SCARD_E_UNEXPECTED;
 	}
 
-	*pcbPubKey = sizeof(BCRYPT_ECCKEY_BLOB) + 64;
+	if (recvlen-2 < (PUBKEY_OFFSET + PUBKEY_LEN)) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "GET DATA for public key returned less data than expected! data length: %d", recvlen-2);
+		return SCARD_E_UNEXPECTED;
+	}
+
+	*pcbPubKey = sizeof(BCRYPT_ECCKEY_BLOB) + PUBKEY_LEN;
 	*ppbPubKey = pCardData->pfnCspAlloc(*pcbPubKey);
 	((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->dwMagic = BCRYPT_ECDSA_PUBLIC_P256_MAGIC;
-	((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->cbKey = 32;
+	//It seems the Microsoft documentation is wrong on this cbKey field for EC keys: "The length, in bytes, of the key."
+	((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->cbKey = PUBKEY_LEN / 2;
 
-	memcpy((*ppbPubKey) + sizeof(BCRYPT_ECCKEY_BLOB), recvbuf + 11, 64);
+	memcpy((*ppbPubKey) + sizeof(BCRYPT_ECCKEY_BLOB), recvbuf + PUBKEY_OFFSET, PUBKEY_LEN);
 
 	return (dwReturn);
 }
@@ -1008,7 +1021,7 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
    Cmd [2] = 0x00;
    Cmd [3] = 0x0C;
    Cmd [4] = 0x02; 
-   Cmd [5] = 0x3F; //5F, (EF, 0C), ReadBinary(), (02, CertID)  
+   Cmd [5] = 0x3F;
    Cmd [6] = 0x00;
    uiCmdLg = 7;
 
@@ -1056,11 +1069,11 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 	 SW1 = recvbuf[recvlen-2];
 	 SW2 = recvbuf[recvlen-1];
 
-   if (!checkStatusCode(WHERE" -> select ID FILE", dwReturn, SW1, SW2))
+   if (!checkStatusCode(WHERE" -> select CIAInfo FILE", dwReturn, SW1, SW2))
 		CLEANUP(dwReturn);
 
 	
-   //READ BINARY for specific field within the ID File
+   //READ BINARY for specific field within the CIAInfo File
    Cmd [0] = 0x00;
    Cmd [1] = 0xB0;
    Cmd [2] = 0x00;
@@ -1081,7 +1094,7 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 
    if ( dwReturn != SCARD_S_SUCCESS )
    {
-		LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (READ BINARY ID) errorcode: [0x%02X]", dwReturn);
+		LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (READ BINARY ID=5032) errorcode: [0x%02X]", dwReturn);
 		CLEANUP(dwReturn);
    }
 
@@ -1466,153 +1479,154 @@ cleanup:
 DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature, BOOL pss_padding)
 {
 
-   DWORD                   dwReturn = 0;
+	DWORD                   dwReturn = 0;
 
-   SCARD_IO_REQUEST        ioSendPci = *g_pioSendPci;
+	SCARD_IO_REQUEST        ioSendPci = *g_pioSendPci;
 
-   unsigned char           Cmd[128];
-   unsigned int            uiCmdLg = 0;
-   unsigned int            signature_len = 0;
+	unsigned char           Cmd[128];
+	unsigned int            uiCmdLg = 0;
+	unsigned int            signature_len = 0;
 
-   unsigned char           recvbuf[1024];
-   unsigned long           recvlen = sizeof(recvbuf);
-   BYTE                    SW1, SW2;
-   PBYTE                   le_sig = NULL;
+	unsigned char           recvbuf[1024];
+	unsigned long           recvlen = sizeof(recvbuf);
+	BYTE                    SW1, SW2;
+	PBYTE                   le_sig = NULL;
 
-   unsigned int            i          = 0;
-   unsigned int            cbHdrHash  = 0;
-   unsigned int            hash_offset = 0;
-   unsigned int            hash_len = cbToBeSigned;
-   const unsigned char     *pbHdrHash = NULL;
-         
-   DWORD out_len = 0;
+	unsigned int            i = 0;
+	unsigned int            cbHdrHash = 0;
+	unsigned int            hash_offset = 0;
+	unsigned int            hash_len = cbToBeSigned;
+	const unsigned char     *pbHdrHash = NULL;
 
-   memset(recvbuf, 0, recvlen);
+	DWORD out_len = 0;
 
-   LogTrace(LOGTYPE_INFO, WHERE, "PteidSignDataGemsafe called with input data len: %d", cbToBeSigned);
+	memset(recvbuf, 0, recvlen);
 
-   //Skip the DigestInfo prefix as the card PSO.CDS command is prepared to receive a raw hash and add the prefix internally
-   if (!pss_padding) {
+	LogTrace(LOGTYPE_INFO, WHERE, "PteidSignDataGemsafe called with input data len: %d", cbToBeSigned);
 
-	   unsigned int digest_info_type = matchDigestInfoPrefix(pbToBeSigned, cbToBeSigned);
+	//Skip the DigestInfo prefix as the card PSO.CDS command is prepared to receive a raw hash and add the prefix internally
+	if (!pss_padding) {
 
-	   if (digest_info_type == SHA256_DIGESTINFO) {
-		   hash_offset += sizeof(SHA256_AID);
-		   hash_len    -= sizeof(SHA256_AID);
-	   }
-	   else if (digest_info_type == SHA384_DIGESTINFO) {
-		   hash_offset += sizeof(SHA384_AID);
-		   hash_len    -= sizeof(SHA384_AID);
-	   }
-	   else if (digest_info_type == SHA512_DIGESTINFO) {
-		   hash_offset += sizeof(SHA512_AID);
-		   hash_len    -= sizeof(SHA512_AID);
-	   }
+		unsigned int digest_info_type = matchDigestInfoPrefix(pbToBeSigned, cbToBeSigned);
 
-	   if (digest_info_type != 0) {
-		   LogTrace(LOGTYPE_INFO, WHERE, "Detected a prefixed hash: actually signing only %u bytes", hash_len);
-	   }
-   }
+		if (digest_info_type == SHA256_DIGESTINFO) {
+			hash_offset += sizeof(SHA256_AID);
+			hash_len -= sizeof(SHA256_AID);
+		}
+		else if (digest_info_type == SHA384_DIGESTINFO) {
+			hash_offset += sizeof(SHA384_AID);
+			hash_len -= sizeof(SHA384_AID);
+		}
+		else if (digest_info_type == SHA512_DIGESTINFO) {
+			hash_offset += sizeof(SHA512_AID);
+			hash_len -= sizeof(SHA512_AID);
+		}
 
-   dwReturn = PteidMSE(pCardData, pin_id, hash_len, pss_padding);
+		if (digest_info_type != 0) {
+			LogTrace(LOGTYPE_INFO, WHERE, "Detected a prefixed hash: actually signing only %u bytes", hash_len);
+		}
+	}
 
-   if (dwReturn != SCARD_S_SUCCESS)
-   {
-	CLEANUP(dwReturn);
-   }
-     
+	dwReturn = PteidMSE(pCardData, pin_id, hash_len, pss_padding);
 
-   /* Sign Command for GEMSAFE*/
-   Cmd [0] = 0x00;
-   Cmd [1] = 0x2A;   /* PSO: Hash COMMAND */
-   Cmd [2] = 0x90;
-   Cmd [3] = 0xA0; 
-   Cmd [4] = (BYTE)(hash_len + 2); // The value of hash_len +2 should always fit a single byte so this cast is safe 
-   Cmd [5] = 0x90;
-   Cmd [6] = (BYTE)(hash_len);
-   
-   
-   memcpy(Cmd + 7, pbToBeSigned+hash_offset, hash_len);
-   uiCmdLg = 7 + hash_len;
-   
+	if (dwReturn != SCARD_S_SUCCESS)
+	{
+		CLEANUP(dwReturn);
+	}
+
+
+	/* Sign Command for GEMSAFE*/
+	Cmd[0] = 0x00;
+	Cmd[1] = 0x2A;   /* PSO: Hash COMMAND */
+	Cmd[2] = 0x90;
+	Cmd[3] = 0xA0;
+	Cmd[4] = (BYTE)(hash_len + 2); // The value of hash_len +2 should always fit a single byte so this cast is safe 
+	Cmd[5] = 0x90;
+	Cmd[6] = (BYTE)(hash_len);
+
+
+	memcpy(Cmd + 7, pbToBeSigned + hash_offset, hash_len);
+	uiCmdLg = 7 + hash_len;
+
 #ifdef _DEBUG
-   LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", hash_len, (char *)&Cmd[5]);
-   
-   LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO Hash");
-   LogDumpHex(uiCmdLg, (char *)Cmd);
+	LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", hash_len, (char *)&Cmd[5]);
+
+	LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO Hash");
+	LogDumpHex(uiCmdLg, (char *)Cmd);
 
 #endif
-   
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
 
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: Hash) errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-   LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO Hash");
-   LogDumpHex(recvlen, (char *)recvbuf);
+	dwReturn = SCardTransmit(pCardData->hScard,
+		&ioSendPci,
+		Cmd,
+		uiCmdLg,
+		NULL,
+		recvbuf,
+		&recvlen);
+	SW1 = recvbuf[recvlen - 2];
+	SW2 = recvbuf[recvlen - 1];
 
-   if ((SW1 != 0x90 && SW2 != 0x00) && SW1 != 0x61) {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "PSO: Hash command failed with SW12 = %02x %02x", SW1, SW2);
-	   if (SW1 == 0x69 && SW2 == 0x85) {
-		   CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
-	   }
-	   else {
-		   CLEANUP(SCARD_E_UNEXPECTED);
-	   }
-   }
-  
+	if (dwReturn != SCARD_S_SUCCESS)
+	{
+		LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: Hash) errorcode: [0x%02X]", dwReturn);
+		CLEANUP(dwReturn);
+	}
+	LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO Hash");
+	LogDumpHex(recvlen, (char *)recvbuf);
+
+	if ((SW1 != 0x90 && SW2 != 0x00) && SW1 != 0x61) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "PSO: Hash command failed with SW12 = %02x %02x", SW1, SW2);
+		if (SW1 == 0x69 && SW2 == 0x85) {
+			CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
+		}
+		else {
+			CLEANUP(SCARD_E_UNEXPECTED);
+		}
+	}
+
 	unsigned char exp_sig_length = 0;
 	if (card_type == IAS_V5_CARD)
 		exp_sig_length = 0x40;
 	else
 		exp_sig_length = g_keySize == 1024 ? 0x80 : 0x00;
 
-   Cmd [0] = 0x00;
-   Cmd [1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
-   Cmd [2] = 0x9E;
-   Cmd [3] = 0x9A;
-	Cmd [4] = exp_sig_length;  /* Length of expected signature */
-   
-   uiCmdLg = 5;
+	Cmd[0] = 0x00;
+	Cmd[1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
+	Cmd[2] = 0x9E;
+	Cmd[3] = 0x9A;
+	Cmd[4] = exp_sig_length;  /* Length of expected signature */
 
-   LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO CDS");
-   LogDumpHex(uiCmdLg, (char *)Cmd);
-   
-   recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard,
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   
-   if ( dwReturn != SCARD_S_SUCCESS )   {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) errorcode: [0x%02X]", dwReturn);
-       CLEANUP(dwReturn);
-   }
+	uiCmdLg = 5;
 
-   SW1 = recvbuf[recvlen - 2];
-   SW2 = recvbuf[recvlen - 1];
+	LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO CDS");
+	LogDumpHex(uiCmdLg, (char *)Cmd);
+
+	recvlen = sizeof(recvbuf);
+	dwReturn = SCardTransmit(pCardData->hScard,
+		&ioSendPci,
+		Cmd,
+		uiCmdLg,
+		NULL,
+		recvbuf,
+		&recvlen);
+
+	if (dwReturn != SCARD_S_SUCCESS) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) errorcode: [0x%02X]", dwReturn);
+		CLEANUP(dwReturn);
+	}
+
+	SW1 = recvbuf[recvlen - 2];
+	SW2 = recvbuf[recvlen - 1];
 
 	if (card_type == IAS_V5_CARD)
 		*pcbSignature = exp_sig_length;
 	else
 		*pcbSignature = g_keySize / 8; //g_keySize == 2048 ? 0x100 : 0x80;
 
-	if (card_type == GEMSAFE_CARD)
+	if (card_type == GEMSAFE_CARD) {
 		/* Allocate memory for the intermediate little-endian signature buffer */
 		le_sig = pCardData->pfnCspAlloc(*pcbSignature);
+	}
 
    /* Allocate memory for the target signature buffer */
    *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature);
