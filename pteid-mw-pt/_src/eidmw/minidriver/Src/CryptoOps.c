@@ -214,7 +214,7 @@ DWORD WINAPI   CardSignData
 		CLEANUP(SCARD_E_NO_KEY_CONTAINER);
 	}
 
-	if ( pInfo->dwKeySpec != AT_SIGNATURE && (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE)) )
+	if ( pInfo->dwKeySpec != AT_SIGNATURE && (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE)) && pInfo->dwKeySpec != pInfo->dwKeySpec == AT_ECDSA_P256)
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->dwKeySpec]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
@@ -271,6 +271,10 @@ DWORD WINAPI   CardSignData
 	case 0:
 		if ( ( pInfo->dwSigningFlags & CARD_PADDING_INFO_PRESENT ) == CARD_PADDING_INFO_PRESENT)
 		{
+			if (card_type == IAS_V5_CARD) {
+				LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_PADDING_INFO_PRESENT using ECC IAS v5 card");
+				CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
+			}
 			LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_PADDING_INFO_PRESENT");
 			if ( pInfo->pPaddingInfo == NULL )
 			{
