@@ -55,24 +55,6 @@ bool checkResultSW12(CByteArray &result)
 	return ulSW12 == 0x9000;
 }
 
-char * byteArrayToHexString(const unsigned char *data, unsigned long array_len) {
-    const unsigned long hex_len = array_len * 2 +1;
-    char * hex = (char *)malloc(hex_len);
-    //No byte seperator in hex conversion
-    char sep = '\0';
-    size_t strlength = 0;
-    int rc = OPENSSL_buf2hexstr_ex(hex, hex_len, &strlength,
-                          data, array_len, sep);
-
-    if (!rc) {
-        MWLOG(LEV_ERROR, MOD_APL, "Failed to encode bytearray! Error code: %ld", ERR_get_error());
-        return "";
-    }
-    MWLOG(LEV_DEBUG, MOD_APL, "Encoded byte array of size: %ld", strlength);
-
-    return hex;
-}
-
 char * MutualAuthentication::generalAuthenticate(const char * ecdh_kifd)
 {
     //Algorithm ID tag 0x80: 0x4F - use AES-128 SM with legacy KDF

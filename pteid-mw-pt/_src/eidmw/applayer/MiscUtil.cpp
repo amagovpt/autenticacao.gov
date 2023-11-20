@@ -503,6 +503,24 @@ void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded
     BIO_free_all(bio);
 }
 
+char * byteArrayToHexString(const unsigned char *data, unsigned long array_len) {
+	const unsigned long hex_len = array_len * 2 + 1;
+	char * hex = (char *)malloc(hex_len);
+	//No byte seperator in hex conversion
+	char sep = '\0';
+	size_t strlength = 0;
+	int rc = OPENSSL_buf2hexstr_ex(hex, hex_len, &strlength,
+		data, array_len, sep);
+
+	if (!rc) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to encode bytearray! Error code: %ld", ERR_get_error());
+		return "";
+	}
+	MWLOG(LEV_DEBUG, MOD_APL, "Encoded byte array of size: %ld", strlength);
+
+	return hex;
+}
+
 void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
 {
     unsigned int n;
