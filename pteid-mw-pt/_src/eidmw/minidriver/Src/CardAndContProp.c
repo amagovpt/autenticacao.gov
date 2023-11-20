@@ -314,54 +314,16 @@ DWORD CardGetKeysizes(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD p
 {
    DWORD             dwReturn  = 0;
 
-   CARD_KEY_SIZES    KeySizes;
-
-   int               iUnSupported = 0;
-   int               iInValid     = 0;
-
    LogTrace(LOGTYPE_INFO, WHERE, "Property: [CP_CARD_KEYSIZES]");
+   PCARD_KEY_SIZES p_key_sizes = (PCARD_KEY_SIZES)(pbData);
 
-   switch(dwFlags)
-   {
-   case AT_ECDHE_P256 :
-   case AT_ECDHE_P384 :
-   case AT_ECDHE_P521 :
-   case AT_ECDSA_P256 :
-   case AT_ECDSA_P384 :
-   case AT_ECDSA_P521 :
-      iUnSupported++;
-      break;
-   case AT_KEYEXCHANGE:
-   case AT_SIGNATURE  :
-      break;
-   default:
-      iInValid++;
-      break;
-   }
-   if ( iInValid )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwFlags]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
-   if ( iUnSupported )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Unsupported parameter [dwFlags]");
-      CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
-   }
-
-   KeySizes.dwVersion            = CARD_KEY_SIZES_CURRENT_VERSION;
-   KeySizes.dwMinimumBitlen      = 1024;
-   KeySizes.dwDefaultBitlen      = 1024;
-   KeySizes.dwMaximumBitlen      = 2048;
-   KeySizes.dwIncrementalBitlen  = 0;
-
-   memcpy (pbData, &KeySizes, sizeof(KeySizes));
-   *pdwDataLen = sizeof(KeySizes);
-
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
+   if (pdwDataLen)
+	   *pdwDataLen = sizeof(CARD_KEY_SIZES);
+   if (cbData < sizeof(CARD_KEY_SIZES))
+	   return SCARD_E_INSUFFICIENT_BUFFER;
+   
+   return CardQueryKeySizes(pCardData, dwFlags, 0, p_key_sizes);
+   
 }
 #undef WHERE
 

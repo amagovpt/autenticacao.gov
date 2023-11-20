@@ -437,16 +437,26 @@ DWORD WINAPI   CardQueryKeySizes
 
 	switch(dwKeySpec)
 	{
-	case AT_ECDHE_P256 :
-	case AT_ECDHE_P384 :
-	case AT_ECDHE_P521 :
-	case AT_ECDSA_P256 :
-	case AT_ECDSA_P384 :
-	case AT_ECDSA_P521 :
+	case AT_ECDSA_P256:
+		pKeySizes->dwMinimumBitlen = 256;
+		pKeySizes->dwDefaultBitlen = 256;
+		pKeySizes->dwMaximumBitlen = 256;
+		pKeySizes->dwIncrementalBitlen = 1;
+		break;
+	case AT_ECDHE_P256:
+	case AT_ECDHE_P384:
+	case AT_ECDHE_P521:
+	case AT_ECDSA_P384:
+	case AT_ECDSA_P521:
 		iUnSupported++;
 		break;
+	//RSA keys
 	case AT_KEYEXCHANGE:
-	case AT_SIGNATURE  :
+	case AT_SIGNATURE:
+		pKeySizes->dwMinimumBitlen = 1024;
+		pKeySizes->dwDefaultBitlen = 3072;
+		pKeySizes->dwMaximumBitlen = 3072;
+		pKeySizes->dwIncrementalBitlen = 0;
 		break;
 	default:
 		iInValid++;
@@ -462,11 +472,6 @@ DWORD WINAPI   CardQueryKeySizes
 		LogTrace(LOGTYPE_ERROR, WHERE, "Unsupported parameter [dwKeySpec][%d]", dwKeySpec);
 		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 	}
-
-	pKeySizes->dwMinimumBitlen     = 1024;
-	pKeySizes->dwDefaultBitlen     = 1024;
-	pKeySizes->dwMaximumBitlen     = 3072;
-	pKeySizes->dwIncrementalBitlen = 0;
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
