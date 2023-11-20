@@ -24,32 +24,6 @@
 #ifndef __PTEIDMDRV__H__
 #define __PTEIDMDRV__H__
 
-/*
- * ID card properties
- */
-#define CP_ID_FILE_STRUCTURE_VERSION          L"File_Structure_Version"
-#define CP_ID_CARD_NUMBER                     L"Card_Number"
-#define CP_ID_CHIP_NUMBER                     L"Chip_Number"
-#define CP_ID_CARD_VALIDITY_BEGIN             L"Card_Validity_Begin"
-#define CP_ID_CARD_VALIDITY_END               L"Card_Validity_End"
-#define CP_ID_CARD_DELIVIRY_MUNICIPALITY      L"Card_Delivery_Municipality"
-#define CP_ID_NATIONAL_NUMBER                 L"National_Number"
-#define CP_ID_NAME                            L"Name"
-#define CP_ID_FIRST_TWO_GIVEN_NAMES           L"First_Two_Given_Names"
-#define CP_ID_FIRST_LETTER_THIRD_GIVEN_NAME   L"First_Letter_Third_Given_Name"
-#define CP_ID_NATIONALITY                     L"Nationality"
-#define CP_ID_BIRTH_LOCATION                  L"Birth_Location"
-#define CP_ID_BIRTH_DATE                      L"Birth_Date"
-#define CP_ID_GENDER                          L"Gender"
-#define CP_ID_NOBILITY                        L"Nobility"
-#define CP_ID_DOCUMENT_TYPE                   L"DocumentvType"
-#define CP_ID_SPECIAL_STATUS                  L"Special_Status"
-#define CP_ID_PHOTO_HASH                      L"Photo_Hash"
-
-#define CP_ID_ADDRESS_STREET_AND_NUMBER       L"Address_StreetvNumber"
-#define CP_ID_ADDRESS_ZIP                     L"Address_Zip"
-#define CP_ID_ADDRESS_MUNICIPALITY            L"Address_Municipality"
-
 DWORD WINAPI   CardGetContainerProperty
                (
                   __in                                         PCARD_DATA     pCardData,
@@ -102,29 +76,8 @@ DWORD CardSetParentWindow(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWOR
 DWORD CardGetPinContextString(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
 DWORD CardSetPinContextString(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWORD dwFlags);
 
-
 DWORD CardSetPropertyUnsupported(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWORD dwFlags);
-DWORD CardGetCardNumber(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
 
-DWORD CardGetChipNumber (PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetValidityBegin(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetValidityEnd(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetDeliveryMunicipality(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetNationalNumber(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetName(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetFirstTwoGivenNames(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetFirstLetterThirdGivenName(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetNationality(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetBirthLocation(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetBirthDate(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetGender(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetNobility(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetDocumentType(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetSpecialStatus(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetPhotoHash(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetAddressStreetAndNumber(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetAddressZip(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
-DWORD CardGetAddressMunicipality(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
 DWORD WINAPI   CardGetProperty
 (
    __in                                         PCARD_DATA  pCardData,
