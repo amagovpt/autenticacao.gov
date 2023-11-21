@@ -32,6 +32,7 @@
 #include "cal.h"
 #include "log.h"
 #include "cert.h"
+#include "asn1.h"
 
 
 #ifndef WIN32
@@ -849,6 +850,7 @@ P11_OBJECT *pCertObject    = NULL;
 P11_OBJECT *pPubKeyObject  = NULL;
 P11_OBJECT *pPrivKeyObject = NULL;
 T_CERT_INFO certinfo;
+T_RSA_KEY_INFO rsa_keyinfo;
 CByteArray oCertData;
 tCert cert;
 tPrivKey key;
@@ -910,6 +912,12 @@ try
       }
 
    ret = cert_get_info(oCertData.GetBytes(), oCertData.Size(), &certinfo);
+   if (ret) goto cleanup;
+
+   if (keytype == CKK_RSA) {
+      ret = get_rsa_key_info(oCertData.GetBytes(), oCertData.Size(), &rsa_keyinfo);
+      if (ret) goto cleanup;
+   }
 
    ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_SUBJECT, (CK_VOID_PTR) certinfo.subject, (CK_ULONG)certinfo.l_subject);
    if (ret) goto cleanup;
@@ -918,7 +926,7 @@ try
    ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_SERIAL_NUMBER, (CK_VOID_PTR) certinfo.serial, (CK_ULONG)certinfo.l_serial);
    if (ret) goto cleanup;
    //use real length from decoder here instead of lg from cal
-   ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_VALUE, (CK_VOID_PTR) oCertData.GetBytes(), (CK_ULONG)certinfo.lcert);
+   ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_VALUE, (CK_VOID_PTR) oCertData.GetBytes(), (CK_ULONG)oCertData.Size());
    if (ret) goto cleanup;
    //TODO Check this in the cal if we can be sure that the certificate can be trusted and not be modified on the card
    ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_TRUSTED, (CK_VOID_PTR) &btrue, sizeof(btrue));
@@ -972,9 +980,9 @@ try
 
       if(keytype == CKK_RSA) {
          if (ret) goto cleanup;
-         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, (CK_ULONG) certinfo.l_mod);
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) rsa_keyinfo.mod, (CK_ULONG) rsa_keyinfo.l_mod);
          if (ret) goto cleanup;
-         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, (CK_ULONG)certinfo.l_exp);
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) rsa_keyinfo.exp, (CK_ULONG)rsa_keyinfo.l_exp);
          if (ret) goto cleanup;
       } else if (keytype == CKK_EC) {
          ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params.GetBytes(), ec_params.Size());
@@ -997,11 +1005,9 @@ try
       ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_WRAP, (CK_VOID_PTR) &bfalse, sizeof(CK_BBOOL));
       if (ret) goto cleanup;
       if(keytype == CKK_RSA) {
-         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, certinfo.l_mod);
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) rsa_keyinfo.mod, rsa_keyinfo.l_mod);
          if (ret) goto cleanup;
-         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_VALUE, (CK_VOID_PTR) certinfo.pkinfo, certinfo.l_pkinfo);
-         if (ret) goto cleanup;
-         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, certinfo.l_exp);
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) rsa_keyinfo.exp, rsa_keyinfo.l_exp);
          if (ret) goto cleanup;
       } else if (keytype == CKK_EC) {
          ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params.GetBytes(), ec_params.Size());
