@@ -33,6 +33,7 @@ macx: LIBS += -lcrypto
 unix:LIBS += -L../lib -l$${COMMONLIB}
 unix:LIBS += -l$${DLGLIB}
 unix: LIBS += -lcrypto
+unix: LIBS += -leac
 !macx:LIBS += -lpcsclite
 
 INCLUDEPATH += . ../common 
