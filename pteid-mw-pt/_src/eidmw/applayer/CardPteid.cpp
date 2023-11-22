@@ -1744,26 +1744,18 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	X509_STORE *store = X509_STORE_new();
 
 	// Load only the SOD relevant root certificates
-
-	// TODO (DEV-CC2): uncommend comment bellow
-	// Do not try to load non-existant certificates from test cards
-
-    // load all certificates, let openssl do the job and find the needed ones...
-	// for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++){
-	// 	APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
-	// 	X509 *pX509 = NULL;
-	// 	const unsigned char *p = sod_ca->getData().GetBytes();
-
-	// 	pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
-	// 	X509_STORE_add_cert(store, pX509);
-	// 	MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
-	// }
+	for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
+		APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
+		X509 *pX509 = NULL;
+		const unsigned char *p = sod_ca->getData().GetBytes();
+		pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
+	 	X509_STORE_add_cert(store, pX509);
+		MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
+	}
 	
 	BIO *Out = BIO_new(BIO_s_mem());
 
-	verifySOD = PKCS7_verify(p7, NULL, NULL,NULL,Out, PKCS7_NOVERIFY)==1;
-	// TODO (DEV-CC2): use line below to verify
-    //verifySOD = PKCS7_verify(p7, NULL,store,NULL,Out, 0)==1;
+    verifySOD = PKCS7_verify(p7, NULL,store,NULL,Out, 0)==1;
 	if (verifySOD) {
 		unsigned char *p;
 		long size;
