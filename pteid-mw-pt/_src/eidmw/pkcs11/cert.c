@@ -154,6 +154,6 @@ unsigned char* parse_ec_point(unsigned char* ppoint, long *len) {
         return NULL;
     }
 
-    unsigned char *point = (unsigned char*)op;
+    return (unsigned char*)op;
 }
 #undef WHERE
