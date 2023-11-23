@@ -33,10 +33,6 @@
 #include "log.h"
 #include "cert.h"
 #include <openssl/asn1.h>
-#include <openssl/obj_mac.h>
-#include <openssl/objects.h>
-#include <openssl/x509.h>
-#include <openssl/core_names.h>
 
 #ifndef WIN32
 #define strcpy_s(a,b,c)         strcpy((a),(c))
@@ -952,6 +948,9 @@ try
       result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
       len = result_buff.Size();
       unsigned char* params = parse_ec_params(result_buff.GetBytes(), &len);
+      if (params == NULL)
+         return CKR_DEVICE_ERROR;
+
       ec_params.Append(params, len);
 
       // Read EC_POINT
@@ -959,6 +958,8 @@ try
       result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
       len = result_buff.Size();
       unsigned char* point = parse_ec_point(result_buff.GetBytes(), &len);
+      if (point == NULL)
+         return CKR_DEVICE_ERROR;
 
       ec_point.Append(0x4);
       ec_point.Append(len);
@@ -1039,6 +1040,16 @@ if (ret != 0)
    }
 
 cleanup:
+if (certinfo.serial) OPENSSL_free(certinfo.serial);
+if (certinfo.issuer) OPENSSL_free(certinfo.issuer);
+if (certinfo.subject) OPENSSL_free(certinfo.subject);
+
+if (keytype == CKK_RSA) {
+   if (rsa_keyinfo.exp) OPENSSL_free(rsa_keyinfo.exp);
+   if (rsa_keyinfo.mod) OPENSSL_free(rsa_keyinfo.mod);
+}
+
+
 
 return (ret);
 }
