@@ -32,8 +32,11 @@
 #include "cal.h"
 #include "log.h"
 #include "cert.h"
-#include "asn1.h"
-
+#include <openssl/asn1.h>
+#include <openssl/obj_mac.h>
+#include <openssl/objects.h>
+#include <openssl/x509.h>
+#include <openssl/core_names.h>
 
 #ifndef WIN32
 #define strcpy_s(a,b,c)         strcpy((a),(c))
@@ -857,7 +860,6 @@ tPrivKey key;
 std::string szReader;
 P11_SLOT *pSlot = NULL;
 CK_KEY_TYPE keytype = CKK_RSA;
-ASN1_ITEM item;
 CByteArray ec_params;
 CByteArray ec_point;
 
@@ -938,31 +940,29 @@ try
    if (oReader.GetCardType() == CARD_PTEID_IAS5) {
       // pID = type
       unsigned char cmd[16] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x06, 0x00, 0x00};
+      long len;
+      CByteArray result_buff;
                                
       if (*pID == 0x45)
          cmd[9] = 0x06; // Auth
       else
          cmd[9] = 0x08; // Sign
 
-      auto result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
-      int ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
-      if (ret) {
-         log_trace(WHERE, "E: Error parsing ASN1 EC param");
-         return (CKR_FUNCTION_FAILED);
-      }
-      ec_params.Append(item.p_raw, item.l_raw);
+      // Read EC_PARAMS
+      result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
+      len = result_buff.Size();
+      unsigned char* params = parse_ec_params(result_buff.GetBytes(), &len);
+      ec_params.Append(params, len);
 
+      // Read EC_POINT
       cmd[13] = 0x86;
       result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
-      ret = asn1_get_item(result_buff.GetBytes(), result_buff.Size(), "\1\1\1\1", &item);
-            if (ret) {
-         log_trace(WHERE, "E: Error parsing ASN1 EC point");
-         return (CKR_FUNCTION_FAILED);
-      }
+      len = result_buff.Size();
+      unsigned char* point = parse_ec_point(result_buff.GetBytes(), &len);
 
-      ec_point.Append(0x4); // OCTET_STRING tag
-      ec_point.Append(item.l_data); // OCTET_STRING length
-      ec_point.Append(item.p_data, item.l_data);
+      ec_point.Append(0x4);
+      ec_point.Append(len);
+      ec_point.Append(point, len);
    }
 
    if (pPrivKeyObject)

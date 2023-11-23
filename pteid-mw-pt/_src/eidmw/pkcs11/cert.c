@@ -101,3 +101,32 @@ int get_rsa_key_info(const unsigned char *pcert, unsigned int lcert, T_RSA_KEY_I
     return 0;
 }
 #undef WHERE
+
+#define WHERE "parse_ec_params()"
+unsigned char* parse_ec_params(unsigned char* pparams, long *len) {
+    unsigned char *params_wrapped = pparams + 6;
+    unsigned long params_size = *len - 6;
+    params_wrapped[0] = 0x30; // little hack with SEQUENCE tag
+
+    int tag = 0, xclass = 0;
+    const unsigned char * op = params_wrapped;
+    ASN1_get_object(&op, len, &tag, &xclass, params_size);
+
+    return (unsigned char*)op;
+}
+#undef WHERE
+
+#define WHERE "parse_ec_point()"
+unsigned char* parse_ec_point(unsigned char* ppoint, long *len) {
+    unsigned char *wrapped = ppoint + 6;
+    unsigned long wrapped_size = *len - 6;
+    wrapped[0] = 0x30; // little hack with SEQUENCE tag
+
+    int tag = 0, xclass = 0;
+    const unsigned char * op = wrapped;
+    ASN1_get_object(&op, len, &tag, &xclass, wrapped_size);
+    ASN1_get_object(&op, len, &tag, &xclass, *len);
+
+    unsigned char *point = (unsigned char*)op;
+}
+#undef WHERE

@@ -105,6 +105,8 @@ typedef struct
 
 int cert_get_info(const unsigned char *pcert, unsigned int lcert, T_CERT_INFO *info);
 int get_rsa_key_info(const unsigned char *pcert, unsigned int lcert, T_RSA_KEY_INFO *rsa_keyinfo);
+unsigned char* parse_ec_params(unsigned char* pparams, long *len);
+unsigned char* parse_ec_point(unsigned char* ppoint, long *len);
 
 #ifdef __cplusplus
    }
