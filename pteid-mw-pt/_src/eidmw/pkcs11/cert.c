@@ -42,21 +42,24 @@ int cert_get_info(const unsigned char *pcert, unsigned int lcert, T_CERT_INFO *i
     pX509 = d2i_X509(&pX509, &pcert, lcert);
 
     X509_NAME *issuer = X509_get_issuer_name(pX509);
-    if(i2d_X509_NAME(issuer, &info->issuer) < 0) {
+    info->l_issuer = i2d_X509_NAME(issuer, &info->issuer);
+    if( info->l_issuer <= 0) {
         log_trace(WHERE, "i2d_X509_NAME() failed reading issuer");
         res = -1;
         goto cleanup;
     }
     
     X509_NAME *subject = X509_get_subject_name(pX509);
-    if(i2d_X509_NAME(subject, &info->subject) < 0) {
+    info->l_subject = i2d_X509_NAME(subject, &info->subject);
+    if( info->l_subject <= 0) {
         log_trace(WHERE, "i2d_X509_NAME() failed reading subject");
         res = -1;
         goto cleanup;
     }
 
     ASN1_INTEGER *serial = X509_get_serialNumber(pX509);
-    if(i2d_ASN1_INTEGER(serial, &info->serial) < 0) {
+    info->l_serial = i2d_ASN1_INTEGER(serial, &info->serial);
+    if(info->serial <= 0) {
         log_trace(WHERE, "i2d_ASN1_INTEGER() failed reading serial");
         res = -1;
         goto cleanup;
