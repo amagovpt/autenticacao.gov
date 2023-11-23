@@ -41,6 +41,8 @@ int cert_get_info(const unsigned char *pcert, unsigned int lcert, T_CERT_INFO *i
     X509 *pX509 = 0;
     pX509 = d2i_X509(&pX509, &pcert, lcert);
 
+    info->lcert = i2d_X509(pX509, NULL);
+
     X509_NAME *issuer = X509_get_issuer_name(pX509);
     info->l_issuer = i2d_X509_NAME(issuer, &info->issuer);
     if( info->l_issuer <= 0) {

@@ -81,6 +81,8 @@ typedef struct
 
 typedef struct
   {
+    unsigned int lcert;
+
     unsigned char *subject;
     unsigned int l_subject;
 

@@ -924,7 +924,7 @@ try
    ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_SERIAL_NUMBER, (CK_VOID_PTR) certinfo.serial, (CK_ULONG)certinfo.l_serial);
    if (ret) goto cleanup;
    //use real length from decoder here instead of lg from cal
-   ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_VALUE, (CK_VOID_PTR) oCertData.GetBytes(), (CK_ULONG)oCertData.Size());
+   ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_VALUE, (CK_VOID_PTR) oCertData.GetBytes(), (CK_ULONG)certinfo.lcert);
    if (ret) goto cleanup;
    //TODO Check this in the cal if we can be sure that the certificate can be trusted and not be modified on the card
    ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_TRUSTED, (CK_VOID_PTR) &btrue, sizeof(btrue));
