@@ -125,6 +125,10 @@ unsigned char* parse_ec_params(unsigned char* pparams, long *len) {
     int tag = 0, xclass = 0;
     const unsigned char * op = params_wrapped;
     ASN1_get_object(&op, len, &tag, &xclass, params_size);
+    if (tag != V_ASN1_SEQUENCE) {
+        log_trace(WHERE, "Expected SEQUENCE tag, got %d", tag);
+        return NULL;
+    }
 
     return (unsigned char*)op;
 }
@@ -139,7 +143,16 @@ unsigned char* parse_ec_point(unsigned char* ppoint, long *len) {
     int tag = 0, xclass = 0;
     const unsigned char * op = wrapped;
     ASN1_get_object(&op, len, &tag, &xclass, wrapped_size);
+    if (tag != V_ASN1_SEQUENCE) {
+        log_trace(WHERE, "Expected SEQUENCE tag, got %d", tag);
+        return NULL;
+    }
+
     ASN1_get_object(&op, len, &tag, &xclass, *len);
+    if (tag != V_ASN1_OBJECT) {
+        log_trace(WHERE, "Expected V_ASN1_OBJECT tag, got %d", tag);
+        return NULL;
+    }
 
     unsigned char *point = (unsigned char*)op;
 }
