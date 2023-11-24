@@ -58,6 +58,7 @@ HEADERS += \
            P15Objects.h \
            PCSC.h \
            GenericPinpad.h \
+           PaceAuthentication.h \
            Pinpad.h \
            PKCS15.h \
            PKCS15Parser.h \
@@ -80,6 +81,7 @@ SOURCES += \
            CardReaderInfo.cpp \
            Context.cpp \
            PCSC.cpp \
+           PaceAuthentication.cpp \
            Pinpad.cpp \
            GenericPinpad.cpp \
            PKCS15.cpp \
