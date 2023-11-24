@@ -242,6 +242,9 @@ namespace eIDMW
             BUF_MEM *memPaddedCommandHeader = EAC_add_iso_pad(m_ctx, memCommandHeader);
             CByteArray paddedCommandHeader = arrayFromBufMem(memPaddedCommandHeader);
 
+            //Pre-increment SSC
+            EAC_increment_ssc(m_ctx);
+
             if(plainAPDU.Size() > 5) {
                 CByteArray inputData(plainAPDU.GetBytes(5, plainAPDU.Size()-5));
                 memInputData = bufMemFromByteArray(inputData);
@@ -274,9 +277,6 @@ namespace eIDMW
 
                 MWLOG(LEV_ERROR, MOD_CAL, "print debug this paddedMemInputData: %s encryptedInput: %s, inputData: %s", paddedInputArray.ToString().c_str(), encryptedInput.ToString().c_str(), inputData.ToString().c_str());
 
-                //Pre-increment SSC
-                EAC_increment_ssc(m_ctx);
-
                 BUF_MEM *memInputForMac = bufMemFromByteArray(inputForMac);
                 BUF_MEM *memMac = EAC_authenticate(m_ctx, memInputForMac);
 
@@ -289,7 +289,6 @@ namespace eIDMW
                 encryptedAPDU.Append(Tcg);
                 encryptedAPDU.Append((unsigned char)lcg);
                 encryptedAPDU.Append(paddingIndicator);
-                //encryptedAPDU.Append(encryptedInput.Size());
                 encryptedAPDU.Append(encryptedInput);
                 encryptedAPDU.Append(Tcc);
                 encryptedAPDU.Append(mac.Size()); //Lcc
