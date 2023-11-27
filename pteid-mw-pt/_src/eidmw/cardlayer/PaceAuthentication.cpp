@@ -62,7 +62,7 @@ namespace eIDMW
                 MWLOG(LEV_ERROR, MOD_CAL, "Couldn't init ef cardaccess");
             }
 
-            const char secret[] = "123456";
+            char * secret = getenv("PACE_CAN");
             PACE_SEC* pace_secret = PACE_SEC_new(secret, strlen(secret), PACE_CAN);
 
             const unsigned char setPace[] = {0x00 ,0x22 ,0xC1 ,0xA4 ,0x0F ,0x80 ,0x0A ,0x04 ,0x00 ,0x7F ,0x00 ,0x07 ,0x02 ,0x02 ,0x04 ,0x02 ,0x04 ,0x83 ,0x01 ,0x02};
