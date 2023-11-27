@@ -838,6 +838,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 		}
 
 		OCSP_REQ_CTX_add1_header(ctx, "User-Agent", PTEID_USER_AGENT_VALUE);
+		OCSP_REQ_CTX_add1_header(ctx, "Host", pszHost);
 
 		OCSP_REQ_CTX_set1_req(ctx, pRequest);
 
