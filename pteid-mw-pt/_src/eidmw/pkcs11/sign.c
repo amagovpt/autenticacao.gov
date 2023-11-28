@@ -468,7 +468,7 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
    if ( pmodsize != NULL )
       {
          if (*pkeytype == CKK_EC)
-            pSignData->l_sign = 512; // TODO: remove hardcoded value for p-256 signature length
+            pSignData->l_sign = 64; // TODO: remove hardcoded value for p-256 signature length
          else
             pSignData->l_sign = (*pmodsize+7)/8;
       }

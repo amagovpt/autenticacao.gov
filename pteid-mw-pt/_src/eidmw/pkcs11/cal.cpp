@@ -1112,15 +1112,6 @@ if (pSlot == NULL)
    }
 std::string szReader = pSlot->name;
 
-if (out == NULL)
-   {
-   //get length of signature
-   *l_out = 128;
-   return(CKR_OK);
-   }
-if (*l_out < 128)
-   return(CKR_BUFFER_TOO_SMALL);
-
 try
 {
    CReader &oReader = oCardLayer->getReader(szReader);
@@ -1176,6 +1167,9 @@ catch (...)
 }
 
 *l_out = oDataOut.Size();
+if (oDataOut.Size() > *l_out)
+   return (CKR_BUFFER_TOO_SMALL);
+
 memcpy(out, oDataOut.GetBytes(), *l_out);
 
 cleanup:
