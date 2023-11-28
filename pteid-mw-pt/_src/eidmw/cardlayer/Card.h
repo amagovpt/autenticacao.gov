@@ -38,13 +38,17 @@
 #include "Util.h"
 #include "GenericPinpad.h"
 #include "../dialogs/dialogs.h"
+
+#include <memory>
+
 namespace eIDMW
 {
-
+class PaceAuthentication;
 class EIDMW_CAL_API CCard
 {
 public:
-	CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
+    CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
+    CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &pace);
     virtual ~CCard(void);
 
     /** Find out which card is present and return the appropriate subclass */
@@ -156,11 +160,13 @@ protected:
     unsigned char m_ucCLA;
 
     const void * m_comm_protocol;
+    std::unique_ptr<PaceAuthentication> m_pace{};
 
 private:
     // No copies allowed
     CCard(const CCard & oCard);
     CCard & operator = (const CCard & oCard);
+    CByteArray handleSendAPDUSecurity(const CByteArray & oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
 };
 
 class CAutoLock

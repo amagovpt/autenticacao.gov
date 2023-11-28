@@ -82,6 +82,7 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
             CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
             CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
             bool isContactLess = atr.Equals(atrContactLessCard);
+            std::unique_ptr<PaceAuthentication> paceAuthentication;
 
             MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(), isContactLess ? "true" : "false");
             MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s", atr.ToString(true, false).c_str());
@@ -94,21 +95,8 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 			int appletVersion = 1;
 
             if(isContactLess) {
-                PaceAuthentication pace(poContext);
-                pace.initPaceAuthentication(hCard, param_structure);
-
-                const unsigned char selectAppAPDU[] = {0x00, 0xA4, 0x04, 0x00, 0x07, 0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x03};
-                CByteArray selectApp(selectAppAPDU, sizeof(selectAppAPDU));
-                long lRetVal = 0;
-                CByteArray response = pace.sendAPDU(selectApp, hCard, lRetVal, param_structure);
-
-                const unsigned char selectFileAPDU[] = {0x00, 0xA4, 0x00, 0x0C, 0x02, 0x2F, 0x00, 0x00};
-                CByteArray selectFile(selectFileAPDU, sizeof(selectFileAPDU));
-                CByteArray responseSelectFile = pace.sendAPDU(selectFile, hCard, lRetVal, param_structure);
-
-                const unsigned char readBinary[] = {0x00, 0xB0, 0x00, 0x00, 0x16};
-                CByteArray readBin(readBinary, sizeof(readBinary));
-                CByteArray responseReadBinary = pace.sendAPDU(readBin, hCard, lRetVal, param_structure);
+                paceAuthentication.reset(new PaceAuthentication(poContext));
+                paceAuthentication->initPaceAuthentication(hCard, param_structure);
             }
 
 			const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
@@ -120,7 +108,13 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 				oCmd.Append((unsigned char)size);
 				oCmd.Append(oAID, size);
 
-				CByteArray oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
+                CByteArray oResp;
+                if(paceAuthentication.get()) {
+                    oResp = paceAuthentication->sendAPDU(oCmd, hCard, lRetVal, param_structure);
+                }
+                else {
+                    oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
+                }
 				return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 			};
 
@@ -131,7 +125,7 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 					appletVersion = 3;
 			}
 
-			poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+            poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, paceAuthentication, param_structure);
 
 			CCache::LimitDiskCacheFiles(10);
 

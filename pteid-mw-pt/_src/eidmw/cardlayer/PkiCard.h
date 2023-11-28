@@ -37,10 +37,11 @@
 namespace eIDMW
 {
 
+class PaceAuthentication;
 class CPkiCard : public CCard
 {
 public:
-    CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
+    CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &pace);
     virtual ~CPkiCard(void);
 
     virtual tCardType GetType() = 0;

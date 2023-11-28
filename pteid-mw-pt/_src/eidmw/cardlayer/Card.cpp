@@ -25,12 +25,22 @@
 #include "Card.h"
 #include "Log.h"
 
+#include "PaceAuthentication.h"
+
 namespace eIDMW
 {
 
 CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad) :
 	m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
-	m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL)
+    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL),
+    m_pace(nullptr)
+{
+}
+
+CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &paceAuthentication):
+    m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
+    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL),
+    m_pace(std::move(paceAuthentication))
 {
 }
 
@@ -382,14 +392,27 @@ CByteArray CCard::GetRandom(unsigned long ulLen)
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
+CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure)
+{
+    CByteArray result;
+    if(m_pace.get()) {
+        result = m_pace->sendAPDU(oCmdAPDU, m_hCard, lRetVal, param_structure);
+    }
+    else {
+        result = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, param_structure);
+    }
+    return result;
+}
+
 CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 {
 	
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
 	const void * protocol_struct = getProtocolStructure();
+    CByteArray oResp;
 
-	CByteArray oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, protocol_struct);
+    oResp = handleSendAPDUSecurity(oCmdAPDU, m_hCard, lRetVal, protocol_struct);
 
 	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED)
 	{
@@ -398,7 +421,7 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 		if (SelectApplet())
 		{
 			//try again, now that the card has been reset
-			oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, protocol_struct);
+            oResp = handleSendAPDUSecurity(oCmdAPDU, m_hCard, lRetVal, protocol_struct);
 		}
 	}
 

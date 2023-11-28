@@ -455,7 +455,7 @@ err:
             }
         }
 
-        CByteArray sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure) {
+        CByteArray sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure) {
             CByteArray encryptedAPDU = formatAPDU(plainAPDU);
             CByteArray decriptedArray = decryptAPDU(m_context->m_oPCSC.Transmit(hCard, encryptedAPDU, &lRetVal, param_structure));
             return decriptedArray;
@@ -487,7 +487,7 @@ err:
         m_impl->initAuthentication(hCard, param_structure);
     }
 
-    CByteArray PaceAuthentication::sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure)
+    CByteArray PaceAuthentication::sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure)
     {
         return m_impl->sendAPDU(plainAPDU, hCard, lRetVal, param_structure);
     }

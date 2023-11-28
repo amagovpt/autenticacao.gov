@@ -35,6 +35,7 @@
 #include "Log.h"
 #include "Config.h"
 #include "CardLayer.h"
+#include "PaceAuthentication.h"
 
 using namespace eIDMW;
 
@@ -51,7 +52,7 @@ static const string TRACEFILE = "3F000003";
 
 unsigned long ulVersion;
 
-static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const void *protocol_struct)
+static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const void *protocol_struct, std::unique_ptr<PaceAuthentication> &paceAuthentication)
 {
 	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
@@ -60,14 +61,19 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const 
 	oCmd.Append((unsigned char) sizeof(PTEID_1_APPLET_AID));
 	oCmd.Append(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
 
-	CByteArray oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
-
+    CByteArray oResp;
+    if(paceAuthentication.get()) {
+        oResp = paceAuthentication->sendAPDU(oCmd, hCard, lRetVal, protocol_struct);
+    }
+    else {
+        oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
+    }
 	return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 }
 
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
-	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol_struct)
+    SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &paceAuthentication, const void *protocol_struct)
 {
 
 	CCard *poCard = NULL;
@@ -77,7 +83,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 		{
 			CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
 
-			poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
+            poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, paceAuthentication, protocol_struct);
 			MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
 
 			// NOTE: PteidCardSelectAppllet does not support V5 cards
@@ -104,8 +110,8 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 }
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
-		     GenericPinpad *poPinpad, tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol) :
-			 CPkiCard(hCard, poContext, poPinpad)
+             GenericPinpad *poPinpad, tSelectAppletMode selectAppletMode, unsigned long ulVersion, std::unique_ptr<PaceAuthentication> &paceAuthentication, const void *protocol) :
+             CPkiCard(hCard, poContext, poPinpad, paceAuthentication)
 {
 	switch (ulVersion){
 	case 1:
@@ -792,7 +798,7 @@ bool CPteidCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
 
 bool CPteidCard::SelectApplet()
 {
-	return PteidCardSelectApplet(m_poContext, m_hCard, getProtocolStructure());
+    return PteidCardSelectApplet(m_poContext, m_hCard, getProtocolStructure(), m_pace);
 }
 
 /**
