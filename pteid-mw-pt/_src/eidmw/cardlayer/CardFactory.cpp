@@ -94,24 +94,21 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 			int appletVersion = 1;
 
             if(isContactLess) {
-                PaceAuthentication pace(poContext, &hCard, param_structure);
-                const unsigned char readBinary[] = {0x00, 0xA4, 0x04, 0x00, 0x07, 0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x03};
-                CByteArray readBin(readBinary, sizeof(readBinary));
-                CByteArray encryptedReadBin = pace.formatAPDU(readBin);
+                PaceAuthentication pace(poContext);
+                pace.initPaceAuthentication(hCard, param_structure);
+
+                const unsigned char selectAppAPDU[] = {0x00, 0xA4, 0x04, 0x00, 0x07, 0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x03};
+                CByteArray selectApp(selectAppAPDU, sizeof(selectAppAPDU));
                 long lRetVal = 0;
-                poContext->m_oPCSC.Transmit(hCard, encryptedReadBin, &lRetVal, param_structure);
+                CByteArray response = pace.sendAPDU(selectApp, hCard, lRetVal, param_structure);
 
-//                const unsigned char readBinary[] = {0x00, 0xB0, 0x00, 0x00, 0x00};
-//                CByteArray readBin(readBinary, sizeof(readBinary));
-//                CByteArray encryptedReadBin = pace.formatAPDU(readBin);
-//                long lRetVal = 0;
-//                poContext->m_oPCSC.Transmit(hCard, encryptedReadBin, &lRetVal, param_structure);
+                const unsigned char selectFileAPDU[] = {0x00, 0xA4, 0x00, 0x0C, 0x02, 0x2F, 0x00, 0x00};
+                CByteArray selectFile(selectFileAPDU, sizeof(selectFileAPDU));
+                CByteArray responseSelectFile = pace.sendAPDU(selectFile, hCard, lRetVal, param_structure);
 
-//                const unsigned char readBinary[] = {0x00, 0xB0, 0x9C, 0x00, 0x00};
-//                CByteArray readBin(readBinary, sizeof(readBinary));
-//                CByteArray encryptedReadBin = pace.formatAPDU(readBin);
-//                long lRetVal = 0;
-//                poContext->m_oPCSC.Transmit(hCard, encryptedReadBin, &lRetVal, param_structure);
+                const unsigned char readBinary[] = {0x00, 0xB0, 0x00, 0x00, 0x16};
+                CByteArray readBin(readBinary, sizeof(readBinary));
+                CByteArray responseReadBinary = pace.sendAPDU(readBin, hCard, lRetVal, param_structure);
             }
 
 			const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool

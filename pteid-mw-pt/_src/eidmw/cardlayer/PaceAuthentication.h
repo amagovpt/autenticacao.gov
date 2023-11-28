@@ -11,10 +11,12 @@ class PaceAuthenticationImpl;
 class PaceAuthentication
 {
 public:
-    PaceAuthentication(CContext *poContext, SCARDHANDLE* hCard, const void *param_structure);
+    PaceAuthentication(CContext *poContext);
     ~PaceAuthentication();
 
-    CByteArray formatAPDU(const CByteArray &plainAPDU);
+    void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
+
+    CByteArray sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
 
 private:
     std::unique_ptr<PaceAuthenticationImpl> m_impl;

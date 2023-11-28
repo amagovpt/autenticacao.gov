@@ -12,7 +12,13 @@ namespace eIDMW
 
     class PaceAuthenticationImpl {
 
-        BUF_MEM *findObject(CByteArray &array, long tag) {
+        const unsigned char Tcg = 0x87;
+        const unsigned char Tcc = 0x8E;
+        const unsigned char Tle = 0x97;
+        const unsigned char paddingIndicator = 0x01;
+        const unsigned char controlByte = 0x0C;
+
+        BUF_MEM *findObject(const CByteArray &array, long tag) {
             const unsigned char *old_data = NULL;
             const unsigned char *desc_data = array.GetBytes();
             int xclass = 0;
@@ -38,7 +44,263 @@ namespace eIDMW
             return mem;
         }
     public:
-        explicit PaceAuthenticationImpl(CContext *poContext, SCARDHANDLE* hCard, const void* param_structure) {
+        explicit PaceAuthenticationImpl(CContext *poContext)
+            : m_context(poContext)
+        {
+
+        }
+
+        BUF_MEM *bufMemFromByteArray(const CByteArray &array) {
+            BUF_MEM *buf = BUF_MEM_new();
+            if(buf == NULL) {
+                //no memory
+                return NULL;
+            }
+
+            buf->data = (char*)malloc(array.Size() * sizeof(char));
+            if(buf->data == NULL) {
+                // no memory
+                return NULL;
+            }
+            memcpy(buf->data, (char*)array.GetBytes(), array.Size());
+            buf->length = array.Size();
+            buf->max = buf->length;
+
+            return buf;
+        }
+
+        CByteArray arrayFromBufMem(BUF_MEM *mem) {
+            return CByteArray ((unsigned char*)mem->data, mem->length);
+        }
+
+        CByteArray formatAPDU(const CByteArray &plainAPDU)
+        {
+            CByteArray encryptedAPDU;
+            CByteArray responseEncryptedAPDU;
+            CByteArray inputForMac;
+            CByteArray mac;
+            CByteArray TlvLe;
+            int lc = plainAPDU.GetByte(4);
+
+            CByteArray command_header(plainAPDU.GetBytes(0, 4));
+            command_header.SetByte(command_header.GetByte(0) | controlByte, 0);
+            BUF_MEM *memCommandHeader = bufMemFromByteArray(command_header);
+            BUF_MEM *memPaddedCommandHeader = EAC_add_iso_pad(m_ctx, memCommandHeader);
+            CByteArray paddedCommandHeader = arrayFromBufMem(memPaddedCommandHeader);
+            inputForMac.Append(paddedCommandHeader);
+
+            if((command_header.Size() + lc + 2 == plainAPDU.Size()) || plainAPDU.Size() == 5) {
+                TlvLe.Append((unsigned char)Tle);
+                TlvLe.Append((unsigned char)0x01);
+                TlvLe.Append((unsigned char)plainAPDU.GetByte(plainAPDU.Size() - 1));
+            }
+
+            //Pre-increment SSC
+            EAC_increment_ssc(m_ctx);
+
+            if(plainAPDU.Size() > 5) {
+                BUF_MEM *memInputData = NULL;
+                BUF_MEM *paddedMemInputData = NULL;
+                CByteArray inputData(plainAPDU.GetBytes(5, plainAPDU.Size() - 5 - (TlvLe.Size() > 0 ? 1 : 0)));
+                memInputData = bufMemFromByteArray(inputData);
+                paddedMemInputData = EAC_add_iso_pad(m_ctx, memInputData);
+
+                BUF_MEM *memEncrytedInput = EAC_encrypt(m_ctx, paddedMemInputData);
+                CByteArray encryptedInput = arrayFromBufMem(memEncrytedInput);
+                CByteArray paddedInputArray = arrayFromBufMem(paddedMemInputData);
+                //LCg = Len(Cg) + Len(PI = 1)
+                int lcg = encryptedInput.Size() + 1;
+
+                CByteArray paddedCryptogram;
+                paddedCryptogram.Append(Tcg);
+                //This is safe because Lcg will be always lower than
+                paddedCryptogram.Append((unsigned char)lcg);
+                paddedCryptogram.Append(paddingIndicator);
+                paddedCryptogram.Append(encryptedInput);
+                if(TlvLe.Size() > 0)
+                    paddedCryptogram.Append(TlvLe);
+
+                BUF_MEM *memCryptogram = bufMemFromByteArray(paddedCryptogram);
+
+                BUF_MEM *memPaddedCryptogram = EAC_add_iso_pad(m_ctx, memCryptogram);
+
+                paddedCryptogram = arrayFromBufMem(memPaddedCryptogram);
+
+                // [Tcg Lcg PI,CG]
+                inputForMac.Append(paddedCryptogram);
+
+                BUF_MEM *memInputForMac = bufMemFromByteArray(inputForMac);
+                BUF_MEM *memMac = EAC_authenticate(m_ctx, memInputForMac);
+
+                mac = arrayFromBufMem(memMac);
+
+                int lc_final = mac.Size() + 2 + encryptedInput.Size() + 3 + TlvLe.Size(); // CG + Tcg + Lcg + PI
+                encryptedAPDU.Append(command_header);
+                encryptedAPDU.Append((unsigned char)lc_final);
+                encryptedAPDU.Append(Tcg);
+                encryptedAPDU.Append((unsigned char)lcg);
+                encryptedAPDU.Append(paddingIndicator);
+                encryptedAPDU.Append(encryptedInput);
+
+                if(TlvLe.Size())
+                    encryptedAPDU.Append(TlvLe);
+
+                if(memMac)
+                    BUF_MEM_clear_free(memMac);
+                if(memInputForMac)
+                    BUF_MEM_clear_free(memInputForMac);
+                if(memPaddedCryptogram)
+                    BUF_MEM_clear_free(memPaddedCryptogram);
+                if(memCryptogram)
+                    BUF_MEM_clear_free(memCryptogram);
+                if(memEncrytedInput)
+                    BUF_MEM_clear_free(memEncrytedInput);
+                if(paddedMemInputData)
+                    BUF_MEM_clear_free(paddedMemInputData);
+                if(memInputData)
+                    BUF_MEM_clear_free(memInputData);
+            }
+            else {
+                BUF_MEM *memTlvLe = bufMemFromByteArray(TlvLe);
+
+                BUF_MEM *paddedTlvLe = EAC_add_iso_pad(m_ctx, memTlvLe);
+
+                inputForMac.Append((unsigned char*)paddedTlvLe->data, paddedTlvLe->length);
+                BUF_MEM *inputMac = bufMemFromByteArray(inputForMac);
+
+                BUF_MEM *memMac = EAC_authenticate(m_ctx, inputMac);
+                mac = arrayFromBufMem(memMac);
+
+
+                int lc_final = mac.Size() + 2 + TlvLe.Size();
+                encryptedAPDU.Append(command_header);
+                encryptedAPDU.Append((unsigned char)lc_final);
+                encryptedAPDU.Append(TlvLe);
+
+                if(memTlvLe)
+                    BUF_MEM_clear_free(memTlvLe);
+                if(paddedTlvLe)
+                    BUF_MEM_clear_free(paddedTlvLe);
+                if(inputMac)
+                    BUF_MEM_clear_free(inputMac);
+                if(memMac)
+                    BUF_MEM_clear_free(memMac);
+            }
+
+            encryptedAPDU.Append(Tcc);
+            encryptedAPDU.Append(mac.Size()); //Lcc
+            encryptedAPDU.Append(mac);
+            encryptedAPDU.Append(0x00);
+
+            EAC_increment_ssc(m_ctx);
+
+            return encryptedAPDU;
+        }
+
+        BUF_MEM *copyFromArray(const CByteArray &array, long index, long length) {
+            BUF_MEM *copiedMem = BUF_MEM_new();
+            copiedMem->data = (char*)malloc(length * sizeof(char));
+            memcpy(copiedMem->data, array.GetBytes(index, length).GetBytes(), length);
+            copiedMem->length = length;
+            copiedMem->max = copiedMem->length;
+            return copiedMem;
+        }
+
+        CByteArray decryptAPDU(const CByteArray &encryptedAPDU) {
+            CByteArray decryptedResponse;
+            CByteArray encryptedResponseToAuthenticate;
+            BUF_MEM *encryptedResponse = NULL;
+            BUF_MEM *encryptedResponseContent = NULL;
+            BUF_MEM *macAPDUResponse = NULL;
+
+            if(encryptedAPDU.Size() <= 2) // error from security
+                return encryptedAPDU;
+
+            if(encryptedAPDU.GetByte(0) == Tcg)
+            {
+                long hex = encryptedAPDU.GetByte(1);
+                encryptedResponseContent = copyFromArray(encryptedAPDU, 2, hex);
+            }
+            int indexStatusCode = encryptedResponseContent ? encryptedResponseContent->length + 4 : 2;
+            encryptedResponse = copyFromArray(encryptedAPDU, indexStatusCode, 2);
+
+            if(encryptedResponseContent != NULL) {
+                encryptedResponseToAuthenticate.Append(Tcg);
+                encryptedResponseToAuthenticate.Append(encryptedResponseContent->length);
+                encryptedResponseToAuthenticate.Append(arrayFromBufMem(encryptedResponseContent));
+            }
+
+            if(encryptedResponse != NULL) {
+                encryptedResponseToAuthenticate.Append(0x99);
+                encryptedResponseToAuthenticate.Append(encryptedResponse->length);
+                encryptedResponseToAuthenticate.Append(arrayFromBufMem(encryptedResponse));
+            }
+
+            BUF_MEM *memResponseToAuthenticate = bufMemFromByteArray(encryptedResponseToAuthenticate);
+
+            BUF_MEM *paddedResponse = EAC_add_iso_pad(m_ctx, memResponseToAuthenticate);
+            BUF_MEM *authenticateResponse = EAC_authenticate(m_ctx, paddedResponse);
+            long macIndex = encryptedResponseToAuthenticate.Size() + 2;
+            macAPDUResponse = copyFromArray(encryptedAPDU, macIndex, (long)encryptedAPDU.GetByte(macIndex - 1));
+
+            if(!macAPDUResponse || !authenticateResponse || (authenticateResponse->length != macAPDUResponse->length)
+                ||  memcmp(macAPDUResponse->data, authenticateResponse->data, macAPDUResponse->length) != 0)
+            {
+                MWLOG(LEV_ERROR, MOD_CAL, "Response from encrypted APDU is invalid! APDU: %s", encryptedAPDU.ToString().c_str());
+                decryptedResponse.Append(encryptedAPDU);
+                goto err;
+            }
+            if(encryptedResponseContent != NULL) {
+                bool padding = encryptedResponseContent->data[0] == 0x01;
+
+                BUF_MEM *decryptResponseRemovePadding = BUF_MEM_new();
+                decryptResponseRemovePadding->length = encryptedResponseContent->length - 1;
+                decryptResponseRemovePadding->data = (char*)malloc(decryptResponseRemovePadding->length * sizeof(char));
+                memcpy(decryptResponseRemovePadding->data, &encryptedResponseContent->data[1], decryptResponseRemovePadding->length);
+                BUF_MEM *paddedEncryptedResponse = NULL;
+                if(decryptResponseRemovePadding->length % 16) {
+                    paddedEncryptedResponse = EAC_add_iso_pad(m_ctx, decryptResponseRemovePadding);
+                }
+                else {
+                    paddedEncryptedResponse = decryptResponseRemovePadding;
+                    decryptResponseRemovePadding = NULL;
+                }
+                BUF_MEM *memDecryptedResponse = EAC_decrypt(m_ctx, paddedEncryptedResponse);
+                if(!padding)
+                    decryptedResponse.Append(arrayFromBufMem(memDecryptedResponse));
+
+                BUF_MEM *unpadDecryptedResponse = EAC_remove_iso_pad(memDecryptedResponse);
+                decryptedResponse.Append(arrayFromBufMem(unpadDecryptedResponse));
+
+                if(unpadDecryptedResponse)
+                    BUF_MEM_clear_free(unpadDecryptedResponse);
+                if(decryptResponseRemovePadding)
+                    BUF_MEM_clear_free(decryptResponseRemovePadding);
+                if(paddedEncryptedResponse)
+                    BUF_MEM_clear_free(paddedEncryptedResponse);
+                if(memDecryptedResponse)
+                    BUF_MEM_clear_free(memDecryptedResponse);
+            }
+
+            decryptedResponse.Append(arrayFromBufMem(encryptedResponse));
+err:
+            if(macAPDUResponse)
+                BUF_MEM_clear_free(macAPDUResponse);
+            if(encryptedResponseContent)
+                BUF_MEM_clear_free(encryptedResponseContent);
+            if(encryptedResponse)
+                BUF_MEM_clear_free(encryptedResponse);
+            if(memResponseToAuthenticate)
+                BUF_MEM_clear_free(memResponseToAuthenticate);
+            if(paddedResponse)
+                BUF_MEM_clear_free(paddedResponse);
+            if(authenticateResponse)
+                BUF_MEM_clear_free(authenticateResponse);
+
+            return decryptedResponse;
+        }
+
+        void initAuthentication(SCARDHANDLE &hCard, const void *param_structure) {
             BUF_MEM *mappingData = NULL, *cardMappingData = NULL, *pubkey = NULL, *cardPubKey = NULL;
             BUF_MEM *token = NULL, *cardToken = NULL;
             int r = 0;
@@ -51,10 +313,10 @@ namespace eIDMW
             const unsigned char SIZE_AND_EF_ACCESS[] = {0x02, 0x01, 0x01C, 0x00};
             oCmd.Append(SIZE_AND_EF_ACCESS, sizeof(SIZE_AND_EF_ACCESS));
             long fileReturn = 0;
-            CByteArray oReadBinary = poContext->m_oPCSC.Transmit(*hCard, oCmd, &fileReturn, param_structure);
+            CByteArray oReadBinary = m_context->m_oPCSC.Transmit(hCard, oCmd, &fileReturn, param_structure);
             const unsigned char READ_BINARY[] = {0x00, 0xB0, 0x9C, 0x00, 0x00};
             CByteArray readBinary(READ_BINARY, sizeof(READ_BINARY));
-            CByteArray readBinEFAccess = poContext->m_oPCSC.Transmit(*hCard, readBinary, &fileReturn, param_structure);
+            CByteArray readBinEFAccess = m_context->m_oPCSC.Transmit(hCard, readBinary, &fileReturn, param_structure);
             readBinEFAccess.Chop(2);
             if (!m_ctx
                 || !EAC_CTX_init_ef_cardaccess(readBinEFAccess.GetBytes(), readBinEFAccess.Size(), m_ctx)
@@ -62,7 +324,7 @@ namespace eIDMW
                 MWLOG(LEV_ERROR, MOD_CAL, "Couldn't init ef cardaccess");
             }
 
-            char * secret = getenv("PACE_CAN");
+            char* secret = getenv("PACE_CAN");
             PACE_SEC* pace_secret = PACE_SEC_new(secret, strlen(secret), PACE_CAN);
 
             const unsigned char setPace[] = {0x00 ,0x22 ,0xC1 ,0xA4 ,0x0F ,0x80 ,0x0A ,0x04 ,0x00 ,0x7F ,0x00 ,0x07 ,0x02 ,0x02 ,0x04 ,0x02 ,0x04 ,0x83 ,0x01 ,0x02};
@@ -77,7 +339,7 @@ namespace eIDMW
 
             setPaceAuth.Append(setPace, sizeof(setPace));
 
-            CByteArray cardNonceResponse = poContext->m_oPCSC.Transmit(*hCard, setPaceAuth, &fileReturn, param_structure);
+            CByteArray cardNonceResponse = m_context->m_oPCSC.Transmit(hCard, setPaceAuth, &fileReturn, param_structure);
 
             CByteArray encryptedNonce;
             const unsigned char authEncrypt[] = {0x10, 0x86, 0x00, 0x00};
@@ -86,7 +348,7 @@ namespace eIDMW
             encryptedNonce.Append(authEncrypt, sizeof(authEncrypt));
             encryptedNonce.Append(authType, sizeof(authType));
 
-            CByteArray responseEncryptedNonce = poContext->m_oPCSC.Transmit(*hCard, encryptedNonce, &fileReturn, param_structure);
+            CByteArray responseEncryptedNonce = m_context->m_oPCSC.Transmit(hCard, encryptedNonce, &fileReturn, param_structure);
 
             BUF_MEM *dec_nonce = findObject(responseEncryptedNonce, 0x80);
 
@@ -107,7 +369,7 @@ namespace eIDMW
             sendMapData.Append(reinterpret_cast<unsigned char*>(mappingData->data), mappingData->length);
             sendMapData.Append(0x00);
 
-            responseMappingData = poContext->m_oPCSC.Transmit(*hCard, sendMapData, &fileReturn, param_structure);
+            responseMappingData = m_context->m_oPCSC.Transmit(hCard, sendMapData, &fileReturn, param_structure);
             cardMappingData = findObject(responseMappingData, 0x82);
             if(!PACE_STEP3A_map_generator(m_ctx, cardMappingData)) {
                 MWLOG(LEV_ERROR, MOD_CAL, "Couldn't generate map");
@@ -126,7 +388,7 @@ namespace eIDMW
             sendEphePubKey.Append(reinterpret_cast<unsigned char*>(pubkey->data), pubkey->length);
             sendEphePubKey.Append(0x00);
 
-            responseEphePubKey = poContext->m_oPCSC.Transmit(*hCard, sendEphePubKey, &fileReturn, param_structure);
+            responseEphePubKey = m_context->m_oPCSC.Transmit(hCard, sendEphePubKey, &fileReturn, param_structure);
 
             cardPubKey = findObject(responseEphePubKey, 0x84);
 
@@ -142,13 +404,12 @@ namespace eIDMW
             verifyToken.Append(reinterpret_cast<unsigned char*>(token->data), token->length);
             verifyToken.Append(0x00);
 
-            responseverifyToken = poContext->m_oPCSC.Transmit(*hCard, verifyToken, &fileReturn, param_structure);
+            responseverifyToken = m_context->m_oPCSC.Transmit(hCard, verifyToken, &fileReturn, param_structure);
             if(responseverifyToken.Size() <=2) {
                 MWLOG(LEV_ERROR, MOD_CAL, "Error verifying generated token, perhaps wrong CAN code.");
                 r = -2;
                 goto err;
             }
-
 
             cardToken = findObject(responseverifyToken, 0x86);
 
@@ -194,142 +455,10 @@ namespace eIDMW
             }
         }
 
-        BUF_MEM *bufMemFromByteArray(const CByteArray &array) {
-            BUF_MEM *buf = BUF_MEM_new();
-            if(buf == NULL) {
-                //no memory
-                return NULL;
-            }
-
-            buf->data = (char*)malloc(array.Size() * sizeof(char));
-            if(buf->data == NULL) {
-                // no memory
-                return NULL;
-            }
-            memcpy(buf->data, (char*)array.GetBytes(), array.Size());
-            buf->length = array.Size();
-            buf->max = buf->length;
-
-            return buf;
-        }
-
-        CByteArray arrayFromBufMem(BUF_MEM *mem) {
-            return CByteArray ((unsigned char*)mem->data, mem->length);
-        }
-
-        CByteArray formatAPDU(const CByteArray &plainAPDU)
-        {
-            BIO *bio = NULL;
-            std::string padde;
-            CByteArray encryptedAPDU;
-            CByteArray responseEncryptedAPDU;
-            CByteArray inputForMac;
-            CByteArray TlvLe;
-            int le = 0;
-            BUF_MEM *headerData = NULL;
-            BUF_MEM *memInputData = NULL;
-            BUF_MEM *paddedMemInputData = NULL;
-
-            const unsigned char Tcg = 0x87;
-            const unsigned char Tcc = 0x8e;
-            const unsigned char Tle = 0x97;
-            const unsigned char paddingIndicator = 0x01;
-            const unsigned char controlByte = 0x0C;
-
-            CByteArray command_header(plainAPDU.GetBytes(0, 4));
-            command_header.SetByte(command_header.GetByte(0) | controlByte, 0);
-            BUF_MEM *memCommandHeader = bufMemFromByteArray(command_header);
-            BUF_MEM *memPaddedCommandHeader = EAC_add_iso_pad(m_ctx, memCommandHeader);
-            CByteArray paddedCommandHeader = arrayFromBufMem(memPaddedCommandHeader);
-
-            //Pre-increment SSC
-            EAC_increment_ssc(m_ctx);
-
-            if(plainAPDU.Size() > 5) {
-                CByteArray inputData(plainAPDU.GetBytes(5, plainAPDU.Size()-5));
-                memInputData = bufMemFromByteArray(inputData);
-                paddedMemInputData = EAC_add_iso_pad(m_ctx, memInputData);
-
-                BUF_MEM *memEncrytedInput = EAC_encrypt(m_ctx, paddedMemInputData);
-                CByteArray encryptedInput = arrayFromBufMem(memEncrytedInput);
-                CByteArray paddedInputArray = arrayFromBufMem(paddedMemInputData);
-                //LCg = Len(Cg) + Len(PI = 1)
-                int lcg = encryptedInput.Size() + 1;
-                inputForMac.Append(paddedCommandHeader);
-
-                CByteArray paddedCryptogram;
-                paddedCryptogram.Append(Tcg);
-                //This is safe because Lcg will be always lower than
-                paddedCryptogram.Append((unsigned char)lcg);
-                paddedCryptogram.Append(paddingIndicator);
-                paddedCryptogram.Append(encryptedInput);
-
-                BUF_MEM *memCryptogram = bufMemFromByteArray(paddedCryptogram);
-
-                BUF_MEM *memPaddedCryptogram = EAC_add_iso_pad(m_ctx, memCryptogram);
-
-                paddedCryptogram = arrayFromBufMem(memPaddedCryptogram);
-
-                // [Tcg Lcg PI,CG]
-                inputForMac.Append(paddedCryptogram);
-
-                MWLOG(LEV_ERROR, MOD_CAL, "print debug this things to authenticate, paddedCommandHeader: %s paddedCryptogram: %s", paddedCommandHeader.ToString().c_str(), paddedCryptogram.ToString().c_str());
-
-                MWLOG(LEV_ERROR, MOD_CAL, "print debug this paddedMemInputData: %s encryptedInput: %s, inputData: %s", paddedInputArray.ToString().c_str(), encryptedInput.ToString().c_str(), inputData.ToString().c_str());
-
-                BUF_MEM *memInputForMac = bufMemFromByteArray(inputForMac);
-                BUF_MEM *memMac = EAC_authenticate(m_ctx, memInputForMac);
-
-                CByteArray mac = arrayFromBufMem(memMac);
-
-                //Build final APDU including Cryptogram and MAC
-                int lc_final = mac.Size() + 2 + encryptedInput.Size() + 3; // CG + Tcg + Lcg + PI
-                encryptedAPDU.Append(command_header);
-                encryptedAPDU.Append((unsigned char)lc_final);
-                encryptedAPDU.Append(Tcg);
-                encryptedAPDU.Append((unsigned char)lcg);
-                encryptedAPDU.Append(paddingIndicator);
-                encryptedAPDU.Append(encryptedInput);
-                encryptedAPDU.Append(Tcc);
-                encryptedAPDU.Append(mac.Size()); //Lcc
-                encryptedAPDU.Append(mac);
-                encryptedAPDU.Append(0x00);
-            }
-            else {
-
-                CByteArray TlvLe;
-                int le = plainAPDU.GetByte(4);
-                inputForMac.Append(paddedCommandHeader);
-
-                TlvLe.Append(0x97);
-                TlvLe.Append(0x01);
-                TlvLe.Append(le);
-                BUF_MEM *memTlvLe = BUF_MEM_new();
-                memTlvLe->data = (char*)TlvLe.GetBytes();
-                memTlvLe->length = TlvLe.Size();
-
-                BUF_MEM *paddedTlvLe = EAC_add_iso_pad(m_ctx, memTlvLe);
-
-                inputForMac.Append((unsigned char*)paddedTlvLe->data, paddedTlvLe->length);
-                BUF_MEM *inputMac = BUF_MEM_new();
-                inputMac->data = (char*)inputForMac.GetBytes();
-                inputMac->length = inputForMac.Size();
-
-                //Pre-increment SSC
-                EAC_increment_ssc(m_ctx);
-                BUF_MEM *mac = EAC_authenticate(m_ctx, inputMac);
-
-
-                int lc_final = mac->length + 2 + TlvLe.Size();
-                encryptedAPDU.Append(command_header);
-                encryptedAPDU.Append((unsigned char)lc_final);
-                encryptedAPDU.Append(TlvLe);
-                encryptedAPDU.Append(0x8e);
-                encryptedAPDU.Append(mac->length); //Lcc
-                encryptedAPDU.Append((unsigned char*)mac->data, mac->length);
-            }
-
-            return encryptedAPDU;
+        CByteArray sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure) {
+            CByteArray encryptedAPDU = formatAPDU(plainAPDU);
+            CByteArray decriptedArray = decryptAPDU(m_context->m_oPCSC.Transmit(hCard, encryptedAPDU, &lRetVal, param_structure));
+            return decriptedArray;
         }
 
         ~PaceAuthenticationImpl()
@@ -340,11 +469,12 @@ namespace eIDMW
 
     private:
         friend class PaceAuthentication;
+        CContext *m_context;
         EAC_CTX *m_ctx;
     };
 
-    PaceAuthentication::PaceAuthentication(CContext *poContext, SCARDHANDLE* hCard, const void *param_structure)
-        : m_impl(new PaceAuthenticationImpl(poContext, hCard, param_structure))
+    PaceAuthentication::PaceAuthentication(CContext *poContext)
+        : m_impl(new PaceAuthenticationImpl(poContext))
     {
     }
 
@@ -352,8 +482,13 @@ namespace eIDMW
     {
     }
 
-    CByteArray PaceAuthentication::formatAPDU(const CByteArray &plainAPDU)
+    void PaceAuthentication::initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure)
     {
-        return m_impl->formatAPDU(plainAPDU);
+        m_impl->initAuthentication(hCard, param_structure);
+    }
+
+    CByteArray PaceAuthentication::sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure)
+    {
+        return m_impl->sendAPDU(plainAPDU, hCard, lRetVal, param_structure);
     }
 }
