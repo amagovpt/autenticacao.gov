@@ -983,7 +983,7 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
    int                     iWaitApdu = 100;
    int   				   bRetry = 0;
 
-   if (cbSerialNumber < 16) {
+   if (cbSerialNumber < 8) {
 		CLEANUP(ERROR_INSUFFICIENT_BUFFER);
    }
 
@@ -991,7 +991,7 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 
    *pdwSerialNumber = 0;
 
-	if (card_type == IAS_V5_CARD)
+	if (card_type == IAS_V5_CARD || card_type == GEMSAFE_CARD)
 	{
 		Cmd[0] = 0x00;
 		Cmd[1] = 0xCA;
@@ -1012,101 +1012,6 @@ DWORD PteidGetCardSN(PCARD_DATA  pCardData,
 
 		return (dwReturn);
 	}
-
-   /***************/
-   /* Select File */
-   /***************/
-   Cmd [0] = 0x00;
-   Cmd [1] = 0xA4; /* SELECT COMMAND */
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x0C;
-   Cmd [4] = 0x02; 
-   Cmd [5] = 0x3F;
-   Cmd [6] = 0x00;
-   uiCmdLg = 7;
-
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   
-   if (!checkStatusCode(WHERE" -> select Dir Root", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-
-   Cmd[5] = 0x4F;
-   memset(recvbuf, 0, sizeof(recvbuf));
-   recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-		                    &recvlen);
-    SW1 = recvbuf[recvlen-2];
-    SW2 = recvbuf[recvlen-1];
-
-	if (!checkStatusCode(WHERE" -> select Specific Dir", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-
-     Cmd [5] = 0x50;
-     Cmd [6] = 0x32;
-	 
-	 memset(recvbuf, 0, sizeof(recvbuf));
-	 recvlen = sizeof(recvbuf);
-     dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-	 SW1 = recvbuf[recvlen-2];
-	 SW2 = recvbuf[recvlen-1];
-
-   if (!checkStatusCode(WHERE" -> select CIAInfo FILE", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-
-	
-   //READ BINARY for specific field within the CIAInfo File
-   Cmd [0] = 0x00;
-   Cmd [1] = 0xB0;
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x07;
-   Cmd [4] = 0x08;
-
-   uiCmdLg = 5;
-   recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-	SW1 = recvbuf[recvlen-2];
-	SW2 = recvbuf[recvlen-1];
-
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-		LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (READ BINARY ID=5032) errorcode: [0x%02X]", dwReturn);
-		CLEANUP(dwReturn);
-   }
-
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Bad status bytes: [0x%02X][0x%02X]", SW1, SW2);
-		CLEANUP(SCARD_E_UNEXPECTED);
-   }
-
-
-   *pdwSerialNumber = 8;
-   memcpy(pbSerialNumber, recvbuf, 8);
 
 cleanup:
    return (dwReturn);
