@@ -375,7 +375,16 @@
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
             <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
-          </RegistryKey>				
+          </RegistryKey>
+          <RegistryKey Root="HKLM"
+                   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5"
+                   Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085050011120fff829000e1" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+          </RegistryKey>
 				</Component>
         
         <Component Id="REGISTERMINIDRIVER_32" Guid="{937DDB3F-D056-41B1-A4BA-4DF96D3430F9}" Win64="no">
@@ -412,6 +421,15 @@
                      Action="createAndRemoveOnUninstall">
             <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085040120120fff829000d0" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+          </RegistryKey>
+          <RegistryKey Root="HKLM"
+                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5"
+                     Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085050011120fff829000e1" KeyPath="no"/>
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
             <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
