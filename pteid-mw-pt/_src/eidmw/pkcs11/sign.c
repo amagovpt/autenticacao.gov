@@ -363,6 +363,13 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
       goto cleanup;
       }
 
+   ret = cal_is_mechanism_supported(pSession->hslot, pMechanism->mechanism);
+   if (ret != CKR_OK)
+      {
+      log_trace(WHERE, "E: mechanism %d not supported", pMechanism->mechanism);
+      goto cleanup;
+      }
+
    //check mechanism
    //since this module is only for PTEID, we check for RSA here and we do not check the device capabilities
    //TODO check mechanism table for signing depending on token in slot

@@ -126,6 +126,7 @@ int cal_init_slots(void);
 int cal_token_present(CK_SLOT_ID hSlot);
 CK_RV cal_get_token_info(CK_SLOT_ID hSlot, CK_TOKEN_INFO_PTR pInfo);
 CK_RV cal_get_mechanism_list(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE_PTR pMechanismList, CK_ULONG_PTR pulCount);
+CK_RV cal_is_mechanism_supported(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE mechanism);
 int cal_connect(CK_SLOT_ID hSlot);
 int cal_disconnect(CK_SLOT_ID hSlot);
 int cal_init_objects(CK_SLOT_ID hSlot);

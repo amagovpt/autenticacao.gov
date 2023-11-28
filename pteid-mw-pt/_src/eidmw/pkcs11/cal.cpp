@@ -456,7 +456,42 @@ return (ret);
 }
 #undef WHERE
 
+#define WHERE "cal_is_mechanism_supported"
+CK_RV cal_is_mechanism_supported(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE mechanism) {
+   CK_RV ret = CKR_OK;
+   BOOL supported_algorithm = FALSE;
+   CK_ULONG count = 0;
 
+   cal_get_mechanism_list(hSlot, NULL, &count);
+   CK_MECHANISM_TYPE_PTR pMechanismList = (CK_MECHANISM_TYPE_PTR) malloc(count * sizeof(CK_MECHANISM_TYPE));
+   
+   if (pMechanismList == NULL) {
+      log_trace(WHERE, "E: error allocating memory");
+      ret = CKR_HOST_MEMORY;
+      goto cleanup;
+   }
+   
+   cal_get_mechanism_list(hSlot, pMechanismList, &count);
+
+   for (unsigned int i = 0; i < count; i++) {
+      if (pMechanismList[i] == mechanism) {
+         supported_algorithm = TRUE;
+         break;
+      }
+   }
+
+   if (!supported_algorithm) {
+      ret = CKR_MECHANISM_INVALID;
+      goto cleanup;
+   }
+
+cleanup:
+   if(pMechanismList)
+      free(pMechanismList);
+
+   return ret;
+}
+#undef WHERE
 
 #define WHERE cal_get_mechanism_info()
 CK_RV cal_get_mechanism_info(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE type, CK_MECHANISM_INFO_PTR pInfo)
