@@ -657,7 +657,7 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
                         bImported = true;
                     }
                 }
-                else
+                else if (Card.getType() == PTEID_CARDTYPE_IAS07)
                 {
                     if(StoreUserCerts (Card, pCertContext, KeyUsageBits, cert, readerName))
                     {
