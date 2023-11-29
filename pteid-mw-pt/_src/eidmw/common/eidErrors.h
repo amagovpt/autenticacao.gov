@@ -266,3 +266,8 @@
 #define EIDMW_REMOTEADDR_REVOKED            0xe1d01d57
 #define EIDMW_REMOTEADDR_INVALID_STATE      0xe1d01d58
 #define EIDMW_REMOTEADDR_UNKNOWN_ERROR      0xe1d01d59
+
+//PACE Error
+#define EIDMW_PACE_ERR_BAD_TOKEN               0xe1d01d5a
+#define EIDMW_PACE_ERR_UNKNOWN                 0xe1d01d5b
+

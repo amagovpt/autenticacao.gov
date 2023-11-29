@@ -7,9 +7,7 @@
 #include "eac/eac.h"
 #include "eac/pace.h"
 
-#include <exception>
-
-#include "MWException.h"
+#include "Log.h"
 
 namespace eIDMW
 {
@@ -413,7 +411,7 @@ err:
 
             responseverifyToken = m_context->m_oPCSC.Transmit(hCard, verifyToken, &fileReturn, param_structure);
             if(responseverifyToken.Size() <=2) {
-                MWLOG(LEV_ERROR, MOD_CAL, "Error verifying generated token, perhaps wrong CAN code.");
+                MWLOG(LEV_ERROR, MOD_CAL, "Error verifying generated token, perhaps wrong CAN code, error response: %s", responseverifyToken.ToString().c_str());
                 r = -2;
                 goto err;
             }
@@ -455,9 +453,13 @@ err:
             }
             if (r < 0) {
                 EAC_CTX_clear_free(m_ctx);
+                m_ctx = NULL;
                 EAC_cleanup();
                 if(r == -2) {
-                    // throw error with some more info from responseverifytoken perhaps with error codes from index 0 and 1
+                    throw CMWEXCEPTION(EIDMW_PACE_ERR_BAD_TOKEN);
+                }
+                else if(r == -1) {
+                    throw CMWEXCEPTION(EIDMW_PACE_ERR_UNKNOWN);
                 }
             }
         }
