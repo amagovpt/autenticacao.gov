@@ -158,6 +158,11 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
     PCCERT_CONTEXT  pDesiredCert	= NULL;
     PCCERT_CONTEXT  pPrevCert		= NULL;
 	HCERTSTORE		hMyStore = CertOpenSystemStore(NULL, L"MY");
+	
+	//TODO: fix certificate registration for new ECDSA certificates
+	if (Card.getType() == PTEID_CARDTYPE_IAS5) {
+		return true;
+	}
 
     if ( NULL != hMyStore )
     {
@@ -657,7 +662,7 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
                         bImported = true;
                     }
                 }
-                else if (Card.getType() == PTEID_CARDTYPE_IAS07)
+                else
                 {
                     if(StoreUserCerts (Card, pCertContext, KeyUsageBits, cert, readerName))
                     {
@@ -673,12 +678,7 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
         long err = e.GetError();
         err = err;
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error importing certificates");
-        //QString strCaption(tr("Retrieving certificates"));
-        //QString strMessage(tr("Error retrieving certificates"));
-        //QMessageBox::information(NULL,strCaption,strMessage);
     }
-
-    //	showCertImportMessage(bImported);
 
     return bImported;
 #else
