@@ -150,6 +150,7 @@ namespace eIDMW
 
   //Remote Address server
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL, L"https://morada.cartaodecidadao.pt" };
+  const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_CC2_BASEURL = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_CC2, L"https://moradacc2.cartaodecidadao.pt" };
   const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST = {EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_TST, L"https://morada.teste.cartaodecidadao.pt" };
 
   } // namespace eidMW

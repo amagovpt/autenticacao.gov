@@ -1379,6 +1379,7 @@ std::string buildRemoteAddressURL(RemoteAddressProtocol protocol, int endpoint) 
     const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
 
     APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
+    APL_Config conf_baseurl_cc2(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_CC2_BASEURL);
     std::string ra_url;
 
     if (CConfig::isTestModeEnabled()) {
@@ -1386,7 +1387,7 @@ std::string buildRemoteAddressURL(RemoteAddressProtocol protocol, int endpoint) 
         ra_url += conf_baseurl_t.getString();
     }
     else {
-        ra_url += conf_baseurl.getString();
+        ra_url += (protocol == CC2_PROTOCOL ? conf_baseurl_cc2.getString() : conf_baseurl.getString());
     }
 
     switch (endpoint) {
@@ -1437,13 +1438,13 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 
     //Send VERIFY command for Address PIN with cached value
     //In CC2 we can't guarantee that the verified state from a previous call to verify address PIN is kept in the card
-    /*unsigned long ulRemaining = 0;
+    unsigned long ulRemaining = 0;
     m_card->getCalReader()->setSSO(true);
     m_card->getCalReader()->PinCmd(PIN_OP_VERIFY, m_card->getPin(ADDRESS_PIN_IDX), "", "", ulRemaining);
     MWLOG(LEV_DEBUG, MOD_APL, "Verified address PIN with cached value. Tries left: %lu", ulRemaining);
 
     //Clear cached PIN
-    m_card->getCalReader()->setSSO(false); */
+    m_card->getCalReader()->setSSO(false);
 
     char * json_str = build_json_ecdh1(ecdh_params, dg13_data, sod_data, authCert_data, serialNumber);
 
