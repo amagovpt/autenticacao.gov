@@ -13,6 +13,7 @@ namespace eIDMW
     class PaceAuthenticationImpl {
 
         const unsigned char Tcg = 0x87;
+        const unsigned char TcgEven = 0x85;
         const unsigned char Tcc = 0x8E;
         const unsigned char Tle = 0x97;
         const unsigned char paddingIndicator = 0x01;
@@ -81,6 +82,7 @@ namespace eIDMW
             CByteArray mac;
             CByteArray TlvLe;
             int lc = plainAPDU.GetByte(4);
+            bool isInsEven = plainAPDU.GetByte(1) & 1;
 
             CByteArray command_header(plainAPDU.GetBytes(0, 4));
             command_header.SetByte(command_header.GetByte(0) | controlByte, 0);
@@ -109,13 +111,14 @@ namespace eIDMW
                 CByteArray encryptedInput = arrayFromBufMem(memEncrytedInput);
                 CByteArray paddedInputArray = arrayFromBufMem(paddedMemInputData);
                 //LCg = Len(Cg) + Len(PI = 1)
-                int lcg = encryptedInput.Size() + 1;
+                int lcg = encryptedInput.Size() + (isInsEven ? 0 : 1);
 
                 CByteArray paddedCryptogram;
-                paddedCryptogram.Append(Tcg);
+                paddedCryptogram.Append(isInsEven ? TcgEven : Tcg);
                 //This is safe because Lcg will be always lower than
                 paddedCryptogram.Append((unsigned char)lcg);
-                paddedCryptogram.Append(paddingIndicator);
+                if(!isInsEven)
+                    paddedCryptogram.Append(paddingIndicator);
                 paddedCryptogram.Append(encryptedInput);
                 if(TlvLe.Size() > 0)
                     paddedCryptogram.Append(TlvLe);
@@ -134,12 +137,13 @@ namespace eIDMW
 
                 mac = arrayFromBufMem(memMac);
 
-                int lc_final = mac.Size() + 2 + encryptedInput.Size() + 3 + TlvLe.Size(); // CG + Tcg + Lcg + PI
+                int lc_final = mac.Size() + 2 + encryptedInput.Size() + 3 + TlvLe.Size() - (isInsEven ? 1 : 0); // CG + Tcg + Lcg + PI
                 encryptedAPDU.Append(command_header);
                 encryptedAPDU.Append((unsigned char)lc_final);
-                encryptedAPDU.Append(Tcg);
+                encryptedAPDU.Append(isInsEven ? TcgEven : Tcg);
                 encryptedAPDU.Append((unsigned char)lcg);
-                encryptedAPDU.Append(paddingIndicator);
+                if(!isInsEven)
+                    encryptedAPDU.Append(paddingIndicator);
                 encryptedAPDU.Append(encryptedInput);
 
                 if(TlvLe.Size())
@@ -212,11 +216,13 @@ namespace eIDMW
             BUF_MEM *encryptedResponse = NULL;
             BUF_MEM *encryptedResponseContent = NULL;
             BUF_MEM *macAPDUResponse = NULL;
+            BUF_MEM *unpadDecryptedResponse = NULL;
+            bool isEven = encryptedAPDU.GetByte(0) == TcgEven;
 
             if(encryptedAPDU.Size() <= 2) // error from security
                 return encryptedAPDU;
 
-            if(encryptedAPDU.GetByte(0) == Tcg)
+            if(encryptedAPDU.GetByte(0) == Tcg || isEven)
             {
                 long hex = encryptedAPDU.GetByte(1);
                 encryptedResponseContent = copyFromArray(encryptedAPDU, 2, hex);
@@ -225,7 +231,7 @@ namespace eIDMW
             encryptedResponse = copyFromArray(encryptedAPDU, indexStatusCode, 2);
 
             if(encryptedResponseContent != NULL) {
-                encryptedResponseToAuthenticate.Append(Tcg);
+                encryptedResponseToAuthenticate.Append(isEven ? TcgEven : Tcg);
                 encryptedResponseToAuthenticate.Append(encryptedResponseContent->length);
                 encryptedResponseToAuthenticate.Append(arrayFromBufMem(encryptedResponseContent));
             }
@@ -251,12 +257,11 @@ namespace eIDMW
                 goto err;
             }
             if(encryptedResponseContent != NULL) {
-                bool padding = encryptedResponseContent->data[0] == 0x01;
-
                 BUF_MEM *decryptResponseRemovePadding = BUF_MEM_new();
-                decryptResponseRemovePadding->length = encryptedResponseContent->length - 1;
+                decryptResponseRemovePadding->length = encryptedResponseContent->length - (isEven ? 0 : 1); // first byte of an encrypted message is padding indicator unless even INS
                 decryptResponseRemovePadding->data = (char*)malloc(decryptResponseRemovePadding->length * sizeof(char));
-                memcpy(decryptResponseRemovePadding->data, &encryptedResponseContent->data[1], decryptResponseRemovePadding->length);
+                memcpy(decryptResponseRemovePadding->data, &encryptedResponseContent->data[isEven ? 0 : 1], decryptResponseRemovePadding->length);
+                decryptResponseRemovePadding->max = decryptResponseRemovePadding->length;
                 BUF_MEM *paddedEncryptedResponse = NULL;
                 if(decryptResponseRemovePadding->length % 16) {
                     paddedEncryptedResponse = EAC_add_iso_pad(m_ctx, decryptResponseRemovePadding);
@@ -265,11 +270,9 @@ namespace eIDMW
                     paddedEncryptedResponse = decryptResponseRemovePadding;
                     decryptResponseRemovePadding = NULL;
                 }
-                BUF_MEM *memDecryptedResponse = EAC_decrypt(m_ctx, paddedEncryptedResponse);
-                if(!padding)
-                    decryptedResponse.Append(arrayFromBufMem(memDecryptedResponse));
 
-                BUF_MEM *unpadDecryptedResponse = EAC_remove_iso_pad(memDecryptedResponse);
+                BUF_MEM *memDecryptedResponse = EAC_decrypt(m_ctx, paddedEncryptedResponse);
+                unpadDecryptedResponse = EAC_remove_iso_pad(memDecryptedResponse);
                 decryptedResponse.Append(arrayFromBufMem(unpadDecryptedResponse));
 
                 if(unpadDecryptedResponse)
