@@ -1,6 +1,7 @@
 #ifndef PACEAUTHENTICATION_H
 #define PACEAUTHENTICATION_H
 
+#include "APDU.h"
 #include "Context.h"
 
 #include <memory>
@@ -17,6 +18,7 @@ public:
     void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
 
     CByteArray sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
+    CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
 
 private:
     std::unique_ptr<PaceAuthenticationImpl> m_impl;
