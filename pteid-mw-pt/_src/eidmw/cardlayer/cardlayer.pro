@@ -47,6 +47,7 @@ unix:!macx:  DEFINES += __UNIX__
 
 # Input
 HEADERS += \
+           APDU.h \
            Cache.h \
            Card.h \
            CardFactory.h \
@@ -74,6 +75,7 @@ HEADERS += \
            CardReaderInfo.h
 
 SOURCES += \
+           APDU.cpp \
            Cache.cpp \
            Card.cpp \
            CardFactory.cpp \
