@@ -512,6 +512,13 @@ err:
                     paddedCryptogram.Append(paddingIndicator);
 
                 paddedCryptogram.Append(encryptedInput);
+
+                if(memInputData != NULL)
+                    BUF_MEM_clear_free(memInputData);
+                if(paddedMemInputData != NULL)
+                    BUF_MEM_clear_free(paddedMemInputData);
+                if(memEncryptedInput != NULL)
+                    BUF_MEM_clear_free(memEncryptedInput);
             }
             if(TlvLe.Size() > 0)
                 paddedCryptogram.Append(TlvLe);
@@ -555,6 +562,19 @@ err:
                 encryptedAPDU.Append(0x00);
 
             EAC_increment_ssc(m_ctx);
+
+            if(memMac != NULL)
+                BUF_MEM_clear_free(memMac);
+            if(inputMac != NULL)
+                BUF_MEM_clear_free(inputMac);
+            if(finalToEncrypt != NULL)
+                BUF_MEM_clear_free(finalToEncrypt);
+            if(memCryptogram != NULL)
+                BUF_MEM_clear_free(memCryptogram);
+            if(memPaddedCommandHeader != NULL)
+                BUF_MEM_clear_free(memPaddedCommandHeader);
+            if(memCommandHeader != NULL)
+                BUF_MEM_clear_free(memCommandHeader);
 
             return encryptedAPDU;
 
