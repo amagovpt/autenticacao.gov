@@ -220,21 +220,29 @@ namespace eIDMW
             BUF_MEM *macAPDUResponse = NULL;
             BUF_MEM *unpadDecryptedResponse = NULL;
             bool isOdd = encryptedAPDU.GetByte(0) == TcgOdd;
+            int startOfData = 0;
 
             if(encryptedAPDU.Size() <= 2) // error from security
                 return encryptedAPDU;
 
             if(encryptedAPDU.GetByte(0) == Tcg || isOdd)
             {
-                long hex = encryptedAPDU.GetByte(1);
-                encryptedResponseContent = copyFromArray(encryptedAPDU, 2, hex);
+                const unsigned char *descData = encryptedAPDU.GetBytes();
+                long sizeData;
+                int xclass = 0;
+                int ans1Tag = 0;
+                int stepsToskip = 0;
+
+                ASN1_get_object(&descData, &sizeData, &ans1Tag, &xclass, encryptedAPDU.Size());
+                const char* result = strstr(reinterpret_cast<const char*>(encryptedAPDU.GetBytes()), reinterpret_cast<const char*>(descData));
+                startOfData = reinterpret_cast<const unsigned char*>(result) - encryptedAPDU.GetBytes();
+                encryptedResponseContent = copyFromArray(encryptedAPDU, startOfData, sizeData);
             }
-            int indexStatusCode = encryptedResponseContent ? encryptedResponseContent->length + 4 : 2;
+            int indexStatusCode = 2 + (encryptedResponseContent ? (encryptedResponseContent->length + (startOfData)) : 0);
             encryptedResponse = copyFromArray(encryptedAPDU, indexStatusCode, 2);
 
             if(encryptedResponseContent != NULL) {
-                encryptedResponseToAuthenticate.Append(isOdd ? TcgOdd : Tcg);
-                encryptedResponseToAuthenticate.Append(encryptedResponseContent->length);
+                encryptedResponseToAuthenticate.Append(encryptedAPDU.GetBytes(0, startOfData));
                 encryptedResponseToAuthenticate.Append(arrayFromBufMem(encryptedResponseContent));
             }
 
