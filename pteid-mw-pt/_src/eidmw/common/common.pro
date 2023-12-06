@@ -38,6 +38,9 @@ unix:!macx: DEFINES += USING_DL_OPEN
 unix:!macx: LIBS += -ldl -pthread
 
 macx: LIBS += -Wl,-framework -Wl,Carbon
+macx: LIBS += -lcrypto
+
+unix: LIBS += -lcrypto
 
 PROJECT_DIR = common
 

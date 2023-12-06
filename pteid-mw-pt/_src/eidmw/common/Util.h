@@ -24,6 +24,7 @@
 #pragma once
 
 #include "Export.h"
+#include "ByteArray.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -51,6 +52,14 @@ EIDMW_CMN_API std::wstring windowsANSIToWideString(const std::string& in);
  * Returns true is csSearch is present in csData.
  */
 EIDMW_CMN_API bool StartsWithCI(const char *csData, const char *csSearch);
+
+/**
+ * Find an object with a specific tag inside an array and return an reference to it
+ * the return value can be null if nothing is found
+ * if the return value is not null the array should be kept allocated for the lifetime of the returned value
+ * if you need to use after the lifetime of the array, copy the value
+ */
+EIDMW_CMN_API const unsigned char* findObject(const CByteArray &array, long &size, long tag);
 
 /**
  * Returns true is csSearch is present in csData.
