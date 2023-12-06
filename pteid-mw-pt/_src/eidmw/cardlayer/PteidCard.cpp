@@ -870,33 +870,47 @@ void CPteidCard::SelectApplication(const CByteArray & oAID)
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo)
 {
 	auto ulPathLen = static_cast<unsigned long>(csPath.size());
+    tFileInfo info;
+    info.lFileLen = info.lReadPINRef = info.lWritePINRef = 0;
 	// path must not contain any incomplete directory or file id
 	if(ulPathLen % 4 != 0 || ulPathLen == 0)
 		throw CMWEXCEPTION(EIDMW_ERR_BAD_PATH);
 
 	// each byte is 2 characters
 	ulPathLen /= 2;
-
+    CByteArray responseSelection;
 	CAutoLock autolock(this);
 	{
 		// Try to select from current application
-		auto oResp = SelectByPath(csPath, bReturnFileInfo);
+        responseSelection = SelectByPath(csPath, bReturnFileInfo);
 
-		auto ulSW12 = getSW12(oResp);
+        auto ulSW12 = getSW12(responseSelection);
 		if ((ulSW12 >> 0x8) & 0x6A) // Select File any error
 		{
 			// If failed, try to select the respective application
 			SelectApplication({ oAID, sizeof(oAID) });
 
 			// Select by path again
-			oResp = SelectByPath(csPath, bReturnFileInfo);
+            responseSelection = SelectByPath(csPath, bReturnFileInfo);
 			
 			// Should be expecting 0x9000 (success)
-			getSW12(oResp, 0x9000);
-		}
+            getSW12(responseSelection, 0x9000);
+        }
+        if(bReturnFileInfo) { //needs to return lReadPINRef and lWritePINRef
+            long size;
+            const unsigned char* length = findObject(responseSelection, size, 0x81);
+            if(length == NULL)
+                length = findObject(responseSelection, size, 0x80);
+            if(length == NULL)
+                return {0};
+
+            CByteArray array(length, size);
+            unsigned long value = strtoul(array.ToString(false, true).c_str(), nullptr, 16);
+            info.lFileLen = value;
+        }
 	}
 
-	return {0};
+    return info;
 }
 
 // Compatible with older CC where only 1 AID present
@@ -930,7 +944,16 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 	//
 	// Send APDU and validate response
 	//
-	auto oResp = SendAPDU(0xA4, oPath.Size() > 2 ? 0x08 : 0x00, bReturnFileInfo ? 0x00 : 0x0C, oPath);
+    CByteArray selectByPathAPDU(6);
+    selectByPathAPDU.Append(m_ucCLA);
+    selectByPathAPDU.Append(0xA4);
+    selectByPathAPDU.Append(oPath.Size() > 2 ? 0x08 : 0x02);
+    selectByPathAPDU.Append(bReturnFileInfo ? 0x00 : 0x0C);
+    selectByPathAPDU.Append(oPath.Size());
+    selectByPathAPDU.Append(oPath);
+    selectByPathAPDU.Append(0x00);
+
+    auto oResp = SendAPDU(selectByPathAPDU);
 	getSW12(oResp, 0x9000);
 
 	return oResp;

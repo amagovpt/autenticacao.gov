@@ -32,6 +32,8 @@
 #include "Thread.h"
 #include "pinpad2.h"
 
+#include <algorithm>
+
 
 unsigned char clearbinary[] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -49,6 +51,8 @@ unsigned char clearbinary[] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                                 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+
+#define MAX_BLOCK_READ_LENGTH 223
 
 namespace eIDMW
 {
@@ -93,50 +97,43 @@ void CPkiCard::SelectApplication(const CByteArray & oAID)
 
 CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
     unsigned long ulOffset, unsigned long ulMaxLen)
-{	
-	CByteArray oData(ulMaxLen);
-
+{
 	CAutoLock autolock(this);
 
     tFileInfo fileInfo = SelectFile(csPath, true);
+    unsigned long realMaxLen = std::min(fileInfo.lFileLen, ulMaxLen);
+    unsigned long offsetByte = ulOffset;
 
-    // Loop until we've read ulMaxLen bytes or until EOF (End Of File)
-    bool bEOF = false;
-    for (unsigned long i = 0; i < ulMaxLen && !bEOF; i += MAX_APDU_READ_LEN)
-    {
-        unsigned long ulLen = ulMaxLen - i <= MAX_APDU_READ_LEN ?
-	    ulMaxLen - i : 0;
+    CByteArray fileArray(realMaxLen);
 
+    //loop while you don't get to the end or maxLen
+    //we use max_block_read_length as 223 because of a limit on SM layer
+    while((offsetByte != fileInfo.lFileLen) && (fileArray.Size() < realMaxLen)) {
+        unsigned long maxLength = std::min(fileInfo.lFileLen - offsetByte, (unsigned long)MAX_BLOCK_READ_LENGTH);
+        CByteArray response = ReadBinary(offsetByte, maxLength);
+        offsetByte += maxLength;
 
-        CByteArray oResp = ReadBinary(ulOffset + i, ulLen);
+        unsigned long ulSW12 = getSW12(response);
 
-
-        unsigned long ulSW12 = getSW12(oResp);
-
-
-		// If the file is a multiple of the block read size, you will get
-		// an SW12 = 6B00 (at least with PT eID) but that OK then..
-        if (ulSW12 == 0x9000 || (i != 0 && ulSW12 == 0x6B00))
-            oData.Append(oResp.GetBytes(), oResp.Size() - 2);
-		else if (ulSW12 == 0x6982) {
-			throw CNotAuthenticatedException(
-				EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
-		}
-		else if (ulSW12 == 0x6B00)
-			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
-		else
+        // If the file is a multiple of the block read size, you will get
+        // an SW12 = 6B00 (at least with PT eID) but that OK then..
+        if (ulSW12 == 0x9000 || (offsetByte != 0 && ulSW12 == 0x6B00))
+            fileArray.Append(response.GetBytes(), response.Size() - 2);
+        else if (ulSW12 == 0x6982) {
+            throw CNotAuthenticatedException(
+                EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
+        }
+        else if (ulSW12 == 0x6B00)
+            throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+        else
             throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
 
-        // If the driver/reader itself did the 6CXX handling,
-        // we assume we're at the EOF
-        if (oResp.Size() < MAX_APDU_READ_LEN)
-            bEOF = true;
     }
 
-	MWLOG(LEV_INFO, MOD_CAL, L"   Read file %ls (%d bytes) from card",
-		utilStringWiden(csPath).c_str(), oData.Size());
+    MWLOG(LEV_INFO, MOD_CAL, L"   Read file %ls (%d bytes) from card",
+          utilStringWiden(csPath).c_str(), fileArray.Size());
 
-    return oData;
+    return fileArray;
 }
 
 void CPkiCard::WriteUncachedFile(const std::string & csPath,
