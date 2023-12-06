@@ -2,6 +2,7 @@
 
 #include "ByteArray.h"
 #include "Log.h"
+#include "Util.h"
 #include "eidErrors.h"
 
 #include "eac/eac.h"
@@ -21,23 +22,12 @@ namespace eIDMW
         const unsigned char paddingIndicator = 0x01;
         const unsigned char controlByte = 0x0C;
 
-        BUF_MEM *findObject(const CByteArray &array, long tag) {
+        BUF_MEM *findObjectMem(const CByteArray &array, long tag) {
             const unsigned char *old_data = NULL;
-            const unsigned char *desc_data = array.GetBytes();
-            int xclass = 0;
-            int ans1Tag = 0;
-            int returnValue = 0;
-            long size = 0;
-            long genTag = 0;
-
-            while(tag != genTag) {
-                if(old_data == desc_data)
-                    return NULL;
-                old_data = desc_data; // test this
-                long returnValue = ASN1_get_object(&desc_data, &size, &ans1Tag, &xclass, array.Size());
-                int constructed = returnValue == V_ASN1_CONSTRUCTED ? 1 : 0;
-                genTag = xclass | (constructed & 0b1) << 5 | ans1Tag;
-            }
+            long size;
+            const unsigned char *desc_data = findObject(array, size, tag);
+            if(desc_data == NULL)
+                return NULL;
 
             BUF_MEM * mem = BUF_MEM_new();
             mem->data = (char*)malloc(size * sizeof(char));
@@ -363,7 +353,7 @@ err:
 
             CByteArray responseEncryptedNonce = m_context->m_oPCSC.Transmit(hCard, encryptedNonce, &fileReturn, param_structure);
 
-            BUF_MEM *dec_nonce = findObject(responseEncryptedNonce, 0x80);
+            BUF_MEM *dec_nonce = findObjectMem(responseEncryptedNonce, 0x80);
 
             if(!PACE_STEP2_dec_nonce(m_ctx, pace_secret, dec_nonce)) {
                 MWLOG(LEV_ERROR, MOD_CAL, "Couldn't decrypt card nonce");
@@ -383,7 +373,7 @@ err:
             sendMapData.Append(0x00);
 
             responseMappingData = m_context->m_oPCSC.Transmit(hCard, sendMapData, &fileReturn, param_structure);
-            cardMappingData = findObject(responseMappingData, 0x82);
+            cardMappingData = findObjectMem(responseMappingData, 0x82);
             if(!PACE_STEP3A_map_generator(m_ctx, cardMappingData)) {
                 MWLOG(LEV_ERROR, MOD_CAL, "Couldn't generate map");
                 r = -1;
@@ -403,7 +393,7 @@ err:
 
             responseEphePubKey = m_context->m_oPCSC.Transmit(hCard, sendEphePubKey, &fileReturn, param_structure);
 
-            cardPubKey = findObject(responseEphePubKey, 0x84);
+            cardPubKey = findObjectMem(responseEphePubKey, 0x84);
 
             if(!PACE_STEP3B_compute_shared_secret(m_ctx, cardPubKey) || !PACE_STEP3C_derive_keys(m_ctx)) {
                 MWLOG(LEV_ERROR, MOD_CAL, "Couldn't compute shared secret or derive keys");
@@ -424,7 +414,7 @@ err:
                 goto err;
             }
 
-            cardToken = findObject(responseverifyToken, 0x86);
+            cardToken = findObjectMem(responseverifyToken, 0x86);
 
             if (!PACE_STEP3D_verify_authentication_token(m_ctx, cardToken)) {
                 MWLOG(LEV_ERROR, MOD_CAL, "Couldn't verify authentication from card");
