@@ -33,6 +33,7 @@
 
 @set PTEID_DIR_CJSON=C:\git\tools\build-scripts\windows\external-libs\cjson-win32
 
+@set PTEID_DIR_OPEN_PACE=C:\git\tools\build-scripts\windows\external-libs\openpace
 
 :: Compiled / external libs x64
 
