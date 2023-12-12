@@ -81,6 +81,11 @@ enum APL_SignatureLevel
     LEVEL_LTV
 };
 
+enum APL_PACEAuthenticationType {
+    APL_PACE_CAN,
+    APL_PACE_UNSUPPORTED,
+};
+
 class CReader;
 class PDFSignature;
 class APL_CryptoFwk;
@@ -150,6 +155,8 @@ public:
 	  * @param oData will contain the content of the file
 	  */
     EIDMW_APL_API virtual bool writeFile(const char *csPath, const CByteArray& oData,unsigned long ulOffset=0);
+
+    EIDMW_APL_API void setPaceAuthentication(const char *secret, size_t secretLen, APL_PACEAuthenticationType secretType);
 
 	void CalLock();							/**< Lock the reader for exclusive atomic access */
 	void CalUnlock();						/**< Unlock the reader */

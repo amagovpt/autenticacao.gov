@@ -43,7 +43,7 @@
 namespace eIDMW
 {
 
-CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad)
+CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess)
 {
 	CCard *poCard = NULL;
 	long lErrCode = EIDMW_ERR_CHECK; // should never be returned
@@ -81,7 +81,7 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 		if (poCard == NULL) {
             CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
             CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
-            bool isContactLess = atr.Equals(atrContactLessCard);
+            isContactLess = atr.Equals(atrContactLessCard);
             std::unique_ptr<PaceAuthentication> paceAuthentication;
 
             MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(), isContactLess ? "true" : "false");
@@ -146,6 +146,7 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 	}
 	else
 	{
+        isContactLess = false;
 		throw CMWEXCEPTION(lErrCode);
 	}
 

@@ -194,8 +194,22 @@ bool PTEID_Card::writeFile(const char *fileID,const PTEID_ByteArray& oData,unsig
 	CByteArray bytearray(oData.GetBytes(),oData.Size());
 	out = pcard->writeFile(fileID,bytearray,ulOffset);
 
-	END_TRY_CATCH
-	return out;
+    END_TRY_CATCH
+        return out;
+}
+
+void PTEID_Card::setPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType)
+{
+    APL_PACEAuthenticationType type = APL_PACE_UNSUPPORTED;
+    if(secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN)
+        type = APL_PACEAuthenticationType::APL_PACE_CAN;
+    else {
+        // not supported
+    }
+    BEGIN_TRY_CATCH
+    APL_Card *pcard=static_cast<APL_Card *>(m_impl);
+    pcard->setPaceAuthentication(secret, length, type);
+    END_TRY_CATCH
 }
 
 

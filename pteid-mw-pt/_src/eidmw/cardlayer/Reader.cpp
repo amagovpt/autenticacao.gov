@@ -82,7 +82,7 @@ static const unsigned char RIPEMD160_AID[] = {
 };
 
 CReader::CReader(const std::string & csReader, CContext *poContext) :
-	m_poCard(NULL), m_oPKCS15(poContext)
+    m_poCard(NULL), m_oPKCS15(poContext), m_isContactless(false)
 {
     m_csReader = csReader;
     m_wsReader = utilStringWiden(csReader);
@@ -266,7 +266,7 @@ bool CReader::Connect()
 	if (m_poCard != NULL)
 		Disconnect(DISCONNECT_LEAVE_CARD);
 
-	m_poCard = CardConnect(m_csReader, m_poContext, NULL);
+    m_poCard = CardConnect(m_csReader, m_poContext, NULL, m_isContactless);
 	if (m_poCard != NULL)
 	{
 		m_oPKCS15.SetCard(m_poCard);
@@ -419,6 +419,16 @@ void CReader::SelectApplication(const CByteArray & oAID)
         throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
     return m_poCard->SelectApplication(oAID);
+}
+
+bool CReader::isCardContactless() const
+{
+    return m_isContactless;
+}
+
+void CReader::setPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType)
+{
+    m_poCard->setPaceAuthentication(secret, secretLen, secretType);
 }
 
 CByteArray CReader::ReadFile(const std::string &csPath,

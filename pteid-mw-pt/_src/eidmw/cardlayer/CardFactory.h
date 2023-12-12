@@ -30,7 +30,7 @@ namespace eIDMW
 
 
 CCard * CardConnect(const std::string &csReader,
-	CContext *poContext, GenericPinpad *poPinpad);
+    CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess);
 
 }
 

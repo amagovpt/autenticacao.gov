@@ -38,12 +38,12 @@
 #include "Util.h"
 #include "GenericPinpad.h"
 #include "../dialogs/dialogs.h"
+#include "PaceAuthentication.h"
 
 #include <memory>
 
 namespace eIDMW
 {
-class PaceAuthentication;
 class EIDMW_CAL_API CCard
 {
 public:
@@ -127,6 +127,8 @@ public:
 	   m_poPinpad = pinpad;
 
     }
+
+    void setPaceAuthentication(const char* secret, size_t secretLen, PaceSecretType secretType);
 
     const void * getProtocolStructure();
 

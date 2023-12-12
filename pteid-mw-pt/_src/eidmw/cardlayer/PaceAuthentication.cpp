@@ -39,6 +39,8 @@ namespace eIDMW
     public:
         explicit PaceAuthenticationImpl(CContext *poContext)
             : m_context(poContext)
+            , m_secret(NULL)
+            , m_secretLen(0)
         {
 
         }
@@ -327,8 +329,8 @@ err:
                 MWLOG(LEV_ERROR, MOD_CAL, "Couldn't init ef cardaccess");
             }
 
-            char* secret = getenv("PACE_CAN");
-            PACE_SEC* pace_secret = PACE_SEC_new(secret, strlen(secret), PACE_CAN);
+            s_type secretType = (s_type)m_secretType;
+            PACE_SEC* pace_secret = PACE_SEC_new(m_secret, m_secretLen, secretType);
 
             const unsigned char setPace[] = {0x00 ,0x22 ,0xC1 ,0xA4 ,0x0F ,0x80 ,0x0A ,0x04 ,0x00 ,0x7F ,0x00 ,0x07 ,0x02 ,0x02 ,0x04 ,0x02 ,0x04 ,0x83 ,0x01 ,0x02};
             const unsigned char finalAuth[] = {0x00, 0x86, 0x00, 0x00, 0x0C, 0x7C, 0x0A, 0x85, 0x08};
@@ -578,6 +580,16 @@ err:
 
         }
 
+        void setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType)
+        {
+            if(m_secret) {
+                free((void*)m_secret);
+            }
+            m_secret = (char*)malloc(sizeof(char) * secretLen);
+            memcpy(m_secret, secret, secretLen);
+            m_secretLen = secretLen;
+            m_secretType = secretType;
+        }
 
         CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure)
         {
@@ -588,11 +600,15 @@ err:
 
         ~PaceAuthenticationImpl()
         {
+            free(m_secret);
             EAC_CTX_clear_free(m_ctx);
             EAC_cleanup();
         }
 
     private:
+        char *m_secret;
+        size_t m_secretLen;
+        PaceSecretType m_secretType;
         friend class PaceAuthentication;
         CContext *m_context;
         EAC_CTX *m_ctx;
@@ -620,5 +636,10 @@ err:
     CByteArray PaceAuthentication::sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure)
     {
         return m_impl->sendAPDU(apdu, hCard, lRetVal, param_structure);
+    }
+
+    void PaceAuthentication::setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType)
+    {
+        return m_impl->setAuthentication(secret, secretLen, secretType);
     }
 }

@@ -58,6 +58,15 @@ typedef enum
     PIN_OP_RESET_NO_PUK
 } tPinOperation;
 
+enum PaceSecretType {
+    PACEMRZ = 1,
+    PACECAN,
+    PACEPIN,
+    PACEPUK,
+    PACERAW,
+
+};
+
 const unsigned long SIGN_ALGO_RSA_RAW = 0x01;
 const unsigned long SIGN_ALGO_RSA_PKCS = 0x02;
 const unsigned long SIGN_ALGO_MD5_RSA_PKCS = 0x04;

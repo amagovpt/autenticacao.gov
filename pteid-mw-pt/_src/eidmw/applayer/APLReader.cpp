@@ -270,7 +270,12 @@ APL_Card *APL_ReaderContext::getCard()
 {
 	connectCard();
 
-	return m_card;
+    return m_card;
+}
+
+bool APL_ReaderContext::isCardContactless() const
+{
+    return m_card->getCalReader()->isCardContactless();
 }
 
 APL_EIDCard *APL_ReaderContext::getEIDCard()

@@ -55,6 +55,17 @@ enum PTEID_CardType
 	PTEID_CARDTYPE_IAS5         /*   IAS v5 cards (CC 2)     */
 };
 
+enum PTEID_CardContactInterface
+{
+    PTEID_CARD_CONTACTEMPTY=0,    /* Empty contact */
+    PTEID_CARD_CONTACT,           /* Card is using contact */
+    PTEID_CARD_CONTACTLESS        /* Card is using contactless */
+};
+
+enum PTEID_CardPaceSecretType
+{
+    PTEID_CARD_SECRET_CAN=0    /* Use can to make Pace authentication */
+};
 
 enum PTEID_PinUsage
 {

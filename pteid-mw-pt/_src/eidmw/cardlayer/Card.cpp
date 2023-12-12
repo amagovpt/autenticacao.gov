@@ -453,7 +453,15 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 		}
 	}
 
-	return oResp;
+    return oResp;
+}
+
+void CCard::setPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType)
+{
+    if(m_pace.get())
+    {
+        m_pace->setAuthentication(secret, secretLen, secretType);
+    }
 }
 
 const void * CCard::getProtocolStructure() {

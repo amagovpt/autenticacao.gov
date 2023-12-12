@@ -19,6 +19,7 @@ public:
 
     CByteArray sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
     CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
+    void setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
 private:
     std::unique_ptr<PaceAuthenticationImpl> m_impl;

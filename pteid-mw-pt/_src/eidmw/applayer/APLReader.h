@@ -338,6 +338,12 @@ public:
 	  */    
     EIDMW_APL_API APL_Card *getCard();
 
+    /**
+      * Get the card in the reader whatever is type
+      * If there is no card in the reader NULL is return
+      */
+    EIDMW_APL_API bool isCardContactless() const;
+
  	/**
 	  * Get the EIdcard in the reader
 	  * If there is no EIdcard in the reader NULL is return

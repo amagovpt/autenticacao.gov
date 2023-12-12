@@ -660,7 +660,28 @@ PTEID_Card &PTEID_ReaderContext::getCard()
 
 	END_TRY_CATCH
 
-	return *out;
+        return *out;
+}
+
+PTEID_CardContactInterface PTEID_ReaderContext::getCardContactInterface()
+{
+    PTEID_CardContactInterface contactInterface = PTEID_CardContactInterface::PTEID_CARD_CONTACTEMPTY;
+
+    BEGIN_TRY_CATCH
+    APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
+    bool isContactLess = pimpl->isCardContactless();
+    APL_Card *pAplCard=pimpl->getCard();
+    if(pAplCard != NULL)
+    {
+        if(isContactLess)
+            contactInterface = PTEID_CardContactInterface::PTEID_CARD_CONTACTLESS;
+        else
+            contactInterface = PTEID_CardContactInterface::PTEID_CARD_CONTACT;
+    }
+
+    END_TRY_CATCH
+
+    return contactInterface;
 }
 
 PTEID_EIDCard &PTEID_ReaderContext::getEIDCard()

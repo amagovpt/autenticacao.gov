@@ -470,6 +470,13 @@ public:
 	 **/
     PTEIDSDK_API PTEID_Card &getCard();
 
+    /**
+     * Get the card interface used on the current used card
+     *
+     * Returns the interface of the current card
+     **/
+    PTEIDSDK_API PTEID_CardContactInterface getCardContactInterface();
+
 	/**
 	 * Get the EIDcard in the reader.
 	 *		Instantiation is made regarding the type of the card
@@ -761,6 +768,8 @@ public:
 	 * @param ulOffset is the offset to begin the writing
 	 **/
 	PTEIDSDK_API virtual bool writeFile(const char *fileID, const PTEID_ByteArray& oData,unsigned long ulOffset=0);
+
+    PTEIDSDK_API virtual void setPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType);
 
 protected:
 	PTEID_Card(const SDK_Context *context,APL_Card *impl);/**< For internal use : Constructor */

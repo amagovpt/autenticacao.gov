@@ -106,6 +106,10 @@ public:
 
     void SelectApplication(const CByteArray & oAID);
 
+    bool isCardContactless() const;
+
+    void setPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
+
     /* Read the file indicated by 'csPath'.
      * This path can be absolute, relative or empty
 	 * (in which case the currenlty selected file is read)
@@ -188,6 +192,7 @@ private:
     CCard *m_poCard;
     CPKCS15 m_oPKCS15;
     CPinpad *m_oPinpad;
+    bool m_isContactless;
     
     friend class CCardLayer; // calls the CReader constructor
 
