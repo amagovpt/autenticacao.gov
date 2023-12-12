@@ -59,12 +59,11 @@ typedef enum
 } tPinOperation;
 
 enum PaceSecretType {
-    PACEMRZ = 1,
+    PACEMRZ = 1,   //Only PACE MRZ and CAN can be used with IAS v5 cards
     PACECAN,
-    PACEPIN,
-    PACEPUK,
+    PACEPIN,       //Not available
+    PACEPUK,       //Not available
     PACERAW,
-
 };
 
 const unsigned long SIGN_ALGO_RSA_RAW = 0x01;

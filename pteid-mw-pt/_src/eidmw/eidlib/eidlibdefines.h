@@ -64,7 +64,7 @@ enum PTEID_CardContactInterface
 
 enum PTEID_CardPaceSecretType
 {
-    PTEID_CARD_SECRET_CAN=0    /* Use can to make Pace authentication */
+    PTEID_CARD_SECRET_CAN=0    /* Use CAN (card access number) as PACE authentication credential */
 };
 
 enum PTEID_PinUsage
