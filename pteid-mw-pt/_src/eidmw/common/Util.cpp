@@ -105,6 +105,26 @@ namespace eIDMW
     }
 #endif
 
+const unsigned char *findObject(const CByteArray &array, long &size, long tag)
+{
+	const unsigned char *old_data = NULL;
+	const unsigned char *desc_data = array.GetBytes();
+	int xclass = 0;
+	int ans1Tag = 0;
+	int returnValue = 0;
+	long genTag = 0;
+
+	while (tag != genTag) {
+		if (old_data == desc_data)
+			return NULL;
+		old_data = desc_data; // test this
+		long returnValue = ASN1_get_object(&desc_data, &size, &ans1Tag, &xclass, array.Size());
+		int constructed = returnValue == V_ASN1_CONSTRUCTED ? 1 : 0;
+		genTag = xclass | (constructed & 0b1) << 5 | ans1Tag;
+	}
+
+	return desc_data;
+}
 
   std::string utilStringNarrow(const std::wstring& in, const std::locale& locale)
   {
@@ -374,27 +394,6 @@ void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRe
 		fprintf(stderr, "CPathUtil::scanDir \"%s\" : %s\n", Dir, strerror(errno));
         return;
     }
-}
-
-const unsigned char *findObject(const CByteArray &array, long &size, long tag)
-{
-    const unsigned char *old_data = NULL;
-    const unsigned char *desc_data = array.GetBytes();
-    int xclass = 0;
-    int ans1Tag = 0;
-    int returnValue = 0;
-    long genTag = 0;
-
-    while(tag != genTag) {
-        if(old_data == desc_data)
-            return NULL;
-        old_data = desc_data; // test this
-        long returnValue = ASN1_get_object(&desc_data, &size, &ans1Tag, &xclass, array.Size());
-        int constructed = returnValue == V_ASN1_CONSTRUCTED ? 1 : 0;
-        genTag = xclass | (constructed & 0b1) << 5 | ans1Tag;
-    }
-
-    return desc_data;
 }
 
 #endif

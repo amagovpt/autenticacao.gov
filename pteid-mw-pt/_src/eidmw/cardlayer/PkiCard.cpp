@@ -101,7 +101,7 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
 	CAutoLock autolock(this);
 
     tFileInfo fileInfo = SelectFile(csPath, true);
-    unsigned long realMaxLen = std::min(fileInfo.lFileLen, ulMaxLen);
+    unsigned long realMaxLen = (std::min)(fileInfo.lFileLen, ulMaxLen);
     unsigned long offsetByte = ulOffset;
 
     CByteArray fileArray(realMaxLen);
@@ -109,7 +109,7 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
     //loop while you don't get to the end or maxLen
     //we use max_block_read_length as 223 because of a limit on SM layer
     while((offsetByte != fileInfo.lFileLen) && (fileArray.Size() < realMaxLen)) {
-        unsigned long maxLength = std::min(fileInfo.lFileLen - offsetByte, (unsigned long)MAX_BLOCK_READ_LENGTH);
+        unsigned long maxLength = (std::min)(fileInfo.lFileLen - offsetByte, (unsigned long)MAX_BLOCK_READ_LENGTH);
         CByteArray response = ReadBinary(offsetByte, maxLength);
         offsetByte += maxLength;
 
