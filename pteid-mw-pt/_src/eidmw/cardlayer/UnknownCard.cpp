@@ -53,6 +53,11 @@ void CUnknownCard::InitEncryptionKey()
     throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
+void CUnknownCard::ReadSerialNumber()
+{
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
 tCardType CUnknownCard::GetType()
 {
     return CARD_UNKNOWN;

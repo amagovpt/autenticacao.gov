@@ -120,6 +120,7 @@ public:
     virtual CByteArray SendAPDU(const CByteArray & oCmdAPDU);
 
     virtual void InitEncryptionKey() = 0;
+	virtual void ReadSerialNumber() = 0;
 
     virtual void setPinpadHandler(GenericPinpad * pinpad)
     {

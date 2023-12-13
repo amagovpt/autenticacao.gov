@@ -44,6 +44,7 @@ public:
         unsigned long ulOffset = 0, unsigned long ulMaxLen = FULL_FILE);
 
     virtual void InitEncryptionKey();
+	virtual void ReadSerialNumber();
 
     tCardType GetType();
 

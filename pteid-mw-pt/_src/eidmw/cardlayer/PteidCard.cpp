@@ -124,20 +124,33 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		m_cardType = CARD_PTEID_IAS5;
 		break;
 	}
+	setProtocol(protocol);
+	m_ucCLA = 0x00;
+
+	ReadSerialNumber();
+	
+}
+
+/* Constructor for IASv5 cards in CL mode */
+CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol): 
+	CPkiCard(hCard, poContext, poPinpad) {
+
+	setProtocol(protocol);
+	m_cardType = CARD_PTEID_IAS5;
+
+}
+
+void CPteidCard::ReadSerialNumber() {
 	try {
-		setProtocol(protocol);
 
-		m_ucCLA = 0x00;
-
-		//
 		// Get card serial number 
 		//
 		if (m_cardType == CARD_PTEID_IAS5) 		// CPLC Data only available on EID app on PTEID_2 cards {
 			SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
-        else {
-            //The IAS v4 application was already selected in CardFactory
-            m_lastSelectedApplication = { PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) };
-        }
+		else {
+			//The IAS v4 application was already selected in CardFactory
+			m_lastSelectedApplication = { PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) };
+		}
 		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
 	}
 	catch (CMWException e) {
@@ -148,6 +161,7 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to get CardData std::exception thrown");
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
+
 }
 
 CPteidCard::~CPteidCard(void)
@@ -919,7 +933,6 @@ tFileInfo CPteidCard::SelectFile(const std::string &csPath, bool bReturnFileInfo
 	return SelectFile(csPath, PTEID_1_APPLET_AID, bReturnFileInfo);
 }
 
-// support for apdu 00 A4 08 04 04 5f 00 EF 01
 CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
 {
 	//

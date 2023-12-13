@@ -40,6 +40,7 @@ namespace eIDMW
         explicit PaceAuthenticationImpl(CContext *poContext)
             : m_context(poContext)
             , m_secret(NULL)
+			, m_ctx(NULL)
             , m_secretLen(0)
         {
 
@@ -601,10 +602,12 @@ err:
             return decriptedArray;
         }
 
-        ~PaceAuthenticationImpl()
-        {
-            free(m_secret);
-            EAC_CTX_clear_free(m_ctx);
+		~PaceAuthenticationImpl()
+		{
+			free(m_secret);
+			if (m_ctx) {
+				EAC_CTX_clear_free(m_ctx);
+			}
             EAC_cleanup();
         }
 

@@ -66,6 +66,8 @@ class CPteidCard : public CPkiCard
 public:
     CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
                tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol);
+
+	CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol);
     ~CPteidCard(void);
 
 	virtual tCardType GetType();
@@ -89,6 +91,7 @@ public:
     	unsigned long unblockFlags);
 
 	virtual void InitEncryptionKey();
+	virtual void ReadSerialNumber();
 
 	virtual unsigned long GetSupportedAlgorithms();  
 

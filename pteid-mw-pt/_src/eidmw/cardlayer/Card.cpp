@@ -459,6 +459,9 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
     {
         m_pace->setAuthentication(secret, secretLen, secretType);
         m_pace->initPaceAuthentication(m_hCard, m_comm_protocol);
+		//Missing steps in Contactless card construction
+		ReadSerialNumber();
+		InitEncryptionKey();
     }
 }
 

@@ -113,12 +113,17 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
                     if (nationalDataStatus)
                         appletVersion = 3;
                 }
+
+				long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+			
+				poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+				if (cacheEnabled)
+					poCard->InitEncryptionKey();
             }
             else {
                 appletVersion = 3;
+				poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure);
             }
-
-            poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
 
 			CCache::LimitDiskCacheFiles(10);
 
@@ -129,10 +134,6 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 			}
 
 			poCard->setProtocol(param_structure);
-
-			long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
-			if (cacheEnabled)
-				poCard->InitEncryptionKey();
 
 			hCard = 0;
 		}
