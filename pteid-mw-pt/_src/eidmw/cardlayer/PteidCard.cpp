@@ -943,8 +943,13 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 	// Note: DF MUST NOT BE ROOT DIRECTORY (3f 00). Operations like (apdu 00 A4 08 04 04 3f 00 2f 00) will return 0x6A Operation not supported
 	//
 	std::string csPathCopy = csPath;
-	if (csPath.find("3F00") != std::string::npos || csPath.find("3f00") != std::string::npos)
+	bool select_by_path_from_mf = false;
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: csPath: %s", __FUNCTION__, csPath);
+	if (csPath.find("3F00") != std::string::npos || csPath.find("3f00") != std::string::npos) {
 		csPathCopy.erase(0, 4);
+		select_by_path_from_mf = true;
+	}
+
 
 	unsigned long ulPathLen = (unsigned long)csPathCopy.size() / 2;
 	CByteArray oPath(ulPathLen);
@@ -960,7 +965,7 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
     CByteArray selectByPathAPDU(6);
     selectByPathAPDU.Append(m_ucCLA);
     selectByPathAPDU.Append(0xA4);
-    selectByPathAPDU.Append(oPath.Size() > 2 ? 0x08 : 0x02);
+    selectByPathAPDU.Append(oPath.Size() > 2 || select_by_path_from_mf ? 0x08 : 0x02);
     selectByPathAPDU.Append(bReturnFileInfo ? 0x00 : 0x0C);
     selectByPathAPDU.Append(oPath.Size());
     selectByPathAPDU.Append(oPath);

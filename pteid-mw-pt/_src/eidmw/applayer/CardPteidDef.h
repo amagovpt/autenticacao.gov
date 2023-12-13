@@ -52,10 +52,10 @@ namespace eIDMW
 
 
 // CARD IAS5 V2
-#define PTEID_FILE_MRZ 				"3F000101"
-#define PTEID_FILE_PHOTO 			"3F000102"
-#define PTEID_FILE_ID_V2			"3F00010D"
-#define PTEID_FILE_SOD_V2           "3F00011D"
+#define PTEID_FILE_MRZ 				"0101"
+#define PTEID_FILE_PHOTO 			"0102"
+#define PTEID_FILE_ID_V2			"010D"
+#define PTEID_FILE_SOD_V2           "011D"
 #define PTEID_FILE_VALID_SOD_FILE_TAGS_V2       {0x1, 0x2, 0xD, 0xE, 0xF}
 
 //Add PTeID-ng Trace defines
