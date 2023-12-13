@@ -57,8 +57,8 @@ unsigned char clearbinary[] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0
 namespace eIDMW
 {
 
-CPkiCard::CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &pace) :
-CCard(hCard, poContext, poPinpad, pace)
+CPkiCard::CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad) :
+CCard(hCard, poContext, poPinpad)
 {
    	m_ucCLA = 0;
 	m_selectAppletMode = DONT_SELECT_APPLET;

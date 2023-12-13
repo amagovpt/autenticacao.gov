@@ -31,12 +31,10 @@
 #include "CardFactory.h"
 #include "UnknownCard.h"
 #include "Log.h"
-#include "Util.h"
 #include "Cache.h"
 #include "Config.h"
 
 #include "PteidCard.h"
-#include "PaceAuthentication.h"
 #include <vector>
 #include <string>
 
@@ -82,7 +80,6 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
             CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
             CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
             isContactLess = atr.Equals(atrContactLessCard);
-            std::unique_ptr<PaceAuthentication> paceAuthentication;
 
             MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(), isContactLess ? "true" : "false");
             MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s", atr.ToString(true, false).c_str());
@@ -94,38 +91,34 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 
 			int appletVersion = 1;
 
-            if(isContactLess) {
-                paceAuthentication.reset(new PaceAuthentication(poContext));
-                paceAuthentication->initPaceAuthentication(hCard, param_structure);
-            }
-
-			const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
-			{
-				long lRetVal = 0;
-				unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
-				CByteArray oCmd(12);
-				oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-				oCmd.Append((unsigned char)size);
-				oCmd.Append(oAID, size);
+            const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
+            {
+                long lRetVal = 0;
+                unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+                CByteArray oCmd(12);
+                oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
+                oCmd.Append((unsigned char)size);
+                oCmd.Append(oAID, size);
 
                 CByteArray oResp;
-                if(paceAuthentication.get()) {
-                    oResp = paceAuthentication->sendAPDU(oCmd, hCard, lRetVal, param_structure);
-                }
-                else {
-                    oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
-                }
-				return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
-			};
+                oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
+                return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
+            };
 
-			bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
-			if (!aidStatus) {
-				bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
-				if (nationalDataStatus)
-					appletVersion = 3;
-			}
+            if(!isContactLess)
+            {
+                bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
+                if (!aidStatus) {
+                    bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
+                    if (nationalDataStatus)
+                        appletVersion = 3;
+                }
+            }
+            else {
+                appletVersion = 3;
+            }
 
-            poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, paceAuthentication, param_structure);
+            poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
 
 			CCache::LimitDiskCacheFiles(10);
 

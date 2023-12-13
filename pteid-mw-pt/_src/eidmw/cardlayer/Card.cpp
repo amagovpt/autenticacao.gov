@@ -30,17 +30,9 @@
 namespace eIDMW
 {
 
-CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad) :
-	m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
-    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL),
-    m_pace(nullptr)
-{
-}
-
-CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &paceAuthentication):
+CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad):
     m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
-    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL),
-    m_pace(std::move(paceAuthentication))
+    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL)
 {
 }
 
@@ -456,11 +448,17 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
     return oResp;
 }
 
-void CCard::setPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType)
+void CCard::createPace()
+{
+    m_pace.reset(new PaceAuthentication(m_poContext));
+}
+
+void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType)
 {
     if(m_pace.get())
     {
         m_pace->setAuthentication(secret, secretLen, secretType);
+        m_pace->initPaceAuthentication(m_hCard, m_comm_protocol);
     }
 }
 

@@ -198,7 +198,7 @@ bool PTEID_Card::writeFile(const char *fileID,const PTEID_ByteArray& oData,unsig
         return out;
 }
 
-void PTEID_Card::setPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType)
+void PTEID_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType)
 {
     APL_PACEAuthenticationType type = APL_PACE_UNSUPPORTED;
     if(secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN)
@@ -208,7 +208,7 @@ void PTEID_Card::setPaceAuthentication(const char *secret, size_t length, PTEID_
     }
     BEGIN_TRY_CATCH
     APL_Card *pcard=static_cast<APL_Card *>(m_impl);
-    pcard->setPaceAuthentication(secret, length, type);
+    pcard->initPaceAuthentication(secret, length, type);
     END_TRY_CATCH
 }
 

@@ -73,7 +73,7 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const 
 
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
-    SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &paceAuthentication, const void *protocol_struct)
+    SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol_struct)
 {
 
 	CCard *poCard = NULL;
@@ -83,7 +83,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 		{
 			CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
 
-            poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, paceAuthentication, protocol_struct);
+            poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
 			MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
 
 			// NOTE: PteidCardSelectAppllet does not support V5 cards
@@ -110,8 +110,8 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 }
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
-             GenericPinpad *poPinpad, tSelectAppletMode selectAppletMode, unsigned long ulVersion, std::unique_ptr<PaceAuthentication> &paceAuthentication, const void *protocol) :
-             CPkiCard(hCard, poContext, poPinpad, paceAuthentication)
+             GenericPinpad *poPinpad, tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol) :
+             CPkiCard(hCard, poContext, poPinpad)
 {
 	switch (ulVersion){
 	case 1:

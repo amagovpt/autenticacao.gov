@@ -31,7 +31,7 @@
 using namespace eIDMW;
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
-                            SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &paceAuthentication, const void *protocol_struct);
+                            SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol_struct);
 
 namespace eIDMW
 {
@@ -65,7 +65,7 @@ class CPteidCard : public CPkiCard
 {
 public:
     CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
-               tSelectAppletMode selectAppletMode, unsigned long ulVersion, std::unique_ptr<PaceAuthentication> &paceAuthentication, const void *protocol);
+               tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol);
     ~CPteidCard(void);
 
 	virtual tCardType GetType();

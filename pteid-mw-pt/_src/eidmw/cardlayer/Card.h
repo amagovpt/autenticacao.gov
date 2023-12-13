@@ -48,7 +48,6 @@ class EIDMW_CAL_API CCard
 {
 public:
     CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
-    CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &pace);
     virtual ~CCard(void);
 
     /** Find out which card is present and return the appropriate subclass */
@@ -128,7 +127,9 @@ public:
 
     }
 
-    void setPaceAuthentication(const char* secret, size_t secretLen, PaceSecretType secretType);
+    void createPace();
+
+    void initPaceAuthentication(const char* secret, size_t secretLen, PaceSecretType secretType);
 
     const void * getProtocolStructure();
 

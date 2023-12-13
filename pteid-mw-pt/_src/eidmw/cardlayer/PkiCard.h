@@ -41,7 +41,7 @@ class PaceAuthentication;
 class CPkiCard : public CCard
 {
 public:
-    CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, std::unique_ptr<PaceAuthentication> &pace);
+    CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
     virtual ~CPkiCard(void);
 
     virtual tCardType GetType() = 0;

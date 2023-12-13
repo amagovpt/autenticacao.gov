@@ -107,8 +107,8 @@ public:
     void SelectApplication(const CByteArray & oAID);
 
     bool isCardContactless() const;
-
-    void setPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
+    
+    void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
     /* Read the file indicated by 'csPath'.
      * This path can be absolute, relative or empty

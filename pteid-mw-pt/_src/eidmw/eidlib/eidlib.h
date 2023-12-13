@@ -769,7 +769,14 @@ public:
 	 **/
 	PTEIDSDK_API virtual bool writeFile(const char *fileID, const PTEID_ByteArray& oData,unsigned long ulOffset=0);
 
-    PTEIDSDK_API virtual void setPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType);
+    /**
+     * Init the Pace authentication process
+     * @param secret string that holds the secret to make the PACE process
+     * @param length size of the secret string
+     * @param secretType type of the secret used to make the PACE process
+     **/
+    
+    PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType);
 
 protected:
 	PTEID_Card(const SDK_Context *context,APL_Card *impl);/**< For internal use : Constructor */

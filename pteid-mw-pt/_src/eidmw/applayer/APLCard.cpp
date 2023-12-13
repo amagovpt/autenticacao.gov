@@ -121,7 +121,7 @@ bool APL_Card::writeFile(const char *csPath, const CByteArray& oData,unsigned lo
     return true; //Otherwise, there is exception
 }
 
-void APL_Card::setPaceAuthentication(const char *secret, size_t secretLen, APL_PACEAuthenticationType secretType)
+void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_PACEAuthenticationType secretType)
 {
     PaceSecretType paceSecretType = PaceSecretType::PACECAN;
 
@@ -132,7 +132,7 @@ void APL_Card::setPaceAuthentication(const char *secret, size_t secretLen, APL_P
     }
 
     BEGIN_CAL_OPERATION(m_reader)
-    m_reader->getCalReader()->setPaceAuthentication(secret, secretLen, paceSecretType);
+    m_reader->getCalReader()->initPaceAuthentication(secret, secretLen, paceSecretType);
     END_CAL_OPERATION(m_reader)
 
 }
