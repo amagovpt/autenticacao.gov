@@ -170,9 +170,6 @@
     <ClInclude Include="MiscUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OCSP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PDFSignature.h">
       <Filter>Header Files</Filter>
     </ClInclude>

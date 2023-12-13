@@ -277,7 +277,6 @@
     <ClInclude Include="cryptoFwkPteid.h" />
     <ClInclude Include="J2KHelper.h" />
     <ClInclude Include="MiscUtil.h" />
-    <ClInclude Include="OCSP.h" />
     <ClInclude Include="PDFSignature.h" />
     <ClInclude Include="PhotoPteid.h" />
     <ClInclude Include="MutualAuthentication.h" />

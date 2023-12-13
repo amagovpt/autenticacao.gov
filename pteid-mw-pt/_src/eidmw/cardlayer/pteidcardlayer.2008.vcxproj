@@ -245,7 +245,6 @@
     <ClInclude Include="CardFactory.h" />
     <ClInclude Include="CardLayer.h" />
     <ClInclude Include="CardLayerConst.h" />
-    <ClInclude Include="cardpluginPteid\PteidCard.h" />
     <ClInclude Include="CardReaderInfo.h" />
     <ClInclude Include="Context.h" />
     <ClInclude Include="GempcPinpad.h" />
@@ -260,6 +259,7 @@
     <ClInclude Include="PKCS15.h" />
     <ClInclude Include="PKCS15Parser.h" />
     <ClInclude Include="PkiCard.h" />
+    <ClInclude Include="PteidCard.h" />
     <ClInclude Include="Reader.h" />
     <CustomBuild Include="ReadersInfo.h" />
     <ClInclude Include="ReaderDeviceInfo.h" />
