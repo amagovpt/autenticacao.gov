@@ -584,6 +584,9 @@ err:
         {
             if(m_secret) {
                 free((void*)m_secret);
+                EAC_CTX_clear_free(m_ctx);
+                m_ctx = NULL;
+                EAC_cleanup();
             }
             m_secret = (char*)malloc(sizeof(char) * secretLen);
             memcpy(m_secret, secret, secretLen);
