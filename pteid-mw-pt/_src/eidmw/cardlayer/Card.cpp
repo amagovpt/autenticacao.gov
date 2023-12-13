@@ -389,7 +389,7 @@ CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE
     CByteArray result;
     bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C;
     if(isAlreadySM && m_pace.get()) {
-        MWLOG(LEV_INFO, MOD_CAL, L"This message is already secure and will not use pace module! Message: %s",
+        MWLOG(LEV_DEBUG, MOD_CAL, "This message is already secure and will not use PACE module! Message: %s",
               oCmdAPDU.ToString().c_str());
     }
     if(m_pace.get() && !isAlreadySM) {
