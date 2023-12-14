@@ -218,6 +218,10 @@ namespace eIDMW
             if(encryptedAPDU.Size() <= 2) // error from security
                 return encryptedAPDU;
 
+            if (m_ctx == NULL) {
+                throw CMWEXCEPTION(EIDMW_PACE_ERR_NOT_INITIALIZED);
+            }
+
             if(encryptedAPDU.GetByte(0) == Tcg || isOdd)
             {
                 const unsigned char *descData = encryptedAPDU.GetBytes();
@@ -327,7 +331,7 @@ err:
             if (!m_ctx
                 || !EAC_CTX_init_ef_cardaccess(readBinEFAccess.GetBytes(), readBinEFAccess.Size(), m_ctx)
                 || !m_ctx->pace_ctx) {
-                MWLOG(LEV_ERROR, MOD_CAL, "Couldn't init ef cardaccess");
+                MWLOG(LEV_ERROR, MOD_CAL, "Couldn't process EF.CardAccess");
             }
 
             s_type secretType = (s_type)m_secretType;
@@ -479,6 +483,10 @@ err:
             CByteArray mac;
             CByteArray encryptedInput;
             int lcg = 0;
+
+            if (m_ctx == NULL) {
+                throw CMWEXCEPTION(EIDMW_PACE_ERR_NOT_INITIALIZED);
+            }
 
             command_header.SetByte(apdu.cls() | controlByte, 0);
             BUF_MEM *memCommandHeader = bufMemFromByteArray(command_header);

@@ -269,5 +269,6 @@
 
 //PACE Error
 #define EIDMW_PACE_ERR_BAD_TOKEN               0xe1d01d5a
-#define EIDMW_PACE_ERR_UNKNOWN                 0xe1d01d5b
+#define EIDMW_PACE_ERR_NOT_INITIALIZED         0xe1d01d5b
+#define EIDMW_PACE_ERR_UNKNOWN                 0xe1d01d5f
 
