@@ -1074,6 +1074,7 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 %javaexception("PTEID_Exception") SignSHA256		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readFile			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") writeFile			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") initPaceAuthentication JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_SmartCard
