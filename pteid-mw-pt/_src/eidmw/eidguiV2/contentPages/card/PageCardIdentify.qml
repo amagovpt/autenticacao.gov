@@ -147,6 +147,15 @@ PageCardIdentifyForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
 
+        onSignalContactlessCANNeeded: {
+            console.log("QML: Contactless CAN is needed!!")
+               
+            propertyPhoto.source = ""
+            propertyPhoto.cache = false
+            propertySavePhotoButton.enabled = false
+            dialogCAN.open()
+        }
+
         onSignalSaveCardPhotoFinished: {
             if(success) {
                 createsuccess_dialog.open()
@@ -287,6 +296,82 @@ PageCardIdentifyForm {
             
             var file = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             gapi.startSavingCardPhoto(file)
+        }
+    }
+
+    Dialog {
+        id: dialogCAN
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width
+           + mainView.width * 0.5 - dialogCAN.width * 0.5
+        y: parent.height * 0.5 - dialogCAN.height * 0.5
+
+        header: Label {
+            text: qsTranslate("Popup PIN", "STR_POPUP_CAN_TITLE")
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: true
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            color: Constants.COLOR_MAIN_BLUE
+        }
+
+        Item {
+            width: parent.width
+            height: rectPin.height
+
+            Item {
+                id: rectPin
+                width: parent.width
+                height: 50
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: textPin
+                    text: qsTranslate("Popup PIN","STR_POPUP_CAN_LABEL")
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    height: parent.height
+                    width: parent.width * 0.5
+                    anchors.bottom: parent.bottom
+                }
+                 TextField {
+                    id: textFieldCAN
+                    width: parent.width * 0.5
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.italic: textFieldCAN.text === "" ? true: false
+                    placeholderText: ""
+                    echoMode : TextInput.Password
+                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    maximumLength: 6
+                    font.family: lato.name
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    clip: false
+                    anchors.left: textPin.right
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+        standardButtons: {
+            textFieldCAN.length == 6 ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
+        }
+
+        onAccepted: {
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            var triesLeft = gapi.startPACEAuthentication(textFieldCAN.text, true)
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            
+        }
+        onRejected: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            propertyBusyIndicator.running = false
         }
     }
 

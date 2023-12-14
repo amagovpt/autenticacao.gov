@@ -274,6 +274,8 @@ public:
 
     enum OAuthErrors {OAuthTimeoutError, OAuthGenericError, OAuthConnectionError, OAuthCancelled};
 
+    enum PaceAuthState {PaceDefault, PaceNeeded, PaceAuthenticated};
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(CardAccessError)
     Q_ENUMS(RemoteAddressError)
@@ -335,6 +337,7 @@ public slots:
     void startCheckSignatureCertValidity();
     void startSavingCardPhoto(QString outputFile);
     int getStringByteLength(QString text);
+	void finishLoadingCardData(PTEID_EIDCard * card);
     void startReadingPersoNotes();
     void startWritingPersoNotes(const QString &text);
     void startReadingAddress();
@@ -413,6 +416,10 @@ public slots:
     void changeAuthPin(QString currentPin, QString newPin);
     void changeSignPin(QString currentPin, QString newPin);
     void changeAddressPin(QString currentPin, QString newPin);
+
+	void startPACEAuthentication(QString pace_can);
+    void doStartPACEAuthentication(QString pace_can);
+    void resetContactlessState() { m_pace_auth_state = PaceDefault; m_is_contactless = false; }
 
     void cancelCMDRegisterCert();
     void signCMD(QList<QString> loadedFilePath, QString outputFile, int page, double coord_x,
@@ -531,6 +538,7 @@ signals:
     void signalEndOAuth(int oauthResult);
     void signalCustomSignImageRemoved();
     void signalOperationCanceledByUser();
+	void signalContactlessCANNeeded();
 
     void signalStartCheckCCSignatureCert(); // Start CC signature check with OCSP
     void signalOkSignCertificate();         // CC signature certificate OK or OCSP no response
@@ -641,6 +649,8 @@ private:
     QString m_shortcutReason;
     QString m_shortcutOutput;
     bool m_shortcutTsa = false;
+	bool m_is_contactless = false;
+    PaceAuthState m_pace_auth_state = PaceDefault;
     signed int selectedReaderIndex = -1;
     double print_scale_factor = 1;
 

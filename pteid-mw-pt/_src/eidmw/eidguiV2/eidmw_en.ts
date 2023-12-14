@@ -2265,6 +2265,19 @@
 <context>
     <name>Popup PIN</name>
     <message>
+        <source>STR_POPUP_CAN_TITLE</source>
+        <translation>Please insert you card access number</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN</source>
+        <translation>Card access number</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_LABEL</source>
+        <translation>CAN: </translation>
+    </message>
+
+    <message>
         <source>STR_POPUP_CARD_PIN_VERIFY</source>
         <translation>PIN verification</translation>
     </message>

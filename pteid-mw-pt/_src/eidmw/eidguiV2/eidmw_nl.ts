@@ -2271,6 +2271,18 @@
         <translation>Verificar o Pin da Morada</translation>
     </message>
     <message>
+        <source>STR_POPUP_CAN_TITLE</source>
+        <translation>Por favor insira o código de acesso ao seu cartão</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN</source>
+        <translation>Código de acesso ao cartão</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_LABEL</source>
+        <translation>CAN: </translation>
+    </message>
+    <message>
         <source>STR_POPUP_CARD_PIN_ADDRESS</source>
         <translation>PIN da Morada</translation>
     </message>
