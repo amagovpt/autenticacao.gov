@@ -697,7 +697,7 @@ public:
 	/**
 	 * Signs a block of data using RSA-PKCS#1.
 	 * 
-	 * @param data block of data to be signed. Has to be hashed using either sha1, sha256, sha384 or sha512. Therefore, data has to be at max 64 bytes.
+	 * @param data block of data to be signed. Has to be hashed using either sha1, sha256, sha384 or sha512. Therefore, size of data array has to be at max 64 bytes.
 	 * @param signatureKey by default uses the 'Authentication private key' to sign message. Setting this to @b true makes use of 'Signature private key' instead.
 	 * @return PTEID_ByteArray containing the signature
 	 */
