@@ -653,8 +653,6 @@ private:
 
     QUrl url;
     QString m_pac_url;
-    bool httpRequestAborted;
-    bool httpRequestSuccess;
 
     int m_seal_width = 178;
     int m_seal_height = 90;
