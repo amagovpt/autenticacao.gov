@@ -25,7 +25,7 @@ namespace eIDMW
         BUF_MEM *findObjectMem(const CByteArray &array, long tag) {
             const unsigned char *old_data = NULL;
             long size;
-            const unsigned char *desc_data = findObject(array, size, tag);
+            const unsigned char *desc_data = findASN1Object(array, size, tag);
             if(desc_data == NULL)
                 return NULL;
 

@@ -105,7 +105,7 @@ namespace eIDMW
     }
 #endif
 
-const unsigned char *findObject(const CByteArray &array, long &size, long tag)
+const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag)
 {
 	const unsigned char *old_data = NULL;
 	const unsigned char *desc_data = array.GetBytes();

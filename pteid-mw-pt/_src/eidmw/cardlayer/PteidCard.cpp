@@ -912,9 +912,11 @@ tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char*
         }
         if(bReturnFileInfo) { //needs to return lReadPINRef and lWritePINRef
             long size;
-            const unsigned char* length = findObject(responseSelection, size, 0x81);
+			/*There are two possible tags for file size attribute in FCI data
+			//0x81 for eid applet and 0x80 for national data applet */
+            const unsigned char* length = findASN1Object(responseSelection, size, 0x81);
             if(length == NULL)
-                length = findObject(responseSelection, size, 0x80);
+                length = findASN1Object(responseSelection, size, 0x80);
             if(length == NULL)
                 return {0};
 
