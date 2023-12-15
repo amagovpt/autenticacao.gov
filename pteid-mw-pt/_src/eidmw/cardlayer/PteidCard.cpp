@@ -143,8 +143,10 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *po
 void CPteidCard::ReadSerialFromMultipass() {
 	if (m_cardType == CARD_PTEID_IAS5) {
 		SelectApplication({ PTEID_2_APPLET_MULTIPASS, sizeof(PTEID_2_APPLET_MULTIPASS) });
-
+		
+		//Card.Access can be read with this application selected but not with Multipass
 		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
+		SendAPDU(0xA4, 0x04, 0x00, { PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
 	}
 	else {
 		MWLOG(LEV_ERROR, MOD_CAL, "This can only be used in IAS5 cards!");
@@ -153,6 +155,7 @@ void CPteidCard::ReadSerialFromMultipass() {
 }
 
 void CPteidCard::ReadSerialNumber() {
+
 	try {
 
 		// Get card serial number 
