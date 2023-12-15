@@ -215,12 +215,8 @@ namespace eIDMW
             bool isOdd = encryptedAPDU.GetByte(0) == TcgOdd;
             int startOfData = 0;
 
-            if(encryptedAPDU.Size() <= 2) // error from security
+            if(encryptedAPDU.Size() <= 2) // Secure Messaging Error
                 return encryptedAPDU;
-
-            if (m_ctx == NULL) {
-                throw CMWEXCEPTION(EIDMW_PACE_ERR_NOT_INITIALIZED);
-            }
 
             if(encryptedAPDU.GetByte(0) == Tcg || isOdd)
             {
@@ -470,6 +466,9 @@ err:
         }
 
         CByteArray sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure) {
+			if (m_ctx == NULL) {
+				throw CMWEXCEPTION(EIDMW_PACE_ERR_NOT_INITIALIZED);
+			}
             CByteArray encryptedAPDU = formatAPDU(plainAPDU);
             CByteArray decriptedArray = decryptAPDU(m_context->m_oPCSC.Transmit(hCard, encryptedAPDU, &lRetVal, param_structure));
             return decriptedArray;
@@ -483,10 +482,6 @@ err:
             CByteArray mac;
             CByteArray encryptedInput;
             int lcg = 0;
-
-            if (m_ctx == NULL) {
-                throw CMWEXCEPTION(EIDMW_PACE_ERR_NOT_INITIALIZED);
-            }
 
             command_header.SetByte(apdu.cls() | controlByte, 0);
             BUF_MEM *memCommandHeader = bufMemFromByteArray(command_header);
@@ -605,6 +600,9 @@ err:
 
         CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure)
         {
+			if (m_ctx == NULL) {
+				throw CMWEXCEPTION(EIDMW_PACE_ERR_NOT_INITIALIZED);
+			}
             CByteArray encryptedAPDU = formatAPDU(apdu);
             CByteArray decriptedArray = decryptAPDU(m_context->m_oPCSC.Transmit(hCard, encryptedAPDU, &lRetVal, param_structure));
             return decriptedArray;
