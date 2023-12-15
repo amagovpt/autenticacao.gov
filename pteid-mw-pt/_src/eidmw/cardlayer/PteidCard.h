@@ -117,6 +117,8 @@ protected:
 
 	virtual tCacheInfo GetCacheInfo(const std::string &csPath);
 
+	void ReadSerialFromMultipass();
+
 	CByteArray m_oCardData;
 	CByteArray m_oSerialNr;
 

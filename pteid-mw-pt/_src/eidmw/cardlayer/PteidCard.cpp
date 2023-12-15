@@ -137,16 +137,32 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *po
 
 	setProtocol(protocol);
 	m_cardType = CARD_PTEID_IAS5;
+	ReadSerialFromMultipass();
+}
 
+void CPteidCard::ReadSerialFromMultipass() {
+	if (m_cardType == CARD_PTEID_IAS5) {
+		SelectApplication({ PTEID_2_APPLET_MULTIPASS, sizeof(PTEID_2_APPLET_MULTIPASS) });
+
+		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
+	}
+	else {
+		MWLOG(LEV_ERROR, MOD_CAL, "This can only be used in IAS5 cards!");
+	}
+	
 }
 
 void CPteidCard::ReadSerialNumber() {
 	try {
 
 		// Get card serial number 
-		//
-		if (m_cardType == CARD_PTEID_IAS5) 		// CPLC Data only available on EID app on PTEID_2 cards {
-			SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+		// CPLC Data only available on EID or Multipass app on PTEID_2 cards 
+		if (m_cardType == CARD_PTEID_IAS5) {
+			if (m_pace.get() != NULL)
+				SelectApplication({ PTEID_2_APPLET_MULTIPASS, sizeof(PTEID_2_APPLET_MULTIPASS)});
+			else
+				SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+		}
 		else {
 			//The IAS v4 application was already selected in CardFactory
 			m_lastSelectedApplication = { PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) };
