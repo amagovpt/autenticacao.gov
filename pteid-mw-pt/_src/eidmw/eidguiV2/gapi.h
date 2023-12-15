@@ -223,6 +223,9 @@ private:
 
 const QString MAIN_QML_PATH("qrc:/main.qml");
 
+void saveCAN(const char * serial, const char *can);
+const char * getCANFromCache(const char * serial);
+
 class GAPI : public QObject
 {
     #define TIMERREADERLIST 5000

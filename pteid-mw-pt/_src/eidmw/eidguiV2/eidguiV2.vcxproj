@@ -301,6 +301,7 @@ echo "**************************************************************************
     <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_autoUpdates.cpp" />
     <ClCompile Include="autoUpdates.cpp" />
+    <ClCompile Include="can_cache.cpp" />
     <ClCompile Include="singleapplication.cpp" />
     <ClCompile Include="singleapplication_p.cpp" />
   </ItemGroup>

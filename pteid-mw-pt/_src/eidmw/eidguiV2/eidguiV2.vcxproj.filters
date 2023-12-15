@@ -65,6 +65,12 @@
     <ClCompile Include="concurrent.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="singleapplication_p.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pteid_can.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="release\qrc_resources.cpp">

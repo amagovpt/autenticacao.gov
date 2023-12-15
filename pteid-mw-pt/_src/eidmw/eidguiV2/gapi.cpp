@@ -724,7 +724,12 @@ void GAPI::doStartPACEAuthentication(QString pace_can) {
 	std::string can_str = pace_can.toStdString();
 
 	card->initPaceAuthentication(can_str.c_str(), can_str.size(), PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+
 	m_pace_auth_state = PaceAuthenticated;
+	//Cache correct CAN value
+	PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
+	const char * serial = verInfo.getSerialNumber();
+	saveCAN(serial, can_str.c_str());
 
 	finishLoadingCardData(card);
 
