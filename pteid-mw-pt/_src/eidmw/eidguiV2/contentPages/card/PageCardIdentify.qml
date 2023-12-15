@@ -149,11 +149,12 @@ PageCardIdentifyForm {
 
         onSignalContactlessCANNeeded: {
             console.log("QML: Contactless CAN is needed!!")
-               
+
             propertyPhoto.source = ""
             propertyPhoto.cache = false
             propertySavePhotoButton.enabled = false
             dialogCAN.open()
+            textFieldCAN.forceActiveFocus();
         }
 
         onSignalSaveCardPhotoFinished: {
@@ -293,7 +294,7 @@ PageCardIdentifyForm {
         onAccepted: {
             outputFile = propertySavePhotoDialogOutput.file.toString()
             console.log("Saving photo to: " + outputFile)
-            
+
             var file = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             gapi.startSavingCardPhoto(file)
         }
@@ -302,7 +303,7 @@ PageCardIdentifyForm {
     Dialog {
         id: dialogCAN
         width: 400
-        height: 200
+        height: 250
         visible: false
         font.family: lato.name
         // Center dialog in the main view
@@ -322,27 +323,50 @@ PageCardIdentifyForm {
 
         Item {
             width: parent.width
-            height: rectPin.height
+            height: rectPin.height + rectTextCAN.height
 
             Item {
-                id: rectPin
+                id: rectTextCAN
                 width: parent.width
-                height: 50
-
+                height: 100
+                y : parent.y - dialogCAN.height * 0.20
                 anchors.horizontalCenter: parent.horizontalCenter
+
                 Text {
-                    id: textPin
-                    text: qsTranslate("Popup PIN","STR_POPUP_CAN_LABEL")
+                    id: textCAN
+                    text: qsTranslate("Popup PIN","STR_POPUP_CAN_TEXT")
                     verticalAlignment: Text.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
                     height: parent.height
-                    width: parent.width * 0.5
-                    anchors.bottom: parent.bottom
+                    width: parent.width
+                    wrapMode: Text.WordWrap
                 }
-                 TextField {
+            }
+
+            Item {
+                id: rectImageCAN
+                width: parent.width
+                height: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                y : parent.y + dialogCAN.height * 0.2
+
+                Image{
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    source: "../../images/CAN_image.png"
+                }
+
+            }
+
+            Item {
+                id: rectPin
+                width: parent.width
+                height: 50
+                y : parent.y + dialogCAN.height * 0.4
+                anchors.horizontalCenter: parent.horizontalCenter   
+                TextField {
                     id: textFieldCAN
                     width: parent.width * 0.5
                     anchors.verticalCenter: parent.verticalCenter
@@ -354,25 +378,35 @@ PageCardIdentifyForm {
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     clip: false
-                    anchors.left: textPin.right
-                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    //anchors.bottom: parent.bottom
                 }
             }
         }
-        standardButtons: {
-            textFieldCAN.length == 6 ? DialogButtonBox.Ok | DialogButtonBox.Cancel : DialogButtonBox.Cancel
+        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+
+        footer: DialogButtonBox {
+            alignment: Qt.AlignHCenter
         }
 
         onAccepted: {
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             var triesLeft = gapi.startPACEAuthentication(textFieldCAN.text, true)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            
+
         }
         onRejected: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            console.log("Pressed cancel")
             propertyBusyIndicator.running = false
         }
+
+        Component.onCompleted: {
+            dialogCAN.standardButton(Dialog.Ok).text = qsTranslate("Popup PIN", "STR_POPUP_CAN_OK")
+            dialogCAN.standardButton(Dialog.Ok).enabled =  Qt.binding( function() { return textFieldCAN.length == 6})
+            dialogCAN.standardButton(Dialog.Cancel).text = qsTranslate("Popup PIN","STR_POPUP_CAN_CANCEL")
+        }
+
     }
 
     PropertyAnimation {

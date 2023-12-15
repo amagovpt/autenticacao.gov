@@ -2272,7 +2272,12 @@
     </message>
     <message>
         <source>STR_POPUP_CAN_TITLE</source>
-        <translation>Por favor insira o código de acesso ao seu cartão</translation>
+        <translation>Leitura de Cartão Contactless</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_TEXT</source>
+        <translation>Por favor insira o código de acesso ao seu cartão.
+Este código de 6 digitos está impresso no seu cartão no canto inferior direito.</translation>
     </message>
     <message>
         <source>STR_POPUP_CAN</source>
@@ -2281,6 +2286,14 @@
     <message>
         <source>STR_POPUP_CAN_LABEL</source>
         <translation>CAN: </translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_OK</source>
+        <translation>Ok</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_CANCEL</source>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <source>STR_POPUP_CARD_PIN_ADDRESS</source>

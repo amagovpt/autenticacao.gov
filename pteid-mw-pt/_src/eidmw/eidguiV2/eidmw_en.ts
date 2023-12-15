@@ -2266,7 +2266,11 @@
     <name>Popup PIN</name>
     <message>
         <source>STR_POPUP_CAN_TITLE</source>
-        <translation>Please insert you card access number</translation>
+        <translation>Contactless Card Reading</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_TEXT</source>
+        <translation>Please insert the card access number for your card. This six digit code is imprinted on your card in the bottom right corner.</translation>
     </message>
     <message>
         <source>STR_POPUP_CAN</source>
@@ -2276,7 +2280,14 @@
         <source>STR_POPUP_CAN_LABEL</source>
         <translation>CAN: </translation>
     </message>
-
+    <message>
+        <source>STR_POPUP_CAN_OK</source>
+        <translation>Ok </translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_CANCEL</source>
+        <translation>Cancel </translation>
+    </message>
     <message>
         <source>STR_POPUP_CARD_PIN_VERIFY</source>
         <translation>PIN verification</translation>
