@@ -441,6 +441,10 @@
       <ComponentRef Id="Cpp_SDK_component"/>
       <ComponentRef Id="Java_SDK_Component"/>
       <ComponentRef Id="CSharp_SDK_Component"/>
+      <ComponentRef Id="pteidmdrv"/>
+      <ComponentRef Id="CertPropService"/>
+      <ComponentRef Id="pteidmdrvsystem32"/>
+      <ComponentRef Id="REGISTERMINIDRIVER"/>
       
       <Feature Id="GUI"
                 Title="!(loc.PteidGui)"
@@ -458,19 +462,9 @@
                 AllowAdvertise="no">
         <ComponentRef Id="SCardSvrService"/>
         <ComponentRef Id="pkcs11"/>
-        <!-- Shortcuts -->
-        <Feature Id="Install_Minidriver" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" Level="0" AllowAdvertise="no">
-          <ComponentRef Id="pteidmdrv"/>
-          <ComponentRef Id="CertPropService"/>
-          <ComponentRef Id="pteidmdrvsystem32"/>
-          <ComponentRef Id="REGISTERMINIDRIVER"/>
-          <Condition Level="1">VersionNT >= 601</Condition>
-        </Feature>
       </Feature>
 
     </Feature>
-
-    <!--    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.StartApp)" />-->
   
     <UI>
       <Property Id="ApplicationFolderName" Value="Portugal Identity Card" />
