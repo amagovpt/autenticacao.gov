@@ -622,9 +622,14 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
 
         delete[] cert_filepath;
     }
+	
     try
     {
         PTEID_EIDCard&		 Card			= ReaderContext.getEIDCard();
+		//Don't need to read or register CC2 certificates here
+		if (Card.getType() == PTEID_CARDTYPE_IAS5) {
+			return true;
+		}
         PTEID_Certificates&	 certificates	= Card.getCertificates();
 
 
