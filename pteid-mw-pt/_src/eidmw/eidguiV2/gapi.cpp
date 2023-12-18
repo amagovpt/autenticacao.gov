@@ -546,6 +546,7 @@ void GAPI::doSaveCardPhoto(QString outputFile) {
     emit signalSaveCardPhotoFinished(success);
 }
 
+//Only applicable to CC1
 void GAPI::getPersoDataFile() {
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getPersoDataFile");
@@ -572,6 +573,7 @@ void GAPI::getPersoDataFile() {
 
 }
 
+//Only applicable to CC1
 void GAPI::setPersoDataFile(const QString &text) {
     qDebug() << "setPersoDataFile() called";
 
@@ -3010,6 +3012,7 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard * card) {
 }
 
 void GAPI::connectToCard() {
+	const int CAN_LENGTH = 6;
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToCard");
 
@@ -3023,10 +3026,18 @@ void GAPI::connectToCard() {
 		finishLoadingCardData(card);
 	}
 	else {
-		emit signalContactlessCANNeeded();
+		PTEID_CardVersionInfo& verInfo = card->getVersionInfo();		const char * serial = verInfo.getSerialNumber();
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Reading cached CAN for serial: %s", serial);
+		std::string cached_can = getCANFromCache(serial);
+		if (cached_can.size() == CAN_LENGTH) {
+			QString pace_can = QString::fromStdString(cached_can);
+			doStartPACEAuthentication(pace_can);
+		}
+		else {
+			emit signalContactlessCANNeeded();
+		}
 	}
    
-
     END_TRY_CATCH
 }
 
