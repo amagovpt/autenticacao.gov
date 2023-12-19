@@ -440,7 +440,7 @@ PageCardIdentifyForm {
                 }
                 onAccepted: {
                     mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-                    var triesLeft = gapi.startPACEAuthentication(textFieldCAN.text, true)
+                    gapi.startPACEAuthentication(textFieldCAN.text, GAPI.IdentityData)
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
                 }

@@ -711,11 +711,12 @@ unsigned int GAPI::doGetTriesLeftSignPin() {
     return (unsigned int)tries_left;
 }
 
-void GAPI::startPACEAuthentication(QString pace_can) {
-    Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can);
+void GAPI::startPACEAuthentication(QString pace_can, CardOperation op) {
+
+    Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can, op);
 }
 
-void GAPI::doStartPACEAuthentication(QString pace_can) {
+void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 
 	PTEID_EIDCard * card = NULL;
 	BEGIN_TRY_CATCH
@@ -733,10 +734,16 @@ void GAPI::doStartPACEAuthentication(QString pace_can) {
 	const char * serial = verInfo.getSerialNumber();
 	saveCAN(serial, can_str.c_str());
 
-	finishLoadingCardData(card);
+	switch (op) {
+        case IdentityData:
+            finishLoadingCardData(card);
+        case SignCertificateData:
+            finishLoadingSignCertData(card);
+        case PinInfo:
+            return; //TODO
+    }
 
 	END_TRY_CATCH
-
 }
 
 void GAPI::verifyAddressPin(QString pin_value, bool forceVerify) {
@@ -3011,8 +3018,23 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard * card) {
 	setDataCardIdentify(cardData);
 }
 
+void GAPI::performPACEWithCache(PTEID_EIDCard * card, CardOperation op) {
+    const int CAN_LENGTH = 6;
+    PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
+    const char * serial = verInfo.getSerialNumber();
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Reading cached CAN for serial: %s", serial);
+
+    std::string cached_can = getCANFromCache(serial);
+    if (cached_can.size() == CAN_LENGTH) {
+        QString pace_can = QString::fromStdString(cached_can);
+        doStartPACEAuthentication(pace_can, op);
+    }
+    else {
+        emit signalContactlessCANNeeded();
+    }
+}
+
 void GAPI::connectToCard() {
-	const int CAN_LENGTH = 6;
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToCard");
 
@@ -3026,16 +3048,7 @@ void GAPI::connectToCard() {
 		finishLoadingCardData(card);
 	}
 	else {
-		PTEID_CardVersionInfo& verInfo = card->getVersionInfo();		const char * serial = verInfo.getSerialNumber();
-		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Reading cached CAN for serial: %s", serial);
-		std::string cached_can = getCANFromCache(serial);
-		if (cached_can.size() == CAN_LENGTH) {
-			QString pace_can = QString::fromStdString(cached_can);
-			doStartPACEAuthentication(pace_can);
-		}
-		else {
-			emit signalContactlessCANNeeded();
-		}
+        performPACEWithCache(card, CardOperation::IdentityData);
 	}
    
     END_TRY_CATCH
@@ -3468,29 +3481,6 @@ void GAPI::checkCCSignatureCert()
     END_TRY_CATCH
 }
 
-void GAPI::startCheckSignatureCertValidity() {
-    Concurrent::run(this, &GAPI::checkSignatureCertValidity);
-}
-
-void GAPI::checkSignatureCertValidity(void)
-{
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "checkSignatureCertValidity");
-
-    BEGIN_TRY_CATCH
-
-    PTEID_EIDCard * card = NULL;
-    getCardInstance(card);
-
-    if (card == NULL) return;
-
-    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
-
-    if (!cert.verifyDateValidity())
-        emit signalSignCertExpired();
-
-    END_TRY_CATCH
-}
-
 void GAPI::fillCertificateList(void)
 {
     bool noIssuer = false;
@@ -3568,6 +3558,22 @@ void GAPI::doValidateCertificates()
     END_TRY_CATCH
 }
 
+void GAPI::finishLoadingSignCertData(PTEID_EIDCard *card) {
+    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
+    QString ownerName = cert.getOwnerName();
+    QString NIC = cert.getSubjectSerialNumber();
+
+    //remove "BI" prefix and checkdigit
+    size_t NIC_length = 8;
+    NIC.replace("BI","");
+    NIC.truncate(NIC_length);
+
+    emit signalSignCertDataChanged(ownerName, NIC);
+
+    if (!cert.verifyDateValidity())
+        emit signalSignCertExpired();
+}
+
 void GAPI::startGettingInfoFromSignCert() {
     Concurrent::run(this, &GAPI::getInfoFromSignCert);
 }
@@ -3583,16 +3589,12 @@ void GAPI::getInfoFromSignCert(void)
 
     if (card == NULL) return;
 
-    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
-    QString ownerName = cert.getOwnerName();
-    QString NIC = cert.getSubjectSerialNumber();
-
-    //remove "BI" prefix and checkdigit
-    size_t NIC_length = 8;
-    NIC.replace("BI","");
-    NIC.truncate(NIC_length);
-
-    emit signalSignCertDataChanged(ownerName, NIC);
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        finishLoadingSignCertData(card);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::SignCertificateData);
+    }
 
     END_TRY_CATCH
 }

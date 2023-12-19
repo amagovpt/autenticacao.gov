@@ -279,6 +279,8 @@ public:
 
     enum PaceAuthState {PaceDefault, PaceNeeded, PaceAuthenticated};
 
+    enum CardOperation {IdentityData, SignCertificateData, PinInfo};
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(CardAccessError)
     Q_ENUMS(RemoteAddressError)
@@ -297,6 +299,7 @@ public:
     Q_ENUMS(TelemetryAction)
     Q_ENUMS(TelemetryStatus)
     Q_ENUMS(OAuthErrors)
+    Q_ENUMS(CardOperation);
 
     QQuickImageProvider * buildImageProvider() { return image_provider; }
     QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
@@ -337,10 +340,10 @@ public slots:
     void startCardReading();
     void startGettingInfoFromSignCert();
     void startCCSignatureCertCheck();
-    void startCheckSignatureCertValidity();
     void startSavingCardPhoto(QString outputFile);
     int getStringByteLength(QString text);
-	void finishLoadingCardData(PTEID_EIDCard * card);
+    void finishLoadingCardData(PTEID_EIDCard * card);
+	void finishLoadingSignCertData(PTEID_EIDCard * card);
     void startReadingPersoNotes();
     void startWritingPersoNotes(const QString &text);
     void startReadingAddress();
@@ -420,8 +423,9 @@ public slots:
     void changeSignPin(QString currentPin, QString newPin);
     void changeAddressPin(QString currentPin, QString newPin);
 
-	void startPACEAuthentication(QString pace_can);
-    void doStartPACEAuthentication(QString pace_can);
+	void startPACEAuthentication(QString pace_can, CardOperation op);
+
+    void performPACEWithCache(PTEID_EIDCard * card, CardOperation op);
     void resetContactlessState() { m_pace_auth_state = PaceDefault; m_is_contactless = false; }
 
     void cancelCMDRegisterCert();
@@ -614,7 +618,7 @@ private:
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );
     void checkCCSignatureCert(void);
-    void checkSignatureCertValidity(void);
+    //void checkSignatureCertValidity(void);
     void getInfoFromSignCert(void);
     int findCardCertificate(QString issuedBy, QString issuedTo);
     void doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);
@@ -630,6 +634,8 @@ private:
     double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin = 15, bool is_bounded_rect = false, double bound_width = 360);
     WindowGeometry *getWndGeometry();
     void handleRemoteAddressErrors(long errorCode);
+    //The 2nd function pointer param points to the function to be called after PACE auth is finished
+    void doStartPACEAuthentication(QString pace_can, CardOperation op);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
