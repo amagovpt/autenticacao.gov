@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -252,6 +252,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Cache.c" />
+    <ClCompile Include="Src\cal.cpp" />
     <ClCompile Include="src\CardAndContProp.c" />
     <ClCompile Include="src\CardCap.c" />
     <ClCompile Include="src\CardPinOps.c" />
@@ -269,6 +270,7 @@
   <ItemGroup>
     <ClInclude Include="src\inc\bcrypt.h" />
     <ClInclude Include="Src\inc\cache.h" />
+    <ClInclude Include="Src\inc\cal.h" />
     <ClInclude Include="src\inc\cardmod.h" />
     <ClInclude Include="src\inc\externalpinui.h" />
     <ClInclude Include="src\inc\globmdrv.h" />

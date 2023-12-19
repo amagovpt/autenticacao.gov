@@ -335,7 +335,8 @@ DWORD WINAPI   CardReadFile
 			if ( _stricmp("ksc00", pszFileName) == 0)					   /* /mscp/ksc00 */
 			{
 				FileFound++;
-				dwReturn = PteidReadCert(pCardData, CERT_AUTH, pcbData, ppbData);
+
+				dwReturn = cal_read_cert(pCardData, CERT_AUTH, pcbData, ppbData);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
 					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
@@ -345,7 +346,7 @@ DWORD WINAPI   CardReadFile
 			if ( _stricmp("ksc01", pszFileName) == 0)					   /* /mscp/ksc01 */
 			{
 				FileFound++;
-				dwReturn = PteidReadCert(pCardData, CERT_NONREP, pcbData, ppbData);
+				dwReturn = cal_read_cert(pCardData, CERT_NONREP, pcbData, ppbData);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
 					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
