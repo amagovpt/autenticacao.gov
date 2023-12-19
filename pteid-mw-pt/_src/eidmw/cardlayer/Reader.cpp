@@ -261,6 +261,47 @@ void CReader::readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, 
 	}
 }
 
+bool CReader::Connect(SCARDHANDLE hCard, DWORD protocol) {
+	m_poCard = CardConnect(hCard, protocol, m_csReader, m_poContext, NULL, m_isContactless);
+	if (m_poCard != NULL) {
+		if (m_isContactless)
+			m_poCard->createPace();
+
+		m_oPKCS15.SetCard(m_poCard);
+		m_oPinpad->Init(m_poCard->m_hCard);
+		CConfig config;
+		long pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
+		if (pinpadEnabled == 1 && m_oPinpad->UsePinpad())
+		{
+			MWLOG(LEV_DEBUG, MOD_CAL, L"Using Pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
+			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler());
+
+		}
+		else
+			MWLOG(LEV_DEBUG, MOD_CAL, L"Using non-pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
+
+
+#ifdef WIN32
+		//Get info on all connected readers using Win32 SetupAPI as TLV Properties Control command is not available for all readers
+		std::vector<ReaderDeviceInfo> readerDevices = win32ReaderDevices();
+		for (auto dev : readerDevices) {
+			MWLOG(LEV_INFO, MOD_CAL, "Windows reader: %s %s (vendorID: %04x, productID: %04x) Driver: %s",
+				dev.manufacturer.c_str(), dev.name.c_str(), dev.vendorID, dev.productID, dev.driver.c_str());
+		}
+		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls",
+			Type2String(m_poCard->GetType()), m_wsReader.c_str());
+#else
+		ReaderDeviceInfo device_info = { 0 };
+		readerDeviceInfo(m_poCard->m_hCard, &device_info, m_oPinpad->getTlvPropertiesIoctl());
+		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls (vendorID: %04x, productID: %04x)",
+			Type2String(m_poCard->GetType()), m_wsReader.c_str(), device_info.vendorID, device_info.productID);
+#endif
+
+	}
+
+	return true;
+}
+
 bool CReader::Connect()
 {
 	if (m_poCard != NULL)

@@ -78,6 +78,7 @@ public:
 	 * any of the other functions below.
 	 */
     bool Connect();
+	 bool Connect(SCARDHANDLE hCard, DWORD protocol);
 
 	/** Disconnect from the card; it's safe to call this function multiple times */
 	void Disconnect(tDisconnectMode disconnectMode = DISCONNECT_LEAVE_CARD);
