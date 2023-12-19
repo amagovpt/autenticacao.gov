@@ -21,6 +21,7 @@ SOURCES += main.cpp \
     certificates.cpp \
     singleapplication_p.cpp \
     singleapplication.cpp \
+    can_cache.cpp \
     concurrent.cpp
 
 INCLUDEPATH += /usr/include/poppler/qt5/
