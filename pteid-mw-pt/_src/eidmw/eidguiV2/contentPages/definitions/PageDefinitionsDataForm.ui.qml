@@ -17,13 +17,16 @@ import "../../scripts/Constants.js" as Constants
 Item {
 
     property alias propertyrectAppCache: rectAppCache
+    property alias propertyrectCANCache: rectCANCache
     property alias propertyButtonRemoveAppCache: buttonRemoveAppCache
-    property alias propertyBusyIndicator : busyIndication
+    property alias propertyButtonRemoveCANCache: buttonRemoveCANCache
     property alias propertyButtonRemoveSCAPCache: buttonRemoveSCAPCache
+    property alias propertyBusyIndicator : busyIndication
     property alias propertyCacheAppSizeTextField : cacheAppSizeTextField
+    property alias propertyCacheCANSizeTextField: cacheCANSizeTextField
     property alias propertyCacheSCAPSizeTextField : cacheSCAPSizeTextField
     property alias propertyCheckboxEnableCache : checkboxEnableCache
-
+    property alias propertyCheckboxEnableCANCache: checkboxEnableCANCache
     property alias propertyMainItem: dateAppCache
 
     anchors.fill: parent
@@ -354,6 +357,144 @@ Item {
                             KeyNavigation.right: propertyMainItem
                             KeyNavigation.backtab: cacheSCAPSizeTextField
                             KeyNavigation.up: cacheSCAPSizeTextField
+                            Keys.onEnterPressed: clicked()
+                            Keys.onReturnPressed: clicked()
+                        }
+                    }
+                }
+            }
+        }
+        Item{
+            id: rectCANCache
+            width: parent.width
+            height: dateCANCache.height + rowCANCache.height
+            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+            anchors.topMargin: 3*Constants.SIZE_ROW_V_SPACE
+            anchors.top: rectSCAPCache.bottom
+
+            Text {
+                id: dateCANCache
+                x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                font.pixelSize: activeFocus
+                                ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                : Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                font.bold: focus
+                color: Constants.COLOR_TEXT_LABEL
+                height: Constants.SIZE_TEXT_LABEL
+                text: qsTranslate("PageDataApp","STR_CAN_CACHE_TITLE") + controler.autoTr
+            }
+            DropShadow {
+                anchors.fill: rowCANCache
+                horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                radius: Constants.FORM_SHADOW_RADIUS
+                samples: Constants.FORM_SHADOW_SAMPLES
+                color: Constants.COLOR_FORM_SHADOW
+                source: rowCANCache
+                spread: Constants.FORM_SHADOW_SPREAD
+                opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+            }
+            RectangularGlow {
+                anchors.fill: rowCANCache
+                glowRadius: Constants.FORM_GLOW_RADIUS
+                spread: Constants.FORM_GLOW_SPREAD
+                color: Constants.COLOR_FORM_GLOW
+                cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+            }
+            Rectangle {
+                id: rowCANCache
+                width: parent.width
+                height: Constants.SIZE_ROW_V_SPACE
+                        + rectCANCacheDesc.height
+                        + rectEnableCANCache.height
+                        + rectCANCacheRemove.height
+                        + buttonRemoveCANCache.height
+                anchors.top: dateCANCache.bottom
+                anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                Rectangle {
+                    id: rectCANCacheDesc
+                    height: 2*Constants.SIZE_TEXT_FIELD + Constants.SIZE_TEXT_FIELD_V_SPACE
+                    width: parent.width - 2*Constants.SIZE_ROW_H_SPACE
+                    anchors.top: rowCANCache.top
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                    anchors.left:rowCANCache.left
+                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                    Text {
+                        id: cacheCANTextField
+                        text: qsTranslate("PageDataApp","STR_CAN_CACHE_TEXT")
+                        width: parent.width
+                        height: parent.height
+                        font.capitalization: Font.MixedCase
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.family: lato.name
+                        font.bold: focus
+                        wrapMode: Text.WordWrap
+                    }
+                }
+
+                Rectangle {
+                    id: rectEnableCANCache
+                    height: 2*Constants.SIZE_TEXT_FIELD
+                    width: parent.width - 2*Constants.SIZE_ROW_H_SPACE
+                    anchors.top: rectCANCacheDesc.bottom
+                    anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+                    anchors.left: parent.left
+                    anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                    CheckBox {
+                        id: checkboxEnableCANCache
+                        height: parent.height
+                        text: qsTranslate("PageDataApp","STR_TOGGLE_CAN_CACHE_CHECKBOX") + controler.autoTr
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        font.capitalization: Font.MixedCase
+                        font.bold: checkboxEnableCANCache.activeFocus
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        checked: controler.getEnablePteidCache()
+                    }
+                }
+                Rectangle {
+                    id: rectCANCacheRemove
+                    width: parent.width
+                    height: 2*Constants.SIZE_TEXT_FIELD
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: Constants.SIZE_ROW_V_SPACE
+
+                    Rectangle {
+                        id: rectCANCacheText
+                        width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.50
+                        anchors.left: rectCANCacheRemove.left
+                        anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                        Text {
+                            id: cacheCANSizeTextField
+                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE_NO_INFO") + controler.autoTr
+                            width: parent.width
+                            height: parent.height
+                            font.capitalization: Font.MixedCase
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.family: lato.name
+                            font.bold: focus
+                            wrapMode: Text.WordWrap
+                            topPadding: Constants.SIZE_ROW_V_SPACE
+                        }
+                    }
+                    Rectangle {
+                        id: rectCANCacheButton
+                        width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.50
+                        anchors.right: rectCANCacheRemove.right
+                        anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
+                        Button {
+                            id: buttonRemoveCANCache
+                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE") + controler.autoTr
+                            width: parent.width
+                            height: Constants.HEIGHT_BOTTOM_COMPONENT
+                            font.pixelSize: Constants.SIZE_TEXT_FIELD
+                            font.family: lato.name
+                            font.capitalization: Font.MixedCase
+                            highlighted: activeFocus ? true : false
+                            enabled: controler.getEnablePteidCache();
                             Keys.onEnterPressed: clicked()
                             Keys.onReturnPressed: clicked()
                         }
