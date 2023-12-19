@@ -40,6 +40,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteid-poppler", "..\pteid-p
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pteidmdrv", "..\minidriver\pteidmdrv.2008.vcxproj", "{479FFA33-2B41-4A15-8192-A41F9FBE3D6A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE} = {C7DE2B79-F890-4ACB-804A-BDD14E1A9CAE}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MarkHidden", "..\misc\Wix_MW35\MarkHidden\MarkHidden.2008.vcxproj", "{5154523E-FDCF-41E7-8845-A5ACC92672B0}"
 EndProject
