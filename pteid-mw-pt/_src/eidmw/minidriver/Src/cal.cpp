@@ -48,3 +48,23 @@ DWORD cal_read_cert(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
 
 	return SCARD_S_SUCCESS;
 }
+
+DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerialNumber, PDWORD pdwSerialNumber) {
+	auto &reader = oCardLayer->getReader(readerName);\
+	try {
+		reader.Connect(pCardData->hScard, protocol);
+		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+		auto serial_number = reader.GetSerialNr();
+
+		if (cbSerialNumber < serial_number.size())
+			return ERROR_INSUFFICIENT_BUFFER;
+
+		*pdwSerialNumber = serial_number.size();
+		memcpy(pbSerialNumber, serial_number.c_str(), serial_number.size());
+	}
+	catch (...) {
+		printf("E: Error getting card serial number!\n");
+		return -1;
+	}
+	return 0;
+}
