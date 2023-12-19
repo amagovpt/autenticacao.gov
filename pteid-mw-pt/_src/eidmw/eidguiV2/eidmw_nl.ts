@@ -821,15 +821,15 @@
     </message>
     <message>
         <source>STR_CAN_CACHE_TITLE</source>
-        <translation>Cache do CAN</translation>
+        <translation>Códigos de acesso contactless</translation>
     </message>
     <message>
         <source>STR_CAN_CACHE_TEXT</source>
-        <translation>A cache do CAN guarda CAN de cartões previamente carregados, evitando nova ligação ao cartão</translation>
+        <translation>Guarda códigos de acesso a cartões contactless previamente lidos, evitando nova autorização</translation>
     </message>
     <message>
         <source>STR_TOGGLE_CAN_CACHE_CHECKBOX</source>
-        <translation>Utilizar cache do CAN</translation>
+        <translation>Guardar códigos de acesso</translation>
     </message>
 </context>
 <context>
@@ -2289,7 +2289,7 @@
     <message>
         <source>STR_POPUP_CAN_TEXT</source>
         <translation>Por favor insira o código de acesso ao seu cartão.
-Este código de 6 digitos está impresso no seu cartão no canto inferior direito.</translation>
+Este número de 6 digitos está impresso no seu cartão no canto inferior direito.</translation>
     </message>
     <message>
         <source>STR_POPUP_CAN</source>
