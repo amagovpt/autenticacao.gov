@@ -821,6 +821,18 @@
         <source>STR_TOGGLE_CACHE_CHECKBOX</source>
         <translation>Use card data cache</translation>
     </message>
+    <message>
+        <source>STR_CAN_CACHE_TITLE</source>
+        <translation>CAN Cache</translation>
+    </message>
+    <message>
+        <source>STR_CAN_CACHE_TEXT</source>
+        <translation>The CAN cache stores the CAN of previously loaded cards, avoiding a new connection to the card</translation>
+    </message>
+    <message>
+        <source>STR_TOGGLE_CAN_CACHE_CHECKBOX</source>
+        <translation>Use CAN cache</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsApp</name>
@@ -2282,11 +2294,11 @@
     </message>
     <message>
         <source>STR_POPUP_CAN_OK</source>
-        <translation>Ok </translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>STR_POPUP_CAN_CANCEL</source>
-        <translation>Cancel </translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>STR_POPUP_CARD_PIN_VERIFY</source>

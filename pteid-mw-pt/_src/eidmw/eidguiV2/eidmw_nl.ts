@@ -819,6 +819,18 @@
         <source>STR_TOGGLE_CACHE_CHECKBOX</source>
         <translation>Utilizar cache de dados do cartão</translation>
     </message>
+    <message>
+        <source>STR_CAN_CACHE_TITLE</source>
+        <translation>Cache do CAN</translation>
+    </message>
+    <message>
+        <source>STR_CAN_CACHE_TEXT</source>
+        <translation>A cache do CAN guarda CAN de cartões previamente carregados, evitando nova ligação ao cartão</translation>
+    </message>
+    <message>
+        <source>STR_TOGGLE_CAN_CACHE_CHECKBOX</source>
+        <translation>Utilizar cache do CAN</translation>
+    </message>
 </context>
 <context>
     <name>PageDefinitionsApp</name>
@@ -2289,7 +2301,7 @@ Este código de 6 digitos está impresso no seu cartão no canto inferior direit
     </message>
     <message>
         <source>STR_POPUP_CAN_OK</source>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>STR_POPUP_CAN_CANCEL</source>

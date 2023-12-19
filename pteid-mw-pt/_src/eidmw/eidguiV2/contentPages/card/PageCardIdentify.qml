@@ -10,6 +10,8 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+import QtGraphicalEffects 1.0
+
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -329,7 +331,7 @@ PageCardIdentifyForm {
                 id: rectTextCAN
                 width: parent.width
                 height: 100
-                y : parent.y - dialogCAN.height * 0.20
+                y : parent.y - dialogCAN.height * 0.15
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
@@ -362,52 +364,93 @@ PageCardIdentifyForm {
 
             Item {
                 id: rectPin
-                width: parent.width
-                height: 50
+                width: parent.width * 0.5
+                height: 30
                 y : parent.y + dialogCAN.height * 0.4
-                anchors.horizontalCenter: parent.horizontalCenter   
-                TextField {
-                    id: textFieldCAN
-                    width: parent.width * 0.5
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.italic: textFieldCAN.text === "" ? true: false
-                    placeholderText: ""
-                    echoMode : TextInput.Password
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
-                    maximumLength: 6
-                    font.family: lato.name
-                    font.pixelSize: Constants.SIZE_TEXT_FIELD
-                    clip: false
+                anchors.horizontalCenter: parent.horizontalCenter
+                Rectangle{
+                    id: borderRectPin
+                    border.color: Constants.COLOR_MAIN_BLUE
+                    border.width: 2
                     anchors.horizontalCenter: parent.horizontalCenter
-                    //anchors.bottom: parent.bottom
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.fill: parent
+                    TextField {
+                        id: textFieldCAN
+                        anchors.left: parent.left
+                        anchors.leftMargin: parent.width / 3
+                        anchors.topMargin: 10
+                        width: parent.width
+                        font.italic: textFieldCAN.text === "" ? true: false
+                        placeholderText: ""
+                        echoMode : TextInput.Password
+                        background:null
+                        validator: RegExpValidator { regExp: /[0-9]+/ }
+                        maximumLength: 6
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_TEXT_FIELD
+                        clip: false
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        //anchors.bottom: parent.bottom
+                        horizontalAlignment: TextField.horizontalAlignment
+                    }
+
                 }
             }
         }
-        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
 
         footer: DialogButtonBox {
             alignment: Qt.AlignHCenter
-        }
+                Button{
+                    id: rejectButton
+                    text: qsTranslate("Popup PIN","STR_POPUP_CAN_CANCEL")
+                    DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    highlighted: activeFocus ? true : false
 
-        onAccepted: {
-            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-            var triesLeft = gapi.startPACEAuthentication(textFieldCAN.text, true)
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    contentItem: Text{
+                        text : rejectButton.text
+                        font: rejectButton.font
+                        color: Constants.COLOR_MAIN_BLACK
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    Keys.onEscapePressed: clicked()
+                }
+                Button {
+                    id: okButton
+                    text: qsTranslate("Popup PIN", "STR_POPUP_CAN_OK")
+                    enabled: textFieldCAN.length == 6
+                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    highlighted: activeFocus ? true : false
 
-        }
-        onRejected: {
-            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-            console.log("Pressed cancel")
-            propertyBusyIndicator.running = false
-        }
+                    contentItem: Text {
+                        text : okButton.text
+                        font: okButton.font
+                        color: okButton.enabled ? Constants.COLOR_MAIN_BLACK : Constants.COLOR_GRAY
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    Keys.onEnterPressed: clicked();
+                }
+                onAccepted: {
+                    mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+                    var triesLeft = gapi.startPACEAuthentication(textFieldCAN.text, true)
+                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
-        Component.onCompleted: {
-            dialogCAN.standardButton(Dialog.Ok).text = qsTranslate("Popup PIN", "STR_POPUP_CAN_OK")
-            dialogCAN.standardButton(Dialog.Ok).enabled =  Qt.binding( function() { return textFieldCAN.length == 6})
-            dialogCAN.standardButton(Dialog.Cancel).text = qsTranslate("Popup PIN","STR_POPUP_CAN_CANCEL")
+                }
+                onRejected: {
+                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                    console.log("Pressed cancel")
+                    propertyBusyIndicator.running = false
+                }
+            }
         }
-
-    }
 
     PropertyAnimation {
         id: expandAnimation
