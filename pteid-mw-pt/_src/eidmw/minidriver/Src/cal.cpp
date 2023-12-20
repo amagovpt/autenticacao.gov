@@ -8,21 +8,23 @@
 using namespace eIDMW;
 
 std::unique_ptr<CCardLayer> oCardLayer;
-std::unique_ptr<CReadersInfo> oReadersInfo;
 std::string readerName;
 DWORD protocol;
 
-int cal_init(const char* reader_name, DWORD protocol_) {
+int cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
 	try {
+		if (!oCardLayer)
 		oCardLayer = std::make_unique<CCardLayer>();
-		oReadersInfo = std::make_unique<CReadersInfo>(oCardLayer->ListReaders());
 
 		readerName = reader_name;
 		protocol = protocol_;
+
+		auto &reader = oCardLayer->getReader(readerName);
+		reader.Connect(pCardData->hScard, protocol);
 	}
 	catch (...) {
 		printf("E: Error initializing card layer!\n");
-		return -1;
+		return 0;
 	}
 
 	return 1;
@@ -31,7 +33,8 @@ int cal_init(const char* reader_name, DWORD protocol_) {
 DWORD cal_read_cert(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PBYTE *ppbCertif) {
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
-		reader.Connect(pCardData->hScard, protocol);
+		reader.UseHandle(pCardData->hScard);
+
 		auto cert = reader.GetCert(dwCertSpec - 1);
 		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 
@@ -52,7 +55,8 @@ DWORD cal_read_cert(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
 DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerialNumber, PDWORD pdwSerialNumber) {
 	auto &reader = oCardLayer->getReader(readerName);\
 	try {
-		reader.Connect(pCardData->hScard, protocol);
+		reader.UseHandle(pCardData->hScard);
+
 		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 		auto serial_number = reader.GetSerialNr();
 

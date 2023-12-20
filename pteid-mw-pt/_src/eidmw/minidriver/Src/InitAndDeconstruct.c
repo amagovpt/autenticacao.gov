@@ -211,7 +211,7 @@ DWORD WINAPI   CardAcquireContext
    
    LogTrace(LOGTYPE_INFO, WHERE, "Context, handle:[0x%02X][0x%02X]", pCardData->hSCardCtx, pCardData->hScard);
 
-	if (!cal_init(readerName, protocol)) {
+	if (!cal_init(pCardData, readerName, protocol)) {
 		CLEANUP(SCARD_F_INTERNAL_ERROR);
 	}
 

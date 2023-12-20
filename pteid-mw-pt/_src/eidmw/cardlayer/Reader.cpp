@@ -261,6 +261,15 @@ void CReader::readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, 
 	}
 }
 
+void CReader::UseHandle(SCARDHANDLE hCard) {
+	if (m_poCard)
+		m_poCard->m_hCard = hCard;
+
+	if (m_oPinpad)
+		m_oPinpad->Init(hCard);
+}
+
+
 bool CReader::Connect(SCARDHANDLE hCard, DWORD protocol) {
 	m_poCard = CardConnect(hCard, protocol, m_csReader, m_poContext, NULL, m_isContactless);
 	if (m_poCard != NULL) {
