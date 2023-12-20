@@ -15,7 +15,7 @@ import QtGraphicalEffects 1.0
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
-import "../definitions/DialogRequestPaceSecret.qml"
+import "../definitions"
 
 //Import C++ defined enums
 import eidguiV2 1.0
@@ -156,8 +156,7 @@ PageCardIdentifyForm {
             propertyPhoto.source = ""
             propertyPhoto.cache = false
             propertySavePhotoButton.enabled = false
-            //paceDialogLoader.active = true
-            //paceDialogLoader.item.open()
+            paceDialogLoader.active = true
         }
 
         onSignalSaveCardPhotoFinished: {
@@ -172,11 +171,13 @@ PageCardIdentifyForm {
         }
     }
 
-//    Loader {
-//        id: paceDialogLoader
-//        active: false
-//        source: "DialogRequestPaceSecret.qml"
-//    }
+    Loader {
+        id: paceDialogLoader
+        active: false
+        anchors.centerIn: parent
+        source: "../definitions/DialogRequestPaceSecret.qml"
+        onLoaded: paceDialogLoader.item.open()
+    }
 
     Dialog {
         id: createsuccess_dialog

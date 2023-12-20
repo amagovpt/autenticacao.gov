@@ -1,9 +1,9 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
-import QtQml 2.15
 
-Component {
-    Dialog {
+import "../../scripts/Constants.js" as Constants
+
+Dialog {
         id: dialogCAN
         width: 400
         height: 250
@@ -31,13 +31,12 @@ Component {
         Item {
             width: parent.width
             height: rectPin.height + rectTextCAN.height
-
+            Keys.onEnterPressed: okButton.clicked();
             Item {
                 id: rectTextCAN
                 width: parent.width
                 height: 100
                 y : parent.y - dialogCAN.height * 0.15
-                anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
                     id: textCAN
@@ -140,9 +139,7 @@ Component {
                         color: okButton.enabled ? Constants.COLOR_MAIN_BLACK : Constants.COLOR_GRAY
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                    }
-                    Keys.onEnterPressed: clicked();
-                }
+                    }                }
                 onAccepted: {
                     mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
                     gapi.startPACEAuthentication(textFieldCAN.text, GAPI.IdentityData)
@@ -156,4 +153,3 @@ Component {
                 }
             }
     }
-}
