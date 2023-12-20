@@ -89,6 +89,8 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
 
     CByteArray fileArray(realMaxLen);
 
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: file length parsed from FCI info: %lu realMaxLen: %lu", __FUNCTION__, fileInfo.lFileLen, realMaxLen);
+
     //loop while you don't get to the end or maxLen
     //we use max_block_read_length as 223 because of a limit on SM layer
     while((offsetByte != fileInfo.lFileLen) && (fileArray.Size() < realMaxLen)) {
