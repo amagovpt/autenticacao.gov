@@ -965,7 +965,7 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 	//
 	std::string csPathCopy = csPath;
 	bool select_by_path_from_mf = false;
-	MWLOG(LEV_DEBUG, MOD_CAL, "%s: csPath: %s", __FUNCTION__, csPath);
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: csPath: %s", __FUNCTION__, csPath.c_str());
 	if (csPath.find("3F00") != std::string::npos || csPath.find("3f00") != std::string::npos) {
 		csPathCopy.erase(0, 4);
 		select_by_path_from_mf = true;
