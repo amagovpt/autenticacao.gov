@@ -452,7 +452,7 @@ Item {
                         font.bold: checkboxEnableCANCache.activeFocus
                         anchors.bottom: parent.bottom
                         anchors.left: parent.left
-                        checked: controler.getEnablePteidCache()
+                        checked: controler.getEnablePteidCANCache()
                     }
                 }
                 Rectangle {
@@ -494,7 +494,7 @@ Item {
                             font.family: lato.name
                             font.capitalization: Font.MixedCase
                             highlighted: activeFocus ? true : false
-                            enabled: controler.getEnablePteidCache();
+                            enabled: controler.getEnablePteidCANCache();
                             Keys.onEnterPressed: clicked()
                             Keys.onReturnPressed: clicked()
                         }

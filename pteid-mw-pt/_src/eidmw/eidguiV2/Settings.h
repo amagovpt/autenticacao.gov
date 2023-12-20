@@ -784,6 +784,18 @@ public:
         return config.getLong();
     }
 
+    void setEnablePteidCANCache(bool bEnabled)
+    {
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CAN_CACHE_ENABLED);
+        config.setLong(bEnabled);
+    }
+
+    bool getEnablePteidCANCache()
+    {
+        eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CAN_CACHE_ENABLED);
+        return config.getLong();
+    }
+
     QString getProxyUsername()
     {
         return m_proxy_username;

@@ -176,6 +176,12 @@ PageDefinitionsDataForm {
         }
     }
 
+    propertyCheckboxEnableCANCache {
+        onCheckedChanged: {
+            var bEnabled = propertyCheckboxEnableCANCache.checked;
+            controler.setEnablePteidCANCache(bEnabled);
+        }
+    }
 
     Component.onCompleted: {
         propertyMainItem.forceActiveFocus()
