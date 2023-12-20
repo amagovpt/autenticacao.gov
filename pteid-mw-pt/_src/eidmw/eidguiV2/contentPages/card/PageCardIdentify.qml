@@ -15,7 +15,6 @@ import QtGraphicalEffects 1.0
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
-import "../definitions"
 
 //Import C++ defined enums
 import eidguiV2 1.0
@@ -152,10 +151,6 @@ PageCardIdentifyForm {
 
         onSignalContactlessCANNeeded: {
             console.log("QML: Contactless CAN is needed!!")
-
-            propertyPhoto.source = ""
-            propertyPhoto.cache = false
-            propertySavePhotoButton.enabled = false
             paceDialogLoader.active = true
         }
 
@@ -174,9 +169,12 @@ PageCardIdentifyForm {
     Loader {
         id: paceDialogLoader
         active: false
-        anchors.centerIn: parent
+        anchors.verticalCenter: parent.verticalCenter
         source: "../definitions/DialogRequestPaceSecret.qml"
-        onLoaded: paceDialogLoader.item.open()
+        onLoaded: {
+            paceDialogLoader.item.afterPaceAction = GAPI.IdentityData
+            paceDialogLoader.item.open()
+        }
     }
 
     Dialog {

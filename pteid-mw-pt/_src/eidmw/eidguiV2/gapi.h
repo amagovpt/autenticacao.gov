@@ -279,7 +279,7 @@ public:
 
     enum PaceAuthState {PaceDefault, PaceNeeded, PaceAuthenticated};
 
-    enum CardOperation {IdentityData, SignCertificateData, PinInfo};
+    enum CardOperation {IdentityData, SignCertificateData, ValidateCertificate, ReadCertDetails, DoAddress, GetAuthPin, GetSignPin, GetAddressPin};
 
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(CardAccessError)

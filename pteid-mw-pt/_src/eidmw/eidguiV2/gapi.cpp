@@ -631,7 +631,16 @@ unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
 }
 
 void GAPI::getTriesLeftAuthPin() {
-    Concurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::GetAuthPin);
+    }
 }
 unsigned int GAPI::doGetTriesLeftAuthPin() {
     unsigned long tries_left = TRIES_LEFT_ERROR;
@@ -685,7 +694,16 @@ unsigned int GAPI::doVerifySignPin(QString pin_value) {
 }
 
 void GAPI::getTriesLeftSignPin() {
-    Concurrent::run(this, &GAPI::doGetTriesLeftSignPin);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doGetTriesLeftSignPin);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::GetAuthPin);
+    }
 }
 unsigned int GAPI::doGetTriesLeftSignPin() {
     unsigned long tries_left = TRIES_LEFT_ERROR;
@@ -737,17 +755,43 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	switch (op) {
         case IdentityData:
             finishLoadingCardData(card);
+        break;
         case SignCertificateData:
             finishLoadingSignCertData(card);
-        case PinInfo:
-            return; //TODO
+        break;
+        case ValidateCertificate:
+            validateCertificates();
+            break;
+        case ReadCertDetails:
+            startfillCertificateList();
+            break;
+        case DoAddress:
+            verifyAddressPin("", false);
+            break;
+        case GetAuthPin:
+            getTriesLeftAuthPin();
+            break;
+        case GetSignPin:
+            getTriesLeftSignPin();
+            break;
+        case GetAddressPin:
+            getTriesLeftAddressPin();
+            break;
     }
 
 	END_TRY_CATCH
 }
 
 void GAPI::verifyAddressPin(QString pin_value, bool forceVerify) {
-    Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value, forceVerify);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value, forceVerify);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::DoAddress);
+    }
 }
 
 unsigned int GAPI::doVerifyAddressPin(QString pin_value, bool forceVerify) {
@@ -780,7 +824,16 @@ unsigned int GAPI::doVerifyAddressPin(QString pin_value, bool forceVerify) {
 }
 
 void GAPI::getTriesLeftAddressPin() {
-    Concurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::GetAuthPin);
+    }
 }
 unsigned int GAPI::doGetTriesLeftAddressPin() {
     unsigned long tries_left = TRIES_LEFT_ERROR;
@@ -3434,7 +3487,16 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
 }
 
 void GAPI::startfillCertificateList(void) {
-    Concurrent::run(this, &GAPI::fillCertificateList);
+    PTEID_EIDCard *card = NULL;
+    getCardInstance(card);
+    if(card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::fillCertificateList);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::ReadCertDetails);
+    }
 }
 
 void GAPI::startGetCardActivation(void) {
@@ -3513,7 +3575,17 @@ void GAPI::fillCertificateList(void)
 }
 
 void GAPI::validateCertificates() {
-    Concurrent::run(this, &GAPI::doValidateCertificates);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+
+    if (card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doValidateCertificates);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::ValidateCertificate);
+    }
 }
 
 void GAPI::doValidateCertificates()

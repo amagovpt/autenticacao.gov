@@ -1,6 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
 
+import eidguiV2 1.0
 import "../../scripts/Constants.js" as Constants
 
 Dialog {
@@ -18,8 +19,10 @@ Dialog {
             textFieldCAN.forceActiveFocus()
         }
 
+        property int afterPaceAction: GAPI.IdentityData
+
         header: Label {
-            text: qsTranslate("Popup up", "Dialog request pace secret")
+            text: qsTranslate("Popup PIN", "STR_POPUP_CAN_TITLE")
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -31,7 +34,6 @@ Dialog {
         Item {
             width: parent.width
             height: rectPin.height + rectTextCAN.height
-            Keys.onEnterPressed: okButton.clicked();
             Item {
                 id: rectTextCAN
                 width: parent.width
@@ -95,8 +97,9 @@ Dialog {
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         clip: false
                         anchors.horizontalCenter: parent.horizontalCenter
-                        //anchors.bottom: parent.bottom
                         horizontalAlignment: TextField.horizontalAlignment
+                        Keys.onEnterPressed: okButton.clicked()
+                        Keys.onReturnPressed: okButton.clicked()
                     }
 
                 }
@@ -132,6 +135,8 @@ Dialog {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     highlighted: activeFocus ? true : false
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
 
                     contentItem: Text {
                         text : okButton.text
@@ -139,10 +144,11 @@ Dialog {
                         color: okButton.enabled ? Constants.COLOR_MAIN_BLACK : Constants.COLOR_GRAY
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                    }                }
+                    }
+                }
                 onAccepted: {
                     mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-                    gapi.startPACEAuthentication(textFieldCAN.text, GAPI.IdentityData)
+                    gapi.startPACEAuthentication(textFieldCAN.text, afterPaceAction)
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
 
                 }

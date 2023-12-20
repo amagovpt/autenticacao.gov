@@ -88,12 +88,15 @@ PageSecurityPinCodesForm {
             propertyBusyIndicator.running = true
             switch(protertyStackLayout.currentIndex) {
             case 0:
+                paceDialogLoader.usePaceAction = GAPI.GetAuthPin
                 gapi.getTriesLeftAuthPin()
                 break;
             case 1:
+                paceDialogLoader.usePaceAction = GAPI.GetSignPin
                 gapi.getTriesLeftSignPin()
                 break;
             case 2:
+                paceDialogLoader.usePaceAction = GAPI.GetAddressPin
                 gapi.getTriesLeftAddressPin()
                 break;
             default:
@@ -149,6 +152,14 @@ PageSecurityPinCodesForm {
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
             updateWithTriesLeft(triesLeft, pin)
+        }
+
+        onSignalContactlessCANNeeded: {
+            console.log("QML: Contactless CAN is needed!!")
+            if(paceDialogLoader.active == true)
+                paceDialogLoader.active = false
+
+            paceDialogLoader.active = true
         }
     }
 
@@ -659,12 +670,15 @@ PageSecurityPinCodesForm {
             propertyBusyIndicator.running = true
             switch(protertyStackLayout.currentIndex) {
             case 0:
+                paceDialogLoader.usePaceAction = GAPI.GetAuthPin
                 gapi.getTriesLeftAuthPin()
                 break;
             case 1:
+                paceDialogLoader.usePaceAction = GAPI.GetSignPin
                 gapi.getTriesLeftSignPin()
                 break;
             case 2:
+                paceDialogLoader.usePaceAction = GAPI.GetAddressPin
                 gapi.getTriesLeftAddressPin()
                 break;
             default:
@@ -672,6 +686,19 @@ PageSecurityPinCodesForm {
             }
         }
     }
+
+    Loader {
+        id: paceDialogLoader
+        active: false
+        property int usePaceAction: GAPI.IdentityData
+        anchors.verticalCenter: parent.verticalCenter
+        source: "../definitions/DialogRequestPaceSecret.qml"
+        onLoaded: {
+            paceDialogLoader.item.afterPaceAction = usePaceAction
+            paceDialogLoader.item.open()
+        }
+    }
+
     Component.onCompleted: {
         propertyBusyIndicator.running = true
         console.log("StackLayout currentIndex = " + protertyStackLayout.currentIndex)
@@ -679,6 +706,7 @@ PageSecurityPinCodesForm {
         // guarantee that current index is the first element
         protertyStackLayout.currentIndex = 0
 
+        paceDialogLoader.usePaceAction = GAPI.GetAuthPin
         gapi.getTriesLeftAuthPin()
         propertyTabAuth.forceActiveFocus()
     }
