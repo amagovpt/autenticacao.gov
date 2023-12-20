@@ -23,7 +23,6 @@ Item {
     property alias propertyButtonRemoveSCAPCache: buttonRemoveSCAPCache
     property alias propertyBusyIndicator : busyIndication
     property alias propertyCacheAppSizeTextField : cacheAppSizeTextField
-    property alias propertyCacheCANSizeTextField: cacheCANSizeTextField
     property alias propertyCacheSCAPSizeTextField : cacheSCAPSizeTextField
     property alias propertyCheckboxEnableCache : checkboxEnableCache
     property alias propertyCheckboxEnableCANCache: checkboxEnableCANCache
@@ -461,25 +460,6 @@ Item {
                     height: 2*Constants.SIZE_TEXT_FIELD
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: Constants.SIZE_ROW_V_SPACE
-
-                    Rectangle {
-                        id: rectCANCacheText
-                        width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.50
-                        anchors.left: rectCANCacheRemove.left
-                        anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-                        Text {
-                            id: cacheCANSizeTextField
-                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE_NO_INFO") + controler.autoTr
-                            width: parent.width
-                            height: parent.height
-                            font.capitalization: Font.MixedCase
-                            font.pixelSize: Constants.SIZE_TEXT_FIELD
-                            font.family: lato.name
-                            font.bold: focus
-                            wrapMode: Text.WordWrap
-                            topPadding: Constants.SIZE_ROW_V_SPACE
-                        }
-                    }
                     Rectangle {
                         id: rectCANCacheButton
                         width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.50
