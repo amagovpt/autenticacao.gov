@@ -197,7 +197,7 @@ DWORD WINAPI   CardAcquireContext
       
    SCardStatus(pCardData->hScard, readerName, &readername_len,
 	   NULL, &protocol, (LPBYTE)&bAtr, &cByte);
-	
+		
    //Store active protocol
    switch(protocol)
    {
@@ -208,8 +208,12 @@ DWORD WINAPI   CardAcquireContext
 	   g_pioSendPci = SCARD_PCI_T1;
 	   break;
    }
-   
+
    LogTrace(LOGTYPE_INFO, WHERE, "Context, handle:[0x%02X][0x%02X]", pCardData->hSCardCtx, pCardData->hScard);
+
+	dwReturn = cal_init(pCardData, readerName, protocol);
+	if (dwReturn != SCARD_S_SUCCESS)
+		CLEANUP(dwReturn);
 
    /********************************/
    /* Initialize function pointers */

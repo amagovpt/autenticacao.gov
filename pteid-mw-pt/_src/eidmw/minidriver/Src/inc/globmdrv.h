@@ -32,6 +32,8 @@
 //#include "util.h"
 #include "stdafx.h"
 
+#include "cal.h"
+
 #define CLEANUP(i)                        {dwReturn=(i);goto cleanup;}
 
 #define MINIDRIVER_VERSION                "1.0.A"

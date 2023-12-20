@@ -560,7 +560,7 @@ DWORD CardGetSerialNo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD p
 	if (vs->bSerialNumberSet == 0) 
 	{
 		// serial number not set
-		dwReturn = PteidGetCardSN(pCardData, vs->szSerialNumber, 
+		dwReturn = cal_get_card_sn(pCardData, vs->szSerialNumber,
 			sizeof(vs->szSerialNumber), pdwDataLen);
 		if ( dwReturn != SCARD_S_SUCCESS )
 		{
