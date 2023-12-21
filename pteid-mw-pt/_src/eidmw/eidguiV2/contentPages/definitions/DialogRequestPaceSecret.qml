@@ -112,6 +112,8 @@ Dialog {
                 Label {
                     id: errorMessageLabel
                     text: qsTranslate("Popup PIN","STR_POPUP_PACE_UNKNOWN")
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
                     color: "red"
                     visible: false
                 }
