@@ -1,5 +1,6 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+ import QtQuick.Layouts 1.15
 
 import eidguiV2 1.0
 import "../../scripts/Constants.js" as Constants
@@ -7,21 +8,36 @@ import "../../scripts/Constants.js" as Constants
 Dialog {
         id: dialogCAN
         width: 400
-        height: 300
         visible: false
         font.family: lato.name
         // Center dialog in the main view
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - dialogCAN.width * 0.5
         y: parent.height * 0.5 - dialogCAN.height * 0.5
-
         onOpened: {
             textFieldCAN.forceActiveFocus()
+        }
+
+        Connections {
+            target: gapi
+            onErrorPace: {
+                errorMessageLabel.visible = true
+                textFieldCAN.enabled = true
+                if(error_code === GAPI.PaceBadToken)
+                    errorMessageLabel.text = qsTranslate("Popup PIN","STR_POPUP_PACE_BAD_TOKEN")
+                else {
+                    errorMessageLabel.text = qsTranslate("Popup PIN","STR_POPUP_PACE_UNKNOWN")
+                }
+            }
+            onPaceSuccess: {
+                close()
+            }
         }
 
         property int afterPaceAction: GAPI.IdentityData
 
         header: Label {
+            id: headLabel
             text: qsTranslate("Popup PIN", "STR_POPUP_CAN_TITLE")
             elide: Label.ElideRight
             padding: 24
@@ -31,37 +47,27 @@ Dialog {
             color: Constants.COLOR_MAIN_BLUE
         }
 
-        Item {
+        ColumnLayout {
+            id: contentItem
+            spacing: 10
             width: parent.width
-            height: rectPin.height + rectTextCAN.height
-            Item {
-                id: rectTextCAN
+            Text {
+                id: textCAN
+                Layout.preferredWidth: parent.width
+                text: qsTranslate("Popup PIN","STR_POPUP_CAN_TEXT")
+                verticalAlignment: Text.AlignVCenter
+                font.pixelSize: Constants.SIZE_TEXT_LABEL
+                font.family: lato.name
+                color: Constants.COLOR_TEXT_LABEL
                 width: parent.width
-                height: 100
-                y : parent.y - dialogCAN.height * 0.15
-
-                Text {
-                    id: textCAN
-                    text: qsTranslate("Popup PIN","STR_POPUP_CAN_TEXT")
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.SIZE_TEXT_LABEL
-                    font.family: lato.name
-                    color: Constants.COLOR_TEXT_LABEL
-                    height: parent.height
-                    width: parent.width
-                    wrapMode: Text.WordWrap
-                }
+                wrapMode: Text.WordWrap
             }
 
             Item {
                 id: rectImageCAN
                 width: parent.width
-                height: 100
-                anchors.horizontalCenter: parent.horizontalCenter
-                y : parent.y + dialogCAN.height * 0.1
-
-                Image{
+                Layout.preferredHeight: childrenRect.height
+                Image {
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: "../../images/CAN_image.png"
                 }
@@ -71,21 +77,15 @@ Dialog {
             Item {
                 id: rectPin
                 width: parent.width * 0.5
-                height: 30
-                y : parent.y + dialogCAN.height * 0.5
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.preferredHeight: 30
+                Layout.alignment: Qt.AlignCenter
                 Rectangle{
                     id: borderRectPin
                     border.color: Constants.COLOR_MAIN_BLUE
                     border.width: 2
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
                     anchors.fill: parent
                     TextField {
                         id: textFieldCAN
-                        anchors.left: parent.left
-                        anchors.leftMargin: parent.width / 3
-                        anchors.topMargin: 10
                         width: parent.width
                         font.italic: textFieldCAN.text === "" ? true: false
                         placeholderText: ""
@@ -96,19 +96,32 @@ Dialog {
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         clip: false
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        horizontalAlignment: TextField.horizontalAlignment
+                        horizontalAlignment: TextInput.AlignHCenter
                         Keys.onEnterPressed: okButton.clicked()
                         Keys.onReturnPressed: okButton.clicked()
+                        onTextChanged: {
+                            errorMessageLabel.visible = false
+                        }
                     }
-
+                }
+            }
+            Item {
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                width: errorMessageLabel.width
+                Label {
+                    id: errorMessageLabel
+                    text: qsTranslate("Popup PIN","STR_POPUP_PACE_UNKNOWN")
+                    color: "red"
+                    visible: false
                 }
             }
         }
 
         footer: DialogButtonBox {
+            id: footerDialog
             alignment: Qt.AlignHCenter
-                Button{
+                Button {
                     id: rejectButton
                     text: qsTranslate("Popup PIN","STR_POPUP_CAN_CANCEL")
                     DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
@@ -119,7 +132,7 @@ Dialog {
                     implicitWidth: Constants.WIDTH_BUTTON
                     implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
 
-                    contentItem: Text{
+                    contentItem: Text {
                         text : rejectButton.text
                         font: rejectButton.font
                         color: Constants.COLOR_MAIN_BLACK
@@ -128,19 +141,23 @@ Dialog {
                     }
                     Keys.onEscapePressed: clicked()
                 }
+
                 Button {
                     id: okButton
                     text: qsTranslate("Popup PIN", "STR_POPUP_CAN_OK")
-                    enabled: textFieldCAN.length == 6
-                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                    enabled: textFieldCAN.length == 6 && textFieldCAN.enabled
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     highlighted: activeFocus ? true : false
-                    Keys.onEnterPressed: clicked()
-                    Keys.onReturnPressed: clicked()
                     implicitWidth: Constants.WIDTH_BUTTON
                     implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
+                    Keys.onEnterPressed: okButton.clicked()
+                    Keys.onReturnPressed: okButton.clicked()
+                    onClicked: {
+                        textFieldCAN.forceActiveFocus()
+                        startPaceFunction()
+                    }
 
                     contentItem: Text {
                         text : okButton.text
@@ -150,16 +167,21 @@ Dialog {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                onAccepted: {
-                    mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-                    gapi.startPACEAuthentication(textFieldCAN.text, afterPaceAction)
-                    mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-
+                onApplied: {
+                    startPaceFunction()
                 }
                 onRejected: {
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
-                    console.log("Pressed cancel")
                     propertyBusyIndicator.running = false
                 }
             }
+
+        function startPaceFunction() {
+            if(textFieldCAN.length != 6)
+                return
+            textFieldCAN.enabled = false
+            mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
+            gapi.startPACEAuthentication(textFieldCAN.text, afterPaceAction)
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        }
     }

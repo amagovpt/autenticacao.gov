@@ -10,6 +10,8 @@
 
 #include "Log.h"
 
+#include <mutex>
+
 namespace eIDMW
 {
 
@@ -307,6 +309,8 @@ err:
         }
 
         void initAuthentication(SCARDHANDLE &hCard, const void *param_structure) {
+
+            std::lock_guard<std::mutex> guard(m_mutex);
             BUF_MEM *mappingData = NULL, *cardMappingData = NULL, *pubkey = NULL, *cardPubKey = NULL;
             BUF_MEM *token = NULL, *cardToken = NULL;
             int r = 0;
@@ -624,6 +628,7 @@ err:
         friend class PaceAuthentication;
         CContext *m_context;
         EAC_CTX *m_ctx;
+        std::mutex m_mutex;
     };
 
     PaceAuthentication::PaceAuthentication(CContext *poContext)

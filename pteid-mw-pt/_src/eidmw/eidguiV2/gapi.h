@@ -279,6 +279,8 @@ public:
 
     enum PaceAuthState {PaceDefault, PaceNeeded, PaceAuthenticated};
 
+    enum PaceError {PaceUnknown, PaceBadToken, PaceUnutilized};
+
     enum CardOperation {IdentityData, SignCertificateData, ValidateCertificate, ReadCertDetails, DoAddress, GetAuthPin, GetSignPin, GetAddressPin};
 
     Q_ENUMS(ScapPdfSignResult)
@@ -300,6 +302,7 @@ public:
     Q_ENUMS(TelemetryStatus)
     Q_ENUMS(OAuthErrors)
     Q_ENUMS(CardOperation);
+    Q_ENUMS(PaceError);
 
     QQuickImageProvider * buildImageProvider() { return image_provider; }
     QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
@@ -584,6 +587,9 @@ signals:
     void signalPrinterPrintFail();
     void signalPrinterPrintFail(int error_code);
     void signalLanguageChangedError();
+
+    void errorPace(int error_code);
+    void paceSuccess();
 
 private:
     bool LoadTranslationFile( QString NewLanguage );

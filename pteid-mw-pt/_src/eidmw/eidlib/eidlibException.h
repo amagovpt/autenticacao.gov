@@ -297,6 +297,13 @@ public:
   PTEIDSDK_API virtual ~PTEID_ExDocTypeUnknown(); /**< Destructor */
 };
 
+class PTEID_PACE_ERROR: public PTEID_Exception
+{
+  public:
+  PTEIDSDK_API PTEID_PACE_ERROR(long lError);				/**< Constructor */
+  PTEIDSDK_API virtual ~PTEID_PACE_ERROR();				/**< Destructor */
+};
+
 }
 
 #endif //__EIDLIB_EXCEPTION_H__

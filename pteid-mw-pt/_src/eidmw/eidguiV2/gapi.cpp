@@ -743,8 +743,27 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	if (card == NULL) return;
 
 	std::string can_str = pace_can.toStdString();
-
-	card->initPaceAuthentication(can_str.c_str(), can_str.size(), PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+    try {
+        card->initPaceAuthentication(can_str.c_str(), can_str.size(), PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+        emit paceSuccess();
+    } catch (PTEID_PACE_ERROR e)
+    {
+        PaceError err;
+        switch(e.GetError())
+        {
+            case EIDMW_PACE_ERR_BAD_TOKEN:
+            err = PaceError::PaceBadToken;
+            break;
+            case EIDMW_PACE_ERR_NOT_INITIALIZED:
+            err = PaceError::PaceUnutilized;
+            break;
+            case EIDMW_PACE_ERR_UNKNOWN:
+            err = PaceError::PaceUnknown;
+            break;
+        }
+        emit errorPace(err);
+        return;
+    }
 
 	m_pace_auth_state = PaceAuthenticated;
 	//Cache correct CAN value
@@ -3087,7 +3106,7 @@ void GAPI::performPACEWithCache(PTEID_EIDCard * card, CardOperation op) {
     std::string cached_can = getCANFromCache(serial);
     if (cached_can.size() == CAN_LENGTH) {
         QString pace_can = QString::fromStdString(cached_can);
-        doStartPACEAuthentication(pace_can, op);
+        Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can, op);
     }
     else {
         emit signalContactlessCANNeeded();

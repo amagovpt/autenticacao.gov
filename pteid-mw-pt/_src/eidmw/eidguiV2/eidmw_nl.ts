@@ -2308,6 +2308,14 @@ Este número de 6 digitos está impresso no seu cartão no canto inferior direit
         <translation>Cancelar</translation>
     </message>
     <message>
+        <source>STR_POPUP_PACE_UNKNOWN</source>
+        <translation>Erro do PACE desconhecido!</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_PACE_BAD_TOKEN</source>
+        <translation>Erro do Pace, código errado!</translation>
+    </message>
+    <message>
         <source>STR_POPUP_CARD_PIN_ADDRESS</source>
         <translation>PIN da Morada</translation>
     </message>
