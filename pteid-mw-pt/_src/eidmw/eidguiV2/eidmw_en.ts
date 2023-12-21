@@ -2301,6 +2301,14 @@
         <translation>Cancel</translation>
     </message>
     <message>
+        <source>STR_POPUP_PACE_UNKNOWN</source>
+        <translation>Reading error.</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_PACE_BAD_TOKEN</source>
+        <translation>Wrong card access number.</translation>
+    </message>
+    <message>
         <source>STR_POPUP_CARD_PIN_VERIFY</source>
         <translation>PIN verification</translation>
     </message>
