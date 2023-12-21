@@ -224,6 +224,7 @@ private:
 const QString MAIN_QML_PATH("qrc:/main.qml");
 
 void saveCAN(const char * serial, const char *can);
+bool deleteCAN();
 std::string getCANFromCache(const char * serial);
 
 class GAPI : public QObject
@@ -394,6 +395,7 @@ public slots:
     void startGettingCompanyAttributes(bool useOAuth);
     void startLoadingAttributesFromCache(bool showSubAttributes);
     void startRemovingAttributesFromCache();
+	void startRemoveCANCache();
     void startGettingEntityAttributes(QList<QString> entities_ids, bool useOAuth);
     static bool isAttributeExpired(std::string& date, std::string& supplier);
 
@@ -601,6 +603,7 @@ private:
 
     void getSCAPAttributesFromCache(bool isShortDescription);
     void removeSCAPAttributesFromCache();
+	void removeCANCache();
     void getSCAPEntityAttributes(QList<QString> ids, bool useOAuth);
     void doCancelCMDRegisterCert();
     void doSignSCAP(const SCAPSignParams &params, bool isCMD);

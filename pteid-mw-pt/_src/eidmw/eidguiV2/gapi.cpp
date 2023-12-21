@@ -2387,6 +2387,15 @@ void GAPI::startRemovingAttributesFromCache() {
     Concurrent::run(this, &GAPI::removeSCAPAttributesFromCache);
 }
 
+void GAPI::startRemoveCANCache() {
+	Concurrent::run(this, &GAPI::removeCANCache);
+}
+void GAPI::removeCANCache() {
+	qDebug() << "removeCANCache";
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "CAN", "Remove CAN Cache");
+	deleteCAN();
+}
+
 void GAPI::startSigningSCAP(QList<QString> inputPDFs, QString outputPDF, int page, double location_x,
     double location_y, QString location, QString reason, bool isTimestamp, bool isLtv, bool isLastPage,  QList<QString> attribute_ids) {
 

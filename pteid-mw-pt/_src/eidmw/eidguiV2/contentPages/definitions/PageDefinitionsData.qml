@@ -172,7 +172,7 @@ PageDefinitionsDataForm {
         onClicked: {
             console.log("propertyButtonRemoveSCAPCache clicked");
             propertyBusyIndicator.running = true;
-            gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
+            gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll);
         }
     }
 
@@ -180,8 +180,22 @@ PageDefinitionsDataForm {
         onCheckedChanged: {
             var bEnabled = propertyCheckboxEnableCANCache.checked;
             controler.setEnablePteidCANCache(bEnabled);
+			if(!bEnabled){
+				gapi.startRemoveCANCache();
+			}
+			propertyButtonRemoveCANCache.enabled = bEnabled;
         }
     }
+    
+	propertyButtonRemoveCANCache{
+		onClicked: {
+            console.log("propertyButtonRemoveCANCache clicked");
+            propertyBusyIndicator.running = true;
+            gapi.startRemoveCANCache();
+		    propertyBusyIndicator.running = false
+		}
+	}
+
 
     Component.onCompleted: {
         propertyMainItem.forceActiveFocus()
