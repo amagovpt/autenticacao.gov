@@ -1507,6 +1507,15 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     MWLOG(LEV_DEBUG, MOD_APL, "%s: 4th POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp4.http_code, resp4.http_response.c_str());
 
     exception_code = validateRemoteAddressData(resp4.http_response.c_str(), CC2_PROTOCOL);
+    //Force PACE SM to "wake up"
+    CReader * reader = m_card->getCalReader();
+    if (reader != NULL) {
+        reader->setNextAPDUClearText();
+
+        const unsigned char select_nonexistent_ef[] = {0x00, 0xA4, 0x02, 0x00, 0x02, 0xAB, 0xCD};
+        CByteArray plaintext_dummy_apdu{select_nonexistent_ef, sizeof(select_nonexistent_ef)};
+        reader->SendAPDU(plaintext_dummy_apdu);
+    }
 
     if (exception_code != 0) {
         throw CMWEXCEPTION(exception_code);

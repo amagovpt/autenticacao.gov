@@ -398,6 +398,14 @@ CByteArray CReader::GetATR()
 	return m_poCard->GetATR();
 }
 
+void CReader::setNextAPDUClearText()
+{
+    if (m_poCard == NULL)
+        throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+    return m_poCard->setNextAPDUClearText();
+}
+
 /*TODO: Is this really needed?    */
 bool CReader::IsPinpadReader()
 {

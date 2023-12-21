@@ -32,7 +32,7 @@ namespace eIDMW
 
 CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad):
     m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
-    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL)
+    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(NULL)
 {
 }
 
@@ -387,7 +387,7 @@ CByteArray CCard::GetRandom(unsigned long ulLen)
 CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure)
 {
     CByteArray result;
-    bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C;
+    bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C || cleartext_next;
     if(isAlreadySM && m_pace.get()) {
         MWLOG(LEV_DEBUG, MOD_CAL, "This message is already secure and will not use PACE module! Message: %s",
               oCmdAPDU.ToString().c_str());
@@ -397,6 +397,7 @@ CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE
     }
     else {
         result = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, param_structure);
+        cleartext_next = false;
     }
     return result;
 }

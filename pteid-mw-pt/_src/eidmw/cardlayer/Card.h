@@ -133,6 +133,7 @@ public:
     void initPaceAuthentication(const char* secret, size_t secretLen, PaceSecretType secretType);
 
     const void * getProtocolStructure();
+    const void setNextAPDUClearText() { cleartext_next = true; }
 
     void setProtocol(const void * protocol_struct) { m_comm_protocol = protocol_struct; }
 
@@ -162,6 +163,7 @@ protected:
 
     std::map <unsigned int, std::string> m_verifiedPINs;
     unsigned char m_ucCLA;
+    bool cleartext_next;
 
     const void * m_comm_protocol;
     std::unique_ptr<PaceAuthentication> m_pace{};

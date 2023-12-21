@@ -149,6 +149,7 @@ public:
 
 	/** Returns the OR-ing of all supported crypto algorithms */
 	unsigned long GetSupportedAlgorithms();
+    void setNextAPDUClearText();
 
 	/* Sign data. If necessary, a PIN will be asked */
     CByteArray Sign(const tPrivKey & key, unsigned long paddingType,
