@@ -25,8 +25,7 @@ namespace eIDMW
         const unsigned char controlByte = 0x0C;
 
         BUF_MEM *findObjectMem(const CByteArray &array, long tag) {
-            const unsigned char *old_data = NULL;
-            long size;
+            long size = 0;
             const unsigned char *desc_data = findASN1Object(array, size, tag);
             if(desc_data == NULL)
                 return NULL;
@@ -145,7 +144,10 @@ namespace eIDMW
 
                 if(TlvLe.Size())
                     encryptedAPDU.Append(TlvLe);
-
+                if (memCommandHeader)
+                    BUF_MEM_clear_free(memCommandHeader);
+                if (memPaddedCommandHeader)
+                    BUF_MEM_clear_free(memPaddedCommandHeader);
                 if(memMac)
                     BUF_MEM_clear_free(memMac);
                 if(memInputForMac)
@@ -435,6 +437,9 @@ err:
             }
 
         err:
+            if (pace_secret) {
+                PACE_SEC_clear_free(pace_secret);
+            }
             if (mappingData) {
                 BUF_MEM_clear_free(mappingData);
             }
