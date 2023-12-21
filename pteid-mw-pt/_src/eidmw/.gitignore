@@ -82,3 +82,7 @@ kspCredentials.h
 eidguiV2Credentials.h
 /release_data.wxs
 /release_data.h
+
+# QT Creator
+###################
+/.qtc_clangd/
