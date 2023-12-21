@@ -38,7 +38,7 @@ CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad):
 
 CCard::~CCard(void)
 {
-    Disconnect(DISCONNECT_LEAVE_CARD);
+    Disconnect(DISCONNECT_RESET_CARD);
 }
 
 void CCard::Disconnect(tDisconnectMode disconnectMode)
