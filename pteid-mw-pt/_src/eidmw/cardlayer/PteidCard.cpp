@@ -938,10 +938,13 @@ tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char*
                 length = findASN1Object(responseSelection, size, 0x80);
             if(length == NULL)
                 return {0};
-
-            CByteArray array(length, size);
-            unsigned long value = strtoul(array.ToString(false, true).c_str(), nullptr, 16);
-            info.lFileLen = value;
+			//File length tag in FCI data has 3 bytes max
+			if (size == 3) {
+				info.lFileLen = (*length << 16) | (*(length + 1) << 8) | *(length+2);
+			}
+			else if (size == 2) {
+				info.lFileLen = (*length << 8) | *(length + 1);
+			}
         }
 	}
 
