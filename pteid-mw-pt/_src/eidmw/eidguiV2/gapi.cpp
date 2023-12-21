@@ -750,7 +750,9 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	//Cache correct CAN value
 	PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
 	const char * serial = verInfo.getSerialNumber();
-	saveCAN(serial, can_str.c_str());
+    if (m_Settings.getEnablePteidCANCache()) {
+	   saveCAN(serial, can_str.c_str());
+    }
 
 	switch (op) {
         case IdentityData:
@@ -3072,6 +3074,11 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard * card) {
 }
 
 void GAPI::performPACEWithCache(PTEID_EIDCard * card, CardOperation op) {
+    if (!m_Settings.getEnablePteidCANCache()) {
+        emit signalContactlessCANNeeded();
+        return;
+    }
+
     const int CAN_LENGTH = 6;
     PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
     const char * serial = verInfo.getSerialNumber();
