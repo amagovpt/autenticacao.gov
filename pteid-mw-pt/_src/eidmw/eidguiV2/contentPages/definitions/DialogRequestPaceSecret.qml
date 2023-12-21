@@ -7,7 +7,7 @@ import "../../scripts/Constants.js" as Constants
 Dialog {
         id: dialogCAN
         width: 400
-        height: 250
+        height: 300
         visible: false
         font.family: lato.name
         // Center dialog in the main view
@@ -57,9 +57,9 @@ Dialog {
             Item {
                 id: rectImageCAN
                 width: parent.width
-                height: 50
+                height: 100
                 anchors.horizontalCenter: parent.horizontalCenter
-                y : parent.y + dialogCAN.height * 0.2
+                y : parent.y + dialogCAN.height * 0.1
 
                 Image{
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -72,7 +72,7 @@ Dialog {
                 id: rectPin
                 width: parent.width * 0.5
                 height: 30
-                y : parent.y + dialogCAN.height * 0.4
+                y : parent.y + dialogCAN.height * 0.5
                 anchors.horizontalCenter: parent.horizontalCenter
                 Rectangle{
                     id: borderRectPin
@@ -116,6 +116,8 @@ Dialog {
                     font.family: lato.name
                     font.capitalization: Font.MixedCase
                     highlighted: activeFocus ? true : false
+                    implicitWidth: Constants.WIDTH_BUTTON
+                    implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
 
                     contentItem: Text{
                         text : rejectButton.text
@@ -137,6 +139,8 @@ Dialog {
                     highlighted: activeFocus ? true : false
                     Keys.onEnterPressed: clicked()
                     Keys.onReturnPressed: clicked()
+                    implicitWidth: Constants.WIDTH_BUTTON
+                    implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
 
                     contentItem: Text {
                         text : okButton.text
