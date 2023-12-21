@@ -899,6 +899,30 @@ void CPteidCard::SelectApplication(const CByteArray & oAID)
 	   m_lastSelectedApplication = oAID;
     }
 }
+/* Extract file length value from smartcard FCI data:
+   There are two possible tags for file size attribute in FCI data
+   0x81 for eid applet and 0x80 for national data applet */
+int extractEFSize(CByteArray& fci_data) {
+    const unsigned char *desc_data = fci_data.GetBytes() + 2;
+    //const unsigned char *old_data = desc_data;
+    int xclass = 0;
+    int asn1Tag = 0;
+    long genTag = 0, size = 0;
+
+    long ret = ASN1_get_object(&desc_data, &size, &asn1Tag, &xclass, fci_data.Size()-2);
+    int constructed = ret == V_ASN1_CONSTRUCTED ? 1 : 0;
+    genTag = xclass | (constructed & 0b1) << 5 | asn1Tag;
+    if (genTag == 0x81 && size == 2) {      //eID app
+        return (*desc_data << 8) | *(desc_data + 1); 
+    }
+    else if (genTag == 0x80 && size == 3) { //National data app
+        return (*desc_data << 16) | (*(desc_data + 1) << 8) | *(desc_data+2);
+    }
+    else {
+        MWLOG(LEV_ERROR, MOD_CAL, "%s: Malformed FCI data, tag found at offset 2: %2x", __FUNCTION__, fci_data.GetByte(2));
+        return 0;
+    }
+}
 
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo)
 {
@@ -929,25 +953,13 @@ tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char*
 			// Should be expecting 0x9000 (success)
             getSW12(responseSelection, 0x9000);
         }
-        if(bReturnFileInfo) { //needs to return lReadPINRef and lWritePINRef
-            long size;
-			char* fci_data = bin2AsciiHex(responseSelection.GetBytes(), responseSelection.Size());
-			MWLOG(LEV_DEBUG, MOD_CAL, "%s: FCI data: %s", __FUNCTION__, fci_data);
+        //TODO: return lReadPINRef and lWritePINRef, from security attributes tag 0x8C
+        if(bReturnFileInfo) {
+            CByteArray fci_data = responseSelection.GetBytes(0, responseSelection.GetByte(1));
+			char* fci_data_hex = bin2AsciiHex(responseSelection.GetBytes(), responseSelection.Size());
+			MWLOG(LEV_DEBUG, MOD_CAL, "%s: FCI data: %s", __FUNCTION__, fci_data_hex);
 
-			/*There are two possible tags for file size attribute in FCI data
-			//0x81 for eid applet and 0x80 for national data applet */
-            const unsigned char* length = findASN1Object(responseSelection, size, 0x81);
-            if(length == NULL)
-                length = findASN1Object(responseSelection, size, 0x80);
-            if(length == NULL)
-                return {0};
-			//File length tag in FCI data has 3 bytes max
-			if (size == 3) {
-				info.lFileLen = (*length << 16) | (*(length + 1) << 8) | *(length+2);
-			}
-			else if (size == 2) {
-				info.lFileLen = (*length << 8) | *(length + 1);
-			}
+            info.lFileLen = extractEFSize(fci_data);
         }
 	}
 
