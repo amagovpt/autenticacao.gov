@@ -35,8 +35,6 @@
 #include <algorithm>
 
 
-#define MAX_BLOCK_READ_LENGTH 223
-
 namespace eIDMW
 {
 
@@ -82,6 +80,8 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
     unsigned long ulOffset, unsigned long ulMaxLen)
 {
 	CAutoLock autolock(this);
+	//We use max_block_read_length as 223 because of a limit on SM layer
+	const int MAX_BLOCK_READ_LENGTH = m_pace.get() != NULL ? 223 : MAX_APDU_READ_LEN;
 
     tFileInfo fileInfo = SelectFile(csPath, true);
     unsigned long realMaxLen = (std::min)(fileInfo.lFileLen, ulMaxLen);
@@ -92,7 +92,6 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
 	MWLOG(LEV_DEBUG, MOD_CAL, "%s: file length parsed from FCI info: %lu realMaxLen: %lu", __FUNCTION__, fileInfo.lFileLen, realMaxLen);
 
     //loop while you don't get to the end or maxLen
-    //we use max_block_read_length as 223 because of a limit on SM layer
     while((offsetByte != fileInfo.lFileLen) && (fileArray.Size() < realMaxLen)) {
         unsigned long maxLength = (std::min)(fileInfo.lFileLen - offsetByte, (unsigned long)MAX_BLOCK_READ_LENGTH);
         CByteArray response = ReadBinary(offsetByte, maxLength);
