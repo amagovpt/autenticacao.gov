@@ -575,6 +575,7 @@ signals:
     void signalCacheNotWritable();
     void signalCacheRemovedLegacy();
     void signalCacheFolderNotCreated();
+	void signalRemoveCANCacheSucess();
 
     // Import Certificates
     void signalImportCertificatesFail();

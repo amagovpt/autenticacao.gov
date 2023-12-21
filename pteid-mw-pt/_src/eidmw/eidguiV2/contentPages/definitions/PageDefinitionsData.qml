@@ -102,6 +102,14 @@ PageDefinitionsDataForm {
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
+
+		onSignalRemoveCANCacheSucess:{
+			console.log("Definitions SCAP - Signal CAN Signal Remove CAN cache Sucess")
+			propertyBusyIndicator.running = false;
+			var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE") + controler.autoTr
+            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC") + controler.autoTr
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+		}
     }
     Connections {
         target: controler

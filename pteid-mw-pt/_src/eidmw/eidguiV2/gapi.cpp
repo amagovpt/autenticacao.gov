@@ -2394,6 +2394,7 @@ void GAPI::removeCANCache() {
 	qDebug() << "removeCANCache";
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "CAN", "Remove CAN Cache");
 	deleteCAN();
+	emit signalRemoveCANCacheSucess();
 }
 
 void GAPI::startSigningSCAP(QList<QString> inputPDFs, QString outputPDF, int page, double location_x,
