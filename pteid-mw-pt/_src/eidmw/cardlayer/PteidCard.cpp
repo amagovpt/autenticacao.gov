@@ -1012,7 +1012,7 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	tCacheInfo check16Cache = {CHECK_16_CACHE, 0}; // Check 16 bytes at offset 0
 	tCacheInfo checkSerial = {CHECK_SERIAL, 0}; // Check if the card serial nr is present
 
-	long cache_enabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+	bool cache_enabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED) && m_cardType == CARD_PTEID_IAS07;
 	if (!cache_enabled)
 		return dontCache;
 
