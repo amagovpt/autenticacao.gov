@@ -27,7 +27,9 @@
 #include <string.h>
 #include <time.h>
 
+#include "pteid_p11.h"
 #include "cert.h"
+#include "log.h"
 
 #include <openssl/x509.h>
 #include <openssl/core_names.h>
