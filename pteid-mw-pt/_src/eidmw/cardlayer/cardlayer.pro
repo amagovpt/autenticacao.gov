@@ -25,9 +25,8 @@ CONFIG -= warn_on qt
 DESTDIR = ../lib
 DEPENDPATH += . 
 macx: LIBS += -L../lib -l$${COMMONLIB}
-macx: LIBS += -L $$DEPS_DIR/openssl-3/lib/
-macx: LIBS += -l$${DLGLIB} \
-              -Wl,-framework -Wl,PCSC 	
+macx: LIBS += -L $$DEPS_DIR/openssl-3/lib/ -L $$DEPS_DIR/openpace/lib/
+macx: LIBS += -l$${DLGLIB} -Wl,-framework -Wl,PCSC
 macx: LIBS += -lcrypto
 
 unix:LIBS += -L../lib -l$${COMMONLIB}
@@ -39,6 +38,7 @@ unix: LIBS += -leac
 INCLUDEPATH += . ../common 
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 macx: INCLUDEPATH += $$DEPS_DIR/openssl-3/include
+macx: INCLUDEPATH += $$DEPS_DIR/openpace/include
 
 DEFINES += EIDMW_CAL_EXPORT
 

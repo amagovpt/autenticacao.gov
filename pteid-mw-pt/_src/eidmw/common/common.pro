@@ -38,14 +38,14 @@ unix:!macx: DEFINES += USING_DL_OPEN
 unix:!macx: LIBS += -ldl -pthread
 
 macx: LIBS += -Wl,-framework -Wl,Carbon
-macx: LIBS += -lcrypto
-
+macx: LIBS += -L $$DEPS_DIR/openssl-3/lib/
 unix: LIBS += -lcrypto
 
 PROJECT_DIR = common
 
 DEPENDPATH += $${PROJECT_DIR} libtomcrypt Socket
 INCLUDEPATH += $${PROJECT_DIR} $${PROJECT_DIR}/libtomcrypt $${PROJECT_DIR}/Socket $${PCSC_INCLUDE_DIR}
+macx: INCLUDEPATH += $$DEPS_DIR/openssl-3/include
 
 public_headers.files = eidErrors.h
 public_headers.path = $${INSTALL_DIR_INCLUDE}
