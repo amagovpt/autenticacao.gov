@@ -339,7 +339,7 @@ DWORD WINAPI   CardReadFile
 				dwReturn = cal_read_cert(pCardData, CERT_AUTH, pcbData, ppbData);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_AUTH] returned [%d]", dwReturn);
 					CLEANUP(SCARD_E_UNEXPECTED);
 				}
 			}
@@ -349,7 +349,7 @@ DWORD WINAPI   CardReadFile
 				dwReturn = cal_read_cert(pCardData, CERT_NONREP, pcbData, ppbData);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_NONREP] returned [%d]", dwReturn);
 					CLEANUP(SCARD_E_UNEXPECTED);
 				}
 			}
@@ -529,20 +529,20 @@ DWORD WINAPI   CardGetFileInfo
 			if ( _stricmp("ksc00", pszFileName) == 0)					   /* /mscp/ksc00 */
 			{
 				FileFound++;
-				dwReturn = PteidReadCert(pCardData, CERT_AUTH, &(pCardFileInfo->cbFileSize), NULL);
+				dwReturn = cal_read_cert(pCardData, CERT_AUTH, &(pCardFileInfo->cbFileSize), NULL);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_AUTH] returned [%d]", dwReturn);
 					CLEANUP(SCARD_E_UNEXPECTED);
       }
    }
 			if ( _stricmp("ksc01", pszFileName) == 0)					   /* /mscp/ksc01 */
 			{
 				FileFound++;
-				dwReturn = PteidReadCert(pCardData, CERT_NONREP, &(pCardFileInfo->cbFileSize), NULL);
+				dwReturn = cal_read_cert(pCardData, CERT_NONREP, &(pCardFileInfo->cbFileSize), NULL);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_NONREP] returned [%d]", dwReturn);
 					CLEANUP(SCARD_E_UNEXPECTED);
 				}
 			}

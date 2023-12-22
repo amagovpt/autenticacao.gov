@@ -188,10 +188,10 @@ DWORD PteidCreateMSRoots(PCARD_DATA  pCardData, DWORD *pcbMSRoots, PBYTE *ppbMSR
 	PCCERT_CONTEXT pCertContext = NULL; 
 	CERT_BLOB      blob;
 
-	dwReturn = PteidReadCert(pCardData, CERT_CA, &cbCertif, &pbCertif);
+	dwReturn = cal_read_cert(pCardData, CERT_CA, &cbCertif, &pbCertif);
 	if ( dwReturn != SCARD_S_SUCCESS )
 	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_CA] returned [%d]", dwReturn);
+		LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_CA] returned [%d]", dwReturn);
 		CLEANUP(SCARD_E_UNEXPECTED);
 	}
 
@@ -245,10 +245,10 @@ DWORD PteidCreateMSRoots(PCARD_DATA  pCardData, DWORD *pcbMSRoots, PBYTE *ppbMSR
 		pCardData->pfnCspFree(pbCertif);
 	}
 
-	dwReturn = PteidReadCert(pCardData, CERT_ROOTCA, &cbCertif, &pbCertif);
+	dwReturn = cal_read_cert(pCardData, CERT_ROOTCA, &cbCertif, &pbCertif);
 	if ( dwReturn != SCARD_S_SUCCESS )
 	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_ROOTCA] returned [%d]", dwReturn);
+		LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_ROOTCA] returned [%d]", dwReturn);
 		CLEANUP(SCARD_E_UNEXPECTED);
 	}
 #ifdef _DEBUG

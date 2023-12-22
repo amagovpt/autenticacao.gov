@@ -179,13 +179,13 @@ DWORD WINAPI   CardGetContainerInfo
 	*/
 	if (card_type != IAS_V5_CARD)
 	{
-		dwReturn = PteidReadCert(pCardData, dwCertSpec, &cbCertif, &pbCertif);
+		dwReturn = cal_read_cert(pCardData, dwCertSpec, &cbCertif, &pbCertif);
 		if (dwReturn != SCARD_S_SUCCESS)
 		{
 			if (bContainerIndex == 0)
-				LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
+				LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_AUTH] returned [%d]", dwReturn);
 			if (bContainerIndex == 1)
-				LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
+				LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_NONREP] returned [%d]", dwReturn);
 			CLEANUP(SCARD_E_UNEXPECTED);
 		}
 	}

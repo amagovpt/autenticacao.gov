@@ -125,13 +125,6 @@ extern DWORD PteidSelectAndReadFile
 				DWORD *cbStream, 
 				PBYTE* pbStream
 );
-extern DWORD PteidReadCert
-			(
-				PCARD_DATA  pCardData, 
-				DWORD dwCertSpec, 
-				DWORD *pcbCertif, 
-				PBYTE *ppbCertif
-			);
 extern DWORD   PteidAuthenticate
                (
                   PCARD_DATA     pCardData, 
