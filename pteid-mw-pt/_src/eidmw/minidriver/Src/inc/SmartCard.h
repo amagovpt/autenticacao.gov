@@ -116,15 +116,6 @@ extern DWORD PteidReadFile
 				DWORD *cbStream, 
 				PBYTE pbStream
 			);
-extern DWORD PteidSelectAndReadFile
-	      (
-			   PCARD_DATA  pCardData, 
-				DWORD dwOffset, 
-				BYTE cbFileID,
-				PBYTE pbFileID, 
-				DWORD *cbStream, 
-				PBYTE* pbStream
-);
 extern DWORD   PteidAuthenticate
                (
                   PCARD_DATA     pCardData, 
