@@ -354,7 +354,7 @@ DWORD WINAPI   CardSignData
 
 	if (card_type == GEMSAFE_CARD || card_type == IAS_V5_CARD)
 	{
-		dwReturn = PteidSignDataGemsafe(pCardData, 
+		dwReturn = cal_sign_data(pCardData, 
 			pInfo->bContainerIndex,
 			pInfo->cbData, 
 			pInfo->pbData, 

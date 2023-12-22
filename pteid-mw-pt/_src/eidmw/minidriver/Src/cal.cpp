@@ -138,3 +138,47 @@ DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey,
 
 	return SCARD_S_SUCCESS;
 }
+
+DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAttemptsRemaining, BYTE pin_id) {
+	auto &reader = oCardLayer->getReader(readerName);
+	try {
+		reader.UseHandle(pCardData->hScard);
+		reader.SelectApplication({ PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA) });
+		tPin tpin = reader.GetPin(pin_id);
+
+		std::string pin = std::string((const char*)pbPin, (size_t)cbPin);
+		unsigned long ulRemaining = 0;
+		auto res = reader.PinCmd(PIN_OP_VERIFY, tpin, pin, "", ulRemaining);
+
+		if (ulRemaining == 0)
+			return SCARD_W_CHV_BLOCKED;
+
+		if (!res)
+			return SCARD_W_WRONG_CHV;
+	}
+	catch (CMWException e) {
+		return EidmwToScardErr(e.GetError());
+	}
+
+	return SCARD_S_SUCCESS;
+}
+
+DWORD cal_sign_data(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature, BOOL pss_padding) {
+	auto &reader = oCardLayer->getReader(readerName);
+	try {
+		reader.UseHandle(pCardData->hScard);
+		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+
+		auto pkey = reader.GetPrivKey(pin_id);
+		auto signed_data = reader.Sign(pkey, pss_padding ? SIGN_ALGO_RSA_PSS : 0, { pbToBeSigned, cbToBeSigned });
+
+		*pcbSignature = signed_data.Size();
+		*ppbSignature = (PBYTE)pCardData->pfnCspAlloc(signed_data.Size());
+		memcpy(*ppbSignature, signed_data.GetBytes(), signed_data.Size());
+	}
+	catch (CMWException e) {
+		return EidmwToScardErr(e.GetError());
+	}
+
+	return SCARD_S_SUCCESS;
+}
