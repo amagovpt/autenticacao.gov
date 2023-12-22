@@ -564,7 +564,7 @@ DWORD CardGetSerialNo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD p
 			sizeof(vs->szSerialNumber), pdwDataLen);
 		if ( dwReturn != SCARD_S_SUCCESS )
 		{
-			LogTrace(LOGTYPE_ERROR, WHERE, "PteidGetCardSN returned [%d]", dwReturn);
+			LogTrace(LOGTYPE_ERROR, WHERE, "cal_get_card_sn returned [%d]", dwReturn);
 			CLEANUP(SCARD_E_UNEXPECTED);
 		}
 		vs->bSerialNumberSet = 1;

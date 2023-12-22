@@ -859,65 +859,6 @@ unsigned int matchDigestInfoPrefix(PBYTE hash, DWORD hash_len) {
 
 /****************************************************************************************************/
 
-#define WHERE "PteidGetCardSN"
-DWORD PteidGetCardSN(PCARD_DATA  pCardData, 
-	PBYTE pbSerialNumber, 
-	DWORD cbSerialNumber, 
-	PDWORD pdwSerialNumber) 
-{
-   DWORD                   dwReturn = 0;
-
-   SCARD_IO_REQUEST        ioSendPci = *g_pioSendPci;
-
-   unsigned char           Cmd[128];
-   unsigned int            uiCmdLg = 0;
-
-   unsigned char           recvbuf[256];
-   unsigned long           recvlen = sizeof(recvbuf);
-   BYTE                    SW1, SW2;
-
-   int                     i = 0;
-   int                     iWaitApdu = 100;
-   int   				   bRetry = 0;
-
-   if (cbSerialNumber < 8) {
-		CLEANUP(ERROR_INSUFFICIENT_BUFFER);
-   }
-
-   PteidSelectApplet(pCardData);
-
-   *pdwSerialNumber = 0;
-
-	if (card_type == IAS_V5_CARD || card_type == GEMSAFE_CARD)
-	{
-		Cmd[0] = 0x00;
-		Cmd[1] = 0xCA;
-		Cmd[2] = 0x9F;
-		Cmd[3] = 0x7F;
-		Cmd[4] = 0x2D;
-		uiCmdLg = 5;
-
-		dwReturn = SCardTransmit(pCardData->hScard, &ioSendPci, Cmd, uiCmdLg, NULL, recvbuf, &recvlen);
-		SW1 = recvbuf[recvlen - 2];
-		SW2 = recvbuf[recvlen - 1];
-
-		if (!checkStatusCode(WHERE" -> get CPLC data", dwReturn, SW1, SW2))
-			CLEANUP(dwReturn);
-
-		*pdwSerialNumber = 8;
-		memcpy(pbSerialNumber, recvbuf + 13, 8);
-
-		return (dwReturn);
-	}
-
-cleanup:
-   return (dwReturn);
-}
-
-#undef WHERE
-
-/****************************************************************************************************/
-
 #define WHERE "PteidSignData"
 DWORD PteidSignData(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
 {

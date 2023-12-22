@@ -81,13 +81,6 @@ typedef struct _FEATURES
 	DWORD GET_KEY_PRESSED;
 } FEATURES, *PFEATURES;
 
-extern DWORD PteidGetCardSN
-	(
-		PCARD_DATA  pCardData, 
-		PBYTE pbSerialNumber, 
-		DWORD cbSerialNumber, 
-		PDWORD pdwSerialNumber
-	);
 extern DWORD PteidSignData
 			(
 				PCARD_DATA  pCardData, 
