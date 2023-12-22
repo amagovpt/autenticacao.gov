@@ -100,7 +100,41 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 
 	return SCARD_S_SUCCESS;
 }
-		return -1;
+
+DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey, PBYTE *ppbPubKey) {
+	auto &reader = oCardLayer->getReader(readerName);
+	try {
+		reader.UseHandle(pCardData->hScard);
+
+		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });	
+
+		unsigned char cmd[16] = { 0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x86, 0x00, 0x00 };
+		const int                   PUBKEY_LEN = 64;
+		const int                   PUBKEY_OFFSET = 11;
+		long len;
+		CByteArray result_buff;
+
+		if (dwCertSpec == 2)
+			cmd[9] = 0x08;
+		else
+			cmd[9] = 0x06;
+
+		result_buff = reader.SendAPDU({ cmd, sizeof(cmd) });
+		if (result_buff.Size() == 0)
+			return SCARD_E_UNEXPECTED;
+
+		*pcbPubKey = sizeof(BCRYPT_ECCKEY_BLOB) + PUBKEY_LEN;
+		*ppbPubKey = (PBYTE)pCardData->pfnCspAlloc(*pcbPubKey);
+		((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->dwMagic = BCRYPT_ECDSA_PUBLIC_P256_MAGIC;
+		//It seems the Microsoft documentation is wrong on this cbKey field for EC keys: "The length, in bytes, of the key."
+		((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->cbKey = PUBKEY_LEN / 2;
+
+		memcpy((*ppbPubKey) + sizeof(BCRYPT_ECCKEY_BLOB), result_buff.GetBytes() + PUBKEY_OFFSET, PUBKEY_LEN);
+
 	}
-	return 0;
+	catch (CMWException e) {
+		return EidmwToScardErr(e.GetError());
+	}
+
+	return SCARD_S_SUCCESS;
 }

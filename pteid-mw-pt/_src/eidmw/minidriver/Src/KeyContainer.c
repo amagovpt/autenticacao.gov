@@ -203,7 +203,7 @@ DWORD WINAPI   CardGetContainerInfo
 	pContainerInfo->dwReserved = 0;
 	
 	if (card_type == IAS_V5_CARD)
-		dwReturn = PteidGetIASv5PubKey(pCardData,
+		dwReturn = cal_read_pub_key(pCardData,
 			dwCertSpec,
 			&(pContainerInfo->cbSigPublicKey),
 			&(pContainerInfo->pbSigPublicKey));
