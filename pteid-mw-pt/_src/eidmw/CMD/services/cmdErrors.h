@@ -33,6 +33,7 @@
 #define ERR_NULL_DATA           (ERR_ADDR_USER_BASE + 0x12)
 #define ERR_INV_DATA            (ERR_ADDR_USER_BASE + 0x13)
 #define ERR_OP_CANCELLED        (ERR_ADDR_USER_BASE + 0x14)
+#define ERR_DOC_NUM_EXCEEDED    (ERR_ADDR_USER_BASE + 0x15)
 
 #define SOAP_SUCCESS_CODE                   200
 #define IS_SOAP_ERROR(error)    ( ( error != ERR_NONE ) && ( error != SOAP_SUCCESS_CODE ) && ( error < ERR_ADDR_USER_BASE ) )

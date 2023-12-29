@@ -222,6 +222,14 @@ namespace eIDMW
         {
             cmdSignature.add_pdf_handler(&pdf_sig);
         }
+        else if (batch_size > MAX_CMD_SIGN_NUM){
+            // If the batch is larger than the max number
+            for (PDFSignature *sig : pdfSignatures)
+            {
+                delete sig;
+            }
+            handleErrorCode(ERR_DOC_NUM_EXCEEDED, false);
+        }
         else {
             cmdSignature.enableBatchMode();
             for (size_t i = 0; i < batch_size; i++)
@@ -319,6 +327,9 @@ namespace eIDMW
             MWLOG(LEV_ERROR, MOD_CMD, L"Error in CMD operation: isOTP=%s", (isOtp ? L"yes" : L"no"));
             switch (err)
             {
+            case ERR_DOC_NUM_EXCEEDED:
+                MWLOG(LEV_ERROR, MOD_CMD, "%s: Exceeded the max number of documents to sign.", __FUNCTION__);
+                throw CMWEXCEPTION(EIDMW_ERR_CMD_DOC_NUM);
             case ERR_GET_CERTIFICATE:
                 MWLOG(LEV_ERROR, MOD_CMD, "%s: Expired account or inactive signature subscription.", __FUNCTION__);
                 throw CMWEXCEPTION(EIDMW_ERR_CMD_INACTIVE_ACCOUNT);

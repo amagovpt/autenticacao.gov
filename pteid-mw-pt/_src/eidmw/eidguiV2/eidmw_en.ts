@@ -2268,6 +2268,10 @@
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Please try again. If this error persists, contact us through &lt;a href=&quot;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&quot;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;.</translation>
     </message>
+    <message>
+        <source>STR_SIGN_CMD_ERROR</source>
+        <translation>Exceeded the max number (100) of documents to sign with CMD.</translation>
+    </message>
 </context>
 <context>
     <name>Popup File</name>

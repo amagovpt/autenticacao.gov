@@ -983,6 +983,13 @@ PageServicesSignForm {
                 return
             }
 
+            if (fileCount > Constants.MAX_CMD_DOCS) {
+                const titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+                const bodyPopup = qsTranslate("Popup Card","STR_SIGN_CMD_ERROR")
+                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                return
+            }
+
             if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && number_of_attributes_selected() == 0) {
                 //SCAP switch checked but no attributes selected
                 const titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
@@ -1255,6 +1262,7 @@ PageServicesSignForm {
         onCountChanged: {
             console.log("filesModel onCountChanged: count = " + filesModel.count)
             fileLoaded = filesModel.count > 0
+            fileCount = filesModel.count
 
             propertyTextDragMsgImg.visible = !fileLoaded
 

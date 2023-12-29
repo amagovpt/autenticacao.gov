@@ -275,6 +275,7 @@
 #define EIDMW_ERR_CMD_INVALID_CODE               0xe1d01e0a
 #define EIDMW_ERR_CMD_INACTIVE_ACCOUNT           0xe1d01e0b
 #define EIDMW_ERR_CMD_SERVICE                    0xe1d01e0c
+#define EIDMW_ERR_CMD_DOC_NUM                    0xe1d01e0d
 
 #define EIDMW_ERR_PDF_SIGNATURE_SANITY_CHECK     0xe1d01e10
 

@@ -27,6 +27,7 @@ Item {
 
     property variant filesArray: []
     property bool fileLoaded: false
+    property int fileCount: 0
     property bool cardLoaded: false
     property bool signCertExpired: false
     property bool propertyBusyIndicatorRunning: false

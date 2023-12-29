@@ -306,3 +306,6 @@ var LOCATION_MAX_LINES = 2
 
 var PROVIDER_SCAP_MAX_LINES = 2
 var ATTR_SCAP_MAX_LINES = 10   
+
+// Sign constants
+var MAX_CMD_DOCS = 100

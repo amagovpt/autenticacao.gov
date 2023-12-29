@@ -2266,6 +2266,10 @@
         <source>STR_GENERIC_ERROR_MSG</source>
         <translation>Por favor tente novamente e, caso o erro persista, contacte-nos através da página &lt;a href=&quot;https://www.autenticacao.gov.pt/contactos?appRedirect=AutenticacaoGovDesktop&quot;&gt;www.autenticacao.gov.pt/contactos&lt;/a&gt;.</translation>
     </message>
+    <message>
+        <source>STR_SIGN_CMD_ERROR</source>
+        <translation>Excedeu o numero máximo (100) de documentos que podem ser assinados com a CMD.</translation>
+    </message>
 </context>
 <context>
     <name>Popup File</name>

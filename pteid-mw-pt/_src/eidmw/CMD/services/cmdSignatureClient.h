@@ -21,6 +21,7 @@
 using namespace eIDMW;
 
 #define B64_ID_FROM_HASH_SIZE 8
+#define MAX_CMD_SIGN_NUM 100
 
 namespace eIDMW {
 

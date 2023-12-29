@@ -340,6 +340,9 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
 				error_message = "The CMD account is expired or inactive.";
 				break;
+			case EIDMW_ERR_CMD_DOC_NUM:
+				error_message = "Exceeded the max number (100) of documents to sign with CMD.";
+				break;
 			//Remote address loading errors
 			case EIDMW_REMOTEADDR_CONNECTION_ERROR:
 				error_message = "Online Address: couldn't connect to service. "+debughelp_msg;
