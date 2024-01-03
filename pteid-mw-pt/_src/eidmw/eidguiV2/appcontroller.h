@@ -37,16 +37,11 @@ using namespace eIDMW;
 class AppController : public QObject
 {
     Q_OBJECT
-    //  Used to dynamic translation in QML (QTBUG-15602)
-    Q_PROPERTY(QString autoTr READ getAutoTr NOTIFY languageChanged)
 public:
     explicit AppController(GUISettings &settings, QObject *parent = 0);
     GUISettings&    getSettings( void )
     {
         return m_Settings;
-    }
-    QString getAutoTr() {
-     return "";
     }
 
 public slots:

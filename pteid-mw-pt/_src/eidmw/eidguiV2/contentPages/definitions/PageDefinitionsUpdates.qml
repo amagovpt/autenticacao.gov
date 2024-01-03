@@ -142,7 +142,7 @@ PageDefinitionsUpdatesForm {
                 propertyButtonCancelUpdateCerts.visible = false
                 propertyReleaseNoteScrollViewCerts.visible = false
                 propertyReleaseScrollViewTextCerts.visible = false
-                restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
+                restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES")
                 restart_dialog.open()
             }
         }

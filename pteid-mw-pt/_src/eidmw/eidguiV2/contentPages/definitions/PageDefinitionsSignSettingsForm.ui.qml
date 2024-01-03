@@ -100,7 +100,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
-                                      "STR_CERTIFICATES_TITLE") + controler.autoTr
+                                      "STR_CERTIFICATES_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     // If this component is changed, the workaround to scroll the page automatically with
@@ -172,7 +172,7 @@ Item {
                         id: checkboxRegister
                         text: qsTranslate(
                                   "PageDefinitionsApp",
-                                  "STR_CERTIFICATES_REGISTER_OP") + controler.autoTr
+                                  "STR_CERTIFICATES_REGISTER_OP")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -197,7 +197,7 @@ Item {
                         id: checkboxRemove
                         text: qsTranslate(
                                   "PageDefinitionsApp",
-                                  "STR_CERTIFICATES_REMOVE_OP") + controler.autoTr
+                                  "STR_CERTIFICATES_REMOVE_OP")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -240,7 +240,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
-                                      "STR_TIMESTAMP_TITLE") + controler.autoTr
+                                      "STR_TIMESTAMP_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -307,7 +307,7 @@ Item {
                     CheckBox {
                         id: checkboxTimeStamp
                         text: qsTranslate("PageDefinitionsApp",
-                                          "STR_TIMESTAMP_OP") + controler.autoTr
+                                          "STR_TIMESTAMP_OP")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -342,7 +342,7 @@ Item {
                             font.italic: textFieldTimeStamp.text === "" ? true : false
                             placeholderText: qsTranslate(
                                                  "PageDefinitionsApp",
-                                                 "STR_TIMESTAMP_URL_OP") + controler.autoTr
+                                                 "STR_TIMESTAMP_URL_OP")
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.bold: activeFocus
@@ -389,7 +389,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsSignSettings",
-                                      "STR_OFFICE_TITLE") + controler.autoTr
+                                      "STR_OFFICE_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -432,7 +432,7 @@ Item {
                         id: checkboxDisable
                         text: qsTranslate(
                                   "PageDefinitionsSignSettings",
-                                  "STR_DISABLE_EMAIL_MATCH") + controler.autoTr
+                                  "STR_DISABLE_EMAIL_MATCH")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -473,7 +473,7 @@ Item {
                     font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
-                    text: qsTranslate("PageDefinitionsApp","STR_CMD_CERT_TITLE") + controler.autoTr
+                    text: qsTranslate("PageDefinitionsApp","STR_CMD_CERT_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -525,7 +525,7 @@ Item {
                             font.bold: activeFocus
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             width: parent.width
-                            text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TEXT") + controler.autoTr
+                            text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TEXT")
                             wrapMode: Text.WordWrap
                             Accessible.role: Accessible.StaticText
                             Accessible.name: text
@@ -574,7 +574,7 @@ Item {
                             id: checkboxCMDRegRemember
                             text: qsTranslate(
                                       "PageDefinitionsSignSettings",
-                                      "STR_CMD_REGISTER_REMEMBER") + controler.autoTr
+                                      "STR_CMD_REGISTER_REMEMBER")
                             height: Constants.HEIGHT_BOTTOM_COMPONENT
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -597,7 +597,7 @@ Item {
                     }
                     Button {
                         id: loadCMDCertsButton
-                        text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_BUTTON") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_BUTTON")
                         height: Constants.HEIGHT_BOTTOM_COMPONENT
                         width: Constants.WIDTH_BUTTON
                         anchors.top: linkRegisterCMDCert.bottom

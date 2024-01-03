@@ -104,7 +104,7 @@ Item {
                     font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
-                    text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TITLE") + controler.autoTr
+                    text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: textReader.text
                     KeyNavigation.tab: textSelectReader
@@ -170,7 +170,7 @@ Item {
                         KeyNavigation.backtab: textReader
                         KeyNavigation.up: textReader
                         KeyNavigation.left: textReader
-                        text: qsTranslate("PageDefinitionsApp", "STR_SELECT_READER") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_SELECT_READER")
                     }
 
                     ComboBox {
@@ -201,7 +201,7 @@ Item {
                     CheckBox {
                         id: checkboxEnablePinpad
                         enabled: false
-                        text: qsTranslate("PageDefinitionsApp", "STR_USE_PINPAD") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_USE_PINPAD")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -243,7 +243,7 @@ Item {
                     font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
-                    text: qsTranslate("PageDefinitionsApp","STR_START_TITLE") + controler.autoTr
+                    text: qsTranslate("PageDefinitionsApp","STR_START_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -285,7 +285,7 @@ Item {
 
                     CheckBox {
                         id: checkboxAutoStart
-                        text: qsTranslate("PageDefinitionsApp","STR_AUTO_START_OP") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp","STR_AUTO_START_OP")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -326,7 +326,7 @@ Item {
                     font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
-                    text: qsTranslate("PageDefinitionsApp","STR_START_AUTOUPDATES_TITLE") + controler.autoTr
+                    text: qsTranslate("PageDefinitionsApp","STR_START_AUTOUPDATES_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -368,7 +368,7 @@ Item {
 
                     CheckBox {
                         id: checkboxStartAutoupdate
-                        text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TEXT") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp","STR_CARD_READER_TEXT")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -411,7 +411,7 @@ Item {
                     font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
-                    text: qsTranslate("PageDefinitionsApp","STR_LANGUAGE_TITLE") + controler.autoTr
+                    text: qsTranslate("PageDefinitionsApp","STR_LANGUAGE_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -460,7 +460,7 @@ Item {
                             id: radioButtonPT
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                             text: qsTranslate("PageDefinitionsApp",
-                                              "STR_PT_NAME_OP") + controler.autoTr
+                                              "STR_PT_NAME_OP")
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
@@ -489,7 +489,7 @@ Item {
                             id: radioButtonUK
                             height: Constants.HEIGHT_RADIO_BOTTOM_COMPONENT
                             text: qsTranslate("PageDefinitionsApp",
-                                              "STR_UK_NAME_OP") + controler.autoTr
+                                              "STR_UK_NAME_OP")
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
@@ -530,7 +530,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
-                                      "STR_APP_LOOK_TITLE") + controler.autoTr
+                                      "STR_APP_LOOK_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -580,7 +580,7 @@ Item {
                         CheckBox {
                             id: checkboxShowAnime
                             text: qsTranslate("PageDefinitionsApp",
-                                            "STR_SHOW_ANIME_OP") + controler.autoTr
+                                            "STR_SHOW_ANIME_OP")
                             height: 25
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -621,7 +621,7 @@ Item {
                     font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
-                    text:  qsTranslate("PageDefinitionsApp", "STR_SCALE_APPLICATION_TITLE") + controler.autoTr
+                    text:  qsTranslate("PageDefinitionsApp", "STR_SCALE_APPLICATION_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -681,7 +681,7 @@ Item {
                         KeyNavigation.backtab: titleScale
                         KeyNavigation.up: titleScale
                         KeyNavigation.left: titleScale
-                        text: qsTranslate("PageDefinitionsApp", "STR_SCALE_APPLICATION_DESC") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_SCALE_APPLICATION_DESC")
                     }
 
                     Item {
@@ -694,7 +694,7 @@ Item {
                         CheckBox {
                             id: checkboxUseSystemScale
                             enabled: false
-                            text: qsTranslate("PageDefinitionsApp", "STR_USE_SYSTEM_SETTING") + controler.autoTr
+                            text: qsTranslate("PageDefinitionsApp", "STR_USE_SYSTEM_SETTING")
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.capitalization: Font.MixedCase
@@ -737,7 +737,7 @@ Item {
                             KeyNavigation.backtab: checkboxUseSystemScale.visible ? checkboxUseSystemScale : textScaleDesc
                             KeyNavigation.up: checkboxUseSystemScale.visible ? checkboxUseSystemScale : textScaleDesc
                             KeyNavigation.left: checkboxUseSystemScale.visible ? checkboxUseSystemScale : textScaleDesc
-                            text: qsTranslate("PageDefinitionsApp", "STR_MANUAL_SCALING") + controler.autoTr
+                            text: qsTranslate("PageDefinitionsApp", "STR_MANUAL_SCALING")
                             verticalAlignment: Text.AlignVCenter
                             opacity: !checkboxUseSystemScale.checked ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                         }
@@ -800,7 +800,7 @@ Item {
                     font.bold: activeFocus
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
-                    text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_TITLE") + controler.autoTr
+                    text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -866,7 +866,7 @@ Item {
                         KeyNavigation.backtab: dateDebugMode
                         KeyNavigation.up: dateDebugMode
                         KeyNavigation.left: dateDebugMode
-                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_DESCRIPTION") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_DESCRIPTION")
                     }
 
                     Text {
@@ -890,7 +890,7 @@ Item {
                         KeyNavigation.backtab: debugModeDescriptionTextField
                         KeyNavigation.up: debugModeDescriptionTextField
                         KeyNavigation.left: debugModeDescriptionTextField
-                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP1") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP1")
                     }
 
                     CheckBox {
@@ -900,7 +900,7 @@ Item {
                         anchors.left: debugModeStep1TextField.right
                         anchors.leftMargin: 10
                         enabled: false
-                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_ENABLE") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_ENABLE")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -943,7 +943,7 @@ Item {
                         KeyNavigation.backtab: checkboxDebugMode
                         KeyNavigation.up: checkboxDebugMode
                         KeyNavigation.left: checkboxDebugMode
-                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP2") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP2")
                             
                         
                     }
@@ -968,7 +968,7 @@ Item {
                         KeyNavigation.backtab: debugModeStep2TextField
                         KeyNavigation.up: debugModeStep2TextField
                         KeyNavigation.left: debugModeStep2TextField
-                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP3") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP3")
                     }
 
                     Text {
@@ -993,7 +993,7 @@ Item {
                         KeyNavigation.backtab: debugModeStep3TextField
                         KeyNavigation.up: debugModeStep3TextField
                         KeyNavigation.left: debugModeStep3TextField
-                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP4") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP4")
                     }
 
                     Button {
@@ -1016,7 +1016,7 @@ Item {
                         onClicked: {
                             controler.zipLogs()
                         }
-                        text: qsTranslate("PageDefinitionsApp", "STR_LOG_ZIP_BUTTON")  + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_LOG_ZIP_BUTTON") 
                     }
 
                     Components.Link {
@@ -1026,7 +1026,7 @@ Item {
                         anchors.topMargin: 3 * Constants.SIZE_TEXT_V_SPACE
                         width: parent.width - 20
                         propertyText.color: debugModeStep3TextField.color
-                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5") + controler.autoTr
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_DEBUG_MODE_STEP5")
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_FIELD
                         propertyText.font.bold: activeFocus
@@ -1049,9 +1049,9 @@ Item {
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr + " "
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
                                             + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#obtenção-do-relatório-para-análise-através-do-menu-configurações'>"
-                                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
                         propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#obtenção-do-relatório-para-análise-através-do-menu-configurações'
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
@@ -1091,7 +1091,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
-                                      "STR_APP_GRAPHICS_TITLE") + controler.autoTr
+                                      "STR_APP_GRAPHICS_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -1160,9 +1160,9 @@ Item {
                         anchors.top: graphicsTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + controler.autoTr + " "
+                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
                                             + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'>"
-                                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + controler.autoTr
+                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
                         propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
@@ -1199,7 +1199,7 @@ Item {
                         KeyNavigation.backtab: textLink.propertyText
                         KeyNavigation.up: textLink.propertyText
                         KeyNavigation.left: textLink.propertyText
-                        text: qsTranslate("PageDefinitionsApp", "STR_ACCEL_MODE") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp", "STR_ACCEL_MODE")
                         verticalAlignment: Text.AlignVCenter
                     }
                     ComboBox {
@@ -1222,9 +1222,9 @@ Item {
                             handleKeyPressed(event.key, comboboxAccelGraphics)
                         }
                         model: [
-                            qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_OPENGL") + controler.autoTr,
-                            qsTranslate("PageDefinitionsApp", "STR_HARDWARE") + controler.autoTr,
-                            qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_DIRECT3D") + controler.autoTr
+                            qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_OPENGL"),
+                            qsTranslate("PageDefinitionsApp", "STR_HARDWARE"),
+                            qsTranslate("PageDefinitionsApp", "STR_SOFTWARE_DIRECT3D")
                         ]
                         KeyNavigation.tab: textAppTelemetry
                         KeyNavigation.down: textAppTelemetry
@@ -1257,7 +1257,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
-                                      "STR_TELEMETRY_TITLE") + controler.autoTr
+                                      "STR_TELEMETRY_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -1302,7 +1302,7 @@ Item {
                     CheckBox {
                         id: checkBoxUseTelemetry
                         text: qsTranslate("PageDefinitionsApp",
-                                          "STR_USE_TELEMETRY_COMBOBOX_TEXT") + controler.autoTr
+                                          "STR_USE_TELEMETRY_COMBOBOX_TEXT")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -1345,7 +1345,7 @@ Item {
                     color: Constants.COLOR_TEXT_LABEL
                     height: Constants.SIZE_TEXT_LABEL
                     text: qsTranslate("PageDefinitionsApp",
-                                      "STR_NETWORK_TITLE") + controler.autoTr
+                                      "STR_NETWORK_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
                     Keys.onPressed: {
@@ -1390,7 +1390,7 @@ Item {
                         id: checkboxSystemProxy
                         text: qsTranslate(
                                   "PageDefinitionsApp",
-                                  "STR_NETWORK_SYSTEM_PROXY_OP") + controler.autoTr
+                                  "STR_NETWORK_SYSTEM_PROXY_OP")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -1416,7 +1416,7 @@ Item {
                     CheckBox {
                         id: checkboxProxy
                         text: qsTranslate("PageDefinitionsApp",
-                                          "STR_NETWORK_PROXY_OP") + controler.autoTr
+                                          "STR_NETWORK_PROXY_OP")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -1453,7 +1453,7 @@ Item {
                             font.bold: activeFocus
                             placeholderText: qsTranslate(
                                                  "PageDefinitionsApp",
-                                                 "STR_NETWORK_PROXY_ADDRESS_OP") + controler.autoTr
+                                                 "STR_NETWORK_PROXY_ADDRESS_OP")
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             enabled: checkboxProxy.checked
@@ -1486,7 +1486,7 @@ Item {
                             font.bold: activeFocus
                             placeholderText: qsTranslate(
                                                  "PageDefinitionsApp",
-                                                 "STR_NETWORK_PROXY_PORT_OP") + controler.autoTr
+                                                 "STR_NETWORK_PROXY_PORT_OP")
                             validator: RegExpValidator {
                                 regExp: /[0-9]+/
                             }
@@ -1510,7 +1510,7 @@ Item {
                         id: checkboxAutProxy
                         x: parent.width * 0.40
                         text: qsTranslate("PageDefinitionsApp",
-                                          "STR_NETWORK_AUTH_OP") + controler.autoTr
+                                          "STR_NETWORK_AUTH_OP")
                         height: 25
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -1549,7 +1549,7 @@ Item {
                             font.italic: textFieldAutUser.text === "" ? true : false
                             placeholderText: qsTranslate(
                                                  "PageDefinitionsApp",
-                                                 "STR_NETWORK_AUTH_USERNAME_OP") + controler.autoTr
+                                                 "STR_NETWORK_AUTH_USERNAME_OP")
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.bold: activeFocus
@@ -1580,7 +1580,7 @@ Item {
                             font.bold: activeFocus
                             placeholderText: qsTranslate(
                                                  "PageDefinitionsApp",
-                                                 "STR_NETWORK_AUTH_PASSWORD_OP") + controler.autoTr
+                                                 "STR_NETWORK_AUTH_PASSWORD_OP")
                             echoMode: TextInput.Password
                             font.family: lato.name
                             font.pixelSize: Constants.SIZE_TEXT_FIELD

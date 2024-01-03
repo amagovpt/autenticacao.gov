@@ -79,7 +79,7 @@ PageDefinitionsSCAPForm {
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
             isCardPresent = false
-            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
                 return;
@@ -93,19 +93,19 @@ PageDefinitionsSCAPForm {
             else if (error_code == GAPI.SodCardReadError) {
                 bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") 
                     + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_CARD_ERROR_MSG") 
-                    + controler.autoTr
+                   
             }
             else if (error_code == GAPI.CardUserPinCancel) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
                }
             else if (error_code == GAPI.CardPinTimeout) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
             }
             else if (error_code == GAPI.IncompatibleReader) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_INCOMPATIBLE_READER")
             }
             else {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             propertyButtonLoadEntityAttributes.enabled =
                     !isLoadingCache && isCardPresent && isAnyEntitySelected()
@@ -118,20 +118,20 @@ PageDefinitionsSCAPForm {
         }
         onSignalCardChanged: {
             console.log("Definitions SCAP Signature --> onSignalCardChanged")
-            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 isCardPresent = false
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 isCardPresent = true
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startCardReading()
             }
             else{
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
             }
             propertyButtonLoadEntityAttributes.enabled =
                     !isLoadingCache && isCardPresent && isAnyEntitySelected()

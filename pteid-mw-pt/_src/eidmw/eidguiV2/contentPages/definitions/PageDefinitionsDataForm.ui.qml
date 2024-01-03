@@ -69,7 +69,7 @@ Item {
                 font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("PageDataApp","STR_CACHE_TITLE") + controler.autoTr
+                text: qsTranslate("PageDataApp","STR_CACHE_TITLE")
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: cacheAppTextField
@@ -146,7 +146,7 @@ Item {
                     CheckBox {
                         id: checkboxEnableCache
                         height: parent.height
-                        text: qsTranslate("PageDataApp","STR_TOGGLE_CACHE_CHECKBOX") + controler.autoTr
+                        text: qsTranslate("PageDataApp","STR_TOGGLE_CACHE_CHECKBOX")
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
@@ -177,7 +177,7 @@ Item {
                         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                         Text {
                             id: cacheAppSizeTextField
-                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE_NO_INFO") + controler.autoTr
+                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE_NO_INFO")
                             width: parent.width
                             height: parent.height
                             font.capitalization: Font.MixedCase
@@ -202,7 +202,7 @@ Item {
                         anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
                         Button {
                             id: buttonRemoveAppCache
-                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE") + controler.autoTr
+                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE")
                             width: parent.width
                             height: Constants.HEIGHT_BOTTOM_COMPONENT
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -240,7 +240,7 @@ Item {
                 font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("PageDataApp","STR_SCAP_CACHE_TITLE") + controler.autoTr
+                text: qsTranslate("PageDataApp","STR_SCAP_CACHE_TITLE")
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: cacheSCAPTextField
@@ -317,7 +317,7 @@ Item {
                         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                         Text {
                             id: cacheSCAPSizeTextField
-                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE_NO_INFO") + controler.autoTr
+                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE_NO_INFO")
                             width: parent.width
                             height: parent.height
                             font.capitalization: Font.MixedCase
@@ -342,7 +342,7 @@ Item {
                         anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
                         Button {
                             id: buttonRemoveSCAPCache
-                            text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE") + controler.autoTr
+                            text: qsTranslate("PageDefinitionsSCAP","STR_SCAP_ATTRIBUTES_BUTTON_REMOVE")
                             width: parent.width
                             height: Constants.HEIGHT_BOTTOM_COMPONENT
                             font.pixelSize: Constants.SIZE_TEXT_FIELD

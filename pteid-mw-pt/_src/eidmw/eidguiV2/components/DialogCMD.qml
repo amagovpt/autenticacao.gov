@@ -88,7 +88,7 @@ Item {
             id: dialogTitle
             visible: true
             elide: Label.ElideRight
-            text: qsTranslate("PageServicesSign","STR_SIGN_CMD") + controler.autoTr
+            text: qsTranslate("PageServicesSign","STR_SIGN_CMD")
             padding: 24
             bottomPadding: 0
             font.bold: dialogContent.activeFocus
@@ -131,7 +131,7 @@ Item {
                     height: 25
                     visible: false
                     propertyText.text: "<a href='https://www.autenticacao.gov.pt/cmd-pedido-chave'>"
-                            + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL") + controler.autoTr
+                            + qsTranslate("PageServicesSign","STR_SIGN_CMD_URL")
                     propertyText.font.italic: true
                     propertyText.verticalAlignment: Text.AlignVCenter
                     anchors.top: parent.top
@@ -207,7 +207,7 @@ Item {
                     visible: false
                     Text {
                         id: textMobileNumber
-                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM") + controler.autoTr
+                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM")
                         verticalAlignment: Text.AlignVCenter
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -244,7 +244,7 @@ Item {
                         width: parent.width * 0.25
                         anchors.verticalCenter: parent.verticalCenter
                         font.italic: textFieldMobileNumber.text === "" ? true: false
-                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM_OP") + controler.autoTr + "?"
+                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM_OP") + "?"
                         validator: RegExpValidator { regExp: /[0-9]+/ }
                         maximumLength: 15
                         font.family: lato.name
@@ -274,7 +274,7 @@ Item {
                     visible: false
                     Text {
                         id: textPin
-                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN") + controler.autoTr
+                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN")
                         verticalAlignment: Text.AlignVCenter
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -290,7 +290,7 @@ Item {
                         width: parent.width * 0.7
                         anchors.verticalCenter: parent.verticalCenter
                         font.italic: textFieldPin.text === "" ? true: false
-                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + controler.autoTr + "?"
+                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + "?"
                         validator: RegExpValidator { regExp: /[0-9]{4,8}/ }
                         echoMode : TextInput.Normal
                         font.family: lato.name
@@ -347,7 +347,7 @@ Item {
                     visible: false
                     Text {
                         id: textReturnCode
-                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE") + controler.autoTr + ":"
+                        text: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE") + ":"
                         verticalAlignment: Text.AlignVCenter
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
@@ -363,7 +363,7 @@ Item {
                         width: parent.width * 0.5
                         anchors.verticalCenter: parent.verticalCenter
                         font.italic: textFieldReturnCode.text === "" ? true: false
-                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE_OP") + controler.autoTr + "?"
+                        placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE_OP") + "?"
                         validator: RegExpValidator { regExp: /^[0-9]{6}$/ }
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -398,7 +398,7 @@ Item {
                         anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
                         anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTranslate("PageServicesSign","STR_SEND_SMS_DESC") + controler.autoTr
+                        text: qsTranslate("PageServicesSign","STR_SEND_SMS_DESC")
                         wrapMode: Text.WordWrap
                         horizontalAlignment: Text.AlignJustify
                     }
@@ -418,7 +418,7 @@ Item {
             }
             CheckBox {
                 id: checkboxDontAskAgain
-                text: qsTranslate("main","STR_DONT_ASK_AGAIN") + controler.autoTr
+                text: qsTranslate("main","STR_DONT_ASK_AGAIN")
                 height: 25
                 visible: false
                 font.family: lato.name
@@ -445,11 +445,11 @@ Item {
                     PropertyChanges {target: rectMobileNumber; visible: true}
                     PropertyChanges {target: textFieldMobileNumber; visible: true; focus: true}
                     PropertyChanges {target: rectPin; visible: true}
-                    PropertyChanges {target: textMessageTop; text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN") + controler.autoTr}
+                    PropertyChanges {target: textMessageTop; text: qsTranslate("PageServicesSign","STR_SIGN_INSERT_LOGIN")}
                     PropertyChanges {
                         target: dialogTitle
                         restoreEntryValues : false
-                        text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TITLE") + controler.autoTr
+                        text: qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TITLE")
                     }
                     PropertyChanges {target: buttonCancel; prev: textFieldPin}
                     PropertyChanges {target: buttonConfirm; enabled: textFieldMobileNumber.acceptableInput && textFieldPin.acceptableInput}
@@ -475,14 +475,14 @@ Item {
                 State {
                     name: Constants.DLG_STATE.LOAD_ATTRIBUTES
                     PropertyChanges {target: buttonConfirm; visible: true; }
-                    PropertyChanges {target: buttonConfirm; text: qsTranslate("PageServicesSign","STR_LOAD_SCAP_ATTRIBUTES") + controler.autoTr}
+                    PropertyChanges {target: buttonConfirm; text: qsTranslate("PageServicesSign","STR_LOAD_SCAP_ATTRIBUTES")}
                     PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {
                         target: labelCMDText;
                         visible: true;
                         propertyLinkUrl: ""
-                        propertyText.text: qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR") + controler.autoTr;
-                        propertyAccessibleText: qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR") + controler.autoTr;
+                        propertyText.text: qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR");
+                        propertyAccessibleText: qsTranslate("Popup File","STR_POPUP_LOAD_SCAP_ATTR");
                     }
                 },
                 State {
@@ -497,16 +497,16 @@ Item {
                 State {
                     name: Constants.DLG_STATE.OPEN_FILE
                     PropertyChanges {target: labelCMDText; visible: true; propertyLinkUrl: ""}
-                    PropertyChanges {target: buttonConfirm; text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN") + controler.autoTr}
+                    PropertyChanges {target: buttonConfirm; text: qsTranslate("Popup File","STR_POPUP_FILE_OPEN")}
                     PropertyChanges {target: buttonConfirm; visible: true}
                     PropertyChanges {target: progressBar; visible: true}
                     PropertyChanges {
                         target: labelCMDText
                         visible: true
-                        propertyText.text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") + controler.autoTr :
-                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI") + controler.autoTr
-                        propertyAccessibleText: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") + controler.autoTr :
-                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI") + controler.autoTr
+                        propertyText.text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI")
+                        propertyAccessibleText: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN") :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_MULTI")
                     }
                 },
                 State {
@@ -515,21 +515,21 @@ Item {
                     PropertyChanges {target: progressBarIndeterminate; visible: false}
                     PropertyChanges {target: buttonCancel; visible: false}
                     PropertyChanges {target: buttonConfirm; visible: true}
-                    PropertyChanges {target: buttonConfirm; text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM") + controler.autoTr}
+                    PropertyChanges {target: buttonConfirm; text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")}
                     PropertyChanges {
                         target: dialogTitle
                         restoreEntryValues : false
-                        text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE") + controler.autoTr :
-                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE_MULTI") + controler.autoTr
+                        text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE") :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE_MULTI")
                     }
                     PropertyChanges {
                         target: labelCMDText;
                         visible: true;
                         propertyLinkUrl: ""
-                        propertyText.text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR") + controler.autoTr :
-                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_MULTI") + controler.autoTr
-                        propertyAccessibleText: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR") + controler.autoTr :
-                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_MULTI") + controler.autoTr
+                        propertyText.text: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR") :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_MULTI")
+                        propertyAccessibleText: signSingleFile ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR") :
+                                               qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_MULTI")
                     }
                 }
             ]
@@ -544,7 +544,7 @@ Item {
                 id: buttonCancel
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
-                text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CANCEL") + controler.autoTr
+                text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CANCEL")
                 visible: dialogContent.state != Constants.DLG_STATE.SHOW_MESSAGE
                 anchors.left: parent.left
                 anchors.leftMargin: cmdDialog.padding
@@ -571,7 +571,7 @@ Item {
                 visible: rectSendSMS.visible
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
-                text: qsTranslate("main","STR_SEND_BY_SMS_BUTTON") + controler.autoTr
+                text: qsTranslate("main","STR_SEND_BY_SMS_BUTTON")
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.family: lato.name
@@ -597,7 +597,7 @@ Item {
                 id: buttonConfirm
                 width: Constants.WIDTH_BUTTON
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
-                text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM") + controler.autoTr
+                text: qsTranslate("PageServicesSign","STR_CMD_POPUP_CONFIRM")
                 anchors.right: parent.right
                 anchors.rightMargin: cmdDialog.padding
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -666,7 +666,7 @@ Item {
         else {
             console.log("Error: invalid cmd dialog type: " + type)
             dialogContent.state = Constants.DLG_STATE.SHOW_MESSAGE
-            labelCMDText.propertyText.text = qsTranslate("GAPI", "STR_POPUP_ERROR") + controler.autoTr
+            labelCMDText.propertyText.text = qsTranslate("GAPI", "STR_POPUP_ERROR")
         }
 
         cmdDialog.open()

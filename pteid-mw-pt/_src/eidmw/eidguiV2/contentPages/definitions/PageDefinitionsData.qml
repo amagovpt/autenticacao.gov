@@ -36,27 +36,27 @@ PageDefinitionsDataForm {
         onSignalCardAccessError: {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
             propertyBusyIndicator.running = false;
-            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD_READER")
             }
             else if (error_code == GAPI.NoCardFound) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CARD")
             }
             else if (error_code == GAPI.SodCardReadError) {
                 bodyPopup = qsTranslate("Popup Card","STR_SOD_VALIDATION_ERROR") 
                     + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_CARD_ERROR_MSG") 
-                    + controler.autoTr
+                   
             }
             else if (error_code == GAPI.CardUserPinCancel) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_CANCELED")
             }
             else if (error_code == GAPI.CardPinTimeout) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_PIN_TIMEOUT")
             }
             else {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_ACCESS_ERROR")
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
@@ -64,18 +64,18 @@ PageDefinitionsDataForm {
         }
         onSignalCardChanged: {
             console.log("Definitions SCAP Signature --> onSignalCardChanged")
-            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startCardReading()
             }
             else{
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
@@ -83,16 +83,16 @@ PageDefinitionsDataForm {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
             updateCacheSize();
             propertyBusyIndicator.running = false
-            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE") + controler.autoTr
-            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC") + controler.autoTr
+            var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalRemoveSCAPAttributesFail: {
             console.log("Definitions SCAP - Signal Remove SCAP Attributes Fail")
             updateCacheSize();
             propertyBusyIndicator.running = false
-            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR") + controler.autoTr
-            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_ERROR") + controler.autoTr
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_ERROR")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
         onSignalCacheNotReadable:{

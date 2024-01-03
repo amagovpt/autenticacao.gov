@@ -31,11 +31,11 @@ PageDefinitionsSignSettingsForm {
             propertyIsRootCaCertInstalled = successful
 
             var titlePopup = successful ? 
-                            qsTranslate("GAPI","STR_POPUP_SUCESS") + controler.autoTr :
-                            qsTranslate("GAPI","STR_POPUP_ERROR") + controler.autoTr
+                            qsTranslate("GAPI","STR_POPUP_SUCESS") :
+                            qsTranslate("GAPI","STR_POPUP_ERROR")
             var bodyPopup = successful ?
-                            qsTranslate("PageDefinitionsApp","STR_ROOT_CERT_INSTALLED_SUCCESS") + controler.autoTr :
-                            qsTranslate("PageDefinitionsApp","STR_ROOT_CERT_INSTALLED_ERROR") + controler.autoTr
+                            qsTranslate("PageDefinitionsApp","STR_ROOT_CERT_INSTALLED_SUCCESS") :
+                            qsTranslate("PageDefinitionsApp","STR_ROOT_CERT_INSTALLED_ERROR")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
@@ -45,7 +45,7 @@ PageDefinitionsSignSettingsForm {
             propertyCheckboxRegister.checked ? gapi.setRegCertValue(true) :
                                                gapi.setRegCertValue(false)
             if (propertyCheckboxRegister.enabled) {
-                restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_REGISTER_CERTIFICATE") + controler.autoTr
+                restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_REGISTER_CERTIFICATE")
                 restart_dialog.open()
             }
         }
@@ -56,7 +56,7 @@ PageDefinitionsSignSettingsForm {
                                              gapi.setRemoveCertValue(false)
 
             if (propertyCheckboxRemove.enabled) {
-                restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_REMOVE_CERTIFICATE") + controler.autoTr
+                restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_REMOVE_CERTIFICATE")
                 restart_dialog.open()
             }
         }

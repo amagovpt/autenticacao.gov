@@ -77,7 +77,7 @@ Item {
                 font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_APP_TITLE") + controler.autoTr
+                text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_APP_TITLE")
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: textDescription.visible ? textDescription : textProgressBar
@@ -475,7 +475,7 @@ Item {
                 font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TITLE") + controler.autoTr
+                text: qsTranslate("PageDefinitionsUpdates","STR_UPDATE_CERTS_TITLE")
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
                 KeyNavigation.tab: textDescriptionCerts

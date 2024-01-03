@@ -137,7 +137,7 @@ Load language error. Please reinstall the application"
         }
         onSignalAutoUpdateSuccess: {
             if(updateType == GAPI.AutoUpdateCerts){
-                restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES") + controler.autoTr
+                restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES")
                 restart_dialog.open()
             }
         }
@@ -202,7 +202,7 @@ Load language error. Please reinstall the application"
 
         header: Label {
             id: labelReaderContext
-            text: qsTr("STR_WARNING") + controler.autoTr
+            text: qsTr("STR_WARNING") 
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -222,7 +222,7 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: textMessageTop
-                    text: qsTr("STR_MULTIPLE_CARDS_DETECTED") + controler.autoTr
+                    text: qsTr("STR_MULTIPLE_CARDS_DETECTED") 
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
@@ -260,7 +260,7 @@ Load language error. Please reinstall the application"
                 visible: true
                 Text {
                     id: textNote
-                    text:  qsTr("STR_CHANGE_READER_INFO") + controler.autoTr
+                    text:  qsTr("STR_CHANGE_READER_INFO") 
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
                     color: Constants.COLOR_TEXT_LABEL
@@ -338,7 +338,7 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelRestartText
-                    text: qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") + controler.autoTr
+                    text: qsTranslate("Popup Card", "STR_POPUP_RESTART_APP") 
                     font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
@@ -363,7 +363,7 @@ Load language error. Please reinstall the application"
                     id: cancelButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("Popup File", "STR_POPUP_RESTART_LATER") + controler.autoTr
+                    text: qsTranslate("Popup File", "STR_POPUP_RESTART_LATER") 
                     anchors.left: parent.left
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -386,7 +386,7 @@ Load language error. Please reinstall the application"
                     id: restartButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("Popup File", "STR_POPUP_RESTART_NOW") + controler.autoTr
+                    text: qsTranslate("Popup File", "STR_POPUP_RESTART_NOW") 
                     anchors.right: parent.right
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -436,7 +436,7 @@ Load language error. Please reinstall the application"
 
         header: Label {
             id: titleText
-            text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_TITLE") + controler.autoTr
+            text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_TITLE") 
             elide: Label.ElideRight
             padding: 24
             bottomPadding: 0
@@ -469,8 +469,8 @@ Load language error. Please reinstall the application"
                 Text {
                     id: labelText
                     text: unsaved_notes_dialog.menu == Constants.QUIT_APPLICATION ?
-                            qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION_EXIT") + controler.autoTr :
-                            qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION") + controler.autoTr
+                            qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION_EXIT")  :
+                            qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_DESCRIPTION") 
                     font.bold: activeFocus
                     font.pixelSize: Constants.SIZE_TEXT_LABEL
                     font.family: lato.name
@@ -494,7 +494,7 @@ Load language error. Please reinstall the application"
                     id: rejectButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_LEAVE") + controler.autoTr
+                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_LEAVE") 
                     anchors.left: parent.left
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -517,7 +517,7 @@ Load language error. Please reinstall the application"
                     id: continueButton
                     width: Constants.WIDTH_BUTTON
                     height: Constants.HEIGHT_BOTTOM_COMPONENT
-                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_STAY") + controler.autoTr
+                    text: qsTranslate("PageCardNotes","STR_UNSAVED_NOTES_STAY") 
                     anchors.right: parent.right
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
                     font.family: lato.name
@@ -1103,7 +1103,7 @@ Load language error. Please reinstall the application"
 
             Button {
                 id: buttonMain
-                text: qsTranslate("MainMenuModel", name) + controler.autoTr
+                text: qsTranslate("MainMenuModel", name) 
                 width: parent.width
                 height: parent.height
                 focus:  mainFormID.propertyMainMenuListView.currentIndex === index ? true : false
@@ -1145,7 +1145,7 @@ Load language error. Please reinstall the application"
 
             Text {
                 id: textMain
-                text: qsTranslate("MainMenuModel", name) + controler.autoTr
+                text: qsTranslate("MainMenuModel", name) 
                 color:  mainFormID.propertyMainMenuListView.currentIndex === index ?
                             Constants.COLOR_TEXT_MAIN_MENU_SELECTED :
                             Constants.COLOR_TEXT_MAIN_MENU_DEFAULT
@@ -1299,7 +1299,7 @@ Load language error. Please reinstall the application"
             }
             Button {
                 id: buttonMainMenuBottom
-                text: qsTranslate("MainMenuBottomModel", name) + controler.autoTr
+                text: qsTranslate("MainMenuBottomModel", name) 
                 width: parent.width
                 height: parent.height
                 focus:  mainFormID.propertyMainMenuBottomListView.currentIndex === index ? true : false
@@ -1339,7 +1339,7 @@ Load language error. Please reinstall the application"
             Text {
                 id: textMainMenuBottom
                 visible: false
-                text: qsTranslate("MainMenuBottomModel", name) + controler.autoTr
+                text: qsTranslate("MainMenuBottomModel", name) 
                 focus:  mainFormID.propertyMainMenuBottomListView.currentIndex === index ?
                             true :
                             false
@@ -1510,7 +1510,7 @@ Load language error. Please reinstall the application"
             color:  mainFormID.opacity == Constants.OPACITY_MAIN_FOCUS 
                 ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
 
-            text: qsTranslate("PageHelpAbout","STR_HELP_APP_VERSION") + controler.autoTr
+            text: qsTranslate("PageHelpAbout","STR_HELP_APP_VERSION") 
                     + " " + controler.getAppVersion().split("-")[0]
             MouseArea {
                 id: mouseAreaVersionLabel

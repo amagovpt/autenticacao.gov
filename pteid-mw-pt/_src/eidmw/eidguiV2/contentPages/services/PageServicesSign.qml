@@ -1850,10 +1850,10 @@ PageServicesSignForm {
             const multiple_files = propertyListViewFiles.count > 1 || propertyRadioButtonXADES.checked == 1
 
             var titlePopup = (multiple_files ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE_MULTI")
-                : qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE")) + controler.autoTr
+                : qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_TITLE"))
 
             var bodyPopup = (multiple_files ? qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR_MULTI")
-                : qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR")) + controler.autoTr
+                : qsTranslate("PageServicesSign","STR_SIGN_OPEN_ERROR"))
 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }

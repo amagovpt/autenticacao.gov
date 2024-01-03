@@ -74,9 +74,9 @@ Item {
             width:  mainFormID.propertyMainMenuView.width
             height: parent.height
             property string propertyTestModeText: controler.getTestMode() ?
-                "  [" + qsTr("STR_RUN_MODE") + "]" + controler.autoTr : ""
+                "  [" + qsTr("STR_RUN_MODE") + "]" : ""
             property string propertyDebugModeText: controler.getDebugModeValue() ?
-                "  [" + qsTr("STR_RUN_DEBUG_MODE") + "]" + controler.autoTr : ""
+                "  [" + qsTr("STR_RUN_DEBUG_MODE") + "]" : ""
             Text {
                 id: categoryText
                 anchors {

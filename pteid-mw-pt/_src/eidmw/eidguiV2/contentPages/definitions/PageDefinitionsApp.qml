@@ -43,19 +43,19 @@ PageDefinitionsAppForm {
         target: controler
         onSignalZipLogsSuccess: {
             console.log("Zip containing log files successfully created on Desktop")
-            var titlePopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_SUCCESS_TITLE") + controler.autoTr
-            var bodyPopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_SUCCESS") + controler.autoTr + filename + "."
+            var titlePopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_SUCCESS_TITLE")
+            var bodyPopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_SUCCESS")  + filename + "."
             if (largeZip){
                 console.log("Warning: zip with log files is larger than 15MB")
-                bodyPopup += "<br><br>" + qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_LARGE") + controler.autoTr
+                bodyPopup += "<br><br>" + qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_LARGE") 
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
         }
         onSignalZipLogsFail: {
             console.log("Failed to create a zip with log files on Desktop")
-            var titlePopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_FAIL_TITLE") + controler.autoTr
-            var bodyPopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_FAIL") + controler.autoTr
+            var titlePopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_FAIL_TITLE") 
+            var bodyPopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_FAIL") 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
     }
@@ -78,7 +78,7 @@ PageDefinitionsAppForm {
             controler.setPinpadEnabledValue(propertyCheckboxEnablePinpad.checked) 
 
             if (propertyCheckboxEnablePinpad.enabled) {
-                restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_USE_PINPAD") + controler.autoTr
+                restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_USE_PINPAD") 
                 restart_dialog.open()
             }
         }
@@ -95,6 +95,7 @@ PageDefinitionsAppForm {
         onCheckedChanged: {
             if (propertyRadioButtonUK.checked){
                 controler.setGuiLanguageString("en")
+                gapi.updateTranslatedStrings()
                 propertyRadioButtonPT.checked = false
             }
 
@@ -106,6 +107,7 @@ PageDefinitionsAppForm {
         onCheckedChanged: {
             if (propertyRadioButtonPT.checked){
                 controler.setGuiLanguageString("nl")
+                gapi.updateTranslatedStrings()
                 propertyRadioButtonUK.checked = false
             }
 
@@ -128,7 +130,7 @@ PageDefinitionsAppForm {
         onCheckedChanged: {
             controler.setUseSystemScaleValue(propertyCheckboxUseSystemScale.checked)
             if (propertyCheckboxUseSystemScale.enabled) {
-                restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") + controler.autoTr
+                restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") 
                 restart_dialog.open()
             }
         }
@@ -137,7 +139,7 @@ PageDefinitionsAppForm {
         console.log("propertyComboBoxScaling onActivated index = "
                     + propertyComboBoxScaling.currentIndex)
         controler.setApplicationScaleValue(propertyComboBoxScaling.currentIndex)
-        restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") + controler.autoTr
+        restart_dialog.headerTitle = qsTranslate("PageDefinitionsApp","STR_SCALE_APPLICATION_TITLE") 
         restart_dialog.open()
     }
     propertyComboBoxScaling.onModelChanged: {
@@ -151,14 +153,14 @@ PageDefinitionsAppForm {
             var debugFilename = controler.setDebugModeValue(propertyCheckBoxDebugMode.checked)
 
             if (propertyCheckBoxDebugMode.enabled) {
-                var titlePopup = qsTranslate("Popup Card","STR_POPUP_DEBUG_MODE") + controler.autoTr
+                var titlePopup = qsTranslate("Popup Card","STR_POPUP_DEBUG_MODE") 
                 var bodyPopup = ""
                 if (debugFilename === "") {
                     restart_dialog.headerTitle = titlePopup
                     restart_dialog.open()
                     return
                 } else {
-                    bodyPopup = qsTranslate("Popup Card", "STR_POPUP_WIN_DEBUG_FILE_ERROR").arg(debugFilename) + controler.autoTr
+                    bodyPopup = qsTranslate("Popup Card", "STR_POPUP_WIN_DEBUG_FILE_ERROR").arg(debugFilename) 
                 }
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
@@ -179,7 +181,7 @@ PageDefinitionsAppForm {
             console.log("propertyComboboxAccelGraphics onActivated index = "
                         + propertyComboboxAccelGraphics.currentIndex)
             controler.setGraphicsAccelValue(propertyComboboxAccelGraphics.currentIndex)
-            restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") + controler.autoTr
+            restart_dialog.headerTitle = qsTranslate("Popup Card","STR_POPUP_ACCEL_GRAPHICS") 
             restart_dialog.open()
         }
         onModelChanged: {

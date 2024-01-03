@@ -401,7 +401,7 @@ Item {
 
                 Accessible.role: Accessible.ListItem
                 Accessible.name: qsTranslate("main", "STR_NOTIFICATION")
-                Accessible.description: qsTranslate("main", "STR_SPACE_TO_OPEN_NOTIFICATION") + controler.autoTr
+                Accessible.description: qsTranslate("main", "STR_SPACE_TO_OPEN_NOTIFICATION")
 
                 function focusForward() {
                     if (!model.read) {
@@ -441,7 +441,7 @@ Item {
 
         Label {
             id: title
-            text: qsTranslate("main", "STR_NOTIFICATION_CENTER") + controler.autoTr
+            text: qsTranslate("main", "STR_NOTIFICATION_CENTER")
             elide: Label.ElideRight
             wrapMode: Text.WordWrap
             lineHeight: 1.2
@@ -479,7 +479,7 @@ Item {
             anchors.right: notificationArea.right
 
             Accessible.role: Accessible.Button
-            Accessible.name: qsTranslate("main", "STR_CLOSE") + controler.autoTr
+            Accessible.name: qsTranslate("main", "STR_CLOSE")
         }
 
         MouseArea {
@@ -520,7 +520,7 @@ Item {
 
                     Text {
                         id: new_notification_title
-                        text: qsTranslate("main", "STR_NOTIFICATION_RECENT") + controler.autoTr
+                        text: qsTranslate("main", "STR_NOTIFICATION_RECENT")
                         visible: listView.model.count > 0
                         color: Constants.COLOR_GRAY
 
@@ -569,7 +569,7 @@ Item {
 
                     Text {
                         id: read_notification_title
-                        text: qsTranslate("main", "STR_NOTIFICATION_READ") + controler.autoTr
+                        text: qsTranslate("main", "STR_NOTIFICATION_READ")
                         color: Constants.COLOR_GRAY
 
                         font.bold: activeFocus
@@ -611,7 +611,7 @@ Item {
 
         Text {
             id: no_notifications_message
-            text: qsTranslate("main", "STR_NO_NOTIFICATIONS") + controler.autoTr
+            text: qsTranslate("main", "STR_NO_NOTIFICATIONS")
             color: Constants.COLOR_GRAY
 
             visible: model_read.count == 0 && listView.model.count == 0
@@ -692,8 +692,8 @@ Item {
 
     function addCmdSettings(read) {
         insertInModel(2, {
-            "title": qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TITLE") + controler.autoTr,
-            "text": qsTranslate("DialogCMD", "STR_REGISTER_CMD_CERT_DESC") + controler.autoTr,
+            "title": qsTranslate("PageDefinitionsApp","STR_REGISTER_CMD_CERT_TITLE"),
+            "text": qsTranslate("DialogCMD", "STR_REGISTER_CMD_CERT_DESC"),
             "link": "https://www.autenticacao.gov.pt/cmd-pedido-chave",
             "category": "definitions_cmd",
             "read": read,
@@ -893,14 +893,14 @@ Item {
     function chooseCategory(category) {
         switch (category) {
             case "news":
-                return qsTranslate("main", "STR_NOTIFICATION_NEWS") + controler.autoTr
+                return qsTranslate("main", "STR_NOTIFICATION_NEWS")
             case "update":
-                return qsTranslate("main", "STR_NOTIFICATION_UPDATE") + controler.autoTr
+                return qsTranslate("main", "STR_NOTIFICATION_UPDATE")
             case "definitions_cmd":
-                return qsTranslate("main", "STR_NOTIFICATION_SERVICES") + controler.autoTr
+                return qsTranslate("main", "STR_NOTIFICATION_SERVICES")
             case "definitions_cache":
             case "definitions_telemetry":
-                return qsTranslate("main", "STR_NOTIFICATION_CONFIG") + controler.autoTr
+                return qsTranslate("main", "STR_NOTIFICATION_CONFIG")
             default:
                 return null
         }

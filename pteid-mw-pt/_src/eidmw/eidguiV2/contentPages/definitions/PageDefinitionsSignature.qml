@@ -49,21 +49,21 @@ PageDefinitionsSignatureForm {
         }
         onSignalCardChanged: {
             console.log("Definitions Signature --> onSignalCardChanged")
-            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ") + controler.autoTr
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
             var returnSubMenuWhenClosed = false
             if (error_code == GAPI.ET_CARD_REMOVED) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 returnSubMenuWhenClosed = true;
                 clearFields()
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
                 gapi.startGettingInfoFromSignCert()
             }
             else{
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN") + controler.autoTr
+                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 returnSubMenuWhenClosed = true;
             }
 

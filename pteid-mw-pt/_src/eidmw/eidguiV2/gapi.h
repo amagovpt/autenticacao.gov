@@ -326,6 +326,7 @@ public slots:
     signed int returnReaderSelected(void) {return selectedReaderIndex; }
     void setAddressLoaded(bool addressLoaded) {m_addressLoaded = addressLoaded; }
     bool isAddressLoaded() { return m_addressLoaded; }
+    void updateTranslatedStrings() { m_qml_engine->retranslate(); }
     void startCardReading();
     void startGettingInfoFromSignCert();
     void startCCSignatureCertCheck();
