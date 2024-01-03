@@ -968,6 +968,12 @@ void AppController::getSignatureOptions() {
     }
     bool lta = cJSON_IsTrue(lta_obj);
 
+    cJSON *prof_name_obj = NULL;
+    if ((prof_name_obj = cJSON_GetObjectItem(json, "professional_name")) == NULL) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get professional_name field", __FUNCTION__);
+    }
+    bool prof_name = cJSON_IsTrue(prof_name_obj);
+
     cJSON *visible_obj = NULL;
     if ((visible_obj = cJSON_GetObjectItem(json, "visible")) == NULL) {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to get visible field", __FUNCTION__);
@@ -1032,7 +1038,7 @@ void AppController::getSignatureOptions() {
     }
 
     QVariantList options;
-    options.append({pades, timestamp, lta, visible, reduced, reason, location, seal_width,
+    options.append({pades, timestamp, lta, prof_name, visible, reduced, reason, location, seal_width,
         seal_height, scap, attribute_ids});
     emit signalRetrieveStoredSignOptions(options);
 }
@@ -1080,14 +1086,15 @@ void AppController::setSignatureOptions(const QVariantList &options) {
     bool pades = options.at(0).toBool();
     bool timestamp = options.at(1).toBool();
     bool lta = options.at(2).toBool();
-    bool visible = options.at(3).toBool();
-    bool reduced = options.at(4).toBool();
-    const QString &reason = options.at(5).toString();
-    const QString &location = options.at(6).toString();
-    const double seal_width = options.at(7).toDouble();
-    const double seal_height = options.at(8).toDouble();
-    const bool scap_signature = options.at(9).toBool();
-    const QStringList &attribute_ids = options.at(10).toStringList();
+    bool prof_name = options.at(3).toBool();
+    bool visible = options.at(4).toBool();
+    bool reduced = options.at(5).toBool();
+    const QString &reason = options.at(6).toString();
+    const QString &location = options.at(7).toString();
+    const double seal_width = options.at(8).toDouble();
+    const double seal_height = options.at(9).toDouble();
+    const bool scap_signature = options.at(10).toBool();
+    const QStringList &attribute_ids = options.at(11).toStringList();
 
     cJSON *json = NULL;
     if ((json = cJSON_CreateObject()) == NULL) {
@@ -1097,6 +1104,7 @@ void AppController::setSignatureOptions(const QVariantList &options) {
     add_to_options_object(json, "pades", pades);
     add_to_options_object(json, "timestamp", timestamp);
     add_to_options_object(json, "lta", lta);
+    add_to_options_object(json, "professional_name", prof_name);
     add_to_options_object(json, "visible", visible);
     add_to_options_object(json, "reduced", reduced);
 
