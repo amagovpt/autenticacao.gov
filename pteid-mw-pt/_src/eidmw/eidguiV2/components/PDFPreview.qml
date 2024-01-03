@@ -185,7 +185,7 @@ Rectangle {
                 }
 
                 var new_x = propertyPageLoader.propertyBackupCoordX * background_image.width
-                var new_y = (propertyPageLoader.propertyBackupCoordY * background_image.height) - dragSigRect.height
+                var new_y = (propertyPageLoader.propertyBackupCoordY * background_image.height)
                 setSignPreview(new_x, Math.max(new_y, 0))
 
                 updateSealPreview()
@@ -218,6 +218,7 @@ Rectangle {
                     width: Constants.FOCUS_BORDER; height: parent.height
                     anchors.left: parent.right
                     clip: false
+                    enabled: !propertyCheckSignReduced.checked
 
                     MouseArea {
                         id: mouseRegioncontainerMouseMovCalcRight
@@ -258,7 +259,8 @@ Rectangle {
                     z:10
                     width: parent.width ; height: Constants.FOCUS_BORDER
                     anchors.top: dragSigRect.bottom
-                    clip: false 
+                    clip: false
+                    enabled: !propertyCheckSignReduced.checked
 
                     MouseArea {
                         id: mouseRegioncontainerMouseMovCalcBottom
@@ -489,7 +491,8 @@ Rectangle {
                 anchors.horizontalCenter: dragSigRect.right
 
                 visible: fileLoaded && dragSigRect.visible
-                source: "qrc:/images/icons-resize.png"
+                enabled: !propertyCheckSignReduced.checked
+                source: enabled ? "qrc:/images/icons-resize.png" : "qrc:/images/icons-resize-disabled.png"
             }
 
             onWidthChanged: {
@@ -533,7 +536,7 @@ Rectangle {
         dragTarget.coord_y = (dragSigRect.y + dragSigRect.height) / background_image.height
 
         propertyPageLoader.propertyBackupCoordX = dragTarget.coord_x
-        propertyPageLoader.propertyBackupCoordY = dragTarget.coord_y
+        propertyPageLoader.propertyBackupCoordY = dragSigRect.y / background_image.height
 
         dragTarget.lastCoord_x = dragSigRect.x
         dragTarget.lastCoord_y = dragSigRect.y
