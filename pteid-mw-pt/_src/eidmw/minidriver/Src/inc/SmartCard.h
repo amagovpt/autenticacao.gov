@@ -141,17 +141,6 @@ extern DWORD   PteidMSE
 				 BOOL pss_padding
 				 ); 
 
-extern DWORD   PteidChangePIN
-               (
-                  PCARD_DATA     pCardData, 
-                  PBYTE          pbCurrentAuthenticator,
-                  DWORD          cbCurrentAuthenticator,
-                  PBYTE          pbNewAuthenticator,
-                  DWORD          cbNewAuthenticator,
-                  PDWORD         pcAttemptsRemaining,
-				  DWORD		     pin_id
-               );
-
 extern DWORD  PteidSelectApplet(PCARD_DATA     pCardData);
 
 extern DWORD CCIDfindFeature
