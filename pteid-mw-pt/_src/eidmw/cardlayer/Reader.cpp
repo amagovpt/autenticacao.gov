@@ -610,6 +610,13 @@ unsigned long CReader::GetSupportedAlgorithms()
     return m_poCard->GetSupportedAlgorithms();
 }
 
+void CReader::setAskPinOnSign(bool bAsk) {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	m_poCard->setAskPinOnSign(bAsk);
+}
+
 CByteArray CReader::Sign(const tPrivKey & key, unsigned long paddingType,
 		const CByteArray & oData)
 {

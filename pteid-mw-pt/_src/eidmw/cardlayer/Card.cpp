@@ -32,7 +32,7 @@ namespace eIDMW
 
 CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad):
     m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
-    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(NULL)
+    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(NULL), m_askPinOnSign(true)
 {
 }
 
@@ -371,6 +371,11 @@ DlgPinUsage CCard::PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey)
 unsigned long CCard::GetSupportedAlgorithms()
 {
 	return 0;
+}
+
+void CCard::setAskPinOnSign(bool bAsk)
+{
+	m_askPinOnSign = bAsk;
 }
 
 CByteArray CCard::Sign(const tPrivKey & key, const tPin & Pin,

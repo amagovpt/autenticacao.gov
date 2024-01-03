@@ -104,6 +104,8 @@ public:
 
 	virtual unsigned long GetSupportedAlgorithms();
 
+	virtual void setAskPinOnSign(bool bAsk);
+
     virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
         unsigned long algo, const CByteArray & oData);
 
@@ -164,6 +166,8 @@ protected:
     std::map <unsigned int, std::string> m_verifiedPINs;
     unsigned char m_ucCLA;
     bool cleartext_next;
+
+	 bool m_askPinOnSign;
 
     const void * m_comm_protocol;
     std::unique_ptr<PaceAuthentication> m_pace{};

@@ -737,35 +737,32 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingT
     MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%04x and data length=%d",
     	paddingType, oData.Size());
 
-    if (pPin != NULL)
-    {
-    unsigned long ulRemaining = 0;
-	if (m_poContext->m_bSSO)
-	{
-		std::string cached_pin = "";
-		if (m_verifiedPINs.find(pPin->ulID) != m_verifiedPINs.end())
-		{
-			cached_pin = m_verifiedPINs[pPin->ulID];
+	if (m_askPinOnSign) {
+		if (pPin != NULL) {
+			unsigned long ulRemaining = 0;
+			if (m_poContext->m_bSSO) {
+				std::string cached_pin = "";
+				if (m_verifiedPINs.find(pPin->ulID) != m_verifiedPINs.end()) {
+					cached_pin = m_verifiedPINs[pPin->ulID];
 
-    		MWLOG(LEV_DEBUG, MOD_CAL, "Using cached pin for %s", pPin->csLabel.c_str());
+					MWLOG(LEV_DEBUG, MOD_CAL, "Using cached pin for %s", pPin->csLabel.c_str());
+				}
+				bOK = PinCmd(PIN_OP_VERIFY, *pPin, cached_pin, "", ulRemaining, &key);
+			} else {
+	#ifdef WIN32
+				//Regularly call SCardStatus()
+				MWLOG(LEV_DEBUG, MOD_CAL, L"Starting KeepAliveThread to keep transaction while waiting for user PIN input");
+				eIDMW::KeepAliveThread keepAlive(&(m_poContext->m_oPCSC), m_hCard);
+				keepAlive.Start();
+	#endif
+
+				bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
+			}
+
+			if (!bOK)
+				throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
 		}
-        bOK = PinCmd(PIN_OP_VERIFY, *pPin, cached_pin, "", ulRemaining, &key);
 	}
-	else
-	{
-#ifdef WIN32
-		//Regularly call SCardStatus()
-		MWLOG(LEV_DEBUG, MOD_CAL, L"Starting KeepAliveThread to keep transaction while waiting for user PIN input");
-		eIDMW::KeepAliveThread keepAlive(&(m_poContext->m_oPCSC), m_hCard);
-		keepAlive.Start();
-#endif
-
-		bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
-	}
-
-    if (!bOK)
-		throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
-    }
 
     SetSecurityEnv(key, paddingType, oData.Size());
 

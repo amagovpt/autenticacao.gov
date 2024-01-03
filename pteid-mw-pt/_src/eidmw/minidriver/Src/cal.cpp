@@ -50,6 +50,8 @@ DWORD cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
 
 		auto &reader = oCardLayer->getReader(readerName);
 		reader.Connect(pCardData->hScard, protocol);
+		reader.setAskPinOnSign(false);
+
 	}
 	catch (CMWException e) {
 		return EidmwToScardErr(e.GetError());
