@@ -509,6 +509,18 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
     else if (errorCode >= EIDMW_REMOTEADDR_CONNECTION_ERROR && errorCode <= EIDMW_REMOTEADDR_UNKNOWN_ERROR) {
         handleRemoteAddressErrors(errorCode);
     }
+	else if(errorCode == EIDMW_ERR_FILE_TOO_LONG) {
+		emit signalPdfSignFail(TooLongFilename, index);
+	}
+	else if(errorCode == EIDMW_ERR_FILE_OP_FL_SYSTEM || errorCode == EIDMW_ERR_FILE_OP_FL_PROCESS) {
+		emit signalPdfSignFail(TooManyOpenFiles, index);
+	}
+	else if(errorCode == EIDMW_ERR_FILE_NO_SPC) {
+		emit signalPdfSignFail(FileNoSpace, index);
+	}
+	else if(errorCode == EIDMW_ERR_FILE_READ_ONLY) {
+		emit signalPdfSignFail(FileReadOnly, index);
+	}
     else {
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
             "Generic eidlib exception in %s! Error code (see strings in eidErrors.h): %08lx", caller_function, errorCode);
@@ -897,6 +909,19 @@ void GAPI::showSignCMDDialog(long error_code)
     case EIDMW_ERR_OP_CANCEL:
         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "CMD signature was canceled by the user.", error_code);
         return;
+	case EIDMW_ERR_FILE_TOO_LONG:
+		message = tr("STR_SIGN_FILE_TOO_LONG_FILENAME");
+		break;
+	case EIDMW_ERR_FILE_OP_FL_SYSTEM:
+	case EIDMW_ERR_FILE_OP_FL_PROCESS:
+		message = tr("STR_SIGN_FILE_TOO_MANY_OPEN_FILES");
+		break;
+	case EIDMW_ERR_FILE_NO_SPC:
+		message = tr("STR_SIGN_FILE_NO_SPACE");
+		break;
+	case EIDMW_ERR_FILE_READ_ONLY:
+		message = tr("STR_SIGN_FILE_READ_ONLY");
+		break;
     default:
         message = tr("STR_CMD_LOGIN_ERROR");
         break;

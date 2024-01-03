@@ -1323,9 +1323,30 @@ int PDFDoc::saveAs(wchar_t *name, PDFWriteMode mode) {
         
         error(errIO, -1, "Couldn't open file ");
         fprintf(stderr, "%ws \n", name); //GooString does not format wchar_t
-        if (errno == EACCES) {
+        int errorCode = errno;
+        switch (errorCode) {
+          case EACCES:
             return errPermission;
-        } else {
+          case EINTR: // process interrupted
+            return errFileINTR;
+          case EIO: //error writing
+            return errFileIO;
+          case ENAMETOOLONG: //too long of a file name
+            return errFileNAMETOOLONG;
+          case ENFILE: // too many files opened in the SYSTEM
+            return errFileOPFLSYSTEM;
+          case EMFILE: //too many files opened in this PROCESS
+            return errFileOPFLPROCES;
+          case ENOSPC: //full disk
+            return errFileNOSPC;
+          case EPERM: // operation is not permited, different from no permissions
+            return errFilePERM;
+          case EROFS: // read only file system
+            return errFileREADONLY;
+          case EXDEV: // cross device link, moving a file by renaming it, don't know if valid in this scenario  
+            return errFileDEV;    
+          default:
+			error(errIO, -1, "Unknown not handled error: {0:d}.", errorCode);
             return errOpenFile;
         }
     }

@@ -478,6 +478,22 @@
         <source>STR_CERTIFIED_ATTRIBUTES</source>
         <translation type="vanished">Atributos certificados: </translation>
     </message>
+    <message>
+        <source>STR_SIGN_FILE_READ_ONLY</source>
+        <translation>Falha a escrever o ficheiro, verifique se está a escrever num local apenas de leitura.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_NO_SPACE</source>
+        <translation>Falha a escrever o ficheiro, por favor verifique se tem espaço no disco.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_TOO_LONG_FILENAME</source>
+        <translation>Falha a escrever o ficheiro, verifique se o nome do ficheiro não excede o permitido.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_TOO_MANY_OPEN_FILES</source>
+        <translation>Falha a escrever o ficheiro, tente fechar alguns ficheiros.</translation>
+    </message>
 </context>
 <context>
     <name>MainMenuBottomModel</name>
@@ -2118,6 +2134,22 @@
     <message>
         <source>STR_SCAP_BAD_CREDENTIALS</source>
         <translation type="unfinished">A aplicação instalada não possui suporte para o serviço do Sistema de Certificação de Atributos Profissionais.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_READ_ONLY</source>
+        <translation>Falha a escrever o ficheiro, verifique se está a escrever num local apenas de leitura.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_NO_SPACE</source>
+        <translation>Falha a escrever o ficheiro, por favor verifique se tem espaço no disco.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_TOO_LONG_FILENAME</source>
+        <translation>Falha a escrever o ficheiro, verifique se o nome do ficheiro não excede o permitido.</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_FILE_TOO_MANY_OPEN_FILES</source>
+        <translation>Falha a escrever o ficheiro, tente fechar alguns ficheiros.</translation>
     </message>
 </context>
 <context>

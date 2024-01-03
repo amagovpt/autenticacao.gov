@@ -134,6 +134,7 @@ class CLogger
 	EIDMW_CMN_API void write(tLOG_Level level,const char *format, ...);
 	EIDMW_CMN_API void write(tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, ...);
 	EIDMW_CMN_API void write(tLOG_Level level,const int line,const char *file,const char *format, ...);
+	EIDMW_CMN_API void getFileFromStdErr(std::wstring &filename);
 
   private:
     static std::unique_ptr<CLogger> m_instance;
@@ -196,9 +197,12 @@ class CLog
 	EIDMW_CMN_API bool writeLineMessageW(const wchar_t *format, ...);
 	EIDMW_CMN_API bool writeLineMessageA(const char *format, ...);
 
+	EIDMW_CMN_API void getFilenameStdErr(std::wstring &filename);
+
   friend class CLogger;
 
 private:
+	void getFilename(std::wstring &filename, const std::wstring &prefix);
 	void getFilename(std::wstring &filename);
 	void renameFiles(const wchar_t *root_filename);
 	bool open(bool bWchar);

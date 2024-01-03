@@ -986,20 +986,51 @@ namespace eIDMW
 
         delete m_doc;
         m_doc = makePDFDoc(utf8_outname.c_str());
-
-        if (tmp_ret == errPermission || tmp_ret == errOpenFile) {
+		auto handleError = [](int errorCode) {
+			switch(errorCode) {
+			case errNone:
+				break;
+			case errPermission:
             throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
+				break;
+			case errOpenFile:
+				throw CMWEXCEPTION(EIDMW_FILE_NOT_OPENED);
+				break;
+			case errFileIO:
+				throw CMWEXCEPTION(EIDMW_ERR_FILE_IO_ERROR);
+				break;
+			case errFileINTR:
+				throw CMWEXCEPTION(EIDMW_ERR_INTR_PROCESS);
+				break;
+			case errFileNAMETOOLONG:
+				throw CMWEXCEPTION(EIDMW_ERR_FILE_TOO_LONG);
+				break;
+			case errFileOPFLSYSTEM:
+				throw CMWEXCEPTION(EIDMW_ERR_FILE_OP_FL_SYSTEM);
+				break;
+			case errFileOPFLPROCES:
+				throw CMWEXCEPTION(EIDMW_ERR_FILE_OP_FL_PROCESS);
+				break;
+			case errFileNOSPC:
+				throw CMWEXCEPTION(EIDMW_ERR_FILE_NO_SPC);
+				break;
+			case errFilePERM:
+				throw CMWEXCEPTION(EIDMW_ERR_FILE_OP_NOT_PERM);
+				break;
+			case errFileREADONLY:
+				throw CMWEXCEPTION(EIDMW_ERR_FILE_READ_ONLY);
+				break;
+			case errFileDEV:
+				throw CMWEXCEPTION(EIDMW_ERR_FILE_DEV);
+				break;
+			default:
+				throw CMWEXCEPTION(EIDMW_FILE_NOT_OPENED);
+				break;
         }
-        else if (tmp_ret != errNone) {
-            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-        }
+		};
 
-        if (final_ret == errPermission || final_ret == errOpenFile) {
-            throw CMWEXCEPTION(EIDMW_PERMISSION_DENIED);
-        }
-        else if (final_ret != errNone) {
-            throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-        }
+		handleError(tmp_ret);
+		handleError(final_ret);
     }
 
     bool PDFSignature::addLtv()

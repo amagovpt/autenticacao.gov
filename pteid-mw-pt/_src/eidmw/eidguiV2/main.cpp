@@ -10,6 +10,7 @@
 ****************************************************************************-*/
 
 #include <QApplication>
+#include <QDateTime>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
@@ -23,6 +24,11 @@
 #include <QDesktopWidget> 
 #include <QCommandLineParser> 
 #include "pteidversions.h"
+#include "LogBase.h"
+
+#include <stdio.h>
+
+#include <iostream>
 
 using namespace eIDMW;
 
@@ -107,6 +113,20 @@ int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settin
     }
 #endif
     return SUCCESS_EXIT_CODE;
+}
+
+FILE* handleSTDErr()
+{
+    std::wstring location;
+	eIDMW::CLogger::instance().getFileFromStdErr(location);
+	QString path = QString::fromWCharArray(location.c_str());
+
+	FILE *file = NULL;
+
+	file = freopen(path.toStdString().c_str(), "a", stderr);
+
+	std::cerr << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz: ").toStdString() << "Message sent to the error stream!" << std::endl;
+	return file;
 }
 
 void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
@@ -197,6 +217,42 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
     }
 }
 
+void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QString file = context.file ? context.file : "";
+    QString function = context.function ? context.function : "";
+    PTEID_LogLevel msgLvl;
+
+    switch (type) {
+    case QtDebugMsg:
+        qDebug().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_DEBUG;
+        break;
+    case QtInfoMsg:
+        qInfo().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_INFO;
+        break;
+    case QtWarningMsg:
+        qWarning().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_WARNING;
+        break;
+    case QtCriticalMsg:
+        qCritical().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_CRITICAL;
+        break;
+    case QtFatalMsg:
+    default:
+        qCritical().noquote() << msg;
+        msgLvl = eIDMW::PTEID_LOG_LEVEL_CRITICAL;
+    }
+
+    QString message = QString ("%1 - %2 - %3 - %4").arg(file, function)
+                                                   .arg(context.line)
+                                                   .arg(msg);
+
+    PTEID_LOG(msgLvl, "QT-messages", message.toStdString().c_str());
+}
+
 int main(int argc, char *argv[])
 {
     int retValue = SUCCESS_EXIT_CODE;
@@ -227,7 +283,10 @@ int main(int argc, char *argv[])
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_CRITICAL, "eidgui", "OpenGL option : %d", tGraphicsAccel);
 
+	FILE * errFile = handleSTDErr();
     SingleApplication app(argc, argv);
+
+    qInstallMessageHandler(myMessageOutput);
 
     // Parse command line arguments
     QCommandLineParser parser;
@@ -299,6 +358,9 @@ int main(int argc, char *argv[])
         if (!proc.startDetached(cmd)){
             qDebug() << "Error restarting application: could not start process.";
         }
+    }
+    if (errFile != NULL) {
+        fclose(errFile);
     }
 
     return retValue;

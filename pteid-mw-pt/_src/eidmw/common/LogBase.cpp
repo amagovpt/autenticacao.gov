@@ -379,6 +379,12 @@ void CLogger::write(tLOG_Level level,const int line,const char *file,const char 
 	}
 }
 
+void CLogger::getFileFromStdErr(std::wstring &filename)
+{
+	CLog &log=getLogA("");
+	log.getFilenameStdErr(filename);
+}
+
 /* ***************
 *** CLog Class ***
 **************** */
@@ -426,8 +432,14 @@ CLog::~CLog()
 {
 }
 
-//PRIVATE: Return the name of to file to write into
+
 void CLog::getFilename(std::wstring &filename)
+{
+	getFilename(filename, m_prefix);
+}
+
+//PRIVATE: Return the name of to file to write into
+void CLog::getFilename(std::wstring &filename, const std::wstring &filePrefix)
 {
 	//Test if the directory exist
 	std::wstring directory;
@@ -455,7 +467,7 @@ void CLog::getFilename(std::wstring &filename)
 
 	//Initialize the root filename
 	std::wstring root_filename;
-	root_filename=directory + m_prefix + L"_";
+	root_filename=directory + filePrefix + L"_";
 	if(m_groupinnewfile && m_group.size()>0)
 		root_filename+=m_group + L"_";
 
@@ -506,6 +518,10 @@ void CLog::getFilename(std::wstring &filename)
 
 	filename=root_filename + index + L".log";
 
+}
+
+void CLog::getFilenameStdErr(std::wstring &filename) {
+	getFilename(filename, L".PTEID_err");
 }
 
 //PRIVATE: Delete file with index 0 et rename all file i to i-1 until m_filenr-1

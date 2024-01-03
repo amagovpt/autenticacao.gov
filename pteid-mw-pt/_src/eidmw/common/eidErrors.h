@@ -218,6 +218,33 @@
 /** User did not yet allow or disallow to read the card */
 #define EIDMW_ERR_USER_MUST_ANSWER     0xe1d0022B
 
+/** File I/O error */
+#define EIDMW_ERR_FILE_IO_ERROR        0xe1d0022C
+
+/** Process interrupted during operation */
+#define EIDMW_ERR_INTR_PROCESS         0xe1d0022D
+
+/** File has too long of a file name */
+#define EIDMW_ERR_FILE_TOO_LONG        0xe1d0022E
+
+/** Too many files opened in the SYSTEM */
+#define EIDMW_ERR_FILE_OP_FL_SYSTEM    0xe1d0022F
+
+/** Too many files opened in the PROCESS */
+#define EIDMW_ERR_FILE_OP_FL_PROCESS   0xe1d00231
+
+/** Disk is Full */
+#define EIDMW_ERR_FILE_NO_SPC          0xe1d00232
+
+/** Operation is not permited */
+#define EIDMW_ERR_FILE_OP_NOT_PERM     0xe1d00233
+
+/** File is read only */
+#define EIDMW_ERR_FILE_READ_ONLY       0xe1d00234
+
+/** Trying to move a file by renaming it */
+#define EIDMW_ERR_FILE_DEV             0xe1d00235
+
 
 //SOD related errors
 
