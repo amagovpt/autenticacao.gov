@@ -133,6 +133,14 @@ public:
 	unsigned long GetCertUniqueID(const CByteArray &cert);
 
 	/**
+	  * Returns the certificate's serial number as a uint64_t
+	  *
+	  * @return true if everything ok, false otherwise
+	  */
+	uint64_t getCertSerialNumber(const CByteArray &cert);
+
+
+	/**
 	  * Verify the validity date of the certificate
 	  */
 	bool VerifyDateValidity(const CByteArray &cert);
@@ -200,9 +208,9 @@ public:
 	bool GetHashSha1(const CByteArray &data, CByteArray *hash);
 
 	/**
-	  * Validate the certificate through CRL process
+	  * Validate the certificate through CRL process and using its serial number
 	  */
-	FWK_CertifStatus CRLValidation(const CByteArray &cert,const CByteArray &crl);
+	FWK_CertifStatus CRLValidation(uint64_t serial_number, X509_CRL* crl);
 
 	/**
 	  * Validate the certificate through OCSP process
@@ -245,7 +253,7 @@ public:
 	  * Return the url of CRL distribution point
 	  * @return true if CDP found
 	  */
-	bool GetCDPUrl(const CByteArray &cert, std::string &url);
+	bool GetCDPUrl(const CByteArray &cert, std::string &url, int ext_nid);
 
 	/**
 	  * Return the CRL of a certificate
@@ -263,7 +271,7 @@ public:
 	  * Return the CRL distribution point Url
 	  * The char * buffer is created and must be destroy by the caller
 	  */
-	char *GetCDPUrl(X509 *pX509_Cert);
+	char *GetCDPUrl(X509 *pX509_Cert, int ext_nid);
 
 
 	/**
@@ -298,6 +306,16 @@ public:
 	  * Reset the proxy parameters
 	  */
 	void resetProxy();
+
+	/**
+	  *  Updates the CRL with the contents with the Delta_CRL.
+	  */
+	void updateCRL(X509_CRL* crl, X509_CRL* delta_crl);
+
+	/**
+	  *  Updates the CRL with the contents with the Delta_CRL. It receives the result in bytes
+	  */
+	X509_CRL* updateCRL(const CByteArray &crl,const CByteArray &delta_crl);
 
 
 	void setActiveCard(APL_SmartCard *card) 

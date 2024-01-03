@@ -110,7 +110,7 @@ namespace eIDMW
 
 			curl_easy_setopt(curl, CURLOPT_URL, url);
 
-			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
 
 			if (pac_proxy_host.size() > 0 && pac_proxy_port.size() > 0)
 			{

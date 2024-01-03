@@ -82,3 +82,8 @@ kspCredentials.h
 eidguiV2Credentials.h
 /release_data.wxs
 /release_data.h
+
+# CRL Unit Test #
+###################
+crl_unit_test/crl_unit_test.out
+crl_unit_test/output.txt

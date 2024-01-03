@@ -1182,19 +1182,18 @@ APL_CertifStatus APL_Certif::getStatus(APL_ValidationLevel crl, APL_ValidationLe
 
 }
 
-APL_Crl *APL_Certif::getCRL()
-{
-	if(!m_crl)
-	{
+APL_Crl *APL_Certif::getCRL(){
+	if(!m_crl){
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instance
-		if(!m_crl)
-		{
+		if(!m_crl){
 			std::string url;
-			if(m_cryptoFwk->GetCDPUrl(getData(),url))
-				m_crl=new APL_Crl(url.c_str(),this);
+			std::string delta_url;
+			// This will get both CRLs, the regular one and the Delta one. Will also be changed to use the serial number
+			if(m_cryptoFwk->GetCDPUrl(getData(),url, NID_crl_distribution_points) && m_cryptoFwk->GetCDPUrl(getData(), delta_url, NID_freshest_crl)){
+				m_crl=new APL_Crl(url.c_str(), delta_url.c_str() , m_cryptoFwk->getCertSerialNumber(getData()));
+			}
 		}
 	}
-
 	return m_crl;
 }
 
@@ -1217,6 +1216,7 @@ APL_OcspResponse *APL_Certif::getOcspResponse()
 APL_CertifStatus APL_Certif::validationCRL()
 {
 	MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::validationCRL() for certificate %s", this->getOwnerName());
+	// GETS CRL
 	APL_Crl *crl=getCRL();
 
 	//If there is no crl (ex. root), validation is ok
@@ -1311,6 +1311,10 @@ const char *APL_Certif::getSerialNumber()
 	return m_info->serialNumber.c_str();
 }
 
+uint64_t APL_Certif::getSerialNumberUint(){
+	return m_cryptoFwk->getCertSerialNumber(getData());
+}
+
 const char *APL_Certif::getOwnerName()
 {
 	initInfo();
@@ -1356,11 +1360,13 @@ unsigned long APL_Certif::getKeyLength()
 /*****************************************************************************************
 ---------------------------------------- APL_Crl --------------------------------------
 *****************************************************************************************/
-APL_Crl::APL_Crl(const char *uri)
+/*
+APL_Crl::APL_Crl(const char *uri, const char *delta_uri)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 
 	m_uri=uri;
+	m_delta_uri=delta_uri;
 
 	m_initOk=false;
 
@@ -1368,19 +1374,40 @@ APL_Crl::APL_Crl(const char *uri)
 	m_issuer=NULL;
 
 	m_info=NULL;
-}
+}*/
 
-APL_Crl::APL_Crl(const char *uri,APL_Certif *certif)
+/*
+APL_Crl::APL_Crl(const char *uri, const char *delta_uri, APL_Certif *certif)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 	//m_cache=AppLayer.getCrlDownloadCache();
 
 	m_uri=uri;
+	m_delta_uri=delta_uri;
+
+	m_initOk=false;
+	
+
+	m_serial_number=m_cryptoFwk->getCertSerialNumber(certif->getData());
+	m_certif=certif;
+	m_issuer=NULL;
+
+	m_info=NULL;
+}
+*/
+
+APL_Crl::APL_Crl(const char *uri, const char *delta_uri, uint64_t serial_number){
+	m_cryptoFwk=AppLayer.getCryptoFwk();
+	//m_cache=AppLayer.getCrlDownloadCache();
+
+	m_uri=uri;
+	m_delta_uri=delta_uri;
 
 	m_initOk=false;
 
-	m_certif=certif;
-	m_issuer=NULL;
+	m_serial_number=serial_number;
+	/*m_certif=NULL;
+	m_issuer=NULL;*/
 
 	m_info=NULL;
 }
@@ -1409,14 +1436,18 @@ const char *APL_Crl::getUri()
 	return m_uri.c_str();
 }
 
-APL_CertifStatus APL_Crl::verifyCert(bool forceDownload)
-{
+
+APL_CertifStatus APL_Crl::verifyCert(bool forceDownload){
+	/*
 	if(!m_certif)
 		throw CMWEXCEPTION(EIDMW_ERR_BAD_USAGE);
+	*/
 
 	FWK_CertifStatus eStatus;
 	CByteArray baCrl;
+	CByteArray baDeltaCRL;
 
+	// Gets the CRL
 	switch(getData(baCrl,forceDownload))
 	{
 	case APL_CRL_STATUS_ERROR:
@@ -1429,16 +1460,38 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload)
 		break;
 	}
 
-	eStatus=m_cryptoFwk->CRLValidation(m_certif->getData(), baCrl);
+	// Gets the Delta CRL
+	switch (getData(baDeltaCRL, forceDownload)){
+	case APL_CRL_STATUS_ERROR:
+		return APL_CERTIF_STATUS_ERROR;
+	case APL_CRL_STATUS_CONNECT:
+		return APL_CERTIF_STATUS_CONNECT;
+	case APL_CRL_STATUS_UNKNOWN:
+	case APL_CRL_STATUS_VALID:
+	default:
+		break;
+	}
+
+	// Gets an updated CRL from the CRL and the Delta CRL
+	X509_CRL* updated_CRL=m_cryptoFwk->updateCRL(baCrl, baDeltaCRL);
+
+	// Validates CRL
+	eStatus=m_cryptoFwk->CRLValidation(m_serial_number, updated_CRL);
+
+	// Frees updated_CRL
+	X509_CRL_free(updated_CRL);
+
+	// Returns the Status
 	return ConvertStatus(eStatus,APL_VALIDATION_PROCESS_CRL);
 }
 
 //Get data from the file and make the verification
-APL_CrlStatus APL_Crl::getData(CByteArray &data, bool forceDownload)
-{
+APL_CrlStatus APL_Crl::getData(CByteArray &data, bool forceDownload){
 	CRLFetcher crl_fetcher;
 	APL_CrlStatus eRetStatus=APL_CRL_STATUS_ERROR;
+	// Can be changed to update with delta CRL
 	data = crl_fetcher.fetch_CRL_file(m_uri.c_str());
+
 
 	//If ok, we get the info, unless we return an empty bytearray
 	if(data.Size() == 0)
@@ -1455,6 +1508,7 @@ APL_CrlStatus APL_Crl::getData(CByteArray &data, bool forceDownload)
 	return eRetStatus;
 }
 
+/*
 APL_Certif *APL_Crl::getIssuer()
 {
 	if(!m_certif)
@@ -1470,7 +1524,7 @@ const char *APL_Crl::getIssuerName()
 	init();
 
 	return m_info->issuerName.c_str();
-}
+}*/
 
 /*****************************************************************************************
 ---------------------------------------- APL_OcspResponse --------------------------------------

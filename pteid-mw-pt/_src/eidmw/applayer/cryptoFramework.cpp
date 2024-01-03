@@ -152,8 +152,7 @@ public:
 		MWLOG(LEV_INFO, MOD_SSL, L" ---> CrlMemoryCache deleted");
 	}
 
-	X509_CRL *getX509CRL(const CByteArray &crl, const CByteArray &hash)
-	{
+	X509_CRL *getX509CRL(const CByteArray &crl, const CByteArray &hash){
 		int i;
 		bool bTSChanged=false;
 		int iOlder=0;
@@ -246,6 +245,28 @@ unsigned long APL_CryptoFwk::GetCertUniqueID(const CByteArray &cert)
 	X509_free(pX509);
 
 	return ret;
+}
+
+uint64_t APL_CryptoFwk::getCertSerialNumber(const CByteArray &cert){
+	const unsigned char *pucCert=NULL;
+	X509 *pX509 = NULL;
+
+	//Convert cert into pX509_Cert
+	pucCert=cert.GetBytes();
+	if ( ! d2i_X509_Wrapper(&pX509, pucCert,cert.Size() ) )
+	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+
+	// The serial number that will be returned;
+ 	uint64_t serial_number = 0;
+
+	//Gets the serial number as an uint64_t
+	ASN1_INTEGER* ASN1_serial_number =X509_get_serialNumber(pX509);
+	ASN1_INTEGER_get_uint64(&serial_number, ASN1_serial_number);
+
+	//Free openSSL object
+	if (pX509) X509_free(pX509);
+
+	return serial_number;
 }
 
 bool APL_CryptoFwk::VerifyDateValidity(const CByteArray &cert)
@@ -586,39 +607,39 @@ bool APL_CryptoFwk::VerifyRoot(const CByteArray &cert, const unsigned char *cons
 	return false;
 }
 
-FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByteArray &crl)
-{
-	X509_CRL *pX509Crl = NULL;
-	X509 *pX509 = NULL;
-    	STACK_OF(X509_REVOKED) *pRevokeds = NULL;
- 	const unsigned char *pucCert=NULL;
-	pucCert=cert.GetBytes();
+// Serial Number 
+FWK_CertifStatus APL_CryptoFwk::CRLValidation(uint64_t serial_number, X509_CRL* pX509Crl){
+
+	MWLOG(LEV_INFO, MOD_SSL, L"CRL Validation");
+	
+    STACK_OF(X509_REVOKED) *pRevokeds = NULL;
 	bool bFound=false;
 	bool onHold = false;
 	FWK_CertifStatus eStatus=FWK_CERTIF_STATUS_UNCHECK;
 
-	if ( ! d2i_X509_Wrapper(&pX509, pucCert,cert.Size() ) )
-	  goto cleanup;
+	// Converts the parameter
+	ASN1_INTEGER* converted_serial_number = ASN1_INTEGER_new();
+	ASN1_INTEGER_set_uint64(converted_serial_number, serial_number);
 
-	//Convert bytearray into X509_CRL
-	if (NULL == (pX509Crl=getX509CRL(crl)))
-	{
-		eStatus=FWK_CERTIF_STATUS_ERROR;
-		goto cleanup;
-	}
-
+	// Gets the revoked certificates from the CRL
     pRevokeds = X509_CRL_get_REVOKED(pX509Crl);
-    if(pRevokeds)
-	{
-		for(int i = 0; i < sk_X509_REVOKED_num(pRevokeds); i++)
-		{
+
+	// If the list isn't empty 
+    if(pRevokeds){
+		// For each revoked certificate
+		for(int i = 0; i < sk_X509_REVOKED_num(pRevokeds); i++){
+			// Gets Certificate
 			X509_REVOKED *pRevoked = sk_X509_REVOKED_value(pRevokeds, i);
-			if(ASN1_INTEGER_cmp(X509_get_serialNumber(pX509), X509_REVOKED_get0_serialNumber(pRevoked))==0)
-			{
+			// If the serial number matches
+			if(ASN1_INTEGER_cmp(converted_serial_number, X509_REVOKED_get0_serialNumber(pRevoked))==0){
+				// It is declared as found
 				bFound=true;
+
+				// Gets revocation reason
 				int crit = 0;
 				ASN1_ENUMERATED * revocation_reason = (ASN1_ENUMERATED *)X509_REVOKED_get_ext_d2i(pRevoked, NID_crl_reason, &crit, NULL);
 
+				// If the revocation reason is hold
 				if (revocation_reason && ASN1_ENUMERATED_get(revocation_reason) == OCSP_REVOKED_STATUS_CERTIFICATEHOLD) {
 					onHold = true;
 				}
@@ -626,7 +647,7 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByte
 			}
 		}
 	}
-
+	// Gets status
 	if (onHold){
 		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: CRL Validation: Certificate Suspended.");
 		eStatus = FWK_CERTIF_STATUS_SUSPENDED;
@@ -639,10 +660,6 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(const CByteArray &cert,const CByte
 		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: CRL Validation: Certificate Valid.");
 		eStatus = FWK_CERTIF_STATUS_VALID;
 	}
-
-cleanup:
-	//Free openSSL object
-    if(pX509) X509_free(pX509);
 
 	return eStatus;
 }
@@ -1119,7 +1136,7 @@ char *APL_CryptoFwk::GetOCSPUrl(X509 *pX509_Cert)
 
 }
 
-bool APL_CryptoFwk::GetCDPUrl(const CByteArray &cert, std::string &url)
+bool APL_CryptoFwk::GetCDPUrl(const CByteArray &cert, std::string &url, int ext_nid)
 {
 	const unsigned char *pucCert=NULL;
 	X509 *pX509 = NULL;
@@ -1132,7 +1149,7 @@ bool APL_CryptoFwk::GetCDPUrl(const CByteArray &cert, std::string &url)
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	//Get the URL of the OCSP responder
-	pUrl = GetCDPUrl(pX509);
+	pUrl = GetCDPUrl(pX509, ext_nid);
 
 	url.clear();
 
@@ -1148,36 +1165,34 @@ bool APL_CryptoFwk::GetCDPUrl(const CByteArray &cert, std::string &url)
 	return bOk;
 }
 
-char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert)
-{
+char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert, int ext_nid){
     STACK_OF(DIST_POINT)* pStack = NULL;
     const char *pData = NULL;
     bool bFound = false;
 
-	pStack = (STACK_OF(DIST_POINT)*) X509_get_ext_d2i(pX509_Cert, NID_crl_distribution_points, NULL, NULL);
-
+	// Gets extension 
+	//int ext_nid = delta ? NID_freshest_crl : NID_crl_distribution_points;
+	pStack = (STACK_OF(DIST_POINT)*) X509_get_ext_d2i(pX509_Cert, ext_nid, NULL, NULL);
     if(pStack == NULL)
        return _strdup("");
 
-
-    for(int j = 0; j < sk_DIST_POINT_num(pStack); j++)
-    {
+	// For each CDP
+    for(int j = 0; j < sk_DIST_POINT_num(pStack); j++){
+		//Loads a distribution point
         DIST_POINT *pRes = (DIST_POINT *)sk_DIST_POINT_value(pStack, j);
-        if(pRes != NULL)
-        {
+		//If the distribution 
+        if(pRes != NULL){
+			//Gets a stack of names
             STACK_OF(GENERAL_NAME) *pNames = pRes->distpoint->name.fullname;
-            if(pNames)
-            {
-                for(int i = 0; i < sk_GENERAL_NAME_num(pNames); i++)
-                {
+            if(pNames){
+                for(int i = 0; i < sk_GENERAL_NAME_num(pNames); i++){
                     GENERAL_NAME *pName = sk_GENERAL_NAME_value(pNames, i);
-                    if(pName != NULL && pName->type == GEN_URI )
-                    {
+                    if(pName != NULL && pName->type == GEN_URI ){
                         pData = (const char *)ASN1_STRING_get0_data(pName->d.uniformResourceIdentifier);
                         bFound = true;
 						break;
                     }
-                 }
+                }
                 sk_GENERAL_NAME_free(pNames);
 				if(bFound) break;
             }
@@ -1194,8 +1209,11 @@ char *APL_CryptoFwk::GetCDPUrl(X509 *pX509_Cert)
 
 bool APL_CryptoFwk::GetCrlData(const CByteArray &cert, CByteArray &outCrl)
 {
+	//Gets the CDP URL so that it can fetch the URL
+	// The Cert will be obtained after the getCDPUrl
+	// The URL will be obtained after the GetCDPUrl
 	std::string url;
-	if (!GetCDPUrl(cert, url)) {
+	if (!GetCDPUrl(cert, url, NID_crl_distribution_points)) {
 		MWLOG(LEV_ERROR, MOD_APL, "Couldn't parse CRL URL from certificate");
 		return false;
 	}
@@ -1209,7 +1227,88 @@ bool APL_CryptoFwk::GetCrlData(const CByteArray &cert, CByteArray &outCrl)
 		return false;
 	}
 
+	//The outCrl is used as a return
+
 	return true;
+}
+
+void APL_CryptoFwk::updateCRL(X509_CRL* crl, X509_CRL* delta_crl){
+
+	// Gets the revoked certificates in the CRL
+    STACK_OF(X509_REVOKED) *pRevokeds = NULL;
+	pRevokeds = X509_CRL_get_REVOKED(crl);
+
+	// Gets the revoked certificates in the delta CRL 
+	STACK_OF(X509_REVOKED) *deltaRevokeds = NULL;
+	deltaRevokeds = X509_CRL_get_REVOKED(delta_crl);
+
+	// Crit param in reason code function
+	int crit = 0;
+
+	// If both the CRL and DeltaCRL have contents
+	if (deltaRevokeds && pRevokeds){
+
+		// For each revoked certificate in the delta_crl
+		for(int i = 0; i < sk_X509_REVOKED_num(deltaRevokeds); i++){
+						
+			// Loads the current revoked certificate in the delta_crl
+			X509_REVOKED *deltaRevoked = sk_X509_REVOKED_value(deltaRevokeds, i);
+
+			// Puts crit to 0
+			crit = 0;
+
+			// Sees if the revoked CRL should be removed
+			ASN1_ENUMERATED * revocation_reason = (ASN1_ENUMERATED *)X509_REVOKED_get_ext_d2i(deltaRevoked, NID_crl_reason, &crit, NULL);
+
+			// Gets the revoked CRL serial number 
+			ASN1_INTEGER * serial_number =  (ASN1_INTEGER *)X509_REVOKED_get0_serialNumber(deltaRevoked);
+
+			uint64_t* serial_number_uint64 = new uint64_t();
+
+			ASN1_INTEGER_get_uint64(serial_number_uint64, serial_number);
+
+			// Gets a pointer to the X509_REVOKED so that it can be removed
+			X509_REVOKED *pRevoked =  X509_REVOKED_new();
+			
+			// Variable that represents if it exists in the original CRL
+			int exists = X509_CRL_get0_by_serial(crl, &pRevoked, serial_number);
+
+			// If it exists in the CRL it needs to be removed or updated
+			if (exists != 0){
+				// If it exists in the CRL, but needs to be removed from CRL
+				if (revocation_reason && ASN1_ENUMERATED_get(revocation_reason) == OCSP_REVOKED_STATUS_REMOVEFROMCRL) {
+					std::cout << "Removed a Certificate from CRL" << std::endl;
+					// Remove contract
+					X509_REVOKED* deleted_X509 = sk_X509_REVOKED_delete_ptr(pRevokeds, pRevoked);
+					// Frees the deleted X509
+					X509_REVOKED_free(deleted_X509);
+				}
+				else{
+					// Changes the revocation reason
+					X509_REVOKED_add1_ext_i2d(pRevoked, NID_crl_reason, (void*) revocation_reason ,crit, X509V3_ADD_REPLACE);	
+				}
+			}	
+			else{	
+				// If it doesn't exist already then removes it
+				//X509_CRL_add0_revoked(crl, deltaRevoked);
+				X509_CRL_add0_revoked(crl, X509_REVOKED_dup(deltaRevoked));
+			}
+		}
+	}
+}
+
+X509_CRL* APL_CryptoFwk::updateCRL(const CByteArray &crl,const CByteArray &delta_crl){
+
+	// Converts CBYTE Array to CRL
+	X509_CRL *CRL = getX509CRL(crl);
+
+	// Converts CBYTE Array to Delta CRL
+	X509_CRL *DeltaCRL = getX509CRL(delta_crl);
+
+	// Calls the function that updates the CRL;
+	updateCRL(CRL, DeltaCRL);
+	
+	return CRL;
 }
 
 bool APL_CryptoFwk::GetOCSPCert(const CByteArray &ocspResponse, CByteArray &outCert)
