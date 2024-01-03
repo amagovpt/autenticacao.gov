@@ -95,7 +95,7 @@ CReader::CReader(const std::string & csReader, CContext *poContext) :
 CReader::~CReader(void)
 {
     if (m_poCard != NULL)
-        Disconnect(DISCONNECT_LEAVE_CARD);
+        Disconnect(DISCONNECT_RESET_CARD);
 
     delete m_oPinpad;
 }
