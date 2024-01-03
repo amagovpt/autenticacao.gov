@@ -81,16 +81,6 @@ typedef struct _FEATURES
 	DWORD GET_KEY_PRESSED;
 } FEATURES, *PFEATURES;
 
-extern DWORD PteidSignData
-			(
-				PCARD_DATA  pCardData, 
-				BYTE pin_id,
-				DWORD cbToBeSigned, 
-				PBYTE pbToBeSigned, 
-				DWORD *pcbSignature, 
-				PBYTE *ppbSignature
-			);
-
 extern DWORD PteidReadPrKDF(PCARD_DATA pCardData,
 							DWORD *out_len,
 							PBYTE *data);
@@ -99,16 +89,7 @@ extern DWORD PteidParsePrKDF(PCARD_DATA pCardData,
 							 DWORD *cbStream, 
 							 BYTE *pbStream,
 							 WORD *cbKeySize);
-extern DWORD PteidSignDataGemsafe 
-			(
-				PCARD_DATA  pCardData, 
-				BYTE pin_id,
-				DWORD cbToBeSigned, 
-				PBYTE pbToBeSigned, 
-				DWORD *pcbSignature, 
-				PBYTE *ppbSignature, 
-				BOOL pss_padding
-			);
+
 extern DWORD PteidReadFile
 			(
 				PCARD_DATA  pCardData, 
@@ -116,14 +97,7 @@ extern DWORD PteidReadFile
 				DWORD *cbStream, 
 				PBYTE pbStream
 			);
-extern DWORD   PteidAuthenticate
-               (
-                  PCARD_DATA     pCardData, 
-                  PBYTE          pbPin, 
-                  DWORD          cbPin, 
-                  PDWORD         pcAttemptsRemaining,
-				  BYTE			 pin_id 
-               );
+
 extern DWORD   PteidAuthenticateExternal
                (
                   PCARD_DATA     pCardData, 
@@ -132,14 +106,6 @@ extern DWORD   PteidAuthenticateExternal
 				  DWORD			PinId
   
                );
-
-extern DWORD   PteidMSE
-				(
-				 PCARD_DATA   pCardData, 
-			     BYTE      key_id,
-				 DWORD hash_length,
-				 BOOL pss_padding
-				 ); 
 
 extern DWORD  PteidSelectApplet(PCARD_DATA     pCardData);
 

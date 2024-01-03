@@ -352,25 +352,12 @@ DWORD WINAPI   CardSignData
 	LogDumpHex(pInfo->cbData, (char *)pInfo->pbData);
 #endif
 
-	if (card_type == GEMSAFE_CARD || card_type == IAS_V5_CARD)
-	{
-		dwReturn = cal_sign_data(pCardData, 
-			pInfo->bContainerIndex,
-			pInfo->cbData, 
-			pInfo->pbData, 
-			&(pInfo->cbSignedData), 
-			&(pInfo->pbSignedData), PssPadInfo != NULL);
-
-	}
-	else if (card_type == IAS_CARD)
-	{
-		dwReturn = PteidSignData(pCardData, 
-			pInfo->bContainerIndex,
-			pInfo->cbData, 
-			pInfo->pbData, 
-			&(pInfo->cbSignedData), 
-			&(pInfo->pbSignedData));
-	}
+	dwReturn = cal_sign_data(pCardData, 
+		pInfo->bContainerIndex,
+		pInfo->cbData, 
+		pInfo->pbData, 
+		&(pInfo->cbSignedData), 
+		&(pInfo->pbSignedData), PssPadInfo != NULL);
 	if ( dwReturn != 0 )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "PteidSignData() returned [0x%X]", dwReturn);
