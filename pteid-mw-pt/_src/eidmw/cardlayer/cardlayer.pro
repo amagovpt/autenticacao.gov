@@ -24,16 +24,15 @@ CONFIG -= warn_on qt
 ## destination directory
 DESTDIR = ../lib
 DEPENDPATH += . 
-macx: LIBS += -L../lib -l$${COMMONLIB}
-macx: LIBS += -L $$DEPS_DIR/openssl-3/lib/ -L $$DEPS_DIR/openpace/lib/
-macx: LIBS += -l$${DLGLIB} -Wl,-framework -Wl,PCSC
-macx: LIBS += -lcrypto
-
 unix:LIBS += -L../lib -l$${COMMONLIB}
 unix:LIBS += -l$${DLGLIB}
 unix: LIBS += -lcrypto
 unix: LIBS += -leac
 !macx:LIBS += -lpcsclite
+macx: LIBS += -L$$DEPS_DIR/openssl-3/lib \
+              -L$$DEPS_DIR/openpace/lib \
+              -L$$DEPS_DIR/openpace/lib  \
+              -Wl,-framework -Wl,PCSC
 
 INCLUDEPATH += . ../common 
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
