@@ -159,7 +159,7 @@ void CPteidCard::ReadSerialNumber() {
 	try {
 
 		// Get card serial number 
-		// CPLC Data only available on EID or Multipass app on PTEID_2 cards 
+		// CPLC Data is only available on EID or Multipass app on PTEID_2 cards 
 		if (m_cardType == CARD_PTEID_IAS5) {
 			if (m_pace.get() != NULL)
 				SelectApplication({ PTEID_2_APPLET_MULTIPASS, sizeof(PTEID_2_APPLET_MULTIPASS)});
@@ -173,11 +173,11 @@ void CPteidCard::ReadSerialNumber() {
 		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
 	}
 	catch (CMWException e) {
-		MWLOG(LEV_CRIT, MOD_CAL, "Failed to get CardData: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
+		MWLOG(LEV_CRIT, MOD_CAL, "Failed to read serial number: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
 	catch (const std::exception &e) {
-		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to get CardData std::exception thrown");
+		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to read serial number std::exception thrown");
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
 
