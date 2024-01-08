@@ -17,11 +17,11 @@ SUBDIRS += common \
 
 SUBDIRS += cardlayer/cardlayer.pro
 
-SUBDIRS +=	pkcs11/pkcs11.pro \
-	        applayer \
-	        CMD/services/cmdServices.pro \
-	        eidlib \
-		eidlibJava_Wrapper
+SUBDIRS += pkcs11/pkcs11.pro \
+           applayer \
+           CMD/services/cmdServices.pro \
+           eidlib \
+           eidlibJava_Wrapper
 
 applayer.depends = pteid-poppler		
 
