@@ -136,7 +136,7 @@ DWORD WINAPI   CardAcquireContext
 					card_type = IAS_V5_CARD;
 					LogTrace(LOGTYPE_INFO, WHERE, "IAS v5 Card Detected");
 				}
-				else if (iAtr > 5)
+				else if (iAtr > 6)
 				{
 					card_type = GEMSAFE_CARD;
 					LogTrace(LOGTYPE_INFO, WHERE, "Gemsafe Card Detected");
