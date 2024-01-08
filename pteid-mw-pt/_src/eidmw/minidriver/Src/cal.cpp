@@ -142,8 +142,14 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
 		reader.UseHandle(pCardData->hScard);
-		if(reader.GetCardType() == CARD_PTEID_IAS5)
+
+		if (card_type == IAS_V5_CARD) {
 			reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+		}
+		else {
+			reader.SelectApplication({ PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) });
+		}
+
 		tPin tpin = reader.GetPin(pin_id);
 
 		std::string pin = std::string((const char*)pbPin, (size_t)cbPin);
