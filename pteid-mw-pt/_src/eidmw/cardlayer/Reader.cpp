@@ -262,11 +262,17 @@ void CReader::readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, 
 }
 
 void CReader::UseHandle(SCARDHANDLE hCard) {
-	if (m_poCard)
+	if (m_poCard) {
+		// reset last application incase card was reset
+		if(GetCardType() == CARD_PTEID_IAS5)
+			m_poCard->ResetApplication();
+		
 		m_poCard->m_hCard = hCard;
+	}
 
 	if (m_oPinpad)
 		m_oPinpad->Init(hCard);
+
 }
 
 

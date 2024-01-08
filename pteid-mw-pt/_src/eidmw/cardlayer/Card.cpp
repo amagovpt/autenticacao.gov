@@ -131,6 +131,10 @@ void CCard::Unlock()
 	}
 }
 
+void CCard::ResetApplication() {
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
 //Not supported for Unknown cards, only implemented in subclasses
 void CCard::SelectApplication(const CByteArray & oAID)
 {

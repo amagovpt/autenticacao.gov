@@ -99,6 +99,7 @@ protected:
 	virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
     virtual bool SelectApplet();
 
+	 virtual void ResetApplication();
 	virtual void SelectApplication(const CByteArray & oAID);
 
 	tFileInfo SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo = false);

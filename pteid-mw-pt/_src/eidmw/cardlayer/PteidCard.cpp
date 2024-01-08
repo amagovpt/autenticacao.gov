@@ -874,6 +874,10 @@ CByteArray CPteidCard::OldSelectByPath(const std::string & csPath, bool bReturnF
 	return CByteArray((unsigned char *)csPathCopy.c_str(), (unsigned long)csPathCopy.size());
 }
 
+void CPteidCard::ResetApplication() {
+	m_lastSelectedApplication.ClearContents();
+}
+
 void CPteidCard::SelectApplication(const CByteArray & oAID)
 {
 	if (m_lastSelectedApplication.Size() > 0 && oAID.Size() > 0 &&

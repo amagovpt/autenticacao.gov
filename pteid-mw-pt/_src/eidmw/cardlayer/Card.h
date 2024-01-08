@@ -73,6 +73,7 @@ public:
     virtual void Lock();
     virtual void Unlock();
 
+	 virtual void ResetApplication();
     virtual void SelectApplication(const CByteArray & oAID);
     virtual void setSSO(bool value);
 

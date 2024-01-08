@@ -43,15 +43,15 @@ long EidmwToScardErr(unsigned long lEidmwErr)
 DWORD cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
 	try {
 		if (!oCardLayer)
-		oCardLayer = std::make_unique<CCardLayer>();
+			oCardLayer = std::make_unique<CCardLayer>();
 
 		readerName = reader_name;
 		protocol = protocol_;
 
 		auto &reader = oCardLayer->getReader(readerName);
+
 		reader.Connect(pCardData->hScard, protocol);
 		reader.setAskPinOnSign(false);
-
 	}
 	catch (CMWException e) {
 		return EidmwToScardErr(e.GetError());
@@ -59,7 +59,6 @@ DWORD cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
 
 	return SCARD_S_SUCCESS;
 }
-
 
 DWORD cal_read_cert(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PBYTE *ppbCertif) {
 	auto &reader = oCardLayer->getReader(readerName);
@@ -86,8 +85,6 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
 		reader.UseHandle(pCardData->hScard);
-
-		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 		auto serial_number = reader.GetSerialNr();
 
 		if (cbSerialNumber < serial_number.size())
@@ -107,8 +104,8 @@ DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey,
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
 		reader.UseHandle(pCardData->hScard);
-
-		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });	
+		if (reader.GetCardType() == CARD_PTEID_IAS5)
+			reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });	
 
 		unsigned char cmd[16] = { 0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x86, 0x00, 0x00 };
 		const int                   PUBKEY_LEN = 64;
@@ -145,7 +142,8 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
 		reader.UseHandle(pCardData->hScard);
-		reader.SelectApplication({ PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA) });
+		if(reader.GetCardType() == CARD_PTEID_IAS5)
+			reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 		tPin tpin = reader.GetPin(pin_id);
 
 		std::string pin = std::string((const char*)pbPin, (size_t)cbPin);
@@ -169,7 +167,6 @@ DWORD cal_sign_data(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
 		reader.UseHandle(pCardData->hScard);
-		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 
 		auto pkey = reader.GetPrivKey(pin_id);
 		auto signed_data = reader.Sign(pkey, pss_padding ? SIGN_ALGO_RSA_PSS : 0, { pbToBeSigned, cbToBeSigned });
