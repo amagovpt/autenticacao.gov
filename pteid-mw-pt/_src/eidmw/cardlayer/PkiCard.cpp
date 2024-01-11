@@ -83,6 +83,8 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
 	//We use max_block_read_length as 223 because of a limit on SM layer
 	const int MAX_BLOCK_READ_LENGTH = m_pace.get() != NULL ? 223 : MAX_APDU_READ_LEN;
 
+	MWLOG(LEV_INFO, MOD_CAL, L"   SelectUncachedFile %ls", utilStringWiden(csPath).c_str());
+
     tFileInfo fileInfo = SelectFile(csPath, true);
     unsigned long realMaxLen = (std::min)(fileInfo.lFileLen, ulMaxLen);
     unsigned long offsetByte = ulOffset;

@@ -42,16 +42,20 @@ long EidmwToScardErr(unsigned long lEidmwErr)
 
 DWORD cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
 	try {
+		readerName = reader_name;
+		protocol = protocol_;
+		
 		if (!oCardLayer)
 			oCardLayer = std::make_unique<CCardLayer>();
 
-		readerName = reader_name;
-		protocol = protocol_;
-
 		auto &reader = oCardLayer->getReader(readerName);
-
 		reader.Connect(pCardData->hScard, protocol);
 		reader.setAskPinOnSign(false);
+
+		if (reader.isCardContactless()) {
+			const char* CAN = "460354";
+			reader.initPaceAuthentication(CAN, 6, PaceSecretType::PACECAN);
+		}
 	}
 	catch (CMWException e) {
 		return EidmwToScardErr(e.GetError());
@@ -85,13 +89,22 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
 		reader.UseHandle(pCardData->hScard);
-		auto serial_number = reader.GetSerialNr();
+		
+		WORD len = 0;
+		auto vendor = reinterpret_cast<VENDOR_SPECIFIC*>(pCardData->pvVendorSpecific);
 
-		if (cbSerialNumber < serial_number.size())
-			return ERROR_INSUFFICIENT_BUFFER;
+		if (!vendor->bSerialNumberSet) {
+			auto serialNumber = reader.GetSerialNr();
 
-		*pdwSerialNumber = serial_number.size();
-		memcpy(pbSerialNumber, serial_number.c_str(), serial_number.size());
+			if (serialNumber.size() > 16)
+				return ERROR_INSUFFICIENT_BUFFER;
+		
+			memcpy(vendor->szSerialNumber, serialNumber.data(), serialNumber.size());
+			len = serialNumber.size();
+		}
+
+		*pdwSerialNumber = len;
+		memcpy(pbSerialNumber, vendor->szSerialNumber, len);
 	}
 	catch (CMWException e) {
 		return EidmwToScardErr(e.GetError());
