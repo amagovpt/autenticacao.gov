@@ -179,7 +179,16 @@ DWORD cal_sign_data(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE
 
 		*pcbSignature = signed_data.Size();
 		*ppbSignature = (PBYTE)pCardData->pfnCspAlloc(signed_data.Size());
-		memcpy(*ppbSignature, signed_data.GetBytes(), signed_data.Size());
+
+		if (reader.GetCardType() == CARD_PTEID_IAS5) {
+			memcpy(*ppbSignature, signed_data.GetBytes(), signed_data.Size());
+		} else {
+			for (int i = 0; i < *pcbSignature; i++)
+			{
+				(*ppbSignature)[i] = signed_data.GetByte(*pcbSignature - i - 1);
+			}
+		}
+
 	}
 	catch (CMWException e) {
 		return EidmwToScardErr(e.GetError());
