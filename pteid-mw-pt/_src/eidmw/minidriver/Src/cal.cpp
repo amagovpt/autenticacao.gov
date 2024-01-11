@@ -70,7 +70,8 @@ DWORD cal_read_cert(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
 		reader.UseHandle(pCardData->hScard);
 
 		auto cert = reader.GetCert(dwCertSpec - 1);
-		reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+		if (reader.GetCardType() == CARD_PTEID_IAS5)
+			reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 
 		auto file = reader.ReadFile(cert.csPath);
 		*pcbCertif = file.Size();
