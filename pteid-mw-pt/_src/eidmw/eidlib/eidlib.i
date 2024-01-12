@@ -905,6 +905,22 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 				}
 				return;
 				break;
+			case EIDMW_PACE_ERR_BAD_TOKEN:
+    		case EIDMW_PACE_ERR_NOT_INITIALIZED:
+    		case EIDMW_PACE_ERR_UNKNOWN:
+				classDescription += "/PTEID_PACE_ERROR";
+				clazz = jenv->FindClass(classDescription.c_str());
+				if (clazz)
+				{
+					methodID   = jenv->GetMethodID(clazz, "<init>", "(I)V");
+					if(methodID)
+					{
+						jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID, err));
+						jint success = jenv->Throw(exc);
+					}
+				}
+				return;
+				break;
 			case EIDMW_ERR_CARD:
 			default:
 				classDescription += "/PTEID_Exception";
