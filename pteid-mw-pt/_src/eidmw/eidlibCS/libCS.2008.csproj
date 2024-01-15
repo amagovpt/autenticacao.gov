@@ -171,6 +171,9 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Object.cs">
       <Link>GeneratedFiles\PTEID_Object.cs</Link>
     </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_PACE_ERROR.cs">
+      <Link>GeneratedFiles\PTEID_PACE_ERROR.cs</Link>
+    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_Param.cs">
       <Link>GeneratedFiles\PTEID_Param.cs</Link>
     </Compile>
