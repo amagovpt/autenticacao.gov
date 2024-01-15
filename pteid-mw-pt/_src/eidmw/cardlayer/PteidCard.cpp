@@ -137,6 +137,7 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *po
 
 	setProtocol(protocol);
 	m_cardType = CARD_PTEID_IAS5;
+	ReadSerialFromMultipass();
 }
 
 void CPteidCard::ReadSerialFromMultipass() {
@@ -193,10 +194,7 @@ tCardType CPteidCard::GetType()
 
 CByteArray CPteidCard::GetSerialNrBytes()
 {
-	if (m_oSerialNr.Size() == 0 && m_cardType == CARD_PTEID_IAS5)
-		ReadSerialFromMultipass();
-
-	return m_oSerialNr;
+    return m_oSerialNr;
 }
 
 CByteArray CPteidCard::GetInfo()
