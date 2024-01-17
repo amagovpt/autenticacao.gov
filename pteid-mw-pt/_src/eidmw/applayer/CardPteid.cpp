@@ -1057,9 +1057,19 @@ void APL_EidFile_ID_V2::MapFieldsInternal()
 	}
 
 	const auto full_mrz = m_EidFile_MRZ->getMRZ();
-	m_MRZ1.assign(full_mrz, PTEIDNG_FIELD_ID_LEN_Mrz1);
-	m_MRZ2.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz2);
-	m_MRZ3.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz3);
+    const auto mrz_len = strlen(full_mrz);
+    //Porto Seguro card type has a smaller MRZ field
+    if (mrz_len < (PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2 + PTEIDNG_FIELD_ID_LEN_Mrz3)) {
+        const char * p_mrz_line_sep = strchr(full_mrz, '/');
+        auto mrz_offset = p_mrz_line_sep-full_mrz;
+        m_MRZ1.assign(full_mrz, mrz_offset);
+        m_MRZ2.assign(p_mrz_line_sep + 1, mrz_len-mrz_offset-1);
+    }
+    else {
+        m_MRZ1.assign(full_mrz, PTEIDNG_FIELD_ID_LEN_Mrz1);
+        m_MRZ2.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz2);
+        m_MRZ3.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz3);        
+    }
 
 	// TODO (DEV-CC2): parse public key from DG13 data to make it available in eidlib
 
