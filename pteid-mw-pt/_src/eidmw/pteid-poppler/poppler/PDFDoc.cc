@@ -774,7 +774,7 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
     cleanSignatureDicts();
   }
 
-  SignatureSignerInfo signer_info { name, civil_number, m_attribute_supplier, m_attribute_name };
+    SignatureSignerInfo signer_info { name, civil_number, m_attribute_supplier, m_attribute_name };
 	if (isLinearized())
 	{
 	   Ref first_page = getPageRef(page);
@@ -806,16 +806,17 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 
 	//Start searching at the start of the new sig dictionary object
 	base_search = (char *)mem_stream.getData() + xref->getSigDictOffset();
+    size_t haystack_len = mem_stream.size() - xref->getSigDictOffset();
 
-	found = (long)memmem(base_search, mem_stream.size(),
+	found = (long)memmem(base_search, haystack_len,
 			       	(const void *) needle, sizeof(needle)-1);
 
 	m_sig_offset = found - haystack + 21;
 	if (found == 0)
-  {
+    {
 		error(errInternal, -1, "prepareSignature: can't find signature offset. Aborting signature!");
-    return;
-  }
+        return;
+    }
 	
 	getCatalog()->setSignatureByteRange(m_sig_offset, ESTIMATED_LEN, mem_stream.size());
 
