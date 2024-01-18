@@ -178,7 +178,7 @@ RA_ECDH2Response parseECDH2Response(const char * json_str) {
     return resp;
 }
 
-RA_MutualAuthResponse parseMutualAuthResponse1(const char *json_str) {
+std::optional<RA_MutualAuthResponse> parseMutualAuthResponse1(const char *json_str) {
     RA_MutualAuthResponse resp;
     cJSON *mutual_auth = cJSON_Parse(json_str);
 
@@ -187,12 +187,11 @@ RA_MutualAuthResponse parseMutualAuthResponse1(const char *json_str) {
     {
         MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
         MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
-        return resp;
+        return {};
     }
 
     apdu_array = cJSON_GetObjectItem(mutual_auth, "internal_auth_commands");
 
-    //TODO: error handling: internal_auth_commands can be null/empty
     if (cJSON_IsArray(apdu_array)) {
         for (int i=0; i < cJSON_GetArraySize(apdu_array); i++) {
             cJSON * item = cJSON_GetArrayItem(apdu_array, i);
@@ -200,11 +199,17 @@ RA_MutualAuthResponse parseMutualAuthResponse1(const char *json_str) {
                 resp.internal_auth_commands.push_back(item->valuestring);
         }
     }
+    else {
+        return {};
+    }
 
     cJSON* item = cJSON_GetObjectItem(mutual_auth, "signed_challenge_command");
 
     if (cJSON_IsString(item) && (item->valuestring != NULL)) {
         resp.signed_challenge_command.append(item->valuestring);
+    }
+    else {
+        return {};
     }
     item = cJSON_GetObjectItem(mutual_auth, "pin_status_command");
 

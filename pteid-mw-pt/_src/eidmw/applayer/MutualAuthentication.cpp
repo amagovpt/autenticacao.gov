@@ -513,7 +513,6 @@ char *MutualAuthentication::sendPrebuiltAPDU(const char *apdu_string)
     if (!checkResultSW12(resp)) {
         MWLOG(LEV_ERROR, MOD_APL, "%s: Error in SM prebuilt APDU! SW: %02x %02x", __FUNCTION__, 
                      resp.GetByte(resp.Size() - 2), resp.GetByte(resp.Size() - 1));
-        return "";
     }
 
 	resp_string = (char *)malloc(resp.Size()*2 +1);

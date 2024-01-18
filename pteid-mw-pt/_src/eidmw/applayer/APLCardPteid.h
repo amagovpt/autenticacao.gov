@@ -382,6 +382,8 @@ private:
     long validateRemoteAddressData(const char * json_response, RemoteAddressProtocol endpoint);
 	void mapNationalFields(cJSON * json_obj);
 	void mapForeignFields(cJSON * json_obj);
+    void breakSecureMessaging();
+    void handleRemoteAddressError(bool sm_started, long exception_code);
 
 	APL_EIDCard *m_card;							/**< Pointer to the card that construct this object*/
 

@@ -28,7 +28,7 @@ INSTALL_DIR_BIN = $${PREFIX_DIR}/bin
 INSTALL_DIR_LIB = $${PREFIX_DIR}/lib
 INSTALL_DIR_INCLUDE = $${PREFIX_DIR}/include
 
-CONFIG += c++11
+CONFIG += c++17
 
 ## link to relative path
 LINK_RELATIVE_PATH = ../lib

@@ -8,6 +8,8 @@
 #include "ByteArray.h"
 #include "cJSON.h"
 
+#include <optional>
+
 //Simple data classes to represent webservice responses
 
 namespace eIDMW
@@ -84,7 +86,7 @@ namespace eIDMW
 
     std::string           parseECDH1Response(const char *json);
     RA_ECDH2Response      parseECDH2Response(const char *json);
-    RA_MutualAuthResponse parseMutualAuthResponse1(const char *json);
+    std::optional<RA_MutualAuthResponse> parseMutualAuthResponse1(const char *json);
 
     cJSON * buildIDObject(APL_EidFile_ID &id_file);
     cJSON * buildAddressObject(APL_EidFile_Address &addr);

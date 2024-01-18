@@ -1410,6 +1410,33 @@ std::string buildRemoteAddressURL(RemoteAddressProtocol protocol, int endpoint) 
     return ra_url;
 }
 
+/* Force PACE SM to "wake up" if it was active before Remote Address mutual auth
+   Using contact interface this has the effect of returning to "cleartext mode"
+*/
+void APL_AddrEId::breakSecureMessaging() {
+
+    CReader * reader = m_card->getCalReader();
+    if (reader != NULL) {
+        reader->setNextAPDUClearText();
+
+        const unsigned char select_nonexistent_ef[] = {0x00, 0xA4, 0x02, 0x00, 0x02, 0xAB, 0xCD};
+        const unsigned char reselect_eid_app[] = {0x00, 0xA4, 0x04, 0x00, 0x07};
+        CByteArray plaintext_reselect(reselect_eid_app, sizeof(reselect_eid_app));
+        plaintext_reselect.Append({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+        CByteArray plaintext_dummy_apdu{select_nonexistent_ef, sizeof(select_nonexistent_ef)};
+
+        reader->SendAPDU(plaintext_dummy_apdu);
+        reader->SendAPDU(plaintext_reselect);
+    }
+}
+
+void APL_AddrEId::handleRemoteAddressError(bool sm_started, long exception_code) {
+    if (sm_started) {
+        breakSecureMessaging();
+    }
+    throw CMWEXCEPTION(exception_code);
+}
+
 void APL_AddrEId::loadRemoteAddress_CC2() {
 
     std::string url_endpoint_ecdh1 = buildRemoteAddressURL(CC2_PROTOCOL, 1);
@@ -1417,6 +1444,7 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     std::string url_endpoint_mutual_auth1 = buildRemoteAddressURL(CC2_PROTOCOL, 3);
     std::string url_endpoint_mutual_auth2 = buildRemoteAddressURL(CC2_PROTOCOL, 4);
     long exception_code = 0;
+    bool sm_started = false;
     const unsigned long ADDRESS_PIN_IDX = 2;
 
     MutualAuthentication mutual_authentication(m_card);
@@ -1461,16 +1489,16 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     std::string ecdh1_kifd = parseECDH1Response(resp.http_response.c_str());
 
     if (ecdh1_kifd.empty()) {
-
-        throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
+        handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
     }
 
     char * kicc = mutual_authentication.generalAuthenticate(ecdh1_kifd.c_str());
 
     if (!kicc) {
-        MWLOG(LEV_DEBUG, MOD_APL, "%s: Address loading aborted in generalAuthenticate!", __FUNCTION__);
-        throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
+        MWLOG(LEV_ERROR, MOD_APL, "%s: Address loading aborted in generalAuthenticate!", __FUNCTION__);
+        handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
     }
+    sm_started = true;
 
     json_str = build_json_ecdh2(kicc);
 
@@ -1483,22 +1511,25 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 
     if (ecdh2_obj.external_auth_apdus.size() == 0) {
         MWLOG(LEV_DEBUG, MOD_APL, "%s: 2nd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp2.http_code, resp2.http_response.c_str());
-        throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
+        handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
     }
 
     auto resp_external_auth = mutual_authentication.sendSequenceOfPrebuiltAPDUs(ecdh2_obj.external_auth_apdus);
 
     json_str = build_json_mutualauth_1(resp_external_auth);
-    //TODO: verify if we have any error in the resp
     //Step 3 of the protocol
     PostResponse resp3 = post_json_remoteaddress(url_endpoint_mutual_auth1.c_str(), json_str, cookie.c_str());
-    MWLOG(LEV_DEBUG, MOD_APL, "%s: 3rd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp3.http_code, resp3.http_response.c_str());
 
-    RA_MutualAuthResponse mutualauth1_obj = parseMutualAuthResponse1(resp3.http_response.c_str());
+    std::optional<RA_MutualAuthResponse> mutualauth1_obj = parseMutualAuthResponse1(resp3.http_response.c_str());
+
+    if (!mutualauth1_obj.has_value()) {
+        MWLOG(LEV_DEBUG, MOD_APL, "%s: 3rd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp3.http_code, resp3.http_response.c_str());
+        handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
 
     auto resp_internal_auth = mutual_authentication.remoteAddressStep3(
-        mutualauth1_obj.signed_challenge_command, mutualauth1_obj.internal_auth_commands,
-        mutualauth1_obj.pin_status_command);
+        mutualauth1_obj.value().signed_challenge_command, mutualauth1_obj.value().internal_auth_commands,
+        mutualauth1_obj.value().pin_status_command);
 
     json_str = build_json_mutualauth_2(resp_internal_auth);
 
@@ -1507,15 +1538,10 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     MWLOG(LEV_DEBUG, MOD_APL, "%s: 4th POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp4.http_code, resp4.http_response.c_str());
 
     exception_code = validateRemoteAddressData(resp4.http_response.c_str(), CC2_PROTOCOL);
-    //Force PACE SM to "wake up"
-    CReader * reader = m_card->getCalReader();
-    if (reader != NULL) {
-        reader->setNextAPDUClearText();
 
-        const unsigned char select_nonexistent_ef[] = {0x00, 0xA4, 0x02, 0x00, 0x02, 0xAB, 0xCD};
-        CByteArray plaintext_dummy_apdu{select_nonexistent_ef, sizeof(select_nonexistent_ef)};
-        reader->SendAPDU(plaintext_dummy_apdu);
-    }
+cleanup:
+
+    breakSecureMessaging();
 
     if (exception_code != 0) {
         throw CMWEXCEPTION(exception_code);
