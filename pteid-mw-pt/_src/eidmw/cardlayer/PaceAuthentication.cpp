@@ -144,10 +144,6 @@ namespace eIDMW
 
                 if(TlvLe.Size())
                     encryptedAPDU.Append(TlvLe);
-                if (memCommandHeader)
-                    BUF_MEM_clear_free(memCommandHeader);
-                if (memPaddedCommandHeader)
-                    BUF_MEM_clear_free(memPaddedCommandHeader);
                 if(memMac)
                     BUF_MEM_clear_free(memMac);
                 if(memInputForMac)
@@ -196,6 +192,11 @@ namespace eIDMW
             encryptedAPDU.Append(0x00);
 
             EAC_increment_ssc(m_ctx);
+
+            if (memCommandHeader)
+                BUF_MEM_clear_free(memCommandHeader);
+            if (memPaddedCommandHeader)
+                BUF_MEM_clear_free(memPaddedCommandHeader);
 
             return encryptedAPDU;
         }
