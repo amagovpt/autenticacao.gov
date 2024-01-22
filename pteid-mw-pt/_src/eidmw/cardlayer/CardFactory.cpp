@@ -167,7 +167,7 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
         	else if (ret.second == SCARD_PROTOCOL_T1)
 				param_structure = SCARD_PCI_T1;
 
-			int appletVersion = 1;
+			int appletVersion = 0;
 
             const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
             {
@@ -186,17 +186,21 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
             if(!isContactLess)
             {
                 bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
-                if (!aidStatus) {
+                if (aidStatus) {
+                    appletVersion = 1;
+                }
+                else {
                     bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
                     if (nationalDataStatus)
                         appletVersion = 3;
                 }
-
-				long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
-			
-				poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
-				if (cacheEnabled)
-					poCard->InitEncryptionKey();
+                if (appletVersion > 0) {
+    				long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+    			
+    				poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+    				if (cacheEnabled)
+    					poCard->InitEncryptionKey();
+                }
             }
             else {
                 appletVersion = 3;
