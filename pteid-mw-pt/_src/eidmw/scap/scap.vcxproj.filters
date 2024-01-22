@@ -68,5 +68,8 @@
     <ClCompile Include="scapcache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sslconnection_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

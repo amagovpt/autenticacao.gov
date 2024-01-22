@@ -170,6 +170,7 @@
     <ClCompile Include="scapimages.cpp" />
     <ClCompile Include="scapservice.cpp" />
     <ClCompile Include="scapsettings.cpp" />
+    <ClCompile Include="sslconnection_helper.cpp" />
     <ClCompile Include="totp_gen.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
