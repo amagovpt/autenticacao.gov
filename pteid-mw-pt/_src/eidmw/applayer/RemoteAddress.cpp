@@ -12,6 +12,7 @@
 #include "cJSON.h"
 #include "Log.h"
 #include "RemoteAddress.h"
+#include <optional>
 
 namespace eIDMW
 {

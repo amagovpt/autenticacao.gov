@@ -18,7 +18,6 @@
 #include <iostream>
 #include "J2KHelper.h"
 
-using namespace std;
 namespace eIDMW {
 
 	PhotoPteid::PhotoPteid(){

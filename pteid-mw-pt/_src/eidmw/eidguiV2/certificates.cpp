@@ -147,6 +147,17 @@ bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
     }
     return true;
 }
+
+void buildCryptProviderStruct(CRYPT_KEY_PROV_INFO * pCryptKeyProvInfo, bool is_ecdsa) {
+	pCryptKeyProvInfo->pwszProvName = is_ecdsa ? (LPWSTR)MS_SMART_CARD_KEY_STORAGE_PROVIDER :(LPWSTR)MS_SCARD_PROV_W;
+	pCryptKeyProvInfo->dwKeySpec = is_ecdsa ? 0 : AT_SIGNATURE;
+	
+	pCryptKeyProvInfo->dwProvType = is_ecdsa ? 0 : PROV_RSA_FULL;
+	pCryptKeyProvInfo->dwFlags = 0;
+	pCryptKeyProvInfo->cProvParam = 0;
+	pCryptKeyProvInfo->rgProvParam = NULL;
+}
+
 #endif
 //*****************************************************
 // store the user certificates of the card in a specific reader
@@ -159,11 +170,6 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
     PCCERT_CONTEXT  pPrevCert		= NULL;
 	HCERTSTORE		hMyStore = CertOpenSystemStore(NULL, L"MY");
 	
-	//TODO: fix certificate registration for new ECDSA certificates
-	if (Card.getType() == PTEID_CARDTYPE_IAS5) {
-		return true;
-	}
-
     if ( NULL != hMyStore )
     {
         RemoveOlderUserCerts(hMyStore, pCertContext);
@@ -235,23 +241,18 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
         QString				  strContainerName;
 
         //Using Minidriver
-            if (KeyUsageBits & CERT_NON_REPUDIATION_KEY_USAGE)
-            {
-                strContainerName = "NR_";
-            }
-            else
-            {
-                strContainerName = "DS_";
-            }
-            strContainerName += pSerialKey;
-            pCryptKeyProvInfo->pwszProvName			= (LPWSTR)MS_SCARD_PROV_W;
-            pCryptKeyProvInfo->dwKeySpec			= AT_SIGNATURE;
-        
-        pCryptKeyProvInfo->pwszContainerName	= (LPWSTR)strContainerName.utf16();
-        pCryptKeyProvInfo->dwProvType			= PROV_RSA_FULL;
-        pCryptKeyProvInfo->dwFlags				= 0;
-        pCryptKeyProvInfo->cProvParam			= 0;
-        pCryptKeyProvInfo->rgProvParam			= NULL;
+		if (KeyUsageBits & CERT_NON_REPUDIATION_KEY_USAGE)
+		{
+			strContainerName = "NR_";
+		}
+		else
+		{
+			strContainerName = "DS_";
+		}
+		strContainerName += pSerialKey;
+
+		pCryptKeyProvInfo->pwszContainerName = (LPWSTR)strContainerName.utf16();
+		buildCryptProviderStruct(pCryptKeyProvInfo, Card.getType() == PTEID_CARDTYPE_IAS5);
 
         // Set the property.
         if (CertSetCertificateContextProperty(
@@ -626,10 +627,6 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
     try
     {
         PTEID_EIDCard&		 Card			= ReaderContext.getEIDCard();
-		//Don't need to read or register CC2 certificates here
-		if (Card.getType() == PTEID_CARDTYPE_IAS5) {
-			return true;
-		}
         PTEID_Certificates&	 certificates	= Card.getCertificates();
 
 
