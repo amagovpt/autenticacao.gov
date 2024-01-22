@@ -120,7 +120,8 @@ DWORD WINAPI   CardAcquireContext
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData->pbAtr]");
       CLEANUP(SCARD_E_INVALID_PARAMETER);
    }
-	
+
+
    LogTrace(LOGTYPE_INFO, WHERE, "ATR input value: ");
    
    LogDumpHex(pCardData->cbAtr, pCardData->pbAtr);
@@ -153,6 +154,10 @@ DWORD WINAPI   CardAcquireContext
          iLgCnt++;
       }
    }
+   if (card_type == IAS_V5_CARD && runningUnderService()) {
+	   CLEANUP(SCARD_F_INTERNAL_ERROR);
+   }
+
    if ( iCardCnt == 0 )
    {
       if ( iLgCnt == 0 )
