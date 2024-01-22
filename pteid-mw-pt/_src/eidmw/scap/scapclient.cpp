@@ -13,6 +13,11 @@
 #include <QDateTime>
 #include <QImage>
 
+#ifdef _WIN32
+#include <openssl/rsa.h>
+#include <openssl/ec.h>
+#endif
+
 #include "scapclient.h"
 #include "scapservice.h"
 #include "scapsettings.h"
@@ -590,6 +595,10 @@ static std::vector<std::string> filter_providers_by_ids(const std::vector<ScapPr
 
 #ifdef _WIN32
 
+/* Code related to TLS client authentication, for Windows it needs to be contained in this module (effectively in the GUI app)
+   because of our use of static libraries for openssl
+ */
+
 thread_local static PTEID_EIDCard * sslconnection_card = NULL;
 
 static void setThreadLocalCardInstance(PTEID_EIDCard * card)
@@ -630,12 +639,68 @@ static int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 		return 0;
 }
 
-void setupSSLCallbackFunction() {
-	//Change the default RSA_METHOD to use our function for signing
-	RSA_METHOD * current_method = (RSA_METHOD *)RSA_get_default_method();
+static ECDSA_SIG * pteid_ecdsa_sign(const unsigned char *dgst, int dgstlen,
+                        const BIGNUM *kinv,
+                        const BIGNUM *rp, EC_KEY *eckey) {
 
-	RSA_meth_set_sign(current_method, eIDMW::rsa_sign);
-	RSA_meth_set_flags(current_method, RSA_METHOD_FLAG_NO_CHECK);
+    MWLOG(LEV_DEBUG, MOD_APL, "pteid_ecdsa_sign() called with digest_len: %u", dgstlen);
+    CByteArray to_sign(dgst, dgstlen);
+    CByteArray signed_data;
+    BIGNUM *bns = NULL, *bnr = NULL;
+    //This size is only valid for curve NIST P-256
+    const int EC_KEY_BYTE_LEN = 32;
+    try
+    {
+        //Sign with Authentication Key
+        signed_data = sslconnection_card->Sign(to_sign, false, dgstlen == SHA256_DIGEST_LENGTH);
+    }
+    catch (CMWException &e)
+    {
+        MWLOG(LEV_ERROR, MOD_APL, "pteid_ecdsa_sign(): Exception caught in card.Sign. Aborting connection! Thrown in %s:%lu", e.GetFile().c_str(), e.GetLine());
+        return NULL;
+    }
+
+    if (signed_data.Size() == EC_KEY_BYTE_LEN*2)
+    {
+        ECDSA_SIG *signature = ECDSA_SIG_new();
+ 
+        bnr = BN_bin2bn(signed_data.GetBytes(), EC_KEY_BYTE_LEN, NULL);
+        bns = BN_bin2bn(signed_data.GetBytes() + EC_KEY_BYTE_LEN, EC_KEY_BYTE_LEN, NULL);
+
+        ECDSA_SIG_set0(signature, bnr, bns);
+
+        return signature;
+    }
+    else {
+        MWLOG(LEV_ERROR, MOD_APL, "pteid_ecdsa_sign(): Unexpected length of returned signature!");
+        return NULL;
+    }
+}
+
+void setupSSLCallbackFunction(bool is_ecdsa) {
+    if (is_ecdsa) {
+        EC_KEY_METHOD * ec_method_default = (EC_KEY_METHOD *)EC_KEY_get_default_method();
+        MWLOG(LEV_DEBUG, MOD_SCAP, "Modifying default EC_KEY_method: %p", ec_method_default);
+
+        EC_KEY_METHOD *ecc_method = EC_KEY_METHOD_new(ec_method_default);
+        if (ecc_method == NULL)
+            return false;
+        // Keep the original function for sign as we only need to change the implementation of sign_sig() in 
+        // the EC_KEY_METHOD
+        int (*orig_sign) (int, const unsigned char *, int, unsigned char *,
+                      unsigned int *, const BIGNUM *, const BIGNUM *, EC_KEY *) = NULL;
+
+        EC_KEY_METHOD_get_sign(ecc_method, &orig_sign, NULL, NULL);
+        EC_KEY_METHOD_set_sign(ecc_method, orig_sign, NULL, eIDMW::pteid_ecdsa_sign);
+        EC_KEY_set_default_method(ecc_method);
+    }
+    else {
+    	//Change the default RSA_METHOD to use our function for signing
+    	RSA_METHOD * current_method = (RSA_METHOD *)RSA_get_default_method();
+
+    	RSA_meth_set_sign(current_method, eIDMW::rsa_sign);
+    	RSA_meth_set_flags(current_method, RSA_METHOD_FLAG_NO_CHECK);
+    }
 }
 
 #endif
@@ -657,8 +722,10 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 
 #ifdef _WIN32
 		setThreadLocalCardInstance(card);
-		setupSSLCallbackFunction();
+		setupSSLCallbackFunction(card->getType() == PTEID_CARDTYPE_IAS5);
 #endif
+
+        MWLOG(LEV_DEBUG, MOD_SCAP, "Building SSLConnection for SCAPClient...");
 		connection.reset(card->buildSSLConnection());
 		curl = connection->connect_encrypted();
 
