@@ -91,17 +91,17 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 	try {
 		reader.UseHandle(pCardData->hScard);
 		
-		WORD len = 0;
+		size_t len = 0;
 		auto vendor = reinterpret_cast<VENDOR_SPECIFIC*>(pCardData->pvVendorSpecific);
 
 		if (!vendor->bSerialNumberSet) {
-			auto serialNumber = reader.GetSerialNr();
+			CByteArray serialNumber = reader.GetSerialNrBytes();
 
-			if (serialNumber.size() > 16)
+			if (serialNumber.Size() > 16)
 				return ERROR_INSUFFICIENT_BUFFER;
 		
-			memcpy(vendor->szSerialNumber, serialNumber.data(), serialNumber.size());
-			len = serialNumber.size();
+			memcpy(vendor->szSerialNumber, serialNumber.GetBytes(), serialNumber.Size());
+			len = serialNumber.Size();
 		}
 
 		*pdwSerialNumber = len;

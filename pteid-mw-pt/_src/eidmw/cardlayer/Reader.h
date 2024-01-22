@@ -94,6 +94,7 @@ public:
     tCardType GetCardType();
 
     std::string GetSerialNr();
+	CByteArray GetSerialNrBytes();
     std::string GetCardLabel();
 
 	std::string GetAppletVersion();

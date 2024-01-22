@@ -442,6 +442,14 @@ std::string CReader::GetSerialNr()
     }
 }
 
+CByteArray CReader::GetSerialNrBytes() {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->GetSerialNrBytes();
+
+}
+
 std::string CReader::GetCardLabel()
 {
     if (m_poCard == NULL)
