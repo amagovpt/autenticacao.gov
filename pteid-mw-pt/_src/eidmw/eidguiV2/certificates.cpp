@@ -114,7 +114,7 @@ void ImportCertFromDisk(void *cert_path)
 // Cryptographic Key Provider - this is crucial for eID signatures using the CNG API
 //****************************************************
 #ifdef WIN32
-bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
+bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext, bool is_ecdsa )
 {
     unsigned long dwPropId= CERT_KEY_PROV_INFO_PROP_ID;
     DWORD cbData = 0;
@@ -135,7 +135,7 @@ bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
     }
     if(CertGetCertificateContextProperty(pCertContext, dwPropId, pCryptKeyProvInfo, &cbData))
     {
-		if (wcscmp(pCryptKeyProvInfo->pwszProvName, MS_SCARD_PROV_W) != 0) {
+		if (wcscmp(pCryptKeyProvInfo->pwszProvName, is_ecdsa ? (LPWSTR)MS_SMART_CARD_KEY_STORAGE_PROVIDER : (LPWSTR)MS_SCARD_PROV_W) != 0) {
 			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
 				"KeyProvider name is different than expected!", GetLastError());
 			return false;
@@ -188,7 +188,7 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
                 // succeeds, the return value is nonzero, or TRUE.
                 // ----------------------------------------------------
                 if(NULL == CertCompareCertificate(X509_ASN_ENCODING,pCertContext->pCertInfo,pDesiredCert->pCertInfo) ||
-                        !ProviderNameCorrect(pDesiredCert) )
+                        !ProviderNameCorrect(pDesiredCert, Card.getType() == PTEID_CARDTYPE_IAS5) )
                 {
                     // ----------------------------------------------------
                     // certificates are not identical, but have the same

@@ -50,10 +50,11 @@ public:
     static bool InstallNewRootCa();
 
 private:
-    static bool StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, PTEID_Certificate& cert, const char* readerName);
+	
+	static bool StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, PTEID_Certificate& cert, const char* readerName);
     static bool StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, const char* readerName);
 #ifdef WIN32
-    static bool ProviderNameCorrect (PCCERT_CONTEXT pCertContext );
+	static bool ProviderNameCorrect(PCCERT_CONTEXT pCertContext, bool is_ecdsa);
     static PCCERT_CONTEXT getNewRootCaCertContextFromEidstore();
     static void RemoveOlderUserCerts(HCERTSTORE hMyStore, PCCERT_CONTEXT pTargetCert);
 #endif
