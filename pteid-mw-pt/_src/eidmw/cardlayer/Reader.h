@@ -78,7 +78,7 @@ public:
 	 * any of the other functions below.
 	 */
     bool Connect();
-	 bool Connect(SCARDHANDLE hCard, DWORD protocol);
+	 bool Connect(SCARDHANDLE hCard, DWORD protocol, bool read_serial);
 	 void UseHandle(SCARDHANDLE hCard);
 
 	/** Disconnect from the card; it's safe to call this function multiple times */

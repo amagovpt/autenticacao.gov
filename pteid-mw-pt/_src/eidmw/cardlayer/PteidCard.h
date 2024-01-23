@@ -67,7 +67,7 @@ public:
     CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
                tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol);
 
-	CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol);
+	CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol, bool read_serial);
     ~CPteidCard(void);
 
 	virtual tCardType GetType();

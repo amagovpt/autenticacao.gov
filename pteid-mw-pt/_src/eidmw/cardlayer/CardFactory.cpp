@@ -43,7 +43,7 @@ namespace eIDMW
 
 
 CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReader,
-	CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess) {
+	CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess, bool read_serial) {
 	CCard *poCard = NULL;
 	long lErrCode = EIDMW_ERR_CHECK;
 	const char* strReader = NULL;
@@ -99,7 +99,7 @@ CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csRead
 		}
 		else {
 			appletVersion = 3;
-			poCard = new CPteidCard(hCard, poContext, poPinpad, paramStructure);
+			poCard = new CPteidCard(hCard, poContext, poPinpad, paramStructure, read_serial);
 		}
 
 		CCache::LimitDiskCacheFiles(10);
@@ -204,7 +204,7 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
             }
             else {
                 appletVersion = 3;
-				poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure);
+				poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure, true);
             }
 
 			CCache::LimitDiskCacheFiles(10);
