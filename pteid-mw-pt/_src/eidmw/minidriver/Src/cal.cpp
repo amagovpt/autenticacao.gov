@@ -34,6 +34,8 @@ long EidmwToScardErr(unsigned long lEidmwErr)
 			lRet = SCARD_W_RESET_CARD; break;
 		case EIDMW_ERR_CARD_SHARING:
 			lRet = SCARD_E_SHARING_VIOLATION; break;
+		case EIDMW_ERR_ALGO_BAD:
+			lRet = SCARD_E_UNSUPPORTED_FEATURE; break;
 		case EIDMW_ERR_NOT_TRANSACTED:
 			lRet = SCARD_E_NOT_TRANSACTED; break;
 	}
