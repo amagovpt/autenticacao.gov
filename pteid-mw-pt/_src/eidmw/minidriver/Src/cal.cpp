@@ -41,8 +41,8 @@ long EidmwToScardErr(unsigned long lEidmwErr)
 	return lRet;
 }
 
-std::string get_can(std::string serial_nbr) {
-	std::wstring wsn = std::wstring(serial_nbr.begin(), serial_nbr.end());
+std::string get_can(std::string serial_number) {
+	std::wstring wsn = std::wstring(serial_number.begin(), serial_number.end());
 	std::wstring cache_key = L"can_" + wsn;
 
 	const struct CConfig::Param_Str test = { L"can_cache", cache_key.c_str(), L"" };
@@ -76,7 +76,10 @@ DWORD cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
 
 		if (reader.isCardContactless()) {
 			auto can = get_can(reader.GetSerialNr());
-			reader.initPaceAuthentication(can.c_str(), 6, PaceSecretType::PACECAN);
+			if (can.size() == 0)
+				return SCARD_F_INTERNAL_ERROR;
+
+			reader.initPaceAuthentication(can.c_str(), can.size(), PaceSecretType::PACECAN);
 		}
 	}
 	catch (CMWException e) {
@@ -182,7 +185,10 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 		// Reset pace authentication if contactless
 		if (reader.isCardContactless()) {
 			auto can = get_can(reader.GetSerialNr());
-			reader.initPaceAuthentication(can.c_str(), 6, PaceSecretType::PACECAN);
+			if (can.size() == 0)
+				return SCARD_F_INTERNAL_ERROR;
+
+			reader.initPaceAuthentication(can.c_str(), can.size(), PaceSecretType::PACECAN);
 		}
 
 		if (card_type == IAS_V5_CARD) {
