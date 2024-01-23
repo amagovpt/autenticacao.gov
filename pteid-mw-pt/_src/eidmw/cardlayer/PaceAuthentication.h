@@ -16,6 +16,7 @@ public:
     ~PaceAuthentication();
 
     void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
+	 bool isInitialized();
 
     CByteArray sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
     CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
@@ -23,6 +24,8 @@ public:
 
 private:
     std::unique_ptr<PaceAuthenticationImpl> m_impl;
+
+	 bool initialized;
 };
 
 }

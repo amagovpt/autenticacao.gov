@@ -638,7 +638,7 @@ err:
     };
 
     PaceAuthentication::PaceAuthentication(CContext *poContext)
-        : m_impl(new PaceAuthenticationImpl(poContext))
+        : m_impl(new PaceAuthenticationImpl(poContext)), initialized(false)
     {
     }
 
@@ -649,7 +649,12 @@ err:
     void PaceAuthentication::initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure)
     {
         m_impl->initAuthentication(hCard, param_structure);
+		  initialized = true;
     }
+
+	 bool PaceAuthentication::isInitialized() {
+		 return initialized;
+	 }
 
     CByteArray PaceAuthentication::sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure)
     {
