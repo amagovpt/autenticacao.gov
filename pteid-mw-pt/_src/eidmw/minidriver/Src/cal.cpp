@@ -3,6 +3,7 @@
 
 #include "CardLayer.h"
 #include "CardFactory.h"
+#include "Config.h"
 #include <memory>
 
 using namespace eIDMW;
@@ -40,21 +41,42 @@ long EidmwToScardErr(unsigned long lEidmwErr)
 	return lRet;
 }
 
-DWORD cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
-	try {
-		readerName = reader_name;
-		protocol = protocol_;
-		
-		if (!oCardLayer)
-			oCardLayer = std::make_unique<CCardLayer>();
+std::string get_can(std::string serial_nbr) {
+	std::wstring wsn = std::wstring(serial_nbr.begin(), serial_nbr.end());
+	std::wstring cache_key = L"can_" + wsn;
 
-		auto &reader = oCardLayer->getReader(readerName);
-		reader.Connect(pCardData->hScard, protocol);
+	const struct CConfig::Param_Str test = { L"can_cache", cache_key.c_str(), L"" };
+	auto can = CConfig::GetString(test);
+
+	return { can.begin(), can.end() };
+}
+
+void break_pace() {
+	auto &reader = oCardLayer->getReader(readerName);
+
+	// simply send a dummy non secure apdu
+	reader.setNextAPDUClearText();
+	unsigned char apdu[] = { 0x00, 0xA4, 0x02, 0x00, 0x02, 0xAB, 0xCD };
+	reader.SendAPDU({ apdu, sizeof(apdu) });
+}
+
+DWORD cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
+	readerName = reader_name;
+	protocol = protocol_;
+
+	if (!oCardLayer)
+		oCardLayer = std::make_unique<CCardLayer>();
+	
+	auto &reader = oCardLayer->getReader(readerName);
+	try {
+		reader.Connect(pCardData->hScard, protocol, false);
 		reader.setAskPinOnSign(false);
 
+		break_pace();
+
 		if (reader.isCardContactless()) {
-			const char* CAN = "460354";
-			reader.initPaceAuthentication(CAN, 6, PaceSecretType::PACECAN);
+			auto can = get_can(reader.GetSerialNr());
+			reader.initPaceAuthentication(can.c_str(), 6, PaceSecretType::PACECAN);
 		}
 	}
 	catch (CMWException e) {
@@ -102,6 +124,7 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 		
 			memcpy(vendor->szSerialNumber, serialNumber.GetBytes(), serialNumber.Size());
 			len = serialNumber.Size();
+			vendor->bSerialNumberSet = true;
 		}
 
 		*pdwSerialNumber = len;
@@ -124,7 +147,6 @@ DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey,
 		unsigned char cmd[16] = { 0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x86, 0x00, 0x00 };
 		const int                   PUBKEY_LEN = 64;
 		const int                   PUBKEY_OFFSET = 11;
-		long len;
 		CByteArray result_buff;
 
 		if (dwCertSpec == 2)
@@ -157,6 +179,12 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 	try {
 		reader.UseHandle(pCardData->hScard);
 
+		// Reset pace authentication if contactless
+		if (reader.isCardContactless()) {
+			auto can = get_can(reader.GetSerialNr());
+			reader.initPaceAuthentication(can.c_str(), 6, PaceSecretType::PACECAN);
+		}
+
 		if (card_type == IAS_V5_CARD) {
 			reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 		}
@@ -183,12 +211,12 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 	return SCARD_S_SUCCESS;
 }
 
-DWORD cal_sign_data(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature, BOOL pss_padding) {
+DWORD cal_sign_data(PCARD_DATA pCardData, BYTE container_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature, BOOL pss_padding) {
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
 		reader.UseHandle(pCardData->hScard);
 
-		auto pkey = reader.GetPrivKey(pin_id);
+		auto pkey = reader.GetPrivKey(container_id);
 		auto signed_data = reader.Sign(pkey, pss_padding ? SIGN_ALGO_RSA_PSS : 0, { pbToBeSigned, cbToBeSigned });
 
 		*pcbSignature = signed_data.Size();
