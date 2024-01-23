@@ -3098,17 +3098,21 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard * card) {
 
 	image_provider->setPixmap(image_photo);
 
+	//All data loaded: we can emit the signal to QML
+	setDataCardIdentify(cardData);
+
 	// Load certificates here
 	for (int i = 0; i < ReaderSet.readerCount(); i++) {
 		auto& reader = ReaderSet.getReaderByNum(i);
 		if (reader.isCardPresent() && reader.getCardContactInterface() == PTEID_CARD_CONTACTLESS) {
-			QString readerName = ReaderSet.getReaderName(i);
-			m_Certificates.ImportCertificates(readerName);
+			QString readerName = reader.getName();
+			bool imported = m_Certificates.ImportCertificates(readerName);
+			if (!imported) {
+				PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "finishLoadingCardData", "ImportCertificates failed!");
+				emit signalImportCertificatesFail();
+			}
 		}
 	}
-	
-	//All data loaded: we can emit the signal to QML
-	setDataCardIdentify(cardData);
 }
 
 void GAPI::performPACEWithCache(PTEID_EIDCard * card, CardOperation op) {
