@@ -63,12 +63,12 @@
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="concurrent.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="singleapplication_p.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="pteid_can.cpp">
+    <ClCompile Include="can_cache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
