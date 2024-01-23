@@ -117,10 +117,6 @@
  *  on Mac OS X when multiple apps are access the card simultaneously) */
 #define EIDMW_ERR_NOT_TRANSACTED       0xe1d00210
 
-/** Incompatible reader.
- * E.g. incompatibility with new card, protocol or other. */
-#define EIDMW_ERR_INCOMPATIBLE_READER  0xe1d0022C
-
 // Internal errors (caused by the middleware)
 
 /** An internal limit has been reached */
@@ -218,32 +214,36 @@
 /** User did not yet allow or disallow to read the card */
 #define EIDMW_ERR_USER_MUST_ANSWER     0xe1d0022B
 
+/** Incompatible reader.
+ * E.g. incompatibility with new card, protocol or other. */
+#define EIDMW_ERR_INCOMPATIBLE_READER  0xe1d0022C
+
 /** File I/O error */
-#define EIDMW_ERR_FILE_IO_ERROR        0xe1d0022C
+#define EIDMW_ERR_FILE_IO_ERROR        0xe1d0022D
 
 /** Process interrupted during operation */
-#define EIDMW_ERR_INTR_PROCESS         0xe1d0022D
+#define EIDMW_ERR_INTR_PROCESS         0xe1d0022E
 
 /** File has too long of a file name */
-#define EIDMW_ERR_FILE_TOO_LONG        0xe1d0022E
+#define EIDMW_ERR_FILE_TOO_LONG        0xe1d0022F
 
 /** Too many files opened in the SYSTEM */
-#define EIDMW_ERR_FILE_OP_FL_SYSTEM    0xe1d0022F
+#define EIDMW_ERR_FILE_OP_FL_SYSTEM    0xe1d00231
 
 /** Too many files opened in the PROCESS */
-#define EIDMW_ERR_FILE_OP_FL_PROCESS   0xe1d00231
+#define EIDMW_ERR_FILE_OP_FL_PROCESS   0xe1d00232
 
 /** Disk is Full */
-#define EIDMW_ERR_FILE_NO_SPC          0xe1d00232
+#define EIDMW_ERR_FILE_NO_SPC          0xe1d00233
 
 /** Operation is not permited */
-#define EIDMW_ERR_FILE_OP_NOT_PERM     0xe1d00233
+#define EIDMW_ERR_FILE_OP_NOT_PERM     0xe1d00234
 
 /** File is read only */
-#define EIDMW_ERR_FILE_READ_ONLY       0xe1d00234
+#define EIDMW_ERR_FILE_READ_ONLY       0xe1d00235
 
 /** Trying to move a file by renaming it */
-#define EIDMW_ERR_FILE_DEV             0xe1d00235
+#define EIDMW_ERR_FILE_DEV             0xe1d00236
 
 
 //SOD related errors
