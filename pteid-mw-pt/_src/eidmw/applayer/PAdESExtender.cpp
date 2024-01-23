@@ -173,7 +173,7 @@ namespace eIDMW
         if (elem->getType() == ValidationDataElement::CERT)
         {
             signed long docCertId = getCertUniqueId(elem->getData(), elem->getSize());
-            vector<ValidationDataElement *>::iterator it = m_validationData.begin();
+            std::vector<ValidationDataElement *>::iterator it = m_validationData.begin();
             while(it != m_validationData.end())
             {
                 ValidationDataElement *newVde = *it;
@@ -191,7 +191,7 @@ namespace eIDMW
         }
     }
 
-    bool PAdESExtender::addCRLRevocationInfo(CByteArray & cert, std::unordered_set<string> vri_keys) {
+    bool PAdESExtender::addCRLRevocationInfo(CByteArray & cert, std::unordered_set<std::string> vri_keys) {
         CByteArray crl;
         APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
         if (cryptoFwk->GetCrlData(cert, crl)) {

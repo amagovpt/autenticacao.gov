@@ -513,7 +513,7 @@ static std::string canonicalNode(DOMNode *node, XERCES_CPP_NAMESPACE::DOMDocumen
 	canonicalizer.setUseNamespaceStack(true);
 	canonicalizer.setExclusive();
 
-	string c14n;
+	std::string c14n;
 	unsigned char buffer[1024];
 	size_t bytes = 0;
 	while ((bytes = canonicalizer.outputBuffer(buffer, 1024)) > 0) {

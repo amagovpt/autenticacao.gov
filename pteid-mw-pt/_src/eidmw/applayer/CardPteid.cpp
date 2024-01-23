@@ -764,7 +764,7 @@ const char *APL_EidFile_ID::getSurnameMother()
 const char *APL_EidFile_ID::getParents()
 {
 
-	string m_Parents = m_GivenNameFather + " " + m_SurnameFather + " * " + m_GivenNameMother + " " + m_SurnameMother;
+	std::string m_Parents = m_GivenNameFather + " " + m_SurnameFather + " * " + m_GivenNameMother + " " + m_SurnameMother;
 
 	if(ShowData())
 		return _strdup(m_Parents.c_str());
@@ -1098,8 +1098,8 @@ PhotoPteid *APL_EidFile_ID_V2::getPhotoObj()
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_Address -----------------------------------------
 *****************************************************************************************/
-const string APL_EidFile_Address::m_NATIONAL = "N";
-const string APL_EidFile_Address::m_FOREIGN = "I";
+const std::string APL_EidFile_Address::m_NATIONAL = "N";
+const std::string APL_EidFile_Address::m_FOREIGN = "I";
 APL_EidFile_Address::APL_EidFile_Address(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ADDRESS,NULL)
 {
 }

@@ -425,7 +425,7 @@ namespace eIDMW
 			unique_filenames.push_back(std::make_pair(clean_filename, equal_filename_count));
 		}
 
-		std::string final_path = string(output_dir) + PATH_SEP + clean_filename;
+		std::string final_path = std::string(output_dir) + PATH_SEP + clean_filename;
 
 		if(equal_filename_count > 0){
 			final_path += "_" + std::to_string(equal_filename_count);

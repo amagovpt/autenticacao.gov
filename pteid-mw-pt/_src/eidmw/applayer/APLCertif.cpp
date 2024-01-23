@@ -674,7 +674,7 @@ err:
 	if (m_stream)
 		fclose(m_stream);
 
-	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %ls ", utilStringWiden(string(path)).c_str());
+	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %ls ", utilStringWiden(std::string(path)).c_str());
 }
 
 APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert)

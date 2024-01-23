@@ -207,7 +207,7 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 
 	std::vector<std::string> certs;
 
-    string strCertificate(certificates_pem, certificateLen);
+    std::string strCertificate(certificates_pem, certificateLen);
 
     if (strCertificate.empty()) {
         throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
@@ -224,7 +224,7 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 	      Search for STR_BEGIN_CERTIFICATE
 	    */
 	    found_init = strCertificate.find(STR_BEGIN_CERTIFICATE, found_init);
-	    if (found_init == string::npos) {
+	    if (found_init == std::string::npos) {
 	        break;
 	    }
 
@@ -240,7 +240,7 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 	        Search for STR_END_CERTIFICATE
 	    */
 	    found_end = strCertificate.find(STR_END_CERTIFICATE, found_init);
-	    if ( found_end == string::npos ) {
+	    if ( found_end == std::string::npos ) {
 	        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	    }
 
@@ -607,7 +607,7 @@ std::string CPathUtil::getWorkingDir()
 //TODO: what happens if filename entry in zip contains slashes ??
 FILE * CPathUtil::openFileForWriting(const char *out_dir, const char *filename)
 {
-	std::string file_path = string(out_dir) + PATH_SEP_STR + filename;
+	std::string file_path = std::string(out_dir) + PATH_SEP_STR + filename;
 #ifdef WIN32
 	std::wstring w_file_path = utilStringWiden(file_path);
 	FILE * fp_out = _wfopen(w_file_path.c_str(), L"wb");
@@ -876,8 +876,8 @@ void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::s
 		}
 
 		std::string final_path = "";
-		if(string(folder).size() != 0)
-			final_path = string(folder) + PATH_SEP;
+		if(std::string(folder).size() != 0)
+			final_path = std::string(folder) + PATH_SEP;
 
 		final_path += clean_filename;
 		if(equal_filename_count > 0) {

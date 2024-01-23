@@ -490,7 +490,7 @@ const char *APL_EIDCard::getTokenSerialNumber(){
 		//BEGIN_CAL_OPERATION(m_reader)
         m_reader->CalLock();
         try{
-            m_tokenSerial = new string (m_reader->getCalReader()->GetSerialNr());
+            m_tokenSerial = new std::string (m_reader->getCalReader()->GetSerialNr());
         } catch(...){
             m_reader->CalUnlock();
             delete m_tokenSerial;
@@ -508,7 +508,7 @@ const char *APL_EIDCard::getTokenLabel(){
 		//BEGIN_CAL_OPERATION(m_reader)
         m_reader->CalLock();
         try{
-            m_tokenLabel = new string (m_reader->getCalReader()->GetCardLabel());
+            m_tokenLabel = new std::string (m_reader->getCalReader()->GetCardLabel());
         } catch(...){
             m_reader->CalUnlock();
             delete m_tokenLabel;
@@ -525,7 +525,7 @@ const char * APL_EIDCard::getAppletVersion() {
 	if (!m_appletVersion) {
 		m_reader->CalLock();
 		try {
-			m_appletVersion = new string(m_reader->getCalReader()->GetAppletVersion());
+			m_appletVersion = new std::string(m_reader->getCalReader()->GetAppletVersion());
 		}
 		catch (...) {
 			m_reader->CalUnlock();
@@ -616,8 +616,8 @@ APL_CCXML_Doc::~APL_CCXML_Doc()
 CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 {
 	CByteArray xml;
-	string *ts, *sn, *sa, *tk;
-	string rootATTRS;
+	std::string *ts, *sn, *sa, *tk;
+	std::string rootATTRS;
 
 	ts = m_xmlUserRequestedInfo->getTimeStamp();
 	sn = m_xmlUserRequestedInfo->getServerName();
@@ -658,7 +658,7 @@ CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 *****************************************************************************************/
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo()
 {
-	xmlSet = new set<enum XMLUserData>;
+	xmlSet = new std::set<enum XMLUserData>;
 	_serverName = NULL;
 	_serverAddress = NULL;
 	_timeStamp = NULL;
@@ -667,21 +667,21 @@ APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo()
 
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress)
 {
-	xmlSet = new set<enum XMLUserData>;
-	_timeStamp = (timeStamp) ? new string(timeStamp) : NULL;
-	_serverName = (serverName) ? new string(serverName) : NULL;
-	_serverAddress = (serverAddress) ? new string(serverAddress) : NULL;
+	xmlSet = new std::set<enum XMLUserData>;
+	_timeStamp = (timeStamp) ? new std::string(timeStamp) : NULL;
+	_serverName = (serverName) ? new std::string(serverName) : NULL;
+	_serverAddress = (serverAddress) ? new std::string(serverAddress) : NULL;
 	_tokenID = NULL;
 }
 
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress, const char *tokenID)
 {
-	xmlSet = new set<enum XMLUserData>;
+	xmlSet = new std::set<enum XMLUserData>;
 
-	_timeStamp = (timeStamp) ? new string(timeStamp) : NULL;
-	_serverName = (serverName) ? new string(serverName) : NULL;
-	_serverAddress = (serverAddress) ? new string(serverAddress) : NULL;
-	_tokenID = (tokenID) ? new string(tokenID) : NULL;
+	_timeStamp = (timeStamp) ? new std::string(timeStamp) : NULL;
+	_serverName = (serverName) ? new std::string(serverName) : NULL;
+	_serverAddress = (serverAddress) ? new std::string(serverAddress) : NULL;
+	_tokenID = (tokenID) ? new std::string(tokenID) : NULL;
 }
 
 APL_XmlUserRequestedInfo::~APL_XmlUserRequestedInfo()
@@ -787,7 +787,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	bool addIdNum = false;
 	bool addCardValues = false;
 	bool addCivilInfo = false;
-	string temp;
+	std::string temp;
 
 	// photo
 	if (_xmlUInfo->contains(XML_PHOTO)){
@@ -798,7 +798,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 
 	// basicInformation
 	if (_xmlUInfo->contains(XML_NAME)){
-		string s;
+		std::string s;
 		s+= getGivenName();
 		s+=" ";
 		s+=getSurname();
@@ -1117,7 +1117,7 @@ CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo
 CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader)
 {
 	CByteArray xml;
-	string str;
+	std::string str;
 
 	if (_xmlUInfo->contains(XML_PERSONAL_NOTES)){
 		str = getPersonalNotes();

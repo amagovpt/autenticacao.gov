@@ -81,8 +81,8 @@ std::wstring ExpandSection(
 {
     HRESULT                          hResult;
     int                              iResult;
-    basic_string <char>::size_type   iTotLenght = czSectionOriginal.length();
-    basic_string <char>::size_type   iStrLenght;
+    std::basic_string <char>::size_type   iTotLenght = czSectionOriginal.length();
+    std::basic_string <char>::size_type   iStrLenght;
     wchar_t                          wsSectionCustom[256]; 
 
 
