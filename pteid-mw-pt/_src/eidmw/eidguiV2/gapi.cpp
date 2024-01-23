@@ -3098,6 +3098,15 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard * card) {
 
 	image_provider->setPixmap(image_photo);
 
+	// Load certificates here
+	for (int i = 0; i < ReaderSet.readerCount(); i++) {
+		auto& reader = ReaderSet.getReaderByNum(i);
+		if (reader.isCardPresent() && reader.getCardContactInterface() == PTEID_CARD_CONTACTLESS) {
+			QString readerName = ReaderSet.getReaderName(i);
+			m_Certificates.ImportCertificates(readerName);
+		}
+	}
+	
 	//All data loaded: we can emit the signal to QML
 	setDataCardIdentify(cardData);
 }
@@ -3229,6 +3238,12 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                 case PTEID_CARDTYPE_IAS5:
                 {
                     PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Will try to ImportCertificates...");
+                    auto& reader = ReaderSet.getReaderByName(pCallBackData->getReaderName().toLatin1().data());
+                    if (reader.isCardPresent() && reader.getCardContactInterface() == PTEID_CARD_CONTACTLESS) {
+                        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Postponing ImportCertificates until PACE authentication...");
+                        break;
+                    }
+
                     bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
 
                     if (!bImported) {
