@@ -634,7 +634,7 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 			return oauth_result.error();
 		}
 
-		headers.push_back(string("FAAuthorization: ") + oauth_token);
+		headers.push_back(std::string("FAAuthorization: ") + oauth_token);
 	}
 
 	std::string process_id = generate_process_id();

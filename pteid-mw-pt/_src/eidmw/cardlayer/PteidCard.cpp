@@ -44,11 +44,11 @@ static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 0x87;
 /* martinho - ANY_ID_BIGGER_THAN_6 will be the ulID in the tPin struct 1-6 are already taken */
 static const unsigned long ANY_ID_BIGGER_THAN_6 = 7;
 /* martinho - some meaningful label */
-static const string LABEL = "Card Activation Code";
+static const std::string LABEL = "Card Activation Code";
 /* martinho - date in bcd format must have 4 bytes*/
 static const unsigned long BCDSIZE = 4;
 /* martinho - trace file*/
-static const string TRACEFILE = "3F000003";
+static const std::string TRACEFILE = "3F000003";
 
 unsigned long ulVersion;
 
