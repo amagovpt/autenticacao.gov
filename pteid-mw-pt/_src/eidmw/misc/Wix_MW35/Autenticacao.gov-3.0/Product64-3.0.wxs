@@ -443,6 +443,15 @@
             <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>
+          <RegistryKey Root="HKLM"
+                  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5 (Contactless)"
+                  Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATR" Value="3b8f800180318065b085050011120fff8290008b" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+         </RegistryKey>
 				</Component>
 
 				<Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
