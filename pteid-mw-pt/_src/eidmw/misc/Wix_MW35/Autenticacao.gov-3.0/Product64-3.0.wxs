@@ -278,8 +278,8 @@
 			<DirectoryRef Id="System64Folder">
 
 				<Component Id="Runtime35_64" Guid="{8FE1C7FB-F06A-40db-8454-88D9E8BDD626}" SharedDllRefCount="yes" Win64="yes">
-			          <File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
-			          <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
+			      <File Id="pteidapplayer_64.dll"  Source="$(var.PTEID_BUILD_FOLDER_X64)pteidapplayer.dll" KeyPath="yes" />
+			      <File Id="pteidcardlayer_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcardlayer.dll" />
 					  <File Id="pteidlib_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll"/>
 					  <File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
             <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
@@ -375,7 +375,25 @@
             <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
             <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
-          </RegistryKey>				
+          </RegistryKey>
+          <RegistryKey Root="HKLM"
+                   Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5"
+                   Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085050011120fff829000e1" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+          </RegistryKey>
+         <RegistryKey Root="HKLM"
+                  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5 (Contactless)"
+                  Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="80000001" Value="pteidmdrv64.dll" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATR" Value="3b8f800180318065b085050011120fff8290008b" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+         </RegistryKey>
 				</Component>
         
         <Component Id="REGISTERMINIDRIVER_32" Guid="{937DDB3F-D056-41B1-A4BA-4DF96D3430F9}" Win64="no">
@@ -416,6 +434,24 @@
             <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
             <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
           </RegistryKey>
+          <RegistryKey Root="HKLM"
+                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5"
+                     Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085050011120fff829000e1" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+          </RegistryKey>
+          <RegistryKey Root="HKLM"
+                  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5 (Contactless)"
+                  Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATR" Value="3b8f800180318065b085050011120fff8290008b" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+         </RegistryKey>
 				</Component>
 
 				<Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
@@ -433,7 +469,6 @@
 							<RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONFOLDER]eidstore\certs"/>
             	<RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONFOLDER]eidstore\certs_test"/>
 							<RegistryValue Type="string" Name="web_dir" Value="[APPLICATIONFOLDER]web"/>
-							<RegistryValue Type="integer" Name="show_java_apps" Value="0"/>
 						</RegistryKey>
 
 						<RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
@@ -528,6 +563,13 @@
         <ComponentRef Id="Java_SDK_Component"/>
         <ComponentRef Id="CSharp_SDK_Component"/>
 
+        <ComponentRef Id="pteidmdrv"/>
+        <ComponentRef Id="CertPropService"/>
+        <ComponentRef Id="pteidmdrvsystem32"/>
+        <ComponentRef Id="pteidmdrvsystem64"/>
+        <ComponentRef Id="REGISTERMINIDRIVER_64"/>
+        <ComponentRef Id="REGISTERMINIDRIVER_32"/>
+
 				<Feature Id="GUI"
 						  Title="!(loc.PteidGui)"
 						  Description="!(loc.PteidGuiDescr)"
@@ -545,18 +587,7 @@
 					<ComponentRef Id="SCardSvrService"/>
 					<ComponentRef Id="pkcs11"/>
 					<ComponentRef Id="pkcs11_64"/>
-
-					<!-- Shortcuts -->
-					<Feature Id="Install_Minidriver" Level="0" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" AllowAdvertise="no">
-						<ComponentRef Id="pteidmdrv"/>
-						<ComponentRef Id="CertPropService"/>
-            <ComponentRef Id="pteidmdrvsystem32"/>
-            <ComponentRef Id="pteidmdrvsystem64"/>
-						<ComponentRef Id="REGISTERMINIDRIVER_64"/>
-            <ComponentRef Id="REGISTERMINIDRIVER_32"/>
-						<Condition Level="1">VersionNT >= 601</Condition>
-					</Feature>
-					
+				
 				</Feature>
 			</Feature>
 

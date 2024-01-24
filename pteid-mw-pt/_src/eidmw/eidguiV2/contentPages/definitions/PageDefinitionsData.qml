@@ -102,6 +102,14 @@ PageDefinitionsDataForm {
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
+
+		onSignalRemoveCANCacheSucess:{
+			console.log("Definitions SCAP - Signal CAN Signal Remove CAN cache Sucess")
+			propertyBusyIndicator.running = false;
+			var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE") + controler.autoTr
+            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC") + controler.autoTr
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+		}
     }
     Connections {
         target: controler
@@ -172,9 +180,29 @@ PageDefinitionsDataForm {
         onClicked: {
             console.log("propertyButtonRemoveSCAPCache clicked");
             propertyBusyIndicator.running = true;
-            gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll)
+            gapi.startRemovingAttributesFromCache(GAPI.ScapAttrAll);
         }
     }
+
+    propertyCheckboxEnableCANCache {
+        onCheckedChanged: {
+            var bEnabled = propertyCheckboxEnableCANCache.checked;
+            controler.setEnablePteidCANCache(bEnabled);
+			if(!bEnabled){
+				gapi.startRemoveCANCache();
+			}
+			propertyButtonRemoveCANCache.enabled = bEnabled;
+        }
+    }
+    
+	propertyButtonRemoveCANCache{
+		onClicked: {
+            console.log("propertyButtonRemoveCANCache clicked");
+            propertyBusyIndicator.running = true;
+            gapi.startRemoveCANCache();
+		    propertyBusyIndicator.running = false
+		}
+	}
 
 
     Component.onCompleted: {

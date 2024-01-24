@@ -848,6 +848,7 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 			jclass		clazz;
 			jmethodID	methodID;
 			std::string classDescription = "pt/gov/cartaodecidadao";
+			std::string constructor = "()V";
 
 			switch(err)
 			{
@@ -893,41 +894,27 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 			case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
 			case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
 				classDescription += "/PTEID_ExSOD";
-				clazz = jenv->FindClass(classDescription.c_str());
-				if (clazz)
-				{
-					methodID   = jenv->GetMethodID(clazz, "<init>", "(I)V");
-					if(methodID)
-					{
-						jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID, err));
-						jint success = jenv->Throw(exc);
-					}
-				}
-				return;
+				constructor =  "(I)V";
+				break;
+			case EIDMW_PACE_ERR_BAD_TOKEN:
+    		case EIDMW_PACE_ERR_NOT_INITIALIZED:
+    		case EIDMW_PACE_ERR_UNKNOWN:
+				classDescription += "/PTEID_PACE_ERROR";
+				constructor =  "(I)V";
 				break;
 			case EIDMW_ERR_CARD:
 			default:
 				classDescription += "/PTEID_Exception";
-				clazz = jenv->FindClass(classDescription.c_str());
-				if (clazz)
-				{
-					methodID   = jenv->GetMethodID(clazz, "<init>", "(I)V");
-					if(methodID)
-					{
-						jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID, err));
-						jint success = jenv->Throw(exc);
-					}
-				}
-				return;
+				constructor = "(I)V";
 				break;
 			}
 			clazz = jenv->FindClass(classDescription.c_str());
 			if (clazz)
 			{
-				methodID   = jenv->GetMethodID(clazz, "<init>", "()V");
+				methodID   = jenv->GetMethodID(clazz, "<init>", constructor.c_str());
 				if(methodID)
 				{
-					jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID));
+					jthrowable  exc   = static_cast<jthrowable>(jenv->NewObject(clazz, methodID, err));
 					jint success = jenv->Throw(exc);
 				}
 			}
@@ -1074,6 +1061,7 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 %javaexception("PTEID_Exception") SignSHA256		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readFile			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") writeFile			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") initPaceAuthentication JAVA_CODE_THROW
 
 //------------------------------------------------------------
 // class PTEID_SmartCard

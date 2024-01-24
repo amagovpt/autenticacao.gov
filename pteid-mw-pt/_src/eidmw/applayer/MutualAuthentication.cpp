@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2016-2021 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2016-2023 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -8,7 +8,7 @@
 
 /*
  *  Card interaction necessary for the Change Address Operation
- *  mainly Diffie-Hellman key agreement and mutual authentication with CVC certificates
+ *  mainly Diffie-Hellman key agreement and mutual authentication with card verifiable certificates (CVC)
  */
 
 #include "APLCard.h"
@@ -26,6 +26,7 @@
 #include <openssl/pkcs7.h>
 #include <openssl/evp.h>
 #include <openssl/x509.h>
+#include <openssl/crypto.h>
 
 namespace eIDMW
 {
@@ -54,27 +55,72 @@ bool checkResultSW12(CByteArray &result)
 	return ulSW12 == 0x9000;
 }
 
+char * MutualAuthentication::generalAuthenticate(const char * ecdh_kifd)
+{
+    //Algorithm ID tag 0x80: 0x4F - use AES-128 SM with legacy KDF
+    //Key reference tag 0x83: ECDH Domain parameters
+    CByteArray kifd_ba(std::string(ecdh_kifd), true);
+    const unsigned char mse_set_ecdh[] = {0x00, 0x22, 0x41, 0xA4, 0x06, 0x83, 0x01, 0x32, 0x80, 0x01, 0x4F}; 
+    CByteArray mse_set_apdu(mse_set_ecdh, sizeof(mse_set_ecdh));
+    const int KICC_LEN = kifd_ba.Size();
+    const int KICC_HEX_LEN = KICC_LEN*2 +1;
+    const int KICC_OFFSET = 4;
+    char *kicc_hex = NULL;
+
+    const unsigned char general_auth[] = {0x00, 0x86, 0x00, 0x00}; 
+    CByteArray general_auth_apdu(general_auth, sizeof(general_auth));
+    const unsigned char general_auth_tlv[] = {0x7c, 0x63, 0x85};
+    unsigned char lc = (unsigned char)kifd_ba.Size() + 4; 
+    general_auth_apdu.Append(lc);
+    general_auth_apdu.Append(general_auth_tlv, sizeof(general_auth_tlv));
+    general_auth_apdu.Append((unsigned char)kifd_ba.Size());
+    general_auth_apdu.Append(kifd_ba);
+    
+    CByteArray resp = m_card->getCalReader()->SendAPDU(mse_set_apdu);
+
+    if (!checkResultSW12(resp))
+    {
+        MWLOG(LEV_ERROR, MOD_APL, L"MSE SET ECDH failed!\n");
+        return NULL;
+    }
+
+    CByteArray resp_ga = m_card->getCalReader()->SendAPDU(general_auth_apdu);
+
+    if (!checkResultSW12(resp_ga))
+    {
+        MWLOG(LEV_ERROR, MOD_APL, L"GENERAL AUTHENTICATE failed!\n");
+        return NULL;
+    }
+
+    return byteArrayToHexString(resp_ga.GetBytes()+KICC_OFFSET, KICC_LEN);
+}
+
+CByteArray MutualAuthentication::_getDH_Param_Data(unsigned char specific_byte, unsigned long offset) {
+    unsigned char apdu_dh[] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xA6, 0x03, 0x83, 0x01, 0x32, 0x7F, 0x49, 0x02,
+    0x00, 0x00, 0x00};
+
+    apdu_dh[13] = specific_byte;
+
+    CByteArray dh_param_ba = m_card->getCalReader()->SendAPDU(CByteArray(apdu_dh, sizeof(apdu_dh)));
+
+    //Parse the DH parameter out of the response APDU excluding also the SW12 bytes
+    CByteArray dh_param_data = dh_param_ba.GetBytes(offset);
+    dh_param_data.Chop(2);
+
+    return dh_param_data;
+}
+
 char * MutualAuthentication::_getDH_Param(unsigned char specific_byte, unsigned long offset)
 {
-		char * hex_param = NULL;
-		// 00 CB 00 FF 0A A6 03 83 01 32 7F 49 02 87 00 00 
-		unsigned char apdu_dh[] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xA6, 0x03, 0x83, 0x01, 0x32, 0x7F, 0x49, 0x02,
-		 0x00, 0x00, 0x00};
+    char * hex_param = NULL;
 
-		apdu_dh[13] = specific_byte;
+    CByteArray dh_param_final = _getDH_Param_Data(specific_byte, offset);
 
-		CByteArray dh_param_ba = m_card->getCalReader()->SendAPDU(CByteArray(apdu_dh, sizeof(apdu_dh)));
+    size_t hex_len = 2 * dh_param_final.Size()+ 1;
+    hex_param = (char *)malloc(hex_len);
 
-		//Parse the DH parameter out of the response APDU excluding also the SW12 bytes
-		CByteArray dh_param_final = dh_param_ba.GetBytes(offset);
-		dh_param_final.Chop(2);
-
-		size_t hex_len = 2 * dh_param_final.Size()+ 1;
-		hex_param = (char *)malloc(hex_len);
-		//CByteArray::ToString(bool bAddSpace, bool bOneLine, unsigned long ulOffset, unsigned long ulLen)
-
-		binToHex(dh_param_final.GetBytes(), dh_param_final.Size(), hex_param, hex_len);
-		return hex_param;
+    binToHex(dh_param_final.GetBytes(), dh_param_final.Size(), hex_param, hex_len);
+    return hex_param;
 }
 
 
@@ -415,31 +461,59 @@ char *MutualAuthentication::generateChallenge(char * chr_string)
 	return challenge;
 }
 
-std::vector<char *> MutualAuthentication::sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array)
+std::vector<std::string> MutualAuthentication::remoteAddressStep3(std::string &signed_challenge, std::vector<std::string> &internal_auth, const std::string &pin_status) {
+    CByteArray signed_challenge_ba(signed_challenge, true);
+    CByteArray pin_status_ba(pin_status, true);
+    std::vector<std::string> responses;
+
+    if (signed_challenge.size() == 0 || pin_status.size() == 0 || internal_auth[0].size() == 0) {
+        MWLOG(LEV_ERROR, MOD_APL, "Invalid APDU inputs for %s. Aborting MutualAuth process!", __FUNCTION__);
+        throw CMWEXCEPTION(EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+
+    CByteArray resp1 = m_card->getCalReader()->SendAPDU(signed_challenge_ba);
+    responses.push_back(byteArrayToHexString(resp1.GetBytes(), resp1.Size()));
+
+    auto resp_internal_auth = sendSequenceOfPrebuiltAPDUs(internal_auth);
+    responses.insert(responses.end(), resp_internal_auth.begin(), resp_internal_auth.end());
+
+    CByteArray resp2 = m_card->getCalReader()->SendAPDU(pin_status_ba);
+    responses.push_back(byteArrayToHexString(resp2.GetBytes(), resp2.Size()));
+
+    return responses;
+}
+
+std::vector<std::string> MutualAuthentication::sendSequenceOfPrebuiltAPDUs(std::vector<std::string> &apdu_array)
 {
 	int i = 0;
-	MWLOG(LEV_DEBUG, MOD_APL, L"MutualAuthentication::sendSequenceOfPrebuiltAPDUs()");
-	std::vector <char *> responses;
+	MWLOG(LEV_DEBUG, MOD_APL, "Starting %s", __FUNCTION__);
+	std::vector<std::string> responses;
 
 	while(i != apdu_array.size())
 	{
-		char * tmp = sendPrebuiltAPDU(apdu_array.at(i));
-		MWLOG(LEV_DEBUG, MOD_APL, "APDU %s -> Result: %s", apdu_array.at(i), tmp);
-		responses.push_back(tmp);
+		std::string r = sendPrebuiltAPDU(apdu_array.at(i).data());
+		MWLOG(LEV_DEBUG, MOD_APL, "APDU %s -> Result: %s", apdu_array.at(i).data(), r.data());
+        //We don't need to send 9000 responses obtained for Command APDUs sent in chaining mode
+        //XX: should be replaced by checking the CLA byte of the command
+        if (r.size() > 2*2) {
+		  responses.push_back(r);
+        }
 		i++;
 	}
 	return responses;
 }
 
-char *MutualAuthentication::sendPrebuiltAPDU(char *apdu_string)
+char *MutualAuthentication::sendPrebuiltAPDU(const char *apdu_string)
 {
 	char *resp_string = NULL;
 
 	CByteArray apdu_ba(std::string(apdu_string), true);
 
-	//This is the Le=00 needed to actually get the card response with T=1 cards
-	apdu_ba.Append(0x00);
 	CByteArray resp = m_card->getCalReader()->SendAPDU(apdu_ba);
+    if (!checkResultSW12(resp)) {
+        MWLOG(LEV_ERROR, MOD_APL, "%s: Error in SM prebuilt APDU! SW: %02x %02x", __FUNCTION__, 
+                     resp.GetByte(resp.Size() - 2), resp.GetByte(resp.Size() - 1));
+    }
 
 	resp_string = (char *)malloc(resp.Size()*2 +1);
 
@@ -493,6 +567,23 @@ bool MutualAuthentication::getDHParams(DHParams *dh_struct, bool getAllParams)
 	}
 
 	return true;
+}
+
+CByteArray MutualAuthentication::getECDHParams()
+{
+    CByteArray ecdh_params_data;
+    if (m_card->getType() != APL_CARDTYPE_PTEID_IAS5) {
+        //No ECDH params available in older cards
+        return CByteArray();
+    }
+
+    ecdh_params_data.Append(_getDH_Param_Data(0x81, 10));
+    ecdh_params_data.Append(_getDH_Param_Data(0x82, 10));
+    ecdh_params_data.Append(_getDH_Param_Data(0x83, 10));
+    ecdh_params_data.Append(_getDH_Param_Data(0x84, 10));
+    ecdh_params_data.Append(_getDH_Param_Data(0x85, 10));
+
+    return ecdh_params_data;
 }
 
 

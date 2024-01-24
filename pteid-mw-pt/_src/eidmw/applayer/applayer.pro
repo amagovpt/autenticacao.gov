@@ -106,7 +106,8 @@ HEADERS += \
 	J2KHelper.h \
 	PDFSignature.h \
 	CurlUtil.h \
-	proxyinfo.h
+	proxyinfo.h \
+	asn1_idfile.h
 
 SOURCES += \
 	APLCertif.cpp        \
@@ -141,7 +142,8 @@ SOURCES += \
 	PNGConverter.cpp \
 	J2KHelper.cpp \
 	CurlUtil.cpp \
-	proxyinfo.cpp
+	proxyinfo.cpp \
+	asn1_idfile.cpp
 
 # Disable annoying and mostly useless gcc warning and add hidden visibility for non-exposed classes and functions
 QMAKE_CXXFLAGS += -Wno-write-strings -fvisibility=hidden

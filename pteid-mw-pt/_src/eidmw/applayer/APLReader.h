@@ -34,8 +34,6 @@
 #include "ByteArray.h"
 #include "CardLayerConst.h"
 
-extern std::string m_InitSerialNumber;								/**< Field ChipNumber */
-
 namespace eIDMW
 {
 
@@ -45,7 +43,8 @@ enum APL_CardType
 {
 	APL_CARDTYPE_UNKNOWN=0,
 	APL_CARDTYPE_PTEID_IAS07,
-	APL_CARDTYPE_PTEID_IAS101
+	APL_CARDTYPE_PTEID_IAS101,
+	APL_CARDTYPE_PTEID_IAS5
 };
 
 
@@ -338,6 +337,12 @@ public:
 	  * If there is no card in the reader NULL is return
 	  */    
     EIDMW_APL_API APL_Card *getCard();
+
+    /**
+      * Get the card in the reader whatever is type
+      * If there is no card in the reader NULL is return
+      */
+    EIDMW_APL_API bool isCardContactless() const;
 
  	/**
 	  * Get the EIdcard in the reader

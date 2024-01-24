@@ -643,6 +643,7 @@ PTEID_Card &PTEID_ReaderContext::getCard()
 		{
 		case APL_CARDTYPE_PTEID_IAS07:
 		case APL_CARDTYPE_PTEID_IAS101:
+		case APL_CARDTYPE_PTEID_IAS5:
 			out = new PTEID_EIDCard(&context,pAplCard);
 			//out = new PTEID_EIDCard(&context,pimpl->getEIDCard());
 			break;
@@ -659,7 +660,28 @@ PTEID_Card &PTEID_ReaderContext::getCard()
 
 	END_TRY_CATCH
 
-	return *out;
+        return *out;
+}
+
+PTEID_CardContactInterface PTEID_ReaderContext::getCardContactInterface()
+{
+    PTEID_CardContactInterface contactInterface = PTEID_CardContactInterface::PTEID_CARD_CONTACTEMPTY;
+
+    BEGIN_TRY_CATCH
+    APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
+    bool isContactLess = pimpl->isCardContactless();
+    APL_Card *pAplCard=pimpl->getCard();
+    if(pAplCard != NULL)
+    {
+        if(isContactLess)
+            contactInterface = PTEID_CardContactInterface::PTEID_CARD_CONTACTLESS;
+        else
+            contactInterface = PTEID_CardContactInterface::PTEID_CARD_CONTACT;
+    }
+
+    END_TRY_CATCH
+
+    return contactInterface;
 }
 
 PTEID_EIDCard &PTEID_ReaderContext::getEIDCard()
@@ -669,7 +691,7 @@ PTEID_EIDCard &PTEID_ReaderContext::getEIDCard()
 	APL_ReaderContext *pimpl=static_cast<APL_ReaderContext *>(m_impl);
 	PTEID_CardType type=ConvertCardType(pimpl->getCardType());
 
-	if (type!=PTEID_CARDTYPE_IAS07 && type!=PTEID_CARDTYPE_IAS101) {
+	if (type!=PTEID_CARDTYPE_IAS07 && type != PTEID_CARDTYPE_IAS5 && type!=PTEID_CARDTYPE_IAS101) {
 		throw PTEID_ExCardTypeUnknown();
 	}
 
@@ -765,6 +787,8 @@ PTEID_Config::PTEID_Config(PTEID_Param Param):PTEID_Object(NULL,NULL)
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);	break;
 	case PTEID_PARAM_GENERAL_PTEID_CACHE_ENABLED:
 		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);	break;
+	case PTEID_PARAM_GENERAL_PTEID_CAN_CACHE_ENABLED:
+		m_impl=new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CAN_CACHE_ENABLED); break;
 	case PTEID_PARAM_GENERAL_CERTS_DIR:
 		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);	break;
 	case PTEID_PARAM_GENERAL_LANGUAGE:

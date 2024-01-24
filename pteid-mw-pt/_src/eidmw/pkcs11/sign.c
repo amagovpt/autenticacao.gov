@@ -363,6 +363,13 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
       goto cleanup;
       }
 
+   ret = cal_is_mechanism_supported(pSession->hslot, pMechanism->mechanism);
+   if (ret != CKR_OK)
+      {
+      log_trace(WHERE, "E: mechanism %d not supported", pMechanism->mechanism);
+      goto cleanup;
+      }
+
    //check mechanism
    //since this module is only for PTEID, we check for RSA here and we do not check the device capabilities
    //TODO check mechanism table for signing depending on token in slot
@@ -374,7 +381,13 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
       case CKM_SHA512_RSA_PKCS:
       case CKM_SHA256_RSA_PKCS_PSS:
       case CKM_SHA384_RSA_PKCS_PSS:
+      case CKM_ECDSA_SHA1:
+      case CKM_ECDSA_SHA224:
+      case CKM_ECDSA_SHA256:
+      case CKM_ECDSA_SHA384:
+      case CKM_ECDSA_SHA512:
       case CKM_SHA512_RSA_PKCS_PSS: ihash = 1; break;
+      case CKM_ECDSA:
       case CKM_RSA_PKCS_PSS:
       case CKM_RSA_PKCS:            ihash = 0; break;
       default: 
@@ -394,7 +407,7 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
    //check class, keytype and sign attribute CKO_PRIV_KEY
    /* CKR_KEY_TYPE_INCONSISTENT has higher rank than CKR_KEY_FUNCTION_NOT_PERMITTED */
    ret = p11_get_attribute_value(pObject->pAttr, pObject->count, CKA_KEY_TYPE, (CK_VOID_PTR*) &pkeytype, &len);
-   if (ret || (len != sizeof(CK_KEY_TYPE)) || (*pkeytype != CKK_RSA))
+   if (ret || (len != sizeof(CK_KEY_TYPE)) || ((*pkeytype != CKK_RSA) && (*pkeytype != CKK_EC)))
       {
       log_trace(WHERE, "E: Wrong keytype");
       ret = CKR_KEY_TYPE_INCONSISTENT;
@@ -451,7 +464,14 @@ CK_RV C_SignInit(CK_SESSION_HANDLE hSession,    /* the session's handle */
 
    pSignData->mechanism = pMechanism->mechanism;
    pSignData->hKey = hKey;
-   if ( pmodsize != NULL )pSignData->l_sign = (*pmodsize+7)/8;
+   
+   if ( pmodsize != NULL )
+      {
+         if (*pkeytype == CKK_EC)
+            pSignData->l_sign = 64; // TODO: remove hardcoded value for p-256 signature length
+         else
+            pSignData->l_sign = (*pmodsize+7)/8;
+      }
    if ( pid != NULL ) pSignData->id = *pid;
 
    if (ihash)

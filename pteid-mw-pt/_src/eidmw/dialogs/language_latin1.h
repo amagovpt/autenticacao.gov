@@ -63,6 +63,7 @@ DEFINE_LANG_STR(Asking) = {L"Asking", L"Pedir", L"", L""};
 DEFINE_LANG_STR(SigningWith) = {L"Signing with", L"Assinar com", L"", L""};
 DEFINE_LANG_STR(AuthenticateWith) = {L"Authenticate with", L"Autenticar com", L"", L""};
 DEFINE_LANG_STR(ReadAddressFrom) = {L"Read address from", L"Ler morada do", L"", L""};
+DEFINE_LANG_STR(Activate) = { L"Activate your", L"Ativar o", L"", L"" };
 DEFINE_LANG_STR(ActivationPinOf) = {L"Activation PIN of", L"Código de ativação do", L"", L""};
 DEFINE_LANG_STR(EnterYour) = {L"Enter your", L"Introduza o seu", L"", L""};
 DEFINE_LANG_STR(CitizenCard) = {L"Citizen Card", L"Cartão de Cidadão", L"", L""};

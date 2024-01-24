@@ -75,6 +75,12 @@
     <ClCompile Include="Win32ReaderInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PaceAuthentication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="APDU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h">
@@ -134,9 +140,6 @@
     <ClInclude Include="PkiCard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cardpluginPteid\PteidCard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -147,6 +150,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ReaderDeviceInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PaceAuthentication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="APDU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PteidCard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

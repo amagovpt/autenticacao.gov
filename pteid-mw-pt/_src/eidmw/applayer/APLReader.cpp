@@ -51,8 +51,6 @@
 
 #include "../_Builds/pteidversions.h"
 
-std::string m_InitSerialNumber;								/**< Field ChipNumber */
-
 namespace eIDMW
 {
 
@@ -183,31 +181,10 @@ APL_CardType APL_ReaderContext::getPhysicalCardType()
 	{
 	case CARD_PTEID_IAS07:
 	case CARD_PTEID_IAS101:
+	case CARD_PTEID_IAS5:
 	{
-		CalLock();
-		//Don't need to read anything from the start yet...
-		try
-		{
 
-			CByteArray file2 = m_calreader->ReadFile(PTEID_FILE_ID, 182, 17,true);
-			stringstream serial;
-			serial << file2.GetBytes();
-			m_InitSerialNumber = serial.str();
-
-		}
-		catch(CMWException &e)
-		{
-    		CalUnlock();
-			unsigned long err = e.GetError();
-			if(err!=EIDMW_ERR_FILE_NOT_FOUND && err!=EIDMW_ERR_NO_CARD)
-				throw e;
-
-			//The card may be empty, we do not instantiate m_card object
-			return ret;
-		}
-		CalUnlock();
-
-       		ret=ConvertCardType(calCardType);
+       	ret=ConvertCardType(calCardType);
 
 		break;
 	}
@@ -277,12 +254,13 @@ bool APL_ReaderContext::connectCard()
 
 	switch(cardType)
 	{
-	case APL_CARDTYPE_PTEID_IAS07:
-	case APL_CARDTYPE_PTEID_IAS101:
-		m_card = new APL_EIDCard(this, cardType);
-		break;
-	default:
-		return false;
+		case APL_CARDTYPE_PTEID_IAS07:
+		case APL_CARDTYPE_PTEID_IAS101:
+		case APL_CARDTYPE_PTEID_IAS5:
+			m_card = new APL_EIDCard(this, cardType);
+			break;
+		default:
+			return false;
 	}
 
 	return true;	//New connection
@@ -292,7 +270,12 @@ APL_Card *APL_ReaderContext::getCard()
 {
 	connectCard();
 
-	return m_card;
+    return m_card;
+}
+
+bool APL_ReaderContext::isCardContactless() const
+{
+    return m_card->getCalReader()->isCardContactless();
 }
 
 APL_EIDCard *APL_ReaderContext::getEIDCard()
@@ -815,6 +798,8 @@ APL_CardType ConvertCardType(tCardType cardType)
 		return APL_CARDTYPE_PTEID_IAS07;
 	case CARD_PTEID_IAS101:
 		return APL_CARDTYPE_PTEID_IAS101;
+	case CARD_PTEID_IAS5:
+		return APL_CARDTYPE_PTEID_IAS5;
 	default:
 		return APL_CARDTYPE_UNKNOWN;
 	}

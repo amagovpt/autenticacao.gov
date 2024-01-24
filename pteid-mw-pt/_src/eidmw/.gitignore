@@ -87,3 +87,7 @@ eidguiV2Credentials.h
 ###################
 crl_unit_test/crl_unit_test.out
 crl_unit_test/output.txt
+
+# QT Creator
+###################
+/.qtc_clangd/

@@ -46,15 +46,13 @@
 
 #include "Log.h"
 
-//std::string m_InitSerialNumber;
-
 namespace eIDMW
 {
 
 /*****************************************************************************************
 ------------------------------------ APL_CardFile ---------------------------------------
 *****************************************************************************************/
-APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *file)
+APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *file, const CByteArray& appId)
 {
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 	m_mappedFields = false;
@@ -62,91 +60,24 @@ APL_CardFile::APL_CardFile(APL_Card *card,const char *csPath,const CByteArray *f
 	m_SODCheck = true; // by default
 	m_card=card;
 
-	/* File Caching at Applayer Level
-	 * APL_Config conf_dir(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR);
-	std::string	m_cachedirpath = conf_dir.getString();
-
-	CPathUtil::checkDir (m_cachedirpath.c_str());
-	std::string contents = m_cachedirpath;
-	contents.append("/");
-	std::string cachefile =	("pteidng-");
-	cachefile.append(m_InitSerialNumber);
-	cachefile.append("-");
-	cachefile.append(csPath);
-	cachefile.append(".bin");
-	contents.append(cachefile);
-
-	try
-	{
-		ifstream chkfile(contents.c_str());
-		//FIX Lenght
-		std::string getPath (cachefile, 25, 12);
-
-		if (getPath == csPath)
-		{
-			if (chkfile)
-			{
-				m_path="";
-				FILE *m_stream;
-				char *buff;
-				unsigned long fileLen;
-				CByteArray cbdata;
-
-#ifdef WIN32
-				fopen_s(&m_stream, contents.c_str(), "rb");
-				_locking( fileno(m_stream), LK_NBLCK, 17000L );
-#else
-				m_stream = fopen(contents.c_str(), "rb");
-#endif
-				fseek(m_stream, 0, SEEK_END);
-				fileLen = ftell(m_stream);
-				fseek(m_stream, 0, SEEK_SET);
-
-				buff=(char *)malloc(fileLen+1);
-
-				fread(buff, fileLen, 1, m_stream);
-#ifdef WIN32
-				_locking( fileno(m_stream), LK_UNLCK, 17000L );
-#endif
-				fclose(m_stream);
-			
-			
-				cbdata.Append((unsigned char*)buff, fileLen);
-				m_data=cbdata;
-				m_keepdata=true;
-
-			} else {
-				m_path=csPath;
-				m_keepdata=false;
-			}
-
-		} else {
-			m_path=csPath;
-			m_keepdata=false;
-		}
-
-	}
-	catch(CMWException& e)
-	{
-		MWLOG(LEV_INFO, MOD_APL, L"LoadData: File cache failed %ls", csPath);
-	}*/
-
 	if(csPath)
 		m_path=csPath;
 	else
 		m_path="";
 
+    m_appId = appId;
+
 	if(file)
 	{
 		m_data=*file;
 		m_keepdata=true;
+        m_status = CARDFILESTATUS_OK;
 	}
 	else
 	{
 		m_keepdata=false;
+        m_status=CARDFILESTATUS_UNREAD;
 	}
-
-	m_status=CARDFILESTATUS_UNREAD;
 
 }
 
@@ -170,6 +101,8 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload)
 	{
 		try
 		{
+			APL_SmartCard *card=dynamic_cast<APL_SmartCard *>(m_card);
+			card->selectApplication(m_appId);
 			//Fill the m_data with the content of the file
 			//MWLOG(LEV_INFO, MOD_APL, L"LoadData: Ask for file %ls", wsPath);	//TODO replace by DEBUG
 			ReadFile();
@@ -239,16 +172,18 @@ bool APL_CardFile::ShowData()
 
 const CByteArray& APL_CardFile::getData()
 {
-	if(ShowData())
-		return m_data;
-
-	return EmptyByteArray;
+    bool status_ok = m_keepdata;
+	if(!m_keepdata) {
+        status_ok = ShowData();
+    }
+	
+    return status_ok ? m_data : EmptyByteArray;
 }
 
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_Certificate -----------------------------------------
 *****************************************************************************************/
-APL_CardFile_Certificate::APL_CardFile_Certificate(APL_SmartCard *card,const char *csPath,const CByteArray *file):APL_CardFile(card,csPath,file)
+APL_CardFile_Certificate::APL_CardFile_Certificate(APL_SmartCard *card,const char *csPath,const CByteArray *file, const CByteArray& appID):APL_CardFile(card,csPath,file, appID)
 {
 	m_ulUniqueId=0;
 }

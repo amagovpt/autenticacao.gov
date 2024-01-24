@@ -214,7 +214,7 @@ DWORD WINAPI   CardSignData
 		CLEANUP(SCARD_E_NO_KEY_CONTAINER);
 	}
 
-	if ( pInfo->dwKeySpec != AT_SIGNATURE )
+	if ( pInfo->dwKeySpec != AT_SIGNATURE && (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE)) && pInfo->dwKeySpec != pInfo->dwKeySpec == AT_ECDSA_P256)
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->dwKeySpec]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
@@ -228,9 +228,14 @@ DWORD WINAPI   CardSignData
 
 	if ( ( pInfo->dwSigningFlags & CARD_BUFFER_SIZE_ONLY ) == CARD_BUFFER_SIZE_ONLY)
 	{
-		LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_BUFFER_SIZE_ONLY");
+		LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_BUFFER_SIZE_ONLY for card_type: %d", card_type);
 		//TODO: hardcoded signature length
-		pInfo->cbSignedData = g_keySize / 8;
+		if (card_type == IAS_V5_CARD) {
+			pInfo->cbSignedData = 64;
+		}
+		else {
+			pInfo->cbSignedData = g_keySize / 8;
+		}
 		CLEANUP(SCARD_S_SUCCESS);
 	}
 
@@ -266,6 +271,10 @@ DWORD WINAPI   CardSignData
 	case 0:
 		if ( ( pInfo->dwSigningFlags & CARD_PADDING_INFO_PRESENT ) == CARD_PADDING_INFO_PRESENT)
 		{
+			if (card_type == IAS_V5_CARD) {
+				LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_PADDING_INFO_PRESENT using ECC IAS v5 card");
+				CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
+			}
 			LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_PADDING_INFO_PRESENT");
 			if ( pInfo->pPaddingInfo == NULL )
 			{
@@ -325,8 +334,11 @@ DWORD WINAPI   CardSignData
 		}
 		else
 		{
-			LogTrace(LOGTYPE_ERROR, WHERE, "[pInfo->pPaddingInfo] unsupported...");
-			CLEANUP(SCARD_E_INVALID_PARAMETER);
+			if (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE))
+			{
+				LogTrace(LOGTYPE_ERROR, WHERE, "[pInfo->pPaddingInfo] unsupported...");
+				CLEANUP(SCARD_E_INVALID_PARAMETER);
+			}
 			/*uiHashAlgo = HASH_ALGO_NONE;*/
 		}
 
@@ -340,25 +352,12 @@ DWORD WINAPI   CardSignData
 	LogDumpHex(pInfo->cbData, (char *)pInfo->pbData);
 #endif
 
-	if (Is_Gemsafe)
-	{
-		dwReturn = PteidSignDataGemsafe(pCardData, 
+	dwReturn = cal_sign_data(pCardData, 
 		pInfo->bContainerIndex,
 		pInfo->cbData, 
 		pInfo->pbData, 
 		&(pInfo->cbSignedData), 
 		&(pInfo->pbSignedData), PssPadInfo != NULL);
-
-	}
-	else
-	{
-	dwReturn = PteidSignData(pCardData, 
-		pInfo->bContainerIndex,
-		pInfo->cbData, 
-		pInfo->pbData, 
-		&(pInfo->cbSignedData), 
-		&(pInfo->pbSignedData));
-	}
 	if ( dwReturn != 0 )
 	{
 		LogTrace(LOGTYPE_ERROR, WHERE, "PteidSignData() returned [0x%X]", dwReturn);
@@ -425,16 +424,26 @@ DWORD WINAPI   CardQueryKeySizes
 
 	switch(dwKeySpec)
 	{
-	case AT_ECDHE_P256 :
-	case AT_ECDHE_P384 :
-	case AT_ECDHE_P521 :
-	case AT_ECDSA_P256 :
-	case AT_ECDSA_P384 :
-	case AT_ECDSA_P521 :
+	case AT_ECDSA_P256:
+		pKeySizes->dwMinimumBitlen = 256;
+		pKeySizes->dwDefaultBitlen = 256;
+		pKeySizes->dwMaximumBitlen = 256;
+		pKeySizes->dwIncrementalBitlen = 1;
+		break;
+	case AT_ECDHE_P256:
+	case AT_ECDHE_P384:
+	case AT_ECDHE_P521:
+	case AT_ECDSA_P384:
+	case AT_ECDSA_P521:
 		iUnSupported++;
 		break;
+	//RSA keys
 	case AT_KEYEXCHANGE:
-	case AT_SIGNATURE  :
+	case AT_SIGNATURE:
+		pKeySizes->dwMinimumBitlen = 1024;
+		pKeySizes->dwDefaultBitlen = 3072;
+		pKeySizes->dwMaximumBitlen = 3072;
+		pKeySizes->dwIncrementalBitlen = 0;
 		break;
 	default:
 		iInValid++;
@@ -450,11 +459,6 @@ DWORD WINAPI   CardQueryKeySizes
 		LogTrace(LOGTYPE_ERROR, WHERE, "Unsupported parameter [dwKeySpec][%d]", dwKeySpec);
 		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 	}
-
-	pKeySizes->dwMinimumBitlen     = 1024;
-	pKeySizes->dwDefaultBitlen     = 1024;
-	pKeySizes->dwMaximumBitlen     = 3072;
-	pKeySizes->dwIncrementalBitlen = 0;
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");

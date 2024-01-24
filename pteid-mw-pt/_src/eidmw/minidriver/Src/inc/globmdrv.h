@@ -32,6 +32,8 @@
 //#include "util.h"
 #include "stdafx.h"
 
+#include "cal.h"
+
 #define CLEANUP(i)                        {dwReturn=(i);goto cleanup;}
 
 #define MINIDRIVER_VERSION                "1.0.A"
@@ -97,7 +99,12 @@ typedef struct _VENDOR_SPECIFIC
 
 /************************************************************************************************************************/
 /* Global State, here be dragons... */
-BYTE Is_Gemsafe;
+
+#define IAS_CARD		0
+#define GEMSAFE_CARD	1
+#define IAS_V5_CARD	2
+
+BYTE card_type;
 WORD g_keySize;
 const SCARD_IO_REQUEST *g_pioSendPci;
 /* Gemsafe = 1, IAS = 2   */

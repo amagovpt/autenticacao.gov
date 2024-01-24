@@ -58,6 +58,14 @@ typedef enum
     PIN_OP_RESET_NO_PUK
 } tPinOperation;
 
+enum PaceSecretType {
+    PACEMRZ = 1,   //Only PACE MRZ and CAN can be used with IAS v5 cards
+    PACECAN,
+    PACEPIN,       //Not available
+    PACEPUK,       //Not available
+    PACERAW,
+};
+
 const unsigned long SIGN_ALGO_RSA_RAW = 0x01;
 const unsigned long SIGN_ALGO_RSA_PKCS = 0x02;
 const unsigned long SIGN_ALGO_MD5_RSA_PKCS = 0x04;
@@ -68,10 +76,27 @@ const unsigned long SIGN_ALGO_SHA512_RSA_PKCS = 0x40;
 const unsigned long SIGN_ALGO_RIPEMD160_RSA_PKCS = 0x80;
 const unsigned long SIGN_ALGO_RSA_PSS = 0x100;
 
+const unsigned long SIGN_ALGO_ECDSA = 0x200;
+const unsigned long SIGN_ALGO_ECDSA_SHA1 = 0x400;
+const unsigned long SIGN_ALGO_ECDSA_SHA224 = 0x800;
+const unsigned long SIGN_ALGO_ECDSA_SHA256 = 0x1000;
+const unsigned long SIGN_ALGO_ECDSA_SHA384 = 0x2000;
+const unsigned long SIGN_ALGO_ECDSA_SHA512 = 0x4000;
+
 const unsigned int SHA1_LEN = 20;
 const unsigned int SHA256_LEN = 32;
 const unsigned int SHA384_LEN = 48;
 const unsigned int SHA512_LEN = 64;
+
+static const unsigned char PTEID_1_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
+static const unsigned char PTEID_2_APPLET_NATIONAL_DATA[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x04};
+static const unsigned char PTEID_2_APPLET_EID[] =       {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x03};
+static const unsigned char PTEID_2_APPLET_MULTIPASS[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x05};
+
+static const unsigned char PTEID_CONTACTLESS_ATR[] = {0x3B, 0x8F, 0x80, 0x01, 0x80, 0x31, 0x80, 0x65, 0xB0, 0x85, 0x05, 0x00, 0x11, 0x12, 0x0F, 0xFF,
+                                                      0x82, 0x90, 0x00, 0x8B};
+
+static const unsigned char SELECT_ADF[] = {0x00, 0xA4, 0x00, 0x0C};
 
 
 typedef enum
@@ -83,8 +108,9 @@ typedef enum
 
 typedef enum
 {
-	CARD_PTEID_IAS07,
-	CARD_PTEID_IAS101,
+	CARD_PTEID_IAS07, // v3 v4
+	CARD_PTEID_IAS101, // legacy
+    CARD_PTEID_IAS5, // v5 (CC 2.0)
     CARD_UNKNOWN,
 } tCardType;
 

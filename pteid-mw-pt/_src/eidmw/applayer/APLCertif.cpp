@@ -5,7 +5,7 @@
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
- * Copyright (C) 2012, 2014, 2016-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012, 2014, 2016-2023 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2014 Vasco Dias - <vasco.dias@caixamagica.pt>
  * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
@@ -102,7 +102,6 @@ APL_Certifs::APL_Certifs(APL_SmartCard *card)
 	loadCard();
 	loadFromFile();
 
-	//initMyCerts();
 	initSODCAs();
 	defaultSODCertifs = true;
 
@@ -116,49 +115,6 @@ APL_Certifs::APL_Certifs(bool loadFromCertsDir)
 		loadFromFile();
 	}
 }
-
-/*
-void APL_Certifs::initMyCerts()
-{
-	//Fill a seperate cert vector that only contains the chain relevant for the current card
-
-	my_certifs.push_back(getAuthentication());
-	my_certifs.push_back(getSignature());
-	APL_Certif * cert = getSignatureSubCA();
-	my_certifs.push_back(cert);
-	my_certifs.push_back(getAuthenticationSubCA());
-
-        // Add Cert with 'Cartão de Cidadão 00x', where x: 1, 2, 3
-        std::vector<unsigned long>::const_iterator itrOrder;
-        std::map<unsigned long, APL_Certif *>::const_iterator itrCert;
-        for(itrOrder=m_certifsOrder.begin();itrOrder!=m_certifsOrder.end();itrOrder++)
-        {
-            itrCert = m_certifs.find(*itrOrder);
-            if( itrCert == m_certifs.end() ) {
-                //The certif is not in the map
-                //Should not happend
-                MWLOG(LEV_ERROR, MOD_APL, L"Exception in initMyCerts(): certificate not found!" );
-                throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
-            }
-
-            cert = itrCert->second;
-            if ( strcmp( cert->getIssuerName(), "ECRaizEstado" ) == 0 ){
-                my_certifs.push_back(cert);
-            }
-        }
-
-	APL_Certif * issuer = findIssuer(cert);
-	APL_Certif * new_issuer = NULL;
-
-	while((new_issuer = findIssuer(issuer)) != issuer)
-	{
-        
-		my_certifs.push_back(new_issuer);
-		issuer = new_issuer;
-	}
-
-}
-*/
 
 //This should select the certificates which are part of the chain for SOD signatures for production cards
 
@@ -352,8 +308,6 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn,APL_CertifType type,bo
 		itrOrder = std::find(m_certifsOrder.begin(), m_certifsOrder.end(), ulUniqueId);
   		if (itrOrder == m_certifsOrder.end())
 			m_certifsOrder.push_back(ulUniqueId);
-
-		resetFlags();
 
 		return cert;
 	}
@@ -658,6 +612,8 @@ void APL_Certifs::loadFromFile()
 {
 	bool bStopRequest = false;
 	scanDir(m_certs_dir.c_str(),"",m_certExtension.c_str(),bStopRequest,this,&APL_Certifs::foundCertificate);
+
+    resetFlags();
 }
 
 void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *param)
@@ -718,7 +674,7 @@ err:
 	if (m_stream)
 		fclose(m_stream);
 
-	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %ls ", utilStringWiden(string(path)).c_str());
+	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Certifs::foundCertificate: problem with file %ls ", utilStringWiden(std::string(path)).c_str());
 }
 
 APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert)
@@ -759,11 +715,10 @@ APL_Certif *APL_Certifs::findCrlIssuer(const CByteArray &crldata)
 
 void APL_Certifs::resetFlags()
 {
-	//Reset the issuer, root and test flag
+	//Reset the issuer and root flags
 	//the order is important
-	resetIssuers();	//First we define the issuers
+    resetIssuers();	    //First we define the issuers
 	resetRoots();		//Then set the root flag
-	resetTests();		//And last define the test flag
 }
 
 void APL_Certifs::resetIssuers()
@@ -790,18 +745,6 @@ void APL_Certifs::resetRoots()
 	}
 }
 
-void APL_Certifs::resetTests()
-{
-	APL_Certif *cert=NULL;
-
-	std::map<unsigned long ,APL_Certif *>::const_iterator itr;
-	for(itr=m_certifs.begin();itr!=m_certifs.end();itr++)
-	{
-		cert=itr->second;
-		cert->resetTest();
-	}
-}
-
 APL_SmartCard *APL_Certifs::getCard()
 {
 	return m_card;
@@ -823,7 +766,13 @@ APL_Certif::APL_Certif(APL_SmartCard *card,APL_Certifs *store,unsigned long ulIn
 	m_certP15Ok=true;
 
 	m_store=store;
-	m_certFile=new APL_CardFile_Certificate(card,m_certP15.csPath.c_str());
+	if (card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+		CByteArray CC2_EID = { PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) };
+		m_certFile = new APL_CardFile_Certificate(card, m_certP15.csPath.c_str(), NULL, CC2_EID);
+	}
+	else {
+		m_certFile = new APL_CardFile_Certificate(card, m_certP15.csPath.c_str());
+	}
 	m_delCertFile=true;
 
 	m_initInfo=false;
@@ -833,7 +782,7 @@ APL_Certif::APL_Certif(APL_SmartCard *card,APL_Certifs *store,unsigned long ulIn
 
 	m_hidden=false;
 
-	m_test=-1;
+	m_test=0;
 	m_root=-1;
 
 	m_countChildren = 0xFFFFFFFF;
@@ -879,7 +828,7 @@ APL_Certif::APL_Certif(APL_Certifs *store,
 	m_onCard=bOnCard;
 	m_hidden=bHidden;
 
-	m_test=-1;
+	m_test=0;
 	m_root=-1;
 
 	m_countChildren = 0xFFFFFFFF;
@@ -1035,31 +984,6 @@ void APL_Certif::resetRoot()
 		m_root=1;
 	else
 		m_root=0;
-}
-
-void APL_Certif::resetTest()
-{
-	//We check the flag only, if it's still a test
-	//else it already had been validated
-	if(m_test)
-	{
-		//If this is a root, we check if it is a good one or test
-		if(m_root)
-		{
-			if(m_cryptoFwk->VerifyRoot(getData()))
-				m_test=0;
-		}
-		else
-		{
-			//If there is an issuer we reset the test flag for it
-			if(m_issuer!=NULL)
-			{
-				m_issuer->resetTest();
-				if(!m_issuer->isTest())
-					m_test=0;
-			}
-		}
-	}
 }
 
 APL_Certif *APL_Certif::getIssuer()

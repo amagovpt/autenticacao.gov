@@ -223,6 +223,10 @@ private:
 
 const QString MAIN_QML_PATH("qrc:/main.qml");
 
+void saveCAN(const char * serial, const char *can);
+bool deleteCAN();
+std::string getCANFromCache(const char * serial);
+
 class GAPI : public QObject
 {
     #define TIMERREADERLIST 5000
@@ -274,6 +278,12 @@ public:
 
     enum OAuthErrors {OAuthTimeoutError, OAuthGenericError, OAuthConnectionError, OAuthCancelled};
 
+    enum PaceAuthState {PaceDefault, PaceNeeded, PaceAuthenticated};
+
+    enum PaceError {PaceUnknown, PaceBadToken, PaceUnutilized};
+
+    enum CardOperation {IdentityData, SignCertificateData, ValidateCertificate, ReadCertDetails, DoAddress, GetAuthPin, GetSignPin, GetAddressPin};
+
     Q_ENUMS(ScapPdfSignResult)
     Q_ENUMS(CardAccessError)
     Q_ENUMS(RemoteAddressError)
@@ -292,6 +302,8 @@ public:
     Q_ENUMS(TelemetryAction)
     Q_ENUMS(TelemetryStatus)
     Q_ENUMS(OAuthErrors)
+    Q_ENUMS(CardOperation);
+    Q_ENUMS(PaceError);
 
     QQuickImageProvider * buildImageProvider() { return image_provider; }
     QQuickImageProvider * buildPdfImageProvider() { return image_provider_pdf; }
@@ -318,6 +330,9 @@ public slots:
     const char *telemetryActionToString(TelemetryAction action);
     static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 
+    // get notes functionality support
+    bool isNotesSupported();
+
     // Slots to Gui request values
     QVariantList getRetReaderList(void);
     int getReaderIndex(void);
@@ -330,9 +345,10 @@ public slots:
     void startCardReading();
     void startGettingInfoFromSignCert();
     void startCCSignatureCertCheck();
-    void startCheckSignatureCertValidity();
     void startSavingCardPhoto(QString outputFile);
     int getStringByteLength(QString text);
+    void finishLoadingCardData(PTEID_EIDCard * card);
+	void finishLoadingSignCertData(PTEID_EIDCard * card);
     void startReadingPersoNotes();
     void startWritingPersoNotes(const QString &text);
     void startReadingAddress();
@@ -380,6 +396,7 @@ public slots:
     void startGettingCompanyAttributes(bool useOAuth);
     void startLoadingAttributesFromCache(bool showSubAttributes);
     void startRemovingAttributesFromCache();
+	void startRemoveCANCache();
     void startGettingEntityAttributes(QList<QString> entities_ids, bool useOAuth);
     static bool isAttributeExpired(std::string& date, std::string& supplier);
 
@@ -411,6 +428,11 @@ public slots:
     void changeAuthPin(QString currentPin, QString newPin);
     void changeSignPin(QString currentPin, QString newPin);
     void changeAddressPin(QString currentPin, QString newPin);
+
+	void startPACEAuthentication(QString pace_can, CardOperation op);
+
+    void performPACEWithCache(PTEID_EIDCard * card, CardOperation op);
+    void resetContactlessState() { m_pace_auth_state = PaceDefault; m_is_contactless = false; }
 
     void cancelCMDRegisterCert();
     void signCMD(QList<QString> loadedFilePath, QString outputFile, int page, double coord_x,
@@ -503,6 +525,7 @@ signals:
     void signalGenericError(const QString error_code);
     void signalSaveCardPhotoFinished(bool success);
     void signalPersoDataLoaded(const QString& persoNotes);
+    void signalPersonalDataNotSupported();
     void signalPdfSignSuccess(int error_code);
     void signalPdfSignFail(int error_code, int index);
     void signalPdfBatchSignFail(int error_code, const QString &filename);
@@ -528,6 +551,7 @@ signals:
     void signalEndOAuth(int oauthResult);
     void signalCustomSignImageRemoved();
     void signalOperationCanceledByUser();
+	void signalContactlessCANNeeded();
 
     void signalStartCheckCCSignatureCert(); // Start CC signature check with OCSP
     void signalOkSignCertificate();         // CC signature certificate OK or OCSP no response
@@ -552,6 +576,7 @@ signals:
     void signalCacheNotWritable();
     void signalCacheRemovedLegacy();
     void signalCacheFolderNotCreated();
+	void signalRemoveCANCacheSucess();
 
     // Import Certificates
     void signalImportCertificatesFail();
@@ -567,6 +592,9 @@ signals:
     void signalPrinterPrintFail(int error_code);
     void signalLanguageChangedError();
 
+    void errorPace(int error_code);
+    void paceSuccess();
+
 private:
     bool LoadTranslationFile( QString NewLanguage );
     void emitErrorSignal(const char * callerfunction, long errorCode, int index = -1);
@@ -577,6 +605,7 @@ private:
 
     void getSCAPAttributesFromCache(bool isShortDescription);
     void removeSCAPAttributesFromCache();
+	void removeCANCache();
     void getSCAPEntityAttributes(QList<QString> ids, bool useOAuth);
     void doCancelCMDRegisterCert();
     void doSignSCAP(const SCAPSignParams &params, bool isCMD);
@@ -600,7 +629,7 @@ private:
     void fillCertificateList (void );
     void getCertificateAuthStatus(void );
     void checkCCSignatureCert(void);
-    void checkSignatureCertValidity(void);
+    //void checkSignatureCertValidity(void);
     void getInfoFromSignCert(void);
     int findCardCertificate(QString issuedBy, QString issuedTo);
     void doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);
@@ -616,6 +645,8 @@ private:
     double drawSingleField(QPainter &painter, double pos_x, double pos_y, QString name, QString value, double line_length, int field_margin = 15, bool is_bounded_rect = false, double bound_width = 360);
     WindowGeometry *getWndGeometry();
     void handleRemoteAddressErrors(long errorCode);
+    //The 2nd function pointer param points to the function to be called after PACE auth is finished
+    void doStartPACEAuthentication(QString pace_can, CardOperation op);
 
     // Data Card Identify map
     QMap<GAPI::IDInfoKey, QString> m_data;
@@ -638,6 +669,8 @@ private:
     QString m_shortcutReason;
     QString m_shortcutOutput;
     bool m_shortcutTsa = false;
+	bool m_is_contactless = false;
+    PaceAuthState m_pace_auth_state = PaceDefault;
     signed int selectedReaderIndex = -1;
     double print_scale_factor = 1;
 
@@ -650,8 +683,6 @@ private:
 
     QUrl url;
     QString m_pac_url;
-    bool httpRequestAborted;
-    bool httpRequestSuccess;
 
     int m_seal_width = 178;
     int m_seal_height = 90;

@@ -19,6 +19,7 @@ public class pteid {
     public static final int CARD_TYPE_ERR = 0;
     public static final int CARD_TYPE_IAS07 = 1;
     public static final int CARD_TYPE_IAS101 = 2;
+    public static final int CARD_TYPE_IAS5   = 3;
 
     public static final int PTEID_EXIT_LEAVE_CARD = 0;
     public static final int PTEID_EXIT_UNPOWER = 2;

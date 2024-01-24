@@ -20,6 +20,6 @@ change_dylib_dep $BUNDLE_BIN_DIR/eidguiV2 "libpteidlib.2.dylib libpteidcommon.2.
 change_dylib_dep $BUNDLE_FWK_DIR/libpoppler-qt5.1.32.0.dylib "libpoppler.129.dylib libfreetype.6.dylib"
 
 #install_name_tool -change /usr/local/opt/poppler/lib/libpoppler-qt5.1.dylib '@rpath/libpoppler-qt5.1.dylib' $BUNDLE_BIN_DIR/eidguiV2
-install_name_tool -add_rpath '@loader_path/BUNDLE_FWK_DIR/' ./$BUNDLE_BIN_DIR/eidguiV2
+install_name_tool -add_rpath "@loader_path/$BUNDLE_FWK_DIR/" ./$BUNDLE_BIN_DIR/eidguiV2
 
 otool -L $BUNDLE_BIN_DIR/eidguiV2

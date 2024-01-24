@@ -114,7 +114,7 @@ void ImportCertFromDisk(void *cert_path)
 // Cryptographic Key Provider - this is crucial for eID signatures using the CNG API
 //****************************************************
 #ifdef WIN32
-bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
+bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext, bool is_ecdsa )
 {
     unsigned long dwPropId= CERT_KEY_PROV_INFO_PROP_ID;
     DWORD cbData = 0;
@@ -135,7 +135,7 @@ bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
     }
     if(CertGetCertificateContextProperty(pCertContext, dwPropId, pCryptKeyProvInfo, &cbData))
     {
-		if (wcscmp(pCryptKeyProvInfo->pwszProvName, MS_SCARD_PROV_W) != 0) {
+		if (wcscmp(pCryptKeyProvInfo->pwszProvName, is_ecdsa ? (LPWSTR)MS_SMART_CARD_KEY_STORAGE_PROVIDER : (LPWSTR)MS_SCARD_PROV_W) != 0) {
 			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
 				"KeyProvider name is different than expected!", GetLastError());
 			return false;
@@ -147,6 +147,17 @@ bool CERTIFICATES::ProviderNameCorrect (PCCERT_CONTEXT pCertContext )
     }
     return true;
 }
+
+void buildCryptProviderStruct(CRYPT_KEY_PROV_INFO * pCryptKeyProvInfo, bool is_ecdsa) {
+	pCryptKeyProvInfo->pwszProvName = is_ecdsa ? (LPWSTR)MS_SMART_CARD_KEY_STORAGE_PROVIDER :(LPWSTR)MS_SCARD_PROV_W;
+	pCryptKeyProvInfo->dwKeySpec = is_ecdsa ? 0 : AT_SIGNATURE;
+	
+	pCryptKeyProvInfo->dwProvType = is_ecdsa ? 0 : PROV_RSA_FULL;
+	pCryptKeyProvInfo->dwFlags = 0;
+	pCryptKeyProvInfo->cProvParam = 0;
+	pCryptKeyProvInfo->rgProvParam = NULL;
+}
+
 #endif
 //*****************************************************
 // store the user certificates of the card in a specific reader
@@ -158,7 +169,7 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
     PCCERT_CONTEXT  pDesiredCert	= NULL;
     PCCERT_CONTEXT  pPrevCert		= NULL;
 	HCERTSTORE		hMyStore = CertOpenSystemStore(NULL, L"MY");
-
+	
     if ( NULL != hMyStore )
     {
         RemoveOlderUserCerts(hMyStore, pCertContext);
@@ -177,7 +188,7 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
                 // succeeds, the return value is nonzero, or TRUE.
                 // ----------------------------------------------------
                 if(NULL == CertCompareCertificate(X509_ASN_ENCODING,pCertContext->pCertInfo,pDesiredCert->pCertInfo) ||
-                        !ProviderNameCorrect(pDesiredCert) )
+                        !ProviderNameCorrect(pDesiredCert, Card.getType() == PTEID_CARDTYPE_IAS5) )
                 {
                     // ----------------------------------------------------
                     // certificates are not identical, but have the same
@@ -230,23 +241,18 @@ bool CERTIFICATES::StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertCont
         QString				  strContainerName;
 
         //Using Minidriver
-            if (KeyUsageBits & CERT_NON_REPUDIATION_KEY_USAGE)
-            {
-                strContainerName = "NR_";
-            }
-            else
-            {
-                strContainerName = "DS_";
-            }
-            strContainerName += pSerialKey;
-            pCryptKeyProvInfo->pwszProvName			= (LPWSTR)MS_SCARD_PROV_W;
-            pCryptKeyProvInfo->dwKeySpec			= AT_SIGNATURE;
-        
-        pCryptKeyProvInfo->pwszContainerName	= (LPWSTR)strContainerName.utf16();
-        pCryptKeyProvInfo->dwProvType			= PROV_RSA_FULL;
-        pCryptKeyProvInfo->dwFlags				= 0;
-        pCryptKeyProvInfo->cProvParam			= 0;
-        pCryptKeyProvInfo->rgProvParam			= NULL;
+		if (KeyUsageBits & CERT_NON_REPUDIATION_KEY_USAGE)
+		{
+			strContainerName = "NR_";
+		}
+		else
+		{
+			strContainerName = "DS_";
+		}
+		strContainerName += pSerialKey;
+
+		pCryptKeyProvInfo->pwszContainerName = (LPWSTR)strContainerName.utf16();
+		buildCryptProviderStruct(pCryptKeyProvInfo, Card.getType() == PTEID_CARDTYPE_IAS5);
 
         // Set the property.
         if (CertSetCertificateContextProperty(
@@ -617,6 +623,7 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
 
         delete[] cert_filepath;
     }
+	
     try
     {
         PTEID_EIDCard&		 Card			= ReaderContext.getEIDCard();
@@ -673,12 +680,7 @@ bool CERTIFICATES::ImportCertificates( const char* readerName )
         long err = e.GetError();
         err = err;
         PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Error importing certificates");
-        //QString strCaption(tr("Retrieving certificates"));
-        //QString strMessage(tr("Error retrieving certificates"));
-        //QMessageBox::information(NULL,strCaption,strMessage);
     }
-
-    //	showCertImportMessage(bImported);
 
     return bImported;
 #else

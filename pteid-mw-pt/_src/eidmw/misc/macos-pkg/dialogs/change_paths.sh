@@ -1,7 +1,7 @@
 function change_dylib_dep {
 	DYLIB_PATH=$1
 	DYLIB_DEPS=$2
-	current_deps=$(otool -X -L $DYLIB_PATH)
+	current_deps=$(otool -X -L $DYLIB_PATH| awk '!x[$1]++')
 	for dylib in $DYLIB_DEPS
 	do 
 		DEP=$(printf $dylib | sed -E sx\\.x\\\\.xg) #Escape dots in dylib name to include in regex

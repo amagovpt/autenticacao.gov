@@ -345,6 +345,24 @@
           <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
           <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
         </RegistryKey>
+        <RegistryKey Root="HKLM"
+                     Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5"
+                     Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATR" Value="3bff9600008131fe4380318065b085050011120fff829000e1" KeyPath="no"/>
+          <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+          <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+        </RegistryKey>
+        <RegistryKey Root="HKLM"
+                  Key="SOFTWARE\Microsoft\Cryptography\Calais\SmartCards\PTeid IAS v5 (Contactless)"
+                  Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Name="80000001" Value="pteidmdrv32.dll" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATR" Value="3b8f800180318065b085050011120fff8290008b" KeyPath="no"/>
+            <RegistryValue Type="binary" Name="ATRMask" Value="ffffffffffffffffffffffffffffffffffffffff" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Crypto Provider" Value="Microsoft Base Smart Card Crypto Provider" KeyPath="no"/>
+            <RegistryValue Type="string" Name="Smart Card Key Storage Provider" Value="Microsoft Smart Card Key Storage Provider" KeyPath="no"/>
+        </RegistryKey>
       </Component>
 
       <Component Id="RegistryPteidSystem" Guid="{414DF15C-6CE6-4181-95B4-D83F16903BA3}">
@@ -362,7 +380,6 @@
             <RegistryValue Type="string" Name="certs_dir" Value="[APPLICATIONFOLDER]eidstore\certs"/>
             <RegistryValue Type="string" Name="certs_dir_test" Value="[APPLICATIONFOLDER]eidstore\certs_test"/>
             <RegistryValue Type="string" Name="web_dir" Value="[APPLICATIONFOLDER]web"/>
-            <RegistryValue Type="integer" Name="show_java_apps" Value="0" />
           </RegistryKey>
 
           <RegistryKey Key="logging" Action="createAndRemoveOnUninstall">
@@ -433,6 +450,10 @@
       <ComponentRef Id="Cpp_SDK_component"/>
       <ComponentRef Id="Java_SDK_Component"/>
       <ComponentRef Id="CSharp_SDK_Component"/>
+      <ComponentRef Id="pteidmdrv"/>
+      <ComponentRef Id="CertPropService"/>
+      <ComponentRef Id="pteidmdrvsystem32"/>
+      <ComponentRef Id="REGISTERMINIDRIVER"/>
       
       <Feature Id="GUI"
                 Title="!(loc.PteidGui)"
@@ -450,19 +471,9 @@
                 AllowAdvertise="no">
         <ComponentRef Id="SCardSvrService"/>
         <ComponentRef Id="pkcs11"/>
-        <!-- Shortcuts -->
-        <Feature Id="Install_Minidriver" Title="!(loc.Minidriver)" Description="!(loc.MinidriverDescr)" Level="0" AllowAdvertise="no">
-          <ComponentRef Id="pteidmdrv"/>
-          <ComponentRef Id="CertPropService"/>
-          <ComponentRef Id="pteidmdrvsystem32"/>
-          <ComponentRef Id="REGISTERMINIDRIVER"/>
-          <Condition Level="1">VersionNT >= 601</Condition>
-        </Feature>
       </Feature>
 
     </Feature>
-
-    <!--    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.StartApp)" />-->
   
     <UI>
       <Property Id="ApplicationFolderName" Value="Portugal Identity Card" />

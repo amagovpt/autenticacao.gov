@@ -10,6 +10,8 @@
 
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+import QtGraphicalEffects 1.0
+
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -147,6 +149,11 @@ PageCardIdentifyForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
 
+        onSignalContactlessCANNeeded: {
+            console.log("QML: Contactless CAN is needed!!")
+            paceDialogLoader.active = true
+        }
+
         onSignalSaveCardPhotoFinished: {
             if(success) {
                 createsuccess_dialog.open()
@@ -156,6 +163,17 @@ PageCardIdentifyForm {
                 var bodyPopup = qsTranslate("GAPI","STR_SAVE_PHOTO_ERROR")
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
+        }
+    }
+
+    Loader {
+        id: paceDialogLoader
+        active: false
+        anchors.verticalCenter: parent.verticalCenter
+        source: "../definitions/DialogRequestPaceSecret.qml"
+        onLoaded: {
+            paceDialogLoader.item.afterPaceAction = GAPI.IdentityData
+            paceDialogLoader.item.open()
         }
     }
 
@@ -284,7 +302,7 @@ PageCardIdentifyForm {
         onAccepted: {
             outputFile = propertySavePhotoDialogOutput.file.toString()
             console.log("Saving photo to: " + outputFile)
-            
+
             var file = decodeURIComponent(Functions.stripFilePrefix(outputFile))
             gapi.startSavingCardPhoto(file)
         }

@@ -78,6 +78,8 @@ public:
 	 * any of the other functions below.
 	 */
     bool Connect();
+	 bool Connect(SCARDHANDLE hCard, DWORD protocol, bool read_serial);
+	 void UseHandle(SCARDHANDLE hCard);
 
 	/** Disconnect from the card; it's safe to call this function multiple times */
 	void Disconnect(tDisconnectMode disconnectMode = DISCONNECT_LEAVE_CARD);
@@ -92,6 +94,7 @@ public:
     tCardType GetCardType();
 
     std::string GetSerialNr();
+	CByteArray GetSerialNrBytes();
     std::string GetCardLabel();
 
 	std::string GetAppletVersion();
@@ -105,6 +108,10 @@ public:
     void Unlock();
 
     void SelectApplication(const CByteArray & oAID);
+
+    bool isCardContactless() const;
+    
+    void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
     /* Read the file indicated by 'csPath'.
      * This path can be absolute, relative or empty
@@ -143,7 +150,9 @@ public:
 
 	/** Returns the OR-ing of all supported crypto algorithms */
 	unsigned long GetSupportedAlgorithms();
+    void setNextAPDUClearText();
 
+	 void setAskPinOnSign(bool bAsk);
 	/* Sign data. If necessary, a PIN will be asked */
     CByteArray Sign(const tPrivKey & key, unsigned long paddingType,
         const CByteArray & oData);
@@ -188,6 +197,7 @@ private:
     CCard *m_poCard;
     CPKCS15 m_oPKCS15;
     CPinpad *m_oPinpad;
+    bool m_isContactless;
     
     friend class CCardLayer; // calls the CReader constructor
 

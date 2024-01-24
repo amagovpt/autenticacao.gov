@@ -594,6 +594,7 @@ void GAPI::doSaveCardPhoto(QString outputFile) {
     emit signalSaveCardPhotoFinished(success);
 }
 
+//Only applicable to CC1
 void GAPI::getPersoDataFile() {
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance getPersoDataFile");
@@ -604,12 +605,23 @@ void GAPI::getPersoDataFile() {
     getCardInstance(card);
     if (card == NULL) return;
 
-    emit signalPersoDataLoaded(QString(card->readPersonalNotes()));
+    try{
+        emit signalPersoDataLoaded(QString(card->readPersonalNotes()));
+    } catch (PTEID_Exception e)
+    {
+        if (e.GetError() == EIDMW_ERR_NOT_SUPPORTED)
+        {
+            signalPersonalDataNotSupported();
+        }
+        else
+            throw e;
+    };
 
     END_TRY_CATCH
 
 }
 
+//Only applicable to CC1
 void GAPI::setPersoDataFile(const QString &text) {
     qDebug() << "setPersoDataFile() called";
 
@@ -648,7 +660,7 @@ unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
 
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard * card = NULL;
+    PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) return TRIES_LEFT_ERROR;
 
@@ -661,13 +673,22 @@ unsigned int  GAPI::doVerifyAuthPin(QString pin_value) {
 
     END_TRY_CATCH
 
-        emit signalTestPinFinished(tries_left, AuthPin);
+    emit signalTestPinFinished(tries_left, AuthPin);
     //QML default types don't include long
     return (unsigned int)tries_left;
 }
 
 void GAPI::getTriesLeftAuthPin() {
-    Concurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::GetAuthPin);
+    }
 }
 unsigned int GAPI::doGetTriesLeftAuthPin() {
     unsigned long tries_left = TRIES_LEFT_ERROR;
@@ -696,7 +717,7 @@ unsigned int GAPI::doGetTriesLeftAuthPin() {
 void GAPI::verifySignPin(QString pin_value) {
     Concurrent::run(this, &GAPI::doVerifySignPin, pin_value);
 }
-unsigned int  GAPI::doVerifySignPin(QString pin_value) {
+unsigned int GAPI::doVerifySignPin(QString pin_value) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifySignPin");
 
@@ -721,7 +742,16 @@ unsigned int  GAPI::doVerifySignPin(QString pin_value) {
 }
 
 void GAPI::getTriesLeftSignPin() {
-    Concurrent::run(this, &GAPI::doGetTriesLeftSignPin);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doGetTriesLeftSignPin);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::GetAuthPin);
+    }
 }
 unsigned int GAPI::doGetTriesLeftSignPin() {
     unsigned long tries_left = TRIES_LEFT_ERROR;
@@ -742,14 +772,97 @@ unsigned int GAPI::doGetTriesLeftSignPin() {
 
     END_TRY_CATCH
 
-        emit signalTriesLeftPinFinished(tries_left, SignPin);
+    emit signalTriesLeftPinFinished(tries_left, SignPin);
     //QML default types don't include long
     return (unsigned int)tries_left;
 }
 
-void GAPI::verifyAddressPin(QString pin_value, bool forceVerify) {
-    Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value, forceVerify);
+void GAPI::startPACEAuthentication(QString pace_can, CardOperation op) {
+
+    Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can, op);
 }
+
+void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
+
+	PTEID_EIDCard * card = NULL;
+	BEGIN_TRY_CATCH
+
+	getCardInstance(card);
+	if (card == NULL) return;
+
+	std::string can_str = pace_can.toStdString();
+    try {
+        card->initPaceAuthentication(can_str.c_str(), can_str.size(), PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+        emit paceSuccess();
+    } catch (PTEID_PACE_ERROR e)
+    {
+        PaceError err;
+        switch(e.GetError())
+        {
+            case EIDMW_PACE_ERR_BAD_TOKEN:
+            err = PaceError::PaceBadToken;
+            break;
+            case EIDMW_PACE_ERR_NOT_INITIALIZED:
+            err = PaceError::PaceUnutilized;
+            break;
+            case EIDMW_PACE_ERR_UNKNOWN:
+            err = PaceError::PaceUnknown;
+            break;
+        }
+        emit errorPace(err);
+        return;
+    }
+
+	m_pace_auth_state = PaceAuthenticated;
+	//Cache correct CAN value
+	PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
+	const char * serial = verInfo.getSerialNumber();
+    if (m_Settings.getEnablePteidCANCache()) {
+	   saveCAN(serial, can_str.c_str());
+    }
+
+	switch (op) {
+        case IdentityData:
+            finishLoadingCardData(card);
+        break;
+        case SignCertificateData:
+            finishLoadingSignCertData(card);
+        break;
+        case ValidateCertificate:
+            validateCertificates();
+            break;
+        case ReadCertDetails:
+            startfillCertificateList();
+            break;
+        case DoAddress:
+            verifyAddressPin("", false);
+            break;
+        case GetAuthPin:
+            getTriesLeftAuthPin();
+            break;
+        case GetSignPin:
+            getTriesLeftSignPin();
+            break;
+        case GetAddressPin:
+            getTriesLeftAddressPin();
+            break;
+    }
+
+	END_TRY_CATCH
+}
+
+void GAPI::verifyAddressPin(QString pin_value, bool forceVerify) {
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value, forceVerify);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::DoAddress);
+    }
+}
+
 unsigned int GAPI::doVerifyAddressPin(QString pin_value, bool forceVerify) {
     unsigned long tries_left = TRIES_LEFT_ERROR;
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance doVerifyAddressPin forceVerify: %s", forceVerify ? "yes": "no");
@@ -780,7 +893,16 @@ unsigned int GAPI::doVerifyAddressPin(QString pin_value, bool forceVerify) {
 }
 
 void GAPI::getTriesLeftAddressPin() {
-    Concurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::GetAuthPin);
+    }
 }
 unsigned int GAPI::doGetTriesLeftAddressPin() {
     unsigned long tries_left = TRIES_LEFT_ERROR;
@@ -788,7 +910,7 @@ unsigned int GAPI::doGetTriesLeftAddressPin() {
 
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard * card = NULL;
+    PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) return TRIES_LEFT_ERROR;
 
@@ -2259,6 +2381,30 @@ void PDFPreviewImageProvider::doCloseAllDocs() {
     renderMutex.unlock();
 }
 
+bool GAPI::isNotesSupported()
+{
+    BEGIN_TRY_CATCH;
+
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+    if (card == NULL) return false;
+
+    try{
+        // try read personal notes
+        card->readPersonalNotes();
+    } catch (PTEID_Exception e)
+    {
+        if (e.GetError() == EIDMW_ERR_NOT_SUPPORTED)
+            return false;
+        else
+            throw e;
+    };
+
+    END_TRY_CATCH
+
+    return true;
+}
+
 void GAPI::startCardReading() {
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "StartCardReading connectToCard");
     QFuture<void> future = Concurrent::run(this, &GAPI::connectToCard);
@@ -2304,6 +2450,16 @@ void GAPI::startLoadingAttributesFromCache(bool showSubAttributes) {
 
 void GAPI::startRemovingAttributesFromCache() {
     Concurrent::run(this, &GAPI::removeSCAPAttributesFromCache);
+}
+
+void GAPI::startRemoveCANCache() {
+	Concurrent::run(this, &GAPI::removeCANCache);
+}
+void GAPI::removeCANCache() {
+	qDebug() << "removeCANCache";
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "CAN", "Remove CAN Cache");
+	deleteCAN();
+	emit signalRemoveCANCacheSucess();
 }
 
 void GAPI::startSigningSCAP(QList<QString> inputPDFs, QString outputPDF, int page, double location_x,
@@ -2821,9 +2977,13 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                 switch (CardType)
                 {
                 case PTEID_CARDTYPE_IAS07:
+                case PTEID_CARDTYPE_IAS5:
                 {
                     PTEID_EIDCard& Card = readerContext.getEIDCard();
                     new_card = &Card;
+					if (readerContext.getCardContactInterface() == PTEID_CARD_CONTACTLESS)
+						m_is_contactless = true;
+
                     break;
                 }
                 case PTEID_CARDTYPE_UNKNOWN:
@@ -2849,9 +3009,12 @@ void GAPI::getCardInstance(PTEID_EIDCard * &new_card) {
                     switch (CardType)
                     {
                     case PTEID_CARDTYPE_IAS07:
+                    case PTEID_CARDTYPE_IAS5:
                     {
                         PTEID_EIDCard& Card = readerContext.getEIDCard();
                         new_card = &Card;
+						if (readerContext.getCardContactInterface() == PTEID_CARD_CONTACTLESS)
+							m_is_contactless = true;
                         break;
                     }
 
@@ -2960,58 +3123,101 @@ int GAPI::getReaderIndex(void)
     return 0;
 }
 
+void GAPI::finishLoadingCardData(PTEID_EIDCard * card) {
+	card->doSODCheck(true); //Enable SOD checking
+	PTEID_EId &eid_file = card->getID();
+
+	qDebug() << "C++: loading Card Data";
+
+	QMap<IDInfoKey, QString> cardData;
+
+	cardData[Surname] = QString::fromUtf8(eid_file.getSurname());
+	cardData[Givenname] = QString::fromUtf8(eid_file.getGivenName());
+	cardData[Sex] = QString::fromUtf8(eid_file.getGender());
+	cardData[Height] = QString::fromUtf8(eid_file.getHeight());
+	cardData[Country] = QString::fromUtf8(eid_file.getCountry());
+	cardData[Birthdate] = QString::fromUtf8(eid_file.getDateOfBirth());
+	cardData[Father] = QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
+		QString::fromUtf8(eid_file.getSurnameFather());
+	cardData[Mother] = QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
+		QString::fromUtf8(eid_file.getSurnameMother());
+	cardData[AccidentalIndications] = QString::fromUtf8(eid_file.getAccidentalIndications());
+	cardData[Documenttype] = QString::fromUtf8(eid_file.getDocumentType());
+	cardData[Documentnum] = QString::fromUtf8(eid_file.getDocumentNumber());
+	cardData[Documentversion] = QString::fromUtf8(eid_file.getDocumentVersion());
+	cardData[Nationality] = QString::fromUtf8(eid_file.getNationality());
+	cardData[Validityenddate] = QString::fromUtf8(eid_file.getValidityEndDate());
+	cardData[Validitybegindate] = QString::fromUtf8(eid_file.getValidityBeginDate());
+	cardData[PlaceOfRequest] = QString::fromUtf8(eid_file.getLocalofRequest());
+	cardData[IssuingEntity] = QString::fromUtf8(eid_file.getIssuingEntity());
+	cardData[NISS] = QString::fromUtf8(eid_file.getSocialSecurityNumber());
+	cardData[NSNS] = QString::fromUtf8(eid_file.getHealthNumber());
+	cardData[NIF] = QString::fromUtf8(eid_file.getTaxNo());
+	cardData[NIC] = QString::fromUtf8(eid_file.getCivilianIdNumber());
+
+	//Load photo into a QPixmap
+	PTEID_ByteArray& photo = eid_file.getPhotoObj().getphoto();
+
+	QPixmap image_photo;
+	image_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
+
+	image_provider->setPixmap(image_photo);
+
+	//All data loaded: we can emit the signal to QML
+	setDataCardIdentify(cardData);
+
+	// Load certificates here
+	for (int i = 0; i < ReaderSet.readerCount(); i++) {
+		auto& reader = ReaderSet.getReaderByNum(i);
+		if (reader.isCardPresent() && reader.getCardContactInterface() == PTEID_CARD_CONTACTLESS) {
+			QString readerName = reader.getName();
+			bool imported = m_Certificates.ImportCertificates(readerName);
+			if (!imported) {
+				PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "finishLoadingCardData", "ImportCertificates failed!");
+				emit signalImportCertificatesFail();
+			}
+		}
+	}
+}
+
+void GAPI::performPACEWithCache(PTEID_EIDCard * card, CardOperation op) {
+    if (!m_Settings.getEnablePteidCANCache()) {
+        emit signalContactlessCANNeeded();
+        return;
+    }
+
+    const int CAN_LENGTH = 6;
+    PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
+    const char * serial = verInfo.getSerialNumber();
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Reading cached CAN for serial: %s", serial);
+
+    std::string cached_can = getCANFromCache(serial);
+    if (cached_can.size() == CAN_LENGTH) {
+        QString pace_can = QString::fromStdString(cached_can);
+        Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can, op);
+    }
+    else {
+        emit signalContactlessCANNeeded();
+    }
+}
+
 void GAPI::connectToCard() {
 
     PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToCard");
 
     BEGIN_TRY_CATCH
 
-        PTEID_EIDCard * card = NULL;
+    PTEID_EIDCard * card = NULL;
     getCardInstance(card);
     if (card == NULL) return;
 
-    card->doSODCheck(true); //Enable SOD checking
-    PTEID_EId &eid_file = card->getID();
-
-    qDebug() << "C++: loading Card Data";
-
-    QMap<IDInfoKey, QString> cardData;
-
-    cardData[Surname] = QString::fromUtf8(eid_file.getSurname());
-    cardData[Givenname] = QString::fromUtf8(eid_file.getGivenName());
-    cardData[Sex] = QString::fromUtf8(eid_file.getGender());
-    cardData[Height] = QString::fromUtf8(eid_file.getHeight());
-    cardData[Country] = QString::fromUtf8(eid_file.getCountry());
-    cardData[Birthdate] = QString::fromUtf8(eid_file.getDateOfBirth());
-    cardData[Father] = QString::fromUtf8(eid_file.getGivenNameFather()) + " " +
-        QString::fromUtf8(eid_file.getSurnameFather());
-    cardData[Mother] = QString::fromUtf8(eid_file.getGivenNameMother()) + " " +
-        QString::fromUtf8(eid_file.getSurnameMother());
-    cardData[AccidentalIndications] = QString::fromUtf8(eid_file.getAccidentalIndications());
-    cardData[Documenttype] = QString::fromUtf8(eid_file.getDocumentType());
-    cardData[Documentnum] = QString::fromUtf8(eid_file.getDocumentNumber());
-    cardData[Documentversion] = QString::fromUtf8(eid_file.getDocumentVersion());
-    cardData[Nationality] = QString::fromUtf8(eid_file.getNationality());
-    cardData[Validityenddate] = QString::fromUtf8(eid_file.getValidityEndDate());
-    cardData[Validitybegindate] = QString::fromUtf8(eid_file.getValidityBeginDate());
-    cardData[PlaceOfRequest] = QString::fromUtf8(eid_file.getLocalofRequest());
-    cardData[IssuingEntity] = QString::fromUtf8(eid_file.getIssuingEntity());
-    cardData[NISS] = QString::fromUtf8(eid_file.getSocialSecurityNumber());
-    cardData[NSNS] = QString::fromUtf8(eid_file.getHealthNumber());
-    cardData[NIF] = QString::fromUtf8(eid_file.getTaxNo());
-    cardData[NIC] = QString::fromUtf8(eid_file.getCivilianIdNumber());
-
-    //Load photo into a QPixmap
-    PTEID_ByteArray& photo = eid_file.getPhotoObj().getphoto();
-
-    QPixmap image_photo;
-    image_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
-
-    image_provider->setPixmap(image_photo);
-
-    //All data loaded: we can emit the signal to QML
-    setDataCardIdentify(cardData);
-
+	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+		finishLoadingCardData(card);
+	}
+	else {
+        performPACEWithCache(card, CardOperation::IdentityData);
+	}
+   
     END_TRY_CATCH
 }
 
@@ -3068,6 +3274,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             }
             pCallBackData->getMainWnd()->setAddressLoaded(false);
             pCallBackData->getMainWnd()->resetReaderSelected();
+            pCallBackData->getMainWnd()->resetContactlessState();
 
             g_runningCallback--;
             return;
@@ -3095,10 +3302,17 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                 PTEID_CardType cardType = readerContext.getCardType();
                 switch (cardType)
                 {
-                case PTEID_CARDTYPE_IAS07:
                 case PTEID_CARDTYPE_IAS101:
+                case PTEID_CARDTYPE_IAS07:
+                case PTEID_CARDTYPE_IAS5:
                 {
                     PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Will try to ImportCertificates...");
+                    auto& reader = ReaderSet.getReaderByName(pCallBackData->getReaderName().toLatin1().data());
+                    if (reader.isCardPresent() && reader.getCardContactInterface() == PTEID_CARD_CONTACTLESS) {
+                        PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Postponing ImportCertificates until PACE authentication...");
+                        break;
+                    }
+
                     bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
 
                     if (!bImported) {
@@ -3108,7 +3322,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                     break;
                 }
                 case PTEID_CARDTYPE_UNKNOWN:
-                    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Unknown Card - skipping ImportCertificates()");
+                    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "unknown Card - skipping ImportCertificates()");
                     break;
                 }
             }
@@ -3393,7 +3607,16 @@ void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificat
 }
 
 void GAPI::startfillCertificateList(void) {
-    Concurrent::run(this, &GAPI::fillCertificateList);
+    PTEID_EIDCard *card = NULL;
+    getCardInstance(card);
+    if(card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::fillCertificateList);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::ReadCertDetails);
+    }
 }
 
 void GAPI::startGetCardActivation(void) {
@@ -3440,29 +3663,6 @@ void GAPI::checkCCSignatureCert()
     END_TRY_CATCH
 }
 
-void GAPI::startCheckSignatureCertValidity() {
-    Concurrent::run(this, &GAPI::checkSignatureCertValidity);
-}
-
-void GAPI::checkSignatureCertValidity(void)
-{
-    PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "checkSignatureCertValidity");
-
-    BEGIN_TRY_CATCH
-
-    PTEID_EIDCard * card = NULL;
-    getCardInstance(card);
-
-    if (card == NULL) return;
-
-    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
-
-    if (!cert.verifyDateValidity())
-        emit signalSignCertExpired();
-
-    END_TRY_CATCH
-}
-
 void GAPI::fillCertificateList(void)
 {
     bool noIssuer = false;
@@ -3495,7 +3695,17 @@ void GAPI::fillCertificateList(void)
 }
 
 void GAPI::validateCertificates() {
-    Concurrent::run(this, &GAPI::doValidateCertificates);
+    PTEID_EIDCard * card = NULL;
+    getCardInstance(card);
+
+    if (card == NULL) return;
+
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        Concurrent::run(this, &GAPI::doValidateCertificates);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::ValidateCertificate);
+    }
 }
 
 void GAPI::doValidateCertificates()
@@ -3540,6 +3750,22 @@ void GAPI::doValidateCertificates()
     END_TRY_CATCH
 }
 
+void GAPI::finishLoadingSignCertData(PTEID_EIDCard *card) {
+    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
+    QString ownerName = cert.getOwnerName();
+    QString NIC = cert.getSubjectSerialNumber();
+
+    //remove "BI" prefix and checkdigit
+    size_t NIC_length = 8;
+    NIC.replace("BI","");
+    NIC.truncate(NIC_length);
+
+    emit signalSignCertDataChanged(ownerName, NIC);
+
+    if (!cert.verifyDateValidity())
+        emit signalSignCertExpired();
+}
+
 void GAPI::startGettingInfoFromSignCert() {
     Concurrent::run(this, &GAPI::getInfoFromSignCert);
 }
@@ -3555,16 +3781,12 @@ void GAPI::getInfoFromSignCert(void)
 
     if (card == NULL) return;
 
-    PTEID_Certificate& cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
-    QString ownerName = cert.getOwnerName();
-    QString NIC = cert.getSubjectSerialNumber();
-
-    //remove "BI" prefix and checkdigit
-    size_t NIC_length = 8;
-    NIC.replace("BI","");
-    NIC.truncate(NIC_length);
-
-    emit signalSignCertDataChanged(ownerName, NIC);
+    if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
+        finishLoadingSignCertData(card);
+    }
+    else {
+        performPACEWithCache(card, CardOperation::SignCertificateData);
+    }
 
     END_TRY_CATCH
 }

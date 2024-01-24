@@ -774,7 +774,7 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
     cleanSignatureDicts();
   }
 
-  SignatureSignerInfo signer_info { name, civil_number, m_attribute_supplier, m_attribute_name };
+    SignatureSignerInfo signer_info { name, civil_number, m_attribute_supplier, m_attribute_name };
 	if (isLinearized())
 	{
 	   Ref first_page = getPageRef(page);
@@ -806,16 +806,17 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 
 	//Start searching at the start of the new sig dictionary object
 	base_search = (char *)mem_stream.getData() + xref->getSigDictOffset();
+    size_t haystack_len = mem_stream.size() - xref->getSigDictOffset();
 
-	found = (long)memmem(base_search, mem_stream.size(),
+	found = (long)memmem(base_search, haystack_len,
 			       	(const void *) needle, sizeof(needle)-1);
 
 	m_sig_offset = found - haystack + 21;
 	if (found == 0)
-  {
+    {
 		error(errInternal, -1, "prepareSignature: can't find signature offset. Aborting signature!");
-    return;
-  }
+        return;
+    }
 	
 	getCatalog()->setSignatureByteRange(m_sig_offset, ESTIMATED_LEN, mem_stream.size());
 
@@ -1033,14 +1034,12 @@ void PDFDoc::prepareTimestamp()
     unsigned char *haystack = streamPtr;
     unsigned char *found = 0;
     unsigned char *needlePtr = 0;
-    long offset = 0;
 
     size_t buffer_len = mem_stream.size();
     /* Find the last occurrence of needle in mem_stream buffer */
     while (needlePtr = (unsigned char *)memmem(haystack, buffer_len, needle, sizeof(needle) - 1))
     {
         found = needlePtr;
-        offset = (long)found - (long)streamPtr;
         haystack = found + sizeof(needle);
 
         buffer_len = mem_stream.size() - ((long)haystack - (long)streamPtr);

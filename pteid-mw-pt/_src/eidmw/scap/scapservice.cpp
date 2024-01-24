@@ -539,7 +539,7 @@ std::string create_authorization_body(const std::string &processId, const Citize
 		goto clean_up;
 	}
 
-	if (cJSON_AddStringToObject(json, "numSignatures", to_string(documents.size()).c_str()) == NULL) {
+	if (cJSON_AddStringToObject(json, "numSignatures", std::to_string(documents.size()).c_str()) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to add numSignatures", __FUNCTION__);
 		goto clean_up;
 	}

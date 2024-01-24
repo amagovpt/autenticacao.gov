@@ -143,6 +143,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_GENERAL_INSTALLDIR    L"install_dirname"      //string, directory of the basic eid software; �c:/Program Files/pteid/�
 #define EIDMW_CNF_GENERAL_CACHEDIR      L"cache_dirname"        //string, cache directory for card-file; $common/pteid/crlcache/
 #define EIDMW_CNF_GENERAL_CACHE_ENABLED L"cache_enabled"
+#define EIDMW_CNF_GENERAL_CAN_CACHE_ENABLED L"can_cache_enabled"
 #define EIDMW_CNF_GENERAL_CERTSDIR      L"certs_dir"
 #define EIDMW_CNF_GENERAL_CERTSDIR_TEST L"certs_dir_test"
 #define EIDMW_CNF_GENERAL_WEBDIR        L"web_dir"
@@ -240,6 +241,7 @@ replace $install by string in install parameter
 #define EIDMW_CNF_AUTOUPDATES_NEWS_URL      L"servernewsurl"            //string
 
 #define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL      L"remoteaddr_url"          //string
+#define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_CC2  L"remoteaddr_cc2_url"      //string
 #define EIDMW_CNF_GENERAL_REMOTEADDR_BASEURL_TST  L"remoteaddr_url_test"     //string
 #define EIDMW_CNF_GENERAL_ADMIN_CONFIGURATION     L"admin_config"       //number; 0=admin configuration is disabled(default), 1=admin configuration is enabled
 
@@ -327,6 +329,7 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CACHEDIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR;
     static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED;
+    static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PTEID_CAN_CACHE_ENABLED;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR;
@@ -426,8 +429,9 @@ public:
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_CERTS_URL;
     static const struct Param_Str EIDMW_CONFIG_PARAM_AUTOUPDATES_NEWS_URL;
 
-    //Remote Address server URL
+    //Remote address server URLs
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL;
+    static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_CC2_BASEURL;
     static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST;
 
 private:

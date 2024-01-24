@@ -29,21 +29,21 @@
 namespace eIDMW
 {
 
-  typedef struct{
+  struct tAlgoInfo {
     int iRef;
     // add: id, parameters, supported operations, algID
     int iAlgRef;
-  } tAlgoInfo;
+  };
 
-  typedef struct
+  struct tDirInfo
   {
     //CByteArray oAppID;
     std::string oAppID;
     std::string csAppPath;
     std::string csLabel;
-  } tDirInfo;
+  };
 
-  typedef struct
+  struct tTokenInfo
   {
     int iVersion;
     std::string     csSerial;
@@ -58,9 +58,9 @@ namespace eIDMW
     std::string     csIssuer;
     std::string     csHolder;
     std::string     csLastUpdate;
-  } tTokenInfo;
+  };
 
-  typedef struct
+  struct tOdfInfo
   {
     std::string csPrkdfPath; // contains the private key info
     std::string csPukdfPath; // contains the public key info
@@ -72,9 +72,10 @@ namespace eIDMW
     std::string csDodfPath;   // contains the cert info
     std::string csAodfPath;  // contains the PIN info
     
-  } tOdfInfo;
+  };
 
-  typedef struct{
+  struct tCommonObjAttr 
+  {
     std::string csLabel;
     unsigned long ulFlags;
     unsigned long ulAuthID;
@@ -89,7 +90,7 @@ namespace eIDMW
       ulUserConsent = 0x0;
       lastPosition = 0;
     }
-  } tCommonObjAttr;
+  };
 
   class PKCS15Parser
   {

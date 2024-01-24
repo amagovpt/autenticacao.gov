@@ -44,7 +44,13 @@ extern "C" {
    {  CKM_RSA_PKCS_PSS,       1024, 3072, CKF_HW | CKF_SIGN  },  \
    {  CKM_SHA256_RSA_PKCS_PSS, 1024, 3072, CKF_HW | CKF_SIGN },  \
    {  CKM_SHA384_RSA_PKCS_PSS, 1024, 3072, CKF_HW | CKF_SIGN },  \
-   {  CKM_SHA512_RSA_PKCS_PSS, 1024, 3072, CKF_HW | CKF_SIGN }  \
+   {  CKM_SHA512_RSA_PKCS_PSS, 1024, 3072, CKF_HW | CKF_SIGN },  \
+   {  CKM_ECDSA,              256, 384   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA1,         256, 384   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA224,       256, 384   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA256,       256, 384   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA384,       256, 384   , CKF_HW | CKF_SIGN }, \
+   {  CKM_ECDSA_SHA512,       256, 384   , CKF_HW | CKF_SIGN }, \
 }
 
 
@@ -60,6 +66,8 @@ extern "C" {
 	{ CKA_SIGN_RECOVER,     ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_DECRYPT,          ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_UNWRAP,           ( CK_VOID_PTR ) NULL, 0 },   \
+    { CKA_LOCAL,            ( CK_VOID_PTR ) NULL, 0 },   \
+   { CKA_EC_PARAMS,        ( CK_VOID_PTR ) NULL, 0 },   \
 	{ CKA_MODULUS,          ( CK_VOID_PTR ) NULL, 0 },   \
    { CKA_MODULUS_BITS,     ( CK_VOID_PTR ) NULL, 0 },   \
    { CKA_EXTRACTABLE,      ( CK_VOID_PTR ) NULL, 0 },   \
@@ -89,6 +97,8 @@ extern "C" {
 	{ CKA_VERIFY,           ( CK_VOID_PTR ) NULL, 0 },  \
 	{ CKA_WRAP,             ( CK_VOID_PTR ) NULL, 0 },  \
    { CKA_VALUE,          ( CK_VOID_PTR ) NULL, 0 },  \
+   { CKA_EC_PARAMS,        ( CK_VOID_PTR ) NULL, 0 },   \
+   { CKA_EC_POINT,         ( CK_VOID_PTR ) NULL, 0 },   \
    { CKA_MODULUS,          ( CK_VOID_PTR ) NULL, 0 },  \
    { CKA_MODULUS_BITS,     ( CK_VOID_PTR ) NULL, 0 },  \
 	{ CKA_PUBLIC_EXPONENT,  ( CK_VOID_PTR ) NULL, 0 },  \
@@ -116,6 +126,7 @@ int cal_init_slots(void);
 int cal_token_present(CK_SLOT_ID hSlot);
 CK_RV cal_get_token_info(CK_SLOT_ID hSlot, CK_TOKEN_INFO_PTR pInfo);
 CK_RV cal_get_mechanism_list(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE_PTR pMechanismList, CK_ULONG_PTR pulCount);
+CK_RV cal_is_mechanism_supported(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE mechanism);
 int cal_connect(CK_SLOT_ID hSlot);
 int cal_disconnect(CK_SLOT_ID hSlot);
 int cal_init_objects(CK_SLOT_ID hSlot);

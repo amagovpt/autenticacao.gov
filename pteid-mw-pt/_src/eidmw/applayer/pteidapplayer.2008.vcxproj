@@ -131,6 +131,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ShowIncludes>false</ShowIncludes>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -198,6 +199,7 @@
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ShowIncludes>false</ShowIncludes>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -227,6 +229,7 @@
     <ClCompile Include="APLCrypto.cpp" />
     <ClCompile Include="APLPublicKey.cpp" />
     <ClCompile Include="APLReader.cpp" />
+    <ClCompile Include="asn1_idfile.cpp" />
     <ClCompile Include="CardFile.cpp" />
     <ClCompile Include="CardPteid.cpp" />
     <ClCompile Include="CertStatusCache.cpp" />
@@ -276,7 +279,6 @@
     <ClInclude Include="cryptoFwkPteid.h" />
     <ClInclude Include="J2KHelper.h" />
     <ClInclude Include="MiscUtil.h" />
-    <ClInclude Include="OCSP.h" />
     <ClInclude Include="PDFSignature.h" />
     <ClInclude Include="PhotoPteid.h" />
     <ClInclude Include="MutualAuthentication.h" />

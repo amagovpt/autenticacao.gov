@@ -118,7 +118,23 @@ bool APL_Card::writeFile(const char *csPath, const CByteArray& oData,unsigned lo
 	m_reader->getCalReader()->WriteFile(csPath,ulOffset,oData);
 	END_CAL_OPERATION(m_reader)
 
-	return true; //Otherwise, there is exception
+    return true; //Otherwise, there is exception
+}
+
+void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_PACEAuthenticationType secretType)
+{
+    PaceSecretType paceSecretType = PaceSecretType::PACECAN;
+
+    if(secretType == APL_PACEAuthenticationType::APL_PACE_CAN)
+        paceSecretType = PaceSecretType::PACECAN;
+    else {
+        //not supported types
+    }
+
+    BEGIN_CAL_OPERATION(m_reader)
+    m_reader->getCalReader()->initPaceAuthentication(secret, secretLen, paceSecretType);
+    END_CAL_OPERATION(m_reader)
+
 }
 
 CByteArray APL_Card::sendAPDU(const CByteArray& cmd)

@@ -451,7 +451,7 @@ const char *PTEID_CCXML_Doc::getCCXML(){
 	cArray = pimpl->getXML();
 	if (xmltemp)
 		delete xmltemp;
-	xmltemp = new string((char*)(cArray.GetBytes()),cArray.Size());
+	xmltemp = new std::string((char*)(cArray.GetBytes()),cArray.Size());
 	END_TRY_CATCH
 
 	return xmltemp->c_str();

@@ -18,7 +18,6 @@
 #include <iostream>
 #include "J2KHelper.h"
 
-using namespace std;
 namespace eIDMW {
 
 	PhotoPteid::PhotoPteid(){
@@ -32,6 +31,17 @@ namespace eIDMW {
 		facialinfo = new CByteArray(_facialinfo);
 		imageinfo = new CByteArray(_imageinfo);
 		photoPNG = NULL;
+	}
+
+	PhotoPteid::PhotoPteid(CByteArray &_photo)
+	{
+		photoRAW = new CByteArray(_photo);
+        //TODO: these 4 fields should be parsed in APL_EidFile_Photo::MapFields
+        cbeff = new CByteArray();
+        facialrechdr = new CByteArray();
+        facialinfo = new CByteArray();
+        imageinfo = new CByteArray();
+        photoPNG = NULL;
 	}
 
 	PhotoPteid::~PhotoPteid(){

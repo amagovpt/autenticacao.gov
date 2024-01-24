@@ -14,10 +14,14 @@
  *      Author: ruim
  */
 
+#include <algorithm>
+
 #include "SODParser.h"
 #include "eidErrors.h"
+#include "Log.h"
 #include "MWException.h"
 #include "../pkcs11/asn1.h"
+
 extern "C" {
 #include "../pkcs11/asn1.c"
 }
@@ -47,7 +51,7 @@ SODParser::~SODParser(){
 		delete attr;
 }
 
-void SODParser::ParseSodEncapsulatedContent(const CByteArray & contents){
+void SODParser::ParseSodEncapsulatedContent(const CByteArray & contents, const std::vector<int>& valid_tags){
 	ASN1_ITEM           xLev0Item;
 	ASN1_ITEM           xLev1Item;
 	ASN1_ITEM           xLev2Item;
@@ -76,8 +80,10 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray & contents){
 	if (memcmp(xLev3Item.p_data, OID_SHA256_ALGORITHM, xLev3Item.l_data) != 0)
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ALGO_OID);
 
-	if ((xLev2Item.l_data < 2)|| (asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_NULL))
-		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
+	// xlevel2 data is pointing to the optional 05 00 entry
+	// TODO (DEV-CC2): to test with final cards
+	if(xLev2Item.l_data >= 2 && (asn1_next_item(&xLev2Item, &xLev3Item)!= 0 || (xLev3Item.tag != ASN_NULL)))
+			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
 	if ((xLev1Item.l_data < 2)|| (asn1_next_item(&xLev1Item, &xLev2Item)!= 0) ||(xLev2Item.tag != ASN_SEQUENCE))
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
@@ -85,7 +91,7 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray & contents){
 
 	attr = new SODAttributes();
 	int i=0;
-	while(xLev2Item.l_data > 0){
+	while(xLev2Item.l_data > 0) {
 
 		if ((xLev2Item.l_data < 2)|| (asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_SEQUENCE))
 			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
@@ -93,14 +99,20 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray & contents){
 		if ((xLev3Item.l_data < 2)|| (asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_INTEGER))
 			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-		if (bin2int(xLev4Item.p_data, xLev4Item.l_data)!=(i+1))
-			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_VALUE);
+		// validate the found tag
+        const auto read_tag = bin2int(xLev4Item.p_data, xLev4Item.l_data);
+		if (std::find(valid_tags.begin(), valid_tags.end(), read_tag) != valid_tags.end()) {
+			if ((xLev3Item.l_data < 2)|| (asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_OCTET_STRING))
+               throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-		if ((xLev3Item.l_data < 2)|| (asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_OCTET_STRING))
-			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
+            attr->hashes[i].Append(xLev4Item.p_data,xLev4Item.l_data);
+            i++;
+        }
+        else {
+            MWLOG(LEV_INFO, MOD_APL, "SODParser: unexpected datagroup tag: %d", read_tag);
+            //throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_VALUE);
+        }
 
-		attr->hashes[i].Append(xLev4Item.p_data,xLev4Item.l_data);
-		i++;
 	}
 }
 

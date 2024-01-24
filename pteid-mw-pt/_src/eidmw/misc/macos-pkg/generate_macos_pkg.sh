@@ -32,7 +32,7 @@ cd $LIB_DIR
 git_revision=`git rev-list --count HEAD`
 popd
 
-VERSION="3.11.0.$git_revision"
+VERSION="3.12.0.$git_revision"
 
 echo "Packaging PTEID version $VERSION"
 echo "IMPORTANT: Don't forget to update the version in apps/Info.plist and release notes in resources dir"
@@ -67,7 +67,7 @@ cp -af $LIB_DIR/*.dylib $LIB_BUNDLE_DIR
 recreate_dir $LIB_BUNDLE_DIR/pteid_jni/
 cp -af $JAR_DIR/pteidlibj.jar $LIB_BUNDLE_DIR/pteid_jni/
 cd system-libs
-sh ./change_paths.sh
+bash ./change_paths.sh
 
 cd $PKG_DIR
 
@@ -82,7 +82,7 @@ cp  $BIN_DIR/../eidguiV2/fonts/myriad/MyriadPro-Regular.otf "$RESOURCES_BUNDLE_D
 cp apps/Info.plist "$EIDGUI_BUNDLE_DIR/../"
 
 cd ${PKG_DIR}/apps/
-sh ./change_paths.sh
+bash ./change_paths.sh
 
 cd $PKG_DIR
 
@@ -92,7 +92,7 @@ cp -af $BIN_DIR/pteiddialogsQTsrv.app $BIN_BUNDLE_DIR
 cp -af $MISC_DIR/pteid_uninstall.sh $BIN_BUNDLE_DIR
 chmod +x $BIN_BUNDLE_DIR/pteid_uninstall.sh
 cd $BIN_BUNDLE_DIR
-sh ./change_paths.sh
+bash ./change_paths.sh
 
 rmdir_if_exists $CERTS_BUNDLE_DIR
 mkdir -p $CERTS_BUNDLE_DIR/certs

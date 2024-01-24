@@ -207,7 +207,7 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 
 	std::vector<std::string> certs;
 
-    string strCertificate(certificates_pem, certificateLen);
+    std::string strCertificate(certificates_pem, certificateLen);
 
     if (strCertificate.empty()) {
         throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
@@ -224,7 +224,7 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 	      Search for STR_BEGIN_CERTIFICATE
 	    */
 	    found_init = strCertificate.find(STR_BEGIN_CERTIFICATE, found_init);
-	    if (found_init == string::npos) {
+	    if (found_init == std::string::npos) {
 	        break;
 	    }
 
@@ -240,7 +240,7 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 	        Search for STR_END_CERTIFICATE
 	    */
 	    found_end = strCertificate.find(STR_END_CERTIFICATE, found_init);
-	    if ( found_end == string::npos ) {
+	    if ( found_end == std::string::npos ) {
 	        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	    }
 
@@ -384,6 +384,25 @@ int PEM_to_DER( char *pem, unsigned char **der ){
     return der_bytes;
 }
 
+long der_get_length(const CByteArray &der_object) {
+	const unsigned char * der_data = der_object.GetBytes();
+
+	long len = 0;
+	int tag = 0, xclass = 0;
+	const unsigned char * op = der_data;
+
+	int ret = ASN1_get_object(&der_data, &len, &tag, &xclass, der_object.Size());
+    MWLOG(LEV_DEBUG, MOD_APL, "%s: Ret=%02x Decoded object len: %d tag: %d, class: %d", __FUNCTION__, ret, len, tag, xclass);
+
+	if (ret != 0x00 && len == 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: This should be a constructed ASN.1 object but ASN1_get_object() returned %d!",
+			 __FUNCTION__, ret);
+		return 0;
+	}
+
+	return len;
+}
+
 long der_certificate_length(const CByteArray &der_certificate) {
 	const unsigned char * der_data = der_certificate.GetBytes();
 
@@ -484,6 +503,24 @@ void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded
     BIO_free_all(bio);
 }
 
+char * byteArrayToHexString(const unsigned char *data, unsigned long array_len) {
+	const unsigned long hex_len = array_len * 2 + 1;
+	char * hex = (char *)malloc(hex_len);
+	//No byte seperator in hex conversion
+	char sep = '\0';
+	size_t strlength = 0;
+	int rc = OPENSSL_buf2hexstr_ex(hex, hex_len, &strlength,
+		data, array_len, sep);
+
+	if (!rc) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to encode bytearray! Error code: %ld", ERR_get_error());
+		return "";
+	}
+	MWLOG(LEV_DEBUG, MOD_APL, "Encoded byte array of size: %ld", strlength);
+
+	return hex;
+}
+
 void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
 {
     unsigned int n;
@@ -570,7 +607,7 @@ std::string CPathUtil::getWorkingDir()
 //TODO: what happens if filename entry in zip contains slashes ??
 FILE * CPathUtil::openFileForWriting(const char *out_dir, const char *filename)
 {
-	std::string file_path = string(out_dir) + PATH_SEP_STR + filename;
+	std::string file_path = std::string(out_dir) + PATH_SEP_STR + filename;
 #ifdef WIN32
 	std::wstring w_file_path = utilStringWiden(file_path);
 	FILE * fp_out = _wfopen(w_file_path.c_str(), L"wb");
@@ -839,8 +876,8 @@ void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::s
 		}
 
 		std::string final_path = "";
-		if(string(folder).size() != 0)
-			final_path = string(folder) + PATH_SEP;
+		if(std::string(folder).size() != 0)
+			final_path = std::string(folder) + PATH_SEP;
 
 		final_path += clean_filename;
 		if(equal_filename_count > 0) {

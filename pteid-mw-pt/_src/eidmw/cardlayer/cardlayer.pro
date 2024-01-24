@@ -24,20 +24,20 @@ CONFIG -= warn_on qt
 ## destination directory
 DESTDIR = ../lib
 DEPENDPATH += . 
-macx: LIBS += -L../lib -l$${COMMONLIB}
-macx: LIBS += -L $$DEPS_DIR/openssl-3/lib/
-macx: LIBS += -l$${DLGLIB} \
-              -Wl,-framework -Wl,PCSC 	
-macx: LIBS += -lcrypto
-
 unix:LIBS += -L../lib -l$${COMMONLIB}
 unix:LIBS += -l$${DLGLIB}
 unix: LIBS += -lcrypto
+unix: LIBS += -leac
 !macx:LIBS += -lpcsclite
+macx: LIBS += -L$$DEPS_DIR/openssl-3/lib \
+              -L$$DEPS_DIR/openpace/lib \
+              -L$$DEPS_DIR/openpace/lib  \
+              -Wl,-framework -Wl,PCSC
 
 INCLUDEPATH += . ../common 
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 macx: INCLUDEPATH += $$DEPS_DIR/openssl-3/include
+macx: INCLUDEPATH += $$DEPS_DIR/openpace/include
 
 DEFINES += EIDMW_CAL_EXPORT
 
@@ -46,6 +46,7 @@ unix:!macx:  DEFINES += __UNIX__
 
 # Input
 HEADERS += \
+           APDU.h \
            Cache.h \
            Card.h \
            CardFactory.h \
@@ -57,6 +58,7 @@ HEADERS += \
            P15Objects.h \
            PCSC.h \
            GenericPinpad.h \
+           PaceAuthentication.h \
            Pinpad.h \
            PKCS15.h \
            PKCS15Parser.h \
@@ -72,6 +74,7 @@ HEADERS += \
            CardReaderInfo.h
 
 SOURCES += \
+           APDU.cpp \
            Cache.cpp \
            Card.cpp \
            CardFactory.cpp \
@@ -79,6 +82,7 @@ SOURCES += \
            CardReaderInfo.cpp \
            Context.cpp \
            PCSC.cpp \
+           PaceAuthentication.cpp \
            Pinpad.cpp \
            GenericPinpad.cpp \
            PKCS15.cpp \

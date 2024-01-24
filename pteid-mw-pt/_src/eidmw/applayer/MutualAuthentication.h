@@ -59,6 +59,7 @@ class MutualAuthentication
 public:
 	MutualAuthentication(APL_Card *card);
 
+    /* Operations used for IAS v4 and earlier cards */
 	bool getDHParams(DHParams *otp_struct, bool getAllParams = false);
 	bool verifyCVCCertificate(const char *cvc_certificate_hex);
 	
@@ -72,11 +73,17 @@ public:
 	
 	char * getPK_IFD_AUT(CByteArray &cvc_cert);
 	char * getPK_IFD_AUT(char * cvc_cert);
-	char *sendPrebuiltAPDU(char *apdu_string);
-	std::vector<char *> sendSequenceOfPrebuiltAPDUs(std::vector<char *> &apdu_array);
+
+    /* Mutual authentication for IAS v5 cards (DAPP) */
+    CByteArray getECDHParams();
+    char * generalAuthenticate(const char * ecdh_kifd);
+	char *sendPrebuiltAPDU(const char *apdu_string);
+	std::vector<std::string> sendSequenceOfPrebuiltAPDUs(std::vector<std::string> &apdu_array);
+    std::vector<std::string> remoteAddressStep3(std::string &signed_challenge, std::vector<std::string> &internal_auth, const std::string &pin_status);
 
 private:
 	char * _getDH_Param(unsigned char specific_byte, unsigned long offset);
+    CByteArray _getDH_Param_Data(unsigned char specific_byte, unsigned long offset);
 	char * _getCVCPublicKey();
 	char * _getCardAuthPublicKey();
 	char * _getSODCert();

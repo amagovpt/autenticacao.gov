@@ -719,6 +719,14 @@
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Permanecer</translation>
     </message>
+    <message>
+        <source>STR_NOTES_PAGE_NOT_SUPPORTED</source>
+        <translation>Não suportado</translation>
+    </message>
+    <message>
+        <source>STR_NOTES_NOT_SUPPORTED_DESCRIPTION_PAGE</source>
+        <translation>Esta funcionalidade não está disponível neste Cartão de Cidadão.</translation>
+    </message>
 </context>
 <context>
     <name>PageCardPrint</name>
@@ -844,6 +852,18 @@
     <message>
         <source>STR_TOGGLE_CACHE_CHECKBOX</source>
         <translation>Utilizar cache de dados do cartão</translation>
+    </message>
+    <message>
+        <source>STR_CAN_CACHE_TITLE</source>
+        <translation>Códigos de acesso contactless</translation>
+    </message>
+    <message>
+        <source>STR_CAN_CACHE_TEXT</source>
+        <translation>Guarda códigos de acesso a cartões contactless previamente lidos, evitando nova autorização</translation>
+    </message>
+    <message>
+        <source>STR_TOGGLE_CAN_CACHE_CHECKBOX</source>
+        <translation>Guardar códigos de acesso</translation>
     </message>
 </context>
 <context>
@@ -2327,6 +2347,39 @@
     <message>
         <source>STR_POPUP_CARD_PIN_VERIFY_ADDRESS</source>
         <translation>Verificar o Pin da Morada</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_TITLE</source>
+        <translation>Leitura de Cartão Contactless</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_TEXT</source>
+        <translation>Por favor insira o código de acesso ao seu cartão.
+Este número de 6 digitos está impresso no seu cartão no canto inferior direito.</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN</source>
+        <translation>Código de acesso ao cartão</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_LABEL</source>
+        <translation>CAN: </translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_CANCEL</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_PACE_UNKNOWN</source>
+        <translation>Erro de leitura.</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_PACE_BAD_TOKEN</source>
+        <translation>Código errado.</translation>
     </message>
     <message>
         <source>STR_POPUP_CARD_PIN_ADDRESS</source>

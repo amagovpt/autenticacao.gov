@@ -721,6 +721,14 @@
         <source>STR_UNSAVED_NOTES_STAY</source>
         <translation>Stay</translation>
     </message>
+    <message>
+        <source>STR_NOTES_PAGE_NOT_SUPPORTED</source>
+        <translation>Not supported</translation>
+    </message>
+    <message>
+        <source>STR_NOTES_NOT_SUPPORTED_DESCRIPTION_PAGE</source>
+        <translation>This feature is not available in this Citizen Card.</translation>
+    </message>
 </context>
 <context>
     <name>PageCardPrint</name>
@@ -846,6 +854,18 @@
     <message>
         <source>STR_TOGGLE_CACHE_CHECKBOX</source>
         <translation>Use card data cache</translation>
+    </message>
+    <message>
+        <source>STR_CAN_CACHE_TITLE</source>
+        <translation>CAN Cache</translation>
+    </message>
+    <message>
+        <source>STR_CAN_CACHE_TEXT</source>
+        <translation>The CAN cache stores the CAN of previously loaded cards, avoiding a new connection to the card</translation>
+    </message>
+    <message>
+        <source>STR_TOGGLE_CAN_CACHE_CHECKBOX</source>
+        <translation>Use CAN cache</translation>
     </message>
 </context>
 <context>
@@ -2322,6 +2342,38 @@
 </context>
 <context>
     <name>Popup PIN</name>
+    <message>
+        <source>STR_POPUP_CAN_TITLE</source>
+        <translation>Contactless Card Reading</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_TEXT</source>
+        <translation>Please insert the card access number for your card. This six digit code is imprinted on your card in the bottom right corner.</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN</source>
+        <translation>Card access number</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_LABEL</source>
+        <translation>CAN: </translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CAN_CANCEL</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_PACE_UNKNOWN</source>
+        <translation>Reading error.</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_PACE_BAD_TOKEN</source>
+        <translation>Wrong card access number.</translation>
+    </message>
     <message>
         <source>STR_POPUP_CARD_PIN_VERIFY</source>
         <translation>PIN verification</translation>

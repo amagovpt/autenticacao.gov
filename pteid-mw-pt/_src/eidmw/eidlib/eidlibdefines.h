@@ -50,10 +50,22 @@ namespace eIDMW
 enum PTEID_CardType
 {
 	PTEID_CARDTYPE_UNKNOWN=0,	/**< Unknown card */
-	PTEID_CARDTYPE_IAS07,
-	PTEID_CARDTYPE_IAS101
+	PTEID_CARDTYPE_IAS07,       /*   IAS v0.7 or compatible until IAS v.4    */
+	PTEID_CARDTYPE_IAS101,      /*   IAS 1.01 cards (legacy)  */
+	PTEID_CARDTYPE_IAS5         /*   IAS v5 cards (CC 2)     */
 };
 
+enum PTEID_CardContactInterface
+{
+    PTEID_CARD_CONTACTEMPTY=0,    /* Empty contact */
+    PTEID_CARD_CONTACT,           /* Card is using contact */
+    PTEID_CARD_CONTACTLESS        /* Card is using contactless */
+};
+
+enum PTEID_CardPaceSecretType
+{
+    PTEID_CARD_SECRET_CAN=0    /* Use CAN (card access number) as PACE authentication credential */
+};
 
 enum PTEID_PinUsage
 {
@@ -112,6 +124,7 @@ enum PTEID_Param
 	PTEID_PARAM_GENERAL_CACHEDIR,		//string, cache directory for card-file;
 	PTEID_PARAM_GENERAL_PTEID_CACHEDIR,
 	PTEID_PARAM_GENERAL_PTEID_CACHE_ENABLED,
+	PTEID_PARAM_GENERAL_PTEID_CAN_CACHE_ENABLED,
 	PTEID_PARAM_GENERAL_CERTS_DIR,
 	PTEID_PARAM_GENERAL_LANGUAGE,		//string, user language: en, pt
 	PTEID_PARAM_GENERAL_SAM_SERVER,

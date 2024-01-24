@@ -37,6 +37,8 @@ PageCardNotesForm {
             propertyBusyIndicator.running = false
         }
         onSignalPersoDataLoaded: {
+            setUnsupportedMessageVisible(false)
+
             console.log("QML: onSignalPersoDataLoaded!")
             mainFormID.propertyPageLoader.propertyLoadedText = persoNotes;
 
@@ -50,6 +52,11 @@ PageCardNotesForm {
             propertyBusyIndicator.running = false
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyNotesText.forceActiveFocus()
+        }
+        onSignalPersonalDataNotSupported:
+        {
+            console.log("QML: onSignalPersonalDataNotSupported")
+            setUnsupportedMessageVisible(true);
         }
         onSignalCardAccessError: {
             console.log("Card Notes onSignalCardAccessError")
@@ -159,6 +166,16 @@ PageCardNotesForm {
             }
             propertyEditNotes.previousText = propertyEditNotes.text
         }
+    }
+
+    function setUnsupportedMessageVisible(visible)
+    {
+        propertyRowText.visible = !visible;
+        propertyBusyIndicator.visible = !visible;
+        propertyBusyIndicator.running = !visible;
+        propertyRowNotesCount.visible = !visible;
+
+        propertyWarningTextItem.visible = visible;
     }
 
     function ensureVisible(r)

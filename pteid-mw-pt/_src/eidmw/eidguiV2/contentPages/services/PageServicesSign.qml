@@ -373,13 +373,18 @@ PageServicesSignForm {
                 signCertExpired = false
 
                 gapi.startGettingInfoFromSignCert();
-                gapi.startCheckSignatureCertValidity();
+                //gapi.startCheckSignatureCertValidity();
             }
             else{
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
                 cardLoaded = false
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+        }
+
+        onSignalContactlessCANNeeded: {
+            console.log("QML: Contactless CAN is needed!!")
+            paceDialogLoader.active = true
         }
 
         onSignalSignCertExpired: {
@@ -430,6 +435,17 @@ PageServicesSignForm {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             perform_signature_CC()
+        }
+    }
+
+    Loader {
+        id: paceDialogLoader
+        active: false
+        anchors.verticalCenter: parent.verticalCenter
+        source: "../definitions/DialogRequestPaceSecret.qml"
+        onLoaded: {
+            paceDialogLoader.item.afterPaceAction = GAPI.SignCertificateData
+            paceDialogLoader.item.open()
         }
     }
 
@@ -1413,7 +1429,7 @@ PageServicesSignForm {
 
         signCertExpired = false //FIXME: this boolean is not needed
         gapi.startGettingInfoFromSignCert();
-        gapi.startCheckSignatureCertValidity();
+
         console.log("End of onCompleted")
     }
 
@@ -1425,7 +1441,6 @@ PageServicesSignForm {
     Components.DialogCMD{
         id: dialogSignCMD
     }
-
     Dialog {
         id: signsuccess_dialog
         width: 400

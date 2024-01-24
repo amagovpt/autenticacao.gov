@@ -32,7 +32,7 @@
 #include "cal.h"
 #include "log.h"
 #include "cert.h"
-
+#include <openssl/asn1.h>
 
 #ifndef WIN32
 #define strcpy_s(a,b,c)         strcpy((a),(c))
@@ -315,6 +315,15 @@ if (pMechanismList == NULL)
    if (algos & SIGN_ALGO_SHA256_RSA_PKCS)    *pulCount +=1;
    if (algos & SIGN_ALGO_SHA384_RSA_PKCS)    *pulCount +=1;
    if (algos & SIGN_ALGO_SHA512_RSA_PKCS)    *pulCount +=1;
+
+   // ECDSA algos
+   if (algos & SIGN_ALGO_ECDSA)              *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA1)         *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA224)       *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA256)       *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA384)       *pulCount +=1;
+   if (algos & SIGN_ALGO_ECDSA_SHA512)       *pulCount +=1;
+
    //4 variants of RSA-PSS
    if (algos & SIGN_ALGO_RSA_PSS)            *pulCount +=4;
    return (CKR_OK);
@@ -398,12 +407,91 @@ if (algos & SIGN_ALGO_RSA_PSS)
    else
 	   return (CKR_BUFFER_TOO_SMALL);
    }
+if (algos & SIGN_ALGO_ECDSA)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA1)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA1;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA224)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA224;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA256)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA256;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA384)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA384;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+if (algos & SIGN_ALGO_ECDSA_SHA512)
+   {
+      if (n++ <= *pulCount)
+         pMechanismList[n-1] = CKM_ECDSA_SHA512;
+      else
+         return (CKR_BUFFER_TOO_SMALL);
+   }
+
+
 
 return (ret);
 }
 #undef WHERE
 
+#define WHERE "cal_is_mechanism_supported"
+CK_RV cal_is_mechanism_supported(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE mechanism) {
+   CK_RV ret = CKR_OK;
+   BOOL supported_algorithm = FALSE;
+   CK_ULONG count = 0;
 
+   cal_get_mechanism_list(hSlot, NULL, &count);
+   CK_MECHANISM_TYPE_PTR pMechanismList = (CK_MECHANISM_TYPE_PTR) malloc(count * sizeof(CK_MECHANISM_TYPE));
+   
+   if (pMechanismList == NULL) {
+      log_trace(WHERE, "E: error allocating memory");
+      ret = CKR_HOST_MEMORY;
+      goto cleanup;
+   }
+   
+   cal_get_mechanism_list(hSlot, pMechanismList, &count);
+
+   for (unsigned int i = 0; i < count; i++) {
+      if (pMechanismList[i] == mechanism) {
+         supported_algorithm = TRUE;
+         break;
+      }
+   }
+
+   if (!supported_algorithm) {
+      ret = CKR_MECHANISM_INVALID;
+      goto cleanup;
+   }
+
+cleanup:
+   if(pMechanismList)
+      free(pMechanismList);
+
+   return ret;
+}
+#undef WHERE
 
 #define WHERE cal_get_mechanism_info()
 CK_RV cal_get_mechanism_info(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE type, CK_MECHANISM_INFO_PTR pInfo)
@@ -565,6 +653,10 @@ try
    {
    	CReader &oReader = oCardLayer->getReader(szReader);
 	oReader.PrivKeyCount();
+   
+   if(oReader.GetCardType() == CARD_PTEID_IAS5) {
+      keytype = CKK_EC;
+   }
 
    for (i=0; i < oReader.PrivKeyCount(); i++)
       {
@@ -600,7 +692,9 @@ try
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_ALWAYS_AUTHENTICATE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
       if (ret) goto cleanup;
-			ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_DERIVE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
+      ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_DERIVE, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
+      if (ret) goto cleanup;
+      ret = p11_set_attribute_value(pObject->pAttr, pObject->count, CKA_LOCAL, (CK_VOID_PTR) &bfalse, sizeof(bfalse));
       if (ret) goto cleanup;
       /**************************************************/
       /* Public key corresponding to private key object */
@@ -790,11 +884,15 @@ P11_OBJECT *pCertObject    = NULL;
 P11_OBJECT *pPubKeyObject  = NULL;
 P11_OBJECT *pPrivKeyObject = NULL;
 T_CERT_INFO certinfo;
+T_RSA_KEY_INFO rsa_keyinfo;
 CByteArray oCertData;
 tCert cert;
 tPrivKey key;
 std::string szReader;
 P11_SLOT *pSlot = NULL;
+CK_KEY_TYPE keytype = CKK_RSA;
+CByteArray ec_params;
+CByteArray ec_point;
 
 pSlot = p11_get_slot(hSlot);
 if (pSlot == NULL)
@@ -833,7 +931,12 @@ try
    CReader &oReader = oCardLayer->getReader(szReader);
    cert = oReader.GetCertByID(*pID);
 
-   //bValid duidt aan if cert met deze ID
+   // Select EID app before reading certificate
+   if(oReader.GetCardType() == CARD_PTEID_IAS5) {
+      keytype = CKK_EC;
+      oReader.SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+   }
+
    if (cert.bValid)
 	   oCertData = oReader.ReadFile(cert.csPath);
    else
@@ -842,6 +945,12 @@ try
       }
 
    ret = cert_get_info(oCertData.GetBytes(), oCertData.Size(), &certinfo);
+   if (ret) goto cleanup;
+
+   if (keytype == CKK_RSA) {
+      ret = get_rsa_key_info(oCertData.GetBytes(), oCertData.Size(), &rsa_keyinfo);
+      if (ret) goto cleanup;
+   }
 
    ret = p11_set_attribute_value(pCertObject->pAttr, pCertObject->count, CKA_SUBJECT, (CK_VOID_PTR) certinfo.subject, (CK_ULONG)certinfo.l_subject);
    if (ret) goto cleanup;
@@ -858,6 +967,39 @@ try
 
    pCertObject->state = P11_CACHED;
 
+   // Read public key file directly from card
+   if (oReader.GetCardType() == CARD_PTEID_IAS5) {
+      // pID = type
+      unsigned char cmd[16] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x06, 0x00, 0x00};
+      long len;
+      CByteArray result_buff;
+                               
+      if (*pID == 0x45)
+         cmd[9] = 0x06; // Auth
+      else
+         cmd[9] = 0x08; // Sign
+
+      // Read EC_PARAMS
+      result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
+      len = result_buff.Size();
+      unsigned char* params = parse_ec_params(result_buff.GetBytes(), &len);
+      if (params == NULL)
+         return CKR_DEVICE_ERROR;
+
+      ec_params.Append(params, len);
+
+      // Read EC_POINT
+      cmd[13] = 0x86;
+      result_buff = oReader.SendAPDU({cmd, sizeof(cmd)});
+      len = result_buff.Size();
+      unsigned char* point = parse_ec_point(result_buff.GetBytes(), &len);
+      if (point == NULL)
+         return CKR_DEVICE_ERROR;
+
+      ec_point.Append(0x4);
+      ec_point.Append(len);
+      ec_point.Append(point, len);
+   }
 
    if (pPrivKeyObject)
       {
@@ -871,11 +1013,17 @@ try
       ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_SIGN_RECOVER, (CK_VOID_PTR) &bfalse, sizeof(CK_BBOOL));
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_UNWRAP, (CK_VOID_PTR) &bfalse, sizeof(CK_BBOOL));
-      if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, (CK_ULONG) certinfo.l_mod);
-      if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, (CK_ULONG)certinfo.l_exp);
-      if (ret) goto cleanup;
+
+      if(keytype == CKK_RSA) {
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) rsa_keyinfo.mod, (CK_ULONG) rsa_keyinfo.l_mod);
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) rsa_keyinfo.exp, (CK_ULONG)rsa_keyinfo.l_exp);
+         if (ret) goto cleanup;
+      } else if (keytype == CKK_EC) {
+         ret = p11_set_attribute_value(pPrivKeyObject->pAttr, pPrivKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params.GetBytes(), ec_params.Size());
+         if (ret) goto cleanup;
+      }
 
       pPrivKeyObject->state = P11_CACHED;
       }
@@ -892,12 +1040,17 @@ try
       if (ret) goto cleanup;
       ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_WRAP, (CK_VOID_PTR) &bfalse, sizeof(CK_BBOOL));
       if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) certinfo.mod, certinfo.l_mod);
-      if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_VALUE, (CK_VOID_PTR) certinfo.pkinfo, certinfo.l_pkinfo);
-      if (ret) goto cleanup;
-      ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) certinfo.exp, certinfo.l_exp);
-      if (ret) goto cleanup;
+      if(keytype == CKK_RSA) {
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_MODULUS, (CK_VOID_PTR) rsa_keyinfo.mod, rsa_keyinfo.l_mod);
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_PUBLIC_EXPONENT, (CK_VOID_PTR) rsa_keyinfo.exp, rsa_keyinfo.l_exp);
+         if (ret) goto cleanup;
+      } else if (keytype == CKK_EC) {
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_PARAMS, (CK_VOID_PTR)ec_params.GetBytes(), ec_params.Size());
+         if (ret) goto cleanup;
+         ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_EC_POINT, (CK_VOID_PTR)ec_point.GetBytes(), ec_point.Size());
+         if (ret) goto cleanup;
+      }
       //TODO test if we can set the trusted flag...
       ret = p11_set_attribute_value(pPubKeyObject->pAttr, pPubKeyObject->count, CKA_TRUSTED, (CK_VOID_PTR) &btrue, sizeof(btrue));
       if (ret) goto cleanup;
@@ -922,6 +1075,16 @@ if (ret != 0)
    }
 
 cleanup:
+if (certinfo.serial) OPENSSL_free(certinfo.serial);
+if (certinfo.issuer) OPENSSL_free(certinfo.issuer);
+if (certinfo.subject) OPENSSL_free(certinfo.subject);
+
+if (keytype == CKK_RSA) {
+   if (rsa_keyinfo.exp) OPENSSL_free(rsa_keyinfo.exp);
+   if (rsa_keyinfo.mod) OPENSSL_free(rsa_keyinfo.mod);
+}
+
+
 
 return (ret);
 }
@@ -949,15 +1112,6 @@ if (pSlot == NULL)
    }
 std::string szReader = pSlot->name;
 
-if (out == NULL)
-   {
-   //get length of signature
-   *l_out = 128;
-   return(CKR_OK);
-   }
-if (*l_out < 128)
-   return(CKR_BUFFER_TOO_SMALL);
-
 try
 {
    CReader &oReader = oCardLayer->getReader(szReader);
@@ -975,6 +1129,12 @@ try
       case CKM_SHA384_RSA_PKCS:        algo = SIGN_ALGO_SHA384_RSA_PKCS;     break;
       case CKM_SHA512:
       case CKM_SHA512_RSA_PKCS:        algo = SIGN_ALGO_SHA512_RSA_PKCS;     break;
+      case CKM_ECDSA:                  algo = SIGN_ALGO_ECDSA;               break;      
+      case CKM_ECDSA_SHA1:             algo = SIGN_ALGO_ECDSA_SHA1;          break;      
+      case CKM_ECDSA_SHA224:           algo = SIGN_ALGO_ECDSA_SHA224;        break;      
+      case CKM_ECDSA_SHA256:           algo = SIGN_ALGO_ECDSA_SHA256;        break;      
+      case CKM_ECDSA_SHA384:           algo = SIGN_ALGO_ECDSA_SHA384;        break;      
+      case CKM_ECDSA_SHA512:           algo = SIGN_ALGO_ECDSA_SHA512;        break;      
       case CKM_RSA_PKCS_PSS:
 	  case CKM_SHA384_RSA_PKCS_PSS:
 	  case CKM_SHA512_RSA_PKCS_PSS:
@@ -1007,6 +1167,9 @@ catch (...)
 }
 
 *l_out = oDataOut.Size();
+if (oDataOut.Size() > *l_out)
+   return (CKR_BUFFER_TOO_SMALL);
+
 memcpy(out, oDataOut.GetBytes(), *l_out);
 
 cleanup:

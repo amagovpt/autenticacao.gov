@@ -81,23 +81,6 @@ typedef struct _FEATURES
 	DWORD GET_KEY_PRESSED;
 } FEATURES, *PFEATURES;
 
-extern DWORD PteidGetCardSN
-	(
-		PCARD_DATA  pCardData, 
-		PBYTE pbSerialNumber, 
-		DWORD cbSerialNumber, 
-		PDWORD pdwSerialNumber
-	);
-extern DWORD PteidSignData
-			(
-				PCARD_DATA  pCardData, 
-				BYTE pin_id,
-				DWORD cbToBeSigned, 
-				PBYTE pbToBeSigned, 
-				DWORD *pcbSignature, 
-				PBYTE *ppbSignature
-			);
-
 extern DWORD PteidReadPrKDF(PCARD_DATA pCardData,
 							DWORD *out_len,
 							PBYTE *data);
@@ -106,16 +89,7 @@ extern DWORD PteidParsePrKDF(PCARD_DATA pCardData,
 							 DWORD *cbStream, 
 							 BYTE *pbStream,
 							 WORD *cbKeySize);
-extern DWORD PteidSignDataGemsafe 
-			(
-				PCARD_DATA  pCardData, 
-				BYTE pin_id,
-				DWORD cbToBeSigned, 
-				PBYTE pbToBeSigned, 
-				DWORD *pcbSignature, 
-				PBYTE *ppbSignature, 
-				BOOL pss_padding
-			);
+
 extern DWORD PteidReadFile
 			(
 				PCARD_DATA  pCardData, 
@@ -123,30 +97,7 @@ extern DWORD PteidReadFile
 				DWORD *cbStream, 
 				PBYTE pbStream
 			);
-extern DWORD PteidSelectAndReadFile
-	      (
-			   PCARD_DATA  pCardData, 
-				DWORD dwOffset, 
-				BYTE cbFileID,
-				PBYTE pbFileID, 
-				DWORD *cbStream, 
-				PBYTE* pbStream
-);
-extern DWORD PteidReadCert
-			(
-				PCARD_DATA  pCardData, 
-				DWORD dwCertSpec, 
-				DWORD *pcbCertif, 
-				PBYTE *ppbCertif
-			);
-extern DWORD   PteidAuthenticate
-               (
-                  PCARD_DATA     pCardData, 
-                  PBYTE          pbPin, 
-                  DWORD          cbPin, 
-                  PDWORD         pcAttemptsRemaining,
-				  BYTE			 pin_id 
-               );
+
 extern DWORD   PteidAuthenticateExternal
                (
                   PCARD_DATA     pCardData, 
@@ -154,25 +105,6 @@ extern DWORD   PteidAuthenticateExternal
 				  BOOL			 bSilent,
 				  DWORD			PinId
   
-               );
-
-extern DWORD   PteidMSE
-				(
-				 PCARD_DATA   pCardData, 
-			     BYTE      key_id,
-				 DWORD hash_length,
-				 BOOL pss_padding
-				 ); 
-
-extern DWORD   PteidChangePIN
-               (
-                  PCARD_DATA     pCardData, 
-                  PBYTE          pbCurrentAuthenticator,
-                  DWORD          cbCurrentAuthenticator,
-                  PBYTE          pbNewAuthenticator,
-                  DWORD          cbNewAuthenticator,
-                  PDWORD         pcAttemptsRemaining,
-				  DWORD		     pin_id
                );
 
 extern DWORD  PteidSelectApplet(PCARD_DATA     pCardData);

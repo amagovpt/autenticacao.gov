@@ -99,131 +99,6 @@ void PteidDelayAndRecover(PCARD_DATA  pCardData,
 }
 #undef WHERE
 
-
-
-#define WHERE "PteidAuthenticate"
-DWORD PteidAuthenticate(PCARD_DATA  pCardData, 
-                       PBYTE        pbPin, 
-                       DWORD        cbPin, 
-                       PDWORD       pcAttemptsRemaining,
-					   BYTE			pin_id) 
-{
-   DWORD             dwReturn  = 0;
-
-   SCARD_IO_REQUEST  ioSendPci = *g_pioSendPci;
-
-   unsigned char     Cmd[128];
-   unsigned int      uiCmdLg   = 0;
-   unsigned char     recvbuf[256];
-   unsigned long     recvlen   = sizeof(recvbuf);
-   BYTE              SW1, SW2;
-   unsigned int              i = 0;
-   unsigned int				 j = 0;
-   char				paddingChar;
-
-   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-
-   /********************/
-   /* Check Parameters */
-   /********************/
-   if ( pCardData == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
-   if ( pbPin == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pbPin]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
-
-   /* Don't allow zero-length PIN */
-   if ( ( cbPin < PTEID_MIN_USER_PIN_LEN ) ||
-        ( cbPin > PTEID_MAX_USER_PIN_LEN ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [cbPin]");
-      CLEANUP(SCARD_W_WRONG_CHV);
-   }
-
-   PteidSelectApplet(pCardData);
-
-   /**********/
-   /* Log On */
-   /**********/
-   Cmd[0] = 0x00;
-   Cmd[1] = 0x20;  /* VERIFY COMMAND */
-   Cmd[2] = 0x00;
-   if (Is_Gemsafe)
-	   Cmd[3] = 0x81 + pin_id; /* PIN ID  */
-   else
-   {
-	   if (pin_id == 0)
-		   Cmd[3] = 0x01;  /* Authentication PIN  */
-	   else
-		   Cmd[3] = 0x82;  /* Signature PIN  */
-   }
-
-   Cmd[4] = 0x08;  /* PIN Length (including padding) */
-
-   if (Is_Gemsafe)
-	   paddingChar = 0xFF;
-   else
-	   paddingChar = 0x2F;
-
-   while(i < 0x08)
-   {
-	   if(i < cbPin)
-		   Cmd[i+5] = pbPin[i];
-	   else
-		   Cmd[i+5] = paddingChar;
-	   i++;
-   }
-	   
-   uiCmdLg = 13;
-   recvlen = sizeof(recvbuf);
-
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      dwReturn = SCARD_W_WRONG_CHV;
-      LogTrace(LOGTYPE_ERROR, WHERE, "VERIFY PIN Failed! SW12: [0x%02X][0x%02X]", SW1, SW2);
-
-      if ( ((SW1 == 0x63) && ((SW2 & 0xF0) == 0xC0)) )
-      {
-         if ( pcAttemptsRemaining != NULL )
-         {
-            /* -1: Don't support returning the count of remaining authentication attempts */
-            *pcAttemptsRemaining = (SW2 & 0x0F);
-         }
-      }
-      else if ((SW1 == 0x69) && (SW2 == 0x83 || SW2 == 0x84))
-      {
-         dwReturn = SCARD_W_CHV_BLOCKED;
-		 LogTrace(LOGTYPE_ERROR, WHERE, "PIN with ID %d is blocked, watch out!!", (int)pin_id);
-      }
-   }
-   else
-   {
-      LogTrace(LOGTYPE_INFO, WHERE, "Logged on...");
-   }
-
-cleanup:
-
-   LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-
-   return(dwReturn);
-}
-#undef WHERE
-
 void GemPCLoadStrings(SCARDHANDLE hCard, DWORD pin_id)
 {
 /*The Following Blob contains the Portuguese strings to show on the Pinpad Display:
@@ -368,7 +243,7 @@ DWORD PteidAuthenticateExternal(
 	/* Log On */
 	/**********/
 
-	if (Is_Gemsafe == 0 && pin_id == 0)
+	if (card_type == IAS_CARD && pin_id == 0)
 		pin_ref = 0x01;
 	else 
 		pin_ref = 0x81 + pin_id;
@@ -489,274 +364,23 @@ BYTE getGemaltoAlgoID(DWORD hash_len) {
 	}
 }
 
+BYTE getIASv5AlgoId(DWORD hash_len) {
+	switch (hash_len) {
+	case SHA1_LEN:
+		return 0x14;
+	case SHA512_LEN:
+		return 0x64;
+	case SHA384_LEN:
+		return 0x54;
+	case SHA256_LEN:
+		return 0x44;
+	default:
+		return 0x02;
+	}
+}
+
 
 /****************************************************************************************************/
-
-#define WHERE "PteidMSE"
-DWORD PteidMSE(PCARD_DATA   pCardData, 
-			     BYTE      key_id, DWORD hash_length,  BOOL pss_padding) 
-{
-  
-   DWORD             dwReturn = 0;
-
-   SCARD_IO_REQUEST  ioSendPci = *g_pioSendPci;
-   //SCARD_IO_REQUEST  ioRecvPci = {0, sizeof(SCARD_IO_REQUEST)};
-
-   unsigned char     Cmd[128];
-   unsigned int      uiCmdLg = 0;
-   unsigned char     recvbuf[256+2];
-   unsigned long     recvlen = sizeof(recvbuf);
-   BYTE              SW1, SW2;
-
-   int               i = 0;
-
-   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-   /*
-    * The MSE: SET Command will fail with error 0x000006f7
-    * if the command is executed too fast after an command which resulted in an error condition
-    */
-   // Sleep(20);
-   Cmd [0] = 0x00;
-   Cmd [1] = 0x22; //MSE
-   Cmd [2] = 0x41;
-   if (Is_Gemsafe)
-   {
-	   Cmd [3] = 0xB6;
-	   Cmd [4] = 0x06; //Length of data
-	   Cmd [5] = 0x80; //Tag (Algorithm ID)
-	   Cmd [6] = 0x01;
-	   //pss_padding parameter adds 3 to the default (PKCS#1) algorithm IDs
-	   Cmd[7] = getGemaltoAlgoID(hash_length);
-	   if (pss_padding)
-			   Cmd[7] += 3;
-	   Cmd [8] = 0x84; //Tag (Key Reference)
-	   Cmd [9] = 0x01;
-	   if(key_id == 0) 
-		Cmd [10] = 0x02; //Auth keyRef
-	   else
-		Cmd [10] = 0x01; //Sign keyRef
-	   uiCmdLg = 11;
-
-   }
-   else
-   {
-	   Cmd [3] = 0xA4;
-	   Cmd [4] = 0x09; //Length of data
-	   Cmd [5] = 0x95; //Tag (Usage Qualifier)
-	   Cmd [6] = 0x01;
-	   Cmd [7] = 0x40;
-	   Cmd [8] = 0x84; //Tag (Key Reference)
-	   Cmd [9] = 0x01;
-	   if(key_id == 0)
-		Cmd [10] = 0x01;
-	   else
-		Cmd [10] = 0x82;
-	   Cmd [11] = 0x80; //Tag (Algorithm Reference)
-	   Cmd [12] = 0x01;
-	   Cmd [13] = 0x02; //(RSA-PKCS#1)
-	   uiCmdLg = 14;
-   }
-  
-   //Sleep(1000);
-   LogTrace(LOGTYPE_INFO, WHERE, "APDU MSE");
-   LogDumpHex(uiCmdLg, (char *)Cmd);
-  
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   PteidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (SET) errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-   
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SET Failed: [0x%02X][0x%02X]", SW1, SW2);
-      CLEANUP(SCARD_E_UNEXPECTED);
-   }
-
-cleanup:
-   LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-   return(dwReturn);
-}
-#undef WHERE
-
-/****************************************************************************************************/
-
-#define WHERE "PteidChangePIN"
-DWORD    PteidChangePIN
-         (
-            PCARD_DATA  pCardData, 
-            PBYTE       pbCurrentAuthenticator,
-            DWORD       cbCurrentAuthenticator,
-            PBYTE       pbNewAuthenticator,
-            DWORD       cbNewAuthenticator,
-            PDWORD      pcAttemptsRemaining,
-			DWORD		     pin_id
-         ) 
-{
-   DWORD             dwReturn = 0;
-
-   SCARD_IO_REQUEST  ioSendPci = *g_pioSendPci;
-   
-   unsigned char     Cmd[128];
-   unsigned int      uiCmdLg = 0;
-   unsigned char     recvbuf[256];
-   unsigned long     recvlen = sizeof(recvbuf);
-   BYTE              SW1, SW2;
-   char				 paddingChar;	
-
-   unsigned int      i        = 0;
-   int				 j		  = 0;	
-
-   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-
-   /********************/
-   /* Check Parameters */
-   /********************/
-   if ( pCardData == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
-   if ( pbCurrentAuthenticator == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pbCurrentAuthenticator]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
-   if ( pbNewAuthenticator == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pbNewAuthenticator]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
-   if ( ( cbCurrentAuthenticator < PTEID_MIN_USER_PIN_LEN ) ||
-        ( cbCurrentAuthenticator > PTEID_MAX_USER_PIN_LEN ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [cbCurrentAuthenticator]");
-      CLEANUP(SCARD_W_WRONG_CHV);
-   }
-   if ( ( cbNewAuthenticator < PTEID_MIN_USER_PIN_LEN ) ||
-        ( cbNewAuthenticator > PTEID_MAX_USER_PIN_LEN ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [cbCurrentAuthenticator]");
-      CLEANUP(SCARD_W_WRONG_CHV);
-   }
-
-   if (!Is_Gemsafe)
-   {
-		dwReturn = PteidAuthenticate(pCardData, pbCurrentAuthenticator, cbCurrentAuthenticator,
-			pcAttemptsRemaining, 1);
-		if(dwReturn != SCARD_S_SUCCESS)
-			CLEANUP(dwReturn);
-   }
-
-   if (Is_Gemsafe)
-	   paddingChar = 0xFF;
-   else
-	   paddingChar = 0x2F;
-  
-
-   /* TODO: This must be corrected see PkiCard.cpp in cardlayer sub-project
-   /* Change PIN code: Old PIN + New PIN + Padding */
-   Cmd[0] = 0x00;
-   Cmd[1] = 0x24;   /* CHANGE REFERENCE DATA COMMAND    */
-   if (Is_Gemsafe)
-	   Cmd[2] = 0x00;
-   else
-	   Cmd[2] = 0x01; 
-   if (Is_Gemsafe)
-	   Cmd[3] = 0x81;  //PIN Reference
-   else
-       Cmd[3] = 0x01; 
-   if(!Is_Gemsafe)
-	Cmd[4] = 0x08; //Just the new PIN
-   else
-	Cmd[4] = 0x10; // Old and new PIN
-	
-   if(Is_Gemsafe)
-   {
-	   while(i < 8)
-	   {
-		if (i < cbCurrentAuthenticator)
-			Cmd[4+i] = pbCurrentAuthenticator[i];
-		else
-			Cmd[4+i] = paddingChar;
-		i++;
-	   }
-   }
-
-   if (!Is_Gemsafe)
-	   j = -8;
-
-   while( i < 16)
-   {
-	   if (i < cbNewAuthenticator)
-		   Cmd[4+i+j] = pbNewAuthenticator[i+j];
-	   else
-		   Cmd[4+i+j] = paddingChar;
-	   i++;
-   }
-   if(Is_Gemsafe)	 
-	   uiCmdLg = 21;
-   else
-	   uiCmdLg = 13; 
-   recvlen = sizeof(recvbuf);
-
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   PteidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      dwReturn = SCARD_W_WRONG_CHV;
-      LogTrace(LOGTYPE_ERROR, WHERE, "CardChangeAuthenticator Failed: [0x%02X][0x%02X]", SW1, SW2);
-
-      if ( ((SW1 == 0x63) && ((SW2 & 0xF0) == 0xC0)) )
-      {
-         if ( pcAttemptsRemaining != NULL )
-         {
-            /* -1: Don't support returning the count of remaining authentication attempts */
-            *pcAttemptsRemaining = (SW2 & 0x0F);
-         }
-      }
-      else if ( (SW1 == 0x69) && (SW2 == 0x83) )
-      {
-         dwReturn = SCARD_W_CHV_BLOCKED;
-      }
-	  else
-		  LogTrace(LOGTYPE_ERROR, WHERE, "Unexpected error reply: [0x%02X][0x%02X]", SW1, SW2);
-   }
-   else
-   {
-      LogTrace(LOGTYPE_INFO, WHERE, "Changed PIN...");
-   }
-
-cleanup:
-   LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-   return(dwReturn);
-}
-#undef WHERE
-
 
 BOOL checkStatusCode(const char * context, DWORD dwReturn, BYTE SW1, BYTE SW2)
 {
@@ -768,7 +392,7 @@ BOOL checkStatusCode(const char * context, DWORD dwReturn, BYTE SW1, BYTE SW2)
 	}
 	if ((SW1 != 0x90) || (SW2 != 0x00))
 	{
-		LogTrace(LOGTYPE_ERROR, context, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
+		LogTrace(LOGTYPE_ERROR, context, "Card returned SW12: [0x%02X][0x%02X]", SW1, SW2);
 		return FALSE;
 	}
 
@@ -826,292 +450,7 @@ unsigned int matchDigestInfoPrefix(PBYTE hash, DWORD hash_len) {
 	}
 }
 
-
 /****************************************************************************************************/
-
-#define WHERE "PteidGetCardSN"
-DWORD PteidGetCardSN(PCARD_DATA  pCardData, 
-	PBYTE pbSerialNumber, 
-	DWORD cbSerialNumber, 
-	PDWORD pdwSerialNumber) 
-{
-   DWORD                   dwReturn = 0;
-
-   SCARD_IO_REQUEST        ioSendPci = *g_pioSendPci;
-
-   unsigned char           Cmd[128];
-   unsigned int            uiCmdLg = 0;
-
-   unsigned char           recvbuf[256];
-   unsigned long           recvlen = sizeof(recvbuf);
-   BYTE                    SW1, SW2;
-
-   int                     i = 0;
-   int                     iWaitApdu = 100;
-   int   				   bRetry = 0;
-
-   if (cbSerialNumber < 16) {
-		CLEANUP(ERROR_INSUFFICIENT_BUFFER);
-   }
-
-   PteidSelectApplet(pCardData);
-
-   *pdwSerialNumber = 0;
-
-
-
-   /***************/
-   /* Select File */
-   /***************/
-   Cmd [0] = 0x00;
-   Cmd [1] = 0xA4; /* SELECT COMMAND */
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x0C;
-   Cmd [4] = 0x02; 
-   Cmd [5] = 0x3F; //5F, (EF, 0C), ReadBinary(), (02, CertID)  
-   Cmd [6] = 0x00;
-   uiCmdLg = 7;
-
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   
-   if (!checkStatusCode(WHERE" -> select Dir Root", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-
-   Cmd[5] = 0x4F;
-   memset(recvbuf, 0, sizeof(recvbuf));
-   recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-		                    &recvlen);
-    SW1 = recvbuf[recvlen-2];
-    SW2 = recvbuf[recvlen-1];
-
-	if (!checkStatusCode(WHERE" -> select Specific Dir", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-
-     Cmd [5] = 0x50;
-     Cmd [6] = 0x32;
-	 
-	 memset(recvbuf, 0, sizeof(recvbuf));
-	 recvlen = sizeof(recvbuf);
-     dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-	 SW1 = recvbuf[recvlen-2];
-	 SW2 = recvbuf[recvlen-1];
-
-   if (!checkStatusCode(WHERE" -> select ID FILE", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-
-	
-   //READ BINARY for specific field within the ID File
-   Cmd [0] = 0x00;
-   Cmd [1] = 0xB0;
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x07;
-   Cmd [4] = 0x08;
-
-   uiCmdLg = 5;
-   recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-	SW1 = recvbuf[recvlen-2];
-	SW2 = recvbuf[recvlen-1];
-
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-		LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (READ BINARY ID) errorcode: [0x%02X]", dwReturn);
-		CLEANUP(dwReturn);
-   }
-
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Bad status bytes: [0x%02X][0x%02X]", SW1, SW2);
-		CLEANUP(SCARD_E_UNEXPECTED);
-   }
-
-
-   *pdwSerialNumber = 8;
-   memcpy(pbSerialNumber, recvbuf, 8);
-
-cleanup:
-   return (dwReturn);
-}
-
-#undef WHERE
-
-/****************************************************************************************************/
-
-#define WHERE "PteidSignData"
-DWORD PteidSignData(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature)
-{
-
-   DWORD                   dwReturn = 0;
-
-   SCARD_IO_REQUEST        ioSendPci = *g_pioSendPci;
-   //SCARD_IO_REQUEST        ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
-
-   unsigned char           Cmd[128];
-   unsigned int            uiCmdLg = 0;
-
-   unsigned char           recvbuf[1024];
-   unsigned long           recvlen = sizeof(recvbuf);
-   BYTE                    SW1, SW2;
-
-   unsigned int            i          = 0;
-   unsigned int            cbHdrHash  = 0;
-   const unsigned char     *pbHdrHash = NULL;
-   unsigned char sha256OID[] = {
-	       	0x30, 0x31, 0x30, 0x0d, 0x06, 0x09,
-		0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
-		0x05, 0x00, 0x04, 0x20 };
-	
-   PteidSelectApplet(pCardData);
-   dwReturn = PteidMSE(pCardData, pin_id, cbToBeSigned, FALSE);
-
-   if (dwReturn != SCARD_S_SUCCESS)
-   {
-	CLEANUP(dwReturn);
-   }
-   
-
-   /* Sign Command for IAS*/
-   /* 00 88 02 00 24 EC 61 B0 5B 70 33 78 39 F0 C8 C5 EB 79 64 */
-   Cmd [0] = 0x00; //0x88, 0x02, 0x00
-   Cmd [1] = 0x88;   /* PSO: Compute Digital Signature COMMAND */
-   Cmd [2] = 0x02;
-   Cmd [3] = 0x00; 
-   
-   //Workaround for SHA-256 with PKCS1 padding
-   //Adobe Reader 10 is using this combination
-   if (cbToBeSigned == 32)
-   {
-	    Cmd [4] = (BYTE)(sizeof(sha256OID) + cbToBeSigned);
-		uiCmdLg = sizeof(sha256OID) + 5 + cbToBeSigned;
-		memcpy(Cmd + 5, sha256OID, sizeof(sha256OID));
-		memcpy(Cmd + 5 + sizeof(sha256OID) , pbToBeSigned, cbToBeSigned);
-   }
-   else
-   {
-	    Cmd [4] = (BYTE)(cbToBeSigned);
-		uiCmdLg = 5 + cbToBeSigned;
-		memcpy(Cmd + 5, pbToBeSigned, cbToBeSigned);
-   }
-   
-   
-   
-#ifdef _DEBUG
-   LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", cbHdrHash + cbToBeSigned, (char *)&Cmd[5]);
-#endif
-   
-   recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            (SCARD_IO_REQUEST *)NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   PteidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (SIGN) errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-
-   if ( ( SW1 != 0x61 ) || ( SW2 != 0x80 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Sign Failed: [0x%02X][0x%02X]", SW1, SW2);
-
-      if ( SW1 == 0x69 )
-      {
-         CLEANUP(SCARD_W_SECURITY_VIOLATION);
-      }
-      else
-      {
-         CLEANUP(SCARD_E_UNEXPECTED);
-      }
-   }
-
-   /* Retrieve signature Command */
-   Cmd [0] = 0x00;
-   Cmd [1] = 0xC0;   /* PSO: GET RESPONSE COMMAND */
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x00;
-   Cmd [4] = 0x80;   /* Length of response */
-   uiCmdLg = 5;
-
-   recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   PteidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (Get Response) errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Get Response Failed: [0x%02X][0x%02X]", SW1, SW2);
-      CLEANUP(SCARD_E_UNEXPECTED);
-   }
-
-   if ( (recvlen - 2) != 0x80 )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid length received: [0x%02X][0x%02X]", recvlen - 2, 0x80);
-      CLEANUP(SCARD_E_UNEXPECTED);
-   }
-
-   *pcbSignature = 0x80;
-
-   /* Allocate memory for the target buffer */
-   *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature);
-
-   if ( *ppbSignature == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbSignature]");
-      CLEANUP(SCARD_E_NO_MEMORY);
-   }
-   /* Copy the signature */
-   for ( i = 0 ; i < *pcbSignature ; i++ )
-   {
-      (*ppbSignature)[i] = recvbuf[*pcbSignature - i - 1];
-   }
-
-cleanup:
-   return (dwReturn);
-}
-#undef WHERE
 
 #define WHERE "PteidParsePrKDF"
 DWORD PteidParsePrKDF(PCARD_DATA pCardData, DWORD *cbStream, BYTE *pbStream, WORD *cbKeySize)
@@ -1240,7 +579,10 @@ DWORD PteidReadPrKDF(PCARD_DATA pCardData, DWORD *out_len, PBYTE *data)
     //Obtain the file FCI template
     Cmd[3] = 0x00;
     Cmd[5] = 0xEF;
-    Cmd[6] = 0x0D;
+	 if (card_type == IAS_V5_CARD)
+		Cmd[6] = 0x0E;
+	 else
+		Cmd[6] = 0x0D;
 
     dwReturn = SCardTransmit(pCardData->hScard, 
                             &ioSendPci, 
@@ -1316,210 +658,6 @@ cleanup:
    return (dwReturn);
 
 }
-#undef WHERE
-
-
-#define WHERE "PteidSignDataGemsafe"
-DWORD PteidSignDataGemsafe(PCARD_DATA pCardData, BYTE pin_id, DWORD cbToBeSigned, PBYTE pbToBeSigned, DWORD *pcbSignature, PBYTE *ppbSignature, BOOL pss_padding)
-{
-
-   DWORD                   dwReturn = 0;
-
-   SCARD_IO_REQUEST        ioSendPci = *g_pioSendPci;
-
-   unsigned char           Cmd[128];
-   unsigned int            uiCmdLg = 0;
-   unsigned int            signature_len = 0;
-
-   unsigned char           recvbuf[1024];
-   unsigned long           recvlen = sizeof(recvbuf);
-   BYTE                    SW1, SW2;
-   PBYTE                   le_sig = NULL;
-
-   unsigned int            i          = 0;
-   unsigned int            cbHdrHash  = 0;
-   unsigned int            hash_offset = 0;
-   unsigned int            hash_len = cbToBeSigned;
-   const unsigned char     *pbHdrHash = NULL;
-         
-   DWORD out_len = 0;
-
-   memset(recvbuf, 0, recvlen);
-
-   LogTrace(LOGTYPE_INFO, WHERE, "PteidSignDataGemsafe called with input data len: %d", cbToBeSigned);
-
-   //Skip the DigestInfo prefix as the card PSO.CDS command is prepared to receive a raw hash and add the prefix internally
-   if (!pss_padding) {
-
-	   unsigned int digest_info_type = matchDigestInfoPrefix(pbToBeSigned, cbToBeSigned);
-
-	   if (digest_info_type == SHA256_DIGESTINFO) {
-		   hash_offset += sizeof(SHA256_AID);
-		   hash_len    -= sizeof(SHA256_AID);
-	   }
-	   else if (digest_info_type == SHA384_DIGESTINFO) {
-		   hash_offset += sizeof(SHA384_AID);
-		   hash_len    -= sizeof(SHA384_AID);
-	   }
-	   else if (digest_info_type == SHA512_DIGESTINFO) {
-		   hash_offset += sizeof(SHA512_AID);
-		   hash_len    -= sizeof(SHA512_AID);
-	   }
-
-	   if (digest_info_type != 0) {
-		   LogTrace(LOGTYPE_INFO, WHERE, "Detected a prefixed hash: actually signing only %u bytes", hash_len);
-	   }
-   }
-
-   dwReturn = PteidMSE(pCardData, pin_id, hash_len, pss_padding);
-
-   if (dwReturn != SCARD_S_SUCCESS)
-   {
-	CLEANUP(dwReturn);
-   }
-     
-
-   /* Sign Command for GEMSAFE*/
-   Cmd [0] = 0x00;
-   Cmd [1] = 0x2A;   /* PSO: Hash COMMAND */
-   Cmd [2] = 0x90;
-   Cmd [3] = 0xA0; 
-   Cmd [4] = (BYTE)(hash_len + 2); // The value of hash_len +2 should always fit a single byte so this cast is safe 
-   Cmd [5] = 0x90;
-   Cmd [6] = (BYTE)(hash_len);
-   
-   
-   memcpy(Cmd + 7, pbToBeSigned+hash_offset, hash_len);
-   uiCmdLg = 7 + hash_len;
-   
-#ifdef _DEBUG
-   LogDumpBin("C:\\SmartCardMinidriverTest\\signdata.bin", hash_len, (char *)&Cmd[5]);
-   
-   LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO Hash");
-   LogDumpHex(uiCmdLg, (char *)Cmd);
-
-#endif
-   
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: Hash) errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-   LogTrace(LOGTYPE_INFO, WHERE, "Return: APDU PSO Hash");
-   LogDumpHex(recvlen, (char *)recvbuf);
-
-   if ((SW1 != 0x90 && SW2 != 0x00) && SW1 != 0x61) {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "PSO: Hash command failed with SW12 = %02x %02x", SW1, SW2);
-	   if (SW1 == 0x69 && SW2 == 0x85) {
-		   CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
-	   }
-	   else {
-		   CLEANUP(SCARD_E_UNEXPECTED);
-	   }
-   }
-  
-   Cmd [0] = 0x00;
-   Cmd [1] = 0x2A;   /* PSO: Compute Digital Signature COMMAND */
-   Cmd [2] = 0x9E;
-   Cmd [3] = 0x9A;
-   Cmd [4] = g_keySize == 1024 ? 0x80 : 0x00;  /* Length of expected signature */
-   
-   uiCmdLg = 5;
-
-   LogTrace(LOGTYPE_INFO, WHERE, "APDU PSO CDS");
-   LogDumpHex(uiCmdLg, (char *)Cmd);
-   
-   recvlen = sizeof(recvbuf);
-   dwReturn = SCardTransmit(pCardData->hScard,
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   
-   if ( dwReturn != SCARD_S_SUCCESS )   {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) errorcode: [0x%02X]", dwReturn);
-       CLEANUP(dwReturn);
-   }
-
-   SW1 = recvbuf[recvlen - 2];
-   SW2 = recvbuf[recvlen - 1];
-
-   *pcbSignature = g_keySize / 8; //g_keySize == 2048 ? 0x100 : 0x80;
-
-   /* Allocate memory for the target buffer and the intermediate little-endian signature buffer */
-   le_sig = pCardData->pfnCspAlloc(*pcbSignature);
-
-   *ppbSignature = pCardData->pfnCspAlloc(*pcbSignature);
-
-   if (*ppbSignature == NULL)
-   {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbSignature]");
-	   CLEANUP(SCARD_E_NO_MEMORY);
-   }
-
-   if (SW1 == 0x61) {
-	   //3072 bit support
-	   //Save the first 256 bytes of the signature
-	   memcpy(le_sig, recvbuf, recvlen - 2);
-
-	   signature_len += recvlen - 2;
-	   Cmd[1] = 0xC0;
-	   Cmd[2] = 0x00;
-	   Cmd[3] = 0x00;
-	   Cmd[4] = SW2;
-		
-	   recvlen = sizeof(recvbuf);
-	   dwReturn = SCardTransmit(pCardData->hScard,
-		   &ioSendPci,
-		   Cmd,
-		   uiCmdLg,
-		   NULL,
-		   recvbuf,
-		   &recvlen);
-
-	   if (dwReturn != SCARD_S_SUCCESS)   {
-		   LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit (PSO: CDS) GET RESPONSE errorcode: [0x%02X]", dwReturn);
-		   CLEANUP(dwReturn);
-	   }
-	   SW1 = recvbuf[recvlen - 2];
-	   SW2 = recvbuf[recvlen - 1];
-
-   }
-   if (SW1 != 0x90 && SW2 != 0x00) {
-	   LogTrace(LOGTYPE_ERROR, WHERE, "PSO: CDS command failed with SW12 = %02x %02x", SW1, SW2);
-	   if (SW1 == 0x69 && SW2 == 0x82) {
-		   CLEANUP(SCARD_W_SECURITY_VIOLATION);
-	   }
-	   else {
-		   CLEANUP(SCARD_E_UNEXPECTED);
-	   }
-   }
-
-   memcpy(le_sig + signature_len, recvbuf, recvlen - 2);
-   
-   //Convert the signature to big-endian with the result in ppbSignature
-   for ( i = 0 ; i < *pcbSignature ; i++ )
-   {
-      (*ppbSignature)[i] = le_sig[*pcbSignature - i - 1];
-   }
-
-cleanup:
-   pCardData->pfnCspFree(le_sig);
-   return (dwReturn);
-}
-
 #undef WHERE
 
 /****************************************************************************************************/
@@ -1630,249 +768,6 @@ cleanup:
 #undef WHERE
 
 /****************************************************************************************************/
-
-#define WHERE "PteidSelectAndReadFile"
-DWORD PteidSelectAndReadFile(PCARD_DATA  pCardData, DWORD dwOffset, BYTE cbFileID, PBYTE pbFileID, DWORD *cbStream, PBYTE * ppbStream)
-{
-   DWORD             dwReturn = 0;
-
-   SCARD_IO_REQUEST  ioSendPci = *g_pioSendPci;
-   //SCARD_IO_REQUEST  ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
-
-   unsigned char     Cmd[128];
-   unsigned int      uiCmdLg = 0;
-
-   unsigned char     recvbuf[256];
-   unsigned long     recvlen = sizeof(recvbuf);
-   BYTE              SW1, SW2;
-
-	DWORD             cbReadBuf;
-
-
-//   BYTE              bRead [255];
-//   DWORD             cbRead;
-
-//   DWORD             cbCertif;
-
-   /***************/
-   /* Select File */
-   /***************/
-   Cmd [0] = 0x00;
-   Cmd [1] = 0xA4; /* SELECT COMMAND */
-   Cmd [2] = 0x08;
-   Cmd [3] = 0x0C;
-   Cmd [4] = cbFileID;
-   uiCmdLg = 5;
-
-   memcpy(&Cmd[5], pbFileID, cbFileID);
-   uiCmdLg += cbFileID;
-
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   PteidDelayAndRecover(pCardData, SW1, SW2, dwReturn);
-   if ( dwReturn != SCARD_S_SUCCESS )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "SCardTransmit errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-   if ( ( SW1 != 0x90 ) || ( SW2 != 0x00 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Select Failed: [0x%02X][0x%02X]", SW1, SW2);
-      CLEANUP(dwReturn);
-   }
-
-	*cbStream = 0;
-	*ppbStream = NULL;
-	cbReadBuf = 1024;
-	while (cbReadBuf == 1024) {
-		if (*ppbStream == NULL)
-			*ppbStream = (PBYTE) pCardData->pfnCspAlloc(*cbStream + cbReadBuf);
-		else
-			*ppbStream = (PBYTE) pCardData->pfnCspReAlloc(*ppbStream, *cbStream + cbReadBuf);
-		
-		if (*ppbStream == NULL) {
-			LogTrace(LOGTYPE_ERROR, WHERE, "pfnCsp(Re)Alloc failed");
-			CLEANUP(dwReturn);
-		}
-
-		dwReturn = PteidReadFile(pCardData, dwOffset, &cbReadBuf, *ppbStream + *cbStream * sizeof(BYTE));
-		if ( dwReturn != SCARD_S_SUCCESS )
-		{
-			LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadFile errorcode: [0x%02X]", dwReturn);
-			pCardData->pfnCspFree(*ppbStream);
-			CLEANUP(dwReturn);
-		}
-		*cbStream = *cbStream + cbReadBuf;
-	}
-cleanup:
-   return (dwReturn);
-}
-
-#undef WHERE
-/****************************************************************************************************/
-
-/*
-/**/
-#define WHERE "PteidReadCert"
-DWORD PteidReadCert(PCARD_DATA  pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PBYTE *ppbCertif)
-{
-   DWORD             dwReturn = 0;
-
-   SCARD_IO_REQUEST  ioSendPci = *g_pioSendPci;
-   //SCARD_IO_REQUEST  ioRecvPci = {1, sizeof(SCARD_IO_REQUEST)};
-
-   unsigned char     Cmd[128];
-   unsigned int      uiCmdLg = 0;
-
-   unsigned char     recvbuf[256];
-   unsigned long     recvlen = sizeof(recvbuf);
-   char certPath[25];
-   const DWORD		 certpath_len = 512;
-   BYTE              SW1, SW2;
-
-   DWORD             cbCertif;
-   
-   VENDOR_SPECIFIC * vs;
-   int serial_len = 16;
-   char * filename;
-
-   cbCertif = 2500; //More than enough for any certificate lmedinas dixit...
-
-   if (ppbCertif == NULL) 
-   {
-	   // we will only return the file length
-	   if (pcbCertif != NULL)
-		   *pcbCertif = cbCertif;
-	   CLEANUP(SCARD_S_SUCCESS);
-   }
-   *ppbCertif = pCardData->pfnCspAlloc(cbCertif);
-   
-   
-   vs = (VENDOR_SPECIFIC*)pCardData->pvVendorSpecific;
-
-   if (!runningUnderService())
-   {
-	   memcpy(certPath, vs->szSerialNumber, serial_len);
-	   certPath[serial_len] = translateCertType(dwCertSpec);
-
-	   //More than enough for long file paths...
-	   filename = pCardData->pfnCspAlloc(certpath_len);
-
-	   getCacheFilePath(certPath, filename, certpath_len);
-
-	   if (readFromCache(filename, *ppbCertif))
-	   {
-		   *pcbCertif = cbCertif;
-		   pCardData->pfnCspFree(filename);
-		   return SCARD_S_SUCCESS;
-	   }
-   }
-
-   // Certificate Not Cached
-
-   PteidSelectApplet(pCardData);
-   memset(recvbuf, 0, sizeof(recvbuf));
-   /***************/
-   /* Select File */
-   /***************/
-   Cmd [0] = 0x00;
-   Cmd [1] = 0xA4; /* SELECT COMMAND */
-   Cmd [2] = 0x00;
-   Cmd [3] = 0x0C;
-   Cmd [4] = 0x02; 
-   Cmd [5] = 0x3F; //5F, (EF, 0C), ReadBinary(), (02, CertID)  
-   Cmd [6] = 0x00;
-   uiCmdLg = 7;
-
-   // 00 A4 09 00 02 EF 09
-
-   dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-                            &recvlen);
-   SW1 = recvbuf[recvlen-2];
-   SW2 = recvbuf[recvlen-1];
-   
-   if (!checkStatusCode(WHERE" -> select Dir Root", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-
-	Cmd[5] = 0x5F;
-	memset(recvbuf, 0, sizeof(recvbuf));
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-		                    &recvlen);
-	if (!checkStatusCode(WHERE" -> select Specific Dir", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-	
-	if (!Is_Gemsafe)
-	{
-	Cmd[2] = 0x09; 
-    Cmd[3] = 0x00;
-	}
-	Cmd[4] = 0x02;
-	Cmd[5] = 0xEF;
-    Cmd[6] = translateCertType(dwCertSpec);
-
-    memset(recvbuf, 0, sizeof(recvbuf));
-	dwReturn = SCardTransmit(pCardData->hScard, 
-                            &ioSendPci, 
-                            Cmd, 
-                            uiCmdLg, 
-                            NULL, 
-                            recvbuf, 
-		                    &recvlen);
-	if (!checkStatusCode(WHERE" -> select CertFile", dwReturn, SW1, SW2))
-		CLEANUP(dwReturn);
-
-   
-   if ( *ppbCertif == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbCertif]");
-      CLEANUP(SCARD_E_NO_MEMORY);
-   }
-
-   dwReturn = PteidReadFile(pCardData, 0, &cbCertif, *ppbCertif);
-   if (dwReturn != SCARD_S_SUCCESS)
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadFile errorcode: [0x%02X]", dwReturn);
-      CLEANUP(dwReturn);
-   }
-  
-	/* Skip caching if running under the Certificate Propagation Service 
-	   It would be painful to grab the cachedir because the relevant
-	   environment variables APPLOCALDATA will point to somewhere under
-	   %WINDIR% (i.e. not to user-writable directories)
-	*/
-  if (!runningUnderService())
-  {
-	   LogTrace(LOGTYPE_INFO, WHERE, "certPath: %s", filename);
-	   CacheCertificate(filename, *ppbCertif, cbCertif);
-	   pCardData->pfnCspFree(filename);
-  }
-
-   /* Certificate Length */
-   *pcbCertif = cbCertif;
-
-cleanup:
-   return (dwReturn);
-}
-#undef WHERE
-
-
 #define WHERE "PteidSelectApplet"
 /**/
 DWORD PteidSelectApplet(PCARD_DATA  pCardData)
@@ -1889,6 +784,7 @@ DWORD PteidSelectApplet(PCARD_DATA  pCardData)
 	unsigned long     recvlen = sizeof(recvbuf);
 	BYTE              SW1, SW2;
 	BYTE IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
+	BYTE IAS_V5_PTEID_APPLET_AID[] = { 0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x03 };
 	BYTE GEMSAFE_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
 	BYTE              cAppletID = sizeof(IAS_PTEID_APPLET_AID);
 	
@@ -1900,13 +796,16 @@ DWORD PteidSelectApplet(PCARD_DATA  pCardData)
 	Cmd [0] = 0x00;
 	Cmd [1] = 0xA4; /* SELECT COMMAND 00 A4 04 0C 07 */
 	Cmd [2] = 0x04;
-	if (Is_Gemsafe)
+	if (card_type == GEMSAFE_CARD || IAS_V5_CARD)
 		Cmd [3] = 0x00;
 	else 
 		Cmd [3] = 0x0C;
 	Cmd [4] = 0x07;
-	if (Is_Gemsafe)
+
+	if (card_type == GEMSAFE_CARD)
 		memcpy(&Cmd[5], GEMSAFE_APPLET_AID, sizeof(GEMSAFE_APPLET_AID));
+	else if (card_type == IAS_V5_CARD)
+		memcpy(&Cmd[5], IAS_V5_PTEID_APPLET_AID, sizeof(IAS_V5_PTEID_APPLET_AID));
 	else
 		memcpy(&Cmd[5], IAS_PTEID_APPLET_AID, cAppletID);
 
@@ -2041,7 +940,7 @@ DWORD createVerifyCommandGemPC(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned in
     pVerifyCommand->abData[2] = 0x00; // P1
     pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
-	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
+	padding = card_type != IAS_CARD ? 0xFF: 0x2F;
 	pVerifyCommand->abData[5] = padding;
     pVerifyCommand->abData[6] = padding; // Pin[1]
     pVerifyCommand->abData[7] = padding; // Pin[2]
@@ -2086,7 +985,7 @@ DWORD createVerifyCommandACR83(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned in
     pVerifyCommand->abData[2] = 0x00; // P1
     pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
-	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
+	padding = card_type != IAS_CARD ? 0xFF: 0x2F;
 	pVerifyCommand->abData[5] = padding;
     pVerifyCommand->abData[6] = padding; // Pin[1]
     pVerifyCommand->abData[7] = padding; // Pin[2]
@@ -2138,7 +1037,7 @@ DWORD createVerifyCommand(PPIN_VERIFY_STRUCTURE pVerifyCommand, unsigned int pin
     pVerifyCommand->abData[2] = 0x00; // P1
     pVerifyCommand->abData[3] = pin_ref; // P2
     pVerifyCommand->abData[4] = 0x08; // Lc = 8 bytes in command data
-	padding = Is_Gemsafe != 0 ? 0xFF: 0x2F;
+	padding = card_type != IAS_CARD ? 0xFF: 0x2F;
 	
     pVerifyCommand->abData[5] = padding; // Pin[1]
     pVerifyCommand->abData[6] = padding; // Pin[2]

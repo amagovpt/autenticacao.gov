@@ -31,7 +31,7 @@
 using namespace eIDMW;
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
-	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol_struct);
+                            SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol_struct);
 
 namespace eIDMW
 {
@@ -64,8 +64,10 @@ private:
 class CPteidCard : public CPkiCard
 {
 public:
-	CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
-		       tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol);
+    CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
+               tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol);
+
+	CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol, bool read_serial);
     ~CPteidCard(void);
 
 	virtual tCardType GetType();
@@ -88,15 +90,25 @@ public:
     virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft,
     	unsigned long unblockFlags);
 
+	virtual void InitEncryptionKey();
+	virtual void ReadSerialNumber();
+
 	virtual unsigned long GetSupportedAlgorithms();  
 
 protected:
 	virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
     virtual bool SelectApplet();
-		
-    virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
 
-    virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
+	 virtual void ResetApplication();
+	virtual void SelectApplication(const CByteArray & oAID);
+
+	tFileInfo SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo = false);
+	virtual tFileInfo SelectFile(const std::string &csPath, bool bReturnFileInfo = false);
+
+	virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false);
+	CByteArray OldSelectByPath(const std::string &csPath, bool bReturnFileInfo);
+
+	virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
         std::string & csPin1, std::string & csPin2, const tPrivKey *pKey, void *wndGeometry = 0 );
 
     virtual void SetSecurityEnv(const tPrivKey & key, unsigned long paddingType,
@@ -106,10 +118,10 @@ protected:
 
 	virtual tCacheInfo GetCacheInfo(const std::string &csPath);
 
+	void ReadSerialFromMultipass();
+
 	CByteArray m_oCardData;
 	CByteArray m_oSerialNr;
-    unsigned char m_ucAppletVersion;
-    unsigned int m_AppletVersion;
 
 };
 

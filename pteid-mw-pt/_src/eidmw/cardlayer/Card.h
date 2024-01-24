@@ -38,13 +38,16 @@
 #include "Util.h"
 #include "GenericPinpad.h"
 #include "../dialogs/dialogs.h"
+#include "PaceAuthentication.h"
+
+#include <memory>
+
 namespace eIDMW
 {
-
 class EIDMW_CAL_API CCard
 {
 public:
-	CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
+    CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
     virtual ~CCard(void);
 
     /** Find out which card is present and return the appropriate subclass */
@@ -70,6 +73,7 @@ public:
     virtual void Lock();
     virtual void Unlock();
 
+	 virtual void ResetApplication();
     virtual void SelectApplication(const CByteArray & oAID);
     virtual void setSSO(bool value);
 
@@ -101,6 +105,8 @@ public:
 
 	virtual unsigned long GetSupportedAlgorithms();
 
+	virtual void setAskPinOnSign(bool bAsk);
+
     virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
         unsigned long algo, const CByteArray & oData);
 
@@ -116,7 +122,8 @@ public:
             const CByteArray & oData);
     virtual CByteArray SendAPDU(const CByteArray & oCmdAPDU);
 
-    virtual void InitEncryptionKey();
+    virtual void InitEncryptionKey() = 0;
+	virtual void ReadSerialNumber() = 0;
 
     virtual void setPinpadHandler(GenericPinpad * pinpad)
     {
@@ -124,7 +131,12 @@ public:
 
     }
 
+    void createPace();
+
+    void initPaceAuthentication(const char* secret, size_t secretLen, PaceSecretType secretType);
+
     const void * getProtocolStructure();
+    const void setNextAPDUClearText() { cleartext_next = true; }
 
     void setProtocol(const void * protocol_struct) { m_comm_protocol = protocol_struct; }
 
@@ -154,13 +166,18 @@ protected:
 
     std::map <unsigned int, std::string> m_verifiedPINs;
     unsigned char m_ucCLA;
+    bool cleartext_next;
+
+	 bool m_askPinOnSign;
 
     const void * m_comm_protocol;
+    std::unique_ptr<PaceAuthentication> m_pace{};
 
 private:
     // No copies allowed
     CCard(const CCard & oCard);
     CCard & operator = (const CCard & oCard);
+    CByteArray handleSendAPDUSecurity(const CByteArray & oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
 };
 
 class CAutoLock

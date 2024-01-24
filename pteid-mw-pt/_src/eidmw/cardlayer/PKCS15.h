@@ -42,7 +42,7 @@ namespace eIDMW
   const unsigned long TOKENFLAG_PRNGENERATION  = 0x00000004;
   const unsigned long TOKENFLAG_EIDCOMPLIANT   = 0x00000008;
 
-  typedef struct 
+  struct tPKCSFile 
   {
     bool isRead;
     std::string path;
@@ -53,16 +53,16 @@ namespace eIDMW
       path = "";
       byteArray.ClearContents();
     }
-  } tPKCSFile;
+  };
 
-  typedef enum {
+  enum tPKCSFileName {
     EFDIR,
     ODF,
     TOKENINFO,
     AODF,
     CDF,
     PRKDF,
-  } tPKCSFileName;
+  };
 
   class EIDMW_CAL_API CPKCS15
   {	       

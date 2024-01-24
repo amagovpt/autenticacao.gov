@@ -207,8 +207,12 @@ APL_EIDCard::~APL_EIDCard()
 
 APL_EidFile_Trace *APL_EIDCard::getFileTrace()
 {
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-		m_FileTrace=new APL_EidFile_Trace(this);
+	CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
+	CByteArray appID = { PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) };
+	if (m_cardType == APL_CARDTYPE_PTEID_IAS5) {
+		appID = { PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) };
+	}
+	m_FileTrace = new APL_EidFile_Trace(this, appID);
 
 
 	return m_FileTrace;
@@ -220,7 +224,12 @@ APL_EidFile_ID *APL_EIDCard::getFileID()
 	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_FileID)
-			m_FileID=new APL_EidFile_ID(this);
+		{
+			if(m_cardType == APL_CARDTYPE_PTEID_IAS5)
+				m_FileID = new APL_EidFile_ID_V2(this);
+			else
+				m_FileID = new APL_EidFile_ID(this);
+		}
 	}
 
 	return m_FileID;
@@ -267,15 +276,21 @@ APL_EidFile_Sod *APL_EIDCard::getFileSod()
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 		if(!m_FileSod)
 		{
-			CByteArray ba_validityEndDate;     //Validity date field from card ID file
-			m_FileSod=new APL_EidFile_Sod(this);
+			
+            if (m_cardType == APL_CARDTYPE_PTEID_IAS5) {
+                m_FileSod = new APL_EidFile_Sod(this, PTEID_FILE_SOD_V2);
+            }
+            else {
+                CByteArray ba_validityEndDate;     //Validity date field from card ID file
+                //Read the validity end date directly from cardlayer to avoid recursive calls from APL_EidFile_ID::getValidityEndDate
+                unsigned long bytes_read = 
+                  this->readFile(PTEID_FILE_ID, ba_validityEndDate, PTEIDNG_FIELD_ID_POS_ValidityEndDate, PTEIDNG_FIELD_ID_LEN_ValidityEndDate);
 
-			//Read the validity end date directly from cardlayer to avoid recursive calls from APL_EidFile_ID::getValidityEndDate
-			unsigned long bytes_read = 
-				  this->readFile(PTEID_FILE_ID, ba_validityEndDate, PTEIDNG_FIELD_ID_POS_ValidityEndDate, PTEIDNG_FIELD_ID_LEN_ValidityEndDate);
+                ba_validityEndDate.TrimRight('\0');
+                m_FileSod = new APL_EidFile_Sod(this);
+                MWLOG(LEV_DEBUG, MOD_APL, "ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
+            }
 
-			ba_validityEndDate.TrimRight('\0');
-			MWLOG(LEV_DEBUG, MOD_APL, "ValidityEndDate freshly read: %s", ba_validityEndDate.GetBytes());
 		}
 	}
 	return m_FileSod;
@@ -283,6 +298,9 @@ APL_EidFile_Sod *APL_EIDCard::getFileSod()
 
 APL_EidFile_PersoData *APL_EIDCard::getFilePersoData()
 {
+	if (m_cardType == APL_CARDTYPE_PTEID_IAS5)
+		throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+
 	if(!m_FilePersoData)
 	{
 		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
@@ -316,77 +334,6 @@ unsigned long APL_EIDCard::readFile(const char *csPath, CByteArray &oData, unsig
 {
 
 	return APL_SmartCard::readFile(csPath,oData,ulOffset,ulMaxLength);
-}
-
-unsigned long APL_EIDCard::certificateCount()
-{
-
-	try
-	{
-		return APL_SmartCard::certificateCount();
-	}
-	catch(...)
-	{
-	}
-
-	if(m_certificateCount==COUNT_UNDEF)
-	{
-		//PKCS15 is broken
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
-		if(m_certificateCount==COUNT_UNDEF)
-		{
-			m_certificateCount=0;
-
-			if(!m_fileCertAuthentication)
-			{
-				m_fileCertAuthentication=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_AUTHENTICATION);
-				//If status ok, we add the certificate to the store
-				if(m_fileCertAuthentication->getStatus(false)==CARDFILESTATUS_OK)
-				{
-					if(NULL == (getCertificates()->addCert(m_fileCertAuthentication,APL_CERTIF_TYPE_AUTHENTICATION,true,false,m_certificateCount,NULL)))
-						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-					m_certificateCount++;
-				}
-			}
-
-			if(!m_fileCertSignature)
-			{
-				m_fileCertSignature=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_SIGNATURE);
-				//If status ok, we add the certificate to the store
-				if(m_fileCertSignature->getStatus(true)==CARDFILESTATUS_OK)
-				{
-					if(NULL == (getCertificates()->addCert(m_fileCertSignature,APL_CERTIF_TYPE_SIGNATURE,true,false,m_certificateCount,NULL)))
-						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-					m_certificateCount++;
-				}
-			}
-
-			if(!m_fileCertRootAuth)
-			{
-				m_fileCertRootAuth=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_ROOT_AUTH);
-				//If status ok, we add the certificate to the store
-				if(m_fileCertRootAuth->getStatus(true)==CARDFILESTATUS_OK)
-				{
-					if(NULL == (getCertificates()->addCert(m_fileCertRootAuth,APL_CERTIF_TYPE_ROOT_AUTH,true,false,m_certificateCount,NULL)))
-						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-					m_certificateCount++;
-				}
-			}
-
-			if(!m_fileCertRootSign)
-			{
-				m_fileCertRootSign=new APL_CardFile_Certificate(this,PTEID_FILE_CERT_ROOT_SIGN);
-				//If status ok, we add the certificate to the store
-				if(m_fileCertRootSign->getStatus(true)==CARDFILESTATUS_OK)
-				{
-					if(NULL == (getCertificates()->addCert(m_fileCertRootSign,APL_CERTIF_TYPE_ROOT_SIGN,true,false,m_certificateCount,NULL)))
-						throw CMWEXCEPTION(EIDMW_ERR_CHECK);
-					m_certificateCount++;
-				}
-			}
-		}
-	}
-	return m_certificateCount;
 }
 
 
@@ -423,6 +370,11 @@ APL_PersonalNotesEId& APL_EIDCard::getPersonalNotes()
 			CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instanciation
 			if(!m_personal)
 			{
+				if(m_cardType == APL_CARDTYPE_PTEID_IAS5)
+            	{
+					throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+				}
+
 				m_personal=new APL_PersonalNotesEId(this);
 			}
 		}
@@ -538,7 +490,7 @@ const char *APL_EIDCard::getTokenSerialNumber(){
 		//BEGIN_CAL_OPERATION(m_reader)
         m_reader->CalLock();
         try{
-            m_tokenSerial = new string (m_reader->getCalReader()->GetSerialNr());
+            m_tokenSerial = new std::string (m_reader->getCalReader()->GetSerialNr());
         } catch(...){
             m_reader->CalUnlock();
             delete m_tokenSerial;
@@ -556,7 +508,7 @@ const char *APL_EIDCard::getTokenLabel(){
 		//BEGIN_CAL_OPERATION(m_reader)
         m_reader->CalLock();
         try{
-            m_tokenLabel = new string (m_reader->getCalReader()->GetCardLabel());
+            m_tokenLabel = new std::string (m_reader->getCalReader()->GetCardLabel());
         } catch(...){
             m_reader->CalUnlock();
             delete m_tokenLabel;
@@ -573,7 +525,7 @@ const char * APL_EIDCard::getAppletVersion() {
 	if (!m_appletVersion) {
 		m_reader->CalLock();
 		try {
-			m_appletVersion = new string(m_reader->getCalReader()->GetAppletVersion());
+			m_appletVersion = new std::string(m_reader->getCalReader()->GetAppletVersion());
 		}
 		catch (...) {
 			m_reader->CalUnlock();
@@ -664,8 +616,8 @@ APL_CCXML_Doc::~APL_CCXML_Doc()
 CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 {
 	CByteArray xml;
-	string *ts, *sn, *sa, *tk;
-	string rootATTRS;
+	std::string *ts, *sn, *sa, *tk;
+	std::string rootATTRS;
 
 	ts = m_xmlUserRequestedInfo->getTimeStamp();
 	sn = m_xmlUserRequestedInfo->getServerName();
@@ -706,7 +658,7 @@ CByteArray APL_CCXML_Doc::getXML(bool bNoHeader)
 *****************************************************************************************/
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo()
 {
-	xmlSet = new set<enum XMLUserData>;
+	xmlSet = new std::set<enum XMLUserData>;
 	_serverName = NULL;
 	_serverAddress = NULL;
 	_timeStamp = NULL;
@@ -715,21 +667,21 @@ APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo()
 
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress)
 {
-	xmlSet = new set<enum XMLUserData>;
-	_timeStamp = (timeStamp) ? new string(timeStamp) : NULL;
-	_serverName = (serverName) ? new string(serverName) : NULL;
-	_serverAddress = (serverAddress) ? new string(serverAddress) : NULL;
+	xmlSet = new std::set<enum XMLUserData>;
+	_timeStamp = (timeStamp) ? new std::string(timeStamp) : NULL;
+	_serverName = (serverName) ? new std::string(serverName) : NULL;
+	_serverAddress = (serverAddress) ? new std::string(serverAddress) : NULL;
 	_tokenID = NULL;
 }
 
 APL_XmlUserRequestedInfo::APL_XmlUserRequestedInfo(const char *timeStamp, const char *serverName, const char *serverAddress, const char *tokenID)
 {
-	xmlSet = new set<enum XMLUserData>;
+	xmlSet = new std::set<enum XMLUserData>;
 
-	_timeStamp = (timeStamp) ? new string(timeStamp) : NULL;
-	_serverName = (serverName) ? new string(serverName) : NULL;
-	_serverAddress = (serverAddress) ? new string(serverAddress) : NULL;
-	_tokenID = (tokenID) ? new string(tokenID) : NULL;
+	_timeStamp = (timeStamp) ? new std::string(timeStamp) : NULL;
+	_serverName = (serverName) ? new std::string(serverName) : NULL;
+	_serverAddress = (serverAddress) ? new std::string(serverAddress) : NULL;
+	_tokenID = (tokenID) ? new std::string(tokenID) : NULL;
 }
 
 APL_XmlUserRequestedInfo::~APL_XmlUserRequestedInfo()
@@ -835,7 +787,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 	bool addIdNum = false;
 	bool addCardValues = false;
 	bool addCivilInfo = false;
-	string temp;
+	std::string temp;
 
 	// photo
 	if (_xmlUInfo->contains(XML_PHOTO)){
@@ -846,7 +798,7 @@ CByteArray APL_DocEId::getXML(bool bNoHeader)
 
 	// basicInformation
 	if (_xmlUInfo->contains(XML_NAME)){
-		string s;
+		std::string s;
 		s+= getGivenName();
 		s+=" ";
 		s+=getSurname();
@@ -1165,7 +1117,7 @@ CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader, APL_XmlUserRequestedInfo
 CByteArray APL_PersonalNotesEId::getXML(bool bNoHeader)
 {
 	CByteArray xml;
-	string str;
+	std::string str;
 
 	if (_xmlUInfo->contains(XML_PERSONAL_NOTES)){
 		str = getPersonalNotes();
@@ -1388,37 +1340,231 @@ void APL_AddrEId::mapForeignFields(cJSON * json_obj) {
 
 }
 
-void APL_AddrEId::loadRemoteAddress() {
-	const std::string ENDPOINT_DH = "/readaddress/sendDHParams";
-	const std::string ENDPOINT_SIGNCHALLENGE = "/readaddress/signChallenge";
-	const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
+long APL_AddrEId::validateRemoteAddressData(const char * json_response, RemoteAddressProtocol protocol) {
+   long exception_code = 0;
+   std::unique_ptr<RA_GetAddressResponse> getaddr_resp(validateReadAddressResponse(json_response));
+   if (getaddr_resp->address_obj != NULL) {
+       remoteAddressLoaded = true;
+       if (!getaddr_resp->is_foreign_address) {
+           mapNationalFields(getaddr_resp->address_obj);
+       }
+       else {
+           mapForeignFields(getaddr_resp->address_obj);
+       }
+   }
+   else {
+       const int INVALID_STATE_ERR = 1015;
+       if (getaddr_resp->error_code == INVALID_STATE_ERR) {
+           MWLOG(LEV_ERROR, MOD_APL, "Card in invalid state for address reading. Error code %d", INVALID_STATE_ERR);
+           exception_code = EIDMW_REMOTEADDR_INVALID_STATE;
+       }
+       else {
+           MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for readAddress endpoint in protocol %d, no HTTP error code but empty/malformed response", protocol);
+           exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
+       }
+   }
+   return exception_code;
+}
 
-	std::string url_endpoint_dh, url_endpoint_signchallenge, url_endpoint_readaddress;
+
+
+std::string buildRemoteAddressURL(RemoteAddressProtocol protocol, int endpoint) {
+    const std::string ENDPOINT_DH1 =  "/readaddressCC2/ecdh1";
+    const std::string ENDPOINT_DH2 = "/readaddressCC2/ecdh2";
+    const std::string ENDPOINT_MA1 = "/readaddressCC2/mutualauth1";
+    const std::string ENDPOINT_MA2 = "/readaddressCC2/mutualauth2";
+
+    const std::string ENDPOINT_DH = "/readaddress/sendDHParams";
+    const std::string ENDPOINT_SIGNCHALLENGE = "/readaddress/signChallenge";
+    const std::string ENDPOINT_READADDRESS = "/readaddress/readAddress";
+
+    APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
+    APL_Config conf_baseurl_cc2(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_CC2_BASEURL);
+    std::string ra_url;
+
+    if (CConfig::isTestModeEnabled()) {
+        APL_Config conf_baseurl_t(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST);
+        ra_url += conf_baseurl_t.getString();
+    }
+    else {
+        ra_url += (protocol == CC2_PROTOCOL ? conf_baseurl_cc2.getString() : conf_baseurl.getString());
+    }
+
+    switch (endpoint) {
+        case 1:
+            ra_url +=  (protocol == CC1_PROTOCOL ? ENDPOINT_DH : ENDPOINT_DH1);
+            break;
+        case 2:
+            ra_url +=  (protocol == CC1_PROTOCOL ? ENDPOINT_SIGNCHALLENGE : ENDPOINT_DH2);
+            break;
+        case 3:
+            ra_url +=  (protocol == CC1_PROTOCOL ? ENDPOINT_READADDRESS : ENDPOINT_MA1);
+            break;
+        case 4:
+            if (protocol == CC2_PROTOCOL) {
+                ra_url += ENDPOINT_MA2;
+            }
+            break;
+    }
+
+    return ra_url;
+}
+
+/* Force PACE SM to "wake up" if it was active before Remote Address mutual auth
+   Using contact interface this has the effect of returning to "cleartext mode"
+*/
+void APL_AddrEId::breakSecureMessaging() {
+
+    CReader * reader = m_card->getCalReader();
+    if (reader != NULL) {
+        reader->setNextAPDUClearText();
+
+        const unsigned char select_nonexistent_ef[] = {0x00, 0xA4, 0x02, 0x00, 0x02, 0xAB, 0xCD};
+        const unsigned char reselect_eid_app[] = {0x00, 0xA4, 0x04, 0x00, 0x07};
+        CByteArray plaintext_reselect(reselect_eid_app, sizeof(reselect_eid_app));
+        plaintext_reselect.Append({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+        CByteArray plaintext_dummy_apdu{select_nonexistent_ef, sizeof(select_nonexistent_ef)};
+
+        reader->SendAPDU(plaintext_dummy_apdu);
+        reader->SendAPDU(plaintext_reselect);
+    }
+}
+
+void APL_AddrEId::handleRemoteAddressError(bool sm_started, long exception_code) {
+    if (sm_started) {
+        breakSecureMessaging();
+    }
+    throw CMWEXCEPTION(exception_code);
+}
+
+void APL_AddrEId::loadRemoteAddress_CC2() {
+
+    std::string url_endpoint_ecdh1 = buildRemoteAddressURL(CC2_PROTOCOL, 1);
+    std::string url_endpoint_ecdh2 = buildRemoteAddressURL(CC2_PROTOCOL, 2);
+    std::string url_endpoint_mutual_auth1 = buildRemoteAddressURL(CC2_PROTOCOL, 3);
+    std::string url_endpoint_mutual_auth2 = buildRemoteAddressURL(CC2_PROTOCOL, 4);
+    long exception_code = 0;
+    bool sm_started = false;
+    const unsigned long ADDRESS_PIN_IDX = 2;
+
+    MutualAuthentication mutual_authentication(m_card);
+
+	m_card->selectApplication({ PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA) });
+    CByteArray dg13_data;
+    CByteArray sod_data = getSodData(m_card);
+    CByteArray authCert_data;
+
+    std::string serialNumber = m_card->getTokenSerialNumber();
+
+    m_card->readFile(PTEID_FILE_ID_V2, dg13_data);
+
+    m_card->selectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+	//Read ecdh_params from card
+	CByteArray ecdh_params = mutual_authentication.getECDHParams();
+
+    m_card->readFile(PTEID_FILE_CERT_AUTHENTICATION_V2, authCert_data);
+
+    //Send VERIFY command for Address PIN with cached value
+    //In CC2 we can't guarantee that the verified state from a previous call to verify address PIN is kept in the card
+    unsigned long ulRemaining = 0;
+    m_card->getCalReader()->setSSO(true);
+    m_card->getCalReader()->PinCmd(PIN_OP_VERIFY, m_card->getPin(ADDRESS_PIN_IDX), "", "", ulRemaining);
+    MWLOG(LEV_DEBUG, MOD_APL, "Verified address PIN with cached value. Tries left: %lu", ulRemaining);
+
+    //Clear cached PIN
+    m_card->getCalReader()->setSSO(false);
+
+    char * json_str = build_json_ecdh1(ecdh_params, dg13_data, sod_data, authCert_data, serialNumber);
+
+    //Step 1 of the protocol
+    PostResponse resp = post_json_remoteaddress(url_endpoint_ecdh1.c_str(), json_str, NULL);
+
+    MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (1) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
+    std::string cookie = parseCookieFromHeaders(resp.http_headers);
+
+    if (cookie.size() > 0) {
+        MWLOG(LEV_DEBUG, MOD_APL, "%s: Received cookie: %s", __FUNCTION__, cookie.c_str());
+    }
+
+    std::string ecdh1_kifd = parseECDH1Response(resp.http_response.c_str());
+
+    if (ecdh1_kifd.empty()) {
+        handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+
+    char * kicc = mutual_authentication.generalAuthenticate(ecdh1_kifd.c_str());
+
+    if (!kicc) {
+        MWLOG(LEV_ERROR, MOD_APL, "%s: Address loading aborted in generalAuthenticate!", __FUNCTION__);
+        handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+    sm_started = true;
+
+    json_str = build_json_ecdh2(kicc);
+
+    //Step 2 of the protocol
+    PostResponse resp2 = post_json_remoteaddress(url_endpoint_ecdh2.c_str(), json_str, cookie.c_str());
+
+    MWLOG(LEV_DEBUG, MOD_APL, "%s: 2nd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp2.http_code, resp2.http_response.c_str());
+
+    RA_ECDH2Response ecdh2_obj = parseECDH2Response(resp2.http_response.c_str());
+
+    if (ecdh2_obj.external_auth_apdus.size() == 0) {
+        MWLOG(LEV_DEBUG, MOD_APL, "%s: 2nd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp2.http_code, resp2.http_response.c_str());
+        handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+
+    auto resp_external_auth = mutual_authentication.sendSequenceOfPrebuiltAPDUs(ecdh2_obj.external_auth_apdus);
+
+    json_str = build_json_mutualauth_1(resp_external_auth);
+    //Step 3 of the protocol
+    PostResponse resp3 = post_json_remoteaddress(url_endpoint_mutual_auth1.c_str(), json_str, cookie.c_str());
+
+    std::optional<RA_MutualAuthResponse> mutualauth1_obj = parseMutualAuthResponse1(resp3.http_response.c_str());
+
+    if (!mutualauth1_obj.has_value()) {
+        MWLOG(LEV_DEBUG, MOD_APL, "%s: 3rd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp3.http_code, resp3.http_response.c_str());
+        handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
+    }
+
+    auto resp_internal_auth = mutual_authentication.remoteAddressStep3(
+        mutualauth1_obj.value().signed_challenge_command, mutualauth1_obj.value().internal_auth_commands,
+        mutualauth1_obj.value().pin_status_command);
+
+    json_str = build_json_mutualauth_2(resp_internal_auth);
+
+    //Step 4 of the protocol: returns address data if all goes well
+    PostResponse resp4 = post_json_remoteaddress(url_endpoint_mutual_auth2.c_str(), json_str, cookie.c_str());
+    MWLOG(LEV_DEBUG, MOD_APL, "%s: 4th POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp4.http_code, resp4.http_response.c_str());
+
+    exception_code = validateRemoteAddressData(resp4.http_response.c_str(), CC2_PROTOCOL);
+
+cleanup:
+
+    breakSecureMessaging();
+
+    if (exception_code != 0) {
+        throw CMWEXCEPTION(exception_code);
+    }
+
+}
+
+void APL_AddrEId::loadRemoteAddress() {
 	long exception_code = 0;
 
 	if (remoteAddressLoaded) {
 		return;
 	}
 
-	APL_Config conf_baseurl(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL);
+    if (m_card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+        loadRemoteAddress_CC2();
+        return;
+    }
 
-	if (!CConfig::isTestModeEnabled()) {
-		url_endpoint_dh += conf_baseurl.getString();
-		url_endpoint_readaddress += conf_baseurl.getString();
-		url_endpoint_signchallenge += conf_baseurl.getString();
-	}
-	else {
-		APL_Config conf_baseurl_t(CConfig::EIDMW_CONFIG_PARAM_GENERAL_REMOTEADDR_BASEURL_TEST);
-		url_endpoint_dh += conf_baseurl_t.getString();
-		url_endpoint_readaddress += conf_baseurl_t.getString();
-		url_endpoint_signchallenge += conf_baseurl_t.getString();
-	}
-
-	url_endpoint_dh += ENDPOINT_DH;
-	url_endpoint_signchallenge += ENDPOINT_SIGNCHALLENGE;
-	url_endpoint_readaddress += ENDPOINT_READADDRESS;
+    std::string url_endpoint_dh = buildRemoteAddressURL(CC1_PROTOCOL, 1);
+    std::string url_endpoint_signchallenge = buildRemoteAddressURL(CC1_PROTOCOL, 2);
+    std::string url_endpoint_readaddress = buildRemoteAddressURL(CC1_PROTOCOL, 3);
 	
-
 	MutualAuthentication mutual_authentication(m_card);
 	DHParams dh_params;
 
@@ -1521,28 +1667,7 @@ void APL_AddrEId::loadRemoteAddress() {
             
 			MWLOG(LEV_INFO, MOD_APL, "%s Endpoint (3) returned HTTP code: %ld", __FUNCTION__, resp.http_code);
 
-			std::unique_ptr<RA_GetAddressResponse> getaddr_resp(validateReadAddressResponse(resp.http_response.c_str()));
-			if (getaddr_resp->address_obj != NULL) {
-				remoteAddressLoaded = true;
-				if (!getaddr_resp->is_foreign_address) {
-					mapNationalFields(getaddr_resp->address_obj);
-				}
-				else {
-					mapForeignFields(getaddr_resp->address_obj);
-				}
-
-			}
-			else {
-				const int INVALID_STATE_ERR = 1015;
-				if (getaddr_resp->error_code == INVALID_STATE_ERR) {
-					MWLOG(LEV_ERROR, MOD_APL, "Card in invalid state for address reading. Error code %d", INVALID_STATE_ERR);
-					exception_code = EIDMW_REMOTEADDR_INVALID_STATE;
-				}
-				else {
-					MWLOG(LEV_ERROR, MOD_APL, "Unexpected server response for %s, no HTTP error code but empty/malformed response", ENDPOINT_READADDRESS.c_str());
-					exception_code = EIDMW_REMOTEADDR_SERVER_ERROR;
-				}
-			}
+			exception_code = validateRemoteAddressData(resp.http_response.c_str(), CC1_PROTOCOL);
 		}
 
 	}

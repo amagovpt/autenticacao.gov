@@ -513,7 +513,7 @@ static std::string canonicalNode(DOMNode *node, XERCES_CPP_NAMESPACE::DOMDocumen
 	canonicalizer.setUseNamespaceStack(true);
 	canonicalizer.setExclusive();
 
-	string c14n;
+	std::string c14n;
 	unsigned char buffer[1024];
 	size_t bytes = 0;
 	while ((bytes = canonicalizer.outputBuffer(buffer, 1024)) > 0) {
@@ -871,6 +871,8 @@ CByteArray &XadesSignature::sign(const char** paths, unsigned int pathCount, zip
 
 	DOMDocument *doc = impl->createDocument(XMLString::transcode(ASIC_NAMESPACE),
 		XMLString::transcode("XAdESSignatures"), NULL);
+    const XMLCh * algorithm_uri = m_pcard != NULL && m_pcard->getType() == APL_CARDTYPE_PTEID_IAS5 ?
+                           DSIGConstants::s_unicodeStrURIECDSA_SHA256 : DSIGConstants::s_unicodeStrURIRSA_SHA256;
 
 	try {
 		// Create a signature object
@@ -878,7 +880,7 @@ CByteArray &XadesSignature::sign(const char** paths, unsigned int pathCount, zip
 
 		// Use it to create a blank signature DOM structure from the doc
 		DOMElement *sigNode = sig->createBlankSignature(doc,
-			DSIGConstants::s_unicodeStrURIEXC_C14N_NOC, DSIGConstants::s_unicodeStrURIRSA_SHA256);
+			DSIGConstants::s_unicodeStrURIEXC_C14N_NOC, algorithm_uri);
 
 		//Add Id attribute to signature
 		sigNode->setAttribute(s_Id, (XMLCh *)signature_id.c_str());
@@ -948,12 +950,12 @@ CByteArray &XadesSignature::sign(const char** paths, unsigned int pathCount, zip
 				XMLString::transcode(e.getMessage()));
 		}
 
-		CByteArray rsa_signature;
+		CByteArray signature_bytes;
 		try {
 			if (m_pcard) {
-				rsa_signature = m_pcard->Sign(CByteArray(bytesToSign, SHA256_LEN), true, true);
+				signature_bytes = m_pcard->Sign(CByteArray(bytesToSign, SHA256_LEN), true, true);
 			} else {
-				rsa_signature = m_signCallback(CByteArray(bytesToSign, SHA256_LEN));
+				signature_bytes = m_signCallback(CByteArray(bytesToSign, SHA256_LEN));
 			}
 		}
 		catch(...) {
@@ -961,7 +963,7 @@ CByteArray &XadesSignature::sign(const char** paths, unsigned int pathCount, zip
 			throw;
 		}
 
-		addSignature(rsa_signature.GetBytes(), rsa_signature.Size(), doc);
+		addSignature(signature_bytes.GetBytes(), signature_bytes.Size(), doc);
 
 		//XAdES-T level
 		if (m_doTimestamp || m_doLTV) {

@@ -88,6 +88,11 @@ PageSecurityCertificatesForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
         }
 
+        onSignalContactlessCANNeeded: {
+            console.log("QML: Contactless CAN is needed!!")
+            paceDialogLoader.active = true
+        }
+
         onSignalCertificatesChanged: {
             console.log("Certificate chain levels: "+ certificatesMap.levelCount)
             var initialOption
@@ -322,6 +327,16 @@ PageSecurityCertificatesForm {
         }
     }
 
+    Loader {
+        id: paceDialogLoader
+        active: false
+        anchors.verticalCenter: parent.verticalCenter
+        source: "../definitions/DialogRequestPaceSecret.qml"
+        onLoaded: {
+            paceDialogLoader.item.afterPaceAction = GAPI.ReadCertDetails
+            paceDialogLoader.item.open()
+        }
+    }
 
     propertyButtonViewCertificate {
         onClicked: {

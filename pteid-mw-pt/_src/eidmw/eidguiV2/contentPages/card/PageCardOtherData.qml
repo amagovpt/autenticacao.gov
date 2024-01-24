@@ -109,6 +109,21 @@ PageCardOtherDataForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
+        onSignalContactlessCANNeeded: {
+            console.log("QML: Contactless CAN is needed!!")
+            paceDialogLoader.active = true
+        }
+    }
+
+    Loader {
+        id: paceDialogLoader
+        active: false
+        anchors.verticalCenter: parent.verticalCenter
+        source: "../definitions/DialogRequestPaceSecret.qml"
+        onLoaded: {
+            paceDialogLoader.item.afterPaceAction = GAPI.IdentityData
+            paceDialogLoader.item.open()
+        }
     }
 
     Component.onCompleted: {

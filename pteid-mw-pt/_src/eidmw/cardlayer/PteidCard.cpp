@@ -24,50 +24,56 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-#include "PteidCard.h"
-#include "Log.h"
-#include "Config.h"
-#include "CardLayer.h"
 
+#include <openssl/ec.h>
+#include <openssl/err.h>
 #ifdef __GNUC__
 #include <termios.h>
 #endif
 
-using namespace eIDMW;
+#include "PteidCard.h"
+#include "Log.h"
+#include "Config.h"
+#include "CardLayer.h"
+#include "PaceAuthentication.h"
 
-static const unsigned char IAS_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x01, 0x02};
-static const unsigned char GEMSAFE_PTEID_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
+using namespace eIDMW;
 
 /* martinho - the id must not be changed */
 static const unsigned long PTEIDNG_ACTIVATION_CODE_ID = 0x87;
 /* martinho - ANY_ID_BIGGER_THAN_6 will be the ulID in the tPin struct 1-6 are already taken */
 static const unsigned long ANY_ID_BIGGER_THAN_6 = 7;
 /* martinho - some meaningful label */
-static const string LABEL = "Card Activation Code";
+static const std::string LABEL = "Card Activation Code";
 /* martinho - date in bcd format must have 4 bytes*/
 static const unsigned long BCDSIZE = 4;
 /* martinho - trace file*/
-static const string TRACEFILE = "3F000003";
+static const std::string TRACEFILE = "3F000003";
 
 unsigned long ulVersion;
 
-static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const void *protocol_struct)
+static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const void *protocol_struct, std::unique_ptr<PaceAuthentication> &paceAuthentication)
 {
 	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
-	CByteArray oCmd(sizeof(GEMSAFE_PTEID_APPLET_AID) + 5);
+	CByteArray oCmd(sizeof(PTEID_1_APPLET_AID) + 5);
 	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-	oCmd.Append((unsigned char) sizeof(GEMSAFE_PTEID_APPLET_AID));
-	oCmd.Append(GEMSAFE_PTEID_APPLET_AID, sizeof(GEMSAFE_PTEID_APPLET_AID));
+	oCmd.Append((unsigned char) sizeof(PTEID_1_APPLET_AID));
+	oCmd.Append(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
 
-	CByteArray oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
-
+    CByteArray oResp;
+    if(paceAuthentication.get()) {
+        oResp = paceAuthentication->sendAPDU(oCmd, hCard, lRetVal, protocol_struct);
+    }
+    else {
+        oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
+    }
 	return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 }
 
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
-	SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol_struct)
+    SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol_struct)
 {
 
 	CCard *poCard = NULL;
@@ -77,14 +83,19 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 		{
 			CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
 
-			bool selected = PteidCardSelectApplet(poContext, hCard, protocol_struct);
+            poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
+			MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
 
-			if (selected) {
-				//We don't support PTEID_IAS101 cards anymore...
-				ulVersion = 1;
-				poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
-				MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
-			}
+			// NOTE: PteidCardSelectAppllet does not support V5 cards
+			// Applet already selected on
+
+			// bool selected = PteidCardSelectApplet(poContext, hCard, protocol_struct);
+			// if (selected) {
+			// 	// We don't support PTEID_IAS101 cards anymore...
+			// 	// ulVersion = 1;
+			// 	poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
+			// 	MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
+			// }
 		}
 	}
 	catch (CMWException &e) {
@@ -99,8 +110,8 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader,
 }
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
-		     GenericPinpad *poPinpad, tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol) :
-			 CPkiCard(hCard, poContext, poPinpad)
+             GenericPinpad *poPinpad, tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol) :
+             CPkiCard(hCard, poContext, poPinpad)
 {
 	switch (ulVersion){
 	case 1:
@@ -109,30 +120,69 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 	case 2:
 		m_cardType = CARD_PTEID_IAS101;
 		break;
+	case 3:
+		m_cardType = CARD_PTEID_IAS5;
+		break;
 	}
+	setProtocol(protocol);
+	m_ucCLA = 0x00;
+
+	ReadSerialNumber();
+	
+}
+
+/* Constructor for IASv5 cards in CL mode */
+CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol, bool read_serial): 
+	CPkiCard(hCard, poContext, poPinpad) {
+
+	setProtocol(protocol);
+	m_cardType = CARD_PTEID_IAS5;
+
+	if(read_serial)
+		ReadSerialFromMultipass();
+}
+
+void CPteidCard::ReadSerialFromMultipass() {
+	if (m_cardType == CARD_PTEID_IAS5) {
+		SelectApplication({ PTEID_2_APPLET_MULTIPASS, sizeof(PTEID_2_APPLET_MULTIPASS) });
+		
+		//Card.Access can be read with this application selected but not with Multipass
+		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
+		SendAPDU(0xA4, 0x04, 0x00, { PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
+	}
+	else {
+		MWLOG(LEV_ERROR, MOD_CAL, "This can only be used in IAS5 cards!");
+	}
+	
+}
+
+void CPteidCard::ReadSerialNumber() {
+
 	try {
-		setProtocol(protocol);
-		// Get Card Serial Number
-		m_oCardData = ReadFile("3F004F005032");
-		m_ucCLA = 0x00;
 
-		m_oCardData.Chop(2); // remove SW12
-
-		CByteArray parsesrnr;
-		parsesrnr = CByteArray(m_oCardData.GetBytes(), m_oCardData.Size());
-		m_oSerialNr = parsesrnr.GetBytes(7, 8);
-
-		// Get Card Applet Version
-		m_AppletVersion = ulVersion;
+		// Get card serial number 
+		// CPLC Data is only available on EID or Multipass app on PTEID_2 cards 
+		if (m_cardType == CARD_PTEID_IAS5) {
+			if (m_pace.get() != NULL)
+				SelectApplication({ PTEID_2_APPLET_MULTIPASS, sizeof(PTEID_2_APPLET_MULTIPASS)});
+			else
+				SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+		}
+		else {
+			//The IAS v4 application was already selected in CardFactory
+			m_lastSelectedApplication = { PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) };
+		}
+		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
 	}
 	catch (CMWException e) {
-		MWLOG(LEV_CRIT, MOD_CAL, "Failed to get CardData: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
+		MWLOG(LEV_CRIT, MOD_CAL, "Failed to read serial number: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
 	catch (const std::exception &e) {
-		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to get CardData std::exception thrown");
+		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to read serial number std::exception thrown");
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
+
 }
 
 CPteidCard::~CPteidCard(void)
@@ -146,7 +196,10 @@ tCardType CPteidCard::GetType()
 
 CByteArray CPteidCard::GetSerialNrBytes()
 {
-    return m_oSerialNr;
+	if (m_oSerialNr.Size() == 0 && m_cardType == CARD_PTEID_IAS5)
+		ReadSerialFromMultipass();
+
+   return m_oSerialNr;
 }
 
 CByteArray CPteidCard::GetInfo()
@@ -177,12 +230,14 @@ std::string CPteidCard::GetAppletVersion() {
 
 }
 
-unsigned long CPteidCard::PinStatus(const tPin & Pin)
-{
+unsigned long CPteidCard::PinStatus(const tPin & Pin) {
 	unsigned long ulSW12 = 0;
 
 	try
 	{
+        if (this->GetType() == CARD_PTEID_IAS5) {
+            SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+        }
 
 		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char) Pin.ulPinRef, 0);
 		ulSW12 = getSW12(oResp);
@@ -195,7 +250,7 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin)
 	catch(...)
 	{
 		//m_ucCLA = 0x00;
-		MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus", ulSW12);
+		MWLOG(LEV_ERROR, MOD_CAL, L"Error in PinStatus: %04x", ulSW12);
 		throw;
 	}
 }
@@ -204,6 +259,9 @@ bool CPteidCard::isPinVerified(const tPin & Pin) {
 
 	try
 	{
+        if (this->GetType() == CARD_PTEID_IAS5) {
+            SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+        }
 		CByteArray oResp = SendAPDU(0x20, 0x00, (unsigned char)Pin.ulPinRef, 0);
 		unsigned long ulSW12 = getSW12(oResp);
 		MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12);
@@ -238,6 +296,7 @@ CByteArray CPteidCard::RootCAPubKey(){
 			oResp.Chop(2); ////remove the SW12 bytes
 		}
 		break;
+        //TODO: changes needed for IAS5
 		case CARD_PTEID_IAS07:
 		{
 			unsigned char apdu_cvc_pubkey_mod[] = {0x00, 0xCB, 0x00,
@@ -285,6 +344,7 @@ bool CPteidCard::Activate(const char *pinCode, CByteArray &BCDDate, bool blockAc
 			padChar = 0x2F;
 			break;
 		case CARD_PTEID_IAS07:
+        case CARD_PTEID_IAS5:
 			padChar = 0xFF;
 			break;
 		default:
@@ -340,7 +400,7 @@ bool CPteidCard::unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk,
 			if (PinCmd(PIN_OP_VERIFY, *puk, pszPuk, "", ulRemaining, NULL))      // Verify PUK
 				bOK = PinCmd(PIN_OP_RESET, pin, pszNewPin, "", triesLeft, NULL); // Reset PIN
 		}
-		else if (m_cardType == CARD_PTEID_IAS07) {
+		else if (m_cardType == CARD_PTEID_IAS07 || m_cardType == CARD_PTEID_IAS5) {
 
 			std::string pin_str;
 			if (pszNewPin != NULL)
@@ -539,12 +599,22 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
     // There's a path in the EF(AODF) for the PINs, but it's
     // not necessary, so we can save a Select File command
     pteidPin.csPath = "";
+    std::string pin1 = csPin1;
 
-    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::PinCmd called with operation=%d", (int)operation);
+    MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::PinCmd called with operation=%d for pinRef: %lu", (int)operation, Pin.ulPinRef);
+    if (m_poContext->m_bSSO) {
+        /* Verify with cached PIN is supported for CC2 and address PIN only */
+        if (operation == PIN_OP_VERIFY && Pin.ulPinRef == 0x83 && GetType() == CARD_PTEID_IAS5) {
+            if (m_verifiedPINs.find(Pin.ulID) != m_verifiedPINs.end())
+            {
+                pin1 = m_verifiedPINs[Pin.ulID];
+            }
+        }
+    }
 
 	pteidPin.encoding = PIN_ENC_ASCII; //PT uses ASCII only for PIN
-	if (m_AppletVersion == 1 ) {
-		pincheck = CPkiCard::PinCmd(operation, pteidPin, csPin1, csPin2,
+	if (GetType() == CARD_PTEID_IAS07 || GetType() == CARD_PTEID_IAS5) {
+		pincheck = CPkiCard::PinCmd(operation, pteidPin, pin1, csPin2,
                                 ulRemaining, pKey,bShowDlg, wndGeometry, unblockFlags);
 	} else {
 		pincheck = CPkiCard::PinCmdIAS(operation, pteidPin, csPin1, csPin2, ulRemaining,
@@ -557,17 +627,21 @@ bool CPteidCard::PinCmd(tPinOperation operation, const tPin & Pin,
 
 unsigned long CPteidCard::GetSupportedAlgorithms()
 {
-	unsigned long ulAlgos =
-		SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS | SIGN_ALGO_SHA256_RSA_PKCS;
+	unsigned long ulAlgos = 0;
 		
 	if (m_cardType == CARD_PTEID_IAS07) {
 		std::string applet_version = GetAppletVersion();
 		char major_version = applet_version[0] == 'v' ? applet_version[1] : applet_version[0];
 			
+		ulAlgos |= SIGN_ALGO_RSA_PKCS | SIGN_ALGO_SHA1_RSA_PKCS | SIGN_ALGO_SHA256_RSA_PKCS;
+		
 		//We could assume that future versions also support these but it's best to be conservative about
 		//supported algorithms
 		if (major_version == '4')
 			ulAlgos |= SIGN_ALGO_SHA384_RSA_PKCS | SIGN_ALGO_SHA512_RSA_PKCS | SIGN_ALGO_RSA_PSS;
+	} else if (m_cardType == CARD_PTEID_IAS5) {
+		ulAlgos |= SIGN_ALGO_ECDSA | SIGN_ALGO_ECDSA_SHA1 | SIGN_ALGO_ECDSA_SHA224 | SIGN_ALGO_ECDSA_SHA256 |
+			SIGN_ALGO_ECDSA_SHA384 | SIGN_ALGO_ECDSA_SHA512;
 	}
 
 	return ulAlgos;
@@ -581,8 +655,26 @@ void CPteidCard::SetSecurityEnv(const tPrivKey & key, unsigned long paddingType,
     CByteArray oResp;
 
     m_ucCLA = 0x00;
+    if (m_cardType == CARD_PTEID_IAS5) {
+        oDatagem.Append(0x80);
+        oDatagem.Append(0x01);
+        //Algorithm: ECDSA
+        if (ulInputLen == SHA256_LEN)
+            ucAlgo = 0x44;
+        else if (ulInputLen == SHA384_LEN)
+            ucAlgo = 0x54;
+        else if (ulInputLen == SHA512_LEN)
+            ucAlgo = 0x64;
+        else if (ulInputLen == SHA1_LEN)
+            ucAlgo = 0x14;
+        oDatagem.Append(ucAlgo);
+        oDatagem.Append(0x84);
+        oDatagem.Append(0x01);
+        oDatagem.Append((unsigned char) key.ulKeyRef);
+        oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
 
-	if (m_AppletVersion == 1) {
+    }
+	else if (m_cardType == CARD_PTEID_IAS07) {
 		oDatagem.Append(0x80);
 		oDatagem.Append(0x01);
 		//Algorithm: RSA with PKCS#1 Padding
@@ -650,35 +742,32 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingT
     MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%04x and data length=%d",
     	paddingType, oData.Size());
 
-    if (pPin != NULL)
-    {
-    unsigned long ulRemaining = 0;
-	if (m_poContext->m_bSSO)
-	{
-		std::string cached_pin = "";
-		if (m_verifiedPINs.find(pPin->ulID) != m_verifiedPINs.end())
-		{
-			cached_pin = m_verifiedPINs[pPin->ulID];
+	if (m_askPinOnSign) {
+		if (pPin != NULL) {
+			unsigned long ulRemaining = 0;
+			if (m_poContext->m_bSSO) {
+				std::string cached_pin = "";
+				if (m_verifiedPINs.find(pPin->ulID) != m_verifiedPINs.end()) {
+					cached_pin = m_verifiedPINs[pPin->ulID];
 
-    			MWLOG(LEV_DEBUG, MOD_CAL, "Using cached pin for %s", pPin->csLabel.c_str());
+					MWLOG(LEV_DEBUG, MOD_CAL, "Using cached pin for %s", pPin->csLabel.c_str());
+				}
+				bOK = PinCmd(PIN_OP_VERIFY, *pPin, cached_pin, "", ulRemaining, &key);
+			} else {
+	#ifdef WIN32
+				//Regularly call SCardStatus()
+				MWLOG(LEV_DEBUG, MOD_CAL, L"Starting KeepAliveThread to keep transaction while waiting for user PIN input");
+				eIDMW::KeepAliveThread keepAlive(&(m_poContext->m_oPCSC), m_hCard);
+				keepAlive.Start();
+	#endif
+
+				bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
+			}
+
+			if (!bOK)
+				throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
 		}
-        	bOK = PinCmd(PIN_OP_VERIFY, *pPin, cached_pin, "", ulRemaining, &key);
 	}
-	else
-	{
-#ifdef WIN32
-		//Regularly call SCardStatus()
-		MWLOG(LEV_DEBUG, MOD_CAL, L"Starting KeepAliveThread to keep transaction while waiting for user PIN input");
-		eIDMW::KeepAliveThread keepAlive(&(m_poContext->m_oPCSC), m_hCard);
-		keepAlive.Start();
-#endif
-
-		bOK = PinCmd(PIN_OP_VERIFY, *pPin, "", "", ulRemaining, &key);
-	}
-
-    if (!bOK)
-		throw CMWEXCEPTION(ulRemaining == 0 ? EIDMW_ERR_PIN_BLOCKED : EIDMW_ERR_PIN_BAD);
-    }
 
     SetSecurityEnv(key, paddingType, oData.Size());
 
@@ -691,7 +780,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingT
 
     CByteArray oResp, oResp1;
 
-    if (m_AppletVersion == 1) {
+    if (GetType() == CARD_PTEID_IAS07 || GetType() == CARD_PTEID_IAS5) {
     	// PSO: Hash GEMSAFE
     	oResp1 = SendAPDU(0x2A, 0x90, 0xA0, oData1);
 
@@ -727,7 +816,7 @@ CByteArray CPteidCard::SignInternal(const tPrivKey & key, unsigned long paddingT
 
     // Remove SW1-SW2 from the response
     oResp.Chop(2);
-
+    
     return oResp;
 }
 
@@ -744,9 +833,8 @@ bool CPteidCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12)
 
 bool CPteidCard::SelectApplet()
 {
-	return PteidCardSelectApplet(m_poContext, m_hCard, getProtocolStructure());
+    return PteidCardSelectApplet(m_poContext, m_hCard, getProtocolStructure(), m_pace);
 }
-
 
 /**
  * The Pteid card doesn't support select by path (only
@@ -758,19 +846,21 @@ bool CPteidCard::SelectApplet()
  *   Select(CCCC)
  *
  */
-CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
+CByteArray CPteidCard::OldSelectByPath(const std::string & csPath, bool bReturnFileInfo)
 {
+	std::string csPathCopy = csPath;
+	if (csPath.find("3F00") != std::string::npos || csPath.find("3f00") != std::string::npos)
+		csPathCopy.erase(0, 4);
+
+
 	unsigned long ulOffset = 0;
-
-
 	// 1. Do a loop of "Select File by file ID" commands
-
-	unsigned long ulPathLen = (unsigned long)csPath.size() / 2;
+	unsigned long ulPathLen = (unsigned long)csPathCopy.size() / 2;
 	for (ulOffset = 0; ulOffset < ulPathLen; ulOffset += 2)
 	{
 		CByteArray oPath(ulPathLen);
-		oPath.Append(Hex2Byte(csPath, ulOffset));
-		oPath.Append(Hex2Byte(csPath, ulOffset + 1));
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset));
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset + 1));
 
 		CByteArray oResp = SendAPDU(0xA4, 0x00, 0x0C, oPath);
 		unsigned long ulSW12 = getSW12(oResp);
@@ -786,7 +876,150 @@ CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFile
 		getSW12(oResp, 0x9000);
 	}
 
-	return CByteArray((unsigned char *)csPath.c_str(), (unsigned long)csPath.size());
+	return CByteArray((unsigned char *)csPathCopy.c_str(), (unsigned long)csPathCopy.size());
+}
+
+void CPteidCard::ResetApplication() {
+	m_lastSelectedApplication.ClearContents();
+}
+
+void CPteidCard::SelectApplication(const CByteArray & oAID)
+{
+	if (m_lastSelectedApplication.Size() > 0 && oAID.Size() > 0 &&
+		memcmp(oAID.GetBytes(), m_lastSelectedApplication.GetBytes(),
+				oAID.Size()) == 0) {
+			return;
+	}
+
+	long lRetVal = 0;
+	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+	CByteArray oCmd(sizeof(oAID) + 5);
+	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
+	oCmd.Append((unsigned char)oAID.Size());
+	oCmd.Append(oAID.GetBytes(), oAID.Size());
+
+	CByteArray oResp = SendAPDU(oCmd);
+
+	if (getSW12(oResp) == 0x9000) {
+	   // If select application was a success, update the state
+	   m_lastSelectedApplication = oAID;
+    }
+}
+/* Extract file length value from smartcard FCI data:
+   There are two possible tags for file size attribute in FCI data
+   0x81 for eid applet and 0x80 for national data applet */
+int extractEFSize(CByteArray& fci_data) {
+    const unsigned char *desc_data = fci_data.GetBytes() + 2;
+    //const unsigned char *old_data = desc_data;
+    int xclass = 0;
+    int asn1Tag = 0;
+    long genTag = 0, size = 0;
+
+    long ret = ASN1_get_object(&desc_data, &size, &asn1Tag, &xclass, fci_data.Size()-2);
+    int constructed = ret == V_ASN1_CONSTRUCTED ? 1 : 0;
+    genTag = xclass | (constructed & 0b1) << 5 | asn1Tag;
+    if (genTag == 0x81 && size == 2) {      //eID app
+        return (*desc_data << 8) | *(desc_data + 1); 
+    }
+    else if (genTag == 0x80 && size == 3) { //National data app
+        return (*desc_data << 16) | (*(desc_data + 1) << 8) | *(desc_data+2);
+    }
+    else {
+        MWLOG(LEV_ERROR, MOD_CAL, "%s: Malformed FCI data, tag found at offset 2: %2x", __FUNCTION__, fci_data.GetByte(2));
+        return 0;
+    }
+}
+
+tFileInfo CPteidCard::SelectFile(const std::string &csPath, const unsigned char* oAID, bool bReturnFileInfo)
+{
+	auto ulPathLen = static_cast<unsigned long>(csPath.size());
+    tFileInfo info;
+    info.lFileLen = info.lReadPINRef = info.lWritePINRef = 0;
+	// path must not contain any incomplete directory or file id
+	if(ulPathLen % 4 != 0 || ulPathLen == 0)
+		throw CMWEXCEPTION(EIDMW_ERR_BAD_PATH);
+
+	// each byte is 2 characters
+	ulPathLen /= 2;
+    CByteArray responseSelection;
+	CAutoLock autolock(this);
+	{
+		// Try to select from current application
+        responseSelection = SelectByPath(csPath, bReturnFileInfo);
+
+        auto ulSW12 = getSW12(responseSelection);
+		if ((ulSW12 >> 0x8) & 0x6A) // Select File any error
+		{
+			// If failed, try to select the respective application
+			SelectApplication({ oAID, sizeof(oAID) });
+
+			// Select by path again
+            responseSelection = SelectByPath(csPath, bReturnFileInfo);
+			
+			// Should be expecting 0x9000 (success)
+            getSW12(responseSelection, 0x9000);
+        }
+        //TODO: return lReadPINRef and lWritePINRef, from security attributes tag 0x8C
+        if(bReturnFileInfo) {
+            CByteArray fci_data = responseSelection.GetBytes(0, responseSelection.GetByte(1));
+			char* fci_data_hex = bin2AsciiHex(responseSelection.GetBytes(), responseSelection.Size());
+			MWLOG(LEV_DEBUG, MOD_CAL, "%s: FCI data: %s", __FUNCTION__, fci_data_hex);
+
+            info.lFileLen = extractEFSize(fci_data);
+        }
+	}
+
+    return info;
+}
+
+// Compatible with older CC where only 1 AID present
+tFileInfo CPteidCard::SelectFile(const std::string &csPath, bool bReturnFileInfo)
+{
+	return SelectFile(csPath, PTEID_1_APPLET_AID, bReturnFileInfo);
+}
+
+CByteArray CPteidCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
+{
+	//
+	// Old version of CC
+	// Only accepts path length of 2-4 bytes (1 file from root directory OR 1 DF and 1 file from DF)
+	// Example 1: apdu 00 A4 08 04 02 2f 00 		- selects file 2f00 from root directory 3f00
+	// Example 2: apdu 00 A4 08 04 04 5f 00 ef 12 	- selects file ef12 from DF 5f00 from root directory 3f00
+	// Note: DF MUST NOT BE ROOT DIRECTORY (3f 00). Operations like (apdu 00 A4 08 04 04 3f 00 2f 00) will return 0x6A Operation not supported
+	//
+	std::string csPathCopy = csPath;
+	bool select_by_path_from_mf = false;
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: csPath: %s", __FUNCTION__, csPath.c_str());
+	if (csPath.find("3F00") != std::string::npos || csPath.find("3f00") != std::string::npos) {
+		csPathCopy.erase(0, 4);
+		select_by_path_from_mf = true;
+	}
+
+
+	unsigned long ulPathLen = (unsigned long)csPathCopy.size() / 2;
+	CByteArray oPath(ulPathLen);
+	for (unsigned long ulOffset = 0; ulOffset < ulPathLen; ulOffset += 2)
+	{
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset));
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset + 1));
+	}
+
+	//
+	// Send APDU and validate response
+	//
+    CByteArray selectByPathAPDU(6);
+    selectByPathAPDU.Append(m_ucCLA);
+    selectByPathAPDU.Append(0xA4);
+    selectByPathAPDU.Append(oPath.Size() > 2 || select_by_path_from_mf ? 0x08 : 0x02);
+    selectByPathAPDU.Append(bReturnFileInfo ? 0x00 : 0x0C);
+    selectByPathAPDU.Append(oPath.Size());
+    selectByPathAPDU.Append(oPath);
+    selectByPathAPDU.Append(0x00);
+
+    auto oResp = SendAPDU(selectByPathAPDU);
+	getSW12(oResp, 0x9000);
+
+	return oResp;
 }
 
 tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
@@ -797,7 +1030,7 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 	tCacheInfo check16Cache = {CHECK_16_CACHE, 0}; // Check 16 bytes at offset 0
 	tCacheInfo checkSerial = {CHECK_SERIAL, 0}; // Check if the card serial nr is present
 
-	long cache_enabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+	bool cache_enabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED) && m_cardType == CARD_PTEID_IAS07;
 	if (!cache_enabled)
 		return dontCache;
 
@@ -832,4 +1065,43 @@ tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath)
 
     //Should not happen...
     return dontCache;
+}
+
+
+void CPteidCard::InitEncryptionKey()
+{
+	try
+	{
+		CByteArray hash;
+		if (GetType() == CARD_PTEID_IAS07)
+		{
+			unsigned char apduSelectFile[] = {0x00, 0xA4, 0x00, 0x0C, 0x02, 0x5F, 0x00};
+	
+			// Select file 5F00
+			CByteArray selectFileRes = SendAPDU(
+				CByteArray(apduSelectFile, sizeof(apduSelectFile)));
+
+			// Check select file success
+			getSW12(selectFileRes, 0x9000);
+
+			// Get hash from SOD file
+			m_ucCLA = 0x00;
+			hash = SendAPDU(0xB0, 0x86, 0xD4, 0x10);
+			getSW12(hash, 0x9000);
+		}
+		else
+		{
+			// Get hash from SOD file in national data application
+			m_ucCLA = 0x00;
+			SelectApplication({PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
+			hash = SendAPDU(0xB0, 0x9D, 0xD2, 0x10);
+			getSW12(hash, 0x9000);
+		}
+
+		// Remove 2 last bytes (SW12) and store encryption key
+		hash.Chop(2);
+		m_oCache.setEncryptionKey(hash);
+	} catch (CMWException e)
+	{
+	}
 }

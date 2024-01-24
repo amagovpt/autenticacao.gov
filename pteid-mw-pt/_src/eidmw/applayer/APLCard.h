@@ -81,6 +81,11 @@ enum APL_SignatureLevel
     LEVEL_LTV
 };
 
+enum APL_PACEAuthenticationType {
+    APL_PACE_CAN,
+    APL_PACE_UNSUPPORTED,
+};
+
 class CReader;
 class PDFSignature;
 class APL_CryptoFwk;
@@ -150,6 +155,8 @@ public:
 	  * @param oData will contain the content of the file
 	  */
     EIDMW_APL_API virtual bool writeFile(const char *csPath, const CByteArray& oData,unsigned long ulOffset=0);
+    
+    EIDMW_APL_API void initPaceAuthentication(const char *secret, size_t secretLen, APL_PACEAuthenticationType secretType);
 
 	void CalLock();							/**< Lock the reader for exclusive atomic access */
 	void CalUnlock();						/**< Unlock the reader */
@@ -263,7 +270,7 @@ public:
 	  * Execute a pin command from the CAL
 	  */
 	EIDMW_APL_API virtual bool pinCmd(tPinOperation operation, const tPin &Pin,const char *csPin1, const char *csPin2,unsigned long &ulRemaining,bool bShowDlg=true, void *wndGeometry = 0 );
-
+    
 	/**
 	  * Return the number of certificate on the card
 	  */

@@ -38,6 +38,9 @@
 */
 CARD_ATR  CardAtr[] = 
             {
+			    //IAS v5 cards
+            {{0x3b,0xff,0x96,0x00,0x00,0x81,0x31,0xfe,0x43,0x80,0x31,0x80,0x65,0xb0,0x85,0x05,0x00,0x11,0x12,0x0f,0xff,0x82,0x90,0x00,0xe1}, 25}, // CC2 Contact
+				{{0x3b,0x8f,0x80,0x01,0x80,0x31,0x80,0x65,0xb0,0x85,0x05,0x00,0x11,0x12,0x0f,0xff,0x82,0x90,0x00,0x8b}, 20}, // CC2 Contactless
 				//IAS cards
 			   {{0x3B,0x65,0x00,0x00,0xd0,0x00,0x54,0x01,0x31}, 9},
 			   {{0x3B,0x65,0x00,0x00,0xd0,0x00,0x54,0x01,0x32}, 9},
@@ -115,8 +118,10 @@ DWORD WINAPI   CardAcquireContext
       LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData->pbAtr]");
       CLEANUP(SCARD_E_INVALID_PARAMETER);
    }
-	
+
+
    LogTrace(LOGTYPE_INFO, WHERE, "ATR input value: ");
+   
    LogDumpHex(pCardData->cbAtr, pCardData->pbAtr);
 
    for ( iAtr = 0 ; iAtr < SUPPORTED_CARDS ; iAtr++ )
@@ -125,23 +130,32 @@ DWORD WINAPI   CardAcquireContext
       {
          if ( memcmp(pCardData->pbAtr, CardAtr[iAtr].pbAtr, pCardData->cbAtr) == 0 )
          {
-			if (iAtr > 3)
-			{
-				Is_Gemsafe = 1; //GEMSAFE
-				LogTrace(LOGTYPE_INFO, WHERE, "Gemsafe Card Detected");
+				if (iAtr < 2)
+				{
+					card_type = IAS_V5_CARD;
+					LogTrace(LOGTYPE_INFO, WHERE, "IAS v5 Card Detected");
+				}
+				else if (iAtr > 5)
+				{
+					card_type = GEMSAFE_CARD;
+					LogTrace(LOGTYPE_INFO, WHERE, "Gemsafe Card Detected");
+				}
+				else
+				{
+					card_type = 0; //IAS
+					LogTrace(LOGTYPE_INFO, WHERE, "IAS Card Detected");
+				}
+				iCardCnt++;
+				break;
 			}
-			else
-			{
-				Is_Gemsafe = 0; //IAS
-				LogTrace(LOGTYPE_INFO, WHERE, "IAS Card Detected");
-			}
-            iCardCnt++;
-            break;
-         }
 
          iLgCnt++;
       }
    }
+   if (card_type == IAS_V5_CARD && runningUnderService()) {
+	   CLEANUP(SCARD_F_INTERNAL_ERROR);
+   }
+
    if ( iCardCnt == 0 )
    {
       if ( iLgCnt == 0 )
@@ -187,7 +201,7 @@ DWORD WINAPI   CardAcquireContext
       
    SCardStatus(pCardData->hScard, readerName, &readername_len,
 	   NULL, &protocol, (LPBYTE)&bAtr, &cByte);
-	
+		
    //Store active protocol
    switch(protocol)
    {
@@ -198,8 +212,12 @@ DWORD WINAPI   CardAcquireContext
 	   g_pioSendPci = SCARD_PCI_T1;
 	   break;
    }
-   
+
    LogTrace(LOGTYPE_INFO, WHERE, "Context, handle:[0x%02X][0x%02X]", pCardData->hSCardCtx, pCardData->hScard);
+
+	dwReturn = cal_init(pCardData, readerName, protocol);
+	if (dwReturn != SCARD_S_SUCCESS)
+		CLEANUP(dwReturn);
 
    /********************************/
    /* Initialize function pointers */

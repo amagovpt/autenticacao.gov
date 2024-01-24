@@ -13,7 +13,7 @@
 
 @set PTEID_DIR_QT_5=C:\Qt\Qt5.12.8\5.12.8\msvc2017
 
-@set PTEID_DIR_OPENSSL=C:\git\tools\build-scripts\windows\external-libs\openssl-3.0.8-win32
+@set PTEID_DIR_OPENSSL=C:\git\tools\build-scripts\windows\external-libs\openssl-3.0.12-win32
 
 @set PTEID_DIR_XERCES=C:\git\tools\build-scripts\windows\external-libs\xerces-c-3.2.3-win32
 
@@ -33,6 +33,7 @@
 
 @set PTEID_DIR_CJSON=C:\git\tools\build-scripts\windows\external-libs\cjson-win32
 
+@set PTEID_DIR_OPEN_PACE=C:\git\tools\build-scripts\windows\external-libs\openpace
 
 :: Compiled / external libs x64
 
@@ -42,7 +43,7 @@
 
 @set PTEID_DIR_QT_5_X64=C:\Qt\Qt5.12.8\5.12.8\msvc2017_64
 
-@set PTEID_DIR_OPENSSL_X64=C:\git\tools\build-scripts\windows\external-libs\openssl-3.0.8-x64
+@set PTEID_DIR_OPENSSL_X64=C:\git\tools\build-scripts\windows\external-libs\openssl-3.0.12-x64
 
 @set PTEID_DIR_XERCES_X64=C:\git\tools\build-scripts\windows\external-libs\xerces-c-3.2.3-win64
 

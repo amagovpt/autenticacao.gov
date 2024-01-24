@@ -53,6 +53,7 @@ namespace eIDMW
 	int X509_to_DER(X509 *x509, unsigned char **der);
 	X509 *DER_to_X509(unsigned char *der, int len);
 	char *DER_to_PEM(unsigned char *der, int len);
+	long der_get_length(const CByteArray &der_object);
 	long der_certificate_length(const CByteArray &der_certificate);
 	char * certificate_subject_from_der(CByteArray & ba);
 	std::string certificate_issuer_serial_from_der(CByteArray & ba);
@@ -85,6 +86,7 @@ char *Base64Encode(const unsigned char *input, long length);
 EIDMW_APL_API void Base64Decode(const char *array, unsigned int inlen, unsigned char *&decoded, unsigned int &decoded_len);
 
 //Hex string encoding for binary data
+char * byteArrayToHexString(const unsigned char *data, unsigned long array_len);
 void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len);
 
 //Common type between 2/3 different cpp files

@@ -362,6 +362,9 @@ const char* PTEID_Exception::GetMessage()
 			case EIDMW_REMOTEADDR_UNKNOWN_ERROR:
 				error_message = "Online Address: unexpected error! " + debughelp_msg;
 				break;
+			case EIDMW_PACE_ERR_BAD_TOKEN:
+				error_message = "The CAN introduced is incorrect.";
+				break;
 			default:
 				error_message = "Unmapped error: " + std::to_string(m_lError);
 				break;
@@ -408,8 +411,11 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e)
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
 	case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
 	case EIDMW_SOD_ERR_INVALID_PKCS7:
-		throw PTEID_ExSOD(e.GetError());
-
+        throw PTEID_ExSOD(e.GetError());
+    case EIDMW_PACE_ERR_BAD_TOKEN:
+    case EIDMW_PACE_ERR_NOT_INITIALIZED:
+    case EIDMW_PACE_ERR_UNKNOWN:
+        throw PTEID_PACE_ERROR(e.GetError());
 	case EIDMW_ERR_CARD:
 	case EIDMW_ERR_TIMEOUT:
 	case EIDMW_ERR_PIN_CANCEL:
@@ -637,6 +643,16 @@ PTEID_ExFileTypeUnknown::~PTEID_ExFileTypeUnknown()
 {
 }
 
+/****************************************************************************************
+-----------------------------------------PTEID_PACE_ERROR--------------------------------------------
+****************************************************************************************/
 
+PTEID_PACE_ERROR::PTEID_PACE_ERROR(long lError): PTEID_Exception(lError)
+{
+}
+
+PTEID_PACE_ERROR::~PTEID_PACE_ERROR()
+{
+}
 
 }

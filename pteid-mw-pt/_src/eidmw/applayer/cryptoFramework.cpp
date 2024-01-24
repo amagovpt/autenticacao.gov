@@ -855,6 +855,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 		}
 
 		OCSP_REQ_CTX_add1_header(ctx, "User-Agent", PTEID_USER_AGENT_VALUE);
+		OCSP_REQ_CTX_add1_header(ctx, "Host", pszHost);
 
 		OCSP_REQ_CTX_set1_req(ctx, pRequest);
 
@@ -1361,7 +1362,7 @@ bool APL_CryptoFwk::getCertInfo(const CByteArray &cert, tCertifInfo &info, const
 
 	baTemp.ClearContents();
 	baTemp.Append(X509_get_serialNumber(pX509)->data,X509_get_serialNumber(pX509)->length);
-	info.serialNumber=baTemp.ToString(false);
+	info.serialNumber = byteArrayToHexString(baTemp.GetBytes(), baTemp.Size());
 
     memset(szTemp, 0, sizeof(szTemp));
 	X509_NAME_get_text_by_NID(X509_get_subject_name(pX509), NID_commonName, szTemp, sizeof(szTemp));

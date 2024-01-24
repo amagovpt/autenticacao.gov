@@ -17,6 +17,7 @@
 #define SODPARSER_H_
 #include "ByteArray.h"
 #include "MWException.h"
+#include <vector>
 
 namespace eIDMW {
 
@@ -25,7 +26,7 @@ class SODAttributes;
 class SODParser {
 public:
 	virtual ~SODParser();
-	void ParseSodEncapsulatedContent(const CByteArray & contents);
+	void ParseSodEncapsulatedContent(const CByteArray& contents, const std::vector<int>& valid_tags);
 	SODAttributes &getHashes();
 
 private:
@@ -34,7 +35,7 @@ private:
 
 class SODAttributes {
 public:
-	CByteArray hashes[4];
+	CByteArray hashes[12];
 };
 
 } /* namespace eIDMW */

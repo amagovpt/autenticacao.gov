@@ -649,55 +649,12 @@ static std::vector<std::string> filter_providers_by_ids(const std::vector<ScapPr
 
 #ifdef _WIN32
 
-thread_local static PTEID_EIDCard * sslconnection_card = NULL;
-
-static void setThreadLocalCardInstance(PTEID_EIDCard * card)
-{
-	sslconnection_card = card;
-}
-
-static int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
-	unsigned char *sigret, unsigned int *siglen, const RSA * rsa)
-{
-	MWLOG(LEV_DEBUG, MOD_SCAP, "scapclient rsa_sign() called with type=%d", type);
-
-	PTEID_ByteArray to_sign;
-	to_sign.Append(m, m_len);
-
-	PTEID_ByteArray signed_data;
-
-	try
-	{
-		//Sign with Authentication Key
-		signed_data = sslconnection_card->Sign(to_sign, false);
-	}
-	catch (PTEID_Exception &e)
-	{
-		MWLOG(LEV_ERROR, MOD_SCAP, L"scapclient rsa_sign(): Exception caught in card.Sign. Aborting connection");
-		fprintf(stderr, "Exception in card.sign() %08x\n", e.GetError());
-		return 0;
-	}
-
-	if (signed_data.Size() > 0)
-	{
-		memcpy(sigret, signed_data.GetBytes(), signed_data.Size());
-		*siglen = (unsigned int)signed_data.Size();
-
-		return 1;
-	}
-	else
-		return 0;
-}
-
-void setupSSLCallbackFunction() {
-	//Change the default RSA_METHOD to use our function for signing
-	RSA_METHOD * current_method = (RSA_METHOD *)RSA_get_default_method();
-
-	RSA_meth_set_sign(current_method, eIDMW::rsa_sign);
-	RSA_meth_set_flags(current_method, RSA_METHOD_FLAG_NO_CHECK);
-}
+//Implemented in sslconnection_helper.cpp
+void setupSSLCallbackFunction(bool is_ecdsa);
+void setThreadLocalCardInstance(PTEID_EIDCard * card);
 
 #endif
+
 
 ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EIDCard *card,
 	const std::vector<ScapProvider> &providers, bool allEnterprise, bool allEmployee)
@@ -716,8 +673,10 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 
 #ifdef _WIN32
 		setThreadLocalCardInstance(card);
-		setupSSLCallbackFunction();
+		setupSSLCallbackFunction(card->getType() == PTEID_CARDTYPE_IAS5);
 #endif
+
+        MWLOG(LEV_DEBUG, MOD_SCAP, "Building SSLConnection for SCAPClient...");
 		connection.reset(card->buildSSLConnection());
 		curl = connection->connect_encrypted();
 
@@ -734,7 +693,7 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 			return oauth_result.error();
 		}
 
-		headers.push_back(string("FAAuthorization: ") + oauth_token);
+		headers.push_back(std::string("FAAuthorization: ") + oauth_token);
 	}
 
 	std::string process_id = generate_process_id();

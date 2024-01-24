@@ -137,6 +137,8 @@ public slots:
     void userCancelledUpdateAppDownload();
     void setEnablePteidCache(bool bEnabled);
     bool getEnablePteidCache();
+    void setEnablePteidCANCache(bool bEnabled);
+    bool getEnablePteidCANCache();    
     void flushCache();
     void getPteidCacheSize();
     void getScapCacheSize();

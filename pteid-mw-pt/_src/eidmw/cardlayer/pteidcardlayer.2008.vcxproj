@@ -71,13 +71,13 @@
     <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-	<TargetName>pteid$(ProjectName)</TargetName>
+    <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-	<TargetName>pteid$(ProjectName)</TargetName>
+    <TargetName>pteid$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
@@ -94,7 +94,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL%\include;../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL%\include;../common;%PTEID_DIR_OPEN_PACE%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_CAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -110,9 +110,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeacMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL%\lib;..\_Binaries35\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL%\lib;..\_Binaries35\$(Platform)\$(Configuration);%PTEID_DIR_OPEN_PACE%\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -126,7 +126,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL_X64%\include;../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL_X64%\include;../common;%PTEID_DIR_OPEN_PACE%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;EIDMW_CAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -142,9 +142,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeacMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL_X64%\lib;..\_Binaries35\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL_X64%\lib;..\_Binaries35\$(Platform)\$(Configuration);%PTEID_DIR_OPEN_PACE%\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -155,7 +155,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL%\include;../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL%\include;../common;%PTEID_DIR_OPEN_PACE%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_CAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -169,9 +169,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeacMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL%\lib;..\_Binaries35\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL%\lib;..\_Binaries35\$(Platform)\$(Configuration);%PTEID_DIR_OPEN_PACE%\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -187,7 +187,7 @@
     </Midl>
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL_X64%\include;../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL_X64%\include;../common;%PTEID_DIR_OPEN_PACE%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_CAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -201,9 +201,9 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;Crypt32.lib;pteidDlgsWin32.lib;pteidcommon.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;Crypt32.lib;pteidDlgsWin32.lib;pteidcommon.lib;winscard.lib;libeacMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL_X64%\lib;..\_Binaries35\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL_X64%\lib;..\_Binaries35\$(Platform)\$(Configuration);%PTEID_DIR_OPEN_PACE%\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -215,6 +215,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ACR83Pinpad.cpp" />
+    <ClCompile Include="APDU.cpp" />
     <ClCompile Include="Cache.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardFactory.cpp" />
@@ -223,6 +224,7 @@
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="GempcPinpad.cpp" />
     <ClCompile Include="GenericPinpad.cpp" />
+    <ClCompile Include="PaceAuthentication.cpp" />
     <ClCompile Include="PCSC.cpp" />
     <ClCompile Include="Pinpad.cpp" />
     <ClCompile Include="PKCS15.cpp" />
@@ -237,18 +239,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h" />
+    <ClInclude Include="APDU.h" />
     <ClInclude Include="Cache.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardFactory.h" />
     <ClInclude Include="CardLayer.h" />
     <ClInclude Include="CardLayerConst.h" />
-    <ClInclude Include="cardpluginPteid\PteidCard.h" />
     <ClInclude Include="CardReaderInfo.h" />
     <ClInclude Include="Context.h" />
     <ClInclude Include="GempcPinpad.h" />
     <ClInclude Include="GenericPinpad.h" />
     <ClInclude Include="InternalConst.h" />
     <ClInclude Include="P15Objects.h" />
+    <ClInclude Include="PaceAuthentication.h" />
     <ClInclude Include="PCSC.h" />
     <ClInclude Include="Pinpad.h" />
     <ClInclude Include="pinpad2-private.h" />
@@ -256,6 +259,7 @@
     <ClInclude Include="PKCS15.h" />
     <ClInclude Include="PKCS15Parser.h" />
     <ClInclude Include="PkiCard.h" />
+    <ClInclude Include="PteidCard.h" />
     <ClInclude Include="Reader.h" />
     <CustomBuild Include="ReadersInfo.h" />
     <ClInclude Include="ReaderDeviceInfo.h" />

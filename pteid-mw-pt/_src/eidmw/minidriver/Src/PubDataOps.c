@@ -238,7 +238,7 @@ DWORD WINAPI   CardReadFile
          DirFound++;
 			if (_stricmp("cmapfile", pszFileName) == 0)			      /* /mscp/cmapfile */
          {
-			WORD keySize;
+			WORD keySize = 0;
             FileFound++;
 				
 				dwReturn = CardGetProperty(pCardData, 
@@ -266,16 +266,24 @@ DWORD WINAPI   CardReadFile
 				/***************************/
 				/* Container name for Authentication key */
 				sprintf (szContainerName, "DS_%s", szSerialNumber);
-				
-				PteidReadPrKDF(pCardData, pcbData, ppbData);
 
-				dwReturn = PteidParsePrKDF(pCardData, pcbData, *ppbData, &keySize);
+				if (card_type == GEMSAFE_CARD) {
+					PteidReadPrKDF(pCardData, pcbData, ppbData);
 
-				if (dwReturn != SCARD_S_SUCCESS)
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error returned by PteidParsePrKDF: %08X", dwReturn);
-					CLEANUP(dwReturn);
+					dwReturn = PteidParsePrKDF(pCardData, pcbData, *ppbData, &keySize);
+
+					if (dwReturn != SCARD_S_SUCCESS)
+					{
+						LogTrace(LOGTYPE_ERROR, WHERE, "Error returned by PteidParsePrKDF: %08X", dwReturn);
+						CLEANUP(dwReturn);
+					}
 				}
+				else if (card_type == IAS_V5_CARD) {
+					//NIST P-256 keys
+					keySize = 256;
+					LogTrace(LOGTYPE_DEBUG, WHERE, "Found ECDSA key of size: %d", keySize);
+				}
+
 				//Save this value for the next call of CardSignData...
 				g_keySize = keySize;
 		
@@ -313,7 +321,9 @@ DWORD WINAPI   CardReadFile
 				cmr[1].wKeyExchangeKeySizeBits    = 0;
 
 				*pcbData = sizeof(cmr);
-				*ppbData = (PBYTE)pCardData->pfnCspReAlloc(*ppbData, *pcbData);
+				//Check if ppbData points to an allocated buffer from a call to PteidReadPrKDF()
+				*ppbData = (*ppbData == NULL) ? (PBYTE)pCardData->pfnCspAlloc(*pcbData): 
+					                          (PBYTE)pCardData->pfnCspReAlloc(*ppbData, *pcbData);
 				if ( *ppbData == NULL )
 				{
 					LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbData]");
@@ -325,20 +335,21 @@ DWORD WINAPI   CardReadFile
 			if ( _stricmp("ksc00", pszFileName) == 0)					   /* /mscp/ksc00 */
 			{
 				FileFound++;
-				dwReturn = PteidReadCert(pCardData, CERT_AUTH, pcbData, ppbData);
+
+				dwReturn = cal_read_cert(pCardData, CERT_AUTH, pcbData, ppbData);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_AUTH] returned [%d]", dwReturn);
 					CLEANUP(SCARD_E_UNEXPECTED);
 				}
 			}
 			if ( _stricmp("ksc01", pszFileName) == 0)					   /* /mscp/ksc01 */
 			{
 				FileFound++;
-				dwReturn = PteidReadCert(pCardData, CERT_NONREP, pcbData, ppbData);
+				dwReturn = cal_read_cert(pCardData, CERT_NONREP, pcbData, ppbData);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_NONREP] returned [%d]", dwReturn);
 					CLEANUP(SCARD_E_UNEXPECTED);
 				}
 			}
@@ -359,95 +370,7 @@ DWORD WINAPI   CardReadFile
 				}
 			}
 		} 
-		if ( _stricmp("id", pszDirectoryName) == 0)               /* /id */
-		{
-			if ( _stricmp("id", pszFileName) == 0)					    /* /id/id */
-			{
-				BYTE  pbFileID [] = { 0x3f, 0x00, 0x5f, 0x00, 0xef, 0x02};
-				BYTE cbFileID  = (BYTE)sizeof(pbFileID);
-				FileFound++;
-				dwReturn = PteidSelectAndReadFile(pCardData, 0, cbFileID , pbFileID , pcbData, ppbData);
-				if ( dwReturn != SCARD_S_SUCCESS )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidSelectAndReadFile returned [%d]", dwReturn);
-					CLEANUP(SCARD_E_UNEXPECTED);
-				}
-				if ( *ppbData == NULL )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbData]");
-					CLEANUP(SCARD_E_NO_MEMORY);
-				}
-			}
-			if ( _stricmp("id_sgn", pszFileName) == 0)					    /* /id/id_sgn */
-			{
-				BYTE  pbFileID [] = { 0x3f, 0x00, 0xdf, 0x01, 0x40, 0x32};
-				BYTE cbFileID  = (BYTE)sizeof(pbFileID);
-				FileFound++;
-				dwReturn = PteidSelectAndReadFile(pCardData, 0, cbFileID , pbFileID , pcbData, ppbData);
-				if ( dwReturn != SCARD_S_SUCCESS )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidSelectAndReadFile returned [%d]", dwReturn);
-					CLEANUP(SCARD_E_UNEXPECTED);
-				}
-				if ( *ppbData == NULL )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbData]");
-					CLEANUP(SCARD_E_NO_MEMORY);
-				}
-			}
-			if ( _stricmp("addr", pszFileName) == 0)					    /* /id/addr */
-			{
-				BYTE  pbFileID [] = { 0x3f, 0x00, 0xdf, 0x01, 0x40, 0x33};
-				BYTE cbFileID  = (BYTE)sizeof(pbFileID);
-				FileFound++;
-				dwReturn = PteidSelectAndReadFile(pCardData, 0, cbFileID , pbFileID , pcbData, ppbData);
-				if ( dwReturn != SCARD_S_SUCCESS )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidSelectAndReadFile returned [%d]", dwReturn);
-					CLEANUP(SCARD_E_UNEXPECTED);
-				}
-				if ( *ppbData == NULL )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbData]");
-					CLEANUP(SCARD_E_NO_MEMORY);
-				}
-			}
-			if ( _stricmp("addr_sgn", pszFileName) == 0)					    /* /id/addr_sgn */
-			{
-				BYTE  pbFileID [] = { 0x3f, 0x00, 0xdf, 0x01, 0x40, 0x34};
-				BYTE cbFileID  = (BYTE)sizeof(pbFileID);
-				FileFound++;
-				dwReturn = PteidSelectAndReadFile(pCardData, 0, cbFileID , pbFileID , pcbData, ppbData);
-				if ( dwReturn != SCARD_S_SUCCESS )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidSelectAndReadFile returned [%d]", dwReturn);
-					CLEANUP(SCARD_E_UNEXPECTED);
-				}
-				if ( *ppbData == NULL )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbData]");
-					CLEANUP(SCARD_E_NO_MEMORY);
-				}
-			}
-			if ( _stricmp("photo", pszFileName) == 0)					    /* /id/photo */
-			{
-				/*TODO: Needs to be fixed for PTEid Photo File */
-				BYTE  pbFileID [] = { 0x3f, 0x00, 0xdf, 0x01, 0x40, 0x35};
-				BYTE cbFileID  = (BYTE)sizeof(pbFileID);
-				FileFound++;
-				dwReturn = PteidSelectAndReadFile(pCardData, 0, cbFileID , pbFileID , pcbData, ppbData);
-				if ( dwReturn != SCARD_S_SUCCESS )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidSelectAndReadFile returned [%d]", dwReturn);
-					CLEANUP(SCARD_E_UNEXPECTED);
-				}
-				if ( *ppbData == NULL )
-				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "Error allocating memory for [*ppbData]");
-					CLEANUP(SCARD_E_NO_MEMORY);
-				}
-			}
-		}
+
 	}
 
 	if ( ! FileFound )
@@ -606,20 +529,20 @@ DWORD WINAPI   CardGetFileInfo
 			if ( _stricmp("ksc00", pszFileName) == 0)					   /* /mscp/ksc00 */
 			{
 				FileFound++;
-				dwReturn = PteidReadCert(pCardData, CERT_AUTH, &(pCardFileInfo->cbFileSize), NULL);
+				dwReturn = cal_read_cert(pCardData, CERT_AUTH, &(pCardFileInfo->cbFileSize), NULL);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_AUTH] returned [%d]", dwReturn);
 					CLEANUP(SCARD_E_UNEXPECTED);
       }
    }
 			if ( _stricmp("ksc01", pszFileName) == 0)					   /* /mscp/ksc01 */
 			{
 				FileFound++;
-				dwReturn = PteidReadCert(pCardData, CERT_NONREP, &(pCardFileInfo->cbFileSize), NULL);
+				dwReturn = cal_read_cert(pCardData, CERT_NONREP, &(pCardFileInfo->cbFileSize), NULL);
 				if ( dwReturn != SCARD_S_SUCCESS )
 				{
-					LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
+					LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_NONREP] returned [%d]", dwReturn);
 					CLEANUP(SCARD_E_UNEXPECTED);
 				}
 			}

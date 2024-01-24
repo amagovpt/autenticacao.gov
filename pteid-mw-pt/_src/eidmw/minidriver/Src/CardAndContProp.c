@@ -116,13 +116,13 @@ DWORD WINAPI   CardGetContainerProperty
 	  	  LogTrace(LOGTYPE_INFO, WHERE, "Creating Non-Repudiation Certif...");
 		  dwCertSpec = CERT_NONREP;
 	  }
-	  dwReturn = PteidReadCert(pCardData, dwCertSpec, &cbCertif, &pbCertif);
+	  dwReturn = cal_read_cert(pCardData, dwCertSpec, &cbCertif, &pbCertif);
 	  if ( dwReturn != SCARD_S_SUCCESS )
 	  {
 		  if (bContainerIndex == 0)
-			  LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_AUTH] returned [%d]", dwReturn);
+			  LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_AUTH] returned [%d]", dwReturn);
 		  if (bContainerIndex == 1)
-			  LogTrace(LOGTYPE_ERROR, WHERE, "PteidReadCert[CERT_NONREP] returned [%d]", dwReturn);
+			  LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_NONREP] returned [%d]", dwReturn);
 		  CLEANUP(SCARD_E_UNEXPECTED);
 	  }
       ContInfo.dwVersion      = CONTAINER_INFO_CURRENT_VERSION;
@@ -314,54 +314,16 @@ DWORD CardGetKeysizes(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD p
 {
    DWORD             dwReturn  = 0;
 
-   CARD_KEY_SIZES    KeySizes;
-
-   int               iUnSupported = 0;
-   int               iInValid     = 0;
-
    LogTrace(LOGTYPE_INFO, WHERE, "Property: [CP_CARD_KEYSIZES]");
+   PCARD_KEY_SIZES p_key_sizes = (PCARD_KEY_SIZES)(pbData);
 
-   switch(dwFlags)
-   {
-   case AT_ECDHE_P256 :
-   case AT_ECDHE_P384 :
-   case AT_ECDHE_P521 :
-   case AT_ECDSA_P256 :
-   case AT_ECDSA_P384 :
-   case AT_ECDSA_P521 :
-      iUnSupported++;
-      break;
-   case AT_KEYEXCHANGE:
-   case AT_SIGNATURE  :
-      break;
-   default:
-      iInValid++;
-      break;
-   }
-   if ( iInValid )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwFlags]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
-   if ( iUnSupported )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Unsupported parameter [dwFlags]");
-      CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
-   }
-
-   KeySizes.dwVersion            = CARD_KEY_SIZES_CURRENT_VERSION;
-   KeySizes.dwMinimumBitlen      = 1024;
-   KeySizes.dwDefaultBitlen      = 1024;
-   KeySizes.dwMaximumBitlen      = 2048;
-   KeySizes.dwIncrementalBitlen  = 0;
-
-   memcpy (pbData, &KeySizes, sizeof(KeySizes));
-   *pdwDataLen = sizeof(KeySizes);
-
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
+   if (pdwDataLen)
+	   *pdwDataLen = sizeof(CARD_KEY_SIZES);
+   if (cbData < sizeof(CARD_KEY_SIZES))
+	   return SCARD_E_INSUFFICIENT_BUFFER;
+   
+   return CardQueryKeySizes(pCardData, dwFlags, 0, p_key_sizes);
+   
 }
 #undef WHERE
 
@@ -598,11 +560,11 @@ DWORD CardGetSerialNo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD p
 	if (vs->bSerialNumberSet == 0) 
 	{
 		// serial number not set
-		dwReturn = PteidGetCardSN(pCardData, vs->szSerialNumber, 
+		dwReturn = cal_get_card_sn(pCardData, vs->szSerialNumber,
 			sizeof(vs->szSerialNumber), pdwDataLen);
 		if ( dwReturn != SCARD_S_SUCCESS )
 		{
-			LogTrace(LOGTYPE_ERROR, WHERE, "PteidGetCardSN returned [%d]", dwReturn);
+			LogTrace(LOGTYPE_ERROR, WHERE, "cal_get_card_sn returned [%d]", dwReturn);
 			CLEANUP(SCARD_E_UNEXPECTED);
 		}
 		vs->bSerialNumberSet = 1;
@@ -1065,265 +1027,6 @@ cleanup:
 #undef WHERE
 
 /****************************************************************************************************/
-/****************************************************************************************************/
-
-#define WHERE "CardGetFirstTwoGivenNames"
-DWORD CardGetFirstTwoGivenNames(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-	PBYTE*   ppbFile = NULL;
-	DWORD    cbFile         = 0;
-
-   LogTrace(LOGTYPE_INFO, WHERE, "GET Property: [CP_ID_FIRST_TWO_GIVEN_NAMES]");
-
-	dwReturn = pCardData->pfnCardReadFile(pCardData, "id", "id", 0, ppbFile, &cbFile);
-
-	if (dwReturn != SCARD_S_SUCCESS) {
-		LogTrace(LOGTYPE_ERROR, WHERE, "CardRead File Failed [0x%x]",dwReturn);
-		CLEANUP(dwReturn);
-	}
-
-	dwReturn = TLVGetField(*ppbFile, cbFile, pbData, cbData, pdwDataLen, ID_FIRST_TWO_GIVEN_NAMES);
-
-   if (dwReturn != SCARD_S_SUCCESS) {
-		LogTrace(LOGTYPE_ERROR, WHERE, "TLVGetField Failed [0x%x]",dwReturn);
-		CLEANUP(dwReturn);
-	}
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetCardNumber"
-DWORD CardGetCardNumber(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetChipNumber"
-DWORD CardGetChipNumber(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetValidityBegin"
-DWORD CardGetValidityBegin(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetValidityEnd"
-DWORD CardGetValidityEnd(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetDeliveryMunicipality"
-DWORD CardGetDeliveryMunicipality(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetNationalNumber"
-DWORD CardGetNationalNumber(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetName"
-DWORD CardGetName(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetFirstLetterThirdGivenName"
-DWORD CardGetFirstLetterThirdGivenName(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetNationality"
-DWORD CardGetNationality(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetBirthLocation"
-DWORD CardGetBirthLocation(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetBirthDate"
-DWORD CardGetBirthDate(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetGender"
-DWORD CardGetGender(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetNobility"
-DWORD CardGetNobility(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetDocumentType"
-DWORD CardGetDocumentType(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetSpecialStatus"
-DWORD CardGetSpecialStatus(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetPhotoHash"
-DWORD CardGetPhotoHash(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetAddressStreetAndNumber"
-DWORD CardGetAddressStreetAndNumber(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetAddressZip"
-DWORD CardGetAddressZip(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
-
-#define WHERE "CardGetAddressMunicipality"
-DWORD CardGetAddressMunicipality(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags)
-{
-   DWORD    dwReturn       = 0;
-   CLEANUP(SCARD_S_SUCCESS);
-
-cleanup:
-   return(dwReturn);
-}
-#undef WHERE
-/****************************************************************************************************/
 
 typedef struct CardPropertyFnct
 {
@@ -1350,27 +1053,6 @@ CardPropertyFnct PropFnct [] =
    {CP_CARD_PIN_STRENGTH_UNBLOCK       , CardGetPinStrengthUnblock       , CardSetPinStrengthUnblock       },
    {CP_PARENT_WINDOW                   , CardGetParentWindow             , CardSetParentWindow             },
    {CP_PIN_CONTEXT_STRING              , CardGetPinContextString         , CardSetPinContextString         },
-	{CP_ID_CARD_NUMBER                  , CardGetCardNumber               , CardSetPropertyUnsupported      },
-	{CP_ID_CHIP_NUMBER                  , CardGetChipNumber               , CardSetPropertyUnsupported      },
-	{CP_ID_CARD_VALIDITY_BEGIN          , CardGetValidityBegin            , CardSetPropertyUnsupported      },
-	{CP_ID_CARD_VALIDITY_END            , CardGetValidityEnd              , CardSetPropertyUnsupported      },
-	{CP_ID_CARD_DELIVIRY_MUNICIPALITY   , CardGetDeliveryMunicipality     , CardSetPropertyUnsupported      },
-	{CP_ID_NATIONAL_NUMBER              , CardGetNationalNumber           , CardSetPropertyUnsupported      },
-	{CP_ID_NAME                         , CardGetName                     , CardSetPropertyUnsupported      },
-	{CP_ID_FIRST_TWO_GIVEN_NAMES        , CardGetFirstTwoGivenNames       , CardSetPropertyUnsupported      },
-	{CP_ID_FIRST_LETTER_THIRD_GIVEN_NAME, CardGetFirstLetterThirdGivenName, CardSetPropertyUnsupported      },
-	{CP_ID_NATIONALITY                  , CardGetNationality              , CardSetPropertyUnsupported      },
-	{CP_ID_BIRTH_LOCATION               , CardGetBirthLocation            , CardSetPropertyUnsupported      },
-	{CP_ID_BIRTH_DATE                   , CardGetBirthDate                , CardSetPropertyUnsupported      },
-	{CP_ID_GENDER                       , CardGetGender                   , CardSetPropertyUnsupported      },
-	{CP_ID_NOBILITY                     , CardGetNobility                 , CardSetPropertyUnsupported      },
-	{CP_ID_DOCUMENT_TYPE                , CardGetDocumentType             , CardSetPropertyUnsupported      },
-	{CP_ID_SPECIAL_STATUS               , CardGetSpecialStatus            , CardSetPropertyUnsupported      },
-	{CP_ID_PHOTO_HASH                   , CardGetPhotoHash                , CardSetPropertyUnsupported      },
-	{CP_ID_ADDRESS_STREET_AND_NUMBER    , CardGetAddressStreetAndNumber   , CardSetPropertyUnsupported      },
-	{CP_ID_ADDRESS_ZIP                  , CardGetAddressZip               , CardSetPropertyUnsupported      },
-	{CP_ID_ADDRESS_MUNICIPALITY         , CardGetAddressMunicipality      , CardSetPropertyUnsupported      },
-
    {NULL, NULL, NULL}
 };
 

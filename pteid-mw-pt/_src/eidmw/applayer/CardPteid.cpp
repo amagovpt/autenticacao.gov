@@ -50,14 +50,12 @@
 
 
 
-using namespace std;
-
 namespace eIDMW
 {
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_TRACE -----------------------------------------
 *****************************************************************************************/
-APL_EidFile_Trace::APL_EidFile_Trace(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_TRACE,NULL)
+APL_EidFile_Trace::APL_EidFile_Trace(APL_EIDCard *card, CByteArray &appID):APL_CardFile(card, PTEID_FILE_TRACE, NULL, appID)
 {
 }
 
@@ -208,9 +206,68 @@ bool APL_EidFile_Trace::isActive(){
 }
 
 /*****************************************************************************************
+---------------------------------------- APL_EidFile_MRZ -----------------------------------------
+*****************************************************************************************/
+APL_EidFile_MRZ::APL_EidFile_MRZ(APL_EIDCard *card) : APL_CardFile(card, PTEID_FILE_MRZ, NULL, {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)})
+{
+}
+
+APL_EidFile_MRZ::~APL_EidFile_MRZ()
+{
+}
+
+void APL_EidFile_MRZ::doSODCheck(bool check)
+{
+	m_SODCheck = check;
+	if (check)
+	{
+		m_isVerified = false;
+		m_mappedFields = false;
+	}
+}
+
+const char *APL_EidFile_MRZ::getMRZ()
+{
+	if (ShowData())
+		return m_Mrz.c_str();
+
+	return "";
+}
+
+void APL_EidFile_MRZ::EmptyFields()
+{
+	m_Mrz.clear();
+}
+
+bool APL_EidFile_MRZ::MapFields()
+{
+	CByteArray len_buffer = m_data.GetBytes(4, 1);
+	len_buffer.TrimRight('\0');
+
+	CByteArray buffer = m_data.GetBytes(5, (unsigned long)len_buffer.GetByte(0));
+	buffer.TrimRight('\0');
+	m_Mrz.assign(reinterpret_cast<const char*>(buffer.GetBytes()), buffer.Size());
+
+	return true;
+}
+
+tCardFileStatus APL_EidFile_MRZ::VerifyFile()
+{
+	if(!m_card)
+		return CARDFILESTATUS_ERROR;
+
+	return CARDFILESTATUS_OK;
+}
+
+/*****************************************************************************************
 ---------------------------------------- APL_EidFile_ID -----------------------------------------
 *****************************************************************************************/
 APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ID,NULL)
+{
+	m_photo = NULL;
+}
+
+APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card, const char *csPath):APL_CardFile(card, csPath, NULL)
 {
 	m_photo = NULL;
 }
@@ -707,7 +764,7 @@ const char *APL_EidFile_ID::getSurnameMother()
 const char *APL_EidFile_ID::getParents()
 {
 
-	string m_Parents = m_GivenNameFather + " " + m_SurnameFather + " * " + m_GivenNameMother + " " + m_SurnameMother;
+	std::string m_Parents = m_GivenNameFather + " " + m_SurnameFather + " * " + m_GivenNameMother + " " + m_SurnameMother;
 
 	if(ShowData())
 		return _strdup(m_Parents.c_str());
@@ -788,10 +845,261 @@ void  APL_EidFile_ID::doSODCheck(bool check){
 }
 
 /*****************************************************************************************
+---------------------------------------- APL_EidFile_PHOTO -----------------------------------------
+*****************************************************************************************/
+APL_EidFile_Photo::APL_EidFile_Photo(APL_EIDCard *card) : APL_CardFile(card,PTEID_FILE_PHOTO,NULL, {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)})
+{
+}
+
+APL_EidFile_Photo::~APL_EidFile_Photo()
+{
+}
+
+CByteArray& APL_EidFile_Photo::getPhotoRaw()
+{
+	if(ShowData())
+		return m_PhotoRaw;
+	
+	return EmptyByteArray;
+}
+
+void APL_EidFile_Photo::doSODCheck(bool check)
+{
+	m_SODCheck = check;
+	if (check)
+	{
+		m_isVerified = false;
+		m_mappedFields = false;
+	}
+}
+
+void APL_EidFile_Photo::EmptyFields()
+{
+	m_PhotoRaw.ClearContents();
+	m_SODCheck = false;
+	m_isVerified = false;
+	m_mappedFields = false;
+}
+
+tCardFileStatus APL_EidFile_Photo::VerifyFile()
+{
+    return !m_card ? CARDFILESTATUS_ERROR : CARDFILESTATUS_OK;
+}
+
+bool APL_EidFile_Photo::MapFields()
+{
+    if (m_mappedFields)
+        return true;
+
+	size_t tag_offset{};
+
+	// find 5F2E tag followed by 0x82.
+	// stop iterating 5 bytes before (0x5F 0x2E 0x82 XX XX)
+	for (size_t i = 0; i < m_data.Size() - 5; i++)
+	{
+		if (m_data.GetByte(i) == 0x5F &&
+			m_data.GetByte(i + 1) == 0x2E &&
+			m_data.GetByte(i + 2) == 0x82)
+		{
+			tag_offset = i;
+			break;
+		}
+	}
+
+	if (tag_offset == 0 || tag_offset >= m_data.Size())
+		return false;
+
+	const auto len = der_get_length(m_data.GetBytes(tag_offset));
+	if(len == 0)
+		return false;
+    //Skip the 3 data blocks defined in ISO/IEC 19794-5 spec
+    unsigned long photo_offset = tag_offset + 5 + PTEIDNG_FIELD_ID_LEN_FACIALRECHDR + PTEIDNG_FIELD_ID_LEN_FACIALINFO + PTEIDNG_FIELD_ID_LEN_IMAGEINFO;
+	
+	m_PhotoRaw.Append(m_data.GetBytes(photo_offset));
+
+    m_mappedFields = true;
+	return true;
+}
+
+/*****************************************************************************************
+---------------------------------------- APL_EidFile_ID_V2 -----------------------------------------
+*****************************************************************************************/
+APL_EidFile_ID_V2::APL_EidFile_ID_V2(APL_EIDCard *card) : APL_EidFile_ID(card, PTEID_FILE_ID_V2)
+{
+	m_appId = {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)};
+    m_EidFile_MRZ = nullptr;
+    m_EidFile_Photo = nullptr;
+}
+
+APL_EidFile_ID_V2::~APL_EidFile_ID_V2()
+{
+}
+
+bool APL_EidFile_ID_V2::LoadPhotoFile()
+{
+	if (m_EidFile_Photo == nullptr)
+	{
+		APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
+        m_EidFile_Photo = new APL_EidFile_Photo(pcard);
+	}
+
+	const auto status = m_EidFile_Photo->getStatus(false) == CARDFILESTATUS_OK;
+	// Early return. Could not load photo file
+	if (status == false)
+		return false;
+
+	m_photo = new PhotoPteid(m_EidFile_Photo->getPhotoRaw());
+	
+    if (m_SODCheck) {
+    	// SOD verification that was delayed and separated from ID & MRZ verification
+    	const auto photo_data = m_EidFile_Photo->getData();
+    	const auto pcard = dynamic_cast<APL_EIDCard*>(m_card);
+    	const auto file_sod = pcard->getFileSod();
+    	if (!m_cryptoFwk->VerifyHashSha256(photo_data, file_sod->getPictureHash()))
+    	{
+    		MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE: %s", file_sod->getPictureHash().ToString(true, false).c_str());
+    		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE);
+    	}
+    }
+
+	return true;
+}
+
+bool APL_EidFile_ID_V2::LoadMRZFile()
+{
+	if(m_EidFile_MRZ == nullptr)
+	{
+		APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
+		m_EidFile_MRZ = new APL_EidFile_MRZ(pcard);
+	}
+
+	return m_EidFile_MRZ->getStatus(false) == CARDFILESTATUS_OK;
+}
+
+bool APL_EidFile_ID_V2::ShowData()
+{
+	bool mrz_status = LoadMRZFile();
+	bool id_status = getStatus(false) == CARDFILESTATUS_OK;
+
+	return mrz_status && id_status;
+}
+
+tCardFileStatus APL_EidFile_ID_V2::VerifyFile()
+{
+	if(!m_card)
+		return CARDFILESTATUS_ERROR;
+	
+	if(m_isVerified)
+		return CARDFILESTATUS_OK;
+
+	MapFieldsInternal();
+
+	if(m_SODCheck)
+	{
+        const auto pcard = dynamic_cast<APL_EIDCard*>(m_card);
+        const auto file_sod = pcard->getFileSod();
+
+        const auto id_data = m_data;
+        const auto mrz_data = m_EidFile_MRZ->getData();
+
+        if (!m_cryptoFwk->VerifyHashSha256(mrz_data, file_sod->getMrzHash()))
+        {
+            MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY: %s", file_sod->getMrzHash().ToString(true, false).c_str());
+            throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ);
+        }
+
+        if (!m_cryptoFwk->VerifyHashSha256(id_data, file_sod->getIdHash()))
+        {
+            MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_ID: %s", file_sod->getIdHash().ToString(true, false).c_str());
+            throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ID);
+        }
+	}
+	
+	m_isVerified = true;
+	return CARDFILESTATUS_OK;
+}
+
+void APL_EidFile_ID_V2::MapFieldsInternal()
+{
+	const auto id_file = eIDMW::decode_id_data(m_data);
+
+    if (id_file == NULL) {
+        throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+    }
+
+	m_DocumentVersion.assign((char *)(id_file->document_version->data), id_file->document_version->length);
+	m_Country.assign((char *)(id_file->issuing_state->data), id_file->issuing_state->length);
+	m_ValidityBeginDate.assign((char *)(id_file->issuing_date->data), id_file->issuing_date->length);
+	m_ValidityEndDate.assign((char *)(id_file->expire_date->data), id_file->expire_date->length);
+	m_LocalofRequest.assign((char *)(id_file->place_order->data), id_file->place_order->length);
+	m_CivilianIdNumber.assign((char *)(id_file->civil_id->data), id_file->civil_id->length);
+	m_Surname.assign((char *)(id_file->surname->data), id_file->surname->length);
+	m_GivenName.assign((char *)(id_file->givenname->data), id_file->givenname->length);
+	m_Nationality.assign((char *)(id_file->nationality_code->data), id_file->nationality_code->length);
+	m_DateOfBirth.assign((char *)(id_file->date_birth->data), id_file->date_birth->length);
+	m_Gender.assign((char *)(id_file->gender->data), id_file->gender->length);
+	m_DocumentType.assign((char *)(id_file->document_label->data), id_file->document_label->length);
+	m_Height.assign((char *)(id_file->height->data), id_file->height->length);
+	m_DocumentNumber.assign((char *)(id_file->document_number->data), id_file->document_number->length);
+	m_TaxNo.assign((char *)(id_file->tax_id->data), id_file->tax_id->length);
+	m_SocialSecurityNo.assign((char *)(id_file->socialsec_id->data), id_file->socialsec_id->length);
+	m_HealthNo.assign((char *)(id_file->health_id->data), id_file->health_id->length);
+	m_IssuingEntity.assign((char *)(id_file->issuing_entity->data), id_file->issuing_entity->length);
+	m_GivenNameFather.assign((char *)(id_file->father_givenname->data), id_file->father_givenname->length);
+	m_SurnameFather.assign((char *)(id_file->father_surname->data), id_file->father_surname->length);
+	m_GivenNameMother.assign((char *)(id_file->mother_givenname->data), id_file->mother_givenname->length);
+	m_SurnameMother.assign((char *)(id_file->mother_surname->data), id_file->mother_surname->length);
+	//Optional field in ID file
+	if (id_file->possible_indications != NULL) {
+		m_AccidentalIndications.assign((char *)(id_file->possible_indications->data), id_file->possible_indications->length);
+	}
+
+	const auto full_mrz = m_EidFile_MRZ->getMRZ();
+    const auto mrz_len = strlen(full_mrz);
+    //Porto Seguro card type has a smaller MRZ field
+    if (mrz_len < (PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2 + PTEIDNG_FIELD_ID_LEN_Mrz3)) {
+        const char * p_mrz_line_sep = strchr(full_mrz, '/');
+        auto mrz_offset = p_mrz_line_sep-full_mrz;
+        m_MRZ1.assign(full_mrz, mrz_offset);
+        m_MRZ2.assign(p_mrz_line_sep + 1, mrz_len-mrz_offset-1);
+    }
+    else {
+        m_MRZ1.assign(full_mrz, PTEIDNG_FIELD_ID_LEN_Mrz1);
+        m_MRZ2.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1, PTEIDNG_FIELD_ID_LEN_Mrz2);
+        m_MRZ3.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz3);        
+    }
+
+	// TODO (DEV-CC2): parse public key from DG13 data to make it available in eidlib
+
+	IDFILE_free(id_file);
+	m_mappedFields = true;
+}
+
+// Deprecated for CC v2
+const char *APL_EidFile_ID_V2::getDocumentPAN()
+{
+	return "";
+}
+
+PhotoPteid *APL_EidFile_ID_V2::getPhotoObj()
+{
+	if (m_photo) {
+		return m_photo;
+	}
+
+	if (m_EidFile_Photo == nullptr) { 
+		const auto status = LoadPhotoFile();
+		if (!status) return NULL;
+	}
+
+	return m_photo;
+}
+
+/*****************************************************************************************
 ---------------------------------------- APL_EidFile_Address -----------------------------------------
 *****************************************************************************************/
-const string APL_EidFile_Address::m_NATIONAL = "N";
-const string APL_EidFile_Address::m_FOREIGN = "I";
+const std::string APL_EidFile_Address::m_NATIONAL = "N";
+const std::string APL_EidFile_Address::m_FOREIGN = "I";
 APL_EidFile_Address::APL_EidFile_Address(APL_EIDCard *card):APL_CardFile(card,PTEID_FILE_ADDRESS,NULL)
 {
 }
@@ -1393,6 +1701,14 @@ void APL_EidFile_Address::doSODCheck(bool check){
 *****************************************************************************************/
 APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card): APL_CardFile(card,PTEID_FILE_SOD,NULL)
 {
+
+}
+
+APL_EidFile_Sod::APL_EidFile_Sod(APL_EIDCard *card, const char* csPath) : APL_CardFile(card, csPath, NULL)
+{
+    if (card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+        m_appId = {PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)};
+    }
 }
 
 APL_EidFile_Sod::~APL_EidFile_Sod()
@@ -1406,11 +1722,11 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	if (m_isVerified) // no need to check again
 		return CARDFILESTATUS_OK;
 
-
+	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
+    
 	if (!m_SODCheck) // check is not activated
 		return CARDFILESTATUS_OK;
 
-	APL_EIDCard *pcard=dynamic_cast<APL_EIDCard *>(m_card);
 
 	PKCS7 *p7 = NULL;
 	char * error_msg = NULL;
@@ -1436,21 +1752,18 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile()
 	X509_STORE *store = X509_STORE_new();
 
 	// Load only the SOD relevant root certificates
-
-	// load all certificates, let openssl do the job and find the needed ones...
-	for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++){
+	for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
 		APL_Certif * sod_ca = pcard->getCertificates()->getSODCA(i);
 		X509 *pX509 = NULL;
 		const unsigned char *p = sod_ca->getData().GetBytes();
-
 		pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
-		X509_STORE_add_cert(store, pX509);
+	 	X509_STORE_add_cert(store, pX509);
 		MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
 	}
 	
 	BIO *Out = BIO_new(BIO_s_mem());
 
-	verifySOD = PKCS7_verify(p7, NULL,store,NULL,Out,0)==1;
+    verifySOD = PKCS7_verify(p7, NULL,store,NULL,Out, 0)==1;
 	if (verifySOD) {
 		unsigned char *p;
 		long size;
@@ -1517,20 +1830,45 @@ bool APL_EidFile_Sod::MapFields()
 	if (!m_SODCheck) // map only if sod check is active
 		return true;
 
+	const auto card_type = m_card->getType();
+
 	SODParser parser;
 
-	parser.ParseSodEncapsulatedContent(m_encapsulatedContent);
+	// Select the valid tags dependent on the card type
+	std::vector<int> valid_tags;
+	if(card_type == APL_CARDTYPE_PTEID_IAS5)
+		valid_tags = PTEID_FILE_VALID_SOD_FILE_TAGS_V2;
+	else
+		valid_tags = PTEID_FILE_VALID_SOD_FILE_TAGS;
 
+	parser.ParseSodEncapsulatedContent(m_encapsulatedContent, valid_tags);
 	SODAttributes &attr = parser.getHashes();
 
-	m_idHash.Append(attr.hashes[0]);
-	m_addressHash.Append(attr.hashes[1]);
-	m_picHash.Append(attr.hashes[2]);
-	m_pkHash.Append(attr.hashes[3]);
-
+	// Hashes are sorted differently based on card type
+	if(card_type == APL_CARDTYPE_PTEID_IAS5)
+	{
+		m_mrzHash.Append(attr.hashes[0]);	
+		m_picHash.Append(attr.hashes[1]);	
+		m_idHash.Append(attr.hashes[2]);	
+		m_pkHash.Append(attr.hashes[4]);	
+	}
+	else
+	{
+		m_idHash.Append(attr.hashes[0]);
+		m_addressHash.Append(attr.hashes[1]);
+		m_picHash.Append(attr.hashes[2]);
+		m_pkHash.Append(attr.hashes[3]);
+	}
+	
 	m_mappedFields = true;
 
 	return true;
+}
+
+const CByteArray& APL_EidFile_Sod::getMrzHash(){
+	if(ShowData())	
+		return m_mrzHash;
+	return EmptyByteArray;
 }
 
 const CByteArray& APL_EidFile_Sod::getAddressHash(){

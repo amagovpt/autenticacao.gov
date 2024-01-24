@@ -25,18 +25,20 @@
 #include "Card.h"
 #include "Log.h"
 
+#include "PaceAuthentication.h"
+
 namespace eIDMW
 {
 
-CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad) :
-	m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
-	m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), m_comm_protocol(NULL)
+CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad):
+    m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad),
+    m_oCache(poContext), m_cardType(CARD_UNKNOWN), m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(NULL), m_askPinOnSign(true)
 {
 }
 
 CCard::~CCard(void)
 {
-    Disconnect(DISCONNECT_LEAVE_CARD);
+    Disconnect(DISCONNECT_RESET_CARD);
 }
 
 void CCard::Disconnect(tDisconnectMode disconnectMode)
@@ -129,6 +131,10 @@ void CCard::Unlock()
 	}
 }
 
+void CCard::ResetApplication() {
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
 //Not supported for Unknown cards, only implemented in subclasses
 void CCard::SelectApplication(const CByteArray & oAID)
 {
@@ -186,7 +192,7 @@ static CByteArray ReturnData(CByteArray oData, unsigned long ulOffset, unsigned 
 CByteArray CCard::ReadFile(const std::string & csPath,
 	unsigned long ulOffset, unsigned long ulMaxLen,bool bDoNotCache)
 {
-	
+
 	tCacheInfo cacheInfo = GetCacheInfo(csPath);
 	//printf("Passed here...\n");
 	if (cacheInfo.action == SIMPLE_CACHE || cacheInfo.action == CHECK_SERIAL)
@@ -371,6 +377,11 @@ unsigned long CCard::GetSupportedAlgorithms()
 	return 0;
 }
 
+void CCard::setAskPinOnSign(bool bAsk)
+{
+	m_askPinOnSign = bAsk;
+}
+
 CByteArray CCard::Sign(const tPrivKey & key, const tPin & Pin,
     unsigned long algo, const CByteArray & oData)
 {
@@ -382,14 +393,33 @@ CByteArray CCard::GetRandom(unsigned long ulLen)
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
+CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure)
+{
+    CByteArray result;
+    bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C || cleartext_next;
+    if(isAlreadySM && m_pace.get()) {
+        MWLOG(LEV_DEBUG, MOD_CAL, "This message is already secure and will not use PACE module! Message: %s",
+              oCmdAPDU.ToString().c_str());
+    }
+	 if (m_pace.get() && m_pace->isInitialized() && !isAlreadySM) {
+        result = m_pace->sendAPDU(oCmdAPDU, m_hCard, lRetVal, param_structure);
+    }
+    else {
+        result = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, param_structure);
+        cleartext_next = false;
+    }
+    return result;
+}
+
 CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 {
 	
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
 	const void * protocol_struct = getProtocolStructure();
+    CByteArray oResp;
 
-	CByteArray oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, protocol_struct);
+    oResp = handleSendAPDUSecurity(oCmdAPDU, m_hCard, lRetVal, protocol_struct);
 
 	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED)
 	{
@@ -398,7 +428,7 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 		if (SelectApplet())
 		{
 			//try again, now that the card has been reset
-			oResp = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, protocol_struct);
+            oResp = handleSendAPDUSecurity(oCmdAPDU, m_hCard, lRetVal, protocol_struct);
 		}
 	}
 
@@ -425,32 +455,23 @@ CByteArray CCard::SendAPDU(const CByteArray & oCmdAPDU)
 		}
 	}
 
-	return oResp;
+    return oResp;
 }
 
-void CCard::InitEncryptionKey()
+void CCard::createPace()
 {
-	unsigned char apduSelectFile[] = {0x00, 0xA4, 0x00, 0x0C, 0x02, 0x5F, 0x00};
+    m_pace.reset(new PaceAuthentication(m_poContext));
+}
 
-	try
-	{
-		// Select file 5F00
-		CByteArray selectFileRes = SendAPDU(
-			CByteArray(apduSelectFile, sizeof(apduSelectFile)));
-
-		//Check select file success
-		getSW12(selectFileRes, 0x9000);
-
-		//Get hash from SOD file
-		m_ucCLA = 0x00;
-		CByteArray hash = SendAPDU(0xB0, 0x86, 0xD4, 0x10);
-		getSW12(hash, 0x9000);
-
-		//Remove 2 last bytes (SW12) and store encryption key
-		hash.Chop(2);
-		m_oCache.setEncryptionKey(hash);
-	}
-	catch(CMWException e) {}	
+void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType)
+{
+    if(m_pace.get())
+    {
+        m_pace->setAuthentication(secret, secretLen, secretType);
+        m_pace->initPaceAuthentication(m_hCard, m_comm_protocol);
+		//Missing steps in Contactless card construction
+		InitEncryptionKey();
+    }
 }
 
 const void * CCard::getProtocolStructure() {

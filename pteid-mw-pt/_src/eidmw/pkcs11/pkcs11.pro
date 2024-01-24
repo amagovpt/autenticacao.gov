@@ -25,12 +25,15 @@ CONFIG -= warn_on qt
 DESTDIR = ../lib
 DEPENDPATH += . 
 LIBS += -L../lib -l$${COMMONLIB} -l$${CARDLAYERLIB} -l$${DLGLIB}
+macx: LIBS += -L $$DEPS_DIR/openssl-3/lib/ -lcrypto
 macx: LIBS += -Wl,-framework -Wl,PCSC
+
 
 LIBS +=	-l$${CARDLAYERLIB}
 
 INCLUDEPATH += . ../common ../cardlayer
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
+macx: INCLUDEPATH += $$DEPS_DIR/openssl-3/include
 
 QMAKE_CXXFLAGS += -fno-strict-aliasing
 QMAKE_CFLAGS += -fno-strict-aliasing

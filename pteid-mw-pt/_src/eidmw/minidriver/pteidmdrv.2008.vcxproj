@@ -103,7 +103,7 @@
     </Midl>
     <ClCompile>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;.\Src\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;.\Src\inc;..\common; ..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -116,7 +116,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>winscard.lib;Rpcrt4.lib;Crypt32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winscard.lib;Rpcrt4.lib;Crypt32.lib;comctl32.lib;pteidcommon.lib;pteidcardlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)pteidmdrv.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>Src\res\pteidmdrv.def</ModuleDefinitionFile>
@@ -124,6 +124,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -143,8 +144,8 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;.\Src\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_CRYPTPDK)\Include;.\Src\inc;..\common; ..\cardlayer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -156,7 +157,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>winscard.lib;Rpcrt4.lib;Crypt32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winscard.lib;Rpcrt4.lib;Crypt32.lib;comctl32.lib;pteidcommon.lib;pteidcardlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)pteidmdrv64.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>Src\res\pteidmdrv.def</ModuleDefinitionFile>
@@ -164,6 +165,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -251,6 +253,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Cache.c" />
+    <ClCompile Include="Src\cal.cpp" />
     <ClCompile Include="src\CardAndContProp.c" />
     <ClCompile Include="src\CardCap.c" />
     <ClCompile Include="src\CardPinOps.c" />
@@ -268,6 +271,7 @@
   <ItemGroup>
     <ClInclude Include="src\inc\bcrypt.h" />
     <ClInclude Include="Src\inc\cache.h" />
+    <ClInclude Include="Src\inc\cal.h" />
     <ClInclude Include="src\inc\cardmod.h" />
     <ClInclude Include="src\inc\externalpinui.h" />
     <ClInclude Include="src\inc\globmdrv.h" />

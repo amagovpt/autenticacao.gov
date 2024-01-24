@@ -1,7 +1,8 @@
+
 function change_dylib_dep {
 	DYLIB_PATH=$1
 	DYLIB_DEPS=$2
-	current_deps=$(otool -X -L $DYLIB_PATH)
+	current_deps=$(otool -X -L $DYLIB_PATH | awk '!x[$1]++')
 	for dylib in $DYLIB_DEPS
 	do 
 		DEP=$(printf $dylib | sed -E sx\\.x\\\\.xg) #Escape dots in dylib name to include in regex
@@ -14,9 +15,8 @@ function change_dylib_dep {
 pushd lib
 
 #Fixup third-party libs
-#change_dylib_dep libssl.3.dylib libcrypto.3.dylib
 change_dylib_dep libssl.3.dylib libcrypto.3.dylib
-change_dylib_dep libxerces-c-3.2.dylib     "libcurl.4.dylib"
+#change_dylib_dep libxerces-c-3.2.dylib     "libcurl.4.dylib"
 change_dylib_dep libxml-security-c.20.dylib "libxerces-c-3.2.dylib libcrypto.3.dylib libcurl.4.dylib"
 change_dylib_dep libfontconfig.1.dylib libfreetype.6.dylib
 change_dylib_dep libpoppler.129.dylib "libtiff.6.dylib libjpeg.62.dylib libfreetype.6.dylib libfontconfig.1.dylib libopenjp2.7.dylib libpng16.16.dylib"

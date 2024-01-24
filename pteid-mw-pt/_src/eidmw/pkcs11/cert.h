@@ -22,8 +22,6 @@
 #ifndef __CERT_H__
 #define __CERT_H__
 
-#include "asn1.h"
-
 #ifndef WIN32
 #define strnicmp strncasecmp
 #endif
@@ -65,28 +63,52 @@ extern "C" {
 
 typedef struct
   {
-    unsigned int lcert;
-    char *subject;
+    unsigned char *subject;
     unsigned int l_subject;
-    char *issuer;
+
+    unsigned char *issuer;
     unsigned int l_issuer;
-    char *mod;
+
+    unsigned char *mod;
     unsigned int l_mod;
-    char *exp;
+
+    unsigned char *exp;
     unsigned int l_exp;
-    char *pkinfo;
-    unsigned int l_pkinfo;
-    char *serial;
+
+    unsigned char *serial;
     unsigned int l_serial;
-    char *validfrom;
-    unsigned int l_validfrom;
-    char *validto;
-    unsigned int l_validto;
+  } T_OLD_CERT_INFO;
+
+typedef struct
+  {
+    unsigned int lcert;
+
+    unsigned char *subject;
+    unsigned int l_subject;
+
+    unsigned char *issuer;
+    unsigned int l_issuer;
+
+    unsigned char *serial;
+    unsigned int l_serial;
   } T_CERT_INFO;
 
+typedef struct
+  {
+    unsigned char *mod;
+    unsigned int l_mod;
+
+    unsigned char *exp;
+    unsigned int l_exp;
+
+    unsigned char *pkinfo;
+    unsigned int l_pkinfo;
+  } T_RSA_KEY_INFO;
 
 int cert_get_info(const unsigned char *pcert, unsigned int lcert, T_CERT_INFO *info);
-
+int get_rsa_key_info(const unsigned char *pcert, unsigned int lcert, T_RSA_KEY_INFO *rsa_keyinfo);
+unsigned char* parse_ec_params(unsigned char* pparams, long *len);
+unsigned char* parse_ec_point(unsigned char* ppoint, long *len);
 
 #ifdef __cplusplus
    }

@@ -26,28 +26,14 @@
 #include <fstream>
 #include <iostream>
 
+#include "CardLayerConst.h"
 #include "PkiCard.h"
 #include "Log.h"
 #include "Thread.h"
 #include "pinpad2.h"
 
+#include <algorithm>
 
-unsigned char clearbinary[] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-                                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
 
 namespace eIDMW
 {
@@ -75,70 +61,65 @@ bool CPkiCard::SelectApplet()
 
 void CPkiCard::SelectApplication(const CByteArray & oAID)
 {
-    	CAutoLock autolock(this);
+	CAutoLock autolock(this);
 
-	if (m_selectAppletMode == ALW_SELECT_APPLET)
-		SelectApplet();
-
-	// Select File command to select the Application by AID
-    	CByteArray oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
-
-			// First try to select the applet
-	if (SelectApplet())
-	{
-		m_selectAppletMode = ALW_SELECT_APPLET;
-		oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
+	if (memcmp(oAID.GetBytes(), m_lastSelectedApplication.GetBytes(),
+				sizeof(oAID.Size())) == 0) {
+		return;
 	}
+        // Select File command to select the Application by AID
+	CByteArray oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
 
 	getSW12(oResp, 0x9000);
+
+	// If select application was a success, update the state
+	m_lastSelectedApplication = oAID;
 }
 
 CByteArray CPkiCard::ReadUncachedFile(const std::string & csPath,
     unsigned long ulOffset, unsigned long ulMaxLen)
 {
-	CByteArray oData(ulMaxLen);
-
 	CAutoLock autolock(this);
+	//We use max_block_read_length as 223 because of a limit on SM layer
+	const int MAX_BLOCK_READ_LENGTH = m_pace.get() != NULL ? 223 : MAX_APDU_READ_LEN;
+
+	MWLOG(LEV_INFO, MOD_CAL, L"   SelectUncachedFile %ls", utilStringWiden(csPath).c_str());
 
     tFileInfo fileInfo = SelectFile(csPath, true);
+    unsigned long realMaxLen = (std::min)(fileInfo.lFileLen, ulMaxLen);
+    unsigned long offsetByte = ulOffset;
 
-    // Loop until we've read ulMaxLen bytes or until EOF (End Of File)
-    bool bEOF = false;
-    for (unsigned long i = 0; i < ulMaxLen && !bEOF; i += MAX_APDU_READ_LEN)
-    {
-        unsigned long ulLen = ulMaxLen - i <= MAX_APDU_READ_LEN ?
-	    ulMaxLen - i : 0;
+    CByteArray fileArray(realMaxLen);
 
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: file length parsed from FCI info: %lu realMaxLen: %lu", __FUNCTION__, fileInfo.lFileLen, realMaxLen);
 
-        CByteArray oResp = ReadBinary(ulOffset + i, ulLen);
+    //loop while you don't get to the end or maxLen
+    while((offsetByte != fileInfo.lFileLen) && (fileArray.Size() < realMaxLen)) {
+        unsigned long maxLength = (std::min)(fileInfo.lFileLen - offsetByte, (unsigned long)MAX_BLOCK_READ_LENGTH);
+        CByteArray response = ReadBinary(offsetByte, maxLength);
+        offsetByte += maxLength;
 
+        unsigned long ulSW12 = getSW12(response);
 
-        unsigned long ulSW12 = getSW12(oResp);
-
-
-		// If the file is a multiple of the block read size, you will get
-		// an SW12 = 6B00 (at least with PT eID) but that OK then..
-        if (ulSW12 == 0x9000 || (i != 0 && ulSW12 == 0x6B00))
-            oData.Append(oResp.GetBytes(), oResp.Size() - 2);
-		else if (ulSW12 == 0x6982) {
-			throw CNotAuthenticatedException(
-				EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
-		}
-		else if (ulSW12 == 0x6B00)
-			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
-		else
+        // If the file is a multiple of the block read size, you will get
+        // an SW12 = 6B00 (at least with PT eID) but that OK then..
+        if (ulSW12 == 0x9000 || (offsetByte != 0 && ulSW12 == 0x6B00))
+            fileArray.Append(response.GetBytes(), response.Size() - 2);
+        else if (ulSW12 == 0x6982) {
+            throw CNotAuthenticatedException(
+                EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
+        }
+        else if (ulSW12 == 0x6B00)
+            throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
+        else
             throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
 
-        // If the driver/reader itself did the 6CXX handling,
-        // we assume we're at the EOF
-        if (oResp.Size() < MAX_APDU_READ_LEN)
-            bEOF = true;
     }
 
-	MWLOG(LEV_INFO, MOD_CAL, L"   Read file %ls (%d bytes) from card",
-		utilStringWiden(csPath).c_str(), oData.Size());
+    MWLOG(LEV_INFO, MOD_CAL, L"   Read file %ls (%d bytes) from card",
+          utilStringWiden(csPath).c_str(), fileArray.Size());
 
-    return oData;
+    return fileArray;
 }
 
 void CPkiCard::WriteUncachedFile(const std::string & csPath,
@@ -156,16 +137,6 @@ void CPkiCard::WriteUncachedFile(const std::string & csPath,
     if ( ulDataLen > PERSODATAFILESIZE )
         throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 
-/*
-    if(ulDataLen == 0)
-    {
-        CByteArray oDataVoid;
-        oDataVoid.Append(clearbinary, sizeof(clearbinary));
-        SendAPDU(0xD6, 0x00, 0x00, oDataVoid);
-
-    }
-    SendAPDU(0x0E, 0x00, 0x02, 0x00);
-*/
     bool bEOF = false;
 
     unsigned long ulLen = ulDataLen;
@@ -215,6 +186,10 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin & Pin,
         const std::string & csPin1, const std::string & csPin2,
         unsigned long & ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry, unsigned long unblockFlags)
 {
+    
+	// TODO (DEV-CC2): make this work for cc2.0
+    if(this->GetType() == CARD_PTEID_IAS5) 
+        SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
 
 	bool bRet = false;
 	std::string csReadPin1, csReadPin2;
@@ -311,7 +286,7 @@ bad_pin:
 
 	// Wrong PIN with no user interaction: return false and don't ask for retries
 	// For PIN unlock we don't ask for retries
-	if (!bRet && !bShowDlg || operation == PIN_OP_RESET)
+	if (!bRet && !bShowDlg || operation == PIN_OP_RESET || operation == PIN_OP_RESET_NO_PUK)
 	{
 	    return bRet;
 	}
@@ -590,31 +565,6 @@ tFileInfo CPkiCard::SelectFile(const std::string & csPath, bool bReturnFileInfo)
 	return xFileInfo;
 }
 
-// Only called from SelectFile(), no locking is done here
-CByteArray CPkiCard::SelectByPath(const std::string & csPath, bool bReturnFileInfo)
-{
-    unsigned char ucP2 = bReturnFileInfo ? 0x00 : 0x0C;
-
-    unsigned long ulPathLen = (unsigned long) (csPath.size() / 2);
-
-    CByteArray oPath(ulPathLen);
-    for (unsigned long i = 0; i < ulPathLen; i++)
-        oPath.Append(Hex2Byte(csPath, i));
-
-    CByteArray oResp = SendAPDU(0xA4, 0x00, ucP2, oPath);
-
-    // The file still wasn't found, so let's first try to select the applet
-    if (SelectApplet())
-    {
-        m_selectAppletMode = ALW_SELECT_APPLET;
-        oResp = SendAPDU(0xA4, 0x80, ucP2, oPath);
-    }
-
-	getSW12(oResp, 0x9000);
-
-	return oResp;
-}
-
 CByteArray CPkiCard::ReadBinary(unsigned long ulOffset, unsigned long ulLen)
 {
 
@@ -625,14 +575,6 @@ CByteArray CPkiCard::ReadBinary(unsigned long ulOffset, unsigned long ulLen)
 
 CByteArray CPkiCard::UpdateBinary(unsigned long ulOffset, const CByteArray & oData)
 {
-    // Update Binary
-    CByteArray oDataVoid;
-
-    /*if (ulOffset == 0)
-    {
-        oDataVoid.Append(clearbinary, sizeof(clearbinary));
-        SendAPDU(0xD6, 0x00, 0x00, oDataVoid);
-    }*/
 
     return SendAPDU(0xD6, (unsigned char) (ulOffset / 256),
                     (unsigned char) (ulOffset % 256), oData);

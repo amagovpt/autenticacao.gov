@@ -274,7 +274,7 @@ PageCardPrintForm {
             propertySwitchBasic.enabled = true
             propertySwitchAdditional.enabled = true
             propertySwitchAddress.enabled = true
-            propertySwitchNotes.enabled = true
+            propertySwitchNotes.enabled = gapi.isNotesSupported()
             propertySwitchPrintDate.enabled = true
             propertySwitchPdfSign.enabled = true
 
@@ -352,6 +352,21 @@ PageCardPrintForm {
             }
         }
 
+        onSignalContactlessCANNeeded: {
+            console.log("QML: Contactless CAN is needed!!")
+            paceDialogLoader.active = true
+        }
+    }
+
+    Loader {
+        id: paceDialogLoader
+        active: false
+        anchors.verticalCenter: parent.verticalCenter
+        source: "../definitions/DialogRequestPaceSecret.qml"
+        onLoaded: {
+            paceDialogLoader.item.afterPaceAction = GAPI.IdentityData
+            paceDialogLoader.item.open()
+        }
     }
 
     propertyFileDialogOutput {

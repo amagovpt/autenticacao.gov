@@ -482,6 +482,14 @@ bool AppController::getEnablePteidCache (){
     return m_Settings.getEnablePteidCache();
 }
 
+void AppController::setEnablePteidCANCache (bool bEnabled){
+    m_Settings.setEnablePteidCANCache(bEnabled);
+}
+
+bool AppController::getEnablePteidCANCache (){
+    return m_Settings.getEnablePteidCANCache();
+}
+
 void AppController::flushCache(){
     Concurrent::run(this, &AppController::doFlushCache);
 }

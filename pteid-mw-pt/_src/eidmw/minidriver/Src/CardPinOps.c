@@ -95,7 +95,7 @@ DWORD WINAPI   CardAuthenticatePin
 		dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, FALSE, 0);
 	} 
 	else {
-		dwReturn = PteidAuthenticate(pCardData, pbPin, cbPin, pcAttemptsRemaining, 0);
+		dwReturn = cal_auth_pin(pCardData, pbPin, cbPin, pcAttemptsRemaining, 0);
 	}
 
 	if ( dwReturn != SCARD_S_SUCCESS )
@@ -276,7 +276,7 @@ DWORD WINAPI   CardAuthenticateEx
 				specific_pin_id);
 	} 
 	else {
-		dwReturn = PteidAuthenticate(pCardData, pbPinData, cbPinData, pcAttemptsRemaining, specific_pin_id);
+		dwReturn = cal_auth_pin(pCardData, pbPinData, cbPinData, pcAttemptsRemaining, specific_pin_id);
 	}
 
 	if ( dwReturn != SCARD_S_SUCCESS )
@@ -419,67 +419,10 @@ DWORD WINAPI   CardChangeAuthenticator
 	__out_opt                              PDWORD        pcAttemptsRemaining
 	)
 {
-	DWORD dwReturn = SCARD_S_SUCCESS;
-
+	DWORD    dwReturn = SCARD_S_SUCCESS;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
-
-	/********************/
-	/* Check Parameters */
-	/********************/
-	if ( pCardData == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( pwszUserId == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pwszUserId]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( pbCurrentAuthenticator == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pbCurrentAuthenticator]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( pbNewAuthenticator == NULL )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pbNewAuthenticator]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-	if ( wcscmp(pwszUserId, wszCARD_USER_USER) != 0 )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter value [pwszUserId]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-
-	if ( dwFlags != CARD_AUTHENTICATE_PIN_PIN )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwFlags]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-
-	/* Don't support setting the retry count */
-	if ( cRetryCount != 0 )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [cRetryCount]");
-		CLEANUP(SCARD_E_INVALID_PARAMETER);
-	}
-
-	dwReturn = PteidChangePIN(pCardData, 
-		pbCurrentAuthenticator,
-		cbCurrentAuthenticator,
-		pbNewAuthenticator,
-		cbNewAuthenticator,
-		pcAttemptsRemaining,
-		0 //Auth PIN
-		);
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "ChangePIN: [0x%02X]", dwReturn);
-		CLEANUP(dwReturn);
-	}
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");

@@ -57,6 +57,9 @@
     <ClCompile Include="src\Util.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Src\cal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\inc\bcrypt.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\inc\util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\inc\cal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

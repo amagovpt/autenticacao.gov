@@ -470,6 +470,13 @@ public:
 	 **/
     PTEIDSDK_API PTEID_Card &getCard();
 
+    /**
+     * Get the card interface used on the current used card
+     *
+     * Returns the interface of the current card
+     **/
+    PTEIDSDK_API PTEID_CardContactInterface getCardContactInterface();
+
 	/**
 	 * Get the EIDcard in the reader.
 	 *		Instantiation is made regarding the type of the card
@@ -690,7 +697,7 @@ public:
 	/**
 	 * Signs a block of data using RSA-PKCS#1.
 	 * 
-	 * @param data block of data to be signed. Has to be hashed using either sha1, sha256, sha384 or sha512. Therefore, data has to be at max 64 bytes.
+	 * @param data block of data to be signed. Has to be hashed using either sha1, sha256, sha384 or sha512. Therefore, size of data array has to be at max 64 bytes.
 	 * @param signatureKey by default uses the 'Authentication private key' to sign message. Setting this to @b true makes use of 'Signature private key' instead.
 	 * @return PTEID_ByteArray containing the signature
 	 */
@@ -761,6 +768,15 @@ public:
 	 * @param ulOffset is the offset to begin the writing
 	 **/
 	PTEIDSDK_API virtual bool writeFile(const char *fileID, const PTEID_ByteArray& oData,unsigned long ulOffset=0);
+
+    /**
+     * Init the Pace authentication process
+     * @param secret string that holds the secret to make the PACE process
+     * @param length size of the secret string
+     * @param secretType type of the secret used to make the PACE process
+     **/
+    
+    PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType);
 
 protected:
 	PTEID_Card(const SDK_Context *context,APL_Card *impl);/**< For internal use : Constructor */

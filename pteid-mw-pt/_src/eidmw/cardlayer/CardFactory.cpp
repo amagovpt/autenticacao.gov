@@ -31,7 +31,6 @@
 #include "CardFactory.h"
 #include "UnknownCard.h"
 #include "Log.h"
-#include "Util.h"
 #include "Cache.h"
 #include "Config.h"
 
@@ -43,7 +42,84 @@ namespace eIDMW
 {
 
 
-CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad)
+CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReader,
+	CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess, bool read_serial) {
+	CCard *poCard = NULL;
+	long lErrCode = EIDMW_ERR_CHECK;
+	const char* strReader = NULL;
+	const void* paramStructure = NULL;
+
+	if (poContext->m_ulConnectionDelay != 0)
+		CThread::SleepMillisecs(poContext->m_ulConnectionDelay);
+
+	strReader = csReader.c_str();
+
+	if (hCard) {
+		CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
+		CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
+		isContactLess = atr.Equals(atrContactLessCard);
+
+		MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(), isContactLess ? "true" : "false");
+		MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s", atr.ToString(true, false).c_str());
+
+		if (protocol == SCARD_PROTOCOL_T0)
+			paramStructure = SCARD_PCI_T0;
+		else if (protocol == SCARD_PROTOCOL_T1)
+			paramStructure = SCARD_PCI_T1;
+
+		const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
+		{
+			long lRetVal = 0;
+			unsigned char tucSelectApp[] = { 0x00, 0xA4, 0x04, 0x00 };
+			CByteArray oCmd(12);
+			oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
+			oCmd.Append((unsigned char)size);
+			oCmd.Append(oAID, size);
+
+			CByteArray oResp;
+			oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, paramStructure);
+			return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
+		};
+
+		int appletVersion = 1;
+		if (!isContactLess)
+		{
+			bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
+			if (!aidStatus) {
+				bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
+				if (nationalDataStatus)
+					appletVersion = 3;
+			}
+
+			long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+
+			poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, paramStructure);
+			if (cacheEnabled)
+				poCard->InitEncryptionKey();
+		}
+		else {
+			appletVersion = 3;
+			poCard = new CPteidCard(hCard, poContext, poPinpad, paramStructure, read_serial);
+		}
+
+		CCache::LimitDiskCacheFiles(10);
+
+		// If no other CCard subclass could be found
+		if (poCard == NULL)
+		{
+			poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
+		}
+
+		poCard->setProtocol(paramStructure);
+	}
+	else {
+		throw CMWEXCEPTION(lErrCode);
+	}
+	
+	return poCard;
+}
+
+CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess)
 {
 	CCard *poCard = NULL;
 	long lErrCode = EIDMW_ERR_CHECK; // should never be returned
@@ -79,20 +155,57 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 
 	if (hCard != 0) {
 		if (poCard == NULL) {
+            CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
+            CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
+            isContactLess = atr.Equals(atrContactLessCard);
 
-			MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s", csReader.c_str());
-			MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s",
-			poContext->m_oPCSC.GetATR(hCard).ToString(true, false).c_str());
+            MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(), isContactLess ? "true" : "false");
+            MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s", atr.ToString(true, false).c_str());
 
 			if (ret.second == SCARD_PROTOCOL_T0)
                param_structure = SCARD_PCI_T0;
         	else if (ret.second == SCARD_PROTOCOL_T1)
 				param_structure = SCARD_PCI_T1;
 
+			int appletVersion = 0;
 
-			//2018-05 Gemsafe cards are the only ones in use by now
-			int appletVersion = 1;
-			poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+            const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
+            {
+                long lRetVal = 0;
+                unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+                CByteArray oCmd(12);
+                oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
+                oCmd.Append((unsigned char)size);
+                oCmd.Append(oAID, size);
+
+                CByteArray oResp;
+                oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
+                return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
+            };
+
+            if(!isContactLess)
+            {
+                bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
+                if (aidStatus) {
+                    appletVersion = 1;
+                }
+                else {
+                    bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
+                    if (nationalDataStatus)
+                        appletVersion = 3;
+                }
+                if (appletVersion > 0) {
+    				long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+    			
+    				poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+    				if (cacheEnabled)
+    					poCard->InitEncryptionKey();
+                }
+            }
+            else {
+                appletVersion = 3;
+				poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure, true);
+            }
 
 			CCache::LimitDiskCacheFiles(10);
 
@@ -104,15 +217,12 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 
 			poCard->setProtocol(param_structure);
 
-			long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
-			if (cacheEnabled)
-				poCard->InitEncryptionKey();
-
 			hCard = 0;
 		}
 	}
 	else
 	{
+        isContactLess = false;
 		throw CMWEXCEPTION(lErrCode);
 	}
 

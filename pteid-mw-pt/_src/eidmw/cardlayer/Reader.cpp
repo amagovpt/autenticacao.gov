@@ -82,7 +82,7 @@ static const unsigned char RIPEMD160_AID[] = {
 };
 
 CReader::CReader(const std::string & csReader, CContext *poContext) :
-	m_poCard(NULL), m_oPKCS15(poContext)
+    m_poCard(NULL), m_oPKCS15(poContext), m_isContactless(false)
 {
     m_csReader = csReader;
     m_wsReader = utilStringWiden(csReader);
@@ -95,7 +95,7 @@ CReader::CReader(const std::string & csReader, CContext *poContext) :
 CReader::~CReader(void)
 {
     if (m_poCard != NULL)
-        Disconnect(DISCONNECT_LEAVE_CARD);
+        Disconnect(DISCONNECT_RESET_CARD);
 
     delete m_oPinpad;
 }
@@ -192,6 +192,7 @@ static const inline wchar_t * Type2String(tCardType cardType)
 	{
 	case CARD_PTEID_IAS07:
 	case CARD_PTEID_IAS101:
+	case CARD_PTEID_IAS5:
 		return L"PT eID";;
 	default: return L"unknown";
 	}
@@ -260,14 +261,72 @@ void CReader::readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, 
 	}
 }
 
+void CReader::UseHandle(SCARDHANDLE hCard) {
+	if (m_poCard) {
+		// reset last application incase card was reset
+		m_poCard->ResetApplication();
+		
+		m_poCard->m_hCard = hCard;
+	}
+
+	if (m_oPinpad)
+		m_oPinpad->Init(hCard);
+
+}
+
+
+bool CReader::Connect(SCARDHANDLE hCard, DWORD protocol, bool read_serial) {
+	m_poCard = CardConnect(hCard, protocol, m_csReader, m_poContext, NULL, m_isContactless, read_serial);
+	if (m_poCard != NULL) {
+		if (m_isContactless)
+			m_poCard->createPace();
+
+		m_oPKCS15.SetCard(m_poCard);
+		m_oPinpad->Init(m_poCard->m_hCard);
+		CConfig config;
+		long pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
+		if (pinpadEnabled == 1 && m_oPinpad->UsePinpad())
+		{
+			MWLOG(LEV_DEBUG, MOD_CAL, L"Using Pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
+			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler());
+
+		}
+		else
+			MWLOG(LEV_DEBUG, MOD_CAL, L"Using non-pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
+
+
+#ifdef WIN32
+		//Get info on all connected readers using Win32 SetupAPI as TLV Properties Control command is not available for all readers
+		std::vector<ReaderDeviceInfo> readerDevices = win32ReaderDevices();
+		for (auto dev : readerDevices) {
+			MWLOG(LEV_INFO, MOD_CAL, "Windows reader: %s %s (vendorID: %04x, productID: %04x) Driver: %s",
+				dev.manufacturer.c_str(), dev.name.c_str(), dev.vendorID, dev.productID, dev.driver.c_str());
+		}
+		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls",
+			Type2String(m_poCard->GetType()), m_wsReader.c_str());
+#else
+		ReaderDeviceInfo device_info = { 0 };
+		readerDeviceInfo(m_poCard->m_hCard, &device_info, m_oPinpad->getTlvPropertiesIoctl());
+		MWLOG(LEV_INFO, MOD_CAL, L" Connected to %ls card in reader %ls (vendorID: %04x, productID: %04x)",
+			Type2String(m_poCard->GetType()), m_wsReader.c_str(), device_info.vendorID, device_info.productID);
+#endif
+
+	}
+
+	return true;
+}
+
 bool CReader::Connect()
 {
 	if (m_poCard != NULL)
 		Disconnect(DISCONNECT_LEAVE_CARD);
 
-	m_poCard = CardConnect(m_csReader, m_poContext, NULL);
+    m_poCard = CardConnect(m_csReader, m_poContext, NULL, m_isContactless);
 	if (m_poCard != NULL)
 	{
+        if(m_isContactless)
+            m_poCard->createPace();
+
 		m_oPKCS15.SetCard(m_poCard);
 		m_oPinpad->Init(m_poCard->m_hCard);
 		CConfig config;
@@ -344,6 +403,14 @@ CByteArray CReader::GetATR()
 	return m_poCard->GetATR();
 }
 
+void CReader::setNextAPDUClearText()
+{
+    if (m_poCard == NULL)
+        throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+    return m_poCard->setNextAPDUClearText();
+}
+
 /*TODO: Is this really needed?    */
 bool CReader::IsPinpadReader()
 {
@@ -373,6 +440,14 @@ std::string CReader::GetSerialNr()
 	err = err;
         return m_oPKCS15.GetSerialNr();
     }
+}
+
+CByteArray CReader::GetSerialNrBytes() {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->GetSerialNrBytes();
+
 }
 
 std::string CReader::GetCardLabel()
@@ -418,6 +493,16 @@ void CReader::SelectApplication(const CByteArray & oAID)
         throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
     return m_poCard->SelectApplication(oAID);
+}
+
+bool CReader::isCardContactless() const
+{
+    return m_isContactless;
+}
+
+void CReader::initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType)
+{
+    m_poCard->initPaceAuthentication(secret, secretLen, secretType);
 }
 
 CByteArray CReader::ReadFile(const std::string &csPath,
@@ -538,6 +623,13 @@ unsigned long CReader::GetSupportedAlgorithms()
     return m_poCard->GetSupportedAlgorithms();
 }
 
+void CReader::setAskPinOnSign(bool bAsk) {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	m_poCard->setAskPinOnSign(bAsk);
+}
+
 CByteArray CReader::Sign(const tPrivKey & key, unsigned long paddingType,
 		const CByteArray & oData)
 {
@@ -560,7 +652,7 @@ CByteArray CReader::Sign(const tPrivKey & key, unsigned long paddingType,
 
 	oAID_Data.Append(oData);
 
-	if (ulSupportedAlgos & SIGN_ALGO_RSA_PKCS)
+	if (ulSupportedAlgos & SIGN_ALGO_RSA_PKCS || ulSupportedAlgos & SIGN_ALGO_ECDSA)
 	{
 		return m_poCard->Sign(key, GetPinByID(key.ulAuthID),
 				paddingType, oAID_Data);

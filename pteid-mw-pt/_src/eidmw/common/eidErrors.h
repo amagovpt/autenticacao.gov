@@ -257,6 +257,7 @@
 #define EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY		0xe1d01c07
 #define EIDMW_SOD_ERR_VERIFY_SOD_SIGN				0xe1d01c08
 #define EIDMW_SOD_ERR_INVALID_PKCS7				    0xe1d01c09
+#define EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ             0xe1d01c0A
 
 //Errors related to CVC authentication and Secure Messaging
 #define EIDMW_ERR_CVC_GENERIC_ERROR       0xe1d01f01
@@ -293,3 +294,9 @@
 #define EIDMW_REMOTEADDR_REVOKED            0xe1d01d57
 #define EIDMW_REMOTEADDR_INVALID_STATE      0xe1d01d58
 #define EIDMW_REMOTEADDR_UNKNOWN_ERROR      0xe1d01d59
+
+//PACE Error
+#define EIDMW_PACE_ERR_BAD_TOKEN               0xe1d01d5a
+#define EIDMW_PACE_ERR_NOT_INITIALIZED         0xe1d01d5b
+#define EIDMW_PACE_ERR_UNKNOWN                 0xe1d01d5f
+

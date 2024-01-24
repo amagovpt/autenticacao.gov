@@ -94,12 +94,6 @@ public:
 	  */
  	EIDMW_APL_API virtual unsigned long readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset=0, unsigned long  ulMaxLength=0);
 
-	/**
-	  * Return the number of certificate on the card
-	  */
-	EIDMW_APL_API virtual unsigned long certificateCount();
-
-
 	EIDMW_APL_API APL_CCXML_Doc& getXmlCCDoc(APL_XmlUserRequestedInfo& userRequestedInfo);
 
 
@@ -313,6 +307,12 @@ friend CByteArray APL_CCXML_Doc::getXML(bool bNoHeader); /* this method accesses
 };
 
 
+enum RemoteAddressProtocol {
+    CC1_PROTOCOL = 1,
+    CC2_PROTOCOL = 2
+};
+
+
 /******************************************************************************//**
   * Class that represent the document Address on a PTEID card
   *
@@ -378,8 +378,12 @@ private:
 	APL_AddrEId &operator= (const APL_AddrEId& doc);	/**< Copy not allowed - not implemented */
 
 	void loadRemoteAddress();
+    void loadRemoteAddress_CC2();
+    long validateRemoteAddressData(const char * json_response, RemoteAddressProtocol endpoint);
 	void mapNationalFields(cJSON * json_obj);
 	void mapForeignFields(cJSON * json_obj);
+    void breakSecureMessaging();
+    void handleRemoteAddressError(bool sm_started, long exception_code);
 
 	APL_EIDCard *m_card;							/**< Pointer to the card that construct this object*/
 
