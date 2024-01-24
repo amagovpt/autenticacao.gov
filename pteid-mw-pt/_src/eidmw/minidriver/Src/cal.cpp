@@ -77,14 +77,14 @@ DWORD cal_init(PCARD_DATA pCardData, const char* reader_name, DWORD protocol_) {
 		break_pace();
 
 		if (reader.isCardContactless()) {
-			auto can = get_can(reader.GetSerialNr());
-			if (can.size() == 0)
+			const auto can = get_can(reader.GetSerialNr());
+			if (can.empty())
 				return SCARD_F_INTERNAL_ERROR;
 
 			reader.initPaceAuthentication(can.c_str(), can.size(), PaceSecretType::PACECAN);
 		}
 	}
-	catch (CMWException e) {
+	catch (CMWException& e) {
 		return EidmwToScardErr(e.GetError());
 	}
 
@@ -96,17 +96,17 @@ DWORD cal_read_cert(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
 	try {
 		reader.UseHandle(pCardData->hScard);
 
-		auto cert = reader.GetCert(dwCertSpec - 1);
+		const auto cert = reader.GetCert(dwCertSpec - 1);
 		if (reader.GetCardType() == CARD_PTEID_IAS5)
 			reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 
 		auto file = reader.ReadFile(cert.csPath);
 		*pcbCertif = file.Size();
 
-		*ppbCertif = (PBYTE)pCardData->pfnCspAlloc(*pcbCertif);
+		*ppbCertif = static_cast<PBYTE>(pCardData->pfnCspAlloc(*pcbCertif));
 		memcpy(*ppbCertif, file.GetBytes(), file.Size());
 	}
-	catch (CMWException e) {
+	catch (CMWException& e) {
 		return EidmwToScardErr(e.GetError());
 	}
 
@@ -118,8 +118,8 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 	try {
 		reader.UseHandle(pCardData->hScard);
 		
-		size_t len = 0;
-		auto vendor = reinterpret_cast<VENDOR_SPECIFIC*>(pCardData->pvVendorSpecific);
+		DWORD len = 0;
+		const auto vendor = static_cast<VENDOR_SPECIFIC*>(pCardData->pvVendorSpecific);
 
 		if (!vendor->bSerialNumberSet) {
 			CByteArray serialNumber = reader.GetSerialNrBytes();
@@ -135,7 +135,7 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 		*pdwSerialNumber = len;
 		memcpy(pbSerialNumber, vendor->szSerialNumber, len);
 	}
-	catch (CMWException e) {
+	catch (CMWException& e) {
 		return EidmwToScardErr(e.GetError());
 	}
 
@@ -150,29 +150,28 @@ DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey,
 			reader.SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });	
 
 		unsigned char cmd[16] = { 0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83, 0x01, 0x08, 0x7F, 0x49, 0x02, 0x86, 0x00, 0x00 };
-		const int                   PUBKEY_LEN = 64;
-		const int                   PUBKEY_OFFSET = 11;
-		CByteArray result_buff;
+		constexpr int                   PUBKEY_LEN = 64;
+		constexpr int                   PUBKEY_OFFSET = 11;
 
 		if (dwCertSpec == 2)
 			cmd[9] = 0x08;
 		else
 			cmd[9] = 0x06;
 
-		result_buff = reader.SendAPDU({ cmd, sizeof(cmd) });
+		CByteArray result_buff = reader.SendAPDU({cmd, sizeof(cmd)});
 		if (result_buff.Size() == 0)
 			return SCARD_E_UNEXPECTED;
 
 		*pcbPubKey = sizeof(BCRYPT_ECCKEY_BLOB) + PUBKEY_LEN;
-		*ppbPubKey = (PBYTE)pCardData->pfnCspAlloc(*pcbPubKey);
-		((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->dwMagic = BCRYPT_ECDSA_PUBLIC_P256_MAGIC;
+		*ppbPubKey = static_cast<PBYTE>(pCardData->pfnCspAlloc(*pcbPubKey));
+		reinterpret_cast<BCRYPT_ECCKEY_BLOB*>(*ppbPubKey)->dwMagic = BCRYPT_ECDSA_PUBLIC_P256_MAGIC;
 		//It seems the Microsoft documentation is wrong on this cbKey field for EC keys: "The length, in bytes, of the key."
-		((BCRYPT_ECCKEY_BLOB*)(*ppbPubKey))->cbKey = PUBKEY_LEN / 2;
+		reinterpret_cast<BCRYPT_ECCKEY_BLOB*>(*ppbPubKey)->cbKey = PUBKEY_LEN / 2;
 
 		memcpy((*ppbPubKey) + sizeof(BCRYPT_ECCKEY_BLOB), result_buff.GetBytes() + PUBKEY_OFFSET, PUBKEY_LEN);
 
 	}
-	catch (CMWException e) {
+	catch (CMWException& e) {
 		return EidmwToScardErr(e.GetError());
 	}
 
@@ -186,8 +185,8 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 
 		// Reset pace authentication if contactless
 		if (reader.isCardContactless()) {
-			auto can = get_can(reader.GetSerialNr());
-			if (can.size() == 0)
+			const auto can = get_can(reader.GetSerialNr());
+			if (can.empty())
 				return SCARD_F_INTERNAL_ERROR;
 
 			reader.initPaceAuthentication(can.c_str(), can.size(), PaceSecretType::PACECAN);
@@ -200,11 +199,11 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 			reader.SelectApplication({ PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID) });
 		}
 
-		tPin tpin = reader.GetPin(pin_id);
+		const tPin tpin = reader.GetPin(pin_id);
 
-		std::string pin = std::string((const char*)pbPin, (size_t)cbPin);
+		const auto pin = std::string(reinterpret_cast<const char*>(pbPin), (size_t)cbPin);
 		unsigned long ulRemaining = 0;
-		auto res = reader.PinCmd(PIN_OP_VERIFY, tpin, pin, "", ulRemaining);
+		const auto res = reader.PinCmd(PIN_OP_VERIFY, tpin, pin, "", ulRemaining);
 
 		if (ulRemaining == 0)
 			return SCARD_W_CHV_BLOCKED;
@@ -212,7 +211,7 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 		if (!res)
 			return SCARD_W_WRONG_CHV;
 	}
-	catch (CMWException e) {
+	catch (CMWException& e) {
 		return EidmwToScardErr(e.GetError());
 	}
 
@@ -224,16 +223,16 @@ DWORD cal_sign_data(PCARD_DATA pCardData, BYTE container_id, DWORD cbToBeSigned,
 	try {
 		reader.UseHandle(pCardData->hScard);
 
-		auto pkey = reader.GetPrivKey(container_id);
+		const auto pkey = reader.GetPrivKey(container_id);
 		auto signed_data = reader.Sign(pkey, pss_padding ? SIGN_ALGO_RSA_PSS : 0, { pbToBeSigned, cbToBeSigned });
 
 		*pcbSignature = signed_data.Size();
-		*ppbSignature = (PBYTE)pCardData->pfnCspAlloc(signed_data.Size());
+		*ppbSignature = static_cast<PBYTE>(pCardData->pfnCspAlloc(signed_data.Size()));
 
 		if (reader.GetCardType() == CARD_PTEID_IAS5) {
 			memcpy(*ppbSignature, signed_data.GetBytes(), signed_data.Size());
 		} else {
-			for (int i = 0; i < *pcbSignature; i++)
+			for (unsigned int i = 0; i < *pcbSignature; i++)
 			{
 				(*ppbSignature)[i] = signed_data.GetByte(*pcbSignature - i - 1);
 			}
