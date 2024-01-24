@@ -378,8 +378,6 @@ WindowGeometry *GAPI::getWndGeometry() {
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) {
 
-    qDebug() << "C++: getDataCardIdentifyValue ";
-
     return m_data[key];
 }
 

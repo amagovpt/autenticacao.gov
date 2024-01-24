@@ -219,8 +219,7 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    QString file = context.file ? context.file : "";
-    QString function = context.function ? context.function : "";
+    QString src_file = context.file ? context.file : "";
     PTEID_LogLevel msgLvl;
 
     switch (type) {
@@ -246,7 +245,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
         msgLvl = eIDMW::PTEID_LOG_LEVEL_CRITICAL;
     }
 
-    QString message = QString ("%1 - %2 - %3 - %4").arg(file, function)
+    QString message = src_file.isEmpty() ? msg : QString ("%1:%2 - %3").arg(src_file)
                                                    .arg(context.line)
                                                    .arg(msg);
 
