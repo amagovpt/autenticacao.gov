@@ -106,8 +106,8 @@ PageDefinitionsDataForm {
 		onSignalRemoveCANCacheSucess:{
 			console.log("Definitions SCAP - Signal CAN Signal Remove CAN cache Sucess")
 			propertyBusyIndicator.running = false;
-			var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE") + controler.autoTr
-            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC") + controler.autoTr
+			var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
+            var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 		}
     }

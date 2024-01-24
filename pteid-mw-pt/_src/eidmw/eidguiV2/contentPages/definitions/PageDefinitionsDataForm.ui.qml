@@ -381,7 +381,7 @@ Item {
                 font.bold: focus
                 color: Constants.COLOR_TEXT_LABEL
                 height: Constants.SIZE_TEXT_LABEL
-                text: qsTranslate("PageDataApp","STR_CAN_CACHE_TITLE") + controler.autoTr
+                text: qsTranslate("PageDataApp","STR_CAN_CACHE_TITLE")
             }
             DropShadow {
                 anchors.fill: rowCANCache
@@ -444,7 +444,7 @@ Item {
                     CheckBox {
                         id: checkboxEnableCANCache
                         height: parent.height
-                        text: qsTranslate("PageDataApp","STR_TOGGLE_CAN_CACHE_CHECKBOX") + controler.autoTr
+                        text: qsTranslate("PageDataApp","STR_TOGGLE_CAN_CACHE_CHECKBOX")
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.capitalization: Font.MixedCase
@@ -467,7 +467,7 @@ Item {
                         anchors.rightMargin: Constants.SIZE_ROW_H_SPACE
                         Button {
                             id: buttonRemoveCANCache
-                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE") + controler.autoTr
+                            text: qsTranslate("PageDataApp","STR_CLEAR_CACHE")
                             width: parent.width
                             height: Constants.HEIGHT_BOTTOM_COMPONENT
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
