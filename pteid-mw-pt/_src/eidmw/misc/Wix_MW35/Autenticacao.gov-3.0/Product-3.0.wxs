@@ -188,6 +188,12 @@
       <Component Id="CertCC006" Guid="{A50B8721-0A16-4FFF-B8D6-4642E0D98BE2}">
          <File Source="..\..\certs\CartaodeCidadao006.der" />
       </Component>
+      <Component Id="CertCC007" Guid="{C29FAC07-8121-4E6E-9ACF-3FA763C9DC42}">
+        <File Source="..\..\certs\CartaodeCidadao007.der" />
+      </Component>
+      <Component Id="CertCC008" Guid="{9E62B7CE-B076-49A9-B684-6FF97B1F7B39}">
+        <File Source="..\..\certs\CartaodeCidadao008.der" />
+      </Component>
       <Component Id="ECRaizEstado002" Guid="{B6E70303-FCA8-4689-9AFA-D5F10F229408}">
          <File Source="..\..\certs\ECRaizEstado002.der" />
       </Component>
@@ -426,6 +432,8 @@
       <ComponentRef Id="CertCC004"/>
       <ComponentRef Id="CertCC005"/>
       <ComponentRef Id="CertCC006"/>
+      <ComponentRef Id="CertCC007"/>
+      <ComponentRef Id="CertCC008"/>
       <ComponentRef Id="ECRaizEstado002"/>
       <ComponentRef Id="SectigoRootCert"/>
       <ComponentRef Id="DigicertRootCert"/>
