@@ -21,6 +21,7 @@
 
 **************************************************************************** */
 #include <iostream>
+#include <string>
 #include <stdlib.h>
 #include <limits.h>
 #include <sys/stat.h>
@@ -90,8 +91,8 @@ std::wstring ExpandSection(
     ) 
 {
     int                              iResult;
-    basic_string <char>::size_type   iTotLenght = czSectionOriginal.length();
-    basic_string <char>::size_type   iStrLenght;
+    std::basic_string <char>::size_type   iTotLenght = czSectionOriginal.length();
+    std::basic_string <char>::size_type   iStrLenght;
 
     //--- Find if anything to expand
     if ((iTotLenght == 0)||(czSectionOriginal[0] != '$'))
