@@ -145,7 +145,7 @@ namespace eIDMW
 			if (res != 0)
 			{
 				MWLOG(LEV_ERROR, MOD_APL, L"Error downloading CRL. Libcurl returned %ls\n", 
-						utilStringWiden(string(error_buf)).c_str());
+						utilStringWiden(std::string(error_buf)).c_str());
 			}
 			else
 			{
