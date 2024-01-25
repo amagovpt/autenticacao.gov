@@ -20,7 +20,7 @@ Dialog {
 
         Connections {
             target: gapi
-            onErrorPace: {
+            onSignalErrorPace: {
                 errorMessageLabel.visible = true
                 textFieldCAN.enabled = true
                 if(error_code === GAPI.PaceBadToken)
@@ -29,7 +29,7 @@ Dialog {
                     errorMessageLabel.text = qsTranslate("Popup PIN","STR_POPUP_PACE_UNKNOWN")
                 }
             }
-            onPaceSuccess: {
+            onSignalPaceSuccess: {
                 close()
             }
         }

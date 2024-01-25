@@ -791,7 +791,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	std::string can_str = pace_can.toStdString();
     try {
         card->initPaceAuthentication(can_str.c_str(), can_str.size(), PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
-        emit paceSuccess();
+        emit signalPaceSuccess();
     } catch (PTEID_PACE_ERROR e)
     {
         PaceError err;
@@ -807,7 +807,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
             err = PaceError::PaceUnknown;
             break;
         }
-        emit errorPace(err);
+        emit signalErrorPace(err);
         return;
     }
 

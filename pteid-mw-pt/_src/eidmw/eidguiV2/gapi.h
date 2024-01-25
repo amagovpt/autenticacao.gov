@@ -592,8 +592,8 @@ signals:
     void signalPrinterPrintFail(int error_code);
     void signalLanguageChangedError();
 
-    void errorPace(int error_code);
-    void paceSuccess();
+    void signalErrorPace(int error_code);
+    void signalPaceSuccess();
 
 private:
     bool LoadTranslationFile( QString NewLanguage );
