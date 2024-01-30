@@ -260,6 +260,20 @@ PageCardAdressForm {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
         }
+
+        onSignalErrorPace: {
+            if(error_code === GAPI.PaceBadToken){
+                console.log("QML: The stored CAN is wrong!! Will ask again!!")
+                paceDialogLoader.active = true
+            }
+        }
+    }
+
+    Connections {
+        target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
+        onClosed: {
+            paceDialogLoader.active = false
+        }
     }
 
     Loader {

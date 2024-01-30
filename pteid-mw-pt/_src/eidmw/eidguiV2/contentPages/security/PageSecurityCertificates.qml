@@ -325,6 +325,20 @@ PageSecurityCertificatesForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
+
+        onSignalErrorPace: {
+            if(error_code === GAPI.PaceBadToken){
+                console.log("QML: The stored CAN is wrong!! Will ask again!!")
+                paceDialogLoader.active = true
+            }
+        }
+    }
+
+    Connections {
+        target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
+        onClosed: {
+            paceDialogLoader.active = false
+        }
     }
 
     Loader {

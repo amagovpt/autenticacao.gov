@@ -158,8 +158,14 @@ PageSecurityPinCodesForm {
             console.log("QML: Contactless CAN is needed!!")
             if(paceDialogLoader.active == true)
                 paceDialogLoader.active = false
-
             paceDialogLoader.active = true
+        }
+
+        onSignalErrorPace: {
+            if(error_code === GAPI.PaceBadToken){
+                console.log("QML: The stored CAN is wrong!! Will ask again!!")
+                paceDialogLoader.active = true
+            }
         }
     }
 
@@ -684,6 +690,13 @@ PageSecurityPinCodesForm {
             default:
                 break
             }
+        }
+    }
+
+    Connections {
+        target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
+        onClosed: {
+            paceDialogLoader.active = false
         }
     }
 

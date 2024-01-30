@@ -18,6 +18,14 @@ bool deleteCAN() {
 	return true;
 }
 
+bool deleteCAN(const char * serial){
+	std::string config_name("can_");
+	config_name += serial;
+	PTEID_Config config(config_name.c_str(), L"can_cache", L"");
+	config.DeleteKeysByPrefix();
+	return true;
+} 
+
 std::string getCANFromCache(const char * serial) {
 	std::string config_name("can_");
 	config_name += serial;

@@ -797,15 +797,19 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
         PaceError err;
         switch(e.GetError())
         {
-            case EIDMW_PACE_ERR_BAD_TOKEN:
-            err = PaceError::PaceBadToken;
-            break;
+            case EIDMW_PACE_ERR_BAD_TOKEN: {
+                err = PaceError::PaceBadToken;
+                PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
+                const char * serial = verInfo.getSerialNumber();
+                deleteCAN(serial);
+                break;
+            }
             case EIDMW_PACE_ERR_NOT_INITIALIZED:
-            err = PaceError::PaceUnutilized;
-            break;
+                err = PaceError::PaceUnutilized;
+                break;
             case EIDMW_PACE_ERR_UNKNOWN:
-            err = PaceError::PaceUnknown;
-            break;
+                err = PaceError::PaceUnknown;
+                break;
         }
         emit signalErrorPace(err);
         return;
@@ -3195,6 +3199,7 @@ void GAPI::performPACEWithCache(PTEID_EIDCard * card, CardOperation op) {
         Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can, op);
     }
     else {
+		deleteCAN(serial);
         emit signalContactlessCANNeeded();
     }
 }

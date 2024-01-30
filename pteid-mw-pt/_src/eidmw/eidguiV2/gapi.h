@@ -225,6 +225,7 @@ const QString MAIN_QML_PATH("qrc:/main.qml");
 
 void saveCAN(const char * serial, const char *can);
 bool deleteCAN();
+bool deleteCAN(const char * serial);
 std::string getCANFromCache(const char * serial);
 
 class GAPI : public QObject
