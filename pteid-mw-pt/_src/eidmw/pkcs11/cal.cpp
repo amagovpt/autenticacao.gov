@@ -32,6 +32,7 @@
 #include "cal.h"
 #include "log.h"
 #include "cert.h"
+#include "Config.h"
 #include <openssl/asn1.h>
 
 #ifndef WIN32
@@ -1239,8 +1240,15 @@ return (ret);
 }
 #undef WHERE
 
+std::string get_cached_can(std::string serial_number) {
+	std::wstring wsn = std::wstring(serial_number.begin(), serial_number.end());
+	std::wstring cache_key = L"can_" + wsn;
 
+	const struct CConfig::Param_Str test = { L"can_cache", cache_key.c_str(), L"" };
+	auto can = CConfig::GetString(test);
 
+	return { can.begin(), can.end() };
+}
 
 #define WHERE "cal_update_token()"
 int cal_update_token(CK_SLOT_ID hSlot)
@@ -1265,18 +1273,22 @@ try
 	CReader &oReader = oCardLayer->getReader(reader);
    status = cal_map_status(oReader.Status(true));
 
+   if (oReader.isCardContactless()) {
+      const std::string can = get_cached_can(oReader.GetSerialNr());
+      if (can.empty())
+         return CKR_GENERAL_ERROR;
+
+      oReader.initPaceAuthentication(can.c_str(), can.size(), PaceSecretType::PACECAN);
+   }
+
+
    if (status != P11_CARD_STILL_PRESENT)
       {
-//	printf("NO CARD CONTEXT... CREATE NEW...\n");
       //clean objects
       for (i=1; i <= pSlot->nobjects; i++)
          {
-		//printf("bet1\n");
          pObject = p11_get_slot_object(pSlot, i);
-		//printf("bet1 end \n");
          p11_clean_object(pObject);
-         //if (pObject != NULL)
-           // pObject->state = 0;
          }
 
       //invalidate sessions
@@ -1286,7 +1298,6 @@ try
       if ((status == P11_CARD_OTHER) || (status == P11_CARD_INSERTED) )
          {
          //(re)initialize objects
-	//printf("calling: cal_init_objects....\n");
          ret = cal_init_objects(pSlot);
          if (ret)
             {
