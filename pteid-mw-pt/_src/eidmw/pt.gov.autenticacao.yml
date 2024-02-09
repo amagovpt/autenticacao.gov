@@ -1,6 +1,6 @@
 app-id: pt.gov.autenticacao
 runtime: org.kde.Platform
-runtime-version: '5.15-21.08'
+runtime-version: '5.15-23.08'
 sdk: org.kde.Sdk
 command: eidguiV2
 finish-args:
@@ -21,6 +21,7 @@ modules:
       - --disable-serial
       - --disable-usb
       - --disable-documentation
+      - --disable-polkit
     cleanup:
       - '/include'
       - '/bin/pcsc-spy'
@@ -33,8 +34,8 @@ modules:
       - rmdir /app/sbin || true
     sources:
       - type: archive
-        url: https://pcsclite.apdu.fr/files/pcsc-lite-1.8.25.tar.bz2
-        sha256: d76d79edc31cf76e782b9f697420d3defbcc91778c3c650658086a1b748e8792
+        url: https://pcsclite.apdu.fr/files/pcsc-lite-2.0.1.tar.bz2
+        sha256: 5edcaf5d4544403bdab6ee2b5d6c02c6f97ea64eebf0825b8d0fa61ba417dada
   - name: xerces-c
     buildsystem: autotools
     cleanup:
@@ -45,8 +46,8 @@ modules:
       - '/lib/libxerces-c.la'
     sources:
       - type: archive
-        url: https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.3.tar.gz
-        sha256: fb96fc49b1fb892d1e64e53a6ada8accf6f0e6d30ce0937956ec68d39bd72c7e
+        url: https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.5.tar.gz
+        sha256: 545cfcce6c4e755207bd1f27e319241e50e37c0c27250f11cda116018f1ef0f5
   - name: libzip
     buildsystem: cmake-ninja
     cleanup:
@@ -57,8 +58,8 @@ modules:
       - '/lib/cmake'
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.9.2.tar.xz
-        sha256: c93e9852b7b2dc931197831438fee5295976ee0ba24f8524a8907be5c2ba5937 
+        url: https://libzip.org/download/libzip-1.10.1.tar.xz
+        sha256: dc3c8d5b4c8bbd09626864f6bcf93de701540f761d76b85d7c7d710f4bd90318
   - name: xml-security-c
     buildsystem: autotools
     cleanup:
@@ -80,8 +81,8 @@ modules:
       - -DBUILD_SHARED_LIBS=OFF
     sources:
       - type: archive
-        url: https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.15.tar.gz
-        sha256: 5308fd4bd90cef7aa060558514de6a1a4a0819974a26e6ed13973c5f624c24b2
+        url: https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.17.tar.gz
+        sha256: c91d1eeb7175c50d49f6ba2a25e69b46bd05cffb798382c19bfb202e467ec51c
   - name: curl
     buildsystem: autotools
     cleanup:
@@ -95,8 +96,8 @@ modules:
       - --with-openssl
     sources:
       - type: archive
-        url: https://curl.se/download/curl-7.87.0.tar.xz
-        sha256: ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff
+        url: https://curl.se/download/curl-8.6.0.tar.xz
+        sha256: 3ccd55d91af9516539df80625f818c734dc6f2ecf9bada33c76765e99121db15
   - name: openjpeg
     buildsystem: cmake-ninja
     cleanup:
@@ -105,8 +106,8 @@ modules:
       - '/bin/opj_*'
     sources:
       - type: archive
-        url: https://github.com/uclouvain/openjpeg/archive/v2.3.1.tar.gz
-        sha256: 63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9
+        url: https://github.com/uclouvain/openjpeg/archive/v2.5.0.tar.gz
+        sha256: 0333806d6adecc6f7a91243b2b839ff4d2053823634d4f6ed7a59bc87409122a
   - name: poppler
     buildsystem: cmake-ninja
     cleanup:
@@ -115,15 +116,17 @@ modules:
     config-opts:
       - -DBUILD_GTK_TESTS=OFF
       - -DBUILD_QT5_TESTS=OFF
+      - -DBUILD_QT6_TESTS=OFF
       - -DBUILD_CPP_TESTS=OFF
       - -DENABLE_UTILS=OFF
       - -DENABLE_CPP=OFF
+      - -DENABLE_QT6=OFF
       - -DENABLE_GLIB=OFF
       - -DENABLE_BOOST=OFF
     sources:
       - type: archive
-        url: https://poppler.freedesktop.org/poppler-22.07.0.tar.xz
-        sha256: 420230c5c43782e2151259b3e523e632f4861342aad70e7e20b8773d9eaf3428
+        url: https://poppler.freedesktop.org/poppler-24.02.0.tar.xz
+        sha256: 19187a3fdd05f33e7d604c4799c183de5ca0118640c88b370ddcf3136343222e
   - name: pteid-mw
     buildsystem: qmake
     config-opts:
