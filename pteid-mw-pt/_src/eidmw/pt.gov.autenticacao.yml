@@ -133,6 +133,7 @@ modules:
       - PREFIX_DIR = /app/
     build-commands:
       -  sed -i 's/pteid-scalable/pt.gov.autenticacao/g' debian/pteid-mw-gui.desktop
+      -  sed -i -E 's/^Exec=.* eidguiV2$/Exec=eidguiV2/g' debian/pteid-mw-gui.desktop
       -  install -Dm644 debian/pteid-mw-gui.desktop /app/share/applications/pt.gov.autenticacao.desktop
       -  install -Dm644 debian/pteid-scalable.svg /app/share/icons/hicolor/scalable/apps/pt.gov.autenticacao.svg
       -  install -Dm644 pt.gov.autenticacao.metainfo.xml /app/share/appdata/pt.gov.autenticacao.metainfo.xml
