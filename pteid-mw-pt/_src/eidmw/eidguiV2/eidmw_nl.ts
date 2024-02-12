@@ -855,11 +855,11 @@
     </message>
     <message>
         <source>STR_CAN_CACHE_TITLE</source>
-        <translation>Códigos de acesso contactless</translation>
+        <translation>Código de acesso contactless</translation>
     </message>
     <message>
         <source>STR_CAN_CACHE_TEXT</source>
-        <translation>Guarda códigos de acesso a cartões contactless previamente lidos, evitando nova autorização</translation>
+        <translation>Guarda o código de acesso ao cartão contactless previamente lido, evitando nova autorização</translation>
     </message>
     <message>
         <source>STR_TOGGLE_CAN_CACHE_CHECKBOX</source>

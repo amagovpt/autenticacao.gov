@@ -857,11 +857,11 @@
     </message>
     <message>
         <source>STR_CAN_CACHE_TITLE</source>
-        <translation>CAN Cache</translation>
+        <translation>Card access number cache</translation>
     </message>
     <message>
         <source>STR_CAN_CACHE_TEXT</source>
-        <translation>The CAN cache stores the CAN of previously loaded cards, avoiding a new connection to the card</translation>
+        <translation type="unfinished">This cache stores the card access number of the previously read card, avoiding a new connection to the card</translation>
     </message>
     <message>
         <source>STR_TOGGLE_CAN_CACHE_CHECKBOX</source>
