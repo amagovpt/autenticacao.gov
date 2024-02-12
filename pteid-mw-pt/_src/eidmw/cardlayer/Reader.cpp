@@ -275,8 +275,8 @@ void CReader::UseHandle(SCARDHANDLE hCard) {
 }
 
 
-bool CReader::Connect(SCARDHANDLE hCard, DWORD protocol, bool read_serial) {
-	m_poCard = CardConnect(hCard, protocol, m_csReader, m_poContext, NULL, m_isContactless, read_serial);
+bool CReader::Connect(SCARDHANDLE hCard, DWORD protocol) {
+	m_poCard = CardConnect(hCard, protocol, m_csReader, m_poContext, NULL, m_isContactless);
 	if (m_poCard != NULL) {
 		if (m_isContactless)
 			m_poCard->createPace();

@@ -132,7 +132,7 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext,
 }
 
 /* Constructor for IASv5 cards in CL mode */
-CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol, bool read_serial): 
+CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol): 
 	CPkiCard(hCard, poContext, poPinpad) {
 
 	setProtocol(protocol);
