@@ -155,11 +155,11 @@ void CPteidCard::ReadSerialNumber() {
 		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
 	}
 	catch (CMWException e) {
-		MWLOG(LEV_CRIT, MOD_CAL, "Failed to read serial number: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
+		MWLOG(LEV_WARN, MOD_CAL, "Failed to read serial number: 0x%0x File: %s, Line:%ld", e.GetError(), e.GetFile().c_str(), e.GetLine());
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
 	catch (const std::exception &e) {
-		MWLOG(LEV_CRIT, MOD_CAL, L"Failed to read serial number std::exception thrown");
+		MWLOG(LEV_WARN, MOD_CAL, L"Failed to read serial number std::exception thrown");
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
 
@@ -224,6 +224,10 @@ unsigned long CPteidCard::PinStatus(const tPin & Pin) {
 		MWLOG(LEV_DEBUG, MOD_CAL, L"PinStatus APDU returned: %x", ulSW12 );
 		if (ulSW12 == 0x9000)
 			return 3; //Maximum Try Counter for PteID Cards
+
+		if (oResp.GetByte(0) != 0x63) {
+			throw m_poContext->m_oPCSC.SW12ToErr(ulSW12);
+		}
 
 		return (ulSW12 % 16);
 	}
