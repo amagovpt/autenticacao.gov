@@ -1240,11 +1240,8 @@ return (ret);
 }
 #undef WHERE
 
-std::string get_cached_can(std::string serial_number) {
-	std::wstring wsn = std::wstring(serial_number.begin(), serial_number.end());
-	std::wstring cache_key = L"can_" + wsn;
-
-	const struct CConfig::Param_Str test = { L"can_cache", cache_key.c_str(), L"" };
+std::string get_cached_can() {
+	const struct CConfig::Param_Str test = { L"can_cache", L"can", L"" };
 	auto can = CConfig::GetString(test);
 
 	return { can.begin(), can.end() };
@@ -1274,7 +1271,7 @@ try
    status = cal_map_status(oReader.Status(true));
 
    if (oReader.isCardContactless()) {
-      const std::string can = get_cached_can(oReader.GetSerialNr());
+      const std::string can = get_cached_can();
       if (can.empty())
          return CKR_GENERAL_ERROR;
 
