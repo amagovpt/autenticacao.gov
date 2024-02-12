@@ -144,9 +144,9 @@ void CPteidCard::ReadSerialNumber() {
 	try {
 
 		// Get card serial number 
-		// CPLC Data is only available on EID or Multipass app on PTEID_2 cards 
+		// CPLC Data is only available on eID application on PTEID_2 cards 
 		if (m_cardType == CARD_PTEID_IAS5) {
-				SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
+		SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 		}
 		else {
 			//The IAS v4 application was already selected in CardFactory
