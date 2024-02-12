@@ -800,8 +800,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
             case EIDMW_PACE_ERR_BAD_TOKEN: {
                 err = PaceError::PaceBadToken;
                 PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
-                const char * serial = verInfo.getSerialNumber();
-                deleteCAN(serial);
+                deleteCAN();
                 break;
             }
             case EIDMW_PACE_ERR_NOT_INITIALIZED:
@@ -818,9 +817,8 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	m_pace_auth_state = PaceAuthenticated;
 	//Cache correct CAN value
 	PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
-	const char * serial = verInfo.getSerialNumber();
     if (m_Settings.getEnablePteidCANCache()) {
-	   saveCAN(serial, can_str.c_str());
+	   saveCAN(can_str.c_str());
     }
 
 	switch (op) {
@@ -3190,16 +3188,15 @@ void GAPI::performPACEWithCache(PTEID_EIDCard * card, CardOperation op) {
 
     const int CAN_LENGTH = 6;
     PTEID_CardVersionInfo& verInfo = card->getVersionInfo();
-    const char * serial = verInfo.getSerialNumber();
-    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Reading cached CAN for serial: %s", serial);
+    PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Reading cached CAN");
 
-    std::string cached_can = getCANFromCache(serial);
+    std::string cached_can = getCANFromCache();
     if (cached_can.size() == CAN_LENGTH) {
         QString pace_can = QString::fromStdString(cached_can);
         Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can, op);
     }
     else {
-		deleteCAN(serial);
+		deleteCAN();
         emit signalContactlessCANNeeded();
     }
 }

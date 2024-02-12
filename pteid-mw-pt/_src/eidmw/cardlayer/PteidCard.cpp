@@ -137,23 +137,6 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *po
 
 	setProtocol(protocol);
 	m_cardType = CARD_PTEID_IAS5;
-
-	if(read_serial)
-		ReadSerialFromMultipass();
-}
-
-void CPteidCard::ReadSerialFromMultipass() {
-	if (m_cardType == CARD_PTEID_IAS5) {
-		SelectApplication({ PTEID_2_APPLET_MULTIPASS, sizeof(PTEID_2_APPLET_MULTIPASS) });
-		
-		//Card.Access can be read with this application selected but not with Multipass
-		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
-		SendAPDU(0xA4, 0x04, 0x00, { PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
-	}
-	else {
-		MWLOG(LEV_ERROR, MOD_CAL, "This can only be used in IAS5 cards!");
-	}
-	
 }
 
 void CPteidCard::ReadSerialNumber() {
@@ -163,9 +146,6 @@ void CPteidCard::ReadSerialNumber() {
 		// Get card serial number 
 		// CPLC Data is only available on EID or Multipass app on PTEID_2 cards 
 		if (m_cardType == CARD_PTEID_IAS5) {
-			if (m_pace.get() != NULL)
-				SelectApplication({ PTEID_2_APPLET_MULTIPASS, sizeof(PTEID_2_APPLET_MULTIPASS)});
-			else
 				SelectApplication({ PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID) });
 		}
 		else {
@@ -197,7 +177,7 @@ tCardType CPteidCard::GetType()
 CByteArray CPteidCard::GetSerialNrBytes()
 {
 	if (m_oSerialNr.Size() == 0 && m_cardType == CARD_PTEID_IAS5)
-		ReadSerialFromMultipass();
+		ReadSerialNumber();
 
    return m_oSerialNr;
 }
