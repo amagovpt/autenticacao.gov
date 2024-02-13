@@ -3291,9 +3291,6 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
             pCallBackData->getMainWnd()->setAddressLoaded(false);
             pCallBackData->getMainWnd()->resetReaderSelected();
 
-            PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
-                "Card inserted with serial number: %s", readerContext.getEIDCard().getVersionInfo().getSerialNumber());
-
             //------------------------------------
             // register certificates when needed
             //------------------------------------
@@ -3312,6 +3309,10 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData* pCallBack
                         PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "Postponing ImportCertificates until PACE authentication...");
                         break;
                     }
+
+					// We can't read serial number before PACE on contactless interface
+					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui",
+							"Card inserted with serial number: %s", readerContext.getEIDCard().getVersionInfo().getSerialNumber());
 
                     bool bImported = pCallBackData->getMainWnd()->m_Certificates.ImportCertificates(pCallBackData->getReaderName());
 
