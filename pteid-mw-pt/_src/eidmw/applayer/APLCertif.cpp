@@ -1112,8 +1112,11 @@ APL_Crl *APL_Certif::getCRL(){
 		if(!m_crl){
 			std::string url;
 			std::string delta_url;
-			// This will get both CRLs, the regular one and the Delta one. Will also be changed to use the serial number
-			if(m_cryptoFwk->GetCDPUrl(getData(),url, NID_crl_distribution_points) && m_cryptoFwk->GetCDPUrl(getData(), delta_url, NID_freshest_crl)){
+			// This will get both CRLs, the main one and the freshest CRL.
+			m_cryptoFwk->GetCDPUrl(getData(), delta_url, NID_freshest_crl);
+			
+			if(m_cryptoFwk->GetCDPUrl(getData(),url, NID_crl_distribution_points)) {
+				MWLOG(LEV_DEBUG, MOD_APL, "Creating APL_CRL with main CRL: %s and deltaCRL: %s", url.c_str(), delta_url.empty()? "(empty)" : delta_url.c_str());
 				m_crl=new APL_Crl(url.c_str(), delta_url.c_str() , m_cryptoFwk->getCertSerialNumber(getData()));
 			}
 		}
@@ -1139,7 +1142,7 @@ APL_OcspResponse *APL_Certif::getOcspResponse()
 
 APL_CertifStatus APL_Certif::validationCRL()
 {
-	MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::validationCRL() for certificate %s", this->getOwnerName());
+	MWLOG(LEV_DEBUG, MOD_APL, "APL_Certif::validationCRL() for certificate %s", this->getLabel());
 	// GETS CRL
 	APL_Crl *crl=getCRL();
 
@@ -1235,10 +1238,6 @@ const char *APL_Certif::getSerialNumber()
 	return m_info->serialNumber.c_str();
 }
 
-uint64_t APL_Certif::getSerialNumberUint(){
-	return m_cryptoFwk->getCertSerialNumber(getData());
-}
-
 const char *APL_Certif::getOwnerName()
 {
 	initInfo();
@@ -1320,7 +1319,7 @@ APL_Crl::APL_Crl(const char *uri, const char *delta_uri, APL_Certif *certif)
 }
 */
 
-APL_Crl::APL_Crl(const char *uri, const char *delta_uri, uint64_t serial_number){
+APL_Crl::APL_Crl(const char *uri, const char *delta_uri, void * serial_number){
 	m_cryptoFwk=AppLayer.getCryptoFwk();
 	//m_cache=AppLayer.getCrlDownloadCache();
 
@@ -1338,14 +1337,14 @@ APL_Crl::APL_Crl(const char *uri, const char *delta_uri, uint64_t serial_number)
 
 APL_Crl::~APL_Crl(void)
 {
-	if(m_info)
+	if(m_serial_number)
 	{
-		delete m_info;
-		m_info=NULL;
+		ASN1_INTEGER_free(reinterpret_cast<ASN1_INTEGER *>(m_serial_number));
 	}
 }
 
 //Initialize the member if not yet done (m_init=false) or forced by passing crlIn!=NULL
+/*
 void APL_Crl::init()
 {
 	if(!m_initOk)
@@ -1353,7 +1352,7 @@ void APL_Crl::init()
 		CByteArray data;
 		getData(data);
 	}
-}
+}*/
 
 const char *APL_Crl::getUri()
 {
@@ -1372,7 +1371,7 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload){
 	CByteArray baDeltaCRL;
 
 	// Gets the CRL
-	switch(getData(baCrl,forceDownload))
+	switch(getData(baCrl, m_uri))
 	{
 	case APL_CRL_STATUS_ERROR:
 		return APL_CERTIF_STATUS_ERROR;
@@ -1384,23 +1383,27 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload){
 		break;
 	}
 
-	// Gets the Delta CRL
-	switch (getData(baDeltaCRL, forceDownload)){
-	case APL_CRL_STATUS_ERROR:
-		return APL_CERTIF_STATUS_ERROR;
-	case APL_CRL_STATUS_CONNECT:
-		return APL_CERTIF_STATUS_CONNECT;
-	case APL_CRL_STATUS_UNKNOWN:
-	case APL_CRL_STATUS_VALID:
-	default:
-		break;
+	if (!m_delta_uri.empty()) {
+
+		// Gets the Delta CRL
+		switch (getData(baDeltaCRL, m_delta_uri)) {
+		case APL_CRL_STATUS_ERROR:
+			return APL_CERTIF_STATUS_ERROR;
+		case APL_CRL_STATUS_CONNECT:
+			return APL_CERTIF_STATUS_CONNECT;
+		case APL_CRL_STATUS_UNKNOWN:
+		case APL_CRL_STATUS_VALID:
+		default:
+			break;
+		}
 	}
 
 	// Gets an updated CRL from the CRL and the Delta CRL
 	X509_CRL* updated_CRL=m_cryptoFwk->updateCRL(baCrl, baDeltaCRL);
 
+	MWLOG(LEV_DEBUG, MOD_APL, "APL_Crl::verifyCert validating cert in CRL and deltaCRL");
 	// Validates CRL
-	eStatus=m_cryptoFwk->CRLValidation(m_serial_number, updated_CRL);
+	eStatus=m_cryptoFwk->CRLValidation(reinterpret_cast<ASN1_INTEGER *>(m_serial_number), updated_CRL);
 
 	// Frees updated_CRL
 	X509_CRL_free(updated_CRL);
@@ -1410,11 +1413,11 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload){
 }
 
 //Get data from the file and make the verification
-APL_CrlStatus APL_Crl::getData(CByteArray &data, bool forceDownload){
+APL_CrlStatus APL_Crl::getData(CByteArray &data, std::string &crl_uri){
 	CRLFetcher crl_fetcher;
 	APL_CrlStatus eRetStatus=APL_CRL_STATUS_ERROR;
 	// Can be changed to update with delta CRL
-	data = crl_fetcher.fetch_CRL_file(m_uri.c_str());
+	data = crl_fetcher.fetch_CRL_file(crl_uri.c_str());
 
 
 	//If ok, we get the info, unless we return an empty bytearray

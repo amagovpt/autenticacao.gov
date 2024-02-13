@@ -247,7 +247,7 @@ unsigned long APL_CryptoFwk::GetCertUniqueID(const CByteArray &cert)
 	return ret;
 }
 
-uint64_t APL_CryptoFwk::getCertSerialNumber(const CByteArray &cert){
+ASN1_INTEGER * APL_CryptoFwk::getCertSerialNumber(const CByteArray &cert){
 	const unsigned char *pucCert=NULL;
 	X509 *pX509 = NULL;
 
@@ -256,17 +256,14 @@ uint64_t APL_CryptoFwk::getCertSerialNumber(const CByteArray &cert){
 	if ( ! d2i_X509_Wrapper(&pX509, pucCert,cert.Size() ) )
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-	// The serial number that will be returned;
- 	uint64_t serial_number = 0;
-
-	//Gets the serial number as an uint64_t
+	//Gets the serial number as ASN1_INTEGER
 	ASN1_INTEGER* ASN1_serial_number =X509_get_serialNumber(pX509);
-	ASN1_INTEGER_get_uint64(&serial_number, ASN1_serial_number);
 
 	//Free openSSL object
 	if (pX509) X509_free(pX509);
-
-	return serial_number;
+	
+	//We need to copy because get_serialNumber returns an internal pointer
+	return ASN1_INTEGER_dup(ASN1_serial_number);
 }
 
 bool APL_CryptoFwk::VerifyDateValidity(const CByteArray &cert)
@@ -608,7 +605,7 @@ bool APL_CryptoFwk::VerifyRoot(const CByteArray &cert, const unsigned char *cons
 }
 
 // Serial Number 
-FWK_CertifStatus APL_CryptoFwk::CRLValidation(uint64_t serial_number, X509_CRL* pX509Crl){
+FWK_CertifStatus APL_CryptoFwk::CRLValidation(ASN1_INTEGER * serial_number, X509_CRL* pX509Crl){
 
 	MWLOG(LEV_INFO, MOD_SSL, L"CRL Validation");
 	
@@ -616,10 +613,6 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(uint64_t serial_number, X509_CRL* 
 	bool bFound=false;
 	bool onHold = false;
 	FWK_CertifStatus eStatus=FWK_CERTIF_STATUS_UNCHECK;
-
-	// Converts the parameter
-	ASN1_INTEGER* converted_serial_number = ASN1_INTEGER_new();
-	ASN1_INTEGER_set_uint64(converted_serial_number, serial_number);
 
 	// Gets the revoked certificates from the CRL
     pRevokeds = X509_CRL_get_REVOKED(pX509Crl);
@@ -631,7 +624,7 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(uint64_t serial_number, X509_CRL* 
 			// Gets Certificate
 			X509_REVOKED *pRevoked = sk_X509_REVOKED_value(pRevokeds, i);
 			// If the serial number matches
-			if(ASN1_INTEGER_cmp(converted_serial_number, X509_REVOKED_get0_serialNumber(pRevoked))==0){
+			if(ASN1_INTEGER_cmp(serial_number, X509_REVOKED_get0_serialNumber(pRevoked))==0){
 				// It is declared as found
 				bFound=true;
 
@@ -1233,7 +1226,7 @@ bool APL_CryptoFwk::GetCrlData(const CByteArray &cert, CByteArray &outCrl)
 	return true;
 }
 
-void APL_CryptoFwk::updateCRL(X509_CRL* crl, X509_CRL* delta_crl){
+void APL_CryptoFwk::updateCRL(X509_CRL* crl, X509_CRL* delta_crl) {
 
 	// Gets the revoked certificates in the CRL
     STACK_OF(X509_REVOKED) *pRevokeds = NULL;
@@ -1300,14 +1293,16 @@ void APL_CryptoFwk::updateCRL(X509_CRL* crl, X509_CRL* delta_crl){
 
 X509_CRL* APL_CryptoFwk::updateCRL(const CByteArray &crl,const CByteArray &delta_crl){
 
-	// Converts CBYTE Array to CRL
+	// Parse CRL data from ByteArray
 	X509_CRL *CRL = getX509CRL(crl);
 
-	// Converts CBYTE Array to Delta CRL
+	// Parse DeltaCRL data from ByteArray
 	X509_CRL *DeltaCRL = getX509CRL(delta_crl);
 
-	// Calls the function that updates the CRL;
-	updateCRL(CRL, DeltaCRL);
+	if (DeltaCRL != NULL) {
+		//Merge the latest changes of deltaCRL
+		updateCRL(CRL, DeltaCRL);
+	}
 	
 	return CRL;
 }

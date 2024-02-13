@@ -137,7 +137,7 @@ public:
 	  *
 	  * @return true if everything ok, false otherwise
 	  */
-	uint64_t getCertSerialNumber(const CByteArray &cert);
+	ASN1_INTEGER * getCertSerialNumber(const CByteArray &cert);
 
 
 	/**
@@ -210,7 +210,7 @@ public:
 	/**
 	  * Validate the certificate through CRL process and using its serial number
 	  */
-	FWK_CertifStatus CRLValidation(uint64_t serial_number, X509_CRL* crl);
+	FWK_CertifStatus CRLValidation(ASN1_INTEGER * serial_number, X509_CRL* crl);
 
 	/**
 	  * Validate the certificate through OCSP process

@@ -511,8 +511,7 @@ public:
 	  */
 	EIDMW_APL_API CByteArray getOCSPResponse();
 
-	EIDMW_APL_API const char *getSerialNumber();		/**< Return the serial number */
-	EIDMW_APL_API uint64_t getSerialNumberUint();       /**< Returns the serial number as an unsigned int*/
+	EIDMW_APL_API const char *getSerialNumber();		/**< Return the serial number as hexadecimal string */
 	EIDMW_APL_API const char *getOwnerName();			/**< Return the name of the owner */
 	EIDMW_APL_API const char *getSubjectSerialNumber();	/**< Return the serial number of the subject */
 	EIDMW_APL_API const char *getIssuerName();			/**< Return the name of the issuer */
@@ -638,39 +637,32 @@ public:
 	  * If it's created from the URL only the signing is not verify
 	  * @return the status of the crl
 	  */
-	EIDMW_APL_API APL_CrlStatus getData(CByteArray &data,bool forceDownload=false);
+	EIDMW_APL_API APL_CrlStatus getData(CByteArray &data, std::string &crl_uri);
 
 	/**
 	  * Return the certificate issuer (NULL if not found)
 	  *
 	  * The certificate comes from the store
 	  */
-	EIDMW_APL_API APL_Certif *getIssuer();
+	//EIDMW_APL_API APL_Certif *getIssuer();
 
-	EIDMW_APL_API const char *getIssuerName();	/**< Return the name of the issuer */
+	//EIDMW_APL_API const char *getIssuerName();	/**< Return the name of the issuer */
 
 	EIDMW_APL_API const char *getUri();			/**< Return the uri of the CRL */
 
 private:
 	APL_Crl(const char *uri, const char *delta_uri, APL_Certif *certif);/**< Constructor */
 
-	APL_Crl(const char* uri, const char *delta_uri, uint64_t serial_number);/**< Constructor */
+	APL_Crl(const char* uri, const char *delta_uri, void *asn1_serial_number);/**< Constructor */
 
 	APL_Crl(const APL_Crl& crl);				/**< Copy not allowed - not implemented */
 	APL_Crl &operator= (const APL_Crl& crl);	/**< Copy not allowed - not implemented */
-
-	/**
-	  * Init m_info,  m_issuer and verify the signature
-	  */
-	void init();
 
 	std::string m_uri;							/**< The url from where the crl comes */
 	std::string m_delta_uri;					/**< The url from where the delta crl comes   */
 
 	bool m_initOk;								/**< True when init has been done */
-	uint64_t m_serial_number;                  /**< The certificate's serial number */
-	//APL_Certif *m_certif;						/**< Link to the certificate */
-	//APL_Certif *m_issuer;						/**< Link to the issuer certificate */
+	void * m_serial_number;                  /**< The certificate's serial number */
 	tCrlInfo *m_info;							/**< Divers information about the crl */
 
 	APL_CrlDownloadingCache *m_cache;
