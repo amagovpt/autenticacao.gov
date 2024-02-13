@@ -381,7 +381,7 @@ CSC_Status APL_CertStatusCache::checkCertValidation(unsigned long ulUniqueID,uns
 	      certstatus != CSC_STATUS_VALID_SIGN)
 	{
 		MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: falling back to CRL validation for certificate %s: OCSP return code %d",
-			 cert->getOwnerName(), certstatus);
+			 cert->getLabel(), certstatus);
 		certstatus = convertStatus(cert->validationCRL());
 	}
 
