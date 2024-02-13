@@ -3196,7 +3196,9 @@ void GAPI::performPACEWithCache(PTEID_EIDCard * card, CardOperation op) {
         Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can, op);
     }
     else {
-		deleteCAN();
+		if (cached_can.size() > 0) {
+			deleteCAN();
+		}
         emit signalContactlessCANNeeded();
     }
 }
