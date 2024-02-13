@@ -125,7 +125,7 @@ FILE* handleSTDErr()
 
 	file = freopen(path.toStdString().c_str(), "a", stderr);
 
-	std::cerr << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz: ").toStdString() << "Message sent to the error stream!" << std::endl;
+	std::cerr << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ").toStdString() << "stderr start" << std::endl;
 	return file;
 }
 
@@ -217,32 +217,26 @@ void parseCommandlineGuiArguments(QCommandLineParser *parser, GAPI *gapi){
     }
 }
 
-void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void customMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QString src_file = context.file ? context.file : "";
     PTEID_LogLevel msgLvl;
 
     switch (type) {
     case QtDebugMsg:
-        qDebug().noquote() << msg;
         msgLvl = eIDMW::PTEID_LOG_LEVEL_DEBUG;
         break;
     case QtInfoMsg:
-        qInfo().noquote() << msg;
         msgLvl = eIDMW::PTEID_LOG_LEVEL_INFO;
         break;
     case QtWarningMsg:
-        qWarning().noquote() << msg;
         msgLvl = eIDMW::PTEID_LOG_LEVEL_WARNING;
         break;
+	case QtFatalMsg:
     case QtCriticalMsg:
-        qCritical().noquote() << msg;
+	default:
         msgLvl = eIDMW::PTEID_LOG_LEVEL_CRITICAL;
         break;
-    case QtFatalMsg:
-    default:
-        qCritical().noquote() << msg;
-        msgLvl = eIDMW::PTEID_LOG_LEVEL_CRITICAL;
     }
 
     QString message = src_file.isEmpty() ? msg : QString ("%1:%2 - %3").arg(src_file)
@@ -285,7 +279,7 @@ int main(int argc, char *argv[])
 	FILE * errFile = handleSTDErr();
     SingleApplication app(argc, argv);
 
-    qInstallMessageHandler(myMessageOutput);
+    qInstallMessageHandler(customMessageHandler);
 
     // Parse command line arguments
     QCommandLineParser parser;
