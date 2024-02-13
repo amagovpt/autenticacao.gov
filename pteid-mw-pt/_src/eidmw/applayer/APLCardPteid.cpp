@@ -1448,18 +1448,20 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
     const unsigned long ADDRESS_PIN_IDX = 2;
 
     MutualAuthentication mutual_authentication(m_card);
-
+	MWLOG(LEV_DEBUG, MOD_APL, "Starting to load Remote Address - Reading SOD data");
 	m_card->selectApplication({ PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA) });
+	
     CByteArray dg13_data;
     CByteArray sod_data = getSodData(m_card);
     CByteArray authCert_data;
-
-    std::string serialNumber = m_card->getTokenSerialNumber();
-
+	MWLOG(LEV_DEBUG, MOD_APL, "Remote Address - Reading ID data (DG13)");
+	m_card->selectApplication({ PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA) });
     m_card->readFile(PTEID_FILE_ID_V2, dg13_data);
 
     m_card->selectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
-	//Read ecdh_params from card
+
+	std::string serialNumber = m_card->getTokenSerialNumber();
+	//Read ECDH parameters from card
 	CByteArray ecdh_params = mutual_authentication.getECDHParams();
 
     m_card->readFile(PTEID_FILE_CERT_AUTHENTICATION_V2, authCert_data);
