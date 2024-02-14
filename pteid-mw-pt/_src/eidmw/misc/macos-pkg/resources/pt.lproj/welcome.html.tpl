@@ -6,13 +6,11 @@
 	</style>
 </head>
 <body>
-<h1>Bem-vindo ao instalador do Autenticação.gov 3.11.0</h2>
+<h1>Bem-vindo ao instalador do Autenticação.gov 3.12.0</h2>
 
-	<h2>Versão 3.11.0 - revisão GIT_REVISION</h2>
+	<h2>Versão 3.12.0 - revisão GIT_REVISION</h2>
 	<ul>
-		<li>As opções de assinatura na aplicação são guardadas para uso futuro</li>
-		<li>Melhorias na assinatura com atributos profissionais</li>
-		<li>Melhorias na leitura da morada online na aplicação</li>
+	    <li>Leitura do novo Cartão de Cidadão emitido a partir de 2024</li>
 	</ul>
 </body>
 </html>

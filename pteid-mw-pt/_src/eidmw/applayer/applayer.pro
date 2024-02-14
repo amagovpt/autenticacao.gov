@@ -146,5 +146,7 @@ SOURCES += \
 	asn1_idfile.cpp
 
 # Disable annoying and mostly useless gcc warning and add hidden visibility for non-exposed classes and functions
+# We need sdt::optional available with C++17 so we need to bump minimum MacOS version to 10.13 (High Sierra)
+QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
 QMAKE_CXXFLAGS += -Wno-write-strings -fvisibility=hidden
 QMAKE_CFLAGS += -fvisibility=hidden

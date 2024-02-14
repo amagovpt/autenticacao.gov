@@ -8,11 +8,11 @@
     <script>
     function CustomInstallationCheck()
     {
-        if(!(system.compareVersions(system.version.ProductVersion, '10.12') >= 0))
+        if(!(system.compareVersions(system.version.ProductVersion, '10.13') >= 0))
         {
-                <!-- Allow installation only on 10.12 or higher -->
+                <!-- Allow installation only on 10.13 or higher -->
                 my.result.title = "Erro na instalação";
-                my.result.message = "Esta versão do macOS não é suportada.\n\nA Aplicação Autenticação.gov suporta apenas versões macOS 10.12 ou superiores";
+                my.result.message = "Esta versão do macOS não é suportada.\n\nA aplicação Autenticação.gov suporta apenas versões macOS 10.13 ou superiores";
                 my.result.type = 'Fatal';
                 return false;
         }
