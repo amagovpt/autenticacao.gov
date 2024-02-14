@@ -598,6 +598,16 @@ static void addCertificateChain(DSIGKeyInfoX509 *keyInfo, APL_Certifs *certs)
 	}
 }
 
+static void addAllCertsToKeyInfo(DSIGKeyInfoX509 *keyInfo, APL_Certifs *certs)
+{
+
+	for (unsigned long i = 0; i < certs->countAll(); i++) {
+		APL_Certif *certif = certs->getCert(i);
+		MWLOG(LEV_DEBUG, MOD_APL, "Add to XAdES certificate chain: %s", certif->getOwnerName());
+		addCertificateToKeyInfo(certif->getData(), keyInfo);
+	}
+}
+
 static CByteArray parseTimestampTokenFromTSReply(CByteArray &ts_reply)
 {
 	unsigned char *tsResp = ts_reply.GetBytes();
@@ -929,7 +939,12 @@ CByteArray &XadesSignature::sign(const char** paths, unsigned int pathCount, zip
 
 		//Append to KeyInfo element all the needed CA certificates
 		DSIGKeyInfoX509 *keyInfoX509 = sig->appendX509Data();
-		addCertificateChain(keyInfoX509, certs);
+		if (m_pcard != NULL) {
+			addCertificateChain(keyInfoX509, certs);
+		}
+		else {
+			addAllCertsToKeyInfo(keyInfoX509, certs);
+		}
 
 		DSIGReference *ref_signed_props = sig->createReference(createSignedPropertiesURI().c_str(),
 			DSIGConstants::s_unicodeStrURISHA256);
