@@ -1196,17 +1196,21 @@ void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
     }
     catch (PTEID_Exception &e) {
         ret = e.GetError();
-        if (isASIC)
+        if (ret == EIDMW_ERR_OP_CANCEL){
+            emit signalCanceledSignature();
+        }
+        else if (isASIC){
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignXADESWithCMD",
                 "Caught exception in PTEID_CMDSignatureClient::SignASiC. Error code: %08x", e.GetError());
-        else
+        }
+        else{
             PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "doSignXADESWithCMD",
                 "Caught exception in PTEID_CMDSignatureClient::SignXades. Error code: %08x", e.GetError());
-
+        }
         showSignCMDDialog(ret);
     }
 
-    emit signalPdfSignSuccess(SignMessageOK);
+//  emit signalPdfSignSuccess(SignMessageOK);
 
     END_TRY_CATCH
 }
