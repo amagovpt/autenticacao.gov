@@ -31,13 +31,11 @@ CEventCallbackThread::CEventCallbackThread()
 {
 }
 
-CEventCallbackThread::CEventCallbackThread(
-	CPCSC *poPCSC, const std::string & csReader,
+CEventCallbackThread::CEventCallbackThread(const std::string & csReader,
 	void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)
 {
 	m_bStop = false;
 	m_bRunning = false;
-	m_poPCSC = poPCSC;
 	m_csReader = csReader;
 	m_callback = callback;
 	m_ulCurrentState = 0;
@@ -53,9 +51,11 @@ void CEventCallbackThread::Run()
 
 	try
 	{
+        CPCSC t_pcsc_context;
+        t_pcsc_context.EstablishContext();
 		while (!g_bStop && ! m_bStop)
 		{
-			bool bChanged = m_poPCSC->GetStatusChange(10, &tInfo, 1);
+			bool bChanged = t_pcsc_context.GetStatusChange(10, &tInfo, 1);
 			if (g_bStop || m_bStop)
 				break;
 			else if (bChanged)
@@ -104,8 +104,7 @@ CThreadPool::~CThreadPool()
 	g_bStop = true;
 }
 
-CEventCallbackThread & CThreadPool::NewThread(
-	CPCSC *poPCSC, const std::string & csReader,
+CEventCallbackThread & CThreadPool::NewThread(const std::string & csReader,
 	void (* callback)(long lRet, unsigned long ulState, void *pvRef),
 	unsigned long & ulHandle, void *pvRef)
 {
@@ -113,8 +112,7 @@ CEventCallbackThread & CThreadPool::NewThread(
 
 	m_ulCurrentHandle++;
 
-	m_pool[m_ulCurrentHandle] = CEventCallbackThread(
-		poPCSC, csReader, callback, pvRef);
+	m_pool[m_ulCurrentHandle] = CEventCallbackThread(csReader, callback, pvRef);
 
 	ulHandle = m_ulCurrentHandle;
 

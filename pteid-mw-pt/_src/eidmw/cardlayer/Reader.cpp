@@ -97,12 +97,11 @@ unsigned long CReader::SetEventCallback(
 	void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)
 {
 	unsigned long ulHandle;
-	CEventCallbackThread & oEventCallbackTread =
-		m_poContext->m_oThreadPool.NewThread(&m_poContext->m_oPCSC,
-			m_csReader, callback, ulHandle, pvRef);
+	CEventCallbackThread & oEventCallbackThread =
+		m_poContext->m_oThreadPool.NewThread(m_csReader, callback, ulHandle, pvRef);
 
 	// Start the thread
-	oEventCallbackTread.Start();
+	oEventCallbackThread.Start();
 
 	MWLOG(LEV_INFO, MOD_CAL, L"    Started event callback thread %d", ulHandle);
 

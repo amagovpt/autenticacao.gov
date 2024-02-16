@@ -39,7 +39,7 @@ class EIDMW_CAL_API CEventCallbackThread : public CThread
 public:
 	CEventCallbackThread();
 
-	CEventCallbackThread(CPCSC *poPCSC, const std::string & csReader,
+	CEventCallbackThread(const std::string & csReader,
 		void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef);
 
 	void Run();
@@ -50,7 +50,6 @@ public:
 
 private:
 	bool m_bStop;
-	CPCSC *m_poPCSC;
 	std::string m_csReader;
 	void (* m_callback)(long lRet, unsigned long ulState, void *pvRef);
 	unsigned long m_ulCurrentState;
@@ -67,8 +66,7 @@ public:
 
 	~CThreadPool();
 
-	CEventCallbackThread & NewThread(
-		CPCSC *poPCSC, const std::string & csReader,
+	CEventCallbackThread & NewThread(const std::string & csReader,
 		void (* callback)(long lRet, unsigned long ulState, void *pvRef),
 		unsigned long & ulHandle, void *pvRef);
 
