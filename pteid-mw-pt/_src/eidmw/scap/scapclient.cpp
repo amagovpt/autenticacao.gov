@@ -210,34 +210,64 @@ std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<S
 	std::string certified_by;
 	std::string certified_attributes;
 
+	std::set<std::string> NIPC_set;
+	std::set<std::string> provider_names;
+
 	std::string separator = "";
 	for (const auto &provider_attributes_pair: group_by_provider(attributes)) {
 		const ScapProvider &provider = provider_attributes_pair.first;
-		certified_by += separator;
+		NIPC_set.insert(provider.nipc);
 		certified_attributes += separator + join_attribute_strings(provider_attributes_pair.second);
 
 		if (provider.type == "ENTERPRISE") {
-			certified_by += "SCAP";
+			provider_names.insert("SCAP");
 			certified_attributes += " de " + provider.name;
 		} else {
-			certified_by += provider.name;
+			provider_names.insert(provider.name);
 		}
-
 		separator = " e ";
+	}
+
+	certified_attributes += "\n";
+
+	separator = "";
+	for(std::string provider_name : provider_names){
+		certified_by += separator + provider_name;
+		separator = " e ";
+	}
+
+	for(std::string NIPC : NIPC_set){
+		certified_attributes += "VATPT-" + NIPC + "\n";
 	}
 
 	return std::make_pair(certified_by, certified_attributes);
 }
 
 //returns string of format: "Entidade: X. Na qualidade de: Y. Subatributos: X1:Y1;(...) Xn:Yn. E na qualidade de (...)"
-static std::string format_reason_field_string(const ScapTransaction &transaction)
+static std::string format_reason_field_string(const ScapTransaction &transaction , const std::vector<ScapAttribute> &attributes)
 {
-	std::string reason = "Entidade: " + transaction.provider_name + ". Na qualidade de: ";
+	// Set of NIPC
+	std::string NIPC;
+
+	// Looks for the NIPC in the attributes, since the transaction's attributes don't have the NIPC
+	for(const ScapAttribute &attribute: attributes){
+		if(attribute.provider.name == transaction.provider_name){
+			NIPC = attribute.provider.nipc;
+			break;
+		}
+	}
+
+	std::string reason =  "Entidade: " + transaction.provider_name + ". ";
+	
+	reason += "VATPT-" + NIPC + ".";
+
+	reason += " Na qualidade de: ";
 
 	std::string separator = "";
+
+	ScapProvider current_provider;
 	for (const ScapAttribute &attribute: transaction.attributes) {
 		reason += separator + attribute.description + ". Subatributos: ";
-
 		for (auto it = attribute.sub_attributes.begin(); it != attribute.sub_attributes.end(); ++it) {
 			reason += it->description + ": " + it->value;
 			reason += (std::next(it) != attribute.sub_attributes.end()) ? "; " : ". "; //end sentence with "."
@@ -323,10 +353,10 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 
 		signature->setSignatureLevel(signature_info.level);
 	} else {
-		reason = format_reason_field_string(transaction);
+		reason = format_reason_field_string(transaction, attributes);
 		output = document.file_path;
 	}
-
+	
 	try {
 		sig_handler->signFiles(signature_info.location.c_str(), reason.c_str(), output.c_str(), false);
 	}
