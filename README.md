@@ -1,5 +1,23 @@
 # Middleware Oficial de Identificação Eletrónica em Portugal - Cartão de Cidadão, da Chave Móvel Digital e Sistema de Certificação de atributos profissionais
 
+> **⚠ IMPORTANTE: Suporte ao novo Cartão de Cidadão.**
+>
+> Para adaptar-se ao novo Cartão de Cidadão, que em breve será emitido, garantindo a padronização europeia estabelecida na diretiva UE 1157/2019, novas funcionalidades e mais segurança dos documentos de identificação, procedeu-se à atualização da aplicação desktop Autenticação.gov e do SDK do middleware do Cartão de Cidadão, que se disponibiliza aqui em modo "pre-release": https://github.com/amagovpt/autenticacao.gov/releases
+> 
+> As principais mudanças na versão desktop da aplicação Autenticação.gov são:
+> 
+> * Interface sem contacto (contactless) para assinar documentos e ler dados de identidade do Cidadão. Veja aqui no manual: [Manual de Utilização](https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html)
+> 
+> Em relação ao SDK do middleware do Cartão de Cidadão, as principais mudanças são:
+> 
+>* Para usar a interface com contato, basta atualizar o software, sem precisar de alterações significativas na integração com o SDK.
+
+>* Para usar a interface sem contacto (contactless), é necessário usar métodos novos do SDK, a [documentação](https://amagovpt.github.io/docs.autenticacao.gov/manual_sdk.html) deve ser consultada, bem como os [exemplos](https://github.com/amagovpt/docs.autenticacao.gov/tree/main/SDK_Examples).
+> 
+>Os certificados e chaves criptográficas do novo Cartão de Cidadão usam um algoritmo criptográfico de curvas elípticas (ECDSA) em vez do algoritmo RSA usado nas versões anteriores do Cartão de Cidadão. Esta mudança deve ser levada em conta nas aplicações que utilizam os métodos de criptografia do SDK ou que verificam dados assinados pelo Cartão de Cidadão.
+
+> Esta nova atualização do software garante a compatibilidade com o novo modelo do Cartão de Cidadão e com os modelos antigos do documento que ainda estejam válidos e em uso.
+
 ## Introdução
 ### Objectivos
 
