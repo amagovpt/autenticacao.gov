@@ -89,7 +89,7 @@ static int rsa_sign(int type, const unsigned char *m, unsigned int m_len,
 	{
 		MWLOG(LEV_ERROR, MOD_APL, L"SSLConnection->rsa_sign(): Exception caught in card.Sign. Aborting connection");
 		fprintf(stderr, "Exception in card.sign() %s:%lu\n",e.GetFile().c_str(), e.GetLine());
-		throw e;
+		return 0;
 	}
 
 
