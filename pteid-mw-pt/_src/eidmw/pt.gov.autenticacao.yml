@@ -99,6 +99,8 @@ modules:
       - type: archive
         url: https://curl.se/download/curl-8.6.0.tar.xz
         sha256: 3ccd55d91af9516539df80625f818c734dc6f2ecf9bada33c76765e99121db15
+      - type: patch
+        path: misc/flatpak-patches/curl-disable-engines.patch
   - name: openjpeg
     buildsystem: cmake-ninja
     cleanup:

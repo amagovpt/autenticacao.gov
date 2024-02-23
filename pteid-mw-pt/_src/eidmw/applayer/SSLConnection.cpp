@@ -235,6 +235,7 @@ static void init_openssl()
 	SSL_load_error_strings();
 
 	ERR_load_BIO_strings();
+
 }
 
 SSLConnection::SSLConnection(APL_Card *card)

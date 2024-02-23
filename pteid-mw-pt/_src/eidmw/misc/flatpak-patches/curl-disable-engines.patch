@@ -1,0 +1,22 @@
+--- a/lib/vtls/openssl.c
++++ b/lib/vtls/openssl.c
+@@ -86,7 +86,7 @@
+ #include <openssl/ocsp.h>
+ #endif
+ 
+-#if (OPENSSL_VERSION_NUMBER >= 0x0090700fL) && /* 0.9.7 or later */     \
++#if 0
+   !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_UI_CONSOLE)
+ #define USE_OPENSSL_ENGINE
+ #include <openssl/engine.h>
+@@ -1706,10 +1706,6 @@
+ #if (OPENSSL_VERSION_NUMBER >= 0x10100000L) &&  \
+   (!defined(LIBRESSL_VERSION_NUMBER) || LIBRESSL_VERSION_NUMBER >= 0x2070000fL)
+   const uint64_t flags =
+-#ifdef OPENSSL_INIT_ENGINE_ALL_BUILTIN
+-    /* not present in BoringSSL */
+-    OPENSSL_INIT_ENGINE_ALL_BUILTIN |
+-#endif
+ #ifdef CURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG
+     OPENSSL_INIT_NO_LOAD_CONFIG |
+ #else
