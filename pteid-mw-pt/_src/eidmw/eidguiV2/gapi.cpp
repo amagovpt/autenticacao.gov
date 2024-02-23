@@ -155,6 +155,35 @@ void GAPI::disableTelemetry()
     m_Settings.setTelemetryStatus(TelemetryStatus::RetryDisable); // trying to send denied telemetry action
     Concurrent::run(this, &GAPI::doUpdateTelemetry, TelemetryAction::Denied);
 }
+
+QString getOSName() {
+
+#ifdef __linux__
+    //Access the os-release file of the host OS
+    QFile file("/run/host/os-release");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return QSysInfo::prettyProductName();
+    }
+
+    QTextStream in(&file);
+    QString line;
+    while (!in.atEnd()) {
+        line = in.readLine();
+        if (line.startsWith("PRETTY_NAME=")) {
+            // Remove the initial part of the line and leading/trailing quotes
+            QString prettyName = line.mid(QString("PRETTY_NAME=").length()).trimmed();
+            if (prettyName.startsWith('"') && prettyName.endsWith('"')) {
+                prettyName = prettyName.mid(1, prettyName.length() - 2);
+            }
+            return prettyName;
+        }
+    }
+    return "Linux (non-conforming distro)";
+#else
+    return QSysInfo::prettyProductName();
+#endif
+}
+
 //
 // Telemetry is updated by making requests to pre-defined endpoints on a
 // remote server.
@@ -204,7 +233,7 @@ void GAPI::doUpdateTelemetry(TelemetryAction action)
         
         // Create user-agent header with the following structure
         // AutenticacaoGov/<version> (<OS Name> <OS version> <OS System Architecture>)
-        QString user_agent = QString(TEL_APP_USER_AGENT) + PTEID_PRODUCT_VERSION + " (" + QSysInfo::prettyProductName().toStdString().c_str() + " " + g_systemArchitecture + ")";
+        QString user_agent = QString(TEL_APP_USER_AGENT) + PTEID_PRODUCT_VERSION + " (" + getOSName().toStdString().c_str()+ " " + g_systemArchitecture + ")";
         curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent.toStdString().c_str());
         //Validate TLS server certificate using our certificate bundle
         std::string cacerts_file = utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
