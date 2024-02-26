@@ -11,10 +11,10 @@
 > Em relação ao SDK do middleware do Cartão de Cidadão, as principais mudanças são:
 > 
 >* Para usar a interface com contato, basta atualizar o software, sem precisar de alterações significativas na integração com o SDK.
-
+>
 >* Para usar a interface sem contacto (contactless), é necessário usar métodos novos do SDK, a [documentação](https://amagovpt.github.io/docs.autenticacao.gov/manual_sdk.html) deve ser consultada, bem como os [exemplos](https://github.com/amagovpt/docs.autenticacao.gov/tree/main/SDK_Examples).
 > 
->Os certificados e chaves criptográficas do novo Cartão de Cidadão usam um algoritmo criptográfico de curvas elípticas (ECDSA) em vez do algoritmo RSA usado nas versões anteriores do Cartão de Cidadão. Esta mudança deve ser levada em conta nas aplicações que utilizam os métodos de criptografia do SDK ou que verificam dados assinados pelo Cartão de Cidadão.
+>* Os certificados e chaves criptográficas do novo Cartão de Cidadão usam um algoritmo criptográfico de curvas elípticas (ECDSA) em vez do algoritmo RSA usado nas versões anteriores do Cartão de Cidadão. Esta mudança deve ser levada em conta nas aplicações que utilizam os métodos de criptografia do SDK ou que verificam dados assinados pelo Cartão de Cidadão.
 
 > Esta nova atualização do software garante a compatibilidade com o novo modelo do Cartão de Cidadão e com os modelos antigos do documento que ainda estejam válidos e em uso.
 
