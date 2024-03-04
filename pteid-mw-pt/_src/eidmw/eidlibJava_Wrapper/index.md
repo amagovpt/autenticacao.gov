@@ -87,6 +87,35 @@ String nrCC = eid.getDocumentNumber();
 (...)
 ```
 
+#### Use Contactless
+To use the card's contactless interface, it is necessary to obtain the card's interface and its type, using `getContactInterface()` and `getCardType()` respectively.
+
+```java
+//Gets the Card Contact Interface and type
+PTEID_CardType cardType = null;
+PTEID_CardContactInterface contactInterface = null;
+
+//Gets the Card Contact Interface and type
+if(readerContext.isCardPresent()){
+    contactInterface = readerContext.getCardContactInterface();
+    cardType = readerContext.getCardType();
+}
+
+```
+
+After obtaining both the contact interface and type, if the contact interface is contactless and the card supports contactless`(PTEID_CardType.PTEID_CARDTYPE_IAS5)`, then PACE Authentication is required to use the card through the contactless interface. PACE Authentication is done through the `initPaceAuthentication` function.
+
+```java
+//If the contactInterface is contactless and the card supports contactless then authenticate with PACE
+if (contactInterface == PTEID_CardContactInterface.PTEID_CARD_CONTACTLESS && cardType ==  PTEID_CardType.PTEID_CARDTYPE_IAS5){
+    Scanner in = new Scanner(System.in);
+    System.out.print("Insert the Card access number (CAN) for the card in use: ");
+    String can_str = in.nextLine();
+    eidCard.initPaceAuthentication(can_str, can_str.length(),  PTEID_CardPaceSecretType.PTEID_CARD_SECRET_CAN);
+}
+
+```
+
 #### Get citizen picture file
 
 
@@ -121,18 +150,25 @@ if (pin.verifyPin("", triesLeft, true)){
 ```
 
 #### How to read or write personal notes
-
+The SDK allows to write or read notes. Read doesn't require any permission, however when writing the authentication pin needs to be requested. **Only cards with CardType different than `PTEID_CardType.PTEID_CARDTYPE_IAS5`(CC2) can read and write notes.**
 
 ```java
+PTEID_CardType cardType = null;
+//Gets the Card type
+if(readerContext.isCardPresent()) {
+    cardType = readerContext.getCardType();
+}
+
 PTEID_EIDCard card = context.getEIDCard();
-(...)
-// read personal notes
-String pdata = card.getID().getPersoData();
-// write personal notes
-String notes = “a few notes”;
-PTEID_ByteArray pb = new PTEID_ByteArray(notes.getBytes(), notes.getBytes().length);
-boolean bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN));
-(...)
+
+if(cardType != PTEID_CardType.PTEID_CARDTYPE_IAS5){
+    // read personal notes
+    String pdata = card.getID().getPersoData();
+    // write personal notes
+    String notes = “a few notes”;
+    PTEID_ByteArray pb = new PTEID_ByteArray(notes.getBytes(), notes.getBytes().length);
+    boolean bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN));
+}
 ```
 
 
