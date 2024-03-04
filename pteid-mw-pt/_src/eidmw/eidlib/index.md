@@ -41,6 +41,39 @@ std::string nome = eid.getGivenName();
 std::string nrCC = eid.getDocumentNumber();
 (...)
 ```
+
+### Use Contactless
+
+To use the card's contactless interface, it is necessary to obtain the card's interface and its type, using `getContactInterface()` and `getCardType()` respectively.
+
+
+```cpp
+//Gets the Card Contact Interface and type
+PTEID_CardContactInterface contactInterface;
+PTEID_CardType cardType;
+
+//Gets the Card Contact Interface and type
+if(readerContext.isCardPresent()) {
+    contactInterface = readerContext.getCardContactInterface();
+    cardType = readerContext.getCardType();
+}
+
+```
+After obtaining both the contact interface and type, if the contact interface is contactless and the card supports contactless `(PTEID_CARDTYPE_IAS5)`, then PACE Authentication is required to use the card through the contactless interface. PACE Authentication is done through the `initPaceAuthentication` function.
+
+```cpp
+PTEID_EIDCard& card = readerContext.getEIDCard();
+
+//If the contactInterface is contactless and the card supports contactless then authenticate with PACE
+if (contactInterface == PTEID_CARD_CONTACTLESS && cardType == PTEID_CARDTYPE_IAS5){
+    std::string can_str;
+    std::cout << "Insert the Card access number (CAN) for the card in use: ";
+    std::cin >> can_str;
+    card.initPaceAuthentication(can_str.c_str(), can_str.size(),  PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+}
+```
+
+
 #### Get picture of a card holder
 
 ```cpp
@@ -232,3 +265,4 @@ config.setString("http://sha1timestamp.ws.symantec.com/sha1/timestamp");
 #### Verify a XAdES signature
 
 One can use the Java library [DSS-Xades](https://github.com/esig/dss/tree/master/dss-xades)  to validate a XAdES signature  .
+
