@@ -44,7 +44,7 @@ std::string nrCC = eid.getDocumentNumber();
 
 #### Use Contactless
 
-To use the card's contactless interface, it is necessary to obtain the card's interface and its type, using `getContactInterface()` and `getCardType()` respectively.
+To use the card's contactless interface, it is necessary to obtain the card's interface and its type, using `getCardContactInterface()` and `getCardType()` respectively.
 
 
 ```cpp
