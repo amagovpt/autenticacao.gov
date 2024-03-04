@@ -42,7 +42,7 @@ std::string nrCC = eid.getDocumentNumber();
 (...)
 ```
 
-### Use Contactless
+#### Use Contactless
 
 To use the card's contactless interface, it is necessary to obtain the card's interface and its type, using `getContactInterface()` and `getCardType()` respectively.
 
@@ -115,17 +115,25 @@ const char * resultXml = ccxml.getCCXML();
 ```
 
 #### How to read or write personal notes
-The SDK allows to write or read notes. Read doesn't require any permission, however when writing the authentication pin needs to be requested.
+The SDK allows to write or read notes. Read doesn't require any permission, however when writing the authentication pin needs to be requested. **Only cards with CardType different than `PTEID_CARDTYPE_IAS5`(CC2) can read and write notes.**
 ```cpp
+PTEID_CardType cardType;
+//Gets the Card type
+if(readerContext.isCardPresent()) {
+    cardType = readerContext.getCardType();
+}
+
 PTEID_EIDCard &card  = readerContext.getEIDCard();
-std::string notes("a few notes");
-PTEID_ByteArray personalNotes(notes.c_str(), notes.size() + 1);
-bool bOk;
-(...)
-// read
-char *my_notes = card.readPersonalNotes(); 
-// write
-bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN)); 
+
+if (cardType != PTEID_CARDTYPE_IAS5){
+	std::string notes("a few notes");
+	PTEID_ByteArray personalNotes(notes.c_str(), notes.size() + 1);
+	bool bOk;
+	// read
+	char *my_notes = card.readPersonalNotes(); 
+	// write
+	bOk = card.writePersonalNotes(personalNotes, card.getPins().getPinByPinRef(PTEID_Pin.AUTH_PIN)); 
+}
 ```
 
 
