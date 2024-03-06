@@ -1528,7 +1528,11 @@ Load language error. Please reinstall the application"
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
-        controler.autoUpdatesCerts()
+        
+        // Only update certificates on Windows and MacOS
+        if (Qt.platform.os !== "linux")
+            controler.autoUpdatesCerts()
+        
         controler.autoUpdatesNews()
         if (controler.getStartAutoupdateValue()) {
             controler.autoUpdateApp()
@@ -1682,7 +1686,11 @@ Load language error. Please reinstall the application"
 
     function reloadNotificationCenter() {
         mainFormID.propertyNotificationMenu.clearModels()
-        controler.autoUpdatesCerts()
+
+        // Only update certificates on Windows and MacOS
+        if (Qt.platform.os !== "linux")
+            controler.autoUpdatesCerts()
+        
         if (controler.getStartAutoupdateValue()) {
             controler.autoUpdateApp()
         }

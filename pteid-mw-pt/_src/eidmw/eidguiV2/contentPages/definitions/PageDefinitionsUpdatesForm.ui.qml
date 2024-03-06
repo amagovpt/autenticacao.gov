@@ -461,7 +461,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             anchors.topMargin:  3*Constants.SIZE_ROW_V_SPACE
             anchors.top : rectUpdateApp.bottom
-
+            visible: Qt.platform.os !== "linux"
             Text {
                 property var keyNavBack: (buttonSearch.visible ? buttonSearch : 
                             (buttonCancelUpdate.visible ? buttonCancelUpdate : releaseNoteScrollViewText))
