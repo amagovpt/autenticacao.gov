@@ -34,6 +34,9 @@ change_dylib_dep libpteidlibj.2.0.0.dylib  "libCMDServices.1.dylib libpteidcommo
 change_dylib_dep libpteidapplayer.2.0.0.dylib "libcurl.4.dylib libpteidcommon.2.dylib libpteidcardlayer.2.dylib \
                 libzip.5.dylib libxml-security-c.20.dylib libpng16.16.dylib libopenjp2.7.dylib libxerces-c-3.2.dylib libcrypto.3.dylib libssl.3.dylib"
 
+#Fix library ID of pteidlib
+install_name_tool -id /usr/local/lib/libpteidlib.2.dylib libpteidlib.2.0.0.dylib
+
 
 ls *dylib| while read name
 do 
