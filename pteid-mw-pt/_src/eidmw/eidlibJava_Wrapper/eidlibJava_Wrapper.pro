@@ -73,8 +73,8 @@ INCLUDEPATH += ../common
 INCLUDEPATH += ../cardlayer
 INCLUDEPATH += ../eidlib
 INCLUDEPATH += ../CMD/services
-INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include
-INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-amd64/include/linux
+INCLUDEPATH += /usr/lib/jvm/java-11-openjdk/include
+INCLUDEPATH += /usr/lib/jvm/java-11-openjdk/include/linux
 
 INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 

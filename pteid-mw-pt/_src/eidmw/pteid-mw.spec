@@ -54,7 +54,7 @@ BuildRequires:	-rpmlint
 BuildRequires:  libxml-security-c-devel
 %endif
 
-%if 0%{?fedora} || 0%{?centos_ver}
+%if 0%{?fedora} || 0%{?rhel}
 BuildRequires:  java-11-openjdk-devel
 Requires:       poppler-qt5
 Requires:       pcsc-lite-ccid
@@ -121,8 +121,8 @@ qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-11-openjd
 %endif
 %endif
 
-%if 0%{?fedora} || 0%{?centos_ver}
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-11-openjdk/include/ /usr/lib/jvm/java-11-openjdk/include/linux/" pteid-mw.pro
+%if 0%{?fedora} || 0%{?rhel}
+qmake-qt5 "PKG_NAME=pteid PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-11-openjdk/include/ /usr/lib/jvm/java-11-openjdk/include/linux/" pteid-mw.pro
 %endif
 
 make %{?jobs:-j%jobs}
@@ -131,38 +131,22 @@ make %{?jobs:-j%jobs}
 
 #install libs
 mkdir -p $RPM_BUILD_ROOT/usr/local/lib/
-install -m 755 -p lib/libpteidcommon.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidcommon.so.2.0.0
-install -m 755 -p lib/libpteiddialogsQT.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteiddialogsQT.so.2.0.0
-install -m 755 -p lib/libpteidcardlayer.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidcardlayer.so.2.0.0
-install -m 755 -p lib/libpteidpkcs11.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidpkcs11.so.2.0.0
-install -m 755 -p lib/libpteidapplayer.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidapplayer.so.2.0.0
-install -m 755 -p lib/libpteidlib.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidlib.so.2.0.0
-install -m 755 -p lib/libpteidlibj.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidlibj.so.2.0.0
-install -m 755 -p lib/libCMDServices.so.1.0.0 $RPM_BUILD_ROOT/usr/local/lib/libCMDServices.so.1.0.0
+mkdir -p $RPM_BUILD_ROOT/usr/share/mime/packages
+ 
+mkdir -p $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/mimetypes/
+ln -s -f ../../../../pixmaps/pteid-signature.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
+ln -s -f ../../../../pixmaps/pteid-signature.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
 
-#install header files
-mkdir -p $RPM_BUILD_ROOT/usr/local/include
-install -m 644 eidlib/eidlib.h $RPM_BUILD_ROOT/usr/local/include/
-install -m 644 eidlib/eidlibcompat.h $RPM_BUILD_ROOT/usr/local/include/
-install -m 644 eidlib/eidlibdefines.h $RPM_BUILD_ROOT/usr/local/include/
-install -m 644 eidlib/eidlibException.h $RPM_BUILD_ROOT/usr/local/include/
-install -m 644 common/eidErrors.h $RPM_BUILD_ROOT/usr/local/include/
-mkdir -p $RPM_BUILD_ROOT/usr/local/share/certs/
-install -m 755 -p misc/certs/*.der $RPM_BUILD_ROOT/usr/local/share/certs/
-install -m 755 -p misc/certs/*.pem $RPM_BUILD_ROOT/usr/local/share/certs/
+%if 0%{?fedora} || 0%{?rhel}
+mkdir -p $RPM_BUILD_ROOT/etc/ld.so.conf.d/
+echo "/usr/local/lib" > $RPM_BUILD_ROOT/etc/ld.so.conf.d/pteid.conf
+%endif
 
-mkdir -p $RPM_BUILD_ROOT/usr/local/share/pteid-mw/www/
-install -m 755 -p misc/web/*.html $RPM_BUILD_ROOT/usr/local/share/pteid-mw/www/
+#mkdir -p $RPM_BUILD_ROOT/usr/share/mime/packages
+%make_install
 
-mkdir -p $RPM_BUILD_ROOT/usr/local/lib/pteid_jni/
-install -m 755 -p jar/pteidlibj.jar $RPM_BUILD_ROOT/usr/local/lib/pteid_jni/
-
-mkdir -p $RPM_BUILD_ROOT/usr/local/bin/
-install -m 755 eidguiV2/eidguiV2 $RPM_BUILD_ROOT/usr/local/bin/eidguiV2
-
-install -m 755 -p bin/pteiddialogsQTsrv $RPM_BUILD_ROOT/usr/local/bin/pteiddialogsQTsrv
-install -m 644 -p eidguiV2/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
-install -m 644 -p eidguiV2/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
+mkdir -p $RPM_BUILD_ROOT%{_jnidir}/
+install -m 755 -p jar/pteidlibj.jar $RPM_BUILD_ROOT%{_jnidir}/
 
 mkdir -p $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
 install -m 644 -p eidguiV2/fonts/myriad/MyriadPro-Regular.otf $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
@@ -178,36 +162,7 @@ install -m 644 -p %{SOURCE2} $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/ap
  %suse_update_desktop_file -i pteid-mw-gui Office Presentation
   export NO_BRP_CHECK_RPATH=true
 %endif
-%clean
-rm -rf $RPM_BUILD_ROOT
 
-%post
-ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so
-ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so.2
-ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so.2.0
-ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so
-ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so.2
-ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so.2.0
-ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so
-ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so.2
-ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so.2.0
-ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so
-ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so.2
-ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so.2.0
-ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so
-ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so.2
-ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so.2.0
-ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so
-ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2
-ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2.0
-ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so
-ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so.1
-ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so.1.0
-
-%if 0%{?fedora} || 0%{?centos_version}
-# BLURP: Add usr local to ldconf
-
-echo "/usr/local/lib" > /etc/ld.so.conf.d/pteid.conf
 # MDV still uses old pcscd services
 if [ -x /etc/init.d/pcscd ]
 then
@@ -216,7 +171,6 @@ fi
 
 %if 0%{?fedora} >= 16
 systemctl restart pcscd.service
-%endif
 %endif
 
 # suse 11.4 pcscd service seems broken
@@ -234,7 +188,7 @@ if [ "$1" = "0" ]; then
 rm -rf /usr/local/lib/libpteidcommon.so
 rm -rf /usr/local/lib/libpteidcommon.so.2
 rm -rf /usr/local/lib/libpteidcommon.so.2.0
-rm -rf /usr/local/lib/libpteiddialogsQT.so              
+rm -rf /usr/local/lib/libpteiddialogsQT.so
 rm -rf /usr/local/lib/libpteiddialogsQT.so.2
 rm -rf /usr/local/lib/libpteiddialogsQT.so.2.2
 rm -rf /usr/local/lib/libpteidcardlayer.so
@@ -274,7 +228,7 @@ for d in $users; do
   fi
 done
 
-%if 0%{?fedora} || 0%{?centos_version}
+%if 0%{?fedora} || 0%{?rhel}
 rm -rf /etc/ld.so.conf.d/pteid.conf
 %endif
 
