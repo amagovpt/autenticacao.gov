@@ -62,7 +62,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
    As dependências para a compilação do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 22.04), são as seguintes:
 
    ```bash
-   sudo apt install build-essential libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-11-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-openssl-dev libcjson-dev
+   sudo apt install build-essential libpcsclite-dev libpoppler-qt5-dev libzip-dev libopenjp2-7-dev libpng-dev openjdk-11-jdk qtbase5-dev qt5-qmake qtbase5-private-dev qtdeclarative5-dev qtquickcontrols2-5-dev qml-module-qtquick-controls2 libssl-dev libxerces-c-dev libxml-security-c-dev swig libcurl4-openssl-dev libcjson-dev libeac-dev
    ```
 
    As dependências para execução do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 22.04), são as seguintes:
