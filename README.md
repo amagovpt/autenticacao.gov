@@ -109,6 +109,7 @@ Será assim necessário compilar as seguintes bibliotecas (versões utilizadas p
 - openjpeg 2.4 - https://www.openjpeg.org/
 - libxml-security-c 2.0.4 - http://archive.apache.org/dist/santuario/c-library/xml-security-c-2.0.4.tar.gz
 - cJSON 1.7.15 - https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.15.zip 
+- OpenPACE 1.1.3 - https://github.com/frankmorgner/openpace/archive/refs/tags/1.1.3.zip
 
 Para compilar a aplicação GUI, projeto disponível em eidmw/eidguiV2, é necessária uma dependência adicional:
 
