@@ -513,6 +513,10 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Permission denied error in %s", caller_function);
         emit signalPdfSignFail(SignFilePermissionFailed, index);
     }
+    else if (errorCode == EIDMW_PDF_INVALID_ERROR) {
+        PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "PDF invalid error in %s", caller_function);
+        emit signalPdfSignFail(PDFFileInvalid, index);
+    }
     else if (errorCode == EIDMW_PDF_UNSUPPORTED_ERROR) {
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "PDF unsupported error in %s", caller_function);
         emit signalPdfSignFail(PDFFileUnsupported, index);

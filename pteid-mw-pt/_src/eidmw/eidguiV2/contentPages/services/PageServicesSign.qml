@@ -144,6 +144,9 @@ PageServicesSignForm {
             case GAPI.SignFilePermissionFailed:
                 generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
                 break;
+            case GAPI.PDFFileInvalid:
+                generic_text = qsTranslate("PageServicesSign", "STR_SIGN_PDF_FILE_UNSUPPORTED")
+                break;
             case GAPI.PDFFileUnsupported:
                 generic_text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
                 break;
@@ -174,6 +177,8 @@ PageServicesSignForm {
             var generic_text
             if (error_code == GAPI.SignFilePermissionFailed) {
                 generic_text = qsTranslate("PageServicesSign","STR_SIGN_FILE_PERMISSION_FAIL")
+            } else if (error_code == GAPI.PDFFileInvalid) {
+                generic_text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
             } else if (error_code == GAPI.PDFFileUnsupported) {
                 generic_text = qsTranslate("PageServicesSign","STR_SIGN_PDF_FILE_UNSUPPORTED")
             } else {

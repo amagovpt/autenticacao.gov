@@ -249,7 +249,7 @@ public:
 
     enum RemoteAddressError { AddressConnectionError, AddressServerError, AddressConnectionTimeout, AddressSmartcardError, AddressServerCertificateError, CardCertificateError, AddressInvalidStateError, AddressUnknownError };
 
-	enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignMessageLtvFailed, SignFilePermissionFailed, PDFFileUnsupported, TooLongFilename, TooManyOpenFiles, FileNoSpace, FileReadOnly};
+	enum SignMessage { SignMessageOK, SignMessageTimestampFailed, SignMessageLtvFailed, SignFilePermissionFailed, PDFFileInvalid, PDFFileUnsupported, TooLongFilename, TooManyOpenFiles, FileNoSpace, FileReadOnly};
 
     enum PrintMessage {NoPrinterAvailable};
 
