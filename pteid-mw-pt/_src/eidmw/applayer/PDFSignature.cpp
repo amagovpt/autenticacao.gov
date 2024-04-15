@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2012-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012-2024 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2013 Vasco Dias - <vasco.dias@caixamagica.pt>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
@@ -746,8 +746,6 @@ namespace eIDMW
 			doc->addSCAPAttributes(m_attributeSupplier, m_attributeName);
 		}
 
-		m_incrementalMode = doc->isSigned() || doc->isReaderEnabled();
-
 		if (this->my_custom_image.img_data != NULL)
 			doc->addCustomSignatureImage(my_custom_image.img_data, my_custom_image.img_length);
 
@@ -759,14 +757,14 @@ namespace eIDMW
 				doc_nr = doc_nr.substr(2, nic_length);
 			}
 			
-			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, doc_nr.c_str(),
+			doc->prepareSignature(&sig_location, m_citizen_fullname, doc_nr.c_str(),
 	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate, m_small_signature);
 		} else {
-			doc->prepareSignature(m_incrementalMode, &sig_location, m_citizen_fullname, NULL,
+			doc->prepareSignature(&sig_location, m_citizen_fullname, NULL,
 	                                 location, reason, m_page, m_sector, isLangPT, isCC(), showDate, m_small_signature);
 		}
 
-		unsigned long len = doc->getSigByteArray(&to_sign, m_incrementalMode);
+		unsigned long len = doc->getSigByteArray(&to_sign);
 
 		if (len == 0) {
 			MWLOG(LEV_ERROR, MOD_APL, "%s: getSigByteArray failed! Invalid signature_offset.",  __FUNCTION__);
@@ -936,8 +934,7 @@ namespace eIDMW
     }
 
     void PDFSignature::save() {
-        PDFWriteMode pdfWriteMode =
-            m_incrementalMode ? writeForceIncremental : writeForceRewrite;
+        PDFWriteMode pdfWriteMode = writeForceIncremental;
         // Create and save pdf to temp file to allow overwrite of original file
 		std::string utf8_outname(m_outputName->getCString());
 #ifdef WIN32

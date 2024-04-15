@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2012, 2014, 2016-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012, 2014, 2016-2024 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2018 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
  *
  * Licensed under the EUPL V.1.2
@@ -755,9 +755,9 @@ Ref PDFDoc::getPageRef(int page)
 
 }
 
-void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
-		const char * name, const char *civil_number, const char *location, const char *reason, int page, int sector,
-		bool isPTLanguage, bool isCCSignature, bool showDate, bool small_signature)
+void PDFDoc::prepareSignature(PDFRectangle *rect, const char * name, const char *civil_number, 
+                              const char *location, const char *reason, int page, int sector,
+   		                      bool isPTLanguage, bool isCCSignature, bool showDate, bool small_signature)
 {
 	const char needle[] = "/Type /Sig";
 	// Turn Signature mode On
@@ -766,13 +766,7 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 	long found = 0;
 	char *base_search = NULL;
 
-	getCatalog()->setIncrementalSignature(incremental_mode);
-
-  //Remove signature dictionaries with empty /Contents that break our byterange generation algorithm
-  if (!incremental_mode) {
-
-    cleanSignatureDicts();
-  }
+	getCatalog()->setIncrementalSignature(true);
 
     SignatureSignerInfo signer_info { name, civil_number, m_attribute_supplier, m_attribute_name };
 	if (isLinearized())
@@ -792,15 +786,8 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
 	MemOutStream mem_stream(this->fileSize + 20000); 
 	OutStream * str = &mem_stream;
 
-	if(incremental_mode)
-	{
-		//We're adding additional signature so it has to be an incremental update
-		saveIncrementalUpdate(str);
-	}
-	else
-	{
-		saveAs(str, writeForceRewrite);
-	}
+	//We're adding additional signature so it has to be an incremental update
+	saveIncrementalUpdate(str);
 
 	long haystack = (long)mem_stream.getData();
 
@@ -826,16 +813,13 @@ void PDFDoc::prepareSignature(bool incremental_mode, PDFRectangle *rect,
  * i.e. everything except the placeholder hex string <0000...>
    The return value is the size of the array
 */
-unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array, bool incremental_mode)
+unsigned long PDFDoc::getSigByteArray(unsigned char **byte_array)
 {
 	MemOutStream mem_stream(this->fileSize+ESTIMATED_LEN +190000);
 	unsigned int i = 0, ret_len = 0;
 	OutStream * out_str = &mem_stream;
 
-	if (incremental_mode)
-	    saveIncrementalUpdate(out_str);
-	else
-	    saveAs(out_str, writeForceRewrite);
+	saveIncrementalUpdate(out_str);
 
   if (m_sig_offset >= mem_stream.size()) {
     error(errInternal, -1, "getSigByteArray: m_sig_offset greater than current doc size: %d >= %d", m_sig_offset, mem_stream.size());

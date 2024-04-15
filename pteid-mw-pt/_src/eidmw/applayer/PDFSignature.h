@@ -172,7 +172,6 @@ namespace eIDMW
         bool m_signStarted;
         bool m_isExternalCertificate;
         bool m_isCC;
-        bool m_incrementalMode;
 
         /* Fields for SCAP signature */
         const char * m_attributeSupplier;
