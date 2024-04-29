@@ -965,6 +965,7 @@ Load language error. Please reinstall the application"
             }
         }
         Component.onCompleted: {
+            mainFormID.propertyImageLogoBottom.forceActiveFocus()
             if(controler.getNotShowHelpStartUp()){
                 mainFormID.state = Constants.MenuState.HOME;
             }else{
@@ -1030,6 +1031,18 @@ Load language error. Please reinstall the application"
             }
         }
     }
+
+    Connections {
+        target: mainFormID.propertyNotificationMenu
+        onPopupClosed: {
+            if (mainFormID.propertyMainMenuListView.currentIndex !== -1) {
+                mainFormID.propertyMainMenuListView.forceActiveFocus()
+            } else if (mainFormID.propertyMainMenuBottomListView.currentIndex !== -1) {
+                mainFormID.propertyMainMenuBottomListView.forceActiveFocus()
+            }
+        }
+    }
+
     Component {
         id: mainMenuDelegate
         Item {
@@ -1312,10 +1325,7 @@ Load language error. Please reinstall the application"
                             mainFormID.propertyMainMenuBottomListView.count - 1){
                         // Move to PageLoader or Main Menu
                         if(mainFormID.propertyPageLoader.source == "qrc:/contentPages/home/PageHome.qml"){
-                            var temp = mainFormID.propertyPageLoader.source
-                            var url = "contentPages/home/PageHome.qml"
-                            mainFormID.propertyPageLoader.source = ""
-                            mainFormID.propertyPageLoader.source = url
+                            mainFormID.propertyPageLoader.item.propertyMainItem.forceActiveFocus()
                         } else {
                             mainFormID.propertyImageLogoBottom.forceActiveFocus()
                         }

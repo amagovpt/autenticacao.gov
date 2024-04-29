@@ -26,6 +26,7 @@ Item {
     property bool reload: false
     property bool hasMandatory: hasMandatoryItem(model_recent)
     property alias popupTitle: title
+	signal popupClosed
 
     Popup {
         id: notificationMenuPopup
@@ -34,6 +35,7 @@ Item {
         modal: true
         anchors.centerIn: parent
         closePolicy: hasMandatory ? Popup.NoAutoClose : Popup.CloseOnEscape
+		onClosed: menuContainer.popupClosed()
 
         ListModel {
             id: model_recent
