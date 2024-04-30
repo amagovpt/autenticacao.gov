@@ -281,6 +281,7 @@ CK_RV C_FindObjectsInit(CK_SESSION_HANDLE hSession,   /* the session's handle */
          {
          log_trace( WHERE, "E: error allocating memory");
          ret = CKR_HOST_MEMORY;
+         goto cleanup;
          }
       }
 
