@@ -1,0 +1,14 @@
+pteid-poppler/poppler/*
+pteid-poppler/fofi/*
+pteid-poppler/goo/*
+
+applayer/cjson.*
+CMD/services/soapC.*
+CMD/services/soapH.*
+CMD/services/soap.*
+CMD/services/stdsoap.h
+CMD/services/stdsoap.cpp
+CMD/services/stdsoap2.h
+CMD/services/stdsoap2.cpp
+CMD/services/soapBasicHttpBinding_USCORECCMovelSignatureProxy.h
+CMD/services/soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp
