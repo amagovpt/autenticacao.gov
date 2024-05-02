@@ -51,7 +51,7 @@
 
 #define EIDMW_CAL_API
 
-#define EIDMW_APL_API __attribute__ ((visibility ("default")))
+#define EIDMW_APL_API __attribute__((visibility("default")))
 
 #endif
 

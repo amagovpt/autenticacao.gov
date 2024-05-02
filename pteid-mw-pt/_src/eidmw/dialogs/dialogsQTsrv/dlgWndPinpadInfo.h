@@ -32,18 +32,16 @@
 
 using namespace eIDMW;
 
-class dlgWndPinpadInfo : public QWidget
-{
+class dlgWndPinpadInfo : public QWidget {
 	Q_OBJECT
 
 public:
-	dlgWndPinpadInfo( unsigned long ulHandle,
-		DlgPinOperation operation, const QString & Reader,
-		const QString &PINName, const QString & Message, QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0 );
+	dlgWndPinpadInfo(unsigned long ulHandle, DlgPinOperation operation, const QString &Reader, const QString &PINName,
+					 const QString &Message, QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0);
 	~dlgWndPinpadInfo();
 
 protected:
-	void closeEvent( QCloseEvent *event );
+	void closeEvent(QCloseEvent *event);
 
 private:
 	Ui::dlgWndPinpadInfo ui;

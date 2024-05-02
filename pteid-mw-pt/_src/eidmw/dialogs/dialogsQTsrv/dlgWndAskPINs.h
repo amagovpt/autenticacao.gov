@@ -38,22 +38,22 @@ using namespace eIDMW;
 #define INPUTFIELD_NEW 1
 #define INPUTFIELD_CONFIRM 2
 
-class dlgWndAskPINs : public dlgWndBase
-{
+class dlgWndAskPINs : public dlgWndBase {
 	Q_OBJECT
 
 public:
-	dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0 );
+	dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString &Header, QString &PINName, bool UseKeypad,
+				  QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0);
 	~dlgWndAskPINs();
 
-	std::wstring getPIN1(){ return QString(ui.txtOldPIN->text()).toStdWString(); };
-	std::wstring getPIN2(){ return QString(ui.txtNewPIN1->text()).toStdWString(); };
+	std::wstring getPIN1() { return QString(ui.txtOldPIN->text()).toStdWString(); };
+	std::wstring getPIN2() { return QString(ui.txtNewPIN1->text()).toStdWString(); };
 
 private:
 	Ui::dlgWndAskPINsClass ui;
 	bool OldPIN_OK, NewPIN1_OK, NewPIN2_OK;
-	bool TestPINs(){ return ( OldPIN_OK && NewPIN1_OK && NewPIN2_OK ); }
-	void updateColors( QLineEdit* lineEdit, bool bOk );
+	bool TestPINs() { return (OldPIN_OK && NewPIN1_OK && NewPIN2_OK); }
+	void updateColors(QLineEdit *lineEdit, bool bOk);
 	unsigned int m_ulPin1MinLen;
 	unsigned int m_ulPin2MinLen;
 	unsigned int m_ulPin1MaxLen;
@@ -65,9 +65,9 @@ private:
 	QRegExpValidator *m_Pin2Validator;
 
 private slots:
-	void on_txtOldPIN_textChanged( const QString & );
-	void on_txtNewPIN1_textChanged( const QString & );
-	void on_txtNewPIN2_textChanged( const QString & );
+	void on_txtOldPIN_textChanged(const QString &);
+	void on_txtNewPIN1_textChanged(const QString &);
+	void on_txtNewPIN2_textChanged(const QString &);
 	void FinalCheck();
 };
 

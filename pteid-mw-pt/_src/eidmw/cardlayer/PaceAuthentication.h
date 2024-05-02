@@ -6,28 +6,26 @@
 
 #include <memory>
 
-namespace eIDMW
-{
+namespace eIDMW {
 class PaceAuthenticationImpl;
-class PaceAuthentication
-{
+class PaceAuthentication {
 public:
-    PaceAuthentication(CContext *poContext);
-    ~PaceAuthentication();
+	PaceAuthentication(CContext *poContext);
+	~PaceAuthentication();
 
-    void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
-	 bool isInitialized();
+	void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
+	bool isInitialized();
 
-    CByteArray sendAPDU(const CByteArray& plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
-    CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void * param_structure);
-    void setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
+	CByteArray sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
+	CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
+	void setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
 private:
-    std::unique_ptr<PaceAuthenticationImpl> m_impl;
+	std::unique_ptr<PaceAuthenticationImpl> m_impl;
 
-	 bool initialized;
+	bool initialized;
 };
 
-}
+} // namespace eIDMW
 
 #endif // PACEAUTHENTICATION_H

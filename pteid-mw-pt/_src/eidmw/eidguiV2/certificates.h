@@ -24,7 +24,7 @@ typedef const void *PCX509CERT;
 #define PCCERT_CONTEXT PCX509CERT
 #endif
 
-//MW libraries
+// MW libraries
 #include "eidlib.h"
 #include "eidlibException.h"
 
@@ -32,32 +32,31 @@ typedef const void *PCX509CERT;
 
 using namespace eIDMW;
 /*
-    CERTIFICATES - Certificates Interface
+	CERTIFICATES - Certificates Interface
 */
-typedef QMap<QString,QVector<PCCERT_CONTEXT> >	tCertPerReader;
+typedef QMap<QString, QVector<PCCERT_CONTEXT>> tCertPerReader;
 
-class CERTIFICATES
-{
+class CERTIFICATES {
 public:
-    CERTIFICATES();
-    static bool ImportCertificates( const char* readerName );
-    static bool ImportCertificates( QString const& readerName );
-    static bool RemoveCertificates( const char* readerName );
-    static bool RemoveCertificates( QString const& readerName );
-    static tCertPerReader			m_certContexts;			//!< certificate contexts of each reader
+	CERTIFICATES();
+	static bool ImportCertificates(const char *readerName);
+	static bool ImportCertificates(const QString &readerName);
+	static bool RemoveCertificates(const char *readerName);
+	static bool RemoveCertificates(const QString &readerName);
+	static tCertPerReader m_certContexts; //!< certificate contexts of each reader
 
-    static bool IsNewRootCACertInstalled();
-    static bool InstallNewRootCa();
+	static bool IsNewRootCACertInstalled();
+	static bool InstallNewRootCa();
 
 private:
-	
-	static bool StoreUserCerts (PTEID_EIDCard& Card, PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, PTEID_Certificate& cert, const char* readerName);
-    static bool StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, const char* readerName);
+	static bool StoreUserCerts(PTEID_EIDCard &Card, PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits,
+							   PTEID_Certificate &cert, const char *readerName);
+	static bool StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, const char *readerName);
 #ifdef WIN32
 	static bool ProviderNameCorrect(PCCERT_CONTEXT pCertContext, bool is_ecdsa);
-    static PCCERT_CONTEXT getNewRootCaCertContextFromEidstore();
-    static void RemoveOlderUserCerts(HCERTSTORE hMyStore, PCCERT_CONTEXT pTargetCert);
+	static PCCERT_CONTEXT getNewRootCaCertContextFromEidstore();
+	static void RemoveOlderUserCerts(HCERTSTORE hMyStore, PCCERT_CONTEXT pTargetCert);
 #endif
-    static void forgetCertificates( QString const& readerName );
+	static void forgetCertificates(const QString &readerName);
 };
 #endif // CERTIFICATES_H

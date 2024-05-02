@@ -21,68 +21,51 @@
 #include "pteidControls.h"
 #include "Log.h"
 
+PteidControls::ControlData::~ControlData() {
+	if (_pAccPropServices) {
+		// Clear the custom accessible name set earlier on the control.
+		MSAAPROPID props[] = {Name_Property_GUID};
 
-PteidControls::ControlData::~ControlData()
-{
-    if (_pAccPropServices)
-    {
-        // Clear the custom accessible name set earlier on the control.
-        MSAAPROPID props[] = { Name_Property_GUID };
+		_pAccPropServices->ClearHwndProps(this->hMainWnd, OBJID_CLIENT, CHILDID_SELF, props, ARRAYSIZE(props));
 
-        _pAccPropServices->ClearHwndProps(
-            this->hMainWnd,
-            OBJID_CLIENT,
-            CHILDID_SELF,
-            props,
-            ARRAYSIZE(props));
-
-        _pAccPropServices->Release();
-        _pAccPropServices = NULL;
-    }
+		_pAccPropServices->Release();
+		_pAccPropServices = NULL;
+	}
 }
 
 // Adapted from https://docs.microsoft.com/en-us/accessibility-tools-docs/items/Win32/Control_Name
-void PteidControls::ControlData::setAccessibleName(LPCTSTR accessibleName)
-{
-	
-    if (!_pAccPropServices)
-    {
+void PteidControls::ControlData::setAccessibleName(LPCTSTR accessibleName) {
+
+	if (!_pAccPropServices) {
 	retry:
 		bool first_retry = true;
-        HRESULT hr = CoCreateInstance(
-            CLSID_AccPropServices,
-            nullptr,
-            CLSCTX_INPROC,
-            IID_PPV_ARGS(&_pAccPropServices));
+		HRESULT hr = CoCreateInstance(CLSID_AccPropServices, nullptr, CLSCTX_INPROC, IID_PPV_ARGS(&_pAccPropServices));
 
-        if (!SUCCEEDED(hr))
-        {
-            MWLOG(LEV_WARN, MOD_DLG, L"  --> PteidControls::ControlData::setAccessibleName: Could not init _pAccPropServices. Error code: %08x", hr);
+		if (!SUCCEEDED(hr)) {
+			MWLOG(LEV_WARN, MOD_DLG,
+				  L"  --> PteidControls::ControlData::setAccessibleName: Could not init _pAccPropServices. Error code: "
+				  L"%08x",
+				  hr);
 			if (hr == CO_E_NOTINITIALIZED && first_retry) {
-				//This should be the correct flag for GUI threads
+				// This should be the correct flag for GUI threads
 				CoInitializeEx(NULL, COINIT_MULTITHREADED);
 				first_retry = false;
 				goto retry;
 			}
-            _pAccPropServices = NULL;
-            return;
-        }
-
-    }
+			_pAccPropServices = NULL;
+			return;
+		}
+	}
 
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  --> PteidControls::ControlData::setAccessibleName: A11y services instance created.");
 
-    // Now set the name on the control. This gets exposed through UIA 
-    // as the element's Name property.
-    HRESULT hr = _pAccPropServices->SetHwndPropStr(
-        this->hMainWnd,
-        OBJID_CLIENT,
-        CHILDID_SELF,
-        Name_Property_GUID,
-        accessibleName);
+	// Now set the name on the control. This gets exposed through UIA
+	// as the element's Name property.
+	HRESULT hr = _pAccPropServices->SetHwndPropStr(this->hMainWnd, OBJID_CLIENT, CHILDID_SELF, Name_Property_GUID,
+												   accessibleName);
 
-    if (!SUCCEEDED(hr))
-    {
-        MWLOG(LEV_WARN, MOD_DLG, L"  --> PteidControls::ControlData::setAccessibleName: Could not set Name_Property_GUID.");
-    }
+	if (!SUCCEEDED(hr)) {
+		MWLOG(LEV_WARN, MOD_DLG,
+			  L"  --> PteidControls::ControlData::setAccessibleName: Could not set Name_Property_GUID.");
+	}
 }

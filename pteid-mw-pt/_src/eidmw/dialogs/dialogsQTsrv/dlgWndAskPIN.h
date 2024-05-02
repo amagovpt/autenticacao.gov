@@ -32,18 +32,18 @@
 
 using namespace eIDMW;
 
-class dlgWndAskPIN : public dlgWndBase
-{
+class dlgWndAskPIN : public dlgWndBase {
 	Q_OBJECT
 
 public:
-	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent = 0, Type_WndGeometry *wndGeometry = 0 );
+	dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &Header, QString &PINName, bool UseKeypad,
+				 QWidget *parent = 0, Type_WndGeometry *wndGeometry = 0);
 	~dlgWndAskPIN();
 
 	std::wstring getPIN();
 
 private slots:
-	void on_txtPIN_textChanged( const QString & text );
+	void on_txtPIN_textChanged(const QString &text);
 
 private:
 	unsigned int m_ulPinMinLen;

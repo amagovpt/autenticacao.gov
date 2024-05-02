@@ -30,14 +30,12 @@
 
 namespace eIDMW {
 
-static size_t curl_write_data(char *data, size_t size, size_t nmemb, void *read_string)
-{
-	((std::string*)read_string)->append((char*)data, size * nmemb);
+static size_t curl_write_data(char *data, size_t size, size_t nmemb, void *read_string) {
+	((std::string *)read_string)->append((char *)data, size * nmemb);
 	return size * nmemb;
 }
 
-static std::string parse_date_header(const std::string &headers)
-{
+static std::string parse_date_header(const std::string &headers) {
 	const std::string to_find = "Date: ";
 	std::istringstream date_header_stream(headers);
 
@@ -51,8 +49,7 @@ static std::string parse_date_header(const std::string &headers)
 	return "";
 }
 
-static CURLU *set_url(ScapSettings & settings, const std::string &endpoint, const std::vector<std::string> &queries)
-{
+static CURLU *set_url(ScapSettings &settings, const std::string &endpoint, const std::vector<std::string> &queries) {
 	CURLU *url = curl_url();
 
 	std::string host = "https://" + settings.getScapServerHost();
@@ -72,7 +69,7 @@ static CURLU *set_url(ScapSettings & settings, const std::string &endpoint, cons
 		return NULL;
 	}
 
-	for (const std::string& query: queries) {
+	for (const std::string &query : queries) {
 		if (curl_url_set(url, CURLUPART_QUERY, query.c_str(), CURLU_APPENDQUERY) != CURLUE_OK) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed: to set processid query string.", __FUNCTION__);
 			return NULL;
@@ -82,9 +79,7 @@ static CURLU *set_url(ScapSettings & settings, const std::string &endpoint, cons
 	return url;
 }
 
-
-ScapResponse perform_request(const ScapCredentials &credentials, const ScapRequest &request, CURL *curl)
-{
+ScapResponse perform_request(const ScapCredentials &credentials, const ScapRequest &request, CURL *curl) {
 	ScapResponse response;
 	response.status = 0;
 
@@ -125,7 +120,7 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 		header_list = curl_slist_append(header_list, "Content-Type: application/json");
 	}
 
-	for (const std::string &header: request.headers) {
+	for (const std::string &header : request.headers) {
 		header_list = curl_slist_append(header_list, header.c_str());
 	}
 
@@ -136,7 +131,7 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, PTEID_USER_AGENT_VALUE);
 
 	curl_easy_setopt(curl, CURLOPT_CURLU, url);
-	//Maximum time the transfer is allowed to complete
+	// Maximum time the transfer is allowed to complete
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
 
 #ifdef DEBUG
@@ -159,8 +154,7 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 
 	try {
 		ret = curl_easy_perform(curl);
-	}
-	catch (CMWException &e) {
+	} catch (CMWException &e) {
 		if (e.GetError() == EIDMW_ERR_PIN_CANCEL) {
 			response.status = SSL_PIN_CANCELED_ERROR;
 		} else {
@@ -170,8 +164,8 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 	}
 
 	if (ret != CURLE_OK) {
-		MWLOG(LEV_ERROR, MOD_SCAP, "Error on request %s. Libcurl returned %s\n",
-			request.endpoint.c_str(), error_buffer);
+		MWLOG(LEV_ERROR, MOD_SCAP, "Error on request %s. Libcurl returned %s\n", request.endpoint.c_str(),
+			  error_buffer);
 
 		long auth = 0;
 		if (!curl_easy_getinfo(curl, CURLINFO_PROXYAUTH_AVAIL, &auth) && auth) {
@@ -194,8 +188,7 @@ clean_up:
 	return response;
 }
 
-static cJSON *get_status_json_object(cJSON *&out_json, const std::string &response)
-{
+static cJSON *get_status_json_object(cJSON *&out_json, const std::string &response) {
 	if ((out_json = cJSON_Parse(response.c_str())) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse response: %s", __FUNCTION__, response.c_str());
 		return NULL;
@@ -210,8 +203,7 @@ static cJSON *get_status_json_object(cJSON *&out_json, const std::string &respon
 	return status;
 }
 
-unsigned int get_response_status(const std::string &response)
-{
+unsigned int get_response_status(const std::string &response) {
 	cJSON *json = NULL;
 	cJSON *status = get_status_json_object(json, response);
 
@@ -226,8 +218,7 @@ unsigned int get_response_status(const std::string &response)
 	return status_code;
 }
 
-std::string get_response_code_description(const std::string &response)
-{
+std::string get_response_code_description(const std::string &response) {
 	cJSON *json = NULL;
 	cJSON *status = get_status_json_object(json, response);
 
@@ -241,8 +232,7 @@ std::string get_response_code_description(const std::string &response)
 	return result;
 }
 
-ScapResponse perform_polling_request(const ScapCredentials &credentials, const ScapRequest &request)
-{
+ScapResponse perform_polling_request(const ScapCredentials &credentials, const ScapRequest &request) {
 	// polling must start 5 second after first request. polling every 2 seconds, max of 50 seconds
 
 	ScapResponse response;
@@ -267,15 +257,14 @@ ScapResponse perform_polling_request(const ScapCredentials &credentials, const S
 
 		response = temp_response;
 
-	} while((inner_status == 102 || inner_status == 206) && difftime(time(NULL), start) < 55);
+	} while ((inner_status == 102 || inner_status == 206) && difftime(time(NULL), start) < 55);
 
 	return response;
 }
 
-std::vector<ScapProvider> parse_providers(const std::string &read_buffer)
-{
+std::vector<ScapProvider> parse_providers(const std::string &read_buffer) {
 	std::vector<ScapProvider> result;
-	cJSON *json =  NULL;
+	cJSON *json = NULL;
 	if ((json = cJSON_Parse(read_buffer.c_str())) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s cJSON_Parse() failed", __FUNCTION__);
 		return result;
@@ -303,13 +292,8 @@ std::vector<ScapProvider> parse_providers(const std::string &read_buffer)
 		char *nipc = cJSON_GetStringValue(cJSON_GetObjectItem(array_item, "nipc"));
 		char *logo = cJSON_GetStringValue(cJSON_GetObjectItem(array_item, "logo"));
 
-		result.push_back(ScapProvider{
-			uri ? uri : "",
-			name ? name : "",
-			type ? type : "",
-			nipc ? nipc : "",
-			logo ? logo : ""
-		});
+		result.push_back(
+			ScapProvider{uri ? uri : "", name ? name : "", type ? type : "", nipc ? nipc : "", logo ? logo : ""});
 	}
 
 	MWLOG(LEV_DEBUG, MOD_SCAP, "%s attributeProviders object correctly parsed.", __FUNCTION__);
@@ -317,10 +301,9 @@ std::vector<ScapProvider> parse_providers(const std::string &read_buffer)
 	return result;
 }
 
-std::string create_search_attributes_body(const CitizenInfo &citizen_info,
-	const std::vector<ScapProvider> &providers, const std::string &processId,
-	const ScapCredentials &credentials, bool allEnterprise, bool allEmployee)
-{
+std::string create_search_attributes_body(const CitizenInfo &citizen_info, const std::vector<ScapProvider> &providers,
+										  const std::string &processId, const ScapCredentials &credentials,
+										  bool allEnterprise, bool allEmployee) {
 	std::string result;
 
 	char *json_string = NULL;
@@ -419,8 +402,7 @@ clean_up:
 	return result;
 }
 
-std::string create_fetch_attributes_body(const std::string &processId)
-{
+std::string create_fetch_attributes_body(const std::string &processId) {
 	std::string result;
 	char *json_string = NULL;
 	cJSON *json = NULL;
@@ -448,8 +430,7 @@ clean_up:
 	return result;
 }
 
-std::string extract_secret_key(const std::string& response)
-{
+std::string extract_secret_key(const std::string &response) {
 	std::string result;
 
 	char *secret_key = NULL;
@@ -471,8 +452,7 @@ clean_up:
 	return result;
 }
 
-static std::string generate_totp(const std::string &id)
-{
+static std::string generate_totp(const std::string &id) {
 	ScapSettings settings;
 	std::string secret_key = settings.getSecretKey(id);
 
@@ -491,9 +471,8 @@ static std::string generate_totp(const std::string &id)
 }
 
 std::string create_authorization_body(const std::string &processId, const CitizenInfo &citizen_info,
-	const ScapCredentials &credentials, const std::vector<ScapAttribute> &attributes,
-	const std::vector<Document> &documents)
-{
+									  const ScapCredentials &credentials, const std::vector<ScapAttribute> &attributes,
+									  const std::vector<Document> &documents) {
 	std::string result;
 
 	char *json_string = NULL;
@@ -573,7 +552,7 @@ std::string create_authorization_body(const std::string &processId, const Citize
 	cJSON_AddItemToObject(json, "citizenInfo", citizen_info_json);
 
 	doc_hashes_info = cJSON_CreateArray();
-	for (const Document& doc: documents) {
+	for (const Document &doc : documents) {
 		if ((doc_info = cJSON_CreateObject()) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s cJSON_CreateObject() failed", __FUNCTION__);
 			goto clean_up;
@@ -584,7 +563,8 @@ std::string create_authorization_body(const std::string &processId, const Citize
 			goto clean_up;
 		}
 
-		if (cJSON_AddStringToObject(doc_info, "originalDocumentCitizenSignature", doc.original_signature.c_str()) == NULL) {
+		if (cJSON_AddStringToObject(doc_info, "originalDocumentCitizenSignature", doc.original_signature.c_str()) ==
+			NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to add originalDocumentCitizenSignature", __FUNCTION__);
 			goto clean_up;
 		}
@@ -600,8 +580,8 @@ std::string create_authorization_body(const std::string &processId, const Citize
 
 	attribute_provider_signatures = cJSON_CreateArray();
 
-	for (const auto &provider_attributes_pair: attrs_grouped_by_provider) {
-		const ScapProvider& provider = provider_attributes_pair.first;
+	for (const auto &provider_attributes_pair : attrs_grouped_by_provider) {
+		const ScapProvider &provider = provider_attributes_pair.first;
 
 		if ((attributes_to_sign = cJSON_CreateObject()) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s cJSON_CreateObject() failed", __FUNCTION__);
@@ -631,7 +611,7 @@ std::string create_authorization_body(const std::string &processId, const Citize
 		cJSON_AddItemToObject(attributes_to_sign, "attributeProviderInfo", attributes_provider_info);
 
 		attributes_array = cJSON_CreateArray();
-		for (const auto &attr: provider_attributes_pair.second) {
+		for (const auto &attr : provider_attributes_pair.second) {
 			if ((attribute_json = cJSON_CreateObject()) == NULL) {
 				MWLOG(LEV_ERROR, MOD_SCAP, "%s cJSON_CreateObject() failed", __FUNCTION__);
 				goto clean_up;
@@ -653,7 +633,7 @@ std::string create_authorization_body(const std::string &processId, const Citize
 			}
 
 			sub_attributes_array = cJSON_CreateArray();
-			for (const ScapSubAttribute &sub_attribute: attr.sub_attributes) {
+			for (const ScapSubAttribute &sub_attribute : attr.sub_attributes) {
 				if ((sub_attribute_json = cJSON_CreateObject()) == NULL) {
 					MWLOG(LEV_ERROR, MOD_SCAP, "%s cJSON_CreateObject() failed", __FUNCTION__);
 					goto clean_up;
@@ -664,7 +644,8 @@ std::string create_authorization_body(const std::string &processId, const Citize
 					goto clean_up;
 				}
 
-				if (cJSON_AddStringToObject(sub_attribute_json, "description", sub_attribute.description.c_str()) == NULL) {
+				if (cJSON_AddStringToObject(sub_attribute_json, "description", sub_attribute.description.c_str()) ==
+					NULL) {
 					MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to add description", __FUNCTION__);
 					goto clean_up;
 				}
@@ -709,11 +690,10 @@ clean_up:
 	return result;
 }
 
-std::vector<ScapTransaction> parse_authorization(const std::string& response)
-{
+std::vector<ScapTransaction> parse_authorization(const std::string &response) {
 	std::vector<ScapTransaction> result;
 
-	cJSON *json =  NULL;
+	cJSON *json = NULL;
 	if ((json = cJSON_Parse(response.c_str())) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse response: %s", __FUNCTION__, response.c_str());
 		return result;
@@ -794,7 +774,8 @@ std::vector<ScapTransaction> parse_authorization(const std::string& response)
 			for (size_t k = 0; k < sub_attributes_array_size; ++k) {
 				cJSON *sub_attribute_json = NULL;
 				if ((sub_attribute_json = cJSON_GetArrayItem(sub_attributes, k)) == NULL) {
-					MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse sub_attribute's item with index %d", __FUNCTION__, k);
+					MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse sub_attribute's item with index %d", __FUNCTION__,
+						  k);
 					cJSON_Delete(json);
 					return result;
 				}
@@ -802,23 +783,15 @@ std::vector<ScapTransaction> parse_authorization(const std::string& response)
 				char *sub_description = cJSON_GetStringValue(cJSON_GetObjectItem(sub_attribute_json, "description"));
 				char *sub_value = cJSON_GetStringValue(cJSON_GetObjectItem(sub_attribute_json, "value"));
 
-				attribute.sub_attributes.push_back({
-					"",
-					sub_description ? sub_description : "",
-					sub_value ? sub_value : ""
-				});
+				attribute.sub_attributes.push_back(
+					{"", sub_description ? sub_description : "", sub_value ? sub_value : ""});
 			}
 
 			attributes.push_back(attribute);
 		}
 
-		ScapTransaction transaction  = {
-			id ? id : "",
-			sad ? sad : "",
-			certificate_chain ? certificate_chain : "",
-			provider_name ? provider_name : "",
-			attributes
-		};
+		ScapTransaction transaction = {id ? id : "", sad ? sad : "", certificate_chain ? certificate_chain : "",
+									   provider_name ? provider_name : "", attributes};
 
 		result.push_back(transaction);
 	}
@@ -829,8 +802,8 @@ std::vector<ScapTransaction> parse_authorization(const std::string& response)
 }
 
 std::string create_sign_hash_body(const std::string &processId, const std::string &id,
-	const ScapCredentials &credentials, const ScapTransaction &transaction, const std::vector<std::string> &hashes)
-{
+								  const ScapCredentials &credentials, const ScapTransaction &transaction,
+								  const std::vector<std::string> &hashes) {
 	std::string result;
 
 	char *json_string = NULL;
@@ -873,7 +846,7 @@ std::string create_sign_hash_body(const std::string &processId, const std::strin
 		goto clean_up;
 	}
 
-	for (const std::string &hash: hashes) {
+	for (const std::string &hash : hashes) {
 		hashes_strings.push_back(hash.c_str());
 	}
 
@@ -897,8 +870,7 @@ clean_up:
 	return result;
 }
 
-std::string create_get_signed_hash_body(const std::string &processId, const ScapTransaction &transaction)
-{
+std::string create_get_signed_hash_body(const std::string &processId, const ScapTransaction &transaction) {
 	std::string result;
 
 	char *json_string = NULL;
@@ -937,11 +909,10 @@ clean_up:
 	return result;
 }
 
-std::vector<std::string> parse_signatures(const std::string &response)
-{
+std::vector<std::string> parse_signatures(const std::string &response) {
 	std::vector<std::string> result;
 
-	cJSON *json =  NULL;
+	cJSON *json = NULL;
 	if ((json = cJSON_Parse(response.c_str())) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse response: %s", __FUNCTION__, response.c_str());
 		return result;
@@ -972,11 +943,10 @@ std::vector<std::string> parse_signatures(const std::string &response)
 	return result;
 }
 
-std::vector<std::string> get_failed_providers_ids(const std::string &response)
-{
+std::vector<std::string> get_failed_providers_ids(const std::string &response) {
 	std::vector<std::string> result;
 
-	cJSON *json =  NULL;
+	cJSON *json = NULL;
 	if ((json = cJSON_Parse(response.c_str())) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse response: %s", __FUNCTION__, response.c_str());
 		return result;
@@ -1023,4 +993,4 @@ std::vector<std::string> get_failed_providers_ids(const std::string &response)
 	return result;
 }
 
-};
+}; // namespace eIDMW

@@ -15,25 +15,22 @@
 
 typedef void CURL;
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 class APL_Card;
 
-class SSLConnection
-{
-	public:
-		EIDMW_APL_API SSLConnection(APL_Card *card);
-		EIDMW_APL_API ~SSLConnection(){};
+class SSLConnection {
+public:
+	EIDMW_APL_API SSLConnection(APL_Card *card);
+	EIDMW_APL_API ~SSLConnection(){};
 
-		EIDMW_APL_API CURL *connect_encrypted();
+	EIDMW_APL_API CURL *connect_encrypted();
 
-
-	private:
-		CURL *m_curl;
-		APL_Card *m_card;
+private:
+	CURL *m_curl;
+	APL_Card *m_card;
 };
 
-}
+} // namespace eIDMW
 
-#endif //Include guard
+#endif // Include guard

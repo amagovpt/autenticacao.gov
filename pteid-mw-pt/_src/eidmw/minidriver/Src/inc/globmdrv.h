@@ -29,86 +29,83 @@
 #include <stdio.h>
 
 #include "Log.h"
-//#include "util.h"
+// #include "util.h"
 #include "stdafx.h"
 
 #include "cal.h"
 
-#define CLEANUP(i)                        {dwReturn=(i);goto cleanup;}
+#define CLEANUP(i)                                                                                                     \
+	{                                                                                                                  \
+		dwReturn = (i);                                                                                                \
+		goto cleanup;                                                                                                  \
+	}
 
-#define MINIDRIVER_VERSION                "1.0.A"
+#define MINIDRIVER_VERSION "1.0.A"
 
-#define ROLE_DIGSIG                       ROLE_USER
-#define ROLE_NONREP                       3
+#define ROLE_DIGSIG ROLE_USER
+#define ROLE_NONREP 3
 
-#define SIGN_TYPE_NONREP		            1
-#define SIGN_TYPE_DIGSIG		            2
+#define SIGN_TYPE_NONREP 1
+#define SIGN_TYPE_DIGSIG 2
 
-#define FILE_OBJECT_DIRECTORY_TYPE        1
-#define FILE_OBJECT_FILE_TYPE             2
+#define FILE_OBJECT_DIRECTORY_TYPE 1
+#define FILE_OBJECT_FILE_TYPE 2
 
-#define MAX_CONTAINERS                    5
+#define MAX_CONTAINERS 5
 
-typedef struct _CARD_ATR
-{
-   BYTE     pbAtr[32];
-   DWORD    cbAtr;
+typedef struct _CARD_ATR {
+	BYTE pbAtr[32];
+	DWORD cbAtr;
 } CARD_ATR, *PCARD_ATR;
 
-typedef struct _VIRTUAL_FILE_OBJECT
-{
-   BYTE                          szDirectoryName [8 + 1];
-   BYTE                          szFileName      [8 + 1];
-   BYTE                          bObjectType;
-   BYTE                          bAccessCondition;
-   LPVOID                        pObjectData;
-   DWORD                         ObjectDataSize;
+typedef struct _VIRTUAL_FILE_OBJECT {
+	BYTE szDirectoryName[8 + 1];
+	BYTE szFileName[8 + 1];
+	BYTE bObjectType;
+	BYTE bAccessCondition;
+	LPVOID pObjectData;
+	DWORD ObjectDataSize;
 
-   struct _VIRTUAL_FILE_OBJECT   *pNext;
+	struct _VIRTUAL_FILE_OBJECT *pNext;
 } VIRTUAL_FILE_OBJECT, *PVIRTUAL_FILE_OBJECT;
 
-
-typedef struct _VFO_CONTAINER_INFO
-{
-   PIN_ID         dwPinId;
-   CONTAINER_INFO ContainerInfo;
+typedef struct _VFO_CONTAINER_INFO {
+	PIN_ID dwPinId;
+	CONTAINER_INFO ContainerInfo;
 } VFO_CONTAINER_INFO, *PVFO_CONTAINER_INFO;
 
 /************************************************************************************************************************/
 
-typedef struct _VENDOR_SPECIFIC
-{
+typedef struct _VENDOR_SPECIFIC {
 	BYTE bSerialNumberSet;
 	BYTE szSerialNumber[16];
 } VENDOR_SPECIFIC;
 
 /************************************************************************************************************************/
 
-#define PTEID_READ_BINARY_MAX_LEN    128
+#define PTEID_READ_BINARY_MAX_LEN 128
 
-#define CERT_AUTH                   1
-#define CERT_NONREP                 2
-#define CERT_CA                     3
-#define CERT_ROOTCA                 4
+#define CERT_AUTH 1
+#define CERT_NONREP 2
+#define CERT_CA 3
+#define CERT_ROOTCA 4
 
-#define HASH_ALGO_NONE              0
-#define HASH_ALGO_SHA1              4
-#define HASH_ALGO_SHA_256           5
-#define HASH_ALGO_SHA_384           6
-#define HASH_ALGO_SHA_512           7
+#define HASH_ALGO_NONE 0
+#define HASH_ALGO_SHA1 4
+#define HASH_ALGO_SHA_256 5
+#define HASH_ALGO_SHA_384 6
+#define HASH_ALGO_SHA_512 7
 
 /************************************************************************************************************************/
 /* Global State, here be dragons... */
 
-#define IAS_CARD		0
-#define GEMSAFE_CARD	1
-#define IAS_V5_CARD	2
+#define IAS_CARD 0
+#define GEMSAFE_CARD 1
+#define IAS_V5_CARD 2
 
 BYTE card_type;
 WORD g_keySize;
 const SCARD_IO_REQUEST *g_pioSendPci;
 /* Gemsafe = 1, IAS = 2   */
-
-
 
 #endif

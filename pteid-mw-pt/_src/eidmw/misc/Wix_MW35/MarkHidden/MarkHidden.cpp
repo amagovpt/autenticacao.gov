@@ -23,40 +23,30 @@
 #include "stdafx.h"
 #include "MarkHidden.h"
 
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 
-int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR    lpCmdLine,
-                     int       nCmdShow) {
+	LPWSTR *szArglist;
+	int nArgs;
 
-   LPWSTR *szArglist;
-   int nArgs;
+	szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
+	if (nArgs == 2) {
+		LPWSTR filename = szArglist[1];
+		// HANDLE hf = CreateFile(L"c:\\temp\\logwix.txt", GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS,
+		// FILE_ATTRIBUTE_NORMAL, NULL); if (hf != INVALID_HANDLE_VALUE) {
+		//     DWORD nw;
+		//     WriteFile(hf, filename, wcslen(filename) * 2, &nw, NULL);
+		//     CloseHandle(hf);
+		// }
+		DWORD dwAttrs = GetFileAttributes(filename);
+		if (dwAttrs != INVALID_FILE_ATTRIBUTES) {
+			dwAttrs |= FILE_ATTRIBUTE_HIDDEN;
+			SetFileAttributes(filename, dwAttrs);
+		}
+	}
 
-   szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
-   if( nArgs == 2 )  {
-       LPWSTR filename = szArglist[1];
-       //HANDLE hf = CreateFile(L"c:\\temp\\logwix.txt", GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-       //if (hf != INVALID_HANDLE_VALUE) {
-       //    DWORD nw;
-       //    WriteFile(hf, filename, wcslen(filename) * 2, &nw, NULL); 
-       //    CloseHandle(hf);
-       //}
-       DWORD dwAttrs = GetFileAttributes(filename);
-       if (dwAttrs != INVALID_FILE_ATTRIBUTES) {
-           dwAttrs |= FILE_ATTRIBUTE_HIDDEN;
-           SetFileAttributes(filename, dwAttrs);
-       }
-   }
+	// Free memory allocated for CommandLineToArgvW arguments.
 
-   // Free memory allocated for CommandLineToArgvW arguments.
+	LocalFree(szArglist);
 
-   LocalFree(szArglist);
-
-   return(0);
-
-    
-
+	return (0);
 }
-
-
-

@@ -27,25 +27,23 @@
 
 using namespace eIDMW;
 
-class dlgWndAskPIN : public Win32Dialog
-{
+class dlgWndAskPIN : public Win32Dialog {
 	void GetPinResult();
 
 	PteidControls::TextData titleData, headerData;
 	PteidControls::TextFieldData textFieldData;
 	PteidControls::ButtonData okBtnProcData, cancelBtnProcData;
-	
+
 	bool m_UseKeypad;
 
 public:
-	dlgWndAskPIN( DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring & title, std::wstring & Header, std::wstring & PINName, HWND Parent = NULL );
+	dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinPusage, std::wstring &title, std::wstring &Header,
+				 std::wstring &PINName, HWND Parent = NULL);
 	virtual ~dlgWndAskPIN();
 
 	wchar_t PinResult[128];
 
-	virtual LRESULT ProcecEvent
-				(	UINT		uMsg,			// Message For This Window
-					WPARAM		wParam,			// Additional Message Information
-					LPARAM		lParam );		// Additional Message Information
+	virtual LRESULT ProcecEvent(UINT uMsg,		// Message For This Window
+								WPARAM wParam,	// Additional Message Information
+								LPARAM lParam); // Additional Message Information
 };
-

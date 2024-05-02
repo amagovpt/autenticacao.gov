@@ -31,17 +31,16 @@
 
 using namespace eIDMW;
 
-class dlgWndBadPIN : public dlgWndBase
-{
+class dlgWndBadPIN : public dlgWndBase {
 	Q_OBJECT
 
 public:
-	dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWidget *parent = 0, Type_WndGeometry *pParentWndGeometry = 0 );
+	dlgWndBadPIN(QString &PINName, unsigned long RemainingTries, QWidget *parent = 0,
+				 Type_WndGeometry *pParentWndGeometry = 0);
 	~dlgWndBadPIN();
 
 private:
 	Ui::dlgWndBadPIN ui;
-
 };
 
 #endif // DLGWNDBADPIN_H

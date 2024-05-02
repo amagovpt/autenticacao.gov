@@ -29,7 +29,7 @@
 
 #ifdef WIN32
 #define __WIN32__
-#define VC_GE_2005( _MSC_VER )	( _MSC_VER >= 1400 )
+#define VC_GE_2005(_MSC_VER) (_MSC_VER >= 1400)
 #include <Windows.h> // needed for Sleep()
 #else
 #ifndef __UNIX__
@@ -51,11 +51,9 @@ typedef DWORD pteid_thread_id;
 typedef pthread_t pteid_thread_id;
 #endif
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-class EIDMW_CMN_API CThread
-{
+class EIDMW_CMN_API CThread {
 public:
 	CThread();
 	virtual ~CThread();
@@ -78,25 +76,25 @@ public:
 	virtual void ForceStop();
 
 	/** Ask the thread to stop then wait until the thread ends */
-	virtual void Stop(unsigned long ulSleepFrequency=100);
+	virtual void Stop(unsigned long ulSleepFrequency = 100);
 
 	/** Wait until the thread ends */
-	virtual void WaitTillStopped(unsigned long ulSleepFrequency=100);
+	virtual void WaitTillStopped(unsigned long ulSleepFrequency = 100);
 
-	/** Wait until the thread ends or the timeout occure (in second) 
+	/** Wait until the thread ends or the timeout occure (in second)
 	iStopMode : 0 = do not stop the thread after timeout
-	            1 = request the thread o stop after timeout
+				1 = request the thread o stop after timeout
 				2 = force the thread to stop*/
-	virtual bool WaitTimeout(unsigned long ulTimeout,int iStopMode=0);
+	virtual bool WaitTimeout(unsigned long ulTimeout, int iStopMode = 0);
 
 	THREAD_OBJ m_SyncHandle;
 	bool m_isRunning;
-	bool m_bStopRequest;	/** Can be taken into account in the run method to end the thread properly before normal ending */
+	bool m_bStopRequest; /** Can be taken into account in the run method to end the thread properly before normal ending
+						  */
 
 	static int getCurrentPid();
 	static pteid_thread_id getCurrentThreadId();
-
 };
 
-}
+} // namespace eIDMW
 #endif

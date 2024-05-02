@@ -1,7 +1,7 @@
 #include <string>
 
 #include "eidlib.h"
-//Declarations for the following functions here
+// Declarations for the following functions here
 #include "gapi.h"
 
 void saveCAN(const char *can) {
@@ -15,9 +15,9 @@ bool deleteCAN() {
 	try {
 		PTEID_Config config(config_name.c_str(), L"can_cache", L"");
 		config.DeleteKeysByPrefix();
-	}
-	catch (PTEID_Exception& e) {
-		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_WARNING, "eidgui", "deleteCAN: Failed to delete cached CAN! Error code: %08x", e.GetError());
+	} catch (PTEID_Exception &e) {
+		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_WARNING, "eidgui", "deleteCAN: Failed to delete cached CAN! Error code: %08x",
+				  e.GetError());
 		return false;
 	}
 	return true;

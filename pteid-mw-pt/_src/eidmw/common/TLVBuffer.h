@@ -27,7 +27,7 @@
 #define TLVBUFFER_H
 
 #if _MSC_VER > 1000
-    #pragma once
+#pragma once
 #endif // _MSC_VER > 1000
 
 #include <stdlib.h>
@@ -35,42 +35,40 @@
 #include <map>
 #include "TLV.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-class CTLVBuffer  
-{
+class CTLVBuffer {
 public:
 	EIDMW_CMN_API CTLVBuffer();
 	EIDMW_CMN_API virtual ~CTLVBuffer();
-    
+
 	EIDMW_CMN_API void SetTagData(unsigned char ucTag, const unsigned char *pucData, unsigned long ulLen);
 	EIDMW_CMN_API unsigned long Extract(unsigned char *pucData, unsigned long ulLen);
-    EIDMW_CMN_API int ParseTLV(const unsigned char *pucData, unsigned long ulLen);
-    EIDMW_CMN_API bool ParseFileTLV(const unsigned char *pucData, unsigned long ulLen);
-    EIDMW_CMN_API CTLV *GetTagData(unsigned char ucTag);
-    EIDMW_CMN_API void FillASCIIData(unsigned char ucTag, char *pData, unsigned long *pulLen);
-    EIDMW_CMN_API void FillUTF8Data(unsigned char ucTag, char *pData, unsigned long *pulLen);
-    EIDMW_CMN_API void FillBinaryStringData(unsigned char ucTag, char *pData, unsigned long *pulLen);
-    EIDMW_CMN_API void FillLongData(unsigned char ucTag, long *piData);
-    EIDMW_CMN_API void FillBinaryData(unsigned char ucTag, unsigned char *pData, unsigned long *pulLen);
-    EIDMW_CMN_API bool FillBinaryDataCheck(unsigned char ucTag, unsigned char *pData, unsigned long *pulMaxLen);
-    EIDMW_CMN_API unsigned long GetLengthNeeded();
+	EIDMW_CMN_API int ParseTLV(const unsigned char *pucData, unsigned long ulLen);
+	EIDMW_CMN_API bool ParseFileTLV(const unsigned char *pucData, unsigned long ulLen);
+	EIDMW_CMN_API CTLV *GetTagData(unsigned char ucTag);
+	EIDMW_CMN_API void FillASCIIData(unsigned char ucTag, char *pData, unsigned long *pulLen);
+	EIDMW_CMN_API void FillUTF8Data(unsigned char ucTag, char *pData, unsigned long *pulLen);
+	EIDMW_CMN_API void FillBinaryStringData(unsigned char ucTag, char *pData, unsigned long *pulLen);
+	EIDMW_CMN_API void FillLongData(unsigned char ucTag, long *piData);
+	EIDMW_CMN_API void FillBinaryData(unsigned char ucTag, unsigned char *pData, unsigned long *pulLen);
+	EIDMW_CMN_API bool FillBinaryDataCheck(unsigned char ucTag, unsigned char *pData, unsigned long *pulMaxLen);
+	EIDMW_CMN_API unsigned long GetLengthNeeded();
 
 private:
-    static char *Hexify(unsigned char * pData, unsigned long ulLen);
+	static char *Hexify(unsigned char *pData, unsigned long ulLen);
 
-    bool TlvEncodeLen(unsigned long ulLenVal, unsigned char *pucBufDest, int *piBufLen);
-    bool TlvDecodeLen(const unsigned char *pucBufSrc, int *piBufLen,  unsigned long *pulLenVal);
+	bool TlvEncodeLen(unsigned long ulLenVal, unsigned char *pucBufDest, int *piBufLen);
+	bool TlvDecodeLen(const unsigned char *pucBufSrc, int *piBufLen, unsigned long *pulLenVal);
 
-    static char hexChars[];
+	static char hexChars[];
 
-    typedef std::map<unsigned char, CTLV *>  MapTLV; 
-    typedef MapTLV::iterator                 ITMap;
+	typedef std::map<unsigned char, CTLV *> MapTLV;
+	typedef MapTLV::iterator ITMap;
 
 	MapTLV m_oMapTLV;
 };
 
-}  // namespace eIDMW
+} // namespace eIDMW
 
 #endif // TLVBUFFER_H

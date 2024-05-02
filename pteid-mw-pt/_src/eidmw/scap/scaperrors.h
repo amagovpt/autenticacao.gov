@@ -46,13 +46,14 @@ enum class ScapError {
 	incomplete_response,
 };
 
-template<class T>
-class ScapResult {
+template <class T> class ScapResult {
 public:
 	ScapResult(const T &data) : m_data(data), m_is_error(false) {};
 	ScapResult(const ScapError &error) : m_error(error), m_is_error(true) { set_critical(error); };
-	ScapResult(const ScapError &error, const std::vector<std::string> &error_data, const T& data)
-		: m_data(data), m_error(error), m_is_error(true), m_error_data(error_data) { set_critical(error); };
+	ScapResult(const ScapError &error, const std::vector<std::string> &error_data, const T &data)
+		: m_data(data), m_error(error), m_is_error(true), m_error_data(error_data) {
+		set_critical(error);
+	};
 
 	bool is_error() const { return m_is_error; };
 	bool is_critical() const { return m_is_error && m_is_critical; };
@@ -72,13 +73,14 @@ private:
 	std::vector<std::string> m_error_data;
 };
 
-template<>
-class ScapResult<void> {
+template <> class ScapResult<void> {
 public:
 	ScapResult() : m_is_error(false), m_is_critical(false) {};
 	ScapResult(const ScapError &error) : m_error(error), m_is_error(true) { set_critical(error); };
 	ScapResult(const ScapError &error, const std::vector<std::string> &error_data)
-			: m_error(error), m_is_error(true), m_error_data(error_data) { set_critical(error); };
+		: m_error(error), m_is_error(true), m_error_data(error_data) {
+		set_critical(error);
+	};
 
 	bool is_error() const { return m_is_error; };
 	bool is_critical() const { return m_is_error && m_is_critical; };

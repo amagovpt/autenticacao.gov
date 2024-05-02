@@ -32,26 +32,24 @@
 #include "OAuthAttributes.h"
 #include "eidErrors.h"
 
-#define ABORT_ON_CRITICAL_ERROR(x) if (x.is_critical()) return x;
+#define ABORT_ON_CRITICAL_ERROR(x)                                                                                     \
+	if (x.is_critical())                                                                                               \
+		return x;
 
 namespace eIDMW {
 
 struct SignatureDetails {
-    QByteArray signature;
-    QByteArray document_hash;
-    QByteArray signing_certificate;
+	QByteArray signature;
+	QByteArray document_hash;
+	QByteArray signing_certificate;
 };
 
-//implemented in pdfsignatureutils.h
+// implemented in pdfsignatureutils.h
 bool get_citizen_signature_details(const QString &filepath, SignatureDetails &sig_details);
 
-static std::string generate_process_id()
-{
-	return QUuid::createUuid().toString(QUuid::WithoutBraces).toStdString();
-}
+static std::string generate_process_id() { return QUuid::createUuid().toString(QUuid::WithoutBraces).toStdString(); }
 
-static std::string get_nic_from_subject_sn(const std::string &subject_serial_number)
-{
+static std::string get_nic_from_subject_sn(const std::string &subject_serial_number) {
 	// remove any textual prefix and checkdigit from NIC
 	// Regex for 8-digit NIC number
 	std::regex nic_pattern("\\d{8}");
@@ -64,22 +62,16 @@ static std::string get_nic_from_subject_sn(const std::string &subject_serial_num
 		MWLOG(LEV_ERROR, MOD_SCAP, "No NIC found in subject SN: %s", subject_serial_number.c_str());
 		return "";
 	}
-
 }
 
-static std::string get_nic_from_cert(PTEID_Certificate &certificate)
-{
+static std::string get_nic_from_cert(PTEID_Certificate &certificate) {
 	std::string subject_serial_number = certificate.getSubjectSerialNumber();
 	return get_nic_from_subject_sn(subject_serial_number);
 }
 
-static std::string get_owner_from_cert(PTEID_Certificate &certificate)
-{
-	return certificate.getOwnerName();
-}
+static std::string get_owner_from_cert(PTEID_Certificate &certificate) { return certificate.getOwnerName(); }
 
-static void save_secret_key(const std::string &secret_key, const std::string &nic)
-{
+static void save_secret_key(const std::string &secret_key, const std::string &nic) {
 	if (secret_key.empty() || nic.empty()) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s Failed to save secret_key: empty secret key or NIC", __FUNCTION__);
 		return;
@@ -87,16 +79,15 @@ static void save_secret_key(const std::string &secret_key, const std::string &ni
 
 	ScapSettings settings;
 #ifdef __APPLE__
-	//With a secretKey already stored in MacOS keychain we can't overwrite it in setSecretKey()
-	//TODO: remove just the matching key for nic
+	// With a secretKey already stored in MacOS keychain we can't overwrite it in setSecretKey()
+	// TODO: remove just the matching key for nic
 	settings.resetScapKeys();
 #endif
 
 	settings.setSecretKey(secret_key, nic);
 }
 
-static std::vector<CByteArray> parse_cert_chain(const std::string &cert_chain)
-{
+static std::vector<CByteArray> parse_cert_chain(const std::string &cert_chain) {
 	std::vector<std::string> certs = parsePEMCertSequence((char *)cert_chain.c_str(), cert_chain.size());
 	std::vector<CByteArray> cert_chain_data;
 
@@ -116,8 +107,7 @@ static std::vector<CByteArray> parse_cert_chain(const std::string &cert_chain)
 	return cert_chain_data;
 }
 
-static bool set_extern_certificates(PDFSignature *sig_handler, const std::string &certificate_chain)
-{
+static bool set_extern_certificates(PDFSignature *sig_handler, const std::string &certificate_chain) {
 	std::vector<CByteArray> cert_chain_data = parse_cert_chain(certificate_chain);
 	if (cert_chain_data.empty()) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "Empty certificate chain in SCAP signature!");
@@ -130,14 +120,13 @@ static bool set_extern_certificates(PDFSignature *sig_handler, const std::string
 	return true;
 }
 
-//returns a string with format: "{AttributeX, AttributeY e AttributeZ}"
-static std::string join_attribute_strings(const std::vector<ScapAttribute> &attributes)
-{
+// returns a string with format: "{AttributeX, AttributeY e AttributeZ}"
+static std::string join_attribute_strings(const std::vector<ScapAttribute> &attributes) {
 	std::string result;
 
 	for (auto it = attributes.begin(); it != attributes.end(); ++it) {
 		result += it->description;
-		if (std::next(it, 2) == attributes.end()) { //if second to last element
+		if (std::next(it, 2) == attributes.end()) { // if second to last element
 			result += " e ";
 		} else if (std::next(it) != attributes.end()) {
 			result += ", ";
@@ -152,52 +141,47 @@ static std::string join_attribute_strings(const std::vector<ScapAttribute> &attr
 	return result;
 }
 
-std::string get_professional_name(const std::vector<ScapAttribute> &attributes)
-{
+std::string get_professional_name(const std::vector<ScapAttribute> &attributes) {
 	std::string professional_name = "";
 	bool checkProfessionalName = false;
 
-	for (auto it = attributes.begin(); it != attributes.end(); ++it)  {
+	for (auto it = attributes.begin(); it != attributes.end(); ++it) {
 
-		if (it == attributes.begin())  {
+		if (it == attributes.begin()) {
 
-			for (const ScapSubAttribute &sub_attribute: it->sub_attributes)  {
-				if(sub_attribute.id == "NomeProfissional")  {
+			for (const ScapSubAttribute &sub_attribute : it->sub_attributes) {
+				if (sub_attribute.id == "NomeProfissional") {
 					professional_name = sub_attribute.value;
 				}
 			}
 
-			//if the first attribute doesn't have professional name
-			if (professional_name.empty())  {
+			// if the first attribute doesn't have professional name
+			if (professional_name.empty()) {
 				return professional_name;
 			}
-		}
-		else  {
+		} else {
 			checkProfessionalName = false;
 
-			for (const ScapSubAttribute &sub_attribute: it->sub_attributes) {
-				if (sub_attribute.id == "NomeProfissional" && 
-					sub_attribute.value == professional_name)  {
-						checkProfessionalName = true;
-					}
+			for (const ScapSubAttribute &sub_attribute : it->sub_attributes) {
+				if (sub_attribute.id == "NomeProfissional" && sub_attribute.value == professional_name) {
+					checkProfessionalName = true;
+				}
 			}
 
-			//all atributes must have the same professional name
-			if (checkProfessionalName == false)  {
+			// all atributes must have the same professional name
+			if (checkProfessionalName == false) {
 				professional_name = "";
 				return professional_name;
 			}
 		}
-
 	}
 
 	return professional_name;
 }
 
-attributes_by_provider_map group_by_provider(const std::vector<ScapAttribute> &attributes)
-{
+attributes_by_provider_map group_by_provider(const std::vector<ScapAttribute> &attributes) {
 	attributes_by_provider_map grouped;
-	for (const ScapAttribute &attribute: attributes) {
+	for (const ScapAttribute &attribute : attributes) {
 		std::vector<ScapAttribute> &attrs = grouped[attribute.provider];
 		attrs.push_back(attribute);
 	}
@@ -205,13 +189,12 @@ attributes_by_provider_map group_by_provider(const std::vector<ScapAttribute> &a
 	return grouped;
 }
 
-std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<ScapAttribute> &attributes)
-{
+std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<ScapAttribute> &attributes) {
 	std::string certified_by;
 	std::string certified_attributes;
 
 	std::string separator = "";
-	for (const auto &provider_attributes_pair: group_by_provider(attributes)) {
+	for (const auto &provider_attributes_pair : group_by_provider(attributes)) {
 		const ScapProvider &provider = provider_attributes_pair.first;
 		certified_by += separator;
 		certified_attributes += separator + join_attribute_strings(provider_attributes_pair.second);
@@ -229,18 +212,17 @@ std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<S
 	return std::make_pair(certified_by, certified_attributes);
 }
 
-//returns string of format: "Entidade: X. Na qualidade de: Y. Subatributos: X1:Y1;(...) Xn:Yn. E na qualidade de (...)"
-static std::string format_reason_field_string(const ScapTransaction &transaction)
-{
+// returns string of format: "Entidade: X. Na qualidade de: Y. Subatributos: X1:Y1;(...) Xn:Yn. E na qualidade de (...)"
+static std::string format_reason_field_string(const ScapTransaction &transaction) {
 	std::string reason = "Entidade: " + transaction.provider_name + ". Na qualidade de: ";
 
 	std::string separator = "";
-	for (const ScapAttribute &attribute: transaction.attributes) {
+	for (const ScapAttribute &attribute : transaction.attributes) {
 		reason += separator + attribute.description + ". Subatributos: ";
 
 		for (auto it = attribute.sub_attributes.begin(); it != attribute.sub_attributes.end(); ++it) {
 			reason += it->description + ": " + it->value;
-			reason += (std::next(it) != attribute.sub_attributes.end()) ? "; " : ". "; //end sentence with "."
+			reason += (std::next(it) != attribute.sub_attributes.end()) ? "; " : ". "; // end sentence with "."
 		}
 
 		separator = "E na qualidade de: ";
@@ -250,9 +232,9 @@ static std::string format_reason_field_string(const ScapTransaction &transaction
 }
 
 static std::string open_scap_signature(const ScapTransaction &transaction, Document &document,
-	const PDFSignatureInfo &signature_info, const CitizenInfo& citizen_info,
-	const std::vector<ScapAttribute> &attributes, bool is_last_signature, bool is_batch, bool is_cc)
-{
+									   const PDFSignatureInfo &signature_info, const CitizenInfo &citizen_info,
+									   const std::vector<ScapAttribute> &attributes, bool is_last_signature,
+									   bool is_batch, bool is_cc) {
 	document.sign_handle = new PTEID_PDFSignature(document.file_path.c_str());
 
 	PTEID_PDFSignature *signature = document.sign_handle;
@@ -271,7 +253,8 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 			if (seal_geometry.x >= 0 && seal_geometry.y >= 0) {
 				unsigned int selected_page;
 				const int page_count = sig_handler->getPageCount();
-				if (signature_info.is_last_page || signature_info.selected_page < 1 || signature_info.selected_page > page_count) {
+				if (signature_info.is_last_page || signature_info.selected_page < 1 ||
+					signature_info.selected_page > page_count) {
 					selected_page = page_count;
 				} else {
 					selected_page = signature_info.selected_page;
@@ -288,23 +271,19 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 
 			if (professional_name.empty()) {
 				sig_name = citizen_info.name;
-			}
-			else {
+			} else {
 				sig_name = professional_name;
 			}
 
-			sig_handler->setSCAPAttributes(_strdup(sig_name.c_str()),
-				_strdup(citizen_info.cert_ssn.c_str()),
-				_strdup(seal_strings.first.c_str()),
-				_strdup(seal_strings.second.c_str()));
+			sig_handler->setSCAPAttributes(_strdup(sig_name.c_str()), _strdup(citizen_info.cert_ssn.c_str()),
+										   _strdup(seal_strings.first.c_str()), _strdup(seal_strings.second.c_str()));
 
-			sig_handler->setIsCC(is_cc); //set correct default seal image
+			sig_handler->setIsCC(is_cc); // set correct default seal image
 			if (signature_info.use_custom_image) {
 				sig_handler->setCustomImage(signature_info.seal_image_data, signature_info.seal_image_length);
-			}
-			else {
-				//if provider has custom logo, use that logo.
-				//if more than one of the selected providers has a logo, use default CC/CMD image.
+			} else {
+				// if provider has custom logo, use that logo.
+				// if more than one of the selected providers has a logo, use default CC/CMD image.
 				QByteArray logo = get_scap_image_data(attributes);
 				if (!logo.isEmpty()) {
 					sig_handler->setCustomImage(reinterpret_cast<unsigned char *>(logo.data()), logo.size());
@@ -316,7 +295,8 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 
 		if (is_batch) {
 			QString tmp_out = signature_info.output.c_str();
-			output = (QString::fromStdString(signature_info.output) + QDir::separator() + document.name.c_str()).toStdString();
+			output = (QString::fromStdString(signature_info.output) + QDir::separator() + document.name.c_str())
+						 .toStdString();
 		} else {
 			output = signature_info.output;
 		}
@@ -329,8 +309,7 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 
 	try {
 		sig_handler->signFiles(signature_info.location.c_str(), reason.c_str(), output.c_str(), false);
-	}
-	catch (CMWException &e) {
+	} catch (CMWException &e) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s PDFSignature::signFiles() failed", __FUNCTION__);
 		throw PTEID_Exception(e.GetError());
 	}
@@ -341,11 +320,8 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s PDFSignature::getHash() failed", __FUNCTION__);
 	}
 
-	unsigned char sha256_prefix[] = {
-		0x30, 0x31, 0x30, 0x0d, 0x06, 0x09,
-		0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
-		0x05, 0x00, 0x04, 0x20
-	};
+	unsigned char sha256_prefix[] = {0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01,
+									 0x65, 0x03, 0x04, 0x02, 0x01, 0x05, 0x00, 0x04, 0x20};
 
 	CByteArray signatureInput(sha256_prefix, sizeof(sha256_prefix));
 	signatureInput.Append(hash_ba);
@@ -358,7 +334,7 @@ static void get_citizen_info_from_signature(PTEID_PDFSignature &signature, Citiz
 
 	citizen_info->name = signature.getCertificateCitizenName();
 
-	if (ssn.find("BI") == 0) { //national citizen
+	if (ssn.find("BI") == 0) { // national citizen
 		citizen_info->cert_ssn = get_nic_from_subject_sn(ssn);
 		citizen_info->doc_type = "BI";
 		citizen_info->doc_nationality = "PT";
@@ -366,64 +342,64 @@ static void get_citizen_info_from_signature(PTEID_PDFSignature &signature, Citiz
 	} else {
 		// e.g.: PASAF-ABC123456
 		citizen_info->cert_ssn = ssn;
-		citizen_info->doc_type = ssn.substr(0, 3); // e.g.: PAS
+		citizen_info->doc_type = ssn.substr(0, 3);		  // e.g.: PAS
 		citizen_info->doc_nationality = ssn.substr(3, 2); // e.g.: AF
-		citizen_info->doc_number = ssn.substr(6); // e.g.: ABC123456
+		citizen_info->doc_number = ssn.substr(6);		  // e.g.: ABC123456
 	}
 }
 
-static ScapError interpret_exception_code(const long code, const char *call)
-{
+static ScapError interpret_exception_code(const long code, const char *call) {
 	switch (code) {
-		case EIDMW_TIMESTAMP_ERROR:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: failed to apply timestamp.", call);
-			return ScapError::sign_timestamp;
-		case EIDMW_LTV_ERROR:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: failed to apply validation data (LTV).", call);
-			return ScapError::sign_ltv;
-		case EIDMW_PDF_UNSUPPORTED_ERROR:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: unsupported pdf.", call);
-			return ScapError::sign_unsupported_pdf;
-		case EIDMW_PERMISSION_DENIED:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: permission denied.", call);
-			return ScapError::sign_permission_denied;
-		case EIDMW_ERR_PIN_CANCEL:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: pin insertion cancelled by user.", call);
-			return ScapError::sign_pin_cancel;
-		case EIDMW_ERR_PIN_BLOCKED:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: pin is blocked.", call);
-			return ScapError::sign_pin_blocked;
-		case EIDMW_ERR_OP_CANCEL:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: operation cancelled by user.", call);
-			return ScapError::sign_cancel;
-		case EIDMW_ERR_CMD_CONNECTION:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service connection error.", call);
-			return ScapError::sign_cmd_connection;
-		case EIDMW_ERR_CMD_INVALID_CODE:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service invalid otp.", call);
-			return ScapError::sign_cmd_invalid_code;
-		case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service invalid account.", call);
-			return ScapError::sign_cmd_invalid_account;
-		case EIDMW_ERR_CMD_SERVICE:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service generic error.", call);
-			return ScapError::sign_cmd_generic;
-		default:
-			MWLOG(LEV_ERROR, MOD_SCAP, "%s: caught exception: %08lx.", call, code);
-			return ScapError::generic;
+	case EIDMW_TIMESTAMP_ERROR:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: failed to apply timestamp.", call);
+		return ScapError::sign_timestamp;
+	case EIDMW_LTV_ERROR:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: failed to apply validation data (LTV).", call);
+		return ScapError::sign_ltv;
+	case EIDMW_PDF_UNSUPPORTED_ERROR:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: unsupported pdf.", call);
+		return ScapError::sign_unsupported_pdf;
+	case EIDMW_PERMISSION_DENIED:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: permission denied.", call);
+		return ScapError::sign_permission_denied;
+	case EIDMW_ERR_PIN_CANCEL:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: pin insertion cancelled by user.", call);
+		return ScapError::sign_pin_cancel;
+	case EIDMW_ERR_PIN_BLOCKED:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: pin is blocked.", call);
+		return ScapError::sign_pin_blocked;
+	case EIDMW_ERR_OP_CANCEL:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: operation cancelled by user.", call);
+		return ScapError::sign_cancel;
+	case EIDMW_ERR_CMD_CONNECTION:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service connection error.", call);
+		return ScapError::sign_cmd_connection;
+	case EIDMW_ERR_CMD_INVALID_CODE:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service invalid otp.", call);
+		return ScapError::sign_cmd_invalid_code;
+	case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service invalid account.", call);
+		return ScapError::sign_cmd_invalid_account;
+	case EIDMW_ERR_CMD_SERVICE:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service generic error.", call);
+		return ScapError::sign_cmd_generic;
+	default:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: caught exception: %08lx.", call, code);
+		return ScapError::generic;
 	}
 }
 
-static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device,
-	const PDFSignatureInfo &signature_info, CitizenInfo *out_citizen_info, std::vector<Document> &out_documents)
-{
+static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device, const PDFSignatureInfo &signature_info,
+												   CitizenInfo *out_citizen_info,
+												   std::vector<Document> &out_documents) {
 	PTEID_PDFSignature signature;
-	for (const std::string &filename: signature_info.filenames) {
+	for (const std::string &filename : signature_info.filenames) {
 		signature.addToBatchSigning((char *)filename.c_str());
 	}
 
-	//If a SCAP signature is LEVEL_TIMESTAMP or higher the 1st citizen signature must include timestamp
-	signature.setSignatureLevel(signature_info.level >= PTEID_LEVEL_TIMESTAMP ? PTEID_LEVEL_TIMESTAMP : PTEID_LEVEL_BASIC);
+	// If a SCAP signature is LEVEL_TIMESTAMP or higher the 1st citizen signature must include timestamp
+	signature.setSignatureLevel(signature_info.level >= PTEID_LEVEL_TIMESTAMP ? PTEID_LEVEL_TIMESTAMP
+																			  : PTEID_LEVEL_BASIC);
 
 	QTemporaryDir *tempDir = new QTemporaryDir();
 	if (!tempDir->isValid()) {
@@ -435,14 +411,15 @@ static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device,
 
 	ScapResult<void> result;
 	try {
-		device->SignPDF(signature, 0, 0, 0, signature_info.location.c_str(), signature_info.reason.c_str(), output_path.c_str());
+		device->SignPDF(signature, 0, 0, 0, signature_info.location.c_str(), signature_info.reason.c_str(),
+						output_path.c_str());
 	} catch (const PTEID_ExBatchSignatureFailed &ex) {
 		if (signature_info.filenames.size() > 1) {
 			const std::string &failed_filename = signature_info.filenames.at(ex.GetFailedSignatureIndex());
 			const ScapError error = interpret_exception_code(ex.GetError(), __FUNCTION__);
 
 			result = {error, {failed_filename}};
-		} else { //not really a batch signature - return simple error without filenames
+		} else { // not really a batch signature - return simple error without filenames
 			result = interpret_exception_code(ex.GetError(), __FUNCTION__);
 		}
 		ABORT_ON_CRITICAL_ERROR(result);
@@ -454,7 +431,7 @@ static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device,
 	SignatureDetails details;
 	QDir dir(output_path.c_str());
 	QFileInfoList file_list = dir.entryInfoList(QDir::Files, QDir::Time | QDir::Reversed);
-	for (const auto &fileinfo: file_list) {
+	for (const auto &fileinfo : file_list) {
 		QString file_path = fileinfo.absoluteFilePath();
 
 		if (!get_citizen_signature_details(file_path, details)) {
@@ -481,8 +458,7 @@ static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device,
 	return result;
 }
 
-static CByteArray decode_base64(const std::string &encoded)
-{
+static CByteArray decode_base64(const std::string &encoded) {
 	unsigned int decoded_len = 0;
 	unsigned char *decoded_buffer;
 	Base64Decode(encoded.c_str(), encoded.size(), decoded_buffer, decoded_len);
@@ -493,8 +469,8 @@ static CByteArray decode_base64(const std::string &encoded)
 	return decoded;
 }
 
-static ScapResult<void> close_scap_signature(std::vector<Document> &documents, const std::vector<std::string> &signatures)
-{
+static ScapResult<void> close_scap_signature(std::vector<Document> &documents,
+											 const std::vector<std::string> &signatures) {
 	ScapResult<void> result;
 	for (size_t i = 0; i < documents.size(); ++i) {
 		Document &doc = documents.at(i);
@@ -504,11 +480,10 @@ static ScapResult<void> close_scap_signature(std::vector<Document> &documents, c
 
 		try {
 			doc.sign_handle->getPdfSignature()->signClose(signature);
-		}
-		catch (const CMWException &ex) {
+		} catch (const CMWException &ex) {
 			if (documents.size() > 1) {
 				result = {interpret_exception_code(ex.GetError(), __FUNCTION__), {doc.name}};
-			} else { //not really a batch signature - return simple error without filenames
+			} else { // not really a batch signature - return simple error without filenames
 				result = interpret_exception_code(ex.GetError(), __FUNCTION__);
 			}
 			ABORT_ON_CRITICAL_ERROR(result);
@@ -521,50 +496,42 @@ static ScapResult<void> close_scap_signature(std::vector<Document> &documents, c
 	return result;
 }
 
-static bool missing_credentials(const ScapCredentials &credentials)
-{
+static bool missing_credentials(const ScapCredentials &credentials) {
 	return credentials.basic_user.empty() || credentials.basic_pass.empty() || credentials.credential_id.empty();
 }
 
-static ScapCredentials load_credentials_from_config()
-{
+static ScapCredentials load_credentials_from_config() {
 	std::wstring appid = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_APPID);
 	std::wstring user = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_USERID);
 	std::wstring passw = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_SCAP_PASSWORD);
 
-	return {
-		std::string(user.begin(), user.end()),
-		std::string(passw.begin(), passw.end()),
-		std::string(appid.begin(), appid.end())
-	};
+	return {std::string(user.begin(), user.end()), std::string(passw.begin(), passw.end()),
+			std::string(appid.begin(), appid.end())};
 }
 
-ScapClient::ScapClient(const ScapCredentials &credentials)
-{
+ScapClient::ScapClient(const ScapCredentials &credentials) {
 	const ScapCredentials credentials_from_config = load_credentials_from_config();
 	m_scap_credentials = missing_credentials(credentials_from_config) ? credentials : credentials_from_config;
 
 	m_oauth = NULL;
 }
 
-static ScapError map_perform_error(const unsigned long error)
-{
+static ScapError map_perform_error(const unsigned long error) {
 	switch (error) {
-		case CURL_PERFORM_ERROR:
-			return ScapError::connection;
-		case PROXY_AUTH_REQUIRED:
-			return ScapError::proxy_auth;
-		case POSSIBLE_PROXY_ERROR:
-			return ScapError::possibly_proxy;
-		case SSL_PIN_CANCELED_ERROR:
-			return ScapError::sign_pin_cancel;
-		default:
-			return ScapError::generic;
+	case CURL_PERFORM_ERROR:
+		return ScapError::connection;
+	case PROXY_AUTH_REQUIRED:
+		return ScapError::proxy_auth;
+	case POSSIBLE_PROXY_ERROR:
+		return ScapError::possibly_proxy;
+	case SSL_PIN_CANCELED_ERROR:
+		return ScapError::sign_pin_cancel;
+	default:
+		return ScapError::generic;
 	}
 }
 
-ScapResult<std::vector<ScapProvider>> ScapClient::getAttributeProviders()
-{
+ScapResult<std::vector<ScapProvider>> ScapClient::getAttributeProviders() {
 	if (missing_credentials(m_scap_credentials)) {
 		return ScapError::bad_credentials;
 	}
@@ -582,27 +549,20 @@ ScapResult<std::vector<ScapProvider>> ScapClient::getAttributeProviders()
 	return providers;
 }
 
-static ScapResult<void> oauth_get_citizen_info(CitizenInfo &citizen_info, std::string &oauth_token, OAuthAttributes *&m_oauth)
-{
-	m_oauth = new OAuthAttributes({
-		CitizenAttribute::NIC,
-		CitizenAttribute::COMPLETENAME,
-		CitizenAttribute::DOCTYPE,
-		CitizenAttribute::DOCNATIONALITY,
-		CitizenAttribute::DOCNUMBER
-	});
+static ScapResult<void> oauth_get_citizen_info(CitizenInfo &citizen_info, std::string &oauth_token,
+											   OAuthAttributes *&m_oauth) {
+	m_oauth = new OAuthAttributes({CitizenAttribute::NIC, CitizenAttribute::COMPLETENAME, CitizenAttribute::DOCTYPE,
+								   CitizenAttribute::DOCNATIONALITY, CitizenAttribute::DOCNUMBER});
 
 	OAuthResult status = m_oauth->fetchAttributes();
 	if (status != OAuthSuccess) {
 		if (status == OAuthCancelled) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s Oauth canceled by user.", __FUNCTION__);
 			return ScapError::oauth_cancelled;
-		}
-		else if (status == OAuthTimeoutError) {
+		} else if (status == OAuthTimeoutError) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s Oauth timed out.", __FUNCTION__);
 			return ScapError::oauth_timeout;
-		}
-		else if (status == OAuthConnectionError) {
+		} else if (status == OAuthConnectionError) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s Oauth connection error.", __FUNCTION__);
 			return ScapError::oauth_connection;
 		}
@@ -635,10 +595,10 @@ static ScapResult<void> oauth_get_citizen_info(CitizenInfo &citizen_info, std::s
 	return {};
 }
 
-static std::vector<std::string> filter_providers_by_ids(const std::vector<ScapProvider> &providers, const std::vector<std::string> &ids)
-{
+static std::vector<std::string> filter_providers_by_ids(const std::vector<ScapProvider> &providers,
+														const std::vector<std::string> &ids) {
 	std::vector<std::string> result;
-	for (const ScapProvider &p: providers) {
+	for (const ScapProvider &p : providers) {
 		if (std::find(ids.begin(), ids.end(), p.uriId) != ids.end()) {
 			result.push_back(p.name);
 		}
@@ -649,16 +609,15 @@ static std::vector<std::string> filter_providers_by_ids(const std::vector<ScapPr
 
 #ifdef _WIN32
 
-//Implemented in sslconnection_helper.cpp
+// Implemented in sslconnection_helper.cpp
 void setupSSLCallbackFunction(bool is_ecdsa);
-void setThreadLocalCardInstance(PTEID_EIDCard * card);
+void setThreadLocalCardInstance(PTEID_EIDCard *card);
 
 #endif
 
-
 ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EIDCard *card,
-	const std::vector<ScapProvider> &providers, bool allEnterprise, bool allEmployee)
-{
+																		const std::vector<ScapProvider> &providers,
+																		bool allEnterprise, bool allEmployee) {
 	std::vector<ScapAttribute> attributes;
 	if (missing_credentials(m_scap_credentials)) {
 		return ScapError::bad_credentials;
@@ -676,7 +635,7 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 		setupSSLCallbackFunction(card->getType() == PTEID_CARDTYPE_IAS5);
 #endif
 
-        MWLOG(LEV_DEBUG, MOD_SCAP, "Building SSLConnection for SCAPClient...");
+		MWLOG(LEV_DEBUG, MOD_SCAP, "Building SSLConnection for SCAPClient...");
 		connection.reset(card->buildSSLConnection());
 		curl = connection->connect_encrypted();
 
@@ -701,8 +660,8 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 	ScapRequest first_request;
 	first_request.endpoint = "/SCAPAttributeService/searchCitizenAttributesRequest";
 	first_request.headers = headers;
-	first_request.body = create_search_attributes_body(citizen_info, providers, process_id,
-		m_scap_credentials, allEnterprise, allEmployee);
+	first_request.body = create_search_attributes_body(citizen_info, providers, process_id, m_scap_credentials,
+													   allEnterprise, allEmployee);
 
 	ScapResponse first_response = perform_request(m_scap_credentials, first_request, curl);
 	if (first_response.status != SCAP_OK) {
@@ -728,8 +687,7 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 		if (status == SCAP_PROCESSING_REQUEST) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "getCitizenAttributesResponse: Service timed out.");
 			return ScapError::timeout;
-		}
-		else if (status == SCAP_EXPIRED_OR_NO_ATTRS) {
+		} else if (status == SCAP_EXPIRED_OR_NO_ATTRS) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "getCitizenAttributesResponse: no attributes or expired attributes.");
 			const auto failed_providers_ids = get_failed_providers_ids(response);
 			std::vector<std::string> failed_providers = filter_providers_by_ids(providers, failed_providers_ids);
@@ -761,15 +719,9 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::getCitizenAttributes(PTEID_EI
 	return attributes;
 }
 
-ScapResult<std::vector<ScapAttribute>> ScapClient::readAttributeCache()
-{
-	return load_cache();
-}
+ScapResult<std::vector<ScapAttribute>> ScapClient::readAttributeCache() { return load_cache(); }
 
-bool ScapClient::clearAttributeCache()
-{
-	return clear_cache();
-}
+bool ScapClient::clearAttributeCache() { return clear_cache(); }
 
 static void clean_up_temp_documents(const std::vector<Document> &documents) {
 	if (!documents.empty()) {
@@ -777,8 +729,7 @@ static void clean_up_temp_documents(const std::vector<Document> &documents) {
 	}
 }
 
-static bool validate_local_clock(const ScapResponse &response)
-{
+static bool validate_local_clock(const ScapResponse &response) {
 	QString server_time_string = QString::fromStdString(response.server_time);
 	QDateTime server_time = QDateTime::fromString(server_time_string, Qt::RFC2822Date);
 	long local = time(nullptr);
@@ -786,12 +737,11 @@ static bool validate_local_clock(const ScapResponse &response)
 
 	MWLOG(LEV_DEBUG, MOD_SCAP, "signHashAuthorization: local time %ld - server time %ld.", local, server);
 
-	return abs(difftime(local,server)) < SCAP_MAX_CLOCK_DIFF;
+	return abs(difftime(local, server)) < SCAP_MAX_CLOCK_DIFF;
 }
 
 ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatureInfo &signature_info,
-	const std::vector<ScapAttribute> &attributes)
-{
+								  const std::vector<ScapAttribute> &attributes) {
 	ScapResult<void> result;
 	if (missing_credentials(m_scap_credentials)) {
 		return ScapError::bad_credentials;
@@ -830,8 +780,7 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 
 	ScapRequest request;
 	request.endpoint = "/SCAPSignatureService/signHashAuthorization";
-	request.body = create_authorization_body(process_id, citizen_info, m_scap_credentials,
-		attributes, documents);
+	request.body = create_authorization_body(process_id, citizen_info, m_scap_credentials, attributes, documents);
 
 	if (request.body.empty()) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s Failed to create signHashAuthorization request body.", __FUNCTION__);
@@ -852,13 +801,11 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 		MWLOG(LEV_ERROR, MOD_SCAP, "signHashAuthorization: Citizen has no attributes.");
 		clean_up_temp_documents(documents);
 		return ScapError::no_attributes;
-	}
-	else if (status == SCAP_EXPIRED_ATTRS) {
+	} else if (status == SCAP_EXPIRED_ATTRS) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "signHashAuthorization: Citizen attributes were expired.");
 		clean_up_temp_documents(documents);
 		return ScapError::expired_attributes;
-	}
-	else if (status == SCAP_TRANSACTION_OR_TOTP_ERROR) {
+	} else if (status == SCAP_TRANSACTION_OR_TOTP_ERROR) {
 		clean_up_temp_documents(documents);
 		std::string code_descr = get_response_code_description(response.response);
 
@@ -871,8 +818,7 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 		}
 
 		return ScapError::generic;
-	}
-	else if (status != SCAP_OK) {
+	} else if (status != SCAP_OK) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "signHashAuthorization: Received status %d", status);
 		clean_up_temp_documents(documents);
 		return ScapError::generic;
@@ -887,15 +833,15 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 
 	bool is_batch = documents.size() > 1;
 	bool is_cc = device->getDeviceType() == PTEID_SigningDeviceType::CC;
-	for (const ScapTransaction& transaction: transactions) {
+	for (const ScapTransaction &transaction : transactions) {
 		bool is_last_signature = stoul(transaction.id) == transactions.size() - 1;
 
 		std::vector<std::string> hashes;
-		for (Document &doc: documents) {
-			std::string hash_ba = open_scap_signature(transaction, doc, signature_info,
-				citizen_info, attributes, is_last_signature, is_batch, is_cc);
+		for (Document &doc : documents) {
+			std::string hash_ba = open_scap_signature(transaction, doc, signature_info, citizen_info, attributes,
+													  is_last_signature, is_batch, is_cc);
 			if (hash_ba.empty()) {
-				//Abort the signature operation as the SCAP server didn't return any certificates
+				// Abort the signature operation as the SCAP server didn't return any certificates
 				return ScapError::generic;
 			}
 			hashes.push_back(hash_ba);
@@ -903,8 +849,8 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 
 		ScapRequest sign_hash_request;
 		sign_hash_request.endpoint = "/SCAPSignatureService/signHash";
-		sign_hash_request.body = create_sign_hash_body(process_id, citizen_info.doc_number,
-			m_scap_credentials, transaction, hashes);
+		sign_hash_request.body =
+			create_sign_hash_body(process_id, citizen_info.doc_number, m_scap_credentials, transaction, hashes);
 
 		ScapResponse sign_hash_response = perform_request(m_scap_credentials, sign_hash_request);
 		if (sign_hash_response.status != SCAP_OK) {
@@ -930,7 +876,8 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 			clean_up_temp_documents(documents);
 			std::string code_descr = get_response_code_description(get_signed_hash_response.response);
 			if (code_descr.compare(SCAP_INVALID_CITIZEN_ATTRIBUTES) == 0) {
-				MWLOG(LEV_ERROR, MOD_SCAP, "getSignHashResult: Invalid cached attributes - maybe the provider changed attribute IDs");
+				MWLOG(LEV_ERROR, MOD_SCAP,
+					  "getSignHashResult: Invalid cached attributes - maybe the provider changed attribute IDs");
 				return ScapError::invalid_attributes;
 			}
 			return ScapError::generic;
@@ -953,9 +900,8 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 	return result;
 }
 
-void ScapClient::cancelOAuth()
-{
+void ScapClient::cancelOAuth() {
 	if (m_oauth)
 		m_oauth->closeListener();
 }
-};
+}; // namespace eIDMW

@@ -33,43 +33,43 @@
 #include "Mutex.h"
 #include "APLReader.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-	class XadesSignature;
+class XadesSignature;
 
-/******************************************************************************//**
-  * Class for all Pteid cryptographic features 
-  *
-  * The goal of this class is to provide facilities to openSSL usage
-  * This is only for internal use, no export is forseen. 
-  *********************************************************************************/
-class APL_CryptoFwkPteid : public APL_CryptoFwk
-{
+/******************************************************************************/ /**
+																				  * Class for all Pteid cryptographic
+																				  *features
+																				  *
+																				  * The goal of this class is to provide
+																				  *facilities to openSSL usage This is
+																				  *only for internal use, no export is
+																				  *forseen.
+																				  *********************************************************************************/
+class APL_CryptoFwkPteid : public APL_CryptoFwk {
 public:
 	/**
-	  * Destructor
-	  */
+	 * Destructor
+	 */
 	virtual ~APL_CryptoFwkPteid(void);
 
 	/**
-	  * Verify if the cert is the correct Pteid root
-	  */
+	 * Verify if the cert is the correct Pteid root
+	 */
 	bool VerifyRoot(const CByteArray &cert);
 
 private:
 	/**
-	  * Constructor"
-	  */
+	 * Constructor"
+	 */
 	APL_CryptoFwkPteid();
 
-	APL_CryptoFwkPteid(const APL_CryptoFwkPteid &service);				/**< Copy not allowed - not implemented */
-	APL_CryptoFwkPteid &operator=(const APL_CryptoFwkPteid &service);	/**< Copy not allowed - not implemented */
+	APL_CryptoFwkPteid(const APL_CryptoFwkPteid &service);			  /**< Copy not allowed - not implemented */
+	APL_CryptoFwkPteid &operator=(const APL_CryptoFwkPteid &service); /**< Copy not allowed - not implemented */
 
-friend void CAppLayer::startAllServices();			/**< This method must access private constructor */
-
+	friend void CAppLayer::startAllServices(); /**< This method must access private constructor */
 };
 
-}
+} // namespace eIDMW
 
 #endif // __CRYPTOPTEIDFWK_H__

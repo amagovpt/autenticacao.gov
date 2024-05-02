@@ -10,17 +10,14 @@
 #define PNG_MAGIC "\x89PNG\x0d\x0a\x1a\x0a"
 #define MAGIC_SIZE 8
 
-#define JP2_DEFAULT			0		//! save with a 16:1 rate
+#define JP2_DEFAULT 0 //! save with a 16:1 rate
 
-#if (defined(BYTE_ORDER) && BYTE_ORDER==BIG_ENDIAN) || \
-    (defined(__BYTE_ORDER) && __BYTE_ORDER==__BIG_ENDIAN) || \
-    defined(__BIG_ENDIAN__)
+#if (defined(BYTE_ORDER) && BYTE_ORDER == BIG_ENDIAN) || (defined(__BYTE_ORDER) && __BYTE_ORDER == __BIG_ENDIAN) ||    \
+	defined(__BIG_ENDIAN__)
 #define IS_BIG_ENDIAN
 #endif
 
-
-struct PNG_MEM_ENCODE
-{
+struct PNG_MEM_ENCODE {
 	unsigned char *buffer;
 	unsigned long size;
 };
@@ -57,7 +54,7 @@ struct MEMORY_HEADER {
 	long current_position;
 };
 
-enum IMAGE_FORMAT{
+enum IMAGE_FORMAT {
 	UNKNOWN = -1,
 
 	PNG = 0,

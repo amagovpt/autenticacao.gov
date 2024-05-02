@@ -30,84 +30,89 @@
 using namespace eIDMW;
 
 #define WHERE "hash_init()"
-int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size)
-{
-   int ret = CKR_OK;
-   CHash *oHash = new CHash();
-   tHashAlgo algo;
+int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size) {
+	int ret = CKR_OK;
+	CHash *oHash = new CHash();
+	tHashAlgo algo;
 
-   switch(pMechanism->mechanism)
-      {
-      case CKM_SHA_1:
-      case CKM_ECDSA_SHA1:
-      case CKM_SHA1_RSA_PKCS:          algo = ALGO_SHA1;       *size=20; break;
+	switch (pMechanism->mechanism) {
+	case CKM_SHA_1:
+	case CKM_ECDSA_SHA1:
+	case CKM_SHA1_RSA_PKCS:
+		algo = ALGO_SHA1;
+		*size = 20;
+		break;
 
-      case CKM_SHA256:
-      case CKM_ECDSA_SHA256:
-	   case CKM_SHA256_RSA_PKCS:
-      case CKM_SHA256_RSA_PKCS_PSS:    algo = ALGO_SHA256;     *size=32; break;
-      
-      case CKM_SHA384:
-      case CKM_ECDSA_SHA384:
-      case CKM_SHA384_RSA_PKCS:
-	   case CKM_SHA384_RSA_PKCS_PSS:    algo = ALGO_SHA384;     *size=48; break;
-      
-      case CKM_SHA512:
-      case CKM_ECDSA_SHA512:
-      case CKM_SHA512_RSA_PKCS:
-	   case CKM_SHA512_RSA_PKCS_PSS:    algo = ALGO_SHA512;     *size=64; break;
-      
-      default:
-         ret = CKR_MECHANISM_INVALID;
-         goto cleanup;
-      }
+	case CKM_SHA256:
+	case CKM_ECDSA_SHA256:
+	case CKM_SHA256_RSA_PKCS:
+	case CKM_SHA256_RSA_PKCS_PSS:
+		algo = ALGO_SHA256;
+		*size = 32;
+		break;
 
-   oHash->Init(algo);
+	case CKM_SHA384:
+	case CKM_ECDSA_SHA384:
+	case CKM_SHA384_RSA_PKCS:
+	case CKM_SHA384_RSA_PKCS_PSS:
+		algo = ALGO_SHA384;
+		*size = 48;
+		break;
 
-   *pphashinfo = oHash;
-   return ret;
+	case CKM_SHA512:
+	case CKM_ECDSA_SHA512:
+	case CKM_SHA512_RSA_PKCS:
+	case CKM_SHA512_RSA_PKCS_PSS:
+		algo = ALGO_SHA512;
+		*size = 64;
+		break;
+
+	default:
+		ret = CKR_MECHANISM_INVALID;
+		goto cleanup;
+	}
+
+	oHash->Init(algo);
+
+	*pphashinfo = oHash;
+	return ret;
 
 cleanup:
-   delete oHash;
-   return ret;
+	delete oHash;
+	return ret;
 }
 #undef WHERE
-
-
 
 #define WHERE "hash_update()"
-int hash_update(void *phashinfo, char *p, unsigned long l)
-{
-int ret = CKR_OK;
-CHash *oHash = (CHash *) phashinfo;
-CByteArray data((unsigned char*)p,l);
+int hash_update(void *phashinfo, char *p, unsigned long l) {
+	int ret = CKR_OK;
+	CHash *oHash = (CHash *)phashinfo;
+	CByteArray data((unsigned char *)p, l);
 
-oHash->Update(data);
+	oHash->Update(data);
 
-return (ret);
+	return (ret);
 }
 #undef WHERE
 
-
 #define WHERE "hash_final()"
-int hash_final(void *phashinfo, unsigned char *p, unsigned long *l)
-{
-int ret = CKR_OK;
+int hash_final(void *phashinfo, unsigned char *p, unsigned long *l) {
+	int ret = CKR_OK;
 
-if (phashinfo == NULL)
-   return(CKR_FUNCTION_FAILED);
+	if (phashinfo == NULL)
+		return (CKR_FUNCTION_FAILED);
 
-CHash *oHash = (CHash *) phashinfo;
-CByteArray data;
+	CHash *oHash = (CHash *)phashinfo;
+	CByteArray data;
 
-data = oHash->GetHash();
+	data = oHash->GetHash();
 
-memcpy(p, data.GetBytes(), data.Size());
+	memcpy(p, data.GetBytes(), data.Size());
 
-*l = data.Size();
+	*l = data.Size();
 
-delete(oHash);
+	delete (oHash);
 
-return (ret);
+	return (ret);
 }
 #undef WHERE

@@ -24,25 +24,11 @@
 #ifndef __PTEIDMDRV__H__
 #define __PTEIDMDRV__H__
 
-DWORD WINAPI   CardGetContainerProperty
-               (
-                  __in                                         PCARD_DATA     pCardData,
-                  __in                                         BYTE           bContainerIndex,
-                  __in                                         LPCWSTR        wszProperty,
-                  __out_bcount_part_opt(cbData, *pdwDataLen)   PBYTE          pbData,
-                  __in                                         DWORD          cbData,
-                  __out                                        PDWORD         pdwDataLen,
-                  __in                                         DWORD          dwFlags
-               );
-DWORD WINAPI   CardSetContainerProperty
-               (
-                  __in                    PCARD_DATA  pCardData,
-                  __in                    BYTE        bContainerIndex,
-                  __in                    LPCWSTR     wszProperty,
-                  __in_bcount(cbDataLen)  PBYTE       pbData,
-                  __in                    DWORD       cbDataLen,
-                  __in                    DWORD       dwFlags
-               );
+DWORD WINAPI CardGetContainerProperty(__in PCARD_DATA pCardData, __in BYTE bContainerIndex, __in LPCWSTR wszProperty,
+									  __out_bcount_part_opt(cbData, *pdwDataLen) PBYTE pbData, __in DWORD cbData,
+									  __out PDWORD pdwDataLen, __in DWORD dwFlags);
+DWORD WINAPI CardSetContainerProperty(__in PCARD_DATA pCardData, __in BYTE bContainerIndex, __in LPCWSTR wszProperty,
+									  __in_bcount(cbDataLen) PBYTE pbData, __in DWORD cbDataLen, __in DWORD dwFlags);
 DWORD CardGetFreeSpace(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
 DWORD CardSetFreeSpace(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWORD dwFlags);
 DWORD CardGetCapabilities(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
@@ -53,7 +39,8 @@ DWORD CardGetReadOnly(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD p
 DWORD CardSetReadOnly(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWORD dwFlags);
 DWORD CardGetCacheMode(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
 DWORD CardSetCacheMode(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWORD dwFlags);
-DWORD CardGetSupportsWinX509Enrollment(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
+DWORD CardGetSupportsWinX509Enrollment(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen,
+									   DWORD dwFlags);
 DWORD CardSetSupportsWinX509Enrollment(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWORD dwFlags);
 DWORD CardGetGuid(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pdwDataLen, DWORD dwFlags);
 DWORD CardSetGuid(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWORD dwFlags);
@@ -78,21 +65,9 @@ DWORD CardSetPinContextString(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, 
 
 DWORD CardSetPropertyUnsupported(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, DWORD dwFlags);
 
-DWORD WINAPI   CardGetProperty
-(
-   __in                                         PCARD_DATA  pCardData,
-   __in                                         LPCWSTR     wszProperty,
-   __out_bcount_part_opt(cbData, *pdwDataLen)   PBYTE       pbData,
-   __in                                         DWORD       cbData,
-   __out                                        PDWORD      pdwDataLen,
-   __in                                         DWORD       dwFlags
-);
-DWORD WINAPI   CardSetProperty
-               (
-                  __in                    PCARD_DATA     pCardData,
-                  __in                    LPCWSTR        wszProperty,
-                  __in_bcount(cbDataLen)  PBYTE          pbData,
-                  __in                    DWORD          cbDataLen,
-                  __in                    DWORD          dwFlags
-               );
+DWORD WINAPI CardGetProperty(__in PCARD_DATA pCardData, __in LPCWSTR wszProperty,
+							 __out_bcount_part_opt(cbData, *pdwDataLen) PBYTE pbData, __in DWORD cbData,
+							 __out PDWORD pdwDataLen, __in DWORD dwFlags);
+DWORD WINAPI CardSetProperty(__in PCARD_DATA pCardData, __in LPCWSTR wszProperty, __in_bcount(cbDataLen) PBYTE pbData,
+							 __in DWORD cbDataLen, __in DWORD dwFlags);
 #endif

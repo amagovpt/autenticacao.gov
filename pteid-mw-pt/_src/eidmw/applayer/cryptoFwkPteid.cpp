@@ -28,23 +28,17 @@
 #include "openssl/x509v3.h"
 #include "CardPteidDef.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 /* *******************
 *** APL_CryptoFwkPteid ***
 ******************** */
-APL_CryptoFwkPteid::APL_CryptoFwkPteid():APL_CryptoFwk()
-{
+APL_CryptoFwkPteid::APL_CryptoFwkPteid() : APL_CryptoFwk() {}
+
+APL_CryptoFwkPteid::~APL_CryptoFwkPteid(void) {}
+
+bool APL_CryptoFwkPteid::VerifyRoot(const CByteArray &cert) {
+	return APL_CryptoFwk::VerifyRoot(cert, _pteid_root_certs, _pteid_root_certs_size);
 }
 
-APL_CryptoFwkPteid::~APL_CryptoFwkPteid(void)
-{
-}
-
-bool APL_CryptoFwkPteid::VerifyRoot(const CByteArray &cert)
-{
-	return APL_CryptoFwk::VerifyRoot(cert,_pteid_root_certs, _pteid_root_certs_size);
-}
-
-}
+} // namespace eIDMW

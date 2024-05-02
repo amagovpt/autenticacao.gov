@@ -9,9 +9,9 @@
 #ifndef TOTP_GEN_H
 #define TOTP_GEN_H
 
-//Implemented in totp_gen.cpp
+// Implemented in totp_gen.cpp
 namespace eIDMW {
 
-    std::string generateTOTP(std::string secretKey, unsigned int digits, unsigned int step_time, time_t my_time);
+std::string generateTOTP(std::string secretKey, unsigned int digits, unsigned int step_time, time_t my_time);
 }
 #endif // TOTP_GEN_H

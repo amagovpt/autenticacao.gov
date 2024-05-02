@@ -2,7 +2,7 @@
 
  * Copyright (C) 2022-2023 José Pinto - <jose.pinto@caixamagica.pt>
  * Copyright (C) 2023 Nuno Romeu Lopes - <nuno.lopes@caixamagica.pt>
- * 
+ *
  * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
@@ -16,33 +16,29 @@
 
 namespace eIDMW {
 
-struct ScapCredentials
-{
+struct ScapCredentials {
 	std::string basic_user;
 	std::string basic_pass;
 	std::string credential_id;
 };
 
-struct ScapProvider
-{
+struct ScapProvider {
 	std::string uriId;
 	std::string name;
 	std::string type;
 	std::string nipc;
 	std::string logo;
 
-	bool operator==(const ScapProvider& p) const { return uriId == p.uriId; };
+	bool operator==(const ScapProvider &p) const { return uriId == p.uriId; };
 };
 
-struct ScapSubAttribute
-{
+struct ScapSubAttribute {
 	std::string id;
 	std::string description;
 	std::string value;
 };
 
-struct ScapAttribute
-{
+struct ScapAttribute {
 	std::string id;
 	std::string description;
 	std::string validity;
@@ -51,14 +47,15 @@ struct ScapAttribute
 	std::string citizen_name;
 	std::string unique_id;
 
-	bool operator==(const ScapAttribute& a) const { return id == a.id && citizen_name == a.citizen_name && provider.nipc == a.provider.nipc; };
+	bool operator==(const ScapAttribute &a) const {
+		return id == a.id && citizen_name == a.citizen_name && provider.nipc == a.provider.nipc;
+	};
 };
 
 struct PDFSignatureInfo;
 class OAuthAttributes;
 
-class ScapClient
-{
+class ScapClient {
 public:
 	ScapClient(const ScapCredentials &credentials);
 
@@ -75,8 +72,9 @@ public:
 	 * @param allEnterprise boolean that when true means we intend to fetch all enterprise attributes.
 	 * @param allEmployee boolean that when true means we intend to fetch all employee attributes.
 	 **/
-	ScapResult<std::vector<ScapAttribute>> getCitizenAttributes(PTEID_EIDCard *card, const std::vector<ScapProvider> &providers,
-		bool allEnterprise = false, bool allEmployee = false);
+	ScapResult<std::vector<ScapAttribute>> getCitizenAttributes(PTEID_EIDCard *card,
+																const std::vector<ScapProvider> &providers,
+																bool allEnterprise = false, bool allEmployee = false);
 
 	/**
 	 * Perform a SCAP signature.
@@ -87,7 +85,7 @@ public:
 	 * @param attributes is the vector of attributes to sign with.
 	 **/
 	ScapResult<void> sign(PTEID_SigningDevice *device, const PDFSignatureInfo &signature_info,
-		const std::vector<ScapAttribute> &attributes);
+						  const std::vector<ScapAttribute> &attributes);
 
 	static ScapResult<std::vector<ScapAttribute>> readAttributeCache();
 	static bool clearAttributeCache();
@@ -99,17 +97,14 @@ private:
 	OAuthAttributes *m_oauth;
 };
 
-struct ScapProviderHasher
-{
-	std::size_t operator()(ScapProvider const& p) const noexcept {
-		return std::hash<std::string>{}(p.uriId);
-	}
+struct ScapProviderHasher {
+	std::size_t operator()(const ScapProvider &p) const noexcept { return std::hash<std::string>{}(p.uriId); }
 };
 
-struct ScapAttributeHasher
-{
-	std::size_t operator()(ScapAttribute const& a) const noexcept {
-		return std::hash<std::string>{}(a.id) ^ std::hash<std::string>{}(a.citizen_name) ^ std::hash<std::string>{}(a.provider.nipc);
+struct ScapAttributeHasher {
+	std::size_t operator()(const ScapAttribute &a) const noexcept {
+		return std::hash<std::string>{}(a.id) ^ std::hash<std::string>{}(a.citizen_name) ^
+			   std::hash<std::string>{}(a.provider.nipc);
 	}
 };
 
@@ -123,4 +118,4 @@ std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<S
 // Return professional name if all selected attributes have it
 std::string get_professional_name(const std::vector<ScapAttribute> &attributes);
 
-};
+}; // namespace eIDMW

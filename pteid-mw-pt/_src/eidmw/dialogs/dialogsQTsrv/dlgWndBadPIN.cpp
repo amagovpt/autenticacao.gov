@@ -30,20 +30,21 @@
 #include <iostream>
 using namespace std;
 
-dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
-{
+dlgWndBadPIN::dlgWndBadPIN(QString &PINName, unsigned long RemainingTries, QWidget *parent,
+						   Type_WndGeometry *pParentWndGeometry)
+	: dlgWndBase(parent) {
 	ui.setupUi(this);
 
 	setFixedSize(this->width(), this->height());
 
 	QString Title = QString::fromWCharArray(GETSTRING_DLG(Notification)) + ": " + PINName;
 	this->setWindowTitle(Title);
-	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
+	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 
 	// HEADER
 	QString sHeader = QString::fromWCharArray(GETSTRING_DLG(Bad)) + " \"" + PINName + "\"";
-	ui.lblHeader->setText( sHeader );
-	ui.lblHeader->setAccessibleName( sHeader );
+	ui.lblHeader->setText(sHeader);
+	ui.lblHeader->setAccessibleName(sHeader);
 	ui.lblHeader->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; font-weight:800; background:rgba(0,0,0,0)}");
 
 	// ICON
@@ -57,22 +58,22 @@ dlgWndBadPIN::dlgWndBadPIN( QString & PINName, unsigned long RemainingTries, QWi
 	ui.lblImage->setScaledContents(true);
 
 	// RETRY BUTTON
-	ui.btnRetry->setText( QString::fromWCharArray(GETSTRING_DLG(Retry)) );
-	ui.btnRetry->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Retry)) );
+	ui.btnRetry->setText(QString::fromWCharArray(GETSTRING_DLG(Retry)));
+	ui.btnRetry->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(Retry)));
 	ui.btnRetry->setStyleSheet("QPushButton {background-color: #3C5DBC; color: #ffffff; border-radius: 0}\
 QPushButton:hover{background-color: #2C3DAC}");
 	ui.btnRetry->setVisible(RemainingTries);
 
 	// CANCEL BUTTON
-	ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
-	ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
+	ui.btnCancel->setText(QString::fromWCharArray(GETSTRING_DLG(Cancel)));
+	ui.btnCancel->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(Cancel)));
 	ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #3C5DBC; border-radius: 0}\
 QPushButton:hover{background-color: #C6C7C7}");
 	ui.btnCancel->setVisible(RemainingTries);
 
 	// OK BUTTON
-	ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
-	ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Ok)) );
+	ui.btnOk->setText(QString::fromWCharArray(GETSTRING_DLG(Ok)));
+	ui.btnOk->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(Ok)));
 	ui.btnOk->setStyleSheet("QPushButton {background-color: #3C5DBC; color: #ffffff; border-radius: 0}\
 QPushButton:hover{background-color: #2C3DAC}");
 	ui.btnOk->setVisible(!RemainingTries);
@@ -81,7 +82,7 @@ QPushButton:hover{background-color: #2C3DAC}");
 	QString sCenter = QString::fromWCharArray(GETSTRING_DLG(IncorrectPin)) + "\n";
 	sCenter += QString().setNum(RemainingTries) + " ";
 	sCenter += QString::fromWCharArray(GETSTRING_DLG(RemainingAttempts)) + ".";
-	if( !RemainingTries )
+	if (!RemainingTries)
 		sCenter = QString::fromWCharArray(GETSTRING_DLG(PinBlocked));
 
 	QString fontSize;
@@ -97,16 +98,11 @@ QPushButton:hover{background-color: #2C3DAC}");
 	ui.lblCenter->setAlignment(Qt::AlignCenter);
 	ui.lblCenter->setWordWrap(true);
 
-        Type_WndGeometry WndGeometry;
-        if ( getWndCenterPos( pParentWndGeometry
-                        , QApplication::desktop()->width(), QApplication::desktop()->height()
-                        , this->width(), this->height()
-                        , &WndGeometry ) ){
-            this->move( WndGeometry.x, WndGeometry.y );
-        }/* if ( getWndCenterPos( pParentWndGeometry, ... ) ) */
+	Type_WndGeometry WndGeometry;
+	if (getWndCenterPos(pParentWndGeometry, QApplication::desktop()->width(), QApplication::desktop()->height(),
+						this->width(), this->height(), &WndGeometry)) {
+		this->move(WndGeometry.x, WndGeometry.y);
+	} /* if ( getWndCenterPos( pParentWndGeometry, ... ) ) */
 }
 
-dlgWndBadPIN::~dlgWndBadPIN()
-{
-
-}
+dlgWndBadPIN::~dlgWndBadPIN() {}

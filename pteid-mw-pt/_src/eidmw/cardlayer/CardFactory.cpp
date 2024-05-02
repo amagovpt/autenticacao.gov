@@ -38,16 +38,14 @@
 #include <vector>
 #include <string>
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-
-CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReader,
-	CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess) {
+CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReader, CContext *poContext,
+				   GenericPinpad *poPinpad, bool &isContactLess) {
 	CCard *poCard = NULL;
 	long lErrCode = EIDMW_ERR_CHECK;
-	const char* strReader = NULL;
-	const void* paramStructure = NULL;
+	const char *strReader = NULL;
+	const void *paramStructure = NULL;
 
 	if (poContext->m_ulConnectionDelay != 0)
 		CThread::SleepMillisecs(poContext->m_ulConnectionDelay);
@@ -59,7 +57,8 @@ CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csRead
 		CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
 		isContactLess = atr.Equals(atrContactLessCard);
 
-		MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(), isContactLess ? "true" : "false");
+		MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(),
+			  isContactLess ? "true" : "false");
 		MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s", atr.ToString(true, false).c_str());
 
 		if (protocol == SCARD_PROTOCOL_T0)
@@ -67,10 +66,9 @@ CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csRead
 		else if (protocol == SCARD_PROTOCOL_T1)
 			paramStructure = SCARD_PCI_T1;
 
-		const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
-		{
+		const auto selectAppId = [&](const unsigned char *oAID, unsigned long size) -> bool {
 			long lRetVal = 0;
-			unsigned char tucSelectApp[] = { 0x00, 0xA4, 0x04, 0x00 };
+			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
 			CByteArray oCmd(12);
 			oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
 			oCmd.Append((unsigned char)size);
@@ -82,11 +80,11 @@ CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csRead
 		};
 
 		int appletVersion = 1;
-		if (!isContactLess)
-		{
+		if (!isContactLess) {
 			bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
 			if (!aidStatus) {
-				bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
+				bool nationalDataStatus =
+					selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
 				if (nationalDataStatus)
 					appletVersion = 3;
 			}
@@ -96,8 +94,7 @@ CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csRead
 			poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, paramStructure);
 			if (cacheEnabled)
 				poCard->InitEncryptionKey();
-		}
-		else {
+		} else {
 			appletVersion = 3;
 			poCard = new CPteidCard(hCard, poContext, poPinpad, paramStructure);
 		}
@@ -105,26 +102,23 @@ CCard * CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csRead
 		CCache::LimitDiskCacheFiles(10);
 
 		// If no other CCard subclass could be found
-		if (poCard == NULL)
-		{
+		if (poCard == NULL) {
 			poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
 		}
 
 		poCard->setProtocol(paramStructure);
-	}
-	else {
+	} else {
 		throw CMWEXCEPTION(lErrCode);
 	}
-	
+
 	return poCard;
 }
 
-CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess)
-{
+CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess) {
 	CCard *poCard = NULL;
 	long lErrCode = EIDMW_ERR_CHECK; // should never be returned
 	const char *strReader = NULL;
-	const void * param_structure = NULL;
+	const void *param_structure = NULL;
 
 	if (poContext->m_ulConnectionDelay != 0)
 		CThread::SleepMillisecs(poContext->m_ulConnectionDelay);
@@ -132,17 +126,14 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 	// Try if we can connect to the card via a normal SCardConnect()
 	SCARDHANDLE hCard = 0;
 	std::pair<SCARDHANDLE, DWORD> ret;
-	try 
-	{
+	try {
 		ret = poContext->m_oPCSC.Connect(csReader);
 		hCard = ret.first;
 
 		if (hCard == 0) {
 			goto done;
 		}
-	}
-	catch(CMWException &e)
-	{
+	} catch (CMWException &e) {
 		if (e.GetError() == (long)EIDMW_ERR_NO_CARD)
 			goto done;
 		if (e.GetError() != (long)EIDMW_ERR_CANT_CONNECT && e.GetError() != (long)EIDMW_ERR_CARD_COMM)
@@ -155,63 +146,61 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 
 	if (hCard != 0) {
 		if (poCard == NULL) {
-            CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
-            CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
-            isContactLess = atr.Equals(atrContactLessCard);
+			CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
+			CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
+			isContactLess = atr.Equals(atrContactLessCard);
 
-            MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(), isContactLess ? "true" : "false");
-            MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s", atr.ToString(true, false).c_str());
+			MWLOG(LEV_DEBUG, MOD_CAL, "Using Reader: %s is the card contactless: %s", csReader.c_str(),
+				  isContactLess ? "true" : "false");
+			MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s", atr.ToString(true, false).c_str());
 
 			if (ret.second == SCARD_PROTOCOL_T0)
-               param_structure = SCARD_PCI_T0;
-        	else if (ret.second == SCARD_PROTOCOL_T1)
+				param_structure = SCARD_PCI_T0;
+			else if (ret.second == SCARD_PROTOCOL_T1)
 				param_structure = SCARD_PCI_T1;
 
 			int appletVersion = 0;
 
-            const auto selectAppId = [&](const unsigned char* oAID, unsigned long size) -> bool
-            {
-                long lRetVal = 0;
-                unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
-                CByteArray oCmd(12);
-                oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-                oCmd.Append((unsigned char)size);
-                oCmd.Append(oAID, size);
+			const auto selectAppId = [&](const unsigned char *oAID, unsigned long size) -> bool {
+				long lRetVal = 0;
+				unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+				CByteArray oCmd(12);
+				oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
+				oCmd.Append((unsigned char)size);
+				oCmd.Append(oAID, size);
 
-                CByteArray oResp;
-                oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
-                return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
-            };
+				CByteArray oResp;
+				oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
+				return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
+			};
 
-            if(!isContactLess)
-            {
-                bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
-                if (aidStatus) {
-                    appletVersion = 1;
-                }
-                else {
-                    bool nationalDataStatus = selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
-                    if (nationalDataStatus)
-                        appletVersion = 3;
-                }
-                if (appletVersion > 0) {
-    				long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
-    			
-    				poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
-    				if (cacheEnabled)
-    					poCard->InitEncryptionKey();
-                }
-            }
-            else {
-                appletVersion = 3;
+			if (!isContactLess) {
+				bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
+				if (aidStatus) {
+					appletVersion = 1;
+				} else {
+					bool nationalDataStatus =
+						selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
+					if (nationalDataStatus)
+						appletVersion = 3;
+				}
+				if (appletVersion > 0) {
+					long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+
+					poCard =
+						PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+					if (cacheEnabled)
+						poCard->InitEncryptionKey();
+				}
+			} else {
+				appletVersion = 3;
 				poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure);
-            }
+			}
 
 			CCache::LimitDiskCacheFiles(10);
 
 			// If no other CCard subclass could be found
-	    	if (poCard == NULL)
-	    	{
+			if (poCard == NULL) {
 				poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
 			}
 
@@ -219,10 +208,8 @@ CCard * CardConnect(const std::string &csReader, CContext *poContext, GenericPin
 
 			hCard = 0;
 		}
-	}
-	else
-	{
-        isContactLess = false;
+	} else {
+		isContactLess = false;
 		throw CMWEXCEPTION(lErrCode);
 	}
 
@@ -230,5 +217,4 @@ done:
 	return poCard;
 }
 
-
-}
+} // namespace eIDMW

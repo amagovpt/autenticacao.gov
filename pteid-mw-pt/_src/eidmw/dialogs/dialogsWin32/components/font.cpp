@@ -32,78 +32,63 @@ HFONT PteidControls::StandardFontBold = NULL;
 HFONT PteidControls::StandardFont = NULL;
 
 HFONT PteidControls::CreatePteidFont(int fontPointSize, int fontWeight, HINSTANCE hInstance, LOGFONT *lfPtr) {
-    if (!Font_bFontsLoaded)
-    {
-        Font_LoadFontsFromResources(hInstance);
-    }
-    HFONT TextFont;
+	if (!Font_bFontsLoaded) {
+		Font_LoadFontsFromResources(hInstance);
+	}
+	HFONT TextFont;
 
-    LOGFONT lf;
-    memset(&lf, 0, sizeof(lf));
+	LOGFONT lf;
+	memset(&lf, 0, sizeof(lf));
 
-    int fontSize = fontPointSize;
-    ScaleDimensions(NULL, &fontSize);
-    lf.lfHeight = -fontSize;
-    lf.lfWeight = fontWeight;
-    lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
-    if (lfPtr != NULL) {
-        lf.lfItalic = lfPtr->lfItalic;
-    }
+	int fontSize = fontPointSize;
+	ScaleDimensions(NULL, &fontSize);
+	lf.lfHeight = -fontSize;
+	lf.lfWeight = fontWeight;
+	lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+	if (lfPtr != NULL) {
+		lf.lfItalic = lfPtr->lfItalic;
+	}
 
-    if (fontWeight == FW_BLACK)
-    {
-        wcscpy_s(lf.lfFaceName, L"Lato Black");
-    }
-    else if (fontWeight == FW_BOLD) {
-        wcscpy_s(lf.lfFaceName, L"Lato Bold");
-    }
-    else {
-        wcscpy_s(lf.lfFaceName, L"Lato Regular");
-    }
+	if (fontWeight == FW_BLACK) {
+		wcscpy_s(lf.lfFaceName, L"Lato Black");
+	} else if (fontWeight == FW_BOLD) {
+		wcscpy_s(lf.lfFaceName, L"Lato Bold");
+	} else {
+		wcscpy_s(lf.lfFaceName, L"Lato Regular");
+	}
 
-    TextFont = CreateFont(lf.lfHeight, lf.lfWidth,
-        lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
-        lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet,
-        lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
-        lf.lfPitchAndFamily, lf.lfFaceName);
+	TextFont = CreateFont(lf.lfHeight, lf.lfWidth, lf.lfEscapement, lf.lfOrientation, lf.lfWeight, lf.lfItalic,
+						  lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet, lf.lfOutPrecision, lf.lfClipPrecision,
+						  lf.lfQuality, lf.lfPitchAndFamily, lf.lfFaceName);
 
-    return TextFont;
+	return TextFont;
 }
 
 void PteidControls::Font_LoadFontsFromResources(HINSTANCE hInstance) {
-    std::vector<HRSRC> res;
-    res.push_back(FindResource(hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT), L"BINARY"));
-    res.push_back(FindResource(hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT_BOLD), L"BINARY"));
-    res.push_back(FindResource(hInstance,
-        MAKEINTRESOURCE(IDR_MYFONT_BLACK), L"BINARY"));
+	std::vector<HRSRC> res;
+	res.push_back(FindResource(hInstance, MAKEINTRESOURCE(IDR_MYFONT), L"BINARY"));
+	res.push_back(FindResource(hInstance, MAKEINTRESOURCE(IDR_MYFONT_BOLD), L"BINARY"));
+	res.push_back(FindResource(hInstance, MAKEINTRESOURCE(IDR_MYFONT_BLACK), L"BINARY"));
 
-    for (size_t i = 0; i < res.size(); i++)
-    {
-        HANDLE fontHandle = NULL;
-        if (res[i])
-        {
-            HGLOBAL mem = LoadResource(hInstance, res[i]);
-            void *data = LockResource(mem);
-            DWORD len = SizeofResource(hInstance, res[i]);
+	for (size_t i = 0; i < res.size(); i++) {
+		HANDLE fontHandle = NULL;
+		if (res[i]) {
+			HGLOBAL mem = LoadResource(hInstance, res[i]);
+			void *data = LockResource(mem);
+			DWORD len = SizeofResource(hInstance, res[i]);
 
-            DWORD nFonts;
-            fontHandle = AddFontMemResourceEx(
-                data,       	// font resource
-                len,       	// number of bytes in font resource 
-                NULL,          	// Reserved. Must be 0.
-                &nFonts      	// number of fonts installed
-                );
-
-        }
-        if (fontHandle == NULL)
-        {
-            MWLOG(LEV_ERROR, MOD_DLG, L"  --> PteidControls::Font_LoadFontsFromResources failed loading font (res[%d])", i);
-        }
-        else
-        {
-            Font_bFontsLoaded = TRUE;
-        }
-    }
+			DWORD nFonts;
+			fontHandle = AddFontMemResourceEx(data,	  // font resource
+											  len,	  // number of bytes in font resource
+											  NULL,	  // Reserved. Must be 0.
+											  &nFonts // number of fonts installed
+			);
+		}
+		if (fontHandle == NULL) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  --> PteidControls::Font_LoadFontsFromResources failed loading font (res[%d])",
+				  i);
+		} else {
+			Font_bFontsLoaded = TRUE;
+		}
+	}
 }

@@ -35,34 +35,23 @@
 #define CM_IOCTL_MODIFY_PIN 0x42330007
 #endif
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-class ACR83Pinpad : public GenericPinpad 
-{
+class ACR83Pinpad : public GenericPinpad {
 public:
-    ACR83Pinpad(CContext *poContext, SCARDHANDLE hCard,
-		const std::string & csReader): GenericPinpad(poContext, hCard, csReader)
-	{
-	};
+	ACR83Pinpad(CContext *poContext, SCARDHANDLE hCard, const std::string &csReader)
+		: GenericPinpad(poContext, hCard, csReader) {};
 
-    virtual CByteArray PinCmd(tPinOperation operation,
-		const tPin & pin, unsigned char ucPinType,
-        const CByteArray & oAPDU, unsigned long & ulRemaining, void *wndGeometry = 0 );
+	virtual CByteArray PinCmd(tPinOperation operation, const tPin &pin, unsigned char ucPinType,
+							  const CByteArray &oAPDU, unsigned long &ulRemaining, void *wndGeometry = 0);
 
 private:
-
-void fillVerifyControlStruct(PP_VERIFY_CCID * pin_verify);
-void fillModifyControlStruct(PP_CHANGE_CCID * pin_change);
-unsigned int fillStructIAS(unsigned char* apdu, unsigned char ucPintype, int changePIN);
-unsigned int fillStructGemsafe(unsigned char * apdu, unsigned char ucPintype, int changePin);
-
-
-
+	void fillVerifyControlStruct(PP_VERIFY_CCID *pin_verify);
+	void fillModifyControlStruct(PP_CHANGE_CCID *pin_change);
+	unsigned int fillStructIAS(unsigned char *apdu, unsigned char ucPintype, int changePIN);
+	unsigned int fillStructGemsafe(unsigned char *apdu, unsigned char ucPintype, int changePin);
 };
 
-}
+} // namespace eIDMW
 
 #endif
-
-

@@ -29,51 +29,48 @@ extern "C" {
 namespace eIDMW {
 
 /* convert variable length binary bit-stream into int-type */
-static unsigned int bin2int(const unsigned char *p_ucDat, unsigned int iLen)
-{
-    unsigned int uiResult = 0;
+static unsigned int bin2int(const unsigned char *p_ucDat, unsigned int iLen) {
+	unsigned int uiResult = 0;
 
-    //parameter check
-    if (iLen > 4)
-        throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
+	// parameter check
+	if (iLen > 4)
+		throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
 
-    //add all bytes
-    while(iLen--)
-    {
-        uiResult = uiResult<<8 | *(p_ucDat++);
-    }
-    return uiResult;
+	// add all bytes
+	while (iLen--) {
+		uiResult = uiResult << 8 | *(p_ucDat++);
+	}
+	return uiResult;
 }
 
-
-SODParser::~SODParser(){
+SODParser::~SODParser() {
 	if (attr)
 		delete attr;
 }
 
-void SODParser::ParseSodEncapsulatedContent(const CByteArray & contents, const std::vector<int>& valid_tags){
-	ASN1_ITEM           xLev0Item;
-	ASN1_ITEM           xLev1Item;
-	ASN1_ITEM           xLev2Item;
-	ASN1_ITEM           xLev3Item;
-	ASN1_ITEM           xLev4Item;
+void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const std::vector<int> &valid_tags) {
+	ASN1_ITEM xLev0Item;
+	ASN1_ITEM xLev1Item;
+	ASN1_ITEM xLev2Item;
+	ASN1_ITEM xLev3Item;
+	ASN1_ITEM xLev4Item;
 
-	xLev0Item.p_data = (unsigned char*)contents.GetBytes();
+	xLev0Item.p_data = (unsigned char *)contents.GetBytes();
 	xLev0Item.l_data = contents.Size();
 
-	if ((asn1_next_item(&xLev0Item, &xLev1Item)!= 0) ||(xLev1Item.tag != ASN_SEQUENCE))
+	if ((asn1_next_item(&xLev0Item, &xLev1Item) != 0) || (xLev1Item.tag != ASN_SEQUENCE))
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-	if ((xLev1Item.l_data < 2)|| (asn1_next_item(&xLev1Item, &xLev2Item)!= 0) ||(xLev2Item.tag != ASN_INTEGER))
+	if ((xLev1Item.l_data < 2) || (asn1_next_item(&xLev1Item, &xLev2Item) != 0) || (xLev2Item.tag != ASN_INTEGER))
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-	if (bin2int(xLev2Item.p_data, xLev2Item.l_data)!=0)
+	if (bin2int(xLev2Item.p_data, xLev2Item.l_data) != 0)
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_VALUE);
 
-	if ((xLev1Item.l_data < 2)|| (asn1_next_item(&xLev1Item, &xLev2Item)!= 0) ||(xLev2Item.tag != ASN_SEQUENCE))
+	if ((xLev1Item.l_data < 2) || (asn1_next_item(&xLev1Item, &xLev2Item) != 0) || (xLev2Item.tag != ASN_SEQUENCE))
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-	if ((xLev2Item.l_data < 2)|| (asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_OID))
+	if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item) != 0) || (xLev3Item.tag != ASN_OID))
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
 	// not the intended way, but for now it will do just fine.
@@ -82,43 +79,38 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray & contents, const s
 
 	// xlevel2 data is pointing to the optional 05 00 entry
 	// TODO (DEV-CC2): to test with final cards
-	if(xLev2Item.l_data >= 2 && (asn1_next_item(&xLev2Item, &xLev3Item)!= 0 || (xLev3Item.tag != ASN_NULL)))
-			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-	if ((xLev1Item.l_data < 2)|| (asn1_next_item(&xLev1Item, &xLev2Item)!= 0) ||(xLev2Item.tag != ASN_SEQUENCE))
+	if (xLev2Item.l_data >= 2 && (asn1_next_item(&xLev2Item, &xLev3Item) != 0 || (xLev3Item.tag != ASN_NULL)))
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
+	if ((xLev1Item.l_data < 2) || (asn1_next_item(&xLev1Item, &xLev2Item) != 0) || (xLev2Item.tag != ASN_SEQUENCE))
+		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
 	attr = new SODAttributes();
-	int i=0;
-	while(xLev2Item.l_data > 0) {
+	int i = 0;
+	while (xLev2Item.l_data > 0) {
 
-		if ((xLev2Item.l_data < 2)|| (asn1_next_item(&xLev2Item, &xLev3Item)!= 0) ||(xLev3Item.tag != ASN_SEQUENCE))
+		if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item) != 0) || (xLev3Item.tag != ASN_SEQUENCE))
 			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-		if ((xLev3Item.l_data < 2)|| (asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_INTEGER))
+		if ((xLev3Item.l_data < 2) || (asn1_next_item(&xLev3Item, &xLev4Item) != 0) || (xLev4Item.tag != ASN_INTEGER))
 			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
 		// validate the found tag
-        const auto read_tag = bin2int(xLev4Item.p_data, xLev4Item.l_data);
+		const auto read_tag = bin2int(xLev4Item.p_data, xLev4Item.l_data);
 		if (std::find(valid_tags.begin(), valid_tags.end(), read_tag) != valid_tags.end()) {
-			if ((xLev3Item.l_data < 2)|| (asn1_next_item(&xLev3Item, &xLev4Item)!= 0) ||(xLev4Item.tag != ASN_OCTET_STRING))
-               throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
+			if ((xLev3Item.l_data < 2) || (asn1_next_item(&xLev3Item, &xLev4Item) != 0) ||
+				(xLev4Item.tag != ASN_OCTET_STRING))
+				throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-            attr->hashes[i].Append(xLev4Item.p_data,xLev4Item.l_data);
-            i++;
-        }
-        else {
-            MWLOG(LEV_INFO, MOD_APL, "SODParser: unexpected datagroup tag: %d", read_tag);
-            //throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_VALUE);
-        }
-
+			attr->hashes[i].Append(xLev4Item.p_data, xLev4Item.l_data);
+			i++;
+		} else {
+			MWLOG(LEV_INFO, MOD_APL, "SODParser: unexpected datagroup tag: %d", read_tag);
+			// throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_VALUE);
+		}
 	}
 }
 
-SODAttributes &SODParser::getHashes(){
-	return *attr;
-}
-
+SODAttributes &SODParser::getHashes() { return *attr; }
 
 } /* namespace eIDMW */

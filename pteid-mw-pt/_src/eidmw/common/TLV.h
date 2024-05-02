@@ -32,31 +32,32 @@
 
 #include "ByteArray.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-class CTLV  
-{
+class CTLV {
 public:
 	EIDMW_CMN_API CTLV();
 	EIDMW_CMN_API CTLV(unsigned char ucTag, const unsigned char *pucData, unsigned long ulLen);
-	EIDMW_CMN_API CTLV(const CTLV & oTlv);
+	EIDMW_CMN_API CTLV(const CTLV &oTlv);
 
 	EIDMW_CMN_API virtual ~CTLV();
 
-    EIDMW_CMN_API void SetTag(unsigned char ucTag) { m_ucTag = ucTag; }
-    EIDMW_CMN_API void SetData(const CByteArray data) { m_Data.Append(data); }
-    EIDMW_CMN_API void SetData(const unsigned char *pucData, unsigned long ulLen) { m_Data.Append(pucData, ulLen); }
-    EIDMW_CMN_API void ReplaceData(const unsigned char *pucData, unsigned long ulLen) { m_Data.ClearContents();SetData(pucData, ulLen); }
-    EIDMW_CMN_API unsigned char GetTag() { return m_ucTag; }
-    EIDMW_CMN_API unsigned char *GetData() { return m_Data.GetBytes(); }
-    EIDMW_CMN_API unsigned long GetLength() { return m_Data.Size(); }
+	EIDMW_CMN_API void SetTag(unsigned char ucTag) { m_ucTag = ucTag; }
+	EIDMW_CMN_API void SetData(const CByteArray data) { m_Data.Append(data); }
+	EIDMW_CMN_API void SetData(const unsigned char *pucData, unsigned long ulLen) { m_Data.Append(pucData, ulLen); }
+	EIDMW_CMN_API void ReplaceData(const unsigned char *pucData, unsigned long ulLen) {
+		m_Data.ClearContents();
+		SetData(pucData, ulLen);
+	}
+	EIDMW_CMN_API unsigned char GetTag() { return m_ucTag; }
+	EIDMW_CMN_API unsigned char *GetData() { return m_Data.GetBytes(); }
+	EIDMW_CMN_API unsigned long GetLength() { return m_Data.Size(); }
 
 private:
-    unsigned char   m_ucTag;
-    CByteArray      m_Data;
+	unsigned char m_ucTag;
+	CByteArray m_Data;
 };
 
-}  // namespace eIDMW
+} // namespace eIDMW
 
 #endif // TLV_H

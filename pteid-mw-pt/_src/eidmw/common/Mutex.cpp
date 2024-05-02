@@ -31,11 +31,9 @@
 #include "Thread.h"
 #endif
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-CMutex::CMutex()
-{
+CMutex::CMutex() {
 #ifdef WIN32
 	InitializeCriticalSection(&m_Mutex);
 #else
@@ -45,8 +43,7 @@ CMutex::CMutex()
 #endif
 }
 
-CMutex::~CMutex()
-{
+CMutex::~CMutex() {
 #ifdef WIN32
 	EnterCriticalSection(&m_Mutex);
 	LeaveCriticalSection(&m_Mutex);
@@ -56,45 +53,33 @@ CMutex::~CMutex()
 #endif
 }
 
-void CMutex::Lock()
-{
+void CMutex::Lock() {
 #ifdef WIN32
 	EnterCriticalSection(&m_Mutex);
 #else
-	if (pthread_mutex_trylock(&m_Mutex))
-	{
-		if (! pthread_equal( m_MutexOwner, pthread_self()  ) )
-		{
+	if (pthread_mutex_trylock(&m_Mutex)) {
+		if (!pthread_equal(m_MutexOwner, pthread_self())) {
 			pthread_mutex_lock(&m_Mutex);
 			m_MutexOwner = pthread_self();
 			m_MutexLockcount++;
-		}
-		else 
-		{
+		} else {
 			m_MutexLockcount++;
 		}
-	}
-	else
-	{	
+	} else {
 		m_MutexOwner = pthread_self();
 		m_MutexLockcount++;
 	}
 #endif
 }
 
-void CMutex::Unlock()
-{
+void CMutex::Unlock() {
 #ifdef WIN32
 	LeaveCriticalSection(&m_Mutex);
 #else
-	if ( pthread_equal( m_MutexOwner, pthread_self()  ) )
-	{
-		if( m_MutexLockcount > 1 )
-		{
+	if (pthread_equal(m_MutexOwner, pthread_self())) {
+		if (m_MutexLockcount > 1) {
 			m_MutexLockcount--;
-		}
-		else
-		{
+		} else {
 			m_MutexOwner = 0;
 			m_MutexLockcount--;
 			pthread_mutex_unlock(&m_Mutex);
@@ -103,4 +88,4 @@ void CMutex::Unlock()
 #endif
 }
 
-}
+} // namespace eIDMW

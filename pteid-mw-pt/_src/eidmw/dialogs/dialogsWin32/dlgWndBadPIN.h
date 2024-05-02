@@ -27,19 +27,16 @@
 
 using namespace eIDMW;
 
-class dlgWndBadPIN : public Win32Dialog
-{
+class dlgWndBadPIN : public Win32Dialog {
 	PteidControls::TextData titleData, headerData;
 	PteidControls::ButtonData okBtnData, retryBtnData, cancelBtnData;
 	HICON imageIco;
 
 public:
-	dlgWndBadPIN( std::wstring & PINName, unsigned long RemainingTries, HWND Parent = NULL );
+	dlgWndBadPIN(std::wstring &PINName, unsigned long RemainingTries, HWND Parent = NULL);
 	virtual ~dlgWndBadPIN();
 
-	virtual LRESULT ProcecEvent
-				(	UINT		uMsg,			// Message For This Window
-					WPARAM		wParam,			// Additional Message Information
-					LPARAM		lParam );		// Additional Message Information
+	virtual LRESULT ProcecEvent(UINT uMsg,		// Message For This Window
+								WPARAM wParam,	// Additional Message Information
+								LPARAM lParam); // Additional Message Information
 };
-

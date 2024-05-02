@@ -69,7 +69,7 @@ extern "C" {
  *   CK_VOID_PTR pReserved
  * );
  *
- * If you're using Windows to declare a function in a Win32 Cryptoki .dll, 
+ * If you're using Windows to declare a function in a Win32 Cryptoki .dll,
  * it might be defined by:
  *
  * #define CK_DECLARE_FUNCTION(returnType, name) \
@@ -146,23 +146,20 @@ extern "C" {
  * #endif
  */
 
-
 /* All the various Cryptoki types and #define'd values are in the
  * file pkcs11t.h.
  */
 #include "pkcs11t.h"
 
-#define __PASTE(x,y)      x##y
-
+#define __PASTE(x, y) x##y
 
 /* ==============================================================
  * Define the "extern" form of all the entry points.
  * ==============================================================
  */
 
-#define CK_NEED_ARG_LIST  1
-#define CK_PKCS11_FUNCTION_INFO(name) \
-  extern CK_DECLARE_FUNCTION(CK_RV, name)
+#define CK_NEED_ARG_LIST 1
+#define CK_PKCS11_FUNCTION_INFO(name) extern CK_DECLARE_FUNCTION(CK_RV, name)
 
 /* pkcs11f.h has all the information about the Cryptoki
  * function prototypes.
@@ -171,7 +168,6 @@ extern "C" {
 
 #undef CK_NEED_ARG_LIST
 #undef CK_PKCS11_FUNCTION_INFO
-
 
 /* ==============================================================
  * Define the typedef form of all the entry points.  That is, for
@@ -180,9 +176,8 @@ extern "C" {
  * ==============================================================
  */
 
-#define CK_NEED_ARG_LIST  1
-#define CK_PKCS11_FUNCTION_INFO(name) \
-  typedef CK_DECLARE_FUNCTION_POINTER(CK_RV, __PASTE(CK_,name))
+#define CK_NEED_ARG_LIST 1
+#define CK_PKCS11_FUNCTION_INFO(name) typedef CK_DECLARE_FUNCTION_POINTER(CK_RV, __PASTE(CK_, name))
 
 /* pkcs11f.h has all the information about the Cryptoki
  * function prototypes.
@@ -191,7 +186,6 @@ extern "C" {
 
 #undef CK_NEED_ARG_LIST
 #undef CK_PKCS11_FUNCTION_INFO
-
 
 /* ==============================================================
  * Define structed vector of entry points.  A CK_FUNCTION_LIST
@@ -202,20 +196,18 @@ extern "C" {
  * ==============================================================
  */
 
-#define CK_PKCS11_FUNCTION_INFO(name) \
-  __PASTE(CK_,name) name;
+#define CK_PKCS11_FUNCTION_INFO(name) __PASTE(CK_, name) name;
 
 /* Create the 3.0 Function list */
 struct CK_FUNCTION_LIST_3_0 {
 
-  CK_VERSION    version;  /* Cryptoki version */
+	CK_VERSION version; /* Cryptoki version */
 
 /* Pile all the function pointers into the CK_FUNCTION_LIST. */
 /* pkcs11f.h has all the information about the Cryptoki
  * function prototypes.
  */
 #include "pkcs11f.h"
-
 };
 
 #define CK_PKCS11_2_0_ONLY 1
@@ -223,19 +215,17 @@ struct CK_FUNCTION_LIST_3_0 {
 /* Continue to define the old CK_FUNCTION_LIST */
 struct CK_FUNCTION_LIST {
 
-  CK_VERSION    version;  /* Cryptoki version */
+	CK_VERSION version; /* Cryptoki version */
 
 /* Pile all the function pointers into the CK_FUNCTION_LIST. */
 /* pkcs11f.h has all the information about the Cryptoki
  * function prototypes.
  */
 #include "pkcs11f.h"
-
 };
 
 #undef CK_PKCS11_FUNCTION_INFO
 #undef CK_PKCS11_2_0_ONLY
-
 
 #undef __PASTE
 
@@ -244,4 +234,3 @@ struct CK_FUNCTION_LIST {
 #endif
 
 #endif /* _PKCS11_H_ */
-

@@ -21,35 +21,27 @@
 #include "Log.h"
 
 #ifdef WIN32
-//QtCore global variable to enable and disable file permissions checking on Windows
+// QtCore global variable to enable and disable file permissions checking on Windows
 extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 #endif
 
 namespace eIDMW {
 
-static QString get_cache_dir()
-{
+static QString get_cache_dir() {
 	ScapSettings settings;
 	QString cache_dir_string = settings.getCacheDir();
 
 	return cache_dir_string;
 }
 
-static QString get_attribute_cache_dir()
-{
-	return get_cache_dir() +  "/scap_attributes/";
-}
+static QString get_attribute_cache_dir() { return get_cache_dir() + "/scap_attributes/"; }
 
-static QString get_logo_cache_dir()
-{
-	return get_cache_dir() +  "/scap_logos/";
-}
+static QString get_logo_cache_dir() { return get_cache_dir() + "/scap_logos/"; }
 
-static std::vector<ScapAttribute> deserialize_attributes(const std::string &response)
-{
+static std::vector<ScapAttribute> deserialize_attributes(const std::string &response) {
 	std::vector<ScapAttribute> result;
 
-	cJSON *json =  NULL;
+	cJSON *json = NULL;
 	if ((json = cJSON_Parse(response.c_str())) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse response: %s", __FUNCTION__, response.c_str());
 		return result;
@@ -114,20 +106,18 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 			char *description = cJSON_GetStringValue(cJSON_GetObjectItem(attribute_json, "description"));
 			char *validity = cJSON_GetStringValue(cJSON_GetObjectItem(attribute_json, "validity"));
 
-			ScapAttribute attribute = {
-				id ? id : "",
-				description ? description : "",
-				validity ? validity : "",
-				{},
-				{
-					provider_uri ? provider_uri : "",
-					provider_name ? provider_name : "",
-					provider_type ? provider_type : "",
-					provider_nipc ? provider_nipc : "",
-					provider_logo ? provider_logo : "",
-				},
-				citizen_name
-			};
+			ScapAttribute attribute = {id ? id : "",
+									   description ? description : "",
+									   validity ? validity : "",
+									   {},
+									   {
+										   provider_uri ? provider_uri : "",
+										   provider_name ? provider_name : "",
+										   provider_type ? provider_type : "",
+										   provider_nipc ? provider_nipc : "",
+										   provider_logo ? provider_logo : "",
+									   },
+									   citizen_name};
 
 			ScapAttributeHasher id_generator;
 			attribute.unique_id = std::to_string(id_generator(attribute));
@@ -141,7 +131,8 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 			for (size_t k = 0; k < sub_attributes_array_size; ++k) {
 				cJSON *sub_attribute_json = NULL;
 				if ((sub_attribute_json = cJSON_GetArrayItem(sub_attributes, k)) == NULL) {
-					MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse sub_attribute's item with index %d", __FUNCTION__, k);
+					MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse sub_attribute's item with index %d", __FUNCTION__,
+						  k);
 					cJSON_Delete(json);
 					return result;
 				}
@@ -150,11 +141,8 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 				char *sub_description = cJSON_GetStringValue(cJSON_GetObjectItem(sub_attribute_json, "description"));
 				char *sub_value = cJSON_GetStringValue(cJSON_GetObjectItem(sub_attribute_json, "value"));
 
-				attribute.sub_attributes.push_back({
-					sub_id ? sub_id : "",
-					sub_description ? sub_description : "",
-					sub_value ? sub_value : ""
-				});
+				attribute.sub_attributes.push_back(
+					{sub_id ? sub_id : "", sub_description ? sub_description : "", sub_value ? sub_value : ""});
 			}
 
 			result.push_back(attribute);
@@ -165,8 +153,7 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 	return result;
 }
 
-static std::string serialize_attributes(const std::vector<ScapAttribute> &attributes)
-{
+static std::string serialize_attributes(const std::vector<ScapAttribute> &attributes) {
 	std::string result;
 
 	if (attributes.size() == 0) {
@@ -205,8 +192,8 @@ static std::string serialize_attributes(const std::vector<ScapAttribute> &attrib
 	cJSON_AddItemToObject(json, "citizenInfo", citizen_info);
 
 	citizen_attributes = cJSON_CreateArray();
-	for (const auto &provider_attributes_pair: attrs_grouped_by_provider) {
-		const ScapProvider& provider = provider_attributes_pair.first;
+	for (const auto &provider_attributes_pair : attrs_grouped_by_provider) {
+		const ScapProvider &provider = provider_attributes_pair.first;
 
 		if ((citizen_attribute_obj = cJSON_CreateObject()) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s cJSON_CreateObject() failed", __FUNCTION__);
@@ -252,7 +239,7 @@ static std::string serialize_attributes(const std::vector<ScapAttribute> &attrib
 		cJSON_AddItemToObject(citizen_attribute_obj, "attributeProviderInfo", provider_info);
 
 		attributes_array = cJSON_CreateArray();
-		for (const auto &attr: provider_attributes_pair.second) {
+		for (const auto &attr : provider_attributes_pair.second) {
 			if ((attribute_json = cJSON_CreateObject()) == NULL) {
 				MWLOG(LEV_ERROR, MOD_SCAP, "%s cJSON_CreateObject() failed", __FUNCTION__);
 				goto clean_up;
@@ -274,7 +261,7 @@ static std::string serialize_attributes(const std::vector<ScapAttribute> &attrib
 			}
 
 			sub_attributes_array = cJSON_CreateArray();
-			for (const ScapSubAttribute &sub_attribute: attr.sub_attributes) {
+			for (const ScapSubAttribute &sub_attribute : attr.sub_attributes) {
 				if ((sub_attribute_json = cJSON_CreateObject()) == NULL) {
 					MWLOG(LEV_ERROR, MOD_SCAP, "%s cJSON_CreateObject() failed", __FUNCTION__);
 					goto clean_up;
@@ -285,7 +272,8 @@ static std::string serialize_attributes(const std::vector<ScapAttribute> &attrib
 					goto clean_up;
 				}
 
-				if (cJSON_AddStringToObject(sub_attribute_json, "description", sub_attribute.description.c_str()) == NULL) {
+				if (cJSON_AddStringToObject(sub_attribute_json, "description", sub_attribute.description.c_str()) ==
+					NULL) {
 					MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to add description", __FUNCTION__);
 					goto clean_up;
 				}
@@ -318,8 +306,7 @@ clean_up:
 	return result;
 }
 
-static bool save_cache(const std::string &to_be_saved, const std::string &id)
-{
+static bool save_cache(const std::string &to_be_saved, const std::string &id) {
 	QString cache_file_string = get_attribute_cache_dir() + id.c_str() + ".json";
 	QFile cache_file(cache_file_string);
 	if (cache_file.open(QIODevice::WriteOnly)) {
@@ -333,8 +320,7 @@ static bool save_cache(const std::string &to_be_saved, const std::string &id)
 	return true;
 }
 
-static bool check_dir_readable(const QDir &dir)
-{
+static bool check_dir_readable(const QDir &dir) {
 #ifdef WIN32
 	// necessary according to https://doc.qt.io/archives/qt-5.12/qfileinfo.html#ntfs-permissions
 	qt_ntfs_permission_lookup++;
@@ -348,8 +334,7 @@ static bool check_dir_readable(const QDir &dir)
 	return is_readable;
 }
 
-ScapResult<std::vector<ScapAttribute>> load_cache()
-{
+ScapResult<std::vector<ScapAttribute>> load_cache() {
 	std::vector<ScapAttribute> result;
 	bool removed_legacy = false;
 
@@ -363,7 +348,7 @@ ScapResult<std::vector<ScapAttribute>> load_cache()
 	}
 
 	QStringList file_list = cache_dir.entryList(QStringList({"*.json", "*.xml"}), QDir::Files | QDir::NoSymLinks);
-	foreach(QString cache_file_name, file_list) {
+	foreach (QString cache_file_name, file_list) {
 		QFile cache_file(get_attribute_cache_dir() + cache_file_name);
 		if (!cache_file.open(QIODevice::ReadOnly)) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to open cache file", __FUNCTION__);
@@ -387,18 +372,17 @@ ScapResult<std::vector<ScapAttribute>> load_cache()
 	return result;
 }
 
-static std::vector<ScapAttribute> merge_attributes(std::vector<ScapAttribute> &dirty, std::vector<ScapAttribute> &fresh)
-{
-	for (const ScapAttribute &dirty_attribute: dirty)
-		if (dirty_attribute.citizen_name == fresh.front().citizen_name
-		&& std::find(fresh.begin(), fresh.end(), dirty_attribute) == fresh.end())
+static std::vector<ScapAttribute> merge_attributes(std::vector<ScapAttribute> &dirty,
+												   std::vector<ScapAttribute> &fresh) {
+	for (const ScapAttribute &dirty_attribute : dirty)
+		if (dirty_attribute.citizen_name == fresh.front().citizen_name &&
+			std::find(fresh.begin(), fresh.end(), dirty_attribute) == fresh.end())
 			fresh.push_back(dirty_attribute);
 
-	return fresh; //attributes to be saved
+	return fresh; // attributes to be saved
 }
 
-static std::vector<ScapAttribute> handle_cache(const std::string &response)
-{
+static std::vector<ScapAttribute> handle_cache(const std::string &response) {
 	std::vector<ScapAttribute> attributes = deserialize_attributes(response);
 
 	// perform cache logic here -> merge attributes etc...
@@ -408,14 +392,13 @@ static std::vector<ScapAttribute> handle_cache(const std::string &response)
 	return result;
 }
 
-bool cache_response(const std::string& response, const std::string &id, std::vector<ScapAttribute> &out_attributes)
-{
-	QDir cache_dir; //create cache dir if it does not exist
+bool cache_response(const std::string &response, const std::string &id, std::vector<ScapAttribute> &out_attributes) {
+	QDir cache_dir; // create cache dir if it does not exist
 	QString cache_path = get_attribute_cache_dir();
 	if (!cache_dir.mkpath(cache_path)) {
 		std::string cache_path_str = cache_path.toStdString();
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s Failed to create scap cache directory, %s", __FUNCTION__,
-			cache_path_str.c_str());
+			  cache_path_str.c_str());
 		return false;
 	}
 
@@ -425,15 +408,14 @@ bool cache_response(const std::string& response, const std::string &id, std::vec
 	return save_cache(serialize_attributes(to_be_saved), id);
 }
 
-static bool clear_files_in_dir(QDir &dir, const std::string &file_filter)
-{
+static bool clear_files_in_dir(QDir &dir, const std::string &file_filter) {
 	dir.setNameFilters(QStringList() << file_filter.c_str());
 	dir.setFilter(QDir::Files);
 
 	ScapSettings settings;
 	settings.resetScapKeys();
 
-	foreach(QString cache_file, dir.entryList()) {
+	foreach (QString cache_file, dir.entryList()) {
 		if (!dir.remove(cache_file)) {
 			return false;
 		}
@@ -442,12 +424,11 @@ static bool clear_files_in_dir(QDir &dir, const std::string &file_filter)
 	return true;
 }
 
-bool clear_cache()
-{
+bool clear_cache() {
 	QDir attributes_dir(get_attribute_cache_dir());
 	QDir logos_dir(get_logo_cache_dir());
 
 	return clear_files_in_dir(attributes_dir, "*.json") && clear_files_in_dir(logos_dir, "*.jpeg");
 }
 
-};
+}; // namespace eIDMW

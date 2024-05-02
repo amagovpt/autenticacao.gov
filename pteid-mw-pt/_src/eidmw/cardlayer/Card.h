@@ -24,7 +24,7 @@
 **************************************************************************** */
 /**
  * Subclasses of this class implement functionality for a specific
- * type of card (e.g. PT eID V1, V2,...) 
+ * type of card (e.g. PT eID V1, V2,...)
  */
 #ifndef CARD_H
 #define CARD_H
@@ -42,146 +42,132 @@
 
 #include <memory>
 
-namespace eIDMW
-{
-class EIDMW_CAL_API CCard
-{
+namespace eIDMW {
+class EIDMW_CAL_API CCard {
 public:
-    CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
-    virtual ~CCard(void);
+	CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
+	virtual ~CCard(void);
 
-    /** Find out which card is present and return the appropriate subclass */
-    static CCard *Connect(const std::string &csReader,
-		CContext *poContext, GenericPinpad *poPinpad);
+	/** Find out which card is present and return the appropriate subclass */
+	static CCard *Connect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad);
 
-    virtual void Disconnect(tDisconnectMode disconnectMode = DISCONNECT_LEAVE_CARD);
+	virtual void Disconnect(tDisconnectMode disconnectMode = DISCONNECT_LEAVE_CARD);
 
-    virtual CByteArray GetATR();
-    
-    virtual CByteArray GetIFDVersion();
-    virtual bool Status();
+	virtual CByteArray GetATR();
 
-    virtual bool IsPinpadReader();
+	virtual CByteArray GetIFDVersion();
+	virtual bool Status();
 
-    virtual tCardType GetType() = 0;
-    virtual std::string GetSerialNr();
-    virtual CByteArray GetSerialNrBytes();
+	virtual bool IsPinpadReader();
+
+	virtual tCardType GetType() = 0;
+	virtual std::string GetSerialNr();
+	virtual CByteArray GetSerialNrBytes();
 	virtual std::string GetLabel();
 
 	virtual std::string GetAppletVersion();
 
-    virtual void Lock();
-    virtual void Unlock();
+	virtual void Lock();
+	virtual void Unlock();
 
-	 virtual void ResetApplication();
-    virtual void SelectApplication(const CByteArray & oAID);
-    virtual void setSSO(bool value);
+	virtual void ResetApplication();
+	virtual void SelectApplication(const CByteArray &oAID);
+	virtual void setSSO(bool value);
 
-	CByteArray ReadCachedFile(const std::string & csPath, std::string & csName,
-		bool & bFound, unsigned long ulOffset, unsigned long ulMaxLen, bool &bFromDisk);
-    virtual CByteArray ReadFile(const std::string & csPath,
-        unsigned long ulOffset = 0, unsigned long ulMaxLen = FULL_FILE, bool bDoNotCache=false);
-    virtual void WriteFile(const std::string &csPath, unsigned long ulOffset,
-        const CByteArray & oData);
+	CByteArray ReadCachedFile(const std::string &csPath, std::string &csName, bool &bFound, unsigned long ulOffset,
+							  unsigned long ulMaxLen, bool &bFromDisk);
+	virtual CByteArray ReadFile(const std::string &csPath, unsigned long ulOffset = 0,
+								unsigned long ulMaxLen = FULL_FILE, bool bDoNotCache = false);
+	virtual void WriteFile(const std::string &csPath, unsigned long ulOffset, const CByteArray &oData);
 	virtual tCacheInfo GetCacheInfo(const std::string &csPath);
 
-    virtual CByteArray ReadUncachedFile(const std::string & csPath,
-        unsigned long ulOffset = 0, unsigned long ulMaxLen = FULL_FILE) = 0;
-    virtual void WriteUncachedFile(const std::string &csPath, unsigned long ulOffset,
-        const CByteArray & oData);
+	virtual CByteArray ReadUncachedFile(const std::string &csPath, unsigned long ulOffset = 0,
+										unsigned long ulMaxLen = FULL_FILE) = 0;
+	virtual void WriteUncachedFile(const std::string &csPath, unsigned long ulOffset, const CByteArray &oData);
 
-	virtual unsigned long PinStatus(const tPin & Pin);
-	virtual bool isPinVerified(const tPin & Pin);
+	virtual unsigned long PinStatus(const tPin &Pin);
+	virtual bool isPinVerified(const tPin &Pin);
 	virtual CByteArray RootCAPubKey();
 	virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);
-	virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft,
-                           unsigned long unblockFlags);
-    virtual bool PinCmd(tPinOperation operation, const tPin & Pin,
-        const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
-        bool bShowDlg=true, void *wndGeometry = 0, unsigned long unblockFlags=0);
+	virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin,
+						   unsigned long &triesLeft, unsigned long unblockFlags);
+	virtual bool PinCmd(tPinOperation operation, const tPin &Pin, const std::string &csPin1, const std::string &csPin2,
+						unsigned long &ulRemaining, const tPrivKey *pKey = NULL, bool bShowDlg = true,
+						void *wndGeometry = 0, unsigned long unblockFlags = 0);
 
-	virtual DlgPinUsage PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey);
+	virtual DlgPinUsage PinUsage2Dlg(const tPin &Pin, const tPrivKey *pKey);
 
 	virtual unsigned long GetSupportedAlgorithms();
 
 	virtual void setAskPinOnSign(bool bAsk);
 
-    virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
-        unsigned long algo, const CByteArray & oData);
+	virtual CByteArray Sign(const tPrivKey &key, const tPin &Pin, unsigned long algo, const CByteArray &oData);
 
-    virtual CByteArray GetRandom(unsigned long ulLen);
+	virtual CByteArray GetRandom(unsigned long ulLen);
 
 	/** Send a case 1 or case 2 commands (no data is sent to the card),
-     * if you know it's case 1 then preferably set bDataIsReturned to false. */
-    virtual CByteArray SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2,
-            unsigned long ulOutLen);
-    /** Send a case 3 or case 4 commands (data is sent to the card),
-     * if you know it's case 1 then preferably set bDataIsReturned to false */
-    virtual CByteArray SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2,
-            const CByteArray & oData);
-    virtual CByteArray SendAPDU(const CByteArray & oCmdAPDU);
+	 * if you know it's case 1 then preferably set bDataIsReturned to false. */
+	virtual CByteArray SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2, unsigned long ulOutLen);
+	/** Send a case 3 or case 4 commands (data is sent to the card),
+	 * if you know it's case 1 then preferably set bDataIsReturned to false */
+	virtual CByteArray SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2, const CByteArray &oData);
+	virtual CByteArray SendAPDU(const CByteArray &oCmdAPDU);
 
-    virtual void InitEncryptionKey() = 0;
+	virtual void InitEncryptionKey() = 0;
 	virtual void ReadSerialNumber() = 0;
 
-    virtual void setPinpadHandler(GenericPinpad * pinpad)
-    {
-	   m_poPinpad = pinpad;
+	virtual void setPinpadHandler(GenericPinpad *pinpad) { m_poPinpad = pinpad; }
 
-    }
+	void createPace();
 
-    void createPace();
+	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
-    void initPaceAuthentication(const char* secret, size_t secretLen, PaceSecretType secretType);
+	const void *getProtocolStructure();
+	const void setNextAPDUClearText() { cleartext_next = true; }
 
-    const void * getProtocolStructure();
-    const void setNextAPDUClearText() { cleartext_next = true; }
+	void setProtocol(const void *protocol_struct) { m_comm_protocol = protocol_struct; }
 
-    void setProtocol(const void * protocol_struct) { m_comm_protocol = protocol_struct; }
-
-    SCARDHANDLE m_hCard;
+	SCARDHANDLE m_hCard;
 
 protected:
-	
-    virtual bool SelectApplet();
+	virtual bool SelectApplet();
 
 	virtual unsigned char Hex2Byte(char cHex);
-	virtual unsigned char Hex2Byte(const std::string & csHex, unsigned long ulIdx);
+	virtual unsigned char Hex2Byte(const std::string &csHex, unsigned long ulIdx);
 	virtual bool IsDigit(char c);
 
 	/** Return true if the serial number is present in oData, false otherwise */
-	bool SerialNrPresent(const CByteArray & oData);
+	bool SerialNrPresent(const CByteArray &oData);
 
 	/** If ulExpected is provided and differs from the return code, an MWException is thrown */
-    virtual unsigned long getSW12(const CByteArray & oRespAPDU, unsigned long ulExpected = 0);
+	virtual unsigned long getSW12(const CByteArray &oRespAPDU, unsigned long ulExpected = 0);
 
 	CContext *m_poContext;
 	GenericPinpad *m_poPinpad;
 	CCache m_oCache;
 	tCardType m_cardType;
-    unsigned long m_ulLockCount;
+	unsigned long m_ulLockCount;
 	bool m_bSerialNrString;
 	std::string m_csSerialNr;
 
-    std::map <unsigned int, std::string> m_verifiedPINs;
-    unsigned char m_ucCLA;
-    bool cleartext_next;
+	std::map<unsigned int, std::string> m_verifiedPINs;
+	unsigned char m_ucCLA;
+	bool cleartext_next;
 
-	 bool m_askPinOnSign;
+	bool m_askPinOnSign;
 
-    const void * m_comm_protocol;
-    std::unique_ptr<PaceAuthentication> m_pace{};
+	const void *m_comm_protocol;
+	std::unique_ptr<PaceAuthentication> m_pace{};
 
 private:
-    // No copies allowed
-    CCard(const CCard & oCard);
-    CCard & operator = (const CCard & oCard);
-    CByteArray handleSendAPDUSecurity(const CByteArray & oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
+	// No copies allowed
+	CCard(const CCard &oCard);
+	CCard &operator=(const CCard &oCard);
+	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal,
+									  const void *param_structure);
 };
 
-class CAutoLock
-{
+class CAutoLock {
 public:
 	CAutoLock(CCard *poCard);
 
@@ -199,5 +185,5 @@ private:
 	SCARDHANDLE m_hCard;
 };
 
-}
+} // namespace eIDMW
 #endif

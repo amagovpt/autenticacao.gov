@@ -23,19 +23,16 @@
 #include "Context.h"
 #include "Config.h"
 
-namespace eIDMW
-{
-	CContext::CContext()
-	{
-		m_bSSO = false; 
+namespace eIDMW {
+CContext::CContext() {
+	m_bSSO = false;
 
-		m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
-	}
-
-	CContext::~CContext()
-	{
-		m_oThreadPool.FinishThreads();
-
-		m_oPCSC.ReleaseContext();
-	}
+	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
 }
+
+CContext::~CContext() {
+	m_oThreadPool.FinishThreads();
+
+	m_oPCSC.ReleaseContext();
+}
+} // namespace eIDMW

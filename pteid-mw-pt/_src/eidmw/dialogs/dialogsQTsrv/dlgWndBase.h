@@ -25,8 +25,7 @@
 
 #include <QDialog>
 
-class dlgWndBase : public QDialog
-{
+class dlgWndBase : public QDialog {
 	Q_OBJECT
 
 public:

@@ -30,96 +30,89 @@
 #include <QIcon>
 #include <QMovie>
 
-dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle,
-		DlgPinOperation operation, const QString & Reader,
-		const QString &PINName, const QString & Message, QWidget *parent, Type_WndGeometry *pParentWndGeometry )
+dlgWndPinpadInfo::dlgWndPinpadInfo(unsigned long ulHandle, DlgPinOperation operation, const QString &Reader,
+								   const QString &PINName, const QString &Message, QWidget *parent,
+								   Type_WndGeometry *pParentWndGeometry)
 
-	: QWidget(parent)
-{
+	: QWidget(parent) {
 	ui.setupUi(this);
-    setFixedSize(this->width(), this->height());
+	setFixedSize(this->width(), this->height());
 
-	QString Title="";
+	QString Title = "";
 
-    if (operation == DLG_PIN_OP_CHANGE)
-        Title+= QString::fromWCharArray(GETSTRING_DLG(ChangeYourPin));
-    else if (operation == DLG_PIN_OP_VERIFY)
-		Title+=QString::fromWCharArray(GETSTRING_DLG(VerifyingPinCode));
+	if (operation == DLG_PIN_OP_CHANGE)
+		Title += QString::fromWCharArray(GETSTRING_DLG(ChangeYourPin));
+	else if (operation == DLG_PIN_OP_VERIFY)
+		Title += QString::fromWCharArray(GETSTRING_DLG(VerifyingPinCode));
 	else if (operation == DLG_PIN_OP_UNBLOCK_CHANGE)
 		Title += QString::fromWCharArray(GETSTRING_DLG(UnblockPinHeader));
-    else
-        Title+=QString::fromWCharArray(GETSTRING_DLG(PinpadInfo));
+	else
+		Title += QString::fromWCharArray(GETSTRING_DLG(PinpadInfo));
 
-    parent->setWindowTitle( Title );
-    parent->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
+	parent->setWindowTitle(Title);
+	parent->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 
-    QString fontSize;
+	QString fontSize;
 #ifdef __APPLE__
-    fontSize = "12pt";
+	fontSize = "12pt";
 #else
-    fontSize = "10pt";
+	fontSize = "10pt";
 #endif
 
-    // HEADER
-    QString sHeader = PINName;
-    ui.lblHeader->setText(sHeader);
-    ui.lblHeader->setAccessibleName(sHeader);
-    ui.lblHeader->setStyleSheet("QLabel { background: rgba(0,0,0,0); color : #3C5DBC; font-size: 16pt; font-weight:800 }");
+	// HEADER
+	QString sHeader = PINName;
+	ui.lblHeader->setText(sHeader);
+	ui.lblHeader->setAccessibleName(sHeader);
+	ui.lblHeader->setStyleSheet(
+		"QLabel { background: rgba(0,0,0,0); color : #3C5DBC; font-size: 16pt; font-weight:800 }");
 
-    // ICON
-    QPixmap pix_icon(":/images/autenticacao.bmp");
-    ui.lblIcon->setPixmap(pix_icon);
-    ui.lblIcon->setScaledContents(true);
+	// ICON
+	QPixmap pix_icon(":/images/autenticacao.bmp");
+	ui.lblIcon->setPixmap(pix_icon);
+	ui.lblIcon->setScaledContents(true);
 
-    // LOADING GIF
-    QMovie *movie = new QMovie(":/images/loading.gif");
-    ui.lblLoading->setMovie(movie);
-    ui.lblLoading->setScaledContents(true);
-    movie->start();
+	// LOADING GIF
+	QMovie *movie = new QMovie(":/images/loading.gif");
+	ui.lblLoading->setMovie(movie);
+	ui.lblLoading->setScaledContents(true);
+	movie->start();
 
-    // CENTER LABEL
-    QString sCenter;
-    if (operation == DLG_PIN_OP_UNBLOCK_CHANGE)
-    {
-        sCenter = QString::fromWCharArray(GETSTRING_DLG(UnlockDialogHeader));
-    }
-    else
-    {
-        sCenter = Message; //QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader));
-    }
+	// CENTER LABEL
+	QString sCenter;
+	if (operation == DLG_PIN_OP_UNBLOCK_CHANGE) {
+		sCenter = QString::fromWCharArray(GETSTRING_DLG(UnlockDialogHeader));
+	} else {
+		sCenter = Message; // QString::fromWCharArray(GETSTRING_DLG(PleaseEnterYourPinOnThePinpadReader));
+	}
 
-    ui.lblCenter->setText(sCenter);
-    ui.lblCenter->setAccessibleName(sCenter);
-    ui.lblCenter->setStyleSheet("QLabel { background: rgba(0,0,0,0); color : #000000; font-size:" + fontSize + "; font-weight: 500}");
-    ui.lblCenter->setAlignment(Qt::AlignCenter);
+	ui.lblCenter->setText(sCenter);
+	ui.lblCenter->setAccessibleName(sCenter);
+	ui.lblCenter->setStyleSheet("QLabel { background: rgba(0,0,0,0); color : #000000; font-size:" + fontSize +
+								"; font-weight: 500}");
+	ui.lblCenter->setAlignment(Qt::AlignCenter);
 
-    // BOTTOM LABEL
-    QString labelDisablePinpad = QString::fromWCharArray(GETSTRING_DLG(PinpadCanBeDisabled));
-    ui.lblBottom->setText(labelDisablePinpad);
-    ui.lblBottom->setAccessibleName(labelDisablePinpad);
-    ui.lblBottom->setStyleSheet("QLabel { background: rgba(0,0,0,0); color : #000000; font-size: " + fontSize + "; }");
-    ui.lblBottom->setAlignment(Qt::AlignCenter);
+	// BOTTOM LABEL
+	QString labelDisablePinpad = QString::fromWCharArray(GETSTRING_DLG(PinpadCanBeDisabled));
+	ui.lblBottom->setText(labelDisablePinpad);
+	ui.lblBottom->setAccessibleName(labelDisablePinpad);
+	ui.lblBottom->setStyleSheet("QLabel { background: rgba(0,0,0,0); color : #000000; font-size: " + fontSize + "; }");
+	ui.lblBottom->setAlignment(Qt::AlignCenter);
 
-    m_ulHandle = ulHandle;
+	m_ulHandle = ulHandle;
 
-    Type_WndGeometry WndGeometry;
-    if ( getWndCenterPos( pParentWndGeometry,
-                          QApplication::desktop()->width(), QApplication::desktop()->height(),
-                          this->width(), this->height(), &WndGeometry ) ) {
-        parent->move(WndGeometry.x, WndGeometry.y);
-    }
+	Type_WndGeometry WndGeometry;
+	if (getWndCenterPos(pParentWndGeometry, QApplication::desktop()->width(), QApplication::desktop()->height(),
+						this->width(), this->height(), &WndGeometry)) {
+		parent->move(WndGeometry.x, WndGeometry.y);
+	}
 }
 
-dlgWndPinpadInfo::~dlgWndPinpadInfo()
-{
-}
+dlgWndPinpadInfo::~dlgWndPinpadInfo() {}
 
-void dlgWndPinpadInfo::closeEvent( QCloseEvent *event)
-{
-	if( m_ulHandle )
-	{
+void dlgWndPinpadInfo::closeEvent(QCloseEvent *event) {
+	if (m_ulHandle) {
 		unsigned long tmp = m_ulHandle;
 		m_ulHandle = 0;
-		DlgClosePinpadInfo( tmp );
+		DlgClosePinpadInfo(tmp);
 	}
 }

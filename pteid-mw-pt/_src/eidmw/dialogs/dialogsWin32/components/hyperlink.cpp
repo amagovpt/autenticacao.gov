@@ -22,86 +22,73 @@
 #include "pteidControls.h"
 #include "Log.h"
 
-HWND PteidControls::CreateHyperlink(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, TextData *textData)
-{
-    // CONTAINER
-    HWND hContainer = CreateWindowEx(
-        WS_EX_CONTROLPARENT,
-        WC_STATIC,
-        L"",
-        WS_CHILD | WS_VISIBLE,
-        x, y, nWidth, nHeight,
-        hWndParent, hMenu, hInstance, NULL);
+HWND PteidControls::CreateHyperlink(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu,
+									HINSTANCE hInstance, TextData *textData) {
+	// CONTAINER
+	HWND hContainer = CreateWindowEx(WS_EX_CONTROLPARENT, WC_STATIC, L"", WS_CHILD | WS_VISIBLE, x, y, nWidth, nHeight,
+									 hWndParent, hMenu, hInstance, NULL);
 
-    SetWindowSubclass(hContainer, Hyperlink_Proc, 0, (DWORD_PTR)textData);
+	SetWindowSubclass(hContainer, Hyperlink_Proc, 0, (DWORD_PTR)textData);
 
-    INITCOMMONCONTROLSEX icex;
-    icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
-    icex.dwICC = ICC_LINK_CLASS;
-    InitCommonControlsEx(&icex);
+	INITCOMMONCONTROLSEX icex;
+	icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
+	icex.dwICC = ICC_LINK_CLASS;
+	InitCommonControlsEx(&icex);
 
-    // TEXT
-    DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
-    dwStyle |= (textData->horizontalCentered ? SS_CENTER : SS_LEFT);
+	// TEXT
+	DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
+	dwStyle |= (textData->horizontalCentered ? SS_CENTER : SS_LEFT);
 
-    HWND hText = CreateWindowExW(0,
-        WC_LINK,
-        textData->text,
-        dwStyle,
-        0, 0, nWidth, nHeight,
-        hContainer, hMenu, hInstance, NULL);
+	HWND hText =
+		CreateWindowExW(0, WC_LINK, textData->text, dwStyle, 0, 0, nWidth, nHeight, hContainer, hMenu, hInstance, NULL);
 
-    SendMessage(hText, WM_SETFONT, (WPARAM)textData->font, 0);
+	SendMessage(hText, WM_SETFONT, (WPARAM)textData->font, 0);
 
-    textData->hMainWnd = hText;
+	textData->hMainWnd = hText;
 
-    return hContainer;
+	return hContainer;
 }
 
-LRESULT CALLBACK PteidControls::Hyperlink_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
-{
-    TextData *textFieldData = (TextData *)dwRefData;
-    switch (uMsg)
-    {
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
+LRESULT CALLBACK PteidControls::Hyperlink_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
+											   DWORD_PTR dwRefData) {
+	TextData *textFieldData = (TextData *)dwRefData;
+	switch (uMsg) {
+	case WM_PAINT: {
+		PAINTSTRUCT ps;
+		HDC hdc = BeginPaint(hWnd, &ps);
 
-        SetBkMode(hdc, TRANSPARENT);
+		SetBkMode(hdc, TRANSPARENT);
 
-        EndPaint(hWnd, &ps);
-        return 0;
-    }
-    case WM_CTLCOLORSTATIC:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> PteidControls::Text_Container_Proc WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
+		EndPaint(hWnd, &ps);
+		return 0;
+	}
+	case WM_CTLCOLORSTATIC: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> PteidControls::Text_Container_Proc WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)",
+			  wParam, lParam);
 
-        HDC hdc = (HDC)wParam;
+		HDC hdc = (HDC)wParam;
 
-        SetBkMode(hdc, TRANSPARENT);
-        SetTextColor(hdc, textFieldData->color);
+		SetBkMode(hdc, TRANSPARENT);
+		SetTextColor(hdc, textFieldData->color);
 
-        return(LRESULT)GetStockObject(NULL_BRUSH);
-    }
+		return (LRESULT)GetStockObject(NULL_BRUSH);
+	}
 
-    case WM_NOTIFY:
-        switch (((LPNMHDR)lParam)->code)
-        {
-            case NM_CLICK:
-            case NM_RETURN:
-            {
-                PNMLINK pNMLink = (PNMLINK)lParam;
-                LITEM item = pNMLink->item;
-                ShellExecute(NULL, L"open", item.szUrl, NULL, NULL, SW_SHOW);
-                break;
-            }
-        }
-        break;
+	case WM_NOTIFY:
+		switch (((LPNMHDR)lParam)->code) {
+		case NM_CLICK:
+		case NM_RETURN: {
+			PNMLINK pNMLink = (PNMLINK)lParam;
+			LITEM item = pNMLink->item;
+			ShellExecute(NULL, L"open", item.szUrl, NULL, NULL, SW_SHOW);
+			break;
+		}
+		}
+		break;
 
-    default:
-        break;
-    }
+	default:
+		break;
+	}
 
-    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+	return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 }

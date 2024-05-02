@@ -50,31 +50,28 @@
 #include "ByteArray.h"
 #include "libtomcrypt/tomcrypt_hash.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 enum tHashAlgo {
-	ALGO_SHA1 = 1,      // 20-byte hash
-	ALGO_SHA256 = 3,    // 32-byte hash
-	ALGO_SHA384 = 4,    // 48-byte hash
-	ALGO_SHA512 = 5    // 64-byte hash
+	ALGO_SHA1 = 1,	 // 20-byte hash
+	ALGO_SHA256 = 3, // 32-byte hash
+	ALGO_SHA384 = 4, // 48-byte hash
+	ALGO_SHA512 = 5	 // 64-byte hash
 };
 
-class EIDMW_CMN_API CHash 
-{
+class EIDMW_CMN_API CHash {
 public:
 	CHash();
 
 	static unsigned long GetHashLength(tHashAlgo algo);
 
 	/* All at once */
-	CByteArray Hash(tHashAlgo algo, const CByteArray & data);
-	CByteArray Hash(tHashAlgo algo, const CByteArray & data,
-		unsigned long ulOffset, unsigned long ulLen);
+	CByteArray Hash(tHashAlgo algo, const CByteArray &data);
+	CByteArray Hash(tHashAlgo algo, const CByteArray &data, unsigned long ulOffset, unsigned long ulLen);
 
 	void Init(tHashAlgo algo);
-	void Update(const CByteArray & data);
-	void Update(const CByteArray & data, unsigned long ulOffset, unsigned long ulLen);
+	void Update(const CByteArray &data);
+	void Update(const CByteArray &data, unsigned long ulOffset, unsigned long ulLen);
 	CByteArray GetHash();
 
 private:
@@ -84,5 +81,5 @@ private:
 	bool m_bInitialized;
 };
 
-}
+} // namespace eIDMW
 #endif

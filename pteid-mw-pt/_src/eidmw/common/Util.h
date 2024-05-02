@@ -37,14 +37,13 @@
 #include <windows.h>
 #endif
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 //--- string conversion between std::wstring and std::string
-EIDMW_CMN_API std::wstring   utilStringWiden(const std::string& in, const std::locale& locale = std::locale());
-EIDMW_CMN_API std::string    utilStringNarrow(const std::wstring& in, const std::locale& locale = std::locale());
+EIDMW_CMN_API std::wstring utilStringWiden(const std::string &in, const std::locale &locale = std::locale());
+EIDMW_CMN_API std::string utilStringNarrow(const std::wstring &in, const std::locale &locale = std::locale());
 #ifdef _WIN32
-EIDMW_CMN_API std::wstring windowsANSIToWideString(const std::string& in);
+EIDMW_CMN_API std::wstring windowsANSIToWideString(const std::string &in);
 #endif
 
 /**
@@ -59,7 +58,7 @@ EIDMW_CMN_API bool StartsWithCI(const char *csData, const char *csSearch);
  * if the return value is not null the array should be kept allocated for the lifetime of the returned value
  * if you need to use after the lifetime of the array, copy the value
  */
-EIDMW_CMN_API const unsigned char* findASN1Object(const CByteArray &array, long &size, long tag);
+EIDMW_CMN_API const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag);
 
 /**
  * Returns true is csSearch is present in csData.
@@ -68,27 +67,29 @@ EIDMW_CMN_API bool StartsWith(const char *csData, const char *csSearch);
 
 EIDMW_CMN_API void SubstringInplace(char *buffer, size_t from, size_t to);
 
-EIDMW_CMN_API char *bin2AsciiHex(const unsigned char * pData, unsigned long ulLen);
+EIDMW_CMN_API char *bin2AsciiHex(const unsigned char *pData, unsigned long ulLen);
 
 // Get the first n utf8 encoded chars in a string
 EIDMW_CMN_API void truncateUtf8String(std::string &utf8String, size_t numberOfChars);
 
 #ifndef WIN32
-    std::u32string stringWidenUTF32(std::string utf8_str);
+std::u32string stringWidenUTF32(std::string utf8_str);
 #endif
 
 #ifdef WIN32
 // Read/Write Registry value
-EIDMW_CMN_API void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dwType, void* output, DWORD *outputSize);
-EIDMW_CMN_API void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dwType, void* input, DWORD inputSize);
+EIDMW_CMN_API void ReadReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD *dwType, void *output,
+						   DWORD *outputSize);
+EIDMW_CMN_API void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dwType, void *input,
+							DWORD inputSize);
 #endif
-
 
 /**
  * Scan the directory and call the call back function for each file corresponding to the extension
-*/
-EIDMW_CMN_API void scanDir(const char *Dir, const char *SubDir, const char *ext, bool &bStopRequest, void *param, std::function<void(const char* SubDir, const char* File, void* param)>);
-}
+ */
+EIDMW_CMN_API void scanDir(const char *Dir, const char *SubDir, const char *ext, bool &bStopRequest, void *param,
+						   std::function<void(const char *SubDir, const char *File, void *param)>);
+} // namespace eIDMW
 
 #ifndef WIN32
 
@@ -102,7 +103,7 @@ EIDMW_CMN_API int strcpy_s(char *dest, size_t len, const char *src);
 
 EIDMW_CMN_API int strncpy_s(char *dest, size_t len, const char *src, long count);
 
-EIDMW_CMN_API int fopen_s(FILE** pFile, const char *filename, const char *mode);
+EIDMW_CMN_API int fopen_s(FILE **pFile, const char *filename, const char *mode);
 
 EIDMW_CMN_API int wcscpy_s(wchar_t *dest, size_t len, const wchar_t *src);
 

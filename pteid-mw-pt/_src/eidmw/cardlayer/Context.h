@@ -27,21 +27,19 @@
 #include "PCSC.h"
 #include "ThreadPool.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-class EIDMW_CAL_API CContext
-{
+class EIDMW_CAL_API CContext {
 public:
 	CContext();
 	~CContext();
 
 	CPCSC m_oPCSC;
-    CThreadPool m_oThreadPool;
-	
+	CThreadPool m_oThreadPool;
+
 	bool m_bSSO; // force Single Sign-On
 	unsigned long m_ulConnectionDelay;
 };
 
-}
+} // namespace eIDMW
 #endif

@@ -26,13 +26,10 @@
 
 #include "eidErrors.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-PTEID_CardType ConvertCardType(APL_CardType eCardType)
-{
-	switch(eCardType)
-	{ 
+PTEID_CardType ConvertCardType(APL_CardType eCardType) {
+	switch (eCardType) {
 	case APL_CARDTYPE_PTEID_IAS07:
 		return PTEID_CARDTYPE_IAS07;
 	case APL_CARDTYPE_PTEID_IAS101:
@@ -44,13 +41,10 @@ PTEID_CardType ConvertCardType(APL_CardType eCardType)
 	}
 }
 
+PTEID_CertifStatus ConvertCertStatus(APL_CertifStatus eStatus) {
+	// Convert the APL_CertifStatus into a status for the 'outside world"
 
-PTEID_CertifStatus ConvertCertStatus(APL_CertifStatus eStatus)
-{
-	//Convert the APL_CertifStatus into a status for the 'outside world"
-
-	switch(eStatus)
-	{
+	switch (eStatus) {
 
 	case APL_CERTIF_STATUS_REVOKED:
 		return PTEID_CERTIF_STATUS_REVOKED;
@@ -78,10 +72,8 @@ PTEID_CertifStatus ConvertCertStatus(APL_CertifStatus eStatus)
 	}
 }
 
-PTEID_CertifType ConvertCertType(APL_CertifType eType)
-{
-	switch(eType)
-	{ 
+PTEID_CertifType ConvertCertType(APL_CertifType eType) {
+	switch (eType) {
 	case APL_CERTIF_TYPE_ROOT:
 		return PTEID_CERTIF_TYPE_ROOT;
 
@@ -102,10 +94,8 @@ PTEID_CertifType ConvertCertType(APL_CertifType eType)
 	}
 }
 
-tLOG_Level ConvertLogLevel(PTEID_LogLevel level)
-{
-	switch(level)
-	{ 
+tLOG_Level ConvertLogLevel(PTEID_LogLevel level) {
+	switch (level) {
 	case PTEID_LOG_LEVEL_ERROR:
 		return LOG_LEVEL_ERROR;
 
@@ -123,25 +113,23 @@ tLOG_Level ConvertLogLevel(PTEID_LogLevel level)
 	}
 }
 
-APL_SignatureLevel ConvertSignatureLevel(PTEID_SignatureLevel level)
-{
-    switch (level)
-    {
-    case PTEID_LEVEL_BASIC:
-        return LEVEL_BASIC;
+APL_SignatureLevel ConvertSignatureLevel(PTEID_SignatureLevel level) {
+	switch (level) {
+	case PTEID_LEVEL_BASIC:
+		return LEVEL_BASIC;
 
-    case PTEID_LEVEL_TIMESTAMP:
-        return LEVEL_TIMESTAMP;
+	case PTEID_LEVEL_TIMESTAMP:
+		return LEVEL_TIMESTAMP;
 
-    case PTEID_LEVEL_LT:
-        return LEVEL_LT;
-		
-    case PTEID_LEVEL_LTV:
-        return LEVEL_LTV;
+	case PTEID_LEVEL_LT:
+		return LEVEL_LT;
 
-    default:
-        return LEVEL_BASIC;
-    }
+	case PTEID_LEVEL_LTV:
+		return LEVEL_LTV;
+
+	default:
+		return LEVEL_BASIC;
+	}
 }
 
-}
+} // namespace eIDMW

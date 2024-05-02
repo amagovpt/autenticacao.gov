@@ -30,9 +30,9 @@
 #include <iostream>
 #include <stdio.h>
 
-
-dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString & Header, QString & PINName, bool UseKeypad, QWidget *parent, Type_WndGeometry *pParentWndGeometry ) : dlgWndBase(parent)
-{
+dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString &Header, QString &PINName,
+							 bool UseKeypad, QWidget *parent, Type_WndGeometry *pParentWndGeometry)
+	: dlgWndBase(parent) {
 	ui.setupUi(this);
 
 	setFixedSize(this->width(), this->height());
@@ -41,183 +41,164 @@ dlgWndAskPINs::dlgWndAskPINs( DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString 
 	m_ulPin2MinLen = pinInfo2.ulMinLen;
 	m_ulPin1MaxLen = pinInfo1.ulMaxLen;
 	m_ulPin2MaxLen = pinInfo2.ulMaxLen;
-	m_ulPin2Flags  = pinInfo2.ulFlags;
+	m_ulPin2Flags = pinInfo2.ulFlags;
 
-	if( pinInfo1.ulFlags & PIN_FLAG_DIGITS )
-	{
+	if (pinInfo1.ulFlags & PIN_FLAG_DIGITS) {
 		char buffer[20];
-		sprintf(buffer,"[0-9]{%u,%u}",m_ulPin1MinLen,m_ulPin1MaxLen);
+		sprintf(buffer, "[0-9]{%u,%u}", m_ulPin1MinLen, m_ulPin1MaxLen);
 		QRegExp rx(buffer);
-		m_Pin1Validator=new QRegExpValidator(rx, 0);
-	}
-	else
-	{
-		m_Pin1Validator=NULL;
+		m_Pin1Validator = new QRegExpValidator(rx, 0);
+	} else {
+		m_Pin1Validator = NULL;
 	}
 
-	if( pinInfo2.ulFlags & PIN_FLAG_DIGITS )
-	{
+	if (pinInfo2.ulFlags & PIN_FLAG_DIGITS) {
 		char buffer[20];
-		sprintf(buffer,"[0-9]{%u,%u}",m_ulPin2MinLen,m_ulPin2MaxLen);
+		sprintf(buffer, "[0-9]{%u,%u}", m_ulPin2MinLen, m_ulPin2MaxLen);
 		QRegExp rx(buffer);
-		m_Pin2Validator=new QRegExpValidator(rx, 0);
-	}
-	else
-	{
-		m_Pin2Validator=NULL;
+		m_Pin2Validator = new QRegExpValidator(rx, 0);
+	} else {
+		m_Pin2Validator = NULL;
 	}
 
 	QString Title;
 
-    if (PINName.contains("PUK"))
-    {
-        Title+= QString::fromWCharArray(GETSTRING_DLG(Unblock));
-    }
-    else
-    {
-        Title+= QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
-    }
+	if (PINName.contains("PUK")) {
+		Title += QString::fromWCharArray(GETSTRING_DLG(Unblock));
+	} else {
+		Title += QString::fromWCharArray(GETSTRING_DLG(RenewingPinCode));
+	}
 
-    this->setWindowTitle( Title );
-    this->setWindowTitle( Title );
-    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
+	this->setWindowTitle(Title);
+	this->setWindowTitle(Title);
+	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 
-    // HEADER
-    if( Header.isEmpty() )
-        Header = QString::fromWCharArray(GETSTRING_DLG(EnterYourPin));
+	// HEADER
+	if (Header.isEmpty())
+		Header = QString::fromWCharArray(GETSTRING_DLG(EnterYourPin));
 
-    ui.lblHeader->setText( Header );
-    ui.lblHeader->setAccessibleName( Header );
-    ui.lblHeader->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; font-weight:800 }");
+	ui.lblHeader->setText(Header);
+	ui.lblHeader->setAccessibleName(Header);
+	ui.lblHeader->setStyleSheet("QLabel { color : #3C5DBC; font-size:16pt; font-weight:800 }");
 
-    // ICON
-    QPixmap pix(":/images/autenticacao.bmp");
-    ui.lblIcon->setPixmap(pix);
-    ui.lblIcon->setScaledContents(true);
+	// ICON
+	QPixmap pix(":/images/autenticacao.bmp");
+	ui.lblIcon->setPixmap(pix);
+	ui.lblIcon->setScaledContents(true);
 
-    // ENTER YOUR PIN LABEL
-    QString enterYourPINText = QString::fromWCharArray(GETSTRING_DLG(EnterYour))
-                               + " " + PINName + " "
-                               + QString::fromWCharArray(GETSTRING_DLG(OfCitizenCard)) + ".";
-    ui.lblEnterYourPIN->setText( enterYourPINText );
-    ui.lblEnterYourPIN->setAccessibleName( enterYourPINText );
-    ui.lblEnterYourPIN->setStyleSheet("QLabel { color : #000000; font-size:12pt; font-weight:500 }");
+	// ENTER YOUR PIN LABEL
+	QString enterYourPINText = QString::fromWCharArray(GETSTRING_DLG(EnterYour)) + " " + PINName + " " +
+							   QString::fromWCharArray(GETSTRING_DLG(OfCitizenCard)) + ".";
+	ui.lblEnterYourPIN->setText(enterYourPINText);
+	ui.lblEnterYourPIN->setAccessibleName(enterYourPINText);
+	ui.lblEnterYourPIN->setStyleSheet("QLabel { color : #000000; font-size:12pt; font-weight:500 }");
 
-    // CURRENT PIN
-    if (PINName.contains("PUK"))
-        ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(Puk)) );
-    else
-        ui.lblOldPINName->setText( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
-    ui.lblOldPINName->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(CurrentPin)) );
-    ui.lblOldPINName->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
+	// CURRENT PIN
+	if (PINName.contains("PUK"))
+		ui.lblOldPINName->setText(QString::fromWCharArray(GETSTRING_DLG(Puk)));
+	else
+		ui.lblOldPINName->setText(QString::fromWCharArray(GETSTRING_DLG(CurrentPin)));
+	ui.lblOldPINName->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(CurrentPin)));
+	ui.lblOldPINName->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
 
-    ui.txtOldPIN->setMaxLength(8); //Max Length of PINs for PTEID cards as currently defined by INCM personalization
-    if (m_Pin1Validator)
-        ui.txtOldPIN->setValidator(m_Pin1Validator);
-    ui.txtOldPIN->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
+	ui.txtOldPIN->setMaxLength(8); // Max Length of PINs for PTEID cards as currently defined by INCM personalization
+	if (m_Pin1Validator)
+		ui.txtOldPIN->setValidator(m_Pin1Validator);
+	ui.txtOldPIN->setStyleSheet(
+		"QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
-    // NEW PIN
-    ui.lblNewPIN1->setText( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
-    ui.lblNewPIN1->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(NewPin)) );
-    ui.lblNewPIN1->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
+	// NEW PIN
+	ui.lblNewPIN1->setText(QString::fromWCharArray(GETSTRING_DLG(NewPin)));
+	ui.lblNewPIN1->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(NewPin)));
+	ui.lblNewPIN1->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
 
-    ui.txtNewPIN1->setMaxLength(8); //Max Length of PINs for PTEID cards as currently defined by INCM personalization
-    if (m_Pin2Validator)
-        ui.txtNewPIN1->setValidator(m_Pin2Validator);
-    ui.txtNewPIN1->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
+	ui.txtNewPIN1->setMaxLength(8); // Max Length of PINs for PTEID cards as currently defined by INCM personalization
+	if (m_Pin2Validator)
+		ui.txtNewPIN1->setValidator(m_Pin2Validator);
+	ui.txtNewPIN1->setStyleSheet(
+		"QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
-    // CONFIRM NEW PIN
-    ui.lblNewPIN2->setText( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
-    ui.lblNewPIN2->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)) );
-    ui.lblNewPIN2->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
+	// CONFIRM NEW PIN
+	ui.lblNewPIN2->setText(QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)));
+	ui.lblNewPIN2->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(ConfirmNewPin)));
+	ui.lblNewPIN2->setStyleSheet("QLabel { color : #000000; font-size: 12pt; background: rgba(0,0,0,0);}");
 
-    ui.txtNewPIN2->setMaxLength(8); //Max Length of PINs for PTEID cards as currently defined by INCM personalization
-    if (m_Pin2Validator)
-        ui.txtNewPIN2->setValidator(m_Pin2Validator);
-    ui.txtNewPIN2->setStyleSheet("QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
+	ui.txtNewPIN2->setMaxLength(8); // Max Length of PINs for PTEID cards as currently defined by INCM personalization
+	if (m_Pin2Validator)
+		ui.txtNewPIN2->setValidator(m_Pin2Validator);
+	ui.txtNewPIN2->setStyleSheet(
+		"QLineEdit {color: #000000; font-size: 12pt; border: 2px solid #D6D7D7; padding-left: 10px}\
 QLineEdit:focus {border: 3px solid #D6D7D7;}");
 
-    OldPIN_OK = NewPIN1_OK = NewPIN2_OK = false;
+	OldPIN_OK = NewPIN1_OK = NewPIN2_OK = false;
 
-    // OK BUTTON
-    ui.btnOk->setText( QString::fromWCharArray(GETSTRING_DLG(Confirm)) );
-    ui.btnOk->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Confirm)) );
-    ui.btnOk->setStyleSheet("QPushButton {background-color: rgba(60, 93, 188, 0.7); color: #ffffff; border-radius: 0}\
+	// OK BUTTON
+	ui.btnOk->setText(QString::fromWCharArray(GETSTRING_DLG(Confirm)));
+	ui.btnOk->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(Confirm)));
+	ui.btnOk->setStyleSheet("QPushButton {background-color: rgba(60, 93, 188, 0.7); color: #ffffff; border-radius: 0}\
 QPushButton:hover{background-color: #2C3DAC}");
-    connect( ui.btnOk, SIGNAL( clicked() ), this, SLOT( FinalCheck() ) );
+	connect(ui.btnOk, SIGNAL(clicked()), this, SLOT(FinalCheck()));
 
-    // CANCEL BUTTON
-    ui.btnCancel->setText( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
-    ui.btnCancel->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(Cancel)) );
-    ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #3C5DBC; border-radius: 0}\
+	// CANCEL BUTTON
+	ui.btnCancel->setText(QString::fromWCharArray(GETSTRING_DLG(Cancel)));
+	ui.btnCancel->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(Cancel)));
+	ui.btnCancel->setStyleSheet("QPushButton {background-color: #D6D7D7; color: #3C5DBC; border-radius: 0}\
 QPushButton:hover{background-color: #C6C7C7}");
 
-    Type_WndGeometry WndGeometry;
-    if ( getWndCenterPos( pParentWndGeometry
-                        , QApplication::desktop()->width(), QApplication::desktop()->height()
-                        , this->width(), this->height()
-                        , &WndGeometry ) ){
-        this->move( WndGeometry.x, WndGeometry.y );
-    }
+	Type_WndGeometry WndGeometry;
+	if (getWndCenterPos(pParentWndGeometry, QApplication::desktop()->width(), QApplication::desktop()->height(),
+						this->width(), this->height(), &WndGeometry)) {
+		this->move(WndGeometry.x, WndGeometry.y);
+	}
 }
 
-dlgWndAskPINs::~dlgWndAskPINs()
-{
-	if(m_Pin1Validator)
-	{
+dlgWndAskPINs::~dlgWndAskPINs() {
+	if (m_Pin1Validator) {
 		delete m_Pin1Validator;
-		m_Pin1Validator=NULL;
+		m_Pin1Validator = NULL;
 	}
 
-	if(m_Pin2Validator)
-	{
+	if (m_Pin2Validator) {
 		delete m_Pin2Validator;
-		m_Pin2Validator=NULL;
+		m_Pin2Validator = NULL;
 	}
 }
 
-void dlgWndAskPINs::on_txtOldPIN_textChanged( const QString & text )
-{
-	OldPIN_OK = (unsigned) text.length() >= m_ulPin1MinLen;
+void dlgWndAskPINs::on_txtOldPIN_textChanged(const QString &text) {
+	OldPIN_OK = (unsigned)text.length() >= m_ulPin1MinLen;
 	updateColors(ui.txtOldPIN, OldPIN_OK);
 }
 
-void dlgWndAskPINs::on_txtNewPIN1_textChanged( const QString & text )
-{
-	NewPIN1_OK = (unsigned) text.length() >= m_ulPin2MinLen;
+void dlgWndAskPINs::on_txtNewPIN1_textChanged(const QString &text) {
+	NewPIN1_OK = (unsigned)text.length() >= m_ulPin2MinLen;
 	ui.lblError->setVisible(false);
 	updateColors(ui.txtNewPIN1, NewPIN1_OK);
 }
 
-void dlgWndAskPINs::on_txtNewPIN2_textChanged( const QString & text )
-{
-	NewPIN2_OK = (unsigned) text.length() >= m_ulPin2MinLen;
+void dlgWndAskPINs::on_txtNewPIN2_textChanged(const QString &text) {
+	NewPIN2_OK = (unsigned)text.length() >= m_ulPin2MinLen;
 	ui.lblError->setVisible(false);
 	updateColors(ui.txtNewPIN2, NewPIN2_OK);
 }
 
-void dlgWndAskPINs::FinalCheck()
-{
-	if( ui.txtNewPIN2->text() == ui.txtNewPIN1->text() && !ui.txtNewPIN1->text().isEmpty() )
-	{
+void dlgWndAskPINs::FinalCheck() {
+	if (ui.txtNewPIN2->text() == ui.txtNewPIN1->text() && !ui.txtNewPIN1->text().isEmpty()) {
 		this->accept();
-	}
-	else
-	{
-        ui.lblError->setText( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
-        ui.lblError->setAccessibleName( QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)) );
-        ui.lblError->setVisible(true);
+	} else {
+		ui.lblError->setText(QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)));
+		ui.lblError->setAccessibleName(QString::fromWCharArray(GETSTRING_DLG(ErrorTheNewPinCodesAreNotIdentical)));
+		ui.lblError->setVisible(true);
 	}
 }
 
-void dlgWndAskPINs::updateColors( QLineEdit* lineEdit, bool bOk )
-{
+void dlgWndAskPINs::updateColors(QLineEdit *lineEdit, bool bOk) {
 	// Update text field border color
 	QString borderColor = bOk ? "#3C5DBC" : "#D6D7D7"; // blue : grey
 	lineEdit->setStyleSheet("QLineEdit {border: 2px solid " + borderColor + "; padding-left: 10px}\
-QLineEdit:focus {border: 3px solid " + borderColor + ";}");
+QLineEdit:focus {border: 3px solid " +
+							borderColor + ";}");
 
 	// Update OK button enabled status and color
 	QString buttonColor = TestPINs() ? "#3C5DBC" : "rgba(60, 93, 188, 0.7)"; // blue : blue with transparency

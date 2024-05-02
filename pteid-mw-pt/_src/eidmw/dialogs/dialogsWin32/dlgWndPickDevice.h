@@ -27,23 +27,20 @@ using namespace eIDMW;
 #define CODE_BUFFER_SIZE 10
 #define ID_BUFFER_SIZE 50
 
-class dlgWndPickDevice : public Win32Dialog
-{
-    PteidControls::TextData titleData, headerData;
-    PteidControls::ButtonData okBtnProcData, cancelBtnProcData;
-    PteidControls::RadioButtonGroupData radioGroupBtnData;
+class dlgWndPickDevice : public Win32Dialog {
+	PteidControls::TextData titleData, headerData;
+	PteidControls::ButtonData okBtnProcData, cancelBtnProcData;
+	PteidControls::RadioButtonGroupData radioGroupBtnData;
 
-    void GetResult();
+	void GetResult();
 
 public:
-    dlgWndPickDevice(HWND Parent = NULL);
-    virtual ~dlgWndPickDevice();
+	dlgWndPickDevice(HWND Parent = NULL);
+	virtual ~dlgWndPickDevice();
 
-    DlgDevice OutDeviceResult;
+	DlgDevice OutDeviceResult;
 
-    virtual LRESULT ProcecEvent
-          (UINT		uMsg,			// Message For This Window
-        WPARAM		wParam,			// Additional Message Information
-        LPARAM		lParam);		// Additional Message Information
+	virtual LRESULT ProcecEvent(UINT uMsg,		// Message For This Window
+								WPARAM wParam,	// Additional Message Information
+								LPARAM lParam); // Additional Message Information
 };
-

@@ -21,12 +21,11 @@
 **************************************************************************** */
 #pragma once
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 typedef enum {
-    TLV_TAG_LONG,
-    TLV_TAG_ULONG,
+	TLV_TAG_LONG,
+	TLV_TAG_ULONG,
 	TLV_TAG_STRING,
 } tTLVTagType;
 

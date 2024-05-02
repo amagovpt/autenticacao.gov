@@ -28,16 +28,12 @@
 extern "C" {
 #endif
 
-
 int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size);
 int hash_update(void *phashinfo, char *p, unsigned long l);
 int hash_final(void *phashinfo, unsigned char *p, unsigned long *l);
 
-
 #ifdef __cplusplus
-   }
+}
 #endif
 
-
 #endif
-

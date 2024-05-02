@@ -43,102 +43,81 @@
 #include <time.h>
 #include <sys/types.h>
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-#define CHALLENGE_LEN                  20
+#define CHALLENGE_LEN 20
 
 /*****************************************************************************************
 ---------------------------------------- APL_Card --------------------------------------------
 *****************************************************************************************/
-APL_CryptoFwk *APL_Card::m_cryptoFwk=NULL;
+APL_CryptoFwk *APL_Card::m_cryptoFwk = NULL;
 
-APL_Card::APL_Card(APL_ReaderContext *reader)
-{
-	if(!m_cryptoFwk)
-		m_cryptoFwk=AppLayer.getCryptoFwk();
+APL_Card::APL_Card(APL_ReaderContext *reader) {
+	if (!m_cryptoFwk)
+		m_cryptoFwk = AppLayer.getCryptoFwk();
 
-	m_reader=reader;
+	m_reader = reader;
 }
 
-APL_Card::~APL_Card()
-{
-}
+APL_Card::~APL_Card() {}
 
+CReader *APL_Card::getCalReader() const { return m_reader->getCalReader(); }
 
-CReader *APL_Card::getCalReader() const
-{
-	return m_reader->getCalReader();
-}
+APL_CardType APL_Card::getType() const { return APL_CARDTYPE_UNKNOWN; }
 
-APL_CardType APL_Card::getType() const
-{
-	return APL_CARDTYPE_UNKNOWN;
-}
+void APL_Card::CalLock() { return m_reader->CalLock(); }
 
-void APL_Card::CalLock()
-{
-	return m_reader->CalLock();
-}
+void APL_Card::CalUnlock() { return m_reader->CalUnlock(); }
 
-void APL_Card::CalUnlock()
-{
-	return m_reader->CalUnlock();
-}
+unsigned long APL_Card::readFile(const char *csPath, CByteArray &oData, unsigned long ulOffset,
+								 unsigned long ulMaxLength) {
 
-unsigned long APL_Card::readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset, unsigned long  ulMaxLength)
-{
-
-	//BEGIN_CAL_OPERATION(m_reader)
+	// BEGIN_CAL_OPERATION(m_reader)
 	m_reader->CalLock();
-	try{
-        oData = m_reader->getCalReader()->ReadFile(csPath,ulOffset,(ulMaxLength==0 ? FULL_FILE : ulMaxLength));
-	} catch(CMWException &e){
+	try {
+		oData = m_reader->getCalReader()->ReadFile(csPath, ulOffset, (ulMaxLength == 0 ? FULL_FILE : ulMaxLength));
+	} catch (CMWException &e) {
 		m_reader->CalUnlock();
 		if (e.GetError() == EIDMW_ERR_INCOMPATIBLE_READER)
 			throw e;
 
 		return 0;
-    } catch(...){
+	} catch (...) {
 		m_reader->CalUnlock();
 		throw;
 		return 0;
 	}
 	m_reader->CalUnlock();
 
-	//END_CAL_OPERATION(m_reader)
+	// END_CAL_OPERATION(m_reader)
 
 	return oData.Size();
 }
 
-bool APL_Card::writeFile(const char *csPath, const CByteArray& oData,unsigned long ulOffset)
-{
+bool APL_Card::writeFile(const char *csPath, const CByteArray &oData, unsigned long ulOffset) {
 
 	BEGIN_CAL_OPERATION(m_reader)
-	m_reader->getCalReader()->WriteFile(csPath,ulOffset,oData);
+	m_reader->getCalReader()->WriteFile(csPath, ulOffset, oData);
 	END_CAL_OPERATION(m_reader)
 
-    return true; //Otherwise, there is exception
+	return true; // Otherwise, there is exception
 }
 
-void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_PACEAuthenticationType secretType)
-{
-    PaceSecretType paceSecretType = PaceSecretType::PACECAN;
+void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_PACEAuthenticationType secretType) {
+	PaceSecretType paceSecretType = PaceSecretType::PACECAN;
 
-    if(secretType == APL_PACEAuthenticationType::APL_PACE_CAN)
-        paceSecretType = PaceSecretType::PACECAN;
-    else {
-        //not supported types
-    }
+	if (secretType == APL_PACEAuthenticationType::APL_PACE_CAN)
+		paceSecretType = PaceSecretType::PACECAN;
+	else {
+		// not supported types
+	}
 
-    BEGIN_CAL_OPERATION(m_reader)
-    m_reader->getCalReader()->initPaceAuthentication(secret, secretLen, paceSecretType);
-    END_CAL_OPERATION(m_reader)
-
+	BEGIN_CAL_OPERATION(m_reader)
+	m_reader->getCalReader()->initPaceAuthentication(secret, secretLen, paceSecretType);
+	END_CAL_OPERATION(m_reader)
 }
 
-CByteArray APL_Card::sendAPDU(const CByteArray& cmd)
-{
+CByteArray APL_Card::sendAPDU(const CByteArray &cmd) {
 
 	CByteArray out;
 
@@ -149,12 +128,11 @@ CByteArray APL_Card::sendAPDU(const CByteArray& cmd)
 	return out;
 }
 
-CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, const unsigned long paddingType)
-{
+CByteArray APL_Card::Sign(const CByteArray &oData, bool signatureKey, const unsigned long paddingType) {
 	CByteArray out;
 	BEGIN_CAL_OPERATION(m_reader)
 	tPrivKey signing_key;
-    //Private key IDs can be found with pkcs15-tool --list-keys from OpenSC package
+	// Private key IDs can be found with pkcs15-tool --list-keys from OpenSC package
 	if (signatureKey)
 		signing_key = m_reader->getCalReader()->GetPrivKeyByID(0x46);
 	else
@@ -164,29 +142,22 @@ CByteArray APL_Card::Sign(const CByteArray & oData, bool signatureKey, const uns
 	END_CAL_OPERATION(m_reader)
 
 	return out;
-
 }
 
-int APL_Card::SignPDF(PDFSignature *pdf_sig,  const char *location,
-		         const char *reason, const char *outfile_path)
-{
+int APL_Card::SignPDF(PDFSignature *pdf_sig, const char *location, const char *reason, const char *outfile_path) {
 
-	if (pdf_sig)
-	{
+	if (pdf_sig) {
 		pdf_sig->setCard(this);
 		return pdf_sig->signFiles(location, reason, outfile_path, true);
 	}
 
 	return -1;
-
 }
 
-
-CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const char *output_path,
-	APL_SignatureLevel level)
-{
+CByteArray &APL_Card::SignXades(const char **paths, unsigned int n_paths, const char *output_path,
+								APL_SignatureLevel level) {
 	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
-	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	if (level == LEVEL_LT) {
 		MWLOG(LEV_ERROR, MOD_CMD, "APL_Card::SignXades(): Signature Level LEVEL_LT is not supported.");
@@ -197,8 +168,7 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 
 	if (level == LEVEL_TIMESTAMP) {
 		sig.enableTimestamp();
-	}
-	else if (level == LEVEL_LTV) {
+	} else if (level == LEVEL_LTV) {
 		sig.enableLongTermValidation();
 	}
 
@@ -212,13 +182,12 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 		throw CMWEXCEPTION(EIDMW_LTV_ERROR);
 	}
 
-	SigContainer::createASiC(signature, paths, n_paths,output_path);
+	SigContainer::createASiC(signature, paths, n_paths, output_path);
 
-	//Write zip container signature and referenced files in zip container
+	// Write zip container signature and referenced files in zip container
 
 	return signature;
 }
-
 
 #ifdef WIN32
 #define PATH_SEP "\\"
@@ -226,62 +195,56 @@ CByteArray &APL_Card::SignXades(const char ** paths, unsigned int n_paths, const
 #define PATH_SEP "/"
 #endif
 
-char *generateFinalPath(const char *output_dir, const char *path)
-{
+char *generateFinalPath(const char *output_dir, const char *path) {
 
-	char * zip_filename = Basename((char*)path);
-	//We need a local copy of basename(path) because basename may return a pointer to some part
-	//of its argument and we don't want to change the input by replacing the last dot
-	char * tmp_path = new char[strlen(zip_filename)+1];
+	char *zip_filename = Basename((char *)path);
+	// We need a local copy of basename(path) because basename may return a pointer to some part
+	// of its argument and we don't want to change the input by replacing the last dot
+	char *tmp_path = new char[strlen(zip_filename) + 1];
 	strcpy(tmp_path, zip_filename);
 
 	replace_lastdot_inplace(tmp_path);
 
-	//Buffer for the filename components plus ".asics" plus PATH_SEP and terminating NULL
-	char *final_path = new char[strlen(output_dir)+strlen(tmp_path)+6+1+1];
+	// Buffer for the filename components plus ".asics" plus PATH_SEP and terminating NULL
+	char *final_path = new char[strlen(output_dir) + strlen(tmp_path) + 6 + 1 + 1];
 	sprintf(final_path, "%s" PATH_SEP "%s.asics", output_dir, tmp_path);
-	delete []tmp_path;
+	delete[] tmp_path;
 
 	return final_path;
 }
 
-void APL_Card::SignXadesIndividual(const char ** paths, unsigned int n_paths, const char *output_dir)
-{
+void APL_Card::SignXadesIndividual(const char **paths, unsigned int n_paths, const char *output_dir) {
 	SignIndividual(paths, n_paths, output_dir, false, false);
 }
 
-void APL_Card::SignXadesTIndividual(const char ** paths, unsigned int n_paths, const char *output_dir)
-{
+void APL_Card::SignXadesTIndividual(const char **paths, unsigned int n_paths, const char *output_dir) {
 	SignIndividual(paths, n_paths, output_dir, true, false);
 }
 
-void APL_Card::SignXadesAIndividual(const char ** paths, unsigned int n_paths, const char *output_dir)
-{
+void APL_Card::SignXadesAIndividual(const char **paths, unsigned int n_paths, const char *output_dir) {
 	SignIndividual(paths, n_paths, output_dir, false, true);
 }
 
-
 // Implementation of the PIN-caching version of SignXades()
 // It signs each input file seperately and creates a .zip container for each
-void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const char *output_dir, bool timestamp, bool xades_a)
-{
+void APL_Card::SignIndividual(const char **paths, unsigned int n_paths, const char *output_dir, bool timestamp,
+							  bool xades_a) {
 	bool throwTimestampException = false;
 	bool throwLTVException = false;
 
 	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
-	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
-    const char *files_to_sign[1];
+	const char *files_to_sign[1];
 
-	for (unsigned int i=0; i!= n_paths; i++)
-	{
+	for (unsigned int i = 0; i != n_paths; i++) {
 		XadesSignature sig(this);
 		if (timestamp)
 			sig.enableTimestamp();
 		else if (xades_a)
 			sig.enableLongTermValidation();
 
-		CByteArray * ts_data = NULL;
+		CByteArray *ts_data = NULL;
 
 		files_to_sign[0] = paths[i];
 		CByteArray &signature = sig.signXades(files_to_sign, 1);
@@ -294,11 +257,11 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 
 		const char *output_file = generateFinalPath(output_dir, paths[i]);
 		SigContainer::createASiC(signature, files_to_sign, 1, output_file);
-		delete []output_file;
+		delete[] output_file;
 
-		//Set SSO on after first iteration to avoid more PinCmd() user interaction for the remaining
-		// iterations
-		if (i==0)
+		// Set SSO on after first iteration to avoid more PinCmd() user interaction for the remaining
+		//  iterations
+		if (i == 0)
 			getCalReader()->setSSO(true);
 
 		delete &signature;
@@ -311,12 +274,9 @@ void APL_Card::SignIndividual(const char ** paths, unsigned int n_paths, const c
 
 	if (throwLTVException)
 		throw CMWEXCEPTION(EIDMW_LTV_ERROR);
-
 }
 
-
-CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, const char *output_file)
-{
+CByteArray &APL_Card::SignXadesT(const char **paths, unsigned int n_paths, const char *output_file) {
 	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
@@ -325,26 +285,25 @@ CByteArray &APL_Card::SignXadesT(const char ** paths, unsigned int n_paths, cons
 
 	CByteArray &signature = sig.signXades(paths, n_paths);
 
-	//Write zip container signature and referenced files in zip container
+	// Write zip container signature and referenced files in zip container
 	SigContainer::createASiC(signature, paths, n_paths, output_file);
-	
+
 	if (sig.shouldThrowTimestampException())
 		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
 
 	return signature;
 }
 
-CByteArray &APL_Card::SignXadesA(const char ** paths, unsigned int n_paths, const char *output_file)
-{
+CByteArray &APL_Card::SignXadesA(const char **paths, unsigned int n_paths, const char *output_file) {
 	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
-	   throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	XadesSignature sig(this);
 	sig.enableLongTermValidation();
 
 	CByteArray &signature = sig.signXades(paths, n_paths);
 
-	//Write zip container signature and referenced files in zip container
+	// Write zip container signature and referenced files in zip container
 	SigContainer::createASiC(signature, paths, n_paths, output_file);
 
 	if (sig.shouldThrowTimestampException())
@@ -356,146 +315,125 @@ CByteArray &APL_Card::SignXadesA(const char ** paths, unsigned int n_paths, cons
 	return signature;
 }
 
-void APL_Card::SignASiC(const char *path, APL_SignatureLevel level)
-{
+void APL_Card::SignASiC(const char *path, APL_SignatureLevel level) {
 	if (path == NULL || !CPathUtil::checkExistingFiles(&path, 1)) {
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 	}
 
 	XadesSignature sig(this);
-    if (level == LEVEL_TIMESTAMP) {
-        sig.enableTimestamp();
-    }
-    else if (level == LEVEL_LTV) {
-        sig.enableLongTermValidation();
-    }
+	if (level == LEVEL_TIMESTAMP) {
+		sig.enableTimestamp();
+	} else if (level == LEVEL_LTV) {
+		sig.enableLongTermValidation();
+	}
 
 	sig.signASiC(path);
 }
 
-
 /*****************************************************************************************
 ---------------------------------------- APL_SmartCard -----------------------------------
 *****************************************************************************************/
-APL_SmartCard::APL_SmartCard(APL_ReaderContext *reader):APL_Card(reader)
-{
-	m_pins=NULL;
-	m_certs=NULL;
-	m_fileinfo=NULL;
+APL_SmartCard::APL_SmartCard(APL_ReaderContext *reader) : APL_Card(reader) {
+	m_pins = NULL;
+	m_certs = NULL;
+	m_fileinfo = NULL;
 
 	APL_Config conf_allowTest(CConfig::EIDMW_CONFIG_PARAM_CERTVALID_ALLOWTESTC);
-	m_allowTestParam = conf_allowTest.getLong()?true:false;
+	m_allowTestParam = conf_allowTest.getLong() ? true : false;
 
-	m_allowTestAsked=false;
-	m_allowTestAnswer=false;
+	m_allowTestAsked = false;
+	m_allowTestAnswer = false;
 
 	m_RootCAPubKey = NULL;
 
-	m_certificateCount=COUNT_UNDEF;
-	m_pinCount=COUNT_UNDEF;
+	m_certificateCount = COUNT_UNDEF;
+	m_pinCount = COUNT_UNDEF;
 }
 
-APL_SmartCard::~APL_SmartCard()
-{
-	if(m_pins)
-	{
+APL_SmartCard::~APL_SmartCard() {
+	if (m_pins) {
 		delete m_pins;
-		m_pins=NULL;
+		m_pins = NULL;
 	}
 
-	if(m_certs)
-	{
+	if (m_certs) {
 		delete m_certs;
-		m_certs=NULL;
+		m_certs = NULL;
 	}
 
-	if(m_fileinfo)
-	{
+	if (m_fileinfo) {
 		delete m_fileinfo;
-		m_fileinfo=NULL;
+		m_fileinfo = NULL;
 	}
 
-	if (m_RootCAPubKey)
-	{
+	if (m_RootCAPubKey) {
 		delete m_RootCAPubKey;
 		m_RootCAPubKey = NULL;
 	}
-
 }
 
-APL_CardFile_Info *APL_SmartCard::getFileInfo()
-{
-	if(!m_fileinfo)
-	{
-		CAutoMutex autoMutex(&m_Mutex);		    //We lock for unly one instanciation
-		if (!m_fileinfo)						//We test again to be sure it isn't instanciated between the first if and the lock
+APL_CardFile_Info *APL_SmartCard::getFileInfo() {
+	if (!m_fileinfo) {
+		CAutoMutex autoMutex(&m_Mutex); // We lock for unly one instanciation
+		if (!m_fileinfo) // We test again to be sure it isn't instanciated between the first if and the lock
 		{
-			m_fileinfo=new APL_CardFile_Info(this);
+			m_fileinfo = new APL_CardFile_Info(this);
 		}
 	}
 
 	return m_fileinfo;
 }
 
-void APL_SmartCard::selectApplication(const CByteArray &applicationId) const
-{
+void APL_SmartCard::selectApplication(const CByteArray &applicationId) const {
 
 	BEGIN_CAL_OPERATION(m_reader)
-		m_reader->getCalReader()->SelectApplication(applicationId);
+	m_reader->getCalReader()->SelectApplication(applicationId);
 	END_CAL_OPERATION(m_reader)
 }
 
-CByteArray APL_SmartCard::sendAPDU(const CByteArray& cmd,APL_Pin *pin,const char *csPinCode)
-{
+CByteArray APL_SmartCard::sendAPDU(const CByteArray &cmd, APL_Pin *pin, const char *csPinCode) {
 
-	unsigned long lRemaining=0;
-	if(pin)
-		if(csPinCode != NULL)
-			pin->verifyPin(csPinCode,lRemaining);
+	unsigned long lRemaining = 0;
+	if (pin)
+		if (csPinCode != NULL)
+			pin->verifyPin(csPinCode, lRemaining);
 
 	return APL_Card::sendAPDU(cmd);
 }
 
-unsigned long APL_SmartCard::readFile(const char *csPath, CByteArray &oData, unsigned long  ulOffset, unsigned long  ulMaxLength)
-{
-	return APL_Card::readFile(csPath,oData,ulOffset,ulMaxLength);
+unsigned long APL_SmartCard::readFile(const char *csPath, CByteArray &oData, unsigned long ulOffset,
+									  unsigned long ulMaxLength) {
+	return APL_Card::readFile(csPath, oData, ulOffset, ulMaxLength);
 }
 
-unsigned long APL_SmartCard::readFile(const char *fileID, CByteArray &in,APL_Pin *pin,const char *csPinCode)
-{
-	unsigned long lRemaining=0;
-	if(pin)
-		if(csPinCode != NULL)
-			pin->verifyPin(csPinCode,lRemaining);
+unsigned long APL_SmartCard::readFile(const char *fileID, CByteArray &in, APL_Pin *pin, const char *csPinCode) {
+	unsigned long lRemaining = 0;
+	if (pin)
+		if (csPinCode != NULL)
+			pin->verifyPin(csPinCode, lRemaining);
 
-
-	return readFile(fileID,in,0UL,0UL);
+	return readFile(fileID, in, 0UL, 0UL);
 }
 
-bool APL_SmartCard::writeFile(const char *fileID, const CByteArray &out, APL_Pin *pin, const char *csPinCode, unsigned long ulOffset)
-{
-	unsigned long lRemaining=0;
+bool APL_SmartCard::writeFile(const char *fileID, const CByteArray &out, APL_Pin *pin, const char *csPinCode,
+							  unsigned long ulOffset) {
+	unsigned long lRemaining = 0;
 
-	if(pin)
-		if(csPinCode != NULL)
-			pin->verifyPin(csPinCode,lRemaining);
+	if (pin)
+		if (csPinCode != NULL)
+			pin->verifyPin(csPinCode, lRemaining);
 
 	return APL_Card::writeFile(fileID, out, ulOffset);
 }
 
-unsigned long APL_SmartCard::pinCount()
-{
+unsigned long APL_SmartCard::pinCount() {
 
-	if(m_pinCount==COUNT_UNDEF)
-	{
-		try
-		{
+	if (m_pinCount == COUNT_UNDEF) {
+		try {
 			BEGIN_CAL_OPERATION(m_reader)
-			m_pinCount =  m_reader->getCalReader()->PinCount();
+			m_pinCount = m_reader->getCalReader()->PinCount();
 			END_CAL_OPERATION(m_reader)
-		}
-		catch(...)
-		{
+		} catch (...) {
 			m_pinCount = 0;
 		}
 	}
@@ -503,22 +441,19 @@ unsigned long APL_SmartCard::pinCount()
 	return m_pinCount;
 }
 
-APL_Pins *APL_SmartCard::getPins()
-{
-	if(!m_pins)
-	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for unly one instanciation
-		if (!m_pins)				//We test again to be sure it isn't instanciated between the first if and the lock
+APL_Pins *APL_SmartCard::getPins() {
+	if (!m_pins) {
+		CAutoMutex autoMutex(&m_Mutex); // We lock for unly one instanciation
+		if (!m_pins) // We test again to be sure it isn't instanciated between the first if and the lock
 		{
-			m_pins=new APL_Pins(this);
+			m_pins = new APL_Pins(this);
 		}
 	}
 
 	return m_pins;
 }
 
-tPin APL_SmartCard::getPin(unsigned long ulIndex)
-{
+tPin APL_SmartCard::getPin(unsigned long ulIndex) {
 
 	if (ulIndex >= pinCount())
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -532,10 +467,9 @@ tPin APL_SmartCard::getPin(unsigned long ulIndex)
 	return out;
 }
 
-unsigned long APL_SmartCard::pinStatus(const tPin &Pin)
-{
+unsigned long APL_SmartCard::pinStatus(const tPin &Pin) {
 
-	unsigned long out=0;
+	unsigned long out = 0;
 
 	BEGIN_CAL_OPERATION(m_reader)
 	out = m_reader->getCalReader()->PinStatus(Pin);
@@ -548,60 +482,53 @@ bool APL_SmartCard::isPinVerified(const tPin &Pin) {
 	bool verified = false;
 
 	BEGIN_CAL_OPERATION(m_reader)
-		verified = m_reader->getCalReader()->isPinVerified(Pin);
+	verified = m_reader->getCalReader()->isPinVerified(Pin);
 	END_CAL_OPERATION(m_reader)
 
 	return verified;
 }
 
-bool APL_SmartCard::pinCmd(tPinOperation operation, const tPin &Pin,
-		const char *csPin1In, const char *csPin2In,
-		unsigned long &ulRemaining, bool bShowDlg, void *wndGeometry )
-{
+bool APL_SmartCard::pinCmd(tPinOperation operation, const tPin &Pin, const char *csPin1In, const char *csPin2In,
+						   unsigned long &ulRemaining, bool bShowDlg, void *wndGeometry) {
 
-	bool ret=false;
+	bool ret = false;
 
-	const char *csPin1=csPin1In;
-	if(!csPin1)
-		csPin1="";
+	const char *csPin1 = csPin1In;
+	if (!csPin1)
+		csPin1 = "";
 
-	const char *csPin2=csPin2In;
-	if(!csPin2)
-		csPin2="";
+	const char *csPin2 = csPin2In;
+	if (!csPin2)
+		csPin2 = "";
 
 	BEGIN_CAL_OPERATION(m_reader)
-	ret=m_reader->getCalReader()->PinCmd(operation,Pin,csPin1,csPin2,ulRemaining,bShowDlg, wndGeometry );
+	ret = m_reader->getCalReader()->PinCmd(operation, Pin, csPin1, csPin2, ulRemaining, bShowDlg, wndGeometry);
 	END_CAL_OPERATION(m_reader)
 
 	return ret;
 }
 
-unsigned long APL_SmartCard::certificateCount()
-{
-	if(m_certificateCount==COUNT_UNDEF)
-	{
+unsigned long APL_SmartCard::certificateCount() {
+	if (m_certificateCount == COUNT_UNDEF) {
 		BEGIN_CAL_OPERATION(m_reader)
-		// Minus one because we're excluding the Root Cert from card 
+		// Minus one because we're excluding the Root Cert from card
 		// (we're assuming it's always the last in the PKCS15 structure)
-		m_certificateCount = m_reader->getCalReader()->CertCount() -1;
+		m_certificateCount = m_reader->getCalReader()->CertCount() - 1;
 		END_CAL_OPERATION(m_reader)
 	}
 
 	return m_certificateCount;
 }
 
-APL_Certifs *APL_SmartCard::getCertificates()
-{
-	if(!m_certs)
-	{
-		CAutoMutex autoMutex(&m_Mutex);		//We lock for only one instantiation
-		if (!m_certs)						//We test again to be sure it isn't instantiated between the first if and the lock
+APL_Certifs *APL_SmartCard::getCertificates() {
+	if (!m_certs) {
+		CAutoMutex autoMutex(&m_Mutex); // We lock for only one instantiation
+		if (!m_certs) // We test again to be sure it isn't instantiated between the first if and the lock
 		{
-			m_certs=new APL_Certifs(this);
-			for(unsigned long ulIndex=0;ulIndex<certificateCount();ulIndex++)
-			{
-				APL_Certif *cert=NULL;
-				cert=m_certs->getCertFromCard(ulIndex);
+			m_certs = new APL_Certifs(this);
+			for (unsigned long ulIndex = 0; ulIndex < certificateCount(); ulIndex++) {
+				APL_Certif *cert = NULL;
+				cert = m_certs->getCertFromCard(ulIndex);
 			}
 		}
 	}
@@ -609,9 +536,8 @@ APL_Certifs *APL_SmartCard::getCertificates()
 	return m_certs;
 }
 
-tCert APL_SmartCard::getP15Cert(unsigned long ulIndex)
-{
-	if (ulIndex>=certificateCount())
+tCert APL_SmartCard::getP15Cert(unsigned long ulIndex) {
+	if (ulIndex >= certificateCount())
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	tCert out;
@@ -623,4 +549,4 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex)
 	return out;
 }
 
-}
+} // namespace eIDMW

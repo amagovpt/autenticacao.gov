@@ -28,34 +28,30 @@ using namespace eIDMW;
 #define CODE_BUFFER_SIZE 10
 #define ID_BUFFER_SIZE 50
 
-class dlgWndAskCmd : public Win32Dialog
-{
-    PteidControls::TextData titleData, headerData, linkData, boxTextData, mobileNumberFieldData, docIdTextData, sendSmsTextData, cautionData;
-    PteidControls::TextFieldData textFieldCodeData, textFieldIdData;
-    PteidControls::ButtonData okBtnProcData, cancelBtnProcData, sendSmsBtnData;
-    PteidControls::ComboBoxData mobilePrefixData;
+class dlgWndAskCmd : public Win32Dialog {
+	PteidControls::TextData titleData, headerData, linkData, boxTextData, mobileNumberFieldData, docIdTextData,
+		sendSmsTextData, cautionData;
+	PteidControls::TextFieldData textFieldCodeData, textFieldIdData;
+	PteidControls::ButtonData okBtnProcData, cancelBtnProcData, sendSmsBtnData;
+	PteidControls::ComboBoxData mobilePrefixData;
 
-    void GetResult();
-    HWND hStaticBox;
-    HWND hSendSmsBox;
-    bool m_askForId;
+	void GetResult();
+	HWND hStaticBox;
+	HWND hSendSmsBox;
+	bool m_askForId;
 
-    std::function<void(void)> *m_fSendSmsCallback;
+	std::function<void(void)> *m_fSendSmsCallback;
 
 public:
-    dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp,
-        std::wstring & Header,
-        std::wstring *inOutId = NULL, std::wstring *userName = NULL,
-        HWND Parent = NULL, std::function<void(void)> *fSendSmsCallback = NULL, bool askForId = false);
-    virtual ~dlgWndAskCmd();
+	dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::wstring &Header, std::wstring *inOutId = NULL,
+				 std::wstring *userName = NULL, HWND Parent = NULL, std::function<void(void)> *fSendSmsCallback = NULL,
+				 bool askForId = false);
+	virtual ~dlgWndAskCmd();
 
-    wchar_t OutCodeResult[CODE_BUFFER_SIZE];
-    wchar_t OutIdResult[ID_BUFFER_SIZE];
+	wchar_t OutCodeResult[CODE_BUFFER_SIZE];
+	wchar_t OutIdResult[ID_BUFFER_SIZE];
 
-    virtual LRESULT ProcecEvent
-        (UINT		uMsg,			// Message For This Window
-        WPARAM		wParam,			// Additional Message Information
-        LPARAM		lParam);		// Additional Message Information
-
+	virtual LRESULT ProcecEvent(UINT uMsg,		// Message For This Window
+								WPARAM wParam,	// Additional Message Information
+								LPARAM lParam); // Additional Message Information
 };
-

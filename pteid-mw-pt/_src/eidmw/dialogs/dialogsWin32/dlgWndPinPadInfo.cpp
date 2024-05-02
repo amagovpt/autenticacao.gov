@@ -36,10 +36,10 @@
 #define IDC_STATIC_WARNING 5
 #define IDT_TIMER 6
 
-dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusage, 
-		DlgPinOperation operation, const std::wstring & csReader, 
-		const std::wstring & title, const std::wstring & Message, HWND Parent)
-:Win32Dialog(L"WndPinpadInfo")
+dlgWndPinpadInfo::dlgWndPinpadInfo(unsigned long ulHandle, DlgPinUsage PinPusage, DlgPinOperation operation,
+								   const std::wstring &csReader, const std::wstring &title, const std::wstring &Message,
+								   HWND Parent)
+	: Win32Dialog(L"WndPinpadInfo")
 
 {
 	m_ModalHold = true;
@@ -51,12 +51,11 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 	std::wstring tmpTitle = title;
 	tmpTitle += Message.c_str();
 	tmpTitle += warningText;
-	
+
 	int window_width = 430;
 	int window_height = 360;
 
-	if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent))
-	{
+	if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent)) {
 		RECT clientRect;
 		GetClientRect(m_hWnd, &clientRect);
 
@@ -65,7 +64,7 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		int contentWidth = (int)(clientRect.right - 2 * contentX);
 		int titleHeight = (int)(clientRect.right * 0.15);
 		animation_width = (int)(clientRect.right * 0.25);
-	    animation_x = (int)((clientRect.right - animation_width) / 2);
+		animation_x = (int)((clientRect.right - animation_width) / 2);
 		animation_y = (int)(clientRect.bottom * 0.18);
 		int headerY = (int)(clientRect.bottom * 0.55);
 		int headerHeight = (int)(clientRect.bottom * 0.2);
@@ -76,10 +75,8 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		titleData.text = title.c_str();
 		titleData.font = PteidControls::StandardFontHeader;
 		titleData.color = BLUE;
-		HWND hTitle = PteidControls::CreateText(
-			contentX, paddingY,
-			contentWidth, titleHeight,
-			m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
+		HWND hTitle = PteidControls::CreateText(contentX, paddingY, contentWidth, titleHeight, m_hWnd,
+												(HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
 		// ANIMATION
 		PteidControls::Circle_Animation_Setup(gdiplusToken);
@@ -89,108 +86,95 @@ dlgWndPinpadInfo::dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage PinPusag
 		headerData.font = headerFont;
 		headerData.text = Message.c_str();
 		headerData.horizontalCentered = true;
-		HWND hHeader = PteidControls::CreateText(
-			contentX, headerY,
-			contentWidth, headerHeight,
-			m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
+		HWND hHeader = PteidControls::CreateText(contentX, headerY, contentWidth, headerHeight, m_hWnd,
+												 (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
 		// WARNING "Pinpad functionality can be disabled"
 		warningTextData.text = warningText;
 		warningTextData.horizontalCentered = true;
-		HWND hWarning = PteidControls::CreateText(
-			contentX, warningY,
-			contentWidth, headerHeight,
-			m_hWnd, (HMENU)IDC_STATIC_WARNING, m_hInstance, &warningTextData);
+		HWND hWarning = PteidControls::CreateText(contentX, warningY, contentWidth, headerHeight, m_hWnd,
+												  (HMENU)IDC_STATIC_WARNING, m_hInstance, &warningTextData);
 	}
-
 }
 
-
-dlgWndPinpadInfo::~dlgWndPinpadInfo()
-{
+dlgWndPinpadInfo::~dlgWndPinpadInfo() {
 	DeleteObject(headerFont);
 	PteidControls::Circle_Animation_Destroy(gdiplusToken);
 	KillTimer(m_hWnd, IDT_TIMER);
 	EnableWindow(m_parent, TRUE);
-	KillWindow( );
+	KillWindow();
 }
 
-LRESULT dlgWndPinpadInfo::ProcecEvent(	UINT		uMsg,			// Message For This Window
-									WPARAM		wParam,			// Additional Message Information
-									LPARAM		lParam )		// Additional Message Information
+LRESULT dlgWndPinpadInfo::ProcecEvent(UINT uMsg,	 // Message For This Window
+									  WPARAM wParam, // Additional Message Information
+									  LPARAM lParam) // Additional Message Information
 {
 	PAINTSTRUCT ps;
-	const RECT animation_rect = { animation_x, animation_y, animation_x + animation_width, animation_y + animation_width };
+	const RECT animation_rect = {animation_x, animation_y, animation_x + animation_width,
+								 animation_y + animation_width};
 
-	switch( uMsg )
-	{
+	switch (uMsg) {
 	case WM_TIMER:
 
 		m_animation_angle += 15;
 		InvalidateRect(m_hWnd, &animation_rect, TRUE);
 		break;
-	case WM_CTLCOLORSTATIC:
-	{
+	case WM_CTLCOLORSTATIC: {
 		HDC hdcStatic = (HDC)wParam;
-		//MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
+		// MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)",
+		// wParam, lParam);
 		SetBkColor(hdcStatic, WHITE);
-		if (m_hbrBkgnd == NULL)
-		{
+		if (m_hbrBkgnd == NULL) {
 			m_hbrBkgnd = CreateSolidBrush(WHITE);
 		}
 
 		return (INT_PTR)m_hbrBkgnd;
 	}
-	case WM_PAINT:
-		{
-			m_hDC = BeginPaint( m_hWnd, &ps );
+	case WM_PAINT: {
+		m_hDC = BeginPaint(m_hWnd, &ps);
 
-			PteidControls::Circle_Animation_OnPaint(m_hWnd, m_hDC, &animation_rect, &ps, m_animation_angle);
+		PteidControls::Circle_Animation_OnPaint(m_hWnd, m_hDC, &animation_rect, &ps, m_animation_angle);
 
-			DrawApplicationIcon(m_hDC, m_hWnd);
+		DrawApplicationIcon(m_hDC, m_hWnd);
 
-			EndPaint( m_hWnd, &ps );
+		EndPaint(m_hWnd, &ps);
 
-			SetForegroundWindow( m_hWnd );
+		SetForegroundWindow(m_hWnd);
 
-			if (!m_timer)
-				m_timer = SetTimer(m_hWnd, IDT_TIMER, ANIMATION_DURATION, (TIMERPROC)NULL);
+		if (!m_timer)
+			m_timer = SetTimer(m_hWnd, IDT_TIMER, ANIMATION_DURATION, (TIMERPROC)NULL);
 
-			return 0;
-
-		}
-
-		case WM_CREATE:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndPinpadInfo::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)",wParam,lParam);
-			break;
-		}
-
-		case WM_CLOSE:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndPinpadInfo::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			if( m_ulHandle )
-			{
-				unsigned long tmp = m_ulHandle;
-				m_ulHandle = 0;
-				DlgClosePinpadInfo( tmp );
-			}
-			return  0;
-		}
-
-		case WM_DESTROY: 
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndModal::ProcecEvent WM_DESTROY (wParam=%X, lParam=%X)",wParam,lParam);
-			break;
-		}
-
-		default:
-		{
-			break;
-		}
+		return 0;
 	}
-	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+
+	case WM_CREATE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndPinpadInfo::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+		break;
+	}
+
+	case WM_CLOSE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndPinpadInfo::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+
+		if (m_ulHandle) {
+			unsigned long tmp = m_ulHandle;
+			m_ulHandle = 0;
+			DlgClosePinpadInfo(tmp);
+		}
+		return 0;
+	}
+
+	case WM_DESTROY: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndModal::ProcecEvent WM_DESTROY (wParam=%X, lParam=%X)", wParam, lParam);
+		break;
+	}
+
+	default: {
+		break;
+	}
+	}
+	return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 }
 
 void dlgWndPinpadInfo::stopExec() {

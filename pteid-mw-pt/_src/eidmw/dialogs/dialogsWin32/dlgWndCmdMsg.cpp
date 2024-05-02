@@ -37,247 +37,223 @@
 
 #define IDT_TIMER 6
 
-dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, HWND Parent) : Win32Dialog(L"WndAskCmd")
-{
-    std::wstring tmpTitle = L"";
-    tmpTitle.append(message);
+dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, HWND Parent)
+	: Win32Dialog(L"WndAskCmd") {
+	std::wstring tmpTitle = L"";
+	tmpTitle.append(message);
 
-    type = msgType;
+	type = msgType;
 	m_timer = NULL;
 
-    dlgResult = DLG_OK;
+	dlgResult = DLG_OK;
 
-    int Height = 360;
-    int Width = 430;
+	int Height = 360;
+	int Width = 430;
 
-    if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent))
-    {
-        RECT clientRect;
-        GetClientRect(m_hWnd, &clientRect);
+	if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent)) {
+		RECT clientRect;
+		GetClientRect(m_hWnd, &clientRect);
 
-        int titleX = (int)(clientRect.right * 0.05);
-        int titleY = (int)(clientRect.bottom * 0.05);
-        int contentWidth = (int)(clientRect.right * 0.9);
-        int titleWidth = (int)(contentWidth * 0.9);
-        int textTopY = (int)(clientRect.bottom * 0.62);
-        int imgWidth = (int)(clientRect.right * 0.25);
-        int imgHeight = imgWidth;
-        img_x = (int)((clientRect.right - imgWidth) / 2 );
-        img_y = (int)(clientRect.bottom * 0.23);
-        int textBottomY = (int)(clientRect.bottom * 0.70);
-        int buttonWidth = (int)(clientRect.right * 0.43);
-        int buttonHeight = (int)(clientRect.bottom * 0.08);
+		int titleX = (int)(clientRect.right * 0.05);
+		int titleY = (int)(clientRect.bottom * 0.05);
+		int contentWidth = (int)(clientRect.right * 0.9);
+		int titleWidth = (int)(contentWidth * 0.9);
+		int textTopY = (int)(clientRect.bottom * 0.62);
+		int imgWidth = (int)(clientRect.right * 0.25);
+		int imgHeight = imgWidth;
+		img_x = (int)((clientRect.right - imgWidth) / 2);
+		img_y = (int)(clientRect.bottom * 0.23);
+		int textBottomY = (int)(clientRect.bottom * 0.70);
+		int buttonWidth = (int)(clientRect.right * 0.43);
+		int buttonHeight = (int)(clientRect.bottom * 0.08);
 
-        // TITLE
-        std::wstring title;
-        switch (operation)
-        {
-        case DlgCmdOperation::DLG_CMD_SIGNATURE:
-            title.append(GETSTRING_DLG(SigningWith)).append(L" ").append(GETSTRING_DLG(CMD));
-            break;
-        case DlgCmdOperation::DLG_CMD_GET_CERTIFICATE:
-            title.append(GETSTRING_DLG(ObtainingCMDCert));
-            break;
-        default:
-            break;
-        }
+		// TITLE
+		std::wstring title;
+		switch (operation) {
+		case DlgCmdOperation::DLG_CMD_SIGNATURE:
+			title.append(GETSTRING_DLG(SigningWith)).append(L" ").append(GETSTRING_DLG(CMD));
+			break;
+		case DlgCmdOperation::DLG_CMD_GET_CERTIFICATE:
+			title.append(GETSTRING_DLG(ObtainingCMDCert));
+			break;
+		default:
+			break;
+		}
 
-        titleData.text = title.c_str();
-        titleData.font = PteidControls::StandardFontHeader;
-        titleData.color = BLUE;
-        HWND hTitle = PteidControls::CreateText(
-            titleX, titleY,
-            titleWidth, (int)(clientRect.bottom * 0.15),
-            m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
+		titleData.text = title.c_str();
+		titleData.font = PteidControls::StandardFontHeader;
+		titleData.color = BLUE;
+		HWND hTitle = PteidControls::CreateText(titleX, titleY, titleWidth, (int)(clientRect.bottom * 0.15), m_hWnd,
+												(HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
-        // ANIMATION / IMAGE
-        if (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS || msgType == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
-        {	
+		// ANIMATION / IMAGE
+		if (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS || msgType == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL) {
 			PteidControls::Circle_Animation_Setup(gdiplusToken);
 			GetClientRect(m_hWnd, &m_client_rectangle);
-        }
-        else if (msgType == DlgCmdMsgType::DLG_CMD_ERROR_MSG || msgType == DlgCmdMsgType::DLG_CMD_WARNING_MSG)
-        {
-            imageIco = (HICON)LoadImage(m_hInstance,
-                MAKEINTRESOURCE((msgType == DlgCmdMsgType::DLG_CMD_ERROR_MSG ? IDI_ICON2 : IDI_ICON1)),
-                IMAGE_ICON, 256, 256, NULL);
-            if (imageIco == NULL){
-                MWLOG(LEV_ERROR, MOD_DLG, L"  --> dlgWndCmdMsg::dlgWndCmdMsg Error while loading image: 0x%x", GetLastError());
-            }
-            HWND hwndImage = CreateWindow(
-                L"STATIC", L"warning.ico", WS_CHILD | WS_VISIBLE | SS_ICON | SS_REALSIZECONTROL,
-				img_x, img_y, imgWidth, imgHeight,
-                m_hWnd, (HMENU)IDI_ICON, m_hInstance, NULL);
-            SendMessage(hwndImage, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)imageIco);
-        }
+		} else if (msgType == DlgCmdMsgType::DLG_CMD_ERROR_MSG || msgType == DlgCmdMsgType::DLG_CMD_WARNING_MSG) {
+			imageIco = (HICON)LoadImage(
+				m_hInstance, MAKEINTRESOURCE((msgType == DlgCmdMsgType::DLG_CMD_ERROR_MSG ? IDI_ICON2 : IDI_ICON1)),
+				IMAGE_ICON, 256, 256, NULL);
+			if (imageIco == NULL) {
+				MWLOG(LEV_ERROR, MOD_DLG, L"  --> dlgWndCmdMsg::dlgWndCmdMsg Error while loading image: 0x%x",
+					  GetLastError());
+			}
+			HWND hwndImage =
+				CreateWindow(L"STATIC", L"warning.ico", WS_CHILD | WS_VISIBLE | SS_ICON | SS_REALSIZECONTROL, img_x,
+							 img_y, imgWidth, imgHeight, m_hWnd, (HMENU)IDI_ICON, m_hInstance, NULL);
+			SendMessage(hwndImage, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)imageIco);
+		}
 
-        // TEXT TOP
-        textTopData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS || msgType == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL ? 
-                                GETSTRING_DLG(PleaseWait) : GETSTRING_DLG(Error));
-        textTopData.horizontalCentered = true;
-        textTopData.font = PteidControls::StandardFontBold;
-        HWND hTextTop = PteidControls::CreateText(
-            0, textTopY, clientRect.right, (int)(clientRect.bottom * 0.08),
-            m_hWnd, (HMENU)IDC_STATIC_TEXT_TOP, m_hInstance, &textTopData);
-            
-        // TEXT BOTTOM
-        textBottomData.text = message;
-        textBottomData.horizontalCentered = true;
-        
-        HWND hTextBottom = PteidControls::CreateText(
-            titleX, textBottomY, contentWidth, (int)(clientRect.bottom * 0.16),
-            m_hWnd, (HMENU)IDC_STATIC_TEXT_BOTTOM, m_hInstance, &textBottomData);
+		// TEXT TOP
+		textTopData.text =
+			(msgType == DlgCmdMsgType::DLG_CMD_PROGRESS || msgType == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL
+				 ? GETSTRING_DLG(PleaseWait)
+				 : GETSTRING_DLG(Error));
+		textTopData.horizontalCentered = true;
+		textTopData.font = PteidControls::StandardFontBold;
+		HWND hTextTop = PteidControls::CreateText(0, textTopY, clientRect.right, (int)(clientRect.bottom * 0.08),
+												  m_hWnd, (HMENU)IDC_STATIC_TEXT_TOP, m_hInstance, &textTopData);
 
-        // BUTTON
-        if ( msgType != DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
-        {
-            btnProcData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? 
-                                    GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok));
-            HWND Cancel_Btn = PteidControls::CreateButton(
-                (int)((clientRect.right - buttonWidth) / 2), (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
-                m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
-            SetFocus(btnProcData.getMainWnd());
-        }
-    }
+		// TEXT BOTTOM
+		textBottomData.text = message;
+		textBottomData.horizontalCentered = true;
+
+		HWND hTextBottom =
+			PteidControls::CreateText(titleX, textBottomY, contentWidth, (int)(clientRect.bottom * 0.16), m_hWnd,
+									  (HMENU)IDC_STATIC_TEXT_BOTTOM, m_hInstance, &textBottomData);
+
+		// BUTTON
+		if (msgType != DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL) {
+			btnProcData.text = (msgType == DlgCmdMsgType::DLG_CMD_PROGRESS ? GETSTRING_DLG(Cancel) : GETSTRING_DLG(Ok));
+			HWND Cancel_Btn = PteidControls::CreateButton((int)((clientRect.right - buttonWidth) / 2),
+														  (int)(clientRect.bottom * 0.87), buttonWidth, buttonHeight,
+														  m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &btnProcData);
+			SetFocus(btnProcData.getMainWnd());
+		}
+	}
 }
 
-dlgWndCmdMsg::~dlgWndCmdMsg()
-{
-    if (type == DlgCmdMsgType::DLG_CMD_PROGRESS || type == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL)
-    {
+dlgWndCmdMsg::~dlgWndCmdMsg() {
+	if (type == DlgCmdMsgType::DLG_CMD_PROGRESS || type == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL) {
 		PteidControls::Circle_Animation_Destroy(gdiplusToken);
 		KillTimer(m_hWnd, IDT_TIMER);
-    }
-    else
-    {
-        DestroyIcon(imageIco);
-    }
-    KillWindow();
+	} else {
+		DestroyIcon(imageIco);
+	}
+	KillWindow();
 }
 
-LRESULT dlgWndCmdMsg::ProcecEvent
-        (UINT		uMsg,			// Message For This Window
-        WPARAM		wParam,			// Additional Message Information
-        LPARAM		lParam)		// Additional Message Information
+LRESULT dlgWndCmdMsg::ProcecEvent(UINT uMsg,	 // Message For This Window
+								  WPARAM wParam, // Additional Message Information
+								  LPARAM lParam) // Additional Message Information
 {
-    PAINTSTRUCT ps;
-	const RECT animation_rect = { img_x, img_y, img_x + outer_circle_diameter, img_y + outer_circle_diameter };
+	PAINTSTRUCT ps;
+	const RECT animation_rect = {img_x, img_y, img_x + outer_circle_diameter, img_y + outer_circle_diameter};
 
-    switch (uMsg)
-    {
+	switch (uMsg) {
 	case WM_TIMER:
 
 		m_angle += 15;
 		InvalidateRect(m_hWnd, &animation_rect, TRUE);
 		break;
-    case WM_COMMAND:
-    {
-        switch (LOWORD(wParam))
-        {
-        case IDB_CANCEL:
-            dlgResult = eIDMW::DLG_CANCEL;
-            close();
-            return TRUE;
+	case WM_COMMAND: {
+		switch (LOWORD(wParam)) {
+		case IDB_CANCEL:
+			dlgResult = eIDMW::DLG_CANCEL;
+			close();
+			return TRUE;
 
-        default:
-            return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
-        }
+		default:
+			return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
+		}
+	}
+	case WM_SIZE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_SIZE (wParam=%X, lParam=%X)", wParam, lParam);
 
-    }
-    case WM_SIZE:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_SIZE (wParam=%X, lParam=%X)", wParam, lParam);
+		if (IsIconic(m_hWnd))
+			return 0;
+		break;
+	}
 
-        if (IsIconic(m_hWnd))
-            return 0;
-        break;
-    }
+	case WM_CTLCOLORSTATIC: {
+		HDC hdcStatic = (HDC)wParam;
+		// MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)",
+		// wParam, lParam);
+		SetBkColor(hdcStatic, WHITE);
+		if (m_hbrBkgnd == NULL) {
+			m_hbrBkgnd = CreateSolidBrush(WHITE);
+		}
 
-    case WM_CTLCOLORSTATIC:
-    {
-        HDC hdcStatic = (HDC)wParam;
-        //MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
-        SetBkColor(hdcStatic, WHITE);
-        if (m_hbrBkgnd == NULL)
-        {
-            m_hbrBkgnd = CreateSolidBrush(WHITE);
-        }
+		return (INT_PTR)m_hbrBkgnd;
+	}
 
-        return (INT_PTR)m_hbrBkgnd;
-    }
-
-    case WM_PAINT:
-    {
-        HDC paint_DC = BeginPaint(m_hWnd, &ps);
+	case WM_PAINT: {
+		HDC paint_DC = BeginPaint(m_hWnd, &ps);
 		FillRect(paint_DC, &m_client_rectangle, (HBRUSH)GetStockObject(WHITE_BRUSH));
 
-        //MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
+		// MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
 		if (type == DlgCmdMsgType::DLG_CMD_PROGRESS || type == DlgCmdMsgType::DLG_CMD_PROGRESS_NO_CANCEL) {
-			PteidControls::Circle_Animation_OnPaint(m_hWnd, paint_DC, &animation_rect, &ps, m_angle );
+			PteidControls::Circle_Animation_OnPaint(m_hWnd, paint_DC, &animation_rect, &ps, m_angle);
 		}
-        DrawApplicationIcon(paint_DC, m_hWnd);
+		DrawApplicationIcon(paint_DC, m_hWnd);
 
-        EndPaint(m_hWnd, &ps);
+		EndPaint(m_hWnd, &ps);
 		DeleteDC(paint_DC);
 
 		if (!m_timer)
 			m_timer = SetTimer(m_hWnd, IDT_TIMER, ANIMATION_DURATION, (TIMERPROC)NULL);
 
-        SetForegroundWindow(m_hWnd);
+		SetForegroundWindow(m_hWnd);
 
-        return 0;
-    }
+		return 0;
+	}
 
-    case WM_ACTIVATE:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_ACTIVATE (wParam=%X, lParam=%X)", wParam, lParam);
-        break;
-    }
+	case WM_ACTIVATE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_ACTIVATE (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+		break;
+	}
 
-    case WM_NCACTIVATE:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_NCACTIVATE (wParam=%X, lParam=%X)", wParam, lParam);
+	case WM_NCACTIVATE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_NCACTIVATE (wParam=%X, lParam=%X)", wParam,
+			  lParam);
 
-        if (!wParam)
-        {
-            SetFocus(m_hWnd);
-            return 0;
-        }
-        break;
-    }
+		if (!wParam) {
+			SetFocus(m_hWnd);
+			return 0;
+		}
+		break;
+	}
 
-    case WM_SETFOCUS:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_SETFOCUS (wParam=%X, lParam=%X)", wParam, lParam);
-        break;
-    }
+	case WM_SETFOCUS: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_SETFOCUS (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+		break;
+	}
 
-    case WM_KILLFOCUS:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_KILLFOCUS (wParam=%X, lParam=%X)", wParam, lParam);
-        break;
-    }
+	case WM_KILLFOCUS: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_KILLFOCUS (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+		break;
+	}
 
-    case WM_CLOSE:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)", wParam, lParam);
-        return 0;
-    }
+	case WM_CLOSE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)", wParam, lParam);
+		return 0;
+	}
 
-    case WM_DESTROY:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_DESTROY (wParam=%X, lParam=%X)", wParam, lParam);
-        break;
-    }
+	case WM_DESTROY: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndCmdMsg::ProcecEvent WM_DESTROY (wParam=%X, lParam=%X)", wParam, lParam);
+		break;
+	}
 
-    default:
-        break;
-    }
-    return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
+	default:
+		break;
+	}
+	return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 }
 
-void dlgWndCmdMsg::stopExec()
-{
-    m_ModalHold = false;
-    PostMessage(m_hWnd, WM_CLOSE, 0, 0);
+void dlgWndCmdMsg::stopExec() {
+	m_ModalHold = false;
+	PostMessage(m_hWnd, WM_CLOSE, 0, 0);
 }
