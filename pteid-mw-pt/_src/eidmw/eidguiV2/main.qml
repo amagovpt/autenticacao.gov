@@ -1114,6 +1114,9 @@ Load language error. Please reinstall the application"
                 z:1 // MouseArea above buttons
             }
 
+            Accessible.role: Accessible.Button
+            Accessible.name: buttonMain.text
+
             Button {
                 id: buttonMain
                 text: qsTranslate("MainMenuModel", name) 
@@ -1121,8 +1124,6 @@ Load language error. Please reinstall the application"
                 height: parent.height
                 focus:  mainFormID.propertyMainMenuListView.currentIndex === index ? true : false
                 opacity: 0
-                Accessible.role: Accessible.Button
-                Accessible.name: text
                 Keys.onTabPressed: {
                     if(mainFormID.propertyMainMenuListView.currentIndex ==
                             mainFormID.propertyMainMenuListView.count - 1){
@@ -1310,6 +1311,10 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: Functions.getBottomMenuImgSource(index,mouseAreaMainMenuBottom.containsMouse)
             }
+
+            Accessible.role: Accessible.Button
+            Accessible.name: buttonMainMenuBottom.text
+
             Button {
                 id: buttonMainMenuBottom
                 text: qsTranslate("MainMenuBottomModel", name) 
@@ -1317,8 +1322,6 @@ Load language error. Please reinstall the application"
                 height: parent.height
                 focus:  mainFormID.propertyMainMenuBottomListView.currentIndex === index ? true : false
                 opacity: 0
-                Accessible.role: Accessible.Button
-                Accessible.name: text
                 onClicked: mainMenuBottomPressed(index)
                 Keys.onTabPressed: {
                     if(mainFormID.propertyMainMenuBottomListView.currentIndex ==
@@ -1430,6 +1433,9 @@ Load language error. Please reinstall the application"
                 z:1 // MouseArea above buttons
             }
 
+            Accessible.role: Accessible.MenuItem
+            Accessible.name: buttonSubMenuBottom.text
+
             Button {
                 id: buttonSubMenuBottom
                 text: qsTranslate("MainMenuModel", subName)
@@ -1453,8 +1459,6 @@ Load language error. Please reinstall the application"
                     }
                 }
             }
-            Accessible.role: Accessible.Button
-            Accessible.name: Functions.getSubMenuName(index)
 
             Text {
                 text: qsTranslate("MainMenuModel", subName)
