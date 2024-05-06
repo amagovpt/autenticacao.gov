@@ -1405,9 +1405,6 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload){
 	// Validates CRL
 	eStatus=m_cryptoFwk->CRLValidation(reinterpret_cast<ASN1_INTEGER *>(m_serial_number), updated_CRL);
 
-	// Frees updated_CRL
-	X509_CRL_free(updated_CRL);
-
 	// Returns the Status
 	return ConvertStatus(eStatus,APL_VALIDATION_PROCESS_CRL);
 }

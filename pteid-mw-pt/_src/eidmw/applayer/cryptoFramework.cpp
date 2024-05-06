@@ -257,13 +257,15 @@ ASN1_INTEGER * APL_CryptoFwk::getCertSerialNumber(const CByteArray &cert){
 	  throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	//Gets the serial number as ASN1_INTEGER
-	ASN1_INTEGER* ASN1_serial_number =X509_get_serialNumber(pX509);
-
-	//Free openSSL object
-	if (pX509) X509_free(pX509);
+	ASN1_INTEGER* tmp_serial_number =X509_get_serialNumber(pX509);
 	
-	//We need to copy because get_serialNumber returns an internal pointer
-	return ASN1_INTEGER_dup(ASN1_serial_number);
+	//We need to copy because X509_get_serialNumber returns an internal pointer to X509 object
+	ASN1_INTEGER * serial_number = ASN1_INTEGER_dup(tmp_serial_number);
+
+	//Free OpenSSL object
+	if (pX509) X509_free(pX509);
+
+	return serial_number;
 }
 
 bool APL_CryptoFwk::VerifyDateValidity(const CByteArray &cert)
