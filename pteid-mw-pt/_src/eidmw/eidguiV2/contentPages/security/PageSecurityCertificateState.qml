@@ -19,6 +19,10 @@ import eidguiV2 1.0
 
 PageSecurityCertificateStateForm {
 
+    Keys.onPressed: {
+        Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
+    }
+
     Connections {
         target: gapi
 

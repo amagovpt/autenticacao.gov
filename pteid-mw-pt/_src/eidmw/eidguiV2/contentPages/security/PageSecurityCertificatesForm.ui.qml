@@ -390,6 +390,9 @@ Item {
                         KeyNavigation.up: buttonViewCertificate
                         Keys.onEnterPressed: clicked()
                         Keys.onReturnPressed: clicked()
+                        Keys.onTabPressed: buttonLessCertificateDetails.forceActiveFocus()
+                        Keys.onDownPressed: buttonLessCertificateDetails.forceActiveFocus()
+                        Keys.onRightPressed: buttonLessCertificateDetails.forceActiveFocus()
                     }
 
                     Button {

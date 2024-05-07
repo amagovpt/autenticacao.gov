@@ -404,6 +404,9 @@ Item{
             KeyNavigation.up: rectSignStatus
             Keys.onEnterPressed: clicked()
             Keys.onReturnPressed: clicked()
+            Keys.onTabPressed: buttonCertificateDetails.forceActiveFocus()
+            Keys.onDownPressed: buttonCertificateDetails.forceActiveFocus()
+            Keys.onRightPressed: buttonCertificateDetails.forceActiveFocus()
         }
 
         Button {
