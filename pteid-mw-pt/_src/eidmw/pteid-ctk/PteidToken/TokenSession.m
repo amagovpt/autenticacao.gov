@@ -11,6 +11,8 @@
 
 #import <Security/SecAsn1Coder.h>
 
+#import <Security/SecAsn1Coder.h>
+
 @implementation PteidAuthOperation
 
 - (nullable instancetype)initWithSession:(PteidTokenSession *)session {
