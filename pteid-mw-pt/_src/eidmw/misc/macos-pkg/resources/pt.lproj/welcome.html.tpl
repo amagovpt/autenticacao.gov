@@ -10,7 +10,8 @@
 
 	<h2>Versão 3.12.0 - revisão GIT_REVISION</h2>
 	<ul>
-	    <li>Leitura do novo Cartão de Cidadão emitido a partir de 2024</li>
+	    <li>Suporte para o novo Cartão de Cidadão</li>
+	    <li>Correções na assinatura SCAP</li>
 	</ul>
 </body>
 </html>
