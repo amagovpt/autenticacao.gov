@@ -1,6 +1,6 @@
 /*-****************************************************************************
 
- * Copyright (C) 2012, 2014, 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012, 2014, 2017-2024 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
@@ -246,7 +246,7 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 
   // Is the file signed?
   POPPLER_API GBool isSigned();
-  POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array, bool incremental);
+  POPPLER_API unsigned long getSigByteArray(unsigned char **byte_array);
   POPPLER_API GBool isReaderEnabled();
   /*Returns set of indexes of the signatures until (and including) the last timestamp signature. 
   The indexes are relative to the last signature: 0 is the last, 1 is the previous one, ... */
@@ -255,8 +255,7 @@ POPPLER_API PDFDoc(GooString *fileNameA, GooString *ownerPassword = NULL,
 
   POPPLER_API Object *getByteRange();
 
-  POPPLER_API void prepareSignature(bool incremental, PDFRectangle *rect, const char * name, 
-		  const char *civil_number, const char *location,
+  POPPLER_API void prepareSignature(PDFRectangle *rect, const char * name, const char *civil_number, const char *location,
 		  const char *reason, int page, int sector, bool isPTLanguage, 
       bool isCCSignature, bool showDate, bool small_signature);
   POPPLER_API void addCustomSignatureImage(unsigned char *image_data, unsigned long image_length);

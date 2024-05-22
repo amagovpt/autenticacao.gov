@@ -40,13 +40,11 @@ namespace eIDMW
         int tsTokenLen = 0;
         unsigned char *tsToken = NULL;
 
-        m_signedPdfDoc->m_incrementalMode = true;
-
         PDFDoc *doc = m_signedPdfDoc->m_doc;
         doc->prepareTimestamp();
         unsigned char *to_sign = NULL;
         const char *hexToken = NULL;
-        unsigned long len = doc->getSigByteArray(&to_sign, true);
+        unsigned long len = doc->getSigByteArray(&to_sign);
 
         if (len == 0) {
             MWLOG(LEV_ERROR, MOD_APL, "%s: getSigByteArray() failed! Invalid signature_offset.", __FUNCTION__);
@@ -234,8 +232,6 @@ namespace eIDMW
         CByteArray issuerCertDataByteArray;
         size_t issuerLen;
         FWK_CertifStatus status = FWK_CERTIF_STATUS_UNCHECK;
-
-        m_signedPdfDoc->m_incrementalMode = true;
 
         PDFDoc *doc = m_signedPdfDoc->m_doc;
         APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
