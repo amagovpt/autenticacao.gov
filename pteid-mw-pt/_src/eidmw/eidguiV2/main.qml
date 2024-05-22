@@ -959,13 +959,13 @@ Load language error. Please reinstall the application"
                 mainWindow.handleUnsavedNotes(mainFormID.propertySubMenuListView.currentIndex, CARD_NOTES_URL, Constants.KEY_NAVIGATION_EXIT_NOTES)
             }
 
-            if(propertyImageLogoBottom.focus){
+            if(propertyLogoContent.focus){
                 mainFormID.propertyMainMenuListView.currentIndex = 0
                 mainFormID.propertyMainMenuListView.forceActiveFocus()
             }
         }
         Component.onCompleted: {
-            mainFormID.propertyImageLogoBottom.forceActiveFocus()
+            mainFormID.propertyLogoContent.forceActiveFocus()
             if(controler.getNotShowHelpStartUp()){
                 mainFormID.state = Constants.MenuState.HOME;
             }else{
@@ -982,7 +982,7 @@ Load language error. Please reinstall the application"
                 mainFormID.propertyMainMenuView.width = mainWindow.width
             }
             if (!controler.getAskToRegisterCmdCertValue())
-                mainFormID.propertyImageLogoBottom.forceActiveFocus()
+                mainFormID.propertyLogoContent.forceActiveFocus()
 
             // Do not select any option
             mainFormID.propertyMainMenuListView.currentIndex = -1
@@ -1017,9 +1017,9 @@ Load language error. Please reinstall the application"
                 }
             }
         }
-        propertyImageLogoBottom {
+        propertyLogoContent {
             onFocusChanged: {
-                if (propertyImageLogoBottom.focus) {
+                if (propertyLogoContent.focus) {
                     propertyMainMenuListView.currentIndex = -1
                     propertyMainMenuBottomListView.currentIndex = -1
                 }
@@ -1100,12 +1100,6 @@ Load language error. Please reinstall the application"
             }
 
 
-
-
-
-
-
-
             MouseArea {
                 id: mouseAreaMainMenu
                 anchors.fill: parent
@@ -1114,6 +1108,9 @@ Load language error. Please reinstall the application"
                 z:1 // MouseArea above buttons
             }
 
+            Accessible.role: Accessible.Button
+            Accessible.name: buttonMain.text
+
             Button {
                 id: buttonMain
                 text: qsTranslate("MainMenuModel", name) 
@@ -1121,8 +1118,6 @@ Load language error. Please reinstall the application"
                 height: parent.height
                 focus:  mainFormID.propertyMainMenuListView.currentIndex === index ? true : false
                 opacity: 0
-                Accessible.role: Accessible.Button
-                Accessible.name: text
                 Keys.onTabPressed: {
                     if(mainFormID.propertyMainMenuListView.currentIndex ==
                             mainFormID.propertyMainMenuListView.count - 1){
@@ -1133,6 +1128,16 @@ Load language error. Please reinstall the application"
                         mainFormID.propertyMainMenuListView.currentIndex++
                     }
                 }
+
+                Keys.onBacktabPressed: {
+                    if(mainFormID.propertyMainMenuListView.currentIndex <= 0){
+                        mainFormID.propertyMainMenuListView.currentIndex = -1
+                        mainFormID.propertyLogoContent.forceActiveFocus()
+                    } else {
+                        mainFormID.propertyMainMenuListView.currentIndex--
+                    }
+                }
+
                 Keys.onEnterPressed: clicked()
                 Keys.onReturnPressed: clicked()
                 onClicked: {
@@ -1310,6 +1315,10 @@ Load language error. Please reinstall the application"
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: Functions.getBottomMenuImgSource(index,mouseAreaMainMenuBottom.containsMouse)
             }
+
+            Accessible.role: Accessible.Button
+            Accessible.name: buttonMainMenuBottom.text
+
             Button {
                 id: buttonMainMenuBottom
                 text: qsTranslate("MainMenuBottomModel", name) 
@@ -1317,8 +1326,6 @@ Load language error. Please reinstall the application"
                 height: parent.height
                 focus:  mainFormID.propertyMainMenuBottomListView.currentIndex === index ? true : false
                 opacity: 0
-                Accessible.role: Accessible.Button
-                Accessible.name: text
                 onClicked: mainMenuBottomPressed(index)
                 Keys.onTabPressed: {
                     if(mainFormID.propertyMainMenuBottomListView.currentIndex ==
@@ -1327,7 +1334,7 @@ Load language error. Please reinstall the application"
                         if(mainFormID.propertyPageLoader.source == "qrc:/contentPages/home/PageHome.qml"){
                             mainFormID.propertyPageLoader.item.propertyMainItem.forceActiveFocus()
                         } else {
-                            mainFormID.propertyImageLogoBottom.forceActiveFocus()
+                            mainFormID.propertyLogoContent.forceActiveFocus()
                         }
                             mainFormID.propertyMainMenuListView.currentIndex = -1
                             mainFormID.propertyMainMenuBottomListView.currentIndex = -1
@@ -1430,6 +1437,9 @@ Load language error. Please reinstall the application"
                 z:1 // MouseArea above buttons
             }
 
+            Accessible.role: Accessible.MenuItem
+            Accessible.name: buttonSubMenuBottom.text
+
             Button {
                 id: buttonSubMenuBottom
                 text: qsTranslate("MainMenuModel", subName)
@@ -1453,8 +1463,6 @@ Load language error. Please reinstall the application"
                     }
                 }
             }
-            Accessible.role: Accessible.Button
-            Accessible.name: Functions.getSubMenuName(index)
 
             Text {
                 text: qsTranslate("MainMenuModel", subName)

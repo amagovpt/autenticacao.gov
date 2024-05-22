@@ -38,7 +38,7 @@ Rectangle {
 
     property alias propertyImageLogo : mouseAreaImageLogo
 
-    property alias propertyImageLogoBottom: imageLogoBottom
+    property alias propertyLogoContent: logoContent
 
     property alias propertyCmdDialog: cmdDialog
 
@@ -110,34 +110,30 @@ Rectangle {
             border.width: 0
             z: 1
             focus: true
-            Accessible.role: Accessible.MenuBar
-
             Image {
-                id: imageLogo
-                width: imageLogoBottom.focus ? Constants.SIZE_IMAGE_LOGO
-                                               + 8 : Constants.SIZE_IMAGE_LOGO
-                height: imageLogoBottom.focus ? Constants.SIZE_IMAGE_LOGO
-                                                + 8 : Constants.SIZE_IMAGE_LOGO
-                y: imageLogoBottom.focus ? parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
-                                           - 4 : parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
+                id: logoContent
                 anchors.horizontalCenter: parent.horizontalCenter
+                width: logoContent.focus ? Constants.SIZE_IMAGE_LOGO
+                                               + 8 : Constants.SIZE_IMAGE_LOGO
+                height: logoContent.focus ? Constants.SIZE_IMAGE_LOGO
+                                                + 8 : Constants.SIZE_IMAGE_LOGO
+                y: logoContent.focus ? parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
+                                           - 4 : parent.height * Constants.IMAGE_LOGO_RELATIVE_V_POS
+                Accessible.role: Accessible.Button
+                Accessible.name: qsTranslate("main","STR_IMAGE_LOGO_ACCESSIBLE_NAME")
+                focus: true
                 source: "images/logo_autenticacao_gov100.png"
-                z: 1
+
                 MouseArea {
                     id: mouseAreaImageLogo
                     anchors.fill: parent
                 }
-            }
-            Button {
-                id: imageLogoBottom
-                text: Accessible.name
-                width: imageLogo.width
-                height: imageLogo.height
-                y: imageLogo.y
-                anchors.horizontalCenter: parent.horizontalCenter
-                opacity: 0
-                Accessible.role: Accessible.Button
-                Accessible.name: qsTranslate("main","STR_IMAGE_LOGO_ACCESSIBLE_NAME")
+
+                Keys.onTabPressed: {
+                    mainMenuListView.currentIndex = 0
+                    mainMenuListView.forceActiveFocus()
+                }
+
                 Keys.onBacktabPressed: {
                     mainMenuBottomListView.currentIndex = mainMenuBottomListView.count - 1
                     mainMenuBottomListView.forceActiveFocus()

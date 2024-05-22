@@ -253,9 +253,9 @@ Item {
                 enabled: true
                 Accessible.role: Accessible.CheckBox
                 Accessible.name: text
-                KeyNavigation.tab: mainFormID.propertyImageLogoBottom
-                KeyNavigation.down: mainFormID.propertyImageLogoBottom
-                KeyNavigation.right: mainFormID.propertyImageLogoBottom
+                KeyNavigation.tab: mainFormID.propertyLogoContent
+                KeyNavigation.down: mainFormID.propertyLogoContent
+                KeyNavigation.right: mainFormID.propertyLogoContent
                 KeyNavigation.backtab: buttonDownload
                 KeyNavigation.up: buttonDownload
                 Keys.onEnterPressed: reminderCheckBox.checked = !reminderCheckBox.checked
