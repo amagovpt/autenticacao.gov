@@ -13,27 +13,26 @@
 #include <string>
 #include "Export.h"
 
-class ProxyInfo
-{
+class ProxyInfo {
 public:
-    EIDMW_APL_API ProxyInfo();
+	EIDMW_APL_API ProxyInfo();
 
 	// The configs returned are utf8 encoded
-    EIDMW_APL_API std::string getProxyHost();
+	EIDMW_APL_API std::string getProxyHost();
 
-    EIDMW_APL_API std::string getProxyPort();
+	EIDMW_APL_API std::string getProxyPort();
 
-    EIDMW_APL_API std::string getProxyUser() { return m_proxy_user; }
+	EIDMW_APL_API std::string getProxyUser() { return m_proxy_user; }
 
-    EIDMW_APL_API std::string getProxyPwd() { return m_proxy_pwd; }
+	EIDMW_APL_API std::string getProxyPwd() { return m_proxy_pwd; }
 
-    EIDMW_APL_API bool isSystemProxy() { return system_proxy;  }
+	EIDMW_APL_API bool isSystemProxy() { return system_proxy; }
 
-    EIDMW_APL_API bool isAutoConfig() { return auto_configured; }
+	EIDMW_APL_API bool isAutoConfig() { return auto_configured; }
 
-    EIDMW_APL_API bool isManualConfig() { return manual_configured; }
+	EIDMW_APL_API bool isManualConfig() { return manual_configured; }
 
-    EIDMW_APL_API void getProxyForHost(std::string urlToFetch, std::string * proxy_host, long *proxy_port);
+	EIDMW_APL_API void getProxyForHost(std::string urlToFetch, std::string *proxy_host, long *proxy_port);
 
 private:
 	bool auto_configured;

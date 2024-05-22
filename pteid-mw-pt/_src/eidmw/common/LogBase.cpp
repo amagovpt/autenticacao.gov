@@ -39,7 +39,7 @@
 #endif
 
 #ifdef __APPLE__
-#include <mach-o/dyld.h>  //For _NSGetExecutablePath
+#include <mach-o/dyld.h> //For _NSGetExecutablePath
 #endif
 
 #ifndef WIN32
@@ -47,32 +47,30 @@
 #include "sys/stat.h"
 #include "Util.h"
 
-#define fwprintf_s fwprintf 
-#define vfwprintf_s vfwprintf 
+#define fwprintf_s fwprintf
+#define vfwprintf_s vfwprintf
 #define swprintf_s swprintf
 #define _stat stat
 
-#define LOG_DIRECTORY_DEFAULT  L"/tmp"
+#define LOG_DIRECTORY_DEFAULT L"/tmp"
 #endif
 
-#define LOG_OPENFAILED_MAXALLOWED  10
+#define LOG_OPENFAILED_MAXALLOWED 10
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-tLOG_Level MapLevel(const wchar_t *level)
-{
-	if(wcscmp(L"critical",level)==0)
+tLOG_Level MapLevel(const wchar_t *level) {
+	if (wcscmp(L"critical", level) == 0)
 		return LOG_LEVEL_CRITICAL;
-	else if(wcscmp(L"error",level)==0)
+	else if (wcscmp(L"error", level) == 0)
 		return LOG_LEVEL_ERROR;
-	else if(wcscmp(L"warning",level)==0)
+	else if (wcscmp(L"warning", level) == 0)
 		return LOG_LEVEL_WARNING;
-	else if(wcscmp(L"info",level)==0)
+	else if (wcscmp(L"info", level) == 0)
 		return LOG_LEVEL_INFO;
-	else if(wcscmp(L"debug",level)==0)
+	else if (wcscmp(L"debug", level) == 0)
 		return LOG_LEVEL_DEBUG;
-	else if(wcscmp(L"none",level)==0)
+	else if (wcscmp(L"none", level) == 0)
 		return LEV_LEVEL_NOLOG;
 	else
 		return LOG_LEVEL_DEFAULT;
@@ -86,57 +84,49 @@ tLOG_Level MapLevel(const wchar_t *level)
 // For Linux/Mac we don't change the current code.
 //-----------------------------------------------
 #ifdef WIN32
-HANDLE LogMutex;		// named mutex for Windows
+HANDLE LogMutex; // named mutex for Windows
 #endif
 
-static CMutex m_mutex;	// mutex for:
-						//   - non-windows
-						//   - used as automutex for creating a logger instance
+static CMutex m_mutex; // mutex for:
+					   //   - non-windows
+					   //   - used as automutex for creating a logger instance
 
 std::unique_ptr<CLogger> CLogger::m_instance;
-bool CLogger::m_bApplicationLeaving=false;
+bool CLogger::m_bApplicationLeaving = false;
 
-//Default constructor
-CLogger::CLogger() 
-{ 
-	m_directory=L".";
-	m_prefix=L"ZS";
-	m_filesize=100000;
-	m_filenr=2;
-	m_groupinnewfile=false;
-	m_maxlevel=LOG_LEVEL_DEFAULT;
+// Default constructor
+CLogger::CLogger() {
+	m_directory = L".";
+	m_prefix = L"ZS";
+	m_filesize = 100000;
+	m_filenr = 2;
+	m_groupinnewfile = false;
+	m_maxlevel = LOG_LEVEL_DEFAULT;
 
 	initFromConfig();
 }
 
-//Copy constructor
-CLogger::CLogger(const CLogger &logger)				
-{ 
-	*this=logger;
-}
+// Copy constructor
+CLogger::CLogger(const CLogger &logger) { *this = logger; }
 
-CLogger &CLogger::operator= (const CLogger &logger)
-{
-	if(this!=&logger)
-	{
-		m_directory=logger.m_directory;
-		m_prefix=logger.m_prefix;
-		m_filesize=logger.m_filesize;
-		m_filenr=logger.m_filenr; 
-		m_maxlevel=logger.m_maxlevel;
-		m_groupinnewfile=logger.m_groupinnewfile;
+CLogger &CLogger::operator=(const CLogger &logger) {
+	if (this != &logger) {
+		m_directory = logger.m_directory;
+		m_prefix = logger.m_prefix;
+		m_filesize = logger.m_filesize;
+		m_filenr = logger.m_filenr;
+		m_maxlevel = logger.m_maxlevel;
+		m_groupinnewfile = logger.m_groupinnewfile;
 	}
 	return *this;
 }
 
-//Destructor
-CLogger::~CLogger()
-{
-	m_bApplicationLeaving=true;
+// Destructor
+CLogger::~CLogger() {
+	m_bApplicationLeaving = true;
 
-	while(m_logStore.size()>0)
-	{
-		delete m_logStore[m_logStore.size()-1];
+	while (m_logStore.size() > 0) {
+		delete m_logStore[m_logStore.size() - 1];
 		m_logStore.pop_back();
 	}
 #ifdef WIN32
@@ -148,15 +138,12 @@ CLogger::~CLogger()
 #endif
 }
 
-//Get the singleton instance of the logger
-CLogger &CLogger::instance()
-{
-	if(m_bApplicationLeaving)
+// Get the singleton instance of the logger
+CLogger &CLogger::instance() {
+	if (m_bApplicationLeaving)
 		throw CMWEXCEPTION(EIDMW_ERR_LOGGER_APPLEAVING);
 
-
-    if (m_instance.get() == 0)
-	{
+	if (m_instance.get() == 0) {
 #ifdef WIN32
 		//----------------------------------------------
 		// always create the logger mutex. Only the first time the named mutex is
@@ -167,23 +154,24 @@ CLogger &CLogger::instance()
 		CAutoMutex autoMutex(&m_mutex);
 		m_instance.reset(new CLogger);
 	}
-    return *m_instance;
+	return *m_instance;
 }
 
-//Set the default values
-void CLogger::init(const wchar_t *directory,const wchar_t *prefix,long filesize,long filenr,tLOG_Level maxlevel,bool groupinnewfile) 
-{ 
-	m_directory=directory;
-	m_prefix=prefix;
-	m_filesize=filesize;
-	m_filenr=filenr; 
-	m_maxlevel=maxlevel;
-	m_groupinnewfile=groupinnewfile;
+// Set the default values
+void CLogger::init(const wchar_t *directory, const wchar_t *prefix, long filesize, long filenr, tLOG_Level maxlevel,
+				   bool groupinnewfile) {
+	m_directory = directory;
+	m_prefix = prefix;
+	m_filesize = filesize;
+	m_filenr = filenr;
+	m_maxlevel = maxlevel;
+	m_groupinnewfile = groupinnewfile;
 }
 
-void CLogger::init(const char *directory,const char *prefix,long filesize,long filenr,tLOG_Level maxlevel,bool groupinnewfile) 
-{ 
-	init(utilStringWiden(directory).c_str(),utilStringWiden(prefix).c_str(),filesize,filenr,maxlevel,groupinnewfile);
+void CLogger::init(const char *directory, const char *prefix, long filesize, long filenr, tLOG_Level maxlevel,
+				   bool groupinnewfile) {
+	init(utilStringWiden(directory).c_str(), utilStringWiden(prefix).c_str(), filesize, filenr, maxlevel,
+		 groupinnewfile);
 }
 
 #ifdef WIN32
@@ -195,7 +183,7 @@ bool isWindowsDebugActive() {
 	PWSTR pszPath = NULL;
 	DWORD dwAttr = 0;
 	bool is_windows_debug = false;
-	
+
 	if (SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &pszPath) == S_OK) {
 		std::wstring debugFlag(pszPath);
 
@@ -216,9 +204,8 @@ bool isWindowsDebugActive() {
 
 #endif
 
-//Set the default values
-void CLogger::initFromConfig()
-{
+// Set the default values
+void CLogger::initFromConfig() {
 	CConfig config;
 
 	std::wstring wcsLogDir = config.GetString(CConfig::EIDMW_CONFIG_PARAM_LOGGING_DIRNAME);
@@ -228,35 +215,31 @@ void CLogger::initFromConfig()
 	std::wstring wcsMaxLevel = config.GetString(CConfig::EIDMW_CONFIG_PARAM_LOGGING_LEVEL);
 	tLOG_Level maxLevel = MapLevel(wcsMaxLevel.c_str());
 #ifdef WIN32
-	if (isWindowsDebugActive())
-	{
+	if (isWindowsDebugActive()) {
 		maxLevel = LOG_LEVEL_DEBUG;
-        config.SetString(CConfig::USER, CConfig::EIDMW_CONFIG_PARAM_LOGGING_LEVEL, L"debug");
+		config.SetString(CConfig::USER, CConfig::EIDMW_CONFIG_PARAM_LOGGING_LEVEL, L"debug");
 	}
-#endif	
+#endif
 	long lGroup = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_LOGGING_GROUP);
 
-	init(wcsLogDir.c_str(), wcsPrefix.c_str(), lFileSize, lFileNbr, maxLevel, (lGroup?true:false));
+	init(wcsLogDir.c_str(), wcsPrefix.c_str(), lFileSize, lFileNbr, maxLevel, (lGroup ? true : false));
 }
 
-//Retrieve a CLog object by is group name
-CLog &CLogger::getLogW(const wchar_t *group)
-{
-	bool find=false;
+// Retrieve a CLog object by is group name
+CLog &CLogger::getLogW(const wchar_t *group) {
+	bool find = false;
 	unsigned int i;
 
-	for(i=0;i<m_logStore.size();i++)
-	{
-		if(m_logStore[i]->m_group.compare(group)==0)
-		{
-			find=true;
+	for (i = 0; i < m_logStore.size(); i++) {
+		if (m_logStore[i]->m_group.compare(group) == 0) {
+			find = true;
 			break;
 		}
 	}
 
-	if(!find)
-	{
-		CLog *log = new CLog(m_directory.c_str(),m_prefix.c_str(),group,m_filesize,m_filenr,m_maxlevel,m_groupinnewfile);
+	if (!find) {
+		CLog *log =
+			new CLog(m_directory.c_str(), m_prefix.c_str(), group, m_filesize, m_filenr, m_maxlevel, m_groupinnewfile);
 		m_logStore.push_back(log);
 		return *log;
 	}
@@ -264,18 +247,13 @@ CLog &CLogger::getLogW(const wchar_t *group)
 	return *m_logStore[i];
 }
 
-CLog &CLogger::getLogA(const char *group)
-{
-	return getLogW(utilStringWiden(group).c_str());
-}
+CLog &CLogger::getLogA(const char *group) { return getLogW(utilStringWiden(group).c_str()); }
 
-//Write into the log of the group
-void CLogger::writeToGroup(const wchar_t *group,tLOG_Level level,const wchar_t *format, ...)
-{
-	CLog &log=getLogW(group);
+// Write into the log of the group
+void CLogger::writeToGroup(const wchar_t *group, tLOG_Level level, const wchar_t *format, ...) {
+	CLog &log = getLogW(group);
 
-	if(log.writeLineHeaderW(level))
-	{
+	if (log.writeLineHeaderW(level)) {
 		va_list args;
 		va_start(args, format);
 		log.writeLineMessageW(format, args);
@@ -283,12 +261,10 @@ void CLogger::writeToGroup(const wchar_t *group,tLOG_Level level,const wchar_t *
 	}
 }
 
-void CLogger::writeToGroup(const char *group,tLOG_Level level,const char *format, ...)
-{
-	CLog &log=getLogA(group);
+void CLogger::writeToGroup(const char *group, tLOG_Level level, const char *format, ...) {
+	CLog &log = getLogA(group);
 
-	if(log.writeLineHeaderA(level))
-	{
+	if (log.writeLineHeaderA(level)) {
 		va_list args;
 		va_start(args, format);
 		log.writeLineMessageA(format, args);
@@ -296,14 +272,13 @@ void CLogger::writeToGroup(const char *group,tLOG_Level level,const char *format
 	}
 }
 
-//Write into the log of the group with filename and line number
-//use with __LINE__,__WFILE__
-void CLogger::writeToGroup(const wchar_t *group,tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, ...)
-{
-	CLog &log=getLogW(group);
+// Write into the log of the group with filename and line number
+// use with __LINE__,__WFILE__
+void CLogger::writeToGroup(const wchar_t *group, tLOG_Level level, const int line, const wchar_t *file,
+						   const wchar_t *format, ...) {
+	CLog &log = getLogW(group);
 
-	if(log.writeLineHeaderW(level,line,file))
-	{
+	if (log.writeLineHeaderW(level, line, file)) {
 		va_list args;
 		va_start(args, format);
 		log.writeLineMessageW(format, args);
@@ -311,12 +286,11 @@ void CLogger::writeToGroup(const wchar_t *group,tLOG_Level level,const int line,
 	}
 }
 
-void CLogger::writeToGroup(const char *group,tLOG_Level level,const int line,const char *file,const char *format, ...)
-{
-	CLog &log=getLogA(group);
+void CLogger::writeToGroup(const char *group, tLOG_Level level, const int line, const char *file, const char *format,
+						   ...) {
+	CLog &log = getLogA(group);
 
-	if(log.writeLineHeaderA(level,line,file))
-	{
+	if (log.writeLineHeaderA(level, line, file)) {
 		va_list args;
 		va_start(args, format);
 		log.writeLineMessageA(format, args);
@@ -324,13 +298,11 @@ void CLogger::writeToGroup(const char *group,tLOG_Level level,const int line,con
 	}
 }
 
-//Write into the default log (no group)
-void CLogger::write(tLOG_Level level,const wchar_t *format, ...)
-{
-	CLog &log=getLogW(L"");
+// Write into the default log (no group)
+void CLogger::write(tLOG_Level level, const wchar_t *format, ...) {
+	CLog &log = getLogW(L"");
 
-	if(log.writeLineHeaderW(level))
-	{
+	if (log.writeLineHeaderW(level)) {
 		va_list args;
 		va_start(args, format);
 		log.writeLineMessageW(format, args);
@@ -338,12 +310,10 @@ void CLogger::write(tLOG_Level level,const wchar_t *format, ...)
 	}
 }
 
-void CLogger::write(tLOG_Level level,const char *format, ...)
-{
-	CLog &log=getLogA("");
+void CLogger::write(tLOG_Level level, const char *format, ...) {
+	CLog &log = getLogA("");
 
-	if(log.writeLineHeaderA(level))
-	{
+	if (log.writeLineHeaderA(level)) {
 		va_list args;
 		va_start(args, format);
 		log.writeLineMessageA(format, args);
@@ -351,14 +321,12 @@ void CLogger::write(tLOG_Level level,const char *format, ...)
 	}
 }
 
-//Write into the default log (no group) with filename and line number
-//use with  __LINE__,__WFILE__
-void CLogger::write(tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, ...)
-{
-	CLog &log=getLogW(L"");
+// Write into the default log (no group) with filename and line number
+// use with  __LINE__,__WFILE__
+void CLogger::write(tLOG_Level level, const int line, const wchar_t *file, const wchar_t *format, ...) {
+	CLog &log = getLogW(L"");
 
-	if(log.writeLineHeaderW(level,line,file))
-	{
+	if (log.writeLineHeaderW(level, line, file)) {
 		va_list args;
 		va_start(args, format);
 		log.writeLineMessageW(format, args);
@@ -366,12 +334,10 @@ void CLogger::write(tLOG_Level level,const int line,const wchar_t *file,const wc
 	}
 }
 
-void CLogger::write(tLOG_Level level,const int line,const char *file,const char *format, ...)
-{
-	CLog &log=getLogA("");
+void CLogger::write(tLOG_Level level, const int line, const char *file, const char *format, ...) {
+	CLog &log = getLogA("");
 
-	if(log.writeLineHeaderA(level,line,file))
-	{
+	if (log.writeLineHeaderA(level, line, file)) {
 		va_list args;
 		va_start(args, format);
 		log.writeLineMessageA(format, args);
@@ -379,9 +345,8 @@ void CLogger::write(tLOG_Level level,const int line,const char *file,const char 
 	}
 }
 
-void CLogger::getFileFromStdErr(std::wstring &filename)
-{
-	CLog &log=getLogA("");
+void CLogger::getFileFromStdErr(std::wstring &filename) {
+	CLog &log = getLogA("");
 	log.getFilenameStdErr(filename);
 }
 
@@ -390,148 +355,129 @@ void CLogger::getFileFromStdErr(std::wstring &filename)
 **************** */
 long CLog::m_sopenfailed = 0;
 
-//PRIVATE: Default constructor
-CLog::CLog(const wchar_t *directory,const wchar_t *prefix,const wchar_t *group,long filesize,long filenr,tLOG_Level maxlevel,bool groupinnewfile)	
-{ 
-	m_f=NULL;
-	m_directory=directory;
-	m_prefix=prefix;
-	m_group=group;
-	m_filesize=filesize;
-	m_filenr=filenr; 
-	m_maxlevel=maxlevel;
-	m_groupinnewfile=groupinnewfile;
-	m_openfailed=0;
+// PRIVATE: Default constructor
+CLog::CLog(const wchar_t *directory, const wchar_t *prefix, const wchar_t *group, long filesize, long filenr,
+		   tLOG_Level maxlevel, bool groupinnewfile) {
+	m_f = NULL;
+	m_directory = directory;
+	m_prefix = prefix;
+	m_group = group;
+	m_filesize = filesize;
+	m_filenr = filenr;
+	m_maxlevel = maxlevel;
+	m_groupinnewfile = groupinnewfile;
+	m_openfailed = 0;
 }
 
-//Copy constructor
-CLog::CLog(const CLog &log)				
-{ 
-	*this=log;
-}
+// Copy constructor
+CLog::CLog(const CLog &log) { *this = log; }
 
-CLog &CLog::operator= (const CLog &log)
-{
-	if(this!=&log)
-	{
-		m_f=log.m_f;
-		m_directory=log.m_directory;
-		m_prefix=log.m_prefix;
-		m_group=log.m_group;
-		m_filesize=log.m_filesize;
-		m_filenr=log.m_filenr; 
-		m_maxlevel=log.m_maxlevel;
-		m_groupinnewfile=log.m_groupinnewfile;
-		m_openfailed=log.m_openfailed;
+CLog &CLog::operator=(const CLog &log) {
+	if (this != &log) {
+		m_f = log.m_f;
+		m_directory = log.m_directory;
+		m_prefix = log.m_prefix;
+		m_group = log.m_group;
+		m_filesize = log.m_filesize;
+		m_filenr = log.m_filenr;
+		m_maxlevel = log.m_maxlevel;
+		m_groupinnewfile = log.m_groupinnewfile;
+		m_openfailed = log.m_openfailed;
 	}
 	return *this;
 }
 
-//Destructor
-CLog::~CLog()
-{
-}
+// Destructor
+CLog::~CLog() {}
 
+void CLog::getFilename(std::wstring &filename) { getFilename(filename, m_prefix); }
 
-void CLog::getFilename(std::wstring &filename)
-{
-	getFilename(filename, m_prefix);
-}
-
-//PRIVATE: Return the name of to file to write into
-void CLog::getFilename(std::wstring &filename, const std::wstring &filePrefix)
-{
-	//Test if the directory exist
+// PRIVATE: Return the name of to file to write into
+void CLog::getFilename(std::wstring &filename, const std::wstring &filePrefix) {
+	// Test if the directory exist
 	std::wstring directory;
 
 #ifdef WIN32
-	DWORD dwError=0;
-	directory=m_directory + L"\\";
+	DWORD dwError = 0;
+	directory = m_directory + L"\\";
 	DWORD dwAttr = GetFileAttributes(directory.c_str());
-    if(dwAttr == INVALID_FILE_ATTRIBUTES) dwError = GetLastError();
-	if(dwError == ERROR_FILE_NOT_FOUND || dwError == ERROR_PATH_NOT_FOUND)
-	{
-		m_directory=L".";
-		directory=m_directory + L"\\";
+	if (dwAttr == INVALID_FILE_ATTRIBUTES)
+		dwError = GetLastError();
+	if (dwError == ERROR_FILE_NOT_FOUND || dwError == ERROR_PATH_NOT_FOUND) {
+		m_directory = L".";
+		directory = m_directory + L"\\";
 	}
 #else
 	//	--> TODO : Test if the directory exist
 	directory = m_directory;
 	struct stat buffer;
-	if ( stat(utilStringNarrow(directory).c_str(),&buffer)){
-	  // check error code
-	  m_directory=LOG_DIRECTORY_DEFAULT;
-	} 
-	directory=m_directory + L"/";
+	if (stat(utilStringNarrow(directory).c_str(), &buffer)) {
+		// check error code
+		m_directory = LOG_DIRECTORY_DEFAULT;
+	}
+	directory = m_directory + L"/";
 #endif
 
-	//Initialize the root filename
+	// Initialize the root filename
 	std::wstring root_filename;
-	root_filename=directory + filePrefix + L"_";
-	if(m_groupinnewfile && m_group.size()>0)
-		root_filename+=m_group + L"_";
+	root_filename = directory + filePrefix + L"_";
+	if (m_groupinnewfile && m_group.size() > 0)
+		root_filename += m_group + L"_";
 
 	wchar_t index[5];
 
-	swprintf_s(index,5,L"%d",0);
+	swprintf_s(index, 5, L"%d", 0);
 
-	//If there is a maximal file size, 
-	//  we parse the file from index 0 to m_filenr-1 
-	//  until we find one -that doesn't exist 
-	//                    or
-	//                    -with a size smaller than m_filesize
-	//  If we don't, we have to rename the files
+	// If there is a maximal file size,
+	//   we parse the file from index 0 to m_filenr-1
+	//   until we find one -that doesn't exist
+	//                     or
+	//                     -with a size smaller than m_filesize
+	//   If we don't, we have to rename the files
 	//
-	//Else If there is only one file its index is 0
-	if(m_filesize>0)
-	{
-		//There must be at least 2 files
-		if(m_filenr<2)
-			m_filenr=2;
+	// Else If there is only one file its index is 0
+	if (m_filesize > 0) {
+		// There must be at least 2 files
+		if (m_filenr < 2)
+			m_filenr = 2;
 
 		std::wstring file;
 		struct _stat results;
-		bool find=false;
+		bool find = false;
 
-		for(int i=0;i<m_filenr;i++)
-		{
+		for (int i = 0; i < m_filenr; i++) {
 
-			swprintf_s(index,5,L"%d",i);
+			swprintf_s(index, 5, L"%d", i);
 
-			file=root_filename + index + L".log";
+			file = root_filename + index + L".log";
 #ifdef WIN32
-			if (_wstat(file.c_str(), &results) != 0 || results.st_size<m_filesize)
+			if (_wstat(file.c_str(), &results) != 0 || results.st_size < m_filesize)
 #else
-			if (stat(utilStringNarrow(file).c_str(), &results) != 0 || results.st_size<m_filesize)
-#endif			
+			if (stat(utilStringNarrow(file).c_str(), &results) != 0 || results.st_size < m_filesize)
+#endif
 			{
-				find=true;
+				find = true;
 				break;
 			}
 		}
-		if(!find)
-		{
+		if (!find) {
 			renameFiles(root_filename.c_str());
-			swprintf_s(index,5,L"%d",m_filenr-1);
+			swprintf_s(index, 5, L"%d", m_filenr - 1);
 		}
 	}
 
-	filename=root_filename + index + L".log";
-
+	filename = root_filename + index + L".log";
 }
 
-void CLog::getFilenameStdErr(std::wstring &filename) {
-	getFilename(filename, L".PTEID_err");
-}
+void CLog::getFilenameStdErr(std::wstring &filename) { getFilename(filename, L".PTEID_err"); }
 
-//PRIVATE: Delete file with index 0 et rename all file i to i-1 until m_filenr-1
-//After this function, the file with index m_filenr-1 is free (it doesn't exist)
-void CLog::renameFiles(const wchar_t *root_filename)
-{
-	//We remove the file 0
+// PRIVATE: Delete file with index 0 et rename all file i to i-1 until m_filenr-1
+// After this function, the file with index m_filenr-1 is free (it doesn't exist)
+void CLog::renameFiles(const wchar_t *root_filename) {
+	// We remove the file 0
 	std::wstring src;
-	src=root_filename;
-	src+=L"0.log";
+	src = root_filename;
+	src += L"0.log";
 
 #ifdef WIN32
 	_wremove(src.c_str());
@@ -544,20 +490,19 @@ void CLog::renameFiles(const wchar_t *root_filename)
 	wchar_t idest[5];
 	struct _stat results;
 
-	//For all file until m_filenr-1
-	// 1 become 0
-	// 2 become 1
-	//i+1 become i
-	//m_filenr-1 become m_filenr-2
-	for(int i=0;i<m_filenr;i++)
-	{
-		swprintf_s(isrc,5,L"%d",i+1);
-		swprintf_s(idest,5,L"%d",i);
+	// For all file until m_filenr-1
+	//  1 become 0
+	//  2 become 1
+	// i+1 become i
+	// m_filenr-1 become m_filenr-2
+	for (int i = 0; i < m_filenr; i++) {
+		swprintf_s(isrc, 5, L"%d", i + 1);
+		swprintf_s(idest, 5, L"%d", i);
 
-		//if the source does not exist, we stop
-		src=root_filename;
-		src+=isrc;
-		src+=L".log";
+		// if the source does not exist, we stop
+		src = root_filename;
+		src += isrc;
+		src += L".log";
 
 #ifdef WIN32
 		if (_wstat(src.c_str(), &results) != 0)
@@ -566,26 +511,24 @@ void CLog::renameFiles(const wchar_t *root_filename)
 		if (stat(utilStringNarrow(src).c_str(), &results) != 0)
 			break;
 #endif
-		dest=root_filename;
-		dest+=idest;
-		dest+=L".log";
+		dest = root_filename;
+		dest += idest;
+		dest += L".log";
 
-		//Rename of the file
+		// Rename of the file
 #ifdef WIN32
-		_wrename(src.c_str(),dest.c_str());
+		_wrename(src.c_str(), dest.c_str());
 #else
-		rename(utilStringNarrow(src).c_str(),utilStringNarrow(dest).c_str());
+		rename(utilStringNarrow(src).c_str(), utilStringNarrow(dest).c_str());
 #endif
 	}
 }
 
-//PRIVATE: Open the file with the correct name
-bool CLog::open(bool bWchar)
-{
-	if(!canWeTryToOpen())
-	{
+// PRIVATE: Open the file with the correct name
+bool CLog::open(bool bWchar) {
+	if (!canWeTryToOpen()) {
 		incrementOpenFailed();
-		return false;		
+		return false;
 	}
 
 #ifdef WIN32
@@ -594,64 +537,63 @@ bool CLog::open(bool bWchar)
 	m_mutex.Lock();
 #endif
 
-	if(m_f)	//Should not happend
+	if (m_f) // Should not happend
 	{
 		close();
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 	}
 
 #ifndef WIN32
-	m_flock.l_type   = F_WRLCK;  /* F_RDLCK, F_WRLCK, F_UNLCK    */
+	m_flock.l_type = F_WRLCK;	 /* F_RDLCK, F_WRLCK, F_UNLCK    */
 	m_flock.l_whence = SEEK_SET; /* SEEK_SET, SEEK_CUR, SEEK_END */
-	m_flock.l_start  = 0;        /* Offset from l_whence         */
-	m_flock.l_len    = 0;        /* length, 0 = to EOF           */
-	m_flock.l_pid    = getpid(); /* our PID                      */
+	m_flock.l_start = 0;		 /* Offset from l_whence         */
+	m_flock.l_len = 0;			 /* length, 0 = to EOF           */
+	m_flock.l_pid = getpid();	 /* our PID                      */
 #endif
 
-	int err=0;
+	int err = 0;
 	std::wstring filename;
 
-	int iLoop=0;
-	do	//If the file is locked by another process, we wait
+	int iLoop = 0;
+	do // If the file is locked by another process, we wait
 	{
-		getFilename(filename); //We get the file name in the loop because other process may rename the files
+		getFilename(filename); // We get the file name in the loop because other process may rename the files
 
 #ifdef WIN32
-		if(bWchar)
-			err  = _wfopen_s(&m_f,filename.c_str(),L"a, ccs=UTF-8");
+		if (bWchar)
+			err = _wfopen_s(&m_f, filename.c_str(), L"a, ccs=UTF-8");
 		else
-			err  = fopen_s(&m_f,utilStringNarrow(filename).c_str(),"a");
+			err = fopen_s(&m_f, utilStringNarrow(filename).c_str(), "a");
 #else
-		m_f = fopen(utilStringNarrow(filename).c_str(),"a, ccs=UTF-8");
-		if (m_f == NULL) err=errno;	
+		m_f = fopen(utilStringNarrow(filename).c_str(), "a, ccs=UTF-8");
+		if (m_f == NULL)
+			err = errno;
 #endif
 
-		if (err != 0 && err != EACCES) 
-			m_f=NULL;
+		if (err != 0 && err != EACCES)
+			m_f = NULL;
 
-		if(err==EACCES) 
+		if (err == EACCES)
 			CThread::SleepMillisecs(20);
 
 		iLoop++;
 
-	} while(err==EACCES && iLoop<100);
+	} while (err == EACCES && iLoop < 100);
 
 #ifndef WIN32
 	// on Linux/Mac we set an advisory lock, i.e. it prevents
-	// other processes from using the file only if they are collaborative 
+	// other processes from using the file only if they are collaborative
 	// and check for the lock, otherwise they can do whatever they like ..
-	if(m_f!=NULL)
-	{
-		if( fcntl(fileno(m_f), F_SETLK, &m_flock) == -1)  /* set the lock */
+	if (m_f != NULL) {
+		if (fcntl(fileno(m_f), F_SETLK, &m_flock) == -1) /* set the lock */
 		{
-		  fclose(m_f);
-		  m_f=NULL;
+			fclose(m_f);
+			m_f = NULL;
 		}
 	}
 #endif
 
-	if(!m_f)
-	{
+	if (!m_f) {
 #ifdef WIN32
 		ReleaseMutex(LogMutex);
 #else
@@ -665,22 +607,21 @@ bool CLog::open(bool bWchar)
 	return true;
 }
 
-//PRIVATE: Close the file
-inline void  CLog::close()
-{
-	if(!m_f)
+// PRIVATE: Close the file
+inline void CLog::close() {
+	if (!m_f)
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 
 #ifndef WIN32
-	m_flock.l_type   = F_UNLCK;  /* tell it to unlock the region */
-		
-	if( fcntl(fileno(m_f), F_SETLK, &m_flock) == -1) /* set the region to unlocked */
+	m_flock.l_type = F_UNLCK; /* tell it to unlock the region */
+
+	if (fcntl(fileno(m_f), F_SETLK, &m_flock) == -1) /* set the region to unlocked */
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 #endif
 
 	fclose(m_f);
 
-	m_f=NULL;
+	m_f = NULL;
 
 #ifdef WIN32
 	ReleaseMutex(LogMutex);
@@ -689,69 +630,62 @@ inline void  CLog::close()
 #endif
 }
 
-//PRIVATE: Convert the enum into message
-const wchar_t *CLog::getLevel(tLOG_Level level)
-{
-	switch(level)
-	{
-		case LOG_LEVEL_CRITICAL:
-			return L"CRITICAL";
-		case LOG_LEVEL_ERROR:
-			return L"ERROR";
-		case LOG_LEVEL_WARNING:
-			return L"WARNING";
-		case LOG_LEVEL_INFO:
-			return L"INFO";
-		case LOG_LEVEL_DEBUG:
-			return L"DEBUG";
-		default:
-			return getLevel(LOG_LEVEL_DEFAULT);
+// PRIVATE: Convert the enum into message
+const wchar_t *CLog::getLevel(tLOG_Level level) {
+	switch (level) {
+	case LOG_LEVEL_CRITICAL:
+		return L"CRITICAL";
+	case LOG_LEVEL_ERROR:
+		return L"ERROR";
+	case LOG_LEVEL_WARNING:
+		return L"WARNING";
+	case LOG_LEVEL_INFO:
+		return L"INFO";
+	case LOG_LEVEL_DEBUG:
+		return L"DEBUG";
+	default:
+		return getLevel(LOG_LEVEL_DEFAULT);
 	}
-
 }
 
-//PRIVATE: Get local time in format YYYY-MM-DD hh:mm:ss by default
-void CLog::getLocalTimeW(std::wstring &timestamp, const wchar_t *format)
-{
+// PRIVATE: Get local time in format YYYY-MM-DD hh:mm:ss by default
+void CLog::getLocalTimeW(std::wstring &timestamp, const wchar_t *format) {
 	time_t rawtime;
 	struct tm timeinfo;
-	wchar_t buffer [20];
+	wchar_t buffer[20];
 
-	time ( &rawtime );
+	time(&rawtime);
 #ifdef WIN32
-	localtime_s( &timeinfo, &rawtime );
+	localtime_s(&timeinfo, &rawtime);
 #else
 	timeinfo = *(localtime(&rawtime));
 #endif
 
-	wcsftime (buffer,20,format,&timeinfo);
+	wcsftime(buffer, 20, format, &timeinfo);
 
 	timestamp.assign(buffer);
 }
 
-void CLog::getLocalTimeA(std::string &timestamp, const char *format)
-{
+void CLog::getLocalTimeA(std::string &timestamp, const char *format) {
 	time_t rawtime;
 	struct tm timeinfo;
-	char buffer [20];
+	char buffer[20];
 
-	time ( &rawtime );
+	time(&rawtime);
 #ifdef WIN32
-	localtime_s( &timeinfo, &rawtime );
+	localtime_s(&timeinfo, &rawtime);
 #else
 	timeinfo = *(localtime(&rawtime));
 #endif
 
-	strftime (buffer,20,format,&timeinfo);
+	strftime(buffer, 20, format, &timeinfo);
 
 	timestamp.assign(buffer);
 }
 
-//Write to log from a variable number of parameter
-void CLog::write(tLOG_Level level,const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(level))
-	{
+// Write to log from a variable number of parameter
+void CLog::write(tLOG_Level level, const wchar_t *format, ...) {
+	if (writeLineHeaderW(level)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -759,10 +693,8 @@ void CLog::write(tLOG_Level level,const wchar_t *format, ...)
 	}
 }
 
-void CLog::write(tLOG_Level level,const char *format, ...)
-{
-	if(writeLineHeaderA(level))
-	{
+void CLog::write(tLOG_Level level, const char *format, ...) {
+	if (writeLineHeaderA(level)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -770,24 +702,20 @@ void CLog::write(tLOG_Level level,const char *format, ...)
 	}
 }
 
-//Write to log from a va_list
-void CLog::write(tLOG_Level level,const wchar_t *format, va_list args)
-{
+// Write to log from a va_list
+void CLog::write(tLOG_Level level, const wchar_t *format, va_list args) {
 	if (writeLineHeaderW(level))
 		writeLineMessageW(format, args);
 }
 
-void CLog::write(tLOG_Level level,const char *format, va_list args)
-{
+void CLog::write(tLOG_Level level, const char *format, va_list args) {
 	if (writeLineHeaderA(level))
 		writeLineMessageA(format, args);
 }
 
-//Write to log from a variable number of parameter with filename and line number
-void CLog::write(tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(level,line,file))
-	{
+// Write to log from a variable number of parameter with filename and line number
+void CLog::write(tLOG_Level level, const int line, const wchar_t *file, const wchar_t *format, ...) {
+	if (writeLineHeaderW(level, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -795,10 +723,8 @@ void CLog::write(tLOG_Level level,const int line,const wchar_t *file,const wchar
 	}
 }
 
-void CLog::write(tLOG_Level level,const int line,const char *file,const char *format, ...)
-{
-	if(writeLineHeaderA(level,line,file))
-	{
+void CLog::write(tLOG_Level level, const int line, const char *file, const char *format, ...) {
+	if (writeLineHeaderA(level, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -806,47 +732,42 @@ void CLog::write(tLOG_Level level,const int line,const char *file,const char *fo
 	}
 }
 
-//Write to log from a va_list with filename and line number
-void CLog::write(tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, va_list args)
-{
-	if (writeLineHeaderW(level,line,file))
+// Write to log from a va_list with filename and line number
+void CLog::write(tLOG_Level level, const int line, const wchar_t *file, const wchar_t *format, va_list args) {
+	if (writeLineHeaderW(level, line, file))
 		writeLineMessageW(format, args);
 }
 
-void CLog::write(tLOG_Level level,const int line,const char *file,const char *format, va_list args)
-{
-	if (writeLineHeaderA(level,line,file))
+void CLog::write(tLOG_Level level, const int line, const char *file, const char *format, va_list args) {
+	if (writeLineHeaderA(level, line, file))
 		writeLineMessageA(format, args);
 }
 
 #ifdef __linux__
 
 void getProcessExecutableName(char *buffer, size_t sizeOfBuffer) {
-	ssize_t ret = readlink("/proc/self/exe", buffer, sizeOfBuffer-1);
+	ssize_t ret = readlink("/proc/self/exe", buffer, sizeOfBuffer - 1);
 	if (ret == -1) {
 		strncpy(buffer, "Unknown name", sizeOfBuffer);
 	}
-
 }
 #endif
 
+// ATTENTION : Design for use with macro
+//             Must be follow by writeLineMessage to close the file
+// Write to log the first part of the line
+bool CLog::writeLineHeaderW(tLOG_Level level, const int line, const wchar_t *file) {
 
-//ATTENTION : Design for use with macro
-//            Must be follow by writeLineMessage to close the file
-//Write to log the first part of the line
-bool CLog::writeLineHeaderW(tLOG_Level level,const int line,const wchar_t *file)
-{
-
- 	if(level>m_maxlevel)
+	if (level > m_maxlevel)
 		return false;
 
 	long lPreviousOpenFailed = getOpenFailed();
 
-	if(!open(true))
+	if (!open(true))
 		return false;
 
 	std::wstring timestamp;
-	getLocalTimeW(timestamp);	
+	getLocalTimeW(timestamp);
 
 	/* Get the full path of the executable file that started this process */
 #ifdef WIN32
@@ -868,47 +789,46 @@ bool CLog::writeLineHeaderW(tLOG_Level level,const int line,const wchar_t *file)
 	_NSGetExecutablePath(baseName, &buf_len);
 
 #endif
-	
-	if(lPreviousOpenFailed > 0)
-	{
-		if(isFileMixingGroups())
-		{
-			fwprintf_s(m_f,L"%ls - %ld - %ls: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",timestamp.c_str(),CThread::getCurrentPid(),m_group.c_str(),lPreviousOpenFailed);
-		}
-		else
-		{
-			fwprintf_s(m_f,L"%ls - %ld: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",timestamp.c_str(),CThread::getCurrentPid(),lPreviousOpenFailed);
+
+	if (lPreviousOpenFailed > 0) {
+		if (isFileMixingGroups()) {
+			fwprintf_s(
+				m_f, L"%ls - %ld - %ls: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",
+				timestamp.c_str(), CThread::getCurrentPid(), m_group.c_str(), lPreviousOpenFailed);
+		} else {
+			fwprintf_s(m_f, L"%ls - %ld: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",
+					   timestamp.c_str(), CThread::getCurrentPid(), lPreviousOpenFailed);
 		}
 	}
 
-	if(isFileMixingGroups())
-	{
-		if(line>0 && wcslen(file)>0)
-			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), m_group.c_str(), getLevel(level), file, line);
+	if (isFileMixingGroups()) {
+		if (line > 0 && wcslen(file) > 0)
+			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(),
+					   CThread::getCurrentPid(), CThread::getCurrentThreadId(), m_group.c_str(), getLevel(level), file,
+					   line);
 		else
-			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), m_group.c_str(), getLevel(level));
-	}
-	else
-	{
-		if(line>0 && wcslen(file)>0)
-			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), getLevel(level), file, line);
+			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(),
+					   CThread::getCurrentThreadId(), m_group.c_str(), getLevel(level));
+	} else {
+		if (line > 0 && wcslen(file) > 0)
+			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(),
+					   CThread::getCurrentPid(), CThread::getCurrentThreadId(), getLevel(level), file, line);
 		else
-			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), getLevel(level));
+			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(),
+					   CThread::getCurrentThreadId(), getLevel(level));
 	}
 
 	return true;
-
 }
 
-bool CLog::writeLineHeaderA(tLOG_Level level_in,const int line,const char *file)
-{
+bool CLog::writeLineHeaderA(tLOG_Level level_in, const int line, const char *file) {
 
- 	if(level_in>m_maxlevel)
+	if (level_in > m_maxlevel)
 		return false;
-	
+
 	long lPreviousOpenFailed = getOpenFailed();
 
-	if(!open(false))
+	if (!open(false))
 		return false;
 
 	std::string timestamp;
@@ -935,46 +855,45 @@ bool CLog::writeLineHeaderA(tLOG_Level level_in,const int line,const char *file)
 	_NSGetExecutablePath(baseName, &buf_len);
 #endif
 
-	if(lPreviousOpenFailed > 0)
-	{
-		if(isFileMixingGroups())
-		{
-			fprintf_s(m_f,"%s - %ld - %s: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",timestamp.c_str(),CThread::getCurrentPid(),m_group.c_str(),lPreviousOpenFailed);
-		}
-		else
-		{
-			fprintf_s(m_f,"%s - %ld: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",timestamp.c_str(),CThread::getCurrentPid(),lPreviousOpenFailed);
+	if (lPreviousOpenFailed > 0) {
+		if (isFileMixingGroups()) {
+			fprintf_s(m_f,
+					  "%s - %ld - %s: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",
+					  timestamp.c_str(), CThread::getCurrentPid(), m_group.c_str(), lPreviousOpenFailed);
+		} else {
+			fprintf_s(m_f, "%s - %ld: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",
+					  timestamp.c_str(), CThread::getCurrentPid(), lPreviousOpenFailed);
 		}
 	}
 
-	std::string level=utilStringNarrow(getLevel(level_in));
+	std::string level = utilStringNarrow(getLevel(level_in));
 
-	if(isFileMixingGroups())
-	{
-		std::string group=utilStringNarrow(m_group);
+	if (isFileMixingGroups()) {
+		std::string group = utilStringNarrow(m_group);
 
-		if(line>0 && strlen(file)>0)
-			fprintf_s(m_f, "%s - %s - %ld|%ld - %s - %s -'%s'-line=%d: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), group.c_str(), level.c_str(), file, line);
+		if (line > 0 && strlen(file) > 0)
+			fprintf_s(m_f, "%s - %s - %ld|%ld - %s - %s -'%s'-line=%d: ", baseName, timestamp.c_str(),
+					  CThread::getCurrentPid(), CThread::getCurrentThreadId(), group.c_str(), level.c_str(), file,
+					  line);
 		else
-			fprintf_s(m_f, "%s - %s - %ld|%ld - %s - %s: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), group.c_str(), level.c_str());
-	}
-	else
-	{
-		if(line>0 && strlen(file)>0)
-			fprintf_s(m_f, "%s - %s - %ld|%ld - %s -'%s'-line=%d: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), level.c_str(), file, line);
+			fprintf_s(m_f, "%s - %s - %ld|%ld - %s - %s: ", baseName, timestamp.c_str(), CThread::getCurrentPid(),
+					  CThread::getCurrentThreadId(), group.c_str(), level.c_str());
+	} else {
+		if (line > 0 && strlen(file) > 0)
+			fprintf_s(m_f, "%s - %s - %ld|%ld - %s -'%s'-line=%d: ", baseName, timestamp.c_str(),
+					  CThread::getCurrentPid(), CThread::getCurrentThreadId(), level.c_str(), file, line);
 		else
-			fprintf_s(m_f, "%s - %s - %ld|%ld - %s: ", baseName, timestamp.c_str(), CThread::getCurrentPid(), CThread::getCurrentThreadId(), level.c_str());
+			fprintf_s(m_f, "%s - %s - %ld|%ld - %s: ", baseName, timestamp.c_str(), CThread::getCurrentPid(),
+					  CThread::getCurrentThreadId(), level.c_str());
 	}
 
 	return true;
-
 }
-//ATTENTION : Design for use with macro
-//            Must be preceded by writeLineHeader to close the file
-//Write to log the second part of the line
-bool CLog::writeLineMessageW(const wchar_t *format, ...)
-{
- 	if(!m_f)	//Should not happend, as this method must only be called if the writeLineHeader succeed
+// ATTENTION : Design for use with macro
+//             Must be preceded by writeLineHeader to close the file
+// Write to log the second part of the line
+bool CLog::writeLineMessageW(const wchar_t *format, ...) {
+	if (!m_f) // Should not happend, as this method must only be called if the writeLineHeader succeed
 		throw CMWEXCEPTION(EIDMW_FILE_NOT_OPENED);
 
 	va_list args;
@@ -985,9 +904,8 @@ bool CLog::writeLineMessageW(const wchar_t *format, ...)
 	return true;
 }
 
-bool CLog::writeLineMessageA(const char *format, ...)
-{
- 	if(!m_f)	//Should not happend, as this method must only be called if the writeLineHeader succeed
+bool CLog::writeLineMessageA(const char *format, ...) {
+	if (!m_f) // Should not happend, as this method must only be called if the writeLineHeader succeed
 		throw CMWEXCEPTION(EIDMW_FILE_NOT_OPENED);
 
 	va_list args;
@@ -998,36 +916,32 @@ bool CLog::writeLineMessageA(const char *format, ...)
 	return true;
 }
 
-//PRIVATE
-//Write to log the second part of the line
+// PRIVATE
+// Write to log the second part of the line
 
-void CLog::writeLineMessageW(const wchar_t *format, va_list argList)
-{
+void CLog::writeLineMessageW(const wchar_t *format, va_list argList) {
 
- 	if(!m_f)	//Should not happend, as this method must only be called if the writeLineHeader succeed
+	if (!m_f) // Should not happend, as this method must only be called if the writeLineHeader succeed
 		throw CMWEXCEPTION(EIDMW_FILE_NOT_OPENED);
 
 	vfwprintf_s(m_f, format, argList);
-	fwprintf_s(m_f,L"%c",'\n');
+	fwprintf_s(m_f, L"%c", '\n');
 	close();
 }
 
-void CLog::writeLineMessageA(const char *format, va_list argList)
-{
+void CLog::writeLineMessageA(const char *format, va_list argList) {
 
- 	if(!m_f)	//Should not happend, as this method must only be called if the writeLineHeader succeed
+	if (!m_f) // Should not happend, as this method must only be called if the writeLineHeader succeed
 		throw CMWEXCEPTION(EIDMW_FILE_NOT_OPENED);
 
 	vfprintf_s(m_f, format, argList);
-	fprintf_s(m_f,"%c",'\n');
+	fprintf_s(m_f, "%c", '\n');
 	close();
 }
 
-//Write Critical level to log
-void CLog::writeCritical(const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(LOG_LEVEL_CRITICAL))
-	{
+// Write Critical level to log
+void CLog::writeCritical(const wchar_t *format, ...) {
+	if (writeLineHeaderW(LOG_LEVEL_CRITICAL)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1035,10 +949,8 @@ void CLog::writeCritical(const wchar_t *format, ...)
 	}
 }
 
-void CLog::writeCritical(const char *format, ...)
-{
-	if(writeLineHeaderA(LOG_LEVEL_CRITICAL))
-	{
+void CLog::writeCritical(const char *format, ...) {
+	if (writeLineHeaderA(LOG_LEVEL_CRITICAL)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -1046,11 +958,9 @@ void CLog::writeCritical(const char *format, ...)
 	}
 }
 
-//Write Critical level to log with filename and line number
-void CLog::writeCritical(const int line,const wchar_t *file,const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(LOG_LEVEL_CRITICAL,line,file))
-	{
+// Write Critical level to log with filename and line number
+void CLog::writeCritical(const int line, const wchar_t *file, const wchar_t *format, ...) {
+	if (writeLineHeaderW(LOG_LEVEL_CRITICAL, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1058,10 +968,8 @@ void CLog::writeCritical(const int line,const wchar_t *file,const wchar_t *forma
 	}
 }
 
-void CLog::writeCritical(const int line,const char *file,const char *format, ...)
-{
-	if(writeLineHeaderA(LOG_LEVEL_CRITICAL,line,file))
-	{
+void CLog::writeCritical(const int line, const char *file, const char *format, ...) {
+	if (writeLineHeaderA(LOG_LEVEL_CRITICAL, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -1069,35 +977,9 @@ void CLog::writeCritical(const int line,const char *file,const char *format, ...
 	}
 }
 
-//Write Error level to log
-void CLog::writeError(const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(LOG_LEVEL_ERROR))
-	{
-		va_list args;
-		va_start(args, format);
-		writeLineMessageW(format, args);
-		va_end(args);
-	}
-
-}
-
-void CLog::writeError(const char *format, ...)
-{
-	if(writeLineHeaderA(LOG_LEVEL_ERROR))
-	{
-		va_list args;
-		va_start(args, format);
-		writeLineMessageA(format, args);
-		va_end(args);
-	}
-
-}
-//Write Error level to log with filename and line number
-void CLog::writeError(const int line,const wchar_t *file,const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(LOG_LEVEL_ERROR,line,file))
-	{
+// Write Error level to log
+void CLog::writeError(const wchar_t *format, ...) {
+	if (writeLineHeaderW(LOG_LEVEL_ERROR)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1105,22 +987,17 @@ void CLog::writeError(const int line,const wchar_t *file,const wchar_t *format, 
 	}
 }
 
-void CLog::writeError(const int line,const char *file,const char *format, ...)
-{
-	if(writeLineHeaderA(LOG_LEVEL_ERROR,line,file))
-	{
+void CLog::writeError(const char *format, ...) {
+	if (writeLineHeaderA(LOG_LEVEL_ERROR)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
 		va_end(args);
 	}
 }
-
-//Write Warning level to log
-void CLog::writeWarning(const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(LOG_LEVEL_WARNING))
-	{
+// Write Error level to log with filename and line number
+void CLog::writeError(const int line, const wchar_t *file, const wchar_t *format, ...) {
+	if (writeLineHeaderW(LOG_LEVEL_ERROR, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1128,10 +1005,8 @@ void CLog::writeWarning(const wchar_t *format, ...)
 	}
 }
 
-void CLog::writeWarning(const char *format, ...)
-{
-	if(writeLineHeaderA(LOG_LEVEL_WARNING))
-	{
+void CLog::writeError(const int line, const char *file, const char *format, ...) {
+	if (writeLineHeaderA(LOG_LEVEL_ERROR, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -1139,11 +1014,9 @@ void CLog::writeWarning(const char *format, ...)
 	}
 }
 
-//Write Warning level to log with filename and line number
-void CLog::writeWarning(const int line,const wchar_t *file,const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(LOG_LEVEL_WARNING,line,file))
-	{
+// Write Warning level to log
+void CLog::writeWarning(const wchar_t *format, ...) {
+	if (writeLineHeaderW(LOG_LEVEL_WARNING)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1151,10 +1024,8 @@ void CLog::writeWarning(const int line,const wchar_t *file,const wchar_t *format
 	}
 }
 
-void CLog::writeWarning(const int line,const char *file,const char *format, ...)
-{
-	if(writeLineHeaderA(LOG_LEVEL_WARNING,line,file))
-	{
+void CLog::writeWarning(const char *format, ...) {
+	if (writeLineHeaderA(LOG_LEVEL_WARNING)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -1162,11 +1033,9 @@ void CLog::writeWarning(const int line,const char *file,const char *format, ...)
 	}
 }
 
-//Write Info level to log
-void CLog::writeInfo(const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(LOG_LEVEL_INFO))
-	{
+// Write Warning level to log with filename and line number
+void CLog::writeWarning(const int line, const wchar_t *file, const wchar_t *format, ...) {
+	if (writeLineHeaderW(LOG_LEVEL_WARNING, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1174,10 +1043,8 @@ void CLog::writeInfo(const wchar_t *format, ...)
 	}
 }
 
-void CLog::writeInfo(const char *format, ...)
-{
-	if(writeLineHeaderA(LOG_LEVEL_INFO))
-	{
+void CLog::writeWarning(const int line, const char *file, const char *format, ...) {
+	if (writeLineHeaderA(LOG_LEVEL_WARNING, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -1185,11 +1052,9 @@ void CLog::writeInfo(const char *format, ...)
 	}
 }
 
-//Write Info level to log with filename and line number
-void CLog::writeInfo(const int line,const wchar_t *file,const wchar_t *format, ...)
-{
-	if(writeLineHeaderW(LOG_LEVEL_INFO,line,file))
-	{
+// Write Info level to log
+void CLog::writeInfo(const wchar_t *format, ...) {
+	if (writeLineHeaderW(LOG_LEVEL_INFO)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1197,10 +1062,8 @@ void CLog::writeInfo(const int line,const wchar_t *file,const wchar_t *format, .
 	}
 }
 
-void CLog::writeInfo(const int line,const char *file,const char *format, ...)
-{
-	if(writeLineHeaderA(LOG_LEVEL_INFO,line,file))
-	{
+void CLog::writeInfo(const char *format, ...) {
+	if (writeLineHeaderA(LOG_LEVEL_INFO)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -1208,12 +1071,9 @@ void CLog::writeInfo(const int line,const char *file,const char *format, ...)
 	}
 }
 
-//Write Debug level to log
-void CLog::writeDebug(const wchar_t *format, ...)
-{
-//    Beeps(1, 1000);
-	if(writeLineHeaderW(LOG_LEVEL_DEBUG))
-	{
+// Write Info level to log with filename and line number
+void CLog::writeInfo(const int line, const wchar_t *file, const wchar_t *format, ...) {
+	if (writeLineHeaderW(LOG_LEVEL_INFO, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1221,11 +1081,8 @@ void CLog::writeDebug(const wchar_t *format, ...)
 	}
 }
 
-void CLog::writeDebug(const char *format, ...)
-{
-//    Beeps(1, 1000);
-	if(writeLineHeaderA(LOG_LEVEL_DEBUG))
-	{
+void CLog::writeInfo(const int line, const char *file, const char *format, ...) {
+	if (writeLineHeaderA(LOG_LEVEL_INFO, line, file)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -1233,12 +1090,10 @@ void CLog::writeDebug(const char *format, ...)
 	}
 }
 
-//Write Debug level to log with filename and line number
-void CLog::writeDebug(const int line,const wchar_t *file,const wchar_t *format, ...)
-{
-
-	if(writeLineHeaderW(LOG_LEVEL_DEBUG,line,file))
-	{
+// Write Debug level to log
+void CLog::writeDebug(const wchar_t *format, ...) {
+	//    Beeps(1, 1000);
+	if (writeLineHeaderW(LOG_LEVEL_DEBUG)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageW(format, args);
@@ -1246,11 +1101,9 @@ void CLog::writeDebug(const int line,const wchar_t *file,const wchar_t *format, 
 	}
 }
 
-void CLog::writeDebug(const int line,const char *file,const char *format, ...)
-{
-
-	if(writeLineHeaderA(LOG_LEVEL_DEBUG,line,file))
-	{
+void CLog::writeDebug(const char *format, ...) {
+	//    Beeps(1, 1000);
+	if (writeLineHeaderA(LOG_LEVEL_DEBUG)) {
 		va_list args;
 		va_start(args, format);
 		writeLineMessageA(format, args);
@@ -1258,43 +1111,57 @@ void CLog::writeDebug(const int line,const char *file,const char *format, ...)
 	}
 }
 
-bool CLog::isFileMixingGroups()
-{
-	return (!m_groupinnewfile || m_group.size()==0);
+// Write Debug level to log with filename and line number
+void CLog::writeDebug(const int line, const wchar_t *file, const wchar_t *format, ...) {
+
+	if (writeLineHeaderW(LOG_LEVEL_DEBUG, line, file)) {
+		va_list args;
+		va_start(args, format);
+		writeLineMessageW(format, args);
+		va_end(args);
+	}
 }
 
-long CLog::getOpenFailed()
-{
-	if(isFileMixingGroups())
+void CLog::writeDebug(const int line, const char *file, const char *format, ...) {
+
+	if (writeLineHeaderA(LOG_LEVEL_DEBUG, line, file)) {
+		va_list args;
+		va_start(args, format);
+		writeLineMessageA(format, args);
+		va_end(args);
+	}
+}
+
+bool CLog::isFileMixingGroups() { return (!m_groupinnewfile || m_group.size() == 0); }
+
+long CLog::getOpenFailed() {
+	if (isFileMixingGroups())
 		return m_sopenfailed;
 	else
 		return m_openfailed;
 }
 
-bool CLog::canWeTryToOpen()
-{
-	//To avoid delay if open failed 5 times consecutively,
-	//we retry only once every 100 times
-	if(isFileMixingGroups())
+bool CLog::canWeTryToOpen() {
+	// To avoid delay if open failed 5 times consecutively,
+	// we retry only once every 100 times
+	if (isFileMixingGroups())
 		return (m_sopenfailed <= 5 || (m_sopenfailed % 100) == 0);
 	else
 		return (m_openfailed <= 5 || (m_openfailed % 100) == 0);
 }
 
-void CLog::incrementOpenFailed()
-{
-	if(isFileMixingGroups())
+void CLog::incrementOpenFailed() {
+	if (isFileMixingGroups())
 		m_sopenfailed++;
 	else
 		m_openfailed++;
 }
 
-void CLog::resetOpenFailed()
-{
-	if(isFileMixingGroups())
-		m_sopenfailed=0;
+void CLog::resetOpenFailed() {
+	if (isFileMixingGroups())
+		m_sopenfailed = 0;
 	else
-		m_openfailed=0;
+		m_openfailed = 0;
 }
 
-}
+} // namespace eIDMW

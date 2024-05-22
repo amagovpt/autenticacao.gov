@@ -27,7 +27,7 @@ Class to set and get configuration-data from the registry(Windows) or the ini-fi
 
 */
 
-//#include <utility>
+// #include <utility>
 #include <algorithm>
 #include <fstream>
 #include <functional>
@@ -36,7 +36,6 @@ Class to set and get configuration-data from the registry(Windows) or the ini-fi
 #include <locale>
 #include <string>
 #include <shlobj.h>
-
 
 #include <stdlib.h>
 #include <exception>
@@ -47,137 +46,126 @@ Class to set and get configuration-data from the registry(Windows) or the ini-fi
 #include "eidErrors.h"
 #include "Util.h"
 
-
 const wchar_t *SC_CONF_REG = L"Software\\PTEID";
 
-namespace eIDMW
-{ 
+namespace eIDMW {
 bool CConfig::bTestModeEnabled = false;
 
-//constructor
-CConfig::CConfig(void)
-{
-}
+// constructor
+CConfig::CConfig(void) {}
 
-CConfig::~CConfig(void)
-{
-}
+CConfig::~CConfig(void) {}
 
 /** Expand $HOME expression in the section string
 
 Search the first occurence of the $-sign, retrieve the $-string, replace with the correct value
-    $home\eidpath
+	$home\eidpath
 
 \return std::wstring            requested parameter
 \retval EIMDW_NOT_OK            exception; when section   is not found
 \retval EIDMW_ERR_PARAM_BAD     exception; when parameter is not found
 
-\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()  
+\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
 
-std::wstring ExpandSection(
-	const std::wstring & czSectionOriginal             /**< In:     the configuration-section where you can find above specified parameter */
-    ) 
-{
-    HRESULT                          hResult;
-    int                              iResult;
-    std::basic_string <char>::size_type   iTotLenght = czSectionOriginal.length();
-    std::basic_string <char>::size_type   iStrLenght;
-    wchar_t                          wsSectionCustom[256]; 
+std::wstring ExpandSection(const std::wstring &czSectionOriginal /**< In:     the configuration-section where you can
+																	find above specified parameter */
+) {
+	HRESULT hResult;
+	int iResult;
+	std::basic_string<char>::size_type iTotLenght = czSectionOriginal.length();
+	std::basic_string<char>::size_type iStrLenght;
+	wchar_t wsSectionCustom[256];
 
+	//--- Find if anything to expand
+	if ((iTotLenght == 0) || (czSectionOriginal[0] != '$')) {
+		// nothing to replace
+		return (czSectionOriginal);
+	}
 
-    //--- Find if anything to expand
-    if ((iTotLenght == 0)||(czSectionOriginal[0] != '$'))
-    {
-        //nothing to replace
-        return(czSectionOriginal);
-    }
+	//--- check for EIDMW_CNF_MACRO_INSTALL
+	iStrLenght = wcslen(EIDMW_CNF_MACRO_INSTALL);
+	iResult = czSectionOriginal.compare(0, iStrLenght, EIDMW_CNF_MACRO_INSTALL);
+	if (iResult == 0) {
+		// replace EIDMW_CNF_MACRO_INSTALL
+		std::wstring czSectionExpanded = CConfig::GetString(EIDMW_CNF_GENERAL_INSTALLDIR, EIDMW_CNF_SECTION_GENERAL);
 
-    //--- check for EIDMW_CNF_MACRO_INSTALL
-    iStrLenght = wcslen(EIDMW_CNF_MACRO_INSTALL);
-    iResult = czSectionOriginal.compare(0, iStrLenght, EIDMW_CNF_MACRO_INSTALL);
-    if (iResult == 0)
-    {
-        //replace EIDMW_CNF_MACRO_INSTALL
-        std::wstring czSectionExpanded = CConfig::GetString(EIDMW_CNF_GENERAL_INSTALLDIR, EIDMW_CNF_SECTION_GENERAL);
-        
-        //add part after the $-macro
-        czSectionExpanded.append(czSectionOriginal.substr(iStrLenght, iTotLenght-iStrLenght));//add part after the $-macro
-        return(czSectionExpanded);
-    }
+		// add part after the $-macro
+		czSectionExpanded.append(
+			czSectionOriginal.substr(iStrLenght, iTotLenght - iStrLenght)); // add part after the $-macro
+		return (czSectionExpanded);
+	}
 
-    //--- check for EIDMW_CNF_MACRO_HOME
-    // returns by default "C:\WINDOWS\system32\config\systemprofile\Application Data" for services.
-    iStrLenght = wcslen(EIDMW_CNF_MACRO_HOME);
-    iResult = czSectionOriginal.compare(0, iStrLenght, EIDMW_CNF_MACRO_HOME);
-    if (iResult == 0)
-    {
-        //replace EIDMW_CNF_MACRO_HOME
-        hResult = SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
+	//--- check for EIDMW_CNF_MACRO_HOME
+	// returns by default "C:\WINDOWS\system32\config\systemprofile\Application Data" for services.
+	iStrLenght = wcslen(EIDMW_CNF_MACRO_HOME);
+	iResult = czSectionOriginal.compare(0, iStrLenght, EIDMW_CNF_MACRO_HOME);
+	if (iResult == 0) {
+		// replace EIDMW_CNF_MACRO_HOME
+		hResult = SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
 
-        //non-user SW(eg.: services) returns: C:\WINDOWS\system32\config\systemprofile\Application Data, replace by common dir
-        if((hResult != S_OK) || ((hResult == S_OK) && (wcsstr(wsSectionCustom, L":\\WINDOWS") != NULL)))
-        {
-            //try common path when problems or when no user found
-            hResult = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
-            if(hResult != S_OK)
-            {
-                //can not replace, return original string
-                return(czSectionOriginal);
-            }
-        }
-        std::wstring czSectionExpanded(wsSectionCustom);    
+		// non-user SW(eg.: services) returns: C:\WINDOWS\system32\config\systemprofile\Application Data, replace by
+		// common dir
+		if ((hResult != S_OK) || ((hResult == S_OK) && (wcsstr(wsSectionCustom, L":\\WINDOWS") != NULL))) {
+			// try common path when problems or when no user found
+			hResult = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
+			if (hResult != S_OK) {
+				// can not replace, return original string
+				return (czSectionOriginal);
+			}
+		}
+		std::wstring czSectionExpanded(wsSectionCustom);
 
- 	//	czSectionExpanded.append(WDIRSEP);
-		//czSectionExpanded.append(EIDMW_CNF_MACRO_COMMON_SUBDIR);
-       
-        //add part after the $-macro
-        czSectionExpanded.append(czSectionOriginal.substr(iStrLenght, iTotLenght-iStrLenght));//add part after the $-macro
-        return(czSectionExpanded);
-    }
+		//	czSectionExpanded.append(WDIRSEP);
+		// czSectionExpanded.append(EIDMW_CNF_MACRO_COMMON_SUBDIR);
 
-    //--- check for EIDMW_CNF_MACRO_COMMON
-    iStrLenght = wcslen(EIDMW_CNF_MACRO_COMMON);
-    iResult = czSectionOriginal.compare(0, iStrLenght, EIDMW_CNF_MACRO_COMMON);
-    if (iResult == 0)
-    {
-        //replace EIDMW_CNF_MACRO_COMMON
+		// add part after the $-macro
+		czSectionExpanded.append(
+			czSectionOriginal.substr(iStrLenght, iTotLenght - iStrLenght)); // add part after the $-macro
+		return (czSectionExpanded);
+	}
 
-        //hResult = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
-        //if(hResult != S_OK)
-        //{
-        //    //can not replace, return original string
-        //    return(czSectionOriginal);
-        //}
-        //std::wstring czSectionExpanded(wsSectionCustom);   
+	//--- check for EIDMW_CNF_MACRO_COMMON
+	iStrLenght = wcslen(EIDMW_CNF_MACRO_COMMON);
+	iResult = czSectionOriginal.compare(0, iStrLenght, EIDMW_CNF_MACRO_COMMON);
+	if (iResult == 0) {
+		// replace EIDMW_CNF_MACRO_COMMON
 
-//////////////////////////////////////////////////////
-//Problem of access right for the user with limited right
-        hResult = SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
+		// hResult = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
+		// if(hResult != S_OK)
+		//{
+		//     //can not replace, return original string
+		//     return(czSectionOriginal);
+		// }
+		// std::wstring czSectionExpanded(wsSectionCustom);
 
-        //non-user SW(eg.: services) returns: C:\WINDOWS\system32\config\systemprofile\Application Data, replace by common dir
-        if((hResult != S_OK) || ((hResult == S_OK) && (wcsstr(wsSectionCustom, L":\\WINDOWS") != NULL)))
-        {
-            //try common path when problems or when no user found
-            hResult = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
-            if(hResult != S_OK)
-            {
-                //can not replace, return original string
-                return(czSectionOriginal);
-            }
-        }
-        std::wstring czSectionExpanded(wsSectionCustom);    
-//////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////
+		// Problem of access right for the user with limited right
+		hResult = SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
+
+		// non-user SW(eg.: services) returns: C:\WINDOWS\system32\config\systemprofile\Application Data, replace by
+		// common dir
+		if ((hResult != S_OK) || ((hResult == S_OK) && (wcsstr(wsSectionCustom, L":\\WINDOWS") != NULL))) {
+			// try common path when problems or when no user found
+			hResult = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_DEFAULT, wsSectionCustom);
+			if (hResult != S_OK) {
+				// can not replace, return original string
+				return (czSectionOriginal);
+			}
+		}
+		std::wstring czSectionExpanded(wsSectionCustom);
+		//////////////////////////////////////////////////////
 
 		czSectionExpanded.append(WDIRSEP);
 		czSectionExpanded.append(EIDMW_CNF_MACRO_COMMON_SUBDIR);
 
-        //add part after the $-macro
-        czSectionExpanded.append(czSectionOriginal.substr(iStrLenght, iTotLenght-iStrLenght));//add part after the $-macro
-        return(czSectionExpanded);
-    }
+		// add part after the $-macro
+		czSectionExpanded.append(
+			czSectionOriginal.substr(iStrLenght, iTotLenght - iStrLenght)); // add part after the $-macro
+		return (czSectionExpanded);
+	}
 
-    return(czSectionOriginal);
+	return (czSectionOriginal);
 }
 
 /** Retrieve from the configuration a parameter of the type STRING in the user settings
@@ -186,62 +174,60 @@ std::wstring ExpandSection(
 \retval EIMDW_NOT_OK            exception; when section   is not found
 \retval EIDMW_ERR_PARAM_BAD     exception; when parameter is not found
 
-\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()  
+\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
-std::wstring GetStringInt(
-	CConfig::tLocation location, 
-	const std::wstring & csName,                /**< In:     parameter name */
-	const std::wstring & czSection,             /**< In:     the configuration-section where you can find above specified parameter */
-    bool                 bExpand                /**< In:     expand $home macro's to the value for this user/PC */
-    ) 
-{
-    wchar_t     wcsKeyRegName[MAX_PATH];
-    BYTE        abValueDat[4*1024];
+std::wstring GetStringInt(CConfig::tLocation location, const std::wstring &csName, /**< In:     parameter name */
+						  const std::wstring &czSection, /**< In:     the configuration-section where you can find above
+															specified parameter */
+						  bool bExpand /**< In:     expand $home macro's to the value for this user/PC */
+) {
+	wchar_t wcsKeyRegName[MAX_PATH];
+	BYTE abValueDat[4 * 1024];
 
-    DWORD       dwValDatLen = 0;
-    DWORD       dwType;
-    LONG        lRes;
-    HKEY        hRegKey;
-    HKEY		hRegKeyRoot;
+	DWORD dwValDatLen = 0;
+	DWORD dwType;
+	LONG lRes;
+	HKEY hRegKey;
+	HKEY hRegKeyRoot;
 
-    if(location == CConfig::SYSTEM)
-        hRegKeyRoot = HKEY_LOCAL_MACHINE;
-    else
-        hRegKeyRoot = HKEY_CURRENT_USER ;
+	if (location == CConfig::SYSTEM)
+		hRegKeyRoot = HKEY_LOCAL_MACHINE;
+	else
+		hRegKeyRoot = HKEY_CURRENT_USER;
 
-    //--- Open the KeyInfo entry
-    swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName)/sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+	//--- Open the KeyInfo entry
+	swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
 
-    lRes = RegOpenKeyEx(hRegKeyRoot, wcsKeyRegName, 0L, KEY_READ , &hRegKey);
-    if (lRes != ERROR_SUCCESS){
-        throw CMWEXCEPTION(EIDMW_CONF);
-    }
+	lRes = RegOpenKeyEx(hRegKeyRoot, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+	if (lRes != ERROR_SUCCESS) {
+		throw CMWEXCEPTION(EIDMW_CONF);
+	}
 
-    //--- get the value
-    dwValDatLen = sizeof(abValueDat); 
-    dwType      = REG_SZ;
-    lRes        = RegQueryValueEx(hRegKey, csName.c_str(), 0L, &dwType, abValueDat, &dwValDatLen);
-    if ((lRes != ERROR_SUCCESS)){     
-        //try current user if no value found and not yet in current user
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-    }
- 
-    if (dwValDatLen > 2)            //remove ending "00"
-        dwValDatLen -= 2;
+	//--- get the value
+	dwValDatLen = sizeof(abValueDat);
+	dwType = REG_SZ;
+	lRes = RegQueryValueEx(hRegKey, csName.c_str(), 0L, &dwType, abValueDat, &dwValDatLen);
+	if ((lRes != ERROR_SUCCESS)) {
+		// try current user if no value found and not yet in current user
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
 
-    RegCloseKey(hRegKey);
+	if (dwValDatLen > 2) // remove ending "00"
+		dwValDatLen -= 2;
 
-	//Correctly handle empty strings, RegQueryValueEx() returns empty strings as having len=2 for 2 terminating NULL-bytes
+	RegCloseKey(hRegKey);
+
+	// Correctly handle empty strings, RegQueryValueEx() returns empty strings as having len=2 for 2 terminating
+	// NULL-bytes
 	if (abValueDat[0] == 0)
 		dwValDatLen = 0;
-    const std::wstring wsResult((const wchar_t*)abValueDat, (size_t) (dwValDatLen/2));  //convert byte to double byte
-    if(bExpand)
-        return( ExpandSection(wsResult) );
-    else
-        return( wsResult );
+	const std::wstring wsResult((const wchar_t *)abValueDat, (size_t)(dwValDatLen / 2)); // convert byte to double byte
+	if (bExpand)
+		return (ExpandSection(wsResult));
+	else
+		return (wsResult);
 }
-
 
 /** Retrieve from the configuration a parameter of the type STRING
 
@@ -249,158 +235,90 @@ std::wstring GetStringInt(
 \retval EIMDW_NOT_OK            exception; when section   is not found
 \retval EIDMW_ERR_PARAM_BAD     exception; when parameter is not found
 
-\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()  
+\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
-std::wstring GetStringInt(
-    const std::wstring & csName,                /**< In:     parameter name */
-	const std::wstring & czSection,             /**< In:     the configuration-section where you can find above specified parameter */
-    bool                 bExpand                /**< In:     expand $home macro's to the value for this user/PC */
-    ) 
-{
-	try
-	{
-		return GetStringInt(CConfig::USER,csName,czSection,bExpand);
-	}
-	catch(...)
-	{
-		return GetStringInt(CConfig::SYSTEM,csName,czSection,bExpand);
+std::wstring GetStringInt(const std::wstring &csName,	 /**< In:     parameter name */
+						  const std::wstring &czSection, /**< In:     the configuration-section where you can find above
+															specified parameter */
+						  bool bExpand /**< In:     expand $home macro's to the value for this user/PC */
+) {
+	try {
+		return GetStringInt(CConfig::USER, csName, czSection, bExpand);
+	} catch (...) {
+		return GetStringInt(CConfig::SYSTEM, csName, czSection, bExpand);
 	}
 }
 
-std::wstring CConfig::GetString(
-	tLocation location, 
-    const struct Param_Str param               /**< In:     parameter struct */
-    ) 
-{
-	return(GetString(location,param.csParam,param.csSection,param.csDefault));
+std::wstring CConfig::GetString(tLocation location, const struct Param_Str param /**< In:     parameter struct */
+) {
+	return (GetString(location, param.csParam, param.csSection, param.csDefault));
 }
 
 std::wstring CConfig::GetString(
-	tLocation location, 
-    const std::wstring & csName,                /**< In:     parameter name */
-	const std::wstring & czSection             /**< In:     the configuration-section where you can find above specified parameter */
-    ) 
-{
-        return(GetStringInt(location,csName, czSection, true));
+	tLocation location, const std::wstring &csName, /**< In:     parameter name */
+	const std::wstring &czSection /**< In:     the configuration-section where you can find above specified parameter */
+) {
+	return (GetStringInt(location, csName, czSection, true));
 }
-
-
 
 /** Retrieve from the configuration a parameter of the type STRING, use the default-value if nothing is found
 
 \return std::wstring        requested parameter
 
-\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()  
+\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
 std::wstring CConfig::GetString(
-	tLocation location, 
-    const std::wstring &csName,                 /**< In:     parameter name */
-	const std::wstring &czSection,              /**< In:     the configuration-section where you can find above specified parameter */
-    const std::wstring &csDefaultValue,         /**< In:     default value when the parameter or section is not found */
-    bool               bExpand                  /**< In:     expand $home macro's to the value for this user/PC */
-    )
-{
-    try{
-        return(GetStringInt(location,csName, czSection, bExpand));
-    }
-    catch(...){                 //return default value if any error happen
-		if(bExpand)
-			return( ExpandSection(csDefaultValue) );
+	tLocation location, const std::wstring &csName, /**< In:     parameter name */
+	const std::wstring
+		&czSection, /**< In:     the configuration-section where you can find above specified parameter */
+	const std::wstring &csDefaultValue, /**< In:     default value when the parameter or section is not found */
+	bool bExpand						/**< In:     expand $home macro's to the value for this user/PC */
+) {
+	try {
+		return (GetStringInt(location, csName, czSection, bExpand));
+	} catch (...) { // return default value if any error happen
+		if (bExpand)
+			return (ExpandSection(csDefaultValue));
 		else
-			return( csDefaultValue );
-        //return(csDefaultValue);
-    }
+			return (csDefaultValue);
+		// return(csDefaultValue);
+	}
+}
+
+std::wstring CConfig::GetString(const struct Param_Str param /**< In:     parameter struct */
+) {
+	return (GetString(param.csParam, param.csSection, param.csDefault));
 }
 
 std::wstring CConfig::GetString(
-    const struct Param_Str param               /**< In:     parameter struct */
-    ) 
-{
-	return(GetString(param.csParam,param.csSection,param.csDefault));
+	const std::wstring &csName,	  /**< In:     parameter name */
+	const std::wstring &czSection /**< In:     the configuration-section where you can find above specified parameter */
+) {
+	return (GetStringInt(csName, czSection, true));
 }
-
-std::wstring CConfig::GetString(
-    const std::wstring & csName,                /**< In:     parameter name */
-	const std::wstring & czSection             /**< In:     the configuration-section where you can find above specified parameter */
-    ) 
-{
-        return(GetStringInt(csName, czSection, true));
-}
-
-
 
 /** Retrieve from the configuration a parameter of the type STRING, use the default-value if nothing is found
 
 \return std::wstring        requested parameter
 
-\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()  
+\sa SetString(), DelString,   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
 std::wstring CConfig::GetString(
-    const std::wstring &csName,                 /**< In:     parameter name */
-	const std::wstring &czSection,              /**< In:     the configuration-section where you can find above specified parameter */
-    const std::wstring &csDefaultValue,         /**< In:     default value when the parameter or section is not found */
-    bool               bExpand                  /**< In:     expand $home macro's to the value for this user/PC */
-    )
-{
-    try{
-        return(GetStringInt(csName, czSection, bExpand));
-    }
-    catch(...){                 //return default value if any error happen
-		if(bExpand)
-			return( ExpandSection(csDefaultValue) );
+	const std::wstring &csName, /**< In:     parameter name */
+	const std::wstring
+		&czSection, /**< In:     the configuration-section where you can find above specified parameter */
+	const std::wstring &csDefaultValue, /**< In:     default value when the parameter or section is not found */
+	bool bExpand						/**< In:     expand $home macro's to the value for this user/PC */
+) {
+	try {
+		return (GetStringInt(csName, czSection, bExpand));
+	} catch (...) { // return default value if any error happen
+		if (bExpand)
+			return (ExpandSection(csDefaultValue));
 		else
-			return( csDefaultValue );
-        //return(csDefaultValue);
-    }
-}
-
-
-
-/** Retrieve from the configuration a parameter of the type LONG
-
-\return long                    requested parameter
-\retval EIMDW_NOT_OK            exception; when section   is not found
-\retval EIDMW_ERR_PARAM_BAD     exception; when parameter is not found
-
-\sa SetString(), GetString(),DelString,   SetLong(), DelLong()  
-*************************************************************************************/
-long CConfig::GetLong(
-    const struct Param_Num param               /**< In:     parameter struct */
-    ) 
-{
-	return(GetLong(param.csParam,param.csSection,param.lDefault));
-}
-
-long CConfig::GetLong(
-    const std::wstring & csName,                /**< In:     parameter name */
-    const std::wstring &czSection               /**< In:     the configuration-section where you can find above specified parameter */
-    )
-{
-	try
-	{
-		return GetLong(CConfig::USER,csName,czSection);
+			return (csDefaultValue);
+		// return(csDefaultValue);
 	}
-	catch(...)
-	{
-		return GetLong(CConfig::SYSTEM,csName,czSection);
-	}
-}
-
-
-/** Retrieve from the configuration a parameter of the type LONG, use the default-value if nothing is found
-
-\return long:   requested parameter
-
-\sa SetString(), GetString(),DelString,   SetLong(), DelLong()  
-*************************************************************************************/
-long CConfig::GetLong(const std::wstring & csName, const std::wstring &czSection, long lDefaultValue)
-{
-    try{
-        return(GetLong(csName, czSection));
-    }
-    catch(...){
-        return(lDefaultValue);
-    }
 }
 
 /** Retrieve from the configuration a parameter of the type LONG
@@ -409,74 +327,105 @@ long CConfig::GetLong(const std::wstring & csName, const std::wstring &czSection
 \retval EIMDW_NOT_OK            exception; when section   is not found
 \retval EIDMW_ERR_PARAM_BAD     exception; when parameter is not found
 
-\sa SetString(), GetString(),DelString,   SetLong(), DelLong()  
+\sa SetString(), GetString(),DelString,   SetLong(), DelLong()
 *************************************************************************************/
-long CConfig::GetLong(
-	tLocation location, 
-	const struct Param_Num param               /**< In:     parameter struct */
-    ) 
-{
-	return(GetLong(location, param.csParam,param.csSection,param.lDefault));
+long CConfig::GetLong(const struct Param_Num param /**< In:     parameter struct */
+) {
+	return (GetLong(param.csParam, param.csSection, param.lDefault));
 }
 
 long CConfig::GetLong(
-	tLocation location, 
-	const std::wstring & csName,                /**< In:     parameter name */
-    const std::wstring &czSection               /**< In:     the configuration-section where you can find above specified parameter */
-    )
-{
-
-    wchar_t     wcsKeyRegName[MAX_PATH];
-
-    DWORD       dwValDatLen;
-    DWORD       dwType;
-    LONG        lRes;
-    HKEY        hRegKey;
-    long        lResult = 0;
-    HKEY		hRegKeyRoot;
-
-    if(location == CConfig::SYSTEM)
-        hRegKeyRoot = HKEY_LOCAL_MACHINE;
-    else
-        hRegKeyRoot = HKEY_CURRENT_USER ;
-
-    //--- Open the KeyInfo entry
-    swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName)/sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
-
-    lRes = RegOpenKeyEx(hRegKeyRoot, wcsKeyRegName, 0L, KEY_READ , &hRegKey);
-    if (lRes != ERROR_SUCCESS){
-        throw CMWEXCEPTION(EIDMW_CONF);
-    }
-
-    //--- get the value
-    dwValDatLen = sizeof(lResult); 
-    dwType      = REG_DWORD;
-    lRes        = RegQueryValueEx(hRegKey, csName.c_str(), 0L, &dwType, (LPBYTE)&lResult, &dwValDatLen);
-    if ((lRes != ERROR_SUCCESS)){     
-        //try current user if no value found and not yet in current user
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-    }
- 
-    RegCloseKey(hRegKey);
-    return( lResult );
+	const std::wstring &csName,	  /**< In:     parameter name */
+	const std::wstring &czSection /**< In:     the configuration-section where you can find above specified parameter */
+) {
+	try {
+		return GetLong(CConfig::USER, csName, czSection);
+	} catch (...) {
+		return GetLong(CConfig::SYSTEM, csName, czSection);
+	}
 }
-
 
 /** Retrieve from the configuration a parameter of the type LONG, use the default-value if nothing is found
 
 \return long:   requested parameter
 
-\sa SetString(), GetString(),DelString,   SetLong(), DelLong()  
+\sa SetString(), GetString(),DelString,   SetLong(), DelLong()
 *************************************************************************************/
-long CConfig::GetLong(tLocation location, const std::wstring & csName, const std::wstring &czSection, long lDefaultValue)
-{
-    try{
-        return(GetLong(location, csName, czSection));
-    }
-    catch(...){
-        return(lDefaultValue);
-    }
+long CConfig::GetLong(const std::wstring &csName, const std::wstring &czSection, long lDefaultValue) {
+	try {
+		return (GetLong(csName, czSection));
+	} catch (...) {
+		return (lDefaultValue);
+	}
+}
+
+/** Retrieve from the configuration a parameter of the type LONG
+
+\return long                    requested parameter
+\retval EIMDW_NOT_OK            exception; when section   is not found
+\retval EIDMW_ERR_PARAM_BAD     exception; when parameter is not found
+
+\sa SetString(), GetString(),DelString,   SetLong(), DelLong()
+*************************************************************************************/
+long CConfig::GetLong(tLocation location, const struct Param_Num param /**< In:     parameter struct */
+) {
+	return (GetLong(location, param.csParam, param.csSection, param.lDefault));
+}
+
+long CConfig::GetLong(
+	tLocation location, const std::wstring &csName, /**< In:     parameter name */
+	const std::wstring &czSection /**< In:     the configuration-section where you can find above specified parameter */
+) {
+
+	wchar_t wcsKeyRegName[MAX_PATH];
+
+	DWORD dwValDatLen;
+	DWORD dwType;
+	LONG lRes;
+	HKEY hRegKey;
+	long lResult = 0;
+	HKEY hRegKeyRoot;
+
+	if (location == CConfig::SYSTEM)
+		hRegKeyRoot = HKEY_LOCAL_MACHINE;
+	else
+		hRegKeyRoot = HKEY_CURRENT_USER;
+
+	//--- Open the KeyInfo entry
+	swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+
+	lRes = RegOpenKeyEx(hRegKeyRoot, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+	if (lRes != ERROR_SUCCESS) {
+		throw CMWEXCEPTION(EIDMW_CONF);
+	}
+
+	//--- get the value
+	dwValDatLen = sizeof(lResult);
+	dwType = REG_DWORD;
+	lRes = RegQueryValueEx(hRegKey, csName.c_str(), 0L, &dwType, (LPBYTE)&lResult, &dwValDatLen);
+	if ((lRes != ERROR_SUCCESS)) {
+		// try current user if no value found and not yet in current user
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	RegCloseKey(hRegKey);
+	return (lResult);
+}
+
+/** Retrieve from the configuration a parameter of the type LONG, use the default-value if nothing is found
+
+\return long:   requested parameter
+
+\sa SetString(), GetString(),DelString,   SetLong(), DelLong()
+*************************************************************************************/
+long CConfig::GetLong(tLocation location, const std::wstring &csName, const std::wstring &czSection,
+					  long lDefaultValue) {
+	try {
+		return (GetLong(location, csName, czSection));
+	} catch (...) {
+		return (lDefaultValue);
+	}
 }
 
 #define MAX_KEY_LENGTH 255
@@ -489,251 +438,217 @@ long CConfig::GetLong(tLocation location, const std::wstring & csName, const std
 
 \sa GetString(), DelString,   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
-void CConfig::DeleteKeysByPrefix(
-    tLocation location,
-    const struct Param_Str param
-    )
-{
-    return(DeleteKeysByPrefix(location, param.csParam, param.csSection));
+void CConfig::DeleteKeysByPrefix(tLocation location, const struct Param_Str param) {
+	return (DeleteKeysByPrefix(location, param.csParam, param.csSection));
 }
 
 void CConfig::DeleteKeysByPrefix(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const std::wstring &csName,             /**< In:    parameter name */
-    const std::wstring &czSection          /**< In:    the configuration-section where you can find above specified parameter */
-    )
-{
-    wchar_t     wcsKeyRegName[MAX_PATH];
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const std::wstring &csName,	  /**< In:    parameter name */
+	const std::wstring &czSection /**< In:    the configuration-section where you can find above specified parameter */
+) {
+	wchar_t wcsKeyRegName[MAX_PATH];
 
-    LONG        lRes;
-    HKEY        hRegKeyTree;
-    HKEY        hRegKey;
-    TCHAR       achClass[MAX_PATH] = TEXT("");      // buffer for class name 
-    DWORD       cchClassName = MAX_PATH;            // size of class string 
-    DWORD       cSubKeys = 0;                       // number of subkeys 
-    DWORD       cbMaxSubKey;                        // longest subkey size 
-    DWORD       cchMaxClass;                        // longest class string 
-    DWORD       cValues;                            // number of values for key 
-    DWORD       cchMaxValue;                        // longest value name 
-    DWORD       cbMaxValueData;                     // longest value data 
-    DWORD       cbSecurityDescriptor;               // size of security descriptor 
-    FILETIME    ftLastWriteTime;                    // last write time 
-    DWORD       i, retCode;
-    TCHAR       achValue[MAX_VALUE_NAME];
-    DWORD       cchValue = MAX_VALUE_NAME;
+	LONG lRes;
+	HKEY hRegKeyTree;
+	HKEY hRegKey;
+	TCHAR achClass[MAX_PATH] = TEXT(""); // buffer for class name
+	DWORD cchClassName = MAX_PATH;		 // size of class string
+	DWORD cSubKeys = 0;					 // number of subkeys
+	DWORD cbMaxSubKey;					 // longest subkey size
+	DWORD cchMaxClass;					 // longest class string
+	DWORD cValues;						 // number of values for key
+	DWORD cchMaxValue;					 // longest value name
+	DWORD cbMaxValueData;				 // longest value data
+	DWORD cbSecurityDescriptor;			 // size of security descriptor
+	FILETIME ftLastWriteTime;			 // last write time
+	DWORD i, retCode;
+	TCHAR achValue[MAX_VALUE_NAME];
+	DWORD cchValue = MAX_VALUE_NAME;
 
-    if (location == SYSTEM)
-        hRegKeyTree = HKEY_LOCAL_MACHINE;
-    else
-        hRegKeyTree = HKEY_CURRENT_USER;
+	if (location == SYSTEM)
+		hRegKeyTree = HKEY_LOCAL_MACHINE;
+	else
+		hRegKeyTree = HKEY_CURRENT_USER;
 
-    //--- Open the KeyInfo entry
-    swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
-    lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
-    if (lRes != ERROR_SUCCESS){
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_CONF);
-    }
-    else 
-    {
-        // Get the class name and the value count. 
-        retCode = RegQueryInfoKey(
-            hRegKey,                    // key handle 
-            achClass,                // buffer for class name 
-            &cchClassName,           // size of class string 
-            NULL,                    // reserved 
-            &cSubKeys,               // number of subkeys 
-            &cbMaxSubKey,            // longest subkey size 
-            &cchMaxClass,            // longest class string 
-            &cValues,                // number of values for this key 
-            &cchMaxValue,            // longest value name 
-            &cbMaxValueData,         // longest value data 
-            &cbSecurityDescriptor,   // security descriptor 
-            &ftLastWriteTime);       // last write time 
+	//--- Open the KeyInfo entry
+	swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+	lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+	if (lRes != ERROR_SUCCESS) {
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_CONF);
+	} else {
+		// Get the class name and the value count.
+		retCode = RegQueryInfoKey(hRegKey,				 // key handle
+								  achClass,				 // buffer for class name
+								  &cchClassName,		 // size of class string
+								  NULL,					 // reserved
+								  &cSubKeys,			 // number of subkeys
+								  &cbMaxSubKey,			 // longest subkey size
+								  &cchMaxClass,			 // longest class string
+								  &cValues,				 // number of values for this key
+								  &cchMaxValue,			 // longest value name
+								  &cbMaxValueData,		 // longest value data
+								  &cbSecurityDescriptor, // security descriptor
+								  &ftLastWriteTime);	 // last write time
 
-        // Enumerate the key values. 
-        if (cValues)
-        {
-            for (i = 0, retCode = ERROR_SUCCESS; i<cValues; i++)
-            {
-                cchValue = MAX_VALUE_NAME;
-                achValue[0] = '\0';
-                lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
-                if (lRes != ERROR_SUCCESS){
-                    RegCloseKey(hRegKey);
-                    throw CMWEXCEPTION(EIDMW_CONF);
-                }
+		// Enumerate the key values.
+		if (cValues) {
+			for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++) {
+				cchValue = MAX_VALUE_NAME;
+				achValue[0] = '\0';
+				lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+				if (lRes != ERROR_SUCCESS) {
+					RegCloseKey(hRegKey);
+					throw CMWEXCEPTION(EIDMW_CONF);
+				}
 
-                retCode = RegEnumValue(hRegKey, 
-                    i,
-                    achValue,
-                    &cchValue,
-                    NULL,
-                    NULL,
-                    NULL,
-                    NULL);
+				retCode = RegEnumValue(hRegKey, i, achValue, &cchValue, NULL, NULL, NULL, NULL);
 
-                if (retCode == ERROR_SUCCESS)
-                {
-                    if (CompareNoCaseN(achValue, csName, csName.size()) == 0){
-                        //--- Open the KeyInfo entry
-                        lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_SET_VALUE, &hRegKey);
-                        if (lRes != ERROR_SUCCESS){
-                            RegCloseKey(hRegKey);
-                            throw CMWEXCEPTION(EIDMW_CONF);
-                        }
-                        //--- delete the value
-                        lRes = RegDeleteValue(hRegKey, achValue);
-                        if (lRes != ERROR_SUCCESS){
-                            RegCloseKey(hRegKey);
-                            throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-                        }
-                        else 
-                        {
-                            i--;
-                            cValues--;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    RegCloseKey(hRegKey);
-}
-	/* Count number of registry values under "czSection" registry key with "csName" as prefix */
-	unsigned int CConfig::CountKeysByPrefix(tLocation location, const std::wstring &csName, const std::wstring &czSection) {
-		wchar_t     wcsKeyRegName[MAX_PATH];
-
-		LONG        lRes;
-		HKEY        hRegKeyTree;
-		HKEY        hRegKey;
-		unsigned int regvalue_counter = 0;
-		
-		DWORD       cValues;                            // number of values for key 
-		DWORD       i, retCode;
-		TCHAR       achValue[MAX_VALUE_NAME];
-		DWORD       cchValue = MAX_VALUE_NAME;
-
-		if (location == SYSTEM)
-			hRegKeyTree = HKEY_LOCAL_MACHINE;
-		else
-			hRegKeyTree = HKEY_CURRENT_USER;
-
-		//--- Open the KeyInfo entry
-		swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
-		lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
-		if (lRes != ERROR_SUCCESS) {
-			RegCloseKey(hRegKey);
-			throw CMWEXCEPTION(EIDMW_CONF);
-		}
-		else
-		{
-			// Get the class name and the value count. 
-			retCode = RegQueryInfoKey(
-				hRegKey,                    // key handle 
-				NULL,                // buffer for class name 
-				NULL,           // size of class string 
-				NULL,                    // reserved 
-				NULL,               // number of subkeys 
-				NULL,            // longest subkey size 
-				NULL,            // longest class string 
-				&cValues,                // number of values for this key 
-				NULL,            // longest value name 
-				NULL,            // longest value data 
-				NULL,            // security descriptor 
-				NULL);           // last write time 
-
-			// Enumerate the key values. 
-			if (cValues)
-			{
-				for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++)
-				{
-					cchValue = MAX_VALUE_NAME;
-					achValue[0] = '\0';
-					lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
-					if (lRes != ERROR_SUCCESS) {
-						RegCloseKey(hRegKey);
-						throw CMWEXCEPTION(EIDMW_CONF);
-					}
-
-					retCode = RegEnumValue(hRegKey,
-						i,
-						achValue,
-						&cchValue,
-						NULL,
-						NULL,
-						NULL,
-						NULL);
-
-					if (retCode == ERROR_SUCCESS)
-					{
-						if (CompareNoCaseN(achValue, csName, csName.size()) == 0) {
-							regvalue_counter++;
+				if (retCode == ERROR_SUCCESS) {
+					if (CompareNoCaseN(achValue, csName, csName.size()) == 0) {
+						//--- Open the KeyInfo entry
+						lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_SET_VALUE, &hRegKey);
+						if (lRes != ERROR_SUCCESS) {
+							RegCloseKey(hRegKey);
+							throw CMWEXCEPTION(EIDMW_CONF);
+						}
+						//--- delete the value
+						lRes = RegDeleteValue(hRegKey, achValue);
+						if (lRes != ERROR_SUCCESS) {
+							RegCloseKey(hRegKey);
+							throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+						} else {
+							i--;
+							cValues--;
 						}
 					}
 				}
 			}
 		}
+	}
+	RegCloseKey(hRegKey);
+}
+/* Count number of registry values under "czSection" registry key with "csName" as prefix */
+unsigned int CConfig::CountKeysByPrefix(tLocation location, const std::wstring &csName, const std::wstring &czSection) {
+	wchar_t wcsKeyRegName[MAX_PATH];
+
+	LONG lRes;
+	HKEY hRegKeyTree;
+	HKEY hRegKey;
+	unsigned int regvalue_counter = 0;
+
+	DWORD cValues; // number of values for key
+	DWORD i, retCode;
+	TCHAR achValue[MAX_VALUE_NAME];
+	DWORD cchValue = MAX_VALUE_NAME;
+
+	if (location == SYSTEM)
+		hRegKeyTree = HKEY_LOCAL_MACHINE;
+	else
+		hRegKeyTree = HKEY_CURRENT_USER;
+
+	//--- Open the KeyInfo entry
+	swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+	lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+	if (lRes != ERROR_SUCCESS) {
 		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_CONF);
+	} else {
+		// Get the class name and the value count.
+		retCode = RegQueryInfoKey(hRegKey,	// key handle
+								  NULL,		// buffer for class name
+								  NULL,		// size of class string
+								  NULL,		// reserved
+								  NULL,		// number of subkeys
+								  NULL,		// longest subkey size
+								  NULL,		// longest class string
+								  &cValues, // number of values for this key
+								  NULL,		// longest value name
+								  NULL,		// longest value data
+								  NULL,		// security descriptor
+								  NULL);	// last write time
 
-		return regvalue_counter;
-	}
+		// Enumerate the key values.
+		if (cValues) {
+			for (i = 0, retCode = ERROR_SUCCESS; i < cValues; i++) {
+				cchValue = MAX_VALUE_NAME;
+				achValue[0] = '\0';
+				lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_READ, &hRegKey);
+				if (lRes != ERROR_SUCCESS) {
+					RegCloseKey(hRegKey);
+					throw CMWEXCEPTION(EIDMW_CONF);
+				}
 
-	unsigned int CConfig::CountKeysByPrefix(tLocation location, const struct Param_Str param) {
-		return CountKeysByPrefix(location, param.csParam, param.csSection);
+				retCode = RegEnumValue(hRegKey, i, achValue, &cchValue, NULL, NULL, NULL, NULL);
+
+				if (retCode == ERROR_SUCCESS) {
+					if (CompareNoCaseN(achValue, csName, csName.size()) == 0) {
+						regvalue_counter++;
+					}
+				}
+			}
+		}
 	}
+	RegCloseKey(hRegKey);
+
+	return regvalue_counter;
+}
+
+unsigned int CConfig::CountKeysByPrefix(tLocation location, const struct Param_Str param) {
+	return CountKeysByPrefix(location, param.csParam, param.csSection);
+}
 
 /** Modify/add into the configuration a parameter of the type STRING
 
 \retval EIMDW_NOT_OK            exception; when section   is not found
 \retval EIDMW_ERR_PARAM_BAD     exception; when parameter could not be modified
 
-\sa GetString(), DelString,   SetLong(), GetLong(), DelLong()  
+\sa GetString(), DelString,   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
 void CConfig::SetString(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const struct Param_Str param,              /**< In:     parameter struct */
-    const std::wstring &csValue             /**< In:    Value that the parameter in the configuration should be set to */
-   ) 
-{
-	return(SetString(location,param.csParam,param.csSection,csValue));
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const struct Param_Str param, /**< In:     parameter struct */
+	const std::wstring &csValue	  /**< In:    Value that the parameter in the configuration should be set to */
+) {
+	return (SetString(location, param.csParam, param.csSection, csValue));
 }
 
 void CConfig::SetString(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const std::wstring &csName,             /**< In:    parameter name */
-    const std::wstring &czSection,          /**< In:    the configuration-section where you can find above specified parameter */
-    const std::wstring &csValue             /**< In:    Value that the parameter in the configuration should be set to */
-    )
-{
-    wchar_t     wcsKeyRegName[MAX_PATH];
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const std::wstring &csName,	   /**< In:    parameter name */
+	const std::wstring &czSection, /**< In:    the configuration-section where you can find above specified parameter */
+	const std::wstring &csValue	   /**< In:    Value that the parameter in the configuration should be set to */
+) {
+	wchar_t wcsKeyRegName[MAX_PATH];
 
-    LONG    lRes;
-    HKEY    hRegKeyTree;
-    HKEY    hRegKey;
+	LONG lRes;
+	HKEY hRegKeyTree;
+	HKEY hRegKey;
 
-    if(location == SYSTEM)
-        hRegKeyTree = HKEY_LOCAL_MACHINE;
-    else
-        hRegKeyTree = HKEY_CURRENT_USER ;
+	if (location == SYSTEM)
+		hRegKeyTree = HKEY_LOCAL_MACHINE;
+	else
+		hRegKeyTree = HKEY_CURRENT_USER;
 
+	swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
 
-    swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName)/sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+	//--- Open the KeyInfo entry
+	lRes = RegCreateKeyEx(hRegKeyTree, wcsKeyRegName, 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hRegKey,
+						  NULL);
+	if (lRes != ERROR_SUCCESS) {
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_CONF);
+	}
 
-    //--- Open the KeyInfo entry
-    lRes = RegCreateKeyEx(hRegKeyTree, wcsKeyRegName, 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hRegKey, NULL);
-    if (lRes != ERROR_SUCCESS){
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_CONF);
-    }
-
-    //--- Set the value
-    lRes = RegSetValueEx(hRegKey, csName.c_str(), NULL, REG_SZ, (const BYTE *)csValue.c_str(), (DWORD)((csValue.length()+1)*sizeof(wchar_t)));  //terminating 0 must also be included !
-    if (lRes != ERROR_SUCCESS){
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_CONF);
-    }
-    RegCloseKey(hRegKey);
+	//--- Set the value
+	lRes = RegSetValueEx(hRegKey, csName.c_str(), NULL, REG_SZ, (const BYTE *)csValue.c_str(),
+						 (DWORD)((csValue.length() + 1) * sizeof(wchar_t))); // terminating 0 must also be included !
+	if (lRes != ERROR_SUCCESS) {
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_CONF);
+	}
+	RegCloseKey(hRegKey);
 }
 
 /** Modify/add into the configuration a parameter of the type LONG
@@ -741,137 +656,123 @@ void CConfig::SetString(
 \retval EIMDW_NOT_OK            exception; when section   is not found
 \retval EIDMW_ERR_PARAM_BAD     exception; when parameter could not be modified
 
-\sa GetString(), SetString(), DelString,   GetLong(), DelLong()  
+\sa GetString(), SetString(), DelString,   GetLong(), DelLong()
 *************************************************************************************/
 void CConfig::SetLong(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const struct Param_Num param,               /**< In:     parameter struct */
-    long lValue                             /**< In:    Value that the parameter in the configuration should be set to */
-    ) 
-{
-	return(SetLong(location,param.csParam,param.csSection,lValue));
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const struct Param_Num param, /**< In:     parameter struct */
+	long lValue					  /**< In:    Value that the parameter in the configuration should be set to */
+) {
+	return (SetLong(location, param.csParam, param.csSection, lValue));
 }
 
 void CConfig::SetLong(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const std::wstring &csName,             /**< In:    parameter name */
-    const std::wstring &czSection,          /**< In:    the configuration-section where you can find above specified parameter */
-    long lValue                             /**< In:    Value that the parameter in the configuration should be set to */
-    )
-{
-    wchar_t     wcsKeyRegName[MAX_PATH];
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const std::wstring &csName,	   /**< In:    parameter name */
+	const std::wstring &czSection, /**< In:    the configuration-section where you can find above specified parameter */
+	long lValue					   /**< In:    Value that the parameter in the configuration should be set to */
+) {
+	wchar_t wcsKeyRegName[MAX_PATH];
 
-    LONG    lRes;
-    HKEY    hRegKeyTree;
-    HKEY    hRegKey;
+	LONG lRes;
+	HKEY hRegKeyTree;
+	HKEY hRegKey;
 
-    if(location == SYSTEM)
-        hRegKeyTree = HKEY_LOCAL_MACHINE;
-    else
-        hRegKeyTree = HKEY_CURRENT_USER ;
+	if (location == SYSTEM)
+		hRegKeyTree = HKEY_LOCAL_MACHINE;
+	else
+		hRegKeyTree = HKEY_CURRENT_USER;
 
+	swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
 
-    swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName)/sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+	//--- Open the KeyInfo entry
+	lRes = RegCreateKeyEx(hRegKeyTree, wcsKeyRegName, 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hRegKey,
+						  NULL);
+	if (lRes != ERROR_SUCCESS) {
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_CONF);
+	}
 
-    //--- Open the KeyInfo entry
-    lRes = RegCreateKeyEx(hRegKeyTree, wcsKeyRegName, 0L, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hRegKey, NULL);
-    if (lRes != ERROR_SUCCESS){
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_CONF);
-    }
+	//--- Set the value
+	lRes = RegSetValueEx(hRegKey, csName.c_str(), NULL, REG_DWORD, (const BYTE *)&lValue, (DWORD)sizeof(long));
+	if (lRes != ERROR_SUCCESS) {
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
 
-    //--- Set the value
-    lRes = RegSetValueEx(hRegKey, csName.c_str(), NULL, REG_DWORD, (const BYTE *)&lValue, (DWORD)sizeof(long));
-    if (lRes != ERROR_SUCCESS){
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-    }
-
-    RegCloseKey(hRegKey);
+	RegCloseKey(hRegKey);
 } // namespace eidMW
-
-
-
-
 
 /** Remove in the configuration a parameter of the type STRING
 
 \retval EIMDW_NOT_OK            exception; when section   is not found
 \retval EIDMW_ERR_PARAM_BAD     exception; when parameter could not be modified
 
-\sa SetString(), GetString(),   SetLong(), GetLong(), DelLong()  
+\sa SetString(), GetString(),   SetLong(), GetLong(), DelLong()
 *************************************************************************************/
 void CConfig::DelString(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const struct Param_Str param               /**< In:     parameter struct */
-    ) 
-{
-	return(DelString(location,param.csParam,param.csSection));
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const struct Param_Str param /**< In:     parameter struct */
+) {
+	return (DelString(location, param.csParam, param.csSection));
 }
 
 void CConfig::DelString(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const std::wstring &csName,             /**< In:    parameter name */
-    const std::wstring &czSection           /**< In:    the configuration-section where you can find above specified parameter */
-    )
-{
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const std::wstring &csName,	  /**< In:    parameter name */
+	const std::wstring &czSection /**< In:    the configuration-section where you can find above specified parameter */
+) {
 
-    wchar_t     wcsKeyRegName[MAX_PATH];
+	wchar_t wcsKeyRegName[MAX_PATH];
 
-    LONG    lRes;
-    HKEY    hRegKeyTree;
-    HKEY    hRegKey;
+	LONG lRes;
+	HKEY hRegKeyTree;
+	HKEY hRegKey;
 
-    if(location == SYSTEM)
-        hRegKeyTree = HKEY_LOCAL_MACHINE;
-    else
-        hRegKeyTree = HKEY_CURRENT_USER ;
+	if (location == SYSTEM)
+		hRegKeyTree = HKEY_LOCAL_MACHINE;
+	else
+		hRegKeyTree = HKEY_CURRENT_USER;
 
+	//--- Open the KeyInfo entry
+	swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName) / sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
+	lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_SET_VALUE, &hRegKey);
+	if (lRes != ERROR_SUCCESS) {
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_CONF);
+	}
 
-    //--- Open the KeyInfo entry
-    swprintf_s(wcsKeyRegName, sizeof(wcsKeyRegName)/sizeof(wchar_t), L"%s\\%s", SC_CONF_REG, czSection.c_str());
-    lRes = RegOpenKeyEx(hRegKeyTree, wcsKeyRegName, 0L, KEY_SET_VALUE, &hRegKey);
-    if (lRes != ERROR_SUCCESS){
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_CONF);
-    }
+	//--- delete the value
+	lRes = RegDeleteValue(hRegKey, csName.c_str());
+	if (lRes != ERROR_SUCCESS) {
+		RegCloseKey(hRegKey);
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
 
-    //--- delete the value
-    lRes = RegDeleteValue(hRegKey, csName.c_str());
-    if (lRes != ERROR_SUCCESS){
-        RegCloseKey(hRegKey);
-        throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-    }
-
-    RegCloseKey(hRegKey);
+	RegCloseKey(hRegKey);
 }
-
-
-
 
 /** Remove in the configuration a parameter of the type LONG
 
 \retval EIMDW_NOT_OK            exception; when section   is not found
 \retval EIDMW_ERR_PARAM_BAD     exception; when parameter could not be modified
 
-\sa SetString(), GetString(), DelString,   SetLong(), GetLong()  
+\sa SetString(), GetString(), DelString,   SetLong(), GetLong()
 *************************************************************************************/
 void CConfig::DelLong(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const struct Param_Num param               /**< In:     parameter struct */
-    ) 
-{
-	return(DelLong(location,param.csParam,param.csSection));
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const struct Param_Num param /**< In:     parameter struct */
+) {
+	return (DelLong(location, param.csParam, param.csSection));
 }
 
 void CConfig::DelLong(
-    tLocation location,                     /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
-    const std::wstring &csName,             /**< In:    parameter name */
-    const std::wstring &czSection           /**< In:    the configuration-section where you can find above specified parameter */
-    )
-{
+	tLocation location, /**< In:    tells to use the SYSTEM or USER configuration = CConfig::SYSTEM or CConfig::USER*/
+	const std::wstring &csName,	  /**< In:    parameter name */
+	const std::wstring &czSection /**< In:    the configuration-section where you can find above specified parameter */
+) {
 
-    DelString(location, csName, czSection);
+	DelString(location, csName, czSection);
 }
 
-}
+} // namespace eIDMW

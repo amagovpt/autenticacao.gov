@@ -23,14 +23,12 @@
 #include "Thread.h"
 #include <stdlib.h>
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 /** run_internal() function, has different
  * return code etc. on different platform */
-THREAD_INITFUNCTION(run_internal, arg)
-{
-	CThread *pThread = (CThread *) arg;
+THREAD_INITFUNCTION(run_internal, arg) {
+	CThread *pThread = (CThread *)arg;
 
 	pThread->Run();
 
@@ -42,8 +40,7 @@ THREAD_INITFUNCTION(run_internal, arg)
 	THREAD_END(pThread->m_SyncHandle);
 }
 
-CThread::CThread()
-{
+CThread::CThread() {
 	m_isRunning = false;
 	m_bStopRequest = false;
 
@@ -52,16 +49,11 @@ CThread::CThread()
 #else
 	m_SyncHandle = 0;
 #endif
-	
 }
 
-CThread::~CThread()
-{
-	THREAD_CLEANUP(m_SyncHandle);
-}
+CThread::~CThread() { THREAD_CLEANUP(m_SyncHandle); }
 
-int CThread::Start()
-{
+int CThread::Start() {
 	int status;
 	THREAD_ID threadHandle;
 
@@ -77,17 +69,15 @@ int CThread::Start()
 	return status;
 }
 
-bool CThread::IsRunning()
-{
-	// To make 'sure' THREAD_END() is called 
+bool CThread::IsRunning() {
+	// To make 'sure' THREAD_END() is called
 	if (!m_isRunning)
 		SleepMillisecs(1);
 
 	return m_isRunning;
 }
 
-void CThread::SleepMillisecs(int millisecs)
-{
+void CThread::SleepMillisecs(int millisecs) {
 #ifdef WIN32
 	Sleep(millisecs);
 #else
@@ -95,57 +85,48 @@ void CThread::SleepMillisecs(int millisecs)
 #endif
 }
 
-void CThread::RequestStop()
-{
-	//Ask the thread to stop
-	m_bStopRequest=true;
+void CThread::RequestStop() {
+	// Ask the thread to stop
+	m_bStopRequest = true;
 }
 
-void CThread::ForceStop()
-{
-	//The thread must be killed
-	//TODO (Now, we just ask the thread to stop)
+void CThread::ForceStop() {
+	// The thread must be killed
+	// TODO (Now, we just ask the thread to stop)
 	RequestStop();
 }
 
-void CThread::Stop(unsigned long ulSleepFrequency)
-{
-	//Ask the thread to stop
+void CThread::Stop(unsigned long ulSleepFrequency) {
+	// Ask the thread to stop
 	RequestStop();
 
-	//Wait until the end of the thread
+	// Wait until the end of the thread
 	WaitTillStopped(ulSleepFrequency);
 }
 
-void CThread::WaitTillStopped(unsigned long ulSleepFrequency)
-{
-	//Wait until the end of the thread
-	while(IsRunning())
-	{
+void CThread::WaitTillStopped(unsigned long ulSleepFrequency) {
+	// Wait until the end of the thread
+	while (IsRunning()) {
 		SleepMillisecs(ulSleepFrequency);
 	}
 }
 
-bool CThread::WaitTimeout(unsigned long ulTimeout,int iStopMode)
-{
-	unsigned long ulCount=ulTimeout;
+bool CThread::WaitTimeout(unsigned long ulTimeout, int iStopMode) {
+	unsigned long ulCount = ulTimeout;
 
-	//Wait until the end of the thread or the timeout
-	while(IsRunning() && ulCount>0)
-	{
+	// Wait until the end of the thread or the timeout
+	while (IsRunning() && ulCount > 0) {
 		SleepMillisecs(1000);
 		ulCount--;
 	}
 
 	/*
 	iStopMode : 0 = do not stop the thread after timeout
-	            1 = request the thread o stop after timeout
+				1 = request the thread o stop after timeout
 				2 = force the thread to stop
 	*/
-	if(IsRunning())
-	{
-		switch(iStopMode)
-		{
+	if (IsRunning()) {
+		switch (iStopMode) {
 		case 1:
 			RequestStop();
 			break;
@@ -156,29 +137,25 @@ bool CThread::WaitTimeout(unsigned long ulTimeout,int iStopMode)
 			break;
 		}
 		return false;
-	}
-	else
-	{
+	} else {
 		return true;
 	}
 }
 
-int CThread::getCurrentPid()
-{
+int CThread::getCurrentPid() {
 #ifdef WIN32
 	return _getpid();
 #else
 	return getpid();
-#endif	
+#endif
 }
 
-pteid_thread_id CThread::getCurrentThreadId()
-{
+pteid_thread_id CThread::getCurrentThreadId() {
 #ifdef WIN32
 	return GetCurrentThreadId();
 #else
 	return pthread_self();
-#endif	
+#endif
 }
 
-}
+} // namespace eIDMW

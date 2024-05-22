@@ -23,33 +23,26 @@
 
 #include "CardLayer.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 CCardReaderInfo *CCardReaderInfo::m_CardReaderInfo = NULL;
 
 // CCardReaderInfo::CCardReaderInfo()
-CCardReaderInfo::CCardReaderInfo(void)
-: m_NoOfReaders(-1)
-{
-}
+CCardReaderInfo::CCardReaderInfo(void) : m_NoOfReaders(-1) {}
 
 // CCardReaderInfo *CCardReaderInfo::GetCardReaderInfo()
-CCardReaderInfo *CCardReaderInfo::GetCardReaderInfo()
-{
-	if (m_CardReaderInfo == NULL)
-	{
+CCardReaderInfo *CCardReaderInfo::GetCardReaderInfo() {
+	if (m_CardReaderInfo == NULL) {
 		m_CardReaderInfo = new CCardReaderInfo();
 	}
 	return m_CardReaderInfo;
 }
 
 // void CCardReaderInfo::CollectInfo(void)
-void CCardReaderInfo::CollectInfo(void)
-{
+void CCardReaderInfo::CollectInfo(void) {
 	CCardLayer oCardLayer;
 	CReadersInfo oReadersInfo = oCardLayer.ListReaders();
 	m_NoOfReaders = oReadersInfo.ReaderCount();
 }
 
-} // namespace eidMW
+} // namespace eIDMW

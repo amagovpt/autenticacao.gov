@@ -35,57 +35,53 @@
 #include "MWException.h"
 #include "LogBase.h"
 
-#define BEGIN_TRY_CATCH										\
-	if(m_context->mutex) m_context->mutex->Lock();			\
-															\
-	try														\
-	{														\
-		checkContextStillOk();								\
-	}														\
-	catch(PTEID_Exception &e)								\
-	{							\
-		e.GetError();				         \
-		if(m_context->mutex) m_context->mutex->Unlock();	\
-		throw;												\
-	}														\
-															\
-	try														\
-	{
+#define BEGIN_TRY_CATCH                                                                                                \
+	if (m_context->mutex)                                                                                              \
+		m_context->mutex->Lock();                                                                                      \
+                                                                                                                       \
+	try {                                                                                                              \
+		checkContextStillOk();                                                                                         \
+	} catch (PTEID_Exception & e) {                                                                                    \
+		e.GetError();                                                                                                  \
+		if (m_context->mutex)                                                                                          \
+			m_context->mutex->Unlock();                                                                                \
+		throw;                                                                                                         \
+	}                                                                                                                  \
+                                                                                                                       \
+	try {
 
-#define END_TRY_CATCH										\
-	}														\
-	catch(PTEID_Exception &e)								\
-	{														\
-		e.GetError();										\
-		if(m_context->mutex) m_context->mutex->Unlock();	\
-		throw;												\
-	}														\
-	catch(CBatchSignFailedException &e)						\
-	{														\
-		if(m_context->mutex) m_context->mutex->Unlock();	\
-		throw PTEID_ExBatchSignatureFailed(e.GetError(),	\
-			e.GetFailedSignatureIndex());					\
-	}														\
-	catch(CMWException &e)									\
-	{														\
-		e.GetError();										\
-		if(m_context->mutex) m_context->mutex->Unlock();	\
-		throw PTEID_Exception::THROWException(e);			\
-	}														\
-	catch(...)												\
-	{														\
-		if(m_context->mutex) m_context->mutex->Unlock();	\
-		throw;												\
-	}														\
-	if(m_context->mutex) m_context->mutex->Unlock();		\
+#define END_TRY_CATCH                                                                                                  \
+	}                                                                                                                  \
+	catch (PTEID_Exception & e) {                                                                                      \
+		e.GetError();                                                                                                  \
+		if (m_context->mutex)                                                                                          \
+			m_context->mutex->Unlock();                                                                                \
+		throw;                                                                                                         \
+	}                                                                                                                  \
+	catch (CBatchSignFailedException & e) {                                                                            \
+		if (m_context->mutex)                                                                                          \
+			m_context->mutex->Unlock();                                                                                \
+		throw PTEID_ExBatchSignatureFailed(e.GetError(), e.GetFailedSignatureIndex());                                 \
+	}                                                                                                                  \
+	catch (CMWException & e) {                                                                                         \
+		e.GetError();                                                                                                  \
+		if (m_context->mutex)                                                                                          \
+			m_context->mutex->Unlock();                                                                                \
+		throw PTEID_Exception::THROWException(e);                                                                      \
+	}                                                                                                                  \
+	catch (...) {                                                                                                      \
+		if (m_context->mutex)                                                                                          \
+			m_context->mutex->Unlock();                                                                                \
+		throw;                                                                                                         \
+	}                                                                                                                  \
+	if (m_context->mutex)                                                                                              \
+		m_context->mutex->Unlock();
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 class APL_ReaderContext;
 
-struct SDK_Context
-{
+struct SDK_Context {
 	unsigned long contextid;
 	APL_ReaderContext *reader;
 	unsigned long cardid;
@@ -99,6 +95,6 @@ PTEID_CertifType ConvertCertType(APL_CertifType eType);
 tLOG_Level ConvertLogLevel(PTEID_LogLevel level);
 
 APL_SignatureLevel ConvertSignatureLevel(PTEID_SignatureLevel level);
-}
+} // namespace eIDMW
 
 #endif //__INTERNALUTIL_H__

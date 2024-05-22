@@ -26,44 +26,34 @@
 
 #ifndef CARDLAYERCONST_H
 #define CARDLAYERCONST_H
-namespace eIDMW
-{
+namespace eIDMW {
 /**
  * The maximum number of readers; if more readers are present
  * only the first MAX_READERS that are found will used.
  */
 const static unsigned long MAX_READERS = 8;
 
+#define UNBLOCK_FLAG_NEW_PIN 1
+#define UNBLOCK_FLAG_PUK_MERGE 2 // Only on pinpad readers
 
-#define UNBLOCK_FLAG_NEW_PIN    1
-#define UNBLOCK_FLAG_PUK_MERGE  2   // Only on pinpad readers
-
-typedef enum
-{
-    DISCONNECT_LEAVE_CARD = 0,
-    DISCONNECT_RESET_CARD = 1,
+typedef enum {
+	DISCONNECT_LEAVE_CARD = 0,
+	DISCONNECT_RESET_CARD = 1,
 } tDisconnectMode;
 
-typedef enum
-{
-    FILE_OP_READ,
-    FILE_OP_WRITE,
+typedef enum {
+	FILE_OP_READ,
+	FILE_OP_WRITE,
 } tFileOperation;
 
-typedef enum
-{
-    PIN_OP_VERIFY,
-    PIN_OP_CHANGE,
-    PIN_OP_RESET,
-    PIN_OP_RESET_NO_PUK
-} tPinOperation;
+typedef enum { PIN_OP_VERIFY, PIN_OP_CHANGE, PIN_OP_RESET, PIN_OP_RESET_NO_PUK } tPinOperation;
 
 enum PaceSecretType {
-    PACEMRZ = 1,   //Only PACE MRZ and CAN can be used with IAS v5 cards
-    PACECAN,
-    PACEPIN,       //Not available
-    PACEPUK,       //Not available
-    PACERAW,
+	PACEMRZ = 1, // Only PACE MRZ and CAN can be used with IAS v5 cards
+	PACECAN,
+	PACEPIN, // Not available
+	PACEPUK, // Not available
+	PACERAW,
 };
 
 const unsigned long SIGN_ALGO_RSA_RAW = 0x01;
@@ -90,31 +80,27 @@ const unsigned int SHA512_LEN = 64;
 
 static const unsigned char PTEID_1_APPLET_AID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x02};
 static const unsigned char PTEID_2_APPLET_NATIONAL_DATA[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x05};
-static const unsigned char PTEID_2_APPLET_EID[] =       {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x04};
+static const unsigned char PTEID_2_APPLET_EID[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x04};
 
-static const unsigned char PTEID_CONTACTLESS_ATR[] = {0x3B, 0x8F, 0x80, 0x01, 0x80, 0x31, 0x80, 0x65, 0xB0, 0x85, 0x05, 0x00, 0x11, 0x12, 0x0F, 0xFF,
-                                                      0x82, 0x90, 0x00, 0x8B};
+static const unsigned char PTEID_CONTACTLESS_ATR[] = {0x3B, 0x8F, 0x80, 0x01, 0x80, 0x31, 0x80, 0x65, 0xB0, 0x85,
+													  0x05, 0x00, 0x11, 0x12, 0x0F, 0xFF, 0x82, 0x90, 0x00, 0x8B};
 
 static const unsigned char SELECT_ADF[] = {0x00, 0xA4, 0x00, 0x0C};
 
-
-typedef enum
-{
-    PIN_ENC_ASCII,
-    PIN_ENC_BCD,
-    PIN_ENC_GP,     // Global platorm encoding e.g. "12345" -> {0x25, 0x12, 0x34, 0x5F, 0xFF, ... 0xFF}
+typedef enum {
+	PIN_ENC_ASCII,
+	PIN_ENC_BCD,
+	PIN_ENC_GP, // Global platorm encoding e.g. "12345" -> {0x25, 0x12, 0x34, 0x5F, 0xFF, ... 0xFF}
 } tPinEncoding;
 
-typedef enum
-{
-	CARD_PTEID_IAS07, // v3 v4
+typedef enum {
+	CARD_PTEID_IAS07,  // v3 v4
 	CARD_PTEID_IAS101, // legacy
-    CARD_PTEID_IAS5, // v5 (CC 2.0)
-    CARD_UNKNOWN,
+	CARD_PTEID_IAS5,   // v5 (CC 2.0)
+	CARD_UNKNOWN,
 } tCardType;
 
-typedef enum
-{
+typedef enum {
 	CARD_INSERTED,
 	CARD_NOT_PRESENT,
 	CARD_STILL_PRESENT,
@@ -131,7 +117,6 @@ const unsigned long ALL_READERS = 0xFFFFFFFF; // used in CCardLayer::GetStatusCh
 const unsigned long FULL_FILE = 0xFFFFFFFF; // used in CReader::ReadFile()
 
 const unsigned long PIN_STATUS_UNKNOWN = 0xFFFFFFFE; // used in CReader::PinStatus()
-
 
 /* used in CReader::Ctrl() */
 
@@ -151,6 +136,6 @@ const long CTRL_PTEID_GETSIGNEDPINSTATUS = CTRL_PTEID + 2;
  *    - the key reference (1 byte)
  *    - the challenge to be signed (20 bytes) */
 const long CTRL_PTEID_INTERNAL_AUTH = CTRL_PTEID + 3;
-}
+} // namespace eIDMW
 
 #endif

@@ -21,61 +21,51 @@
 #include "pteidControls.h"
 #include "Log.h"
 
-HWND PteidControls::CreateText(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, TextData *textData)
-{
-    // CONTAINER
-    HWND hContainer = CreateWindow(
-        WC_STATIC,
-        L"",
-        WS_CHILD | WS_VISIBLE,
-        x, y, nWidth, nHeight,
-        hWndParent, hMenu, hInstance, NULL);
-    SetWindowSubclass(hContainer, Text_Container_Proc, 0, (DWORD_PTR)textData);
+HWND PteidControls::CreateText(int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance,
+							   TextData *textData) {
+	// CONTAINER
+	HWND hContainer =
+		CreateWindow(WC_STATIC, L"", WS_CHILD | WS_VISIBLE, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, NULL);
+	SetWindowSubclass(hContainer, Text_Container_Proc, 0, (DWORD_PTR)textData);
 
-    // TEXT
-    DWORD dwStyle = WS_CHILD | WS_VISIBLE;
-    dwStyle |= (textData->horizontalCentered ? SS_CENTER : SS_LEFT);
-    HWND hText = CreateWindow(
-        WC_STATIC,
-        textData->text,
-        dwStyle,
-        0, 0, nWidth, nHeight,
-        hContainer, hMenu, hInstance, NULL);
-    SendMessage(hText, WM_SETFONT, (WPARAM)textData->font, 0);
+	// TEXT
+	DWORD dwStyle = WS_CHILD | WS_VISIBLE;
+	dwStyle |= (textData->horizontalCentered ? SS_CENTER : SS_LEFT);
+	HWND hText =
+		CreateWindow(WC_STATIC, textData->text, dwStyle, 0, 0, nWidth, nHeight, hContainer, hMenu, hInstance, NULL);
+	SendMessage(hText, WM_SETFONT, (WPARAM)textData->font, 0);
 
-    textData->hMainWnd = hText;
+	textData->hMainWnd = hText;
 
-    return hContainer;
+	return hContainer;
 }
 
-LRESULT CALLBACK PteidControls::Text_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
-{
-    TextData *textFieldData = (TextData *)dwRefData;
-    switch (uMsg)
-    {
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
+LRESULT CALLBACK PteidControls::Text_Container_Proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
+													UINT_PTR uIdSubclass, DWORD_PTR dwRefData) {
+	TextData *textFieldData = (TextData *)dwRefData;
+	switch (uMsg) {
+	case WM_PAINT: {
+		PAINTSTRUCT ps;
+		HDC hdc = BeginPaint(hWnd, &ps);
 
-        SetBkMode(hdc, TRANSPARENT);
+		SetBkMode(hdc, TRANSPARENT);
 
-        EndPaint(hWnd, &ps);
-        return 0;
-    }
-    case WM_CTLCOLORSTATIC:
-    {
-        MWLOG(LEV_DEBUG, MOD_DLG, L"  --> PteidControls::Text_Container_Proc WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)", wParam, lParam);
+		EndPaint(hWnd, &ps);
+		return 0;
+	}
+	case WM_CTLCOLORSTATIC: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> PteidControls::Text_Container_Proc WM_CTLCOLORSTATIC (wParam=%X, lParam=%X)",
+			  wParam, lParam);
 
-        HDC hdc = (HDC)wParam;
+		HDC hdc = (HDC)wParam;
 
-        SetBkMode(hdc, TRANSPARENT);
-        SetTextColor(hdc, textFieldData->color);
+		SetBkMode(hdc, TRANSPARENT);
+		SetTextColor(hdc, textFieldData->color);
 
-        return(LRESULT)GetStockObject(NULL_BRUSH);
-    }
-    default:
-        break;
-    }
-    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+		return (LRESULT)GetStockObject(NULL_BRUSH);
+	}
+	default:
+		break;
+	}
+	return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 }

@@ -26,11 +26,12 @@ namespace eIDMW {
 class PhotoPteid {
 public:
 	EIDMW_APL_API PhotoPteid();
-	EIDMW_APL_API PhotoPteid(CByteArray &photo, CByteArray &cbeff, CByteArray &facialrechdr, CByteArray &facialinfo, CByteArray &imageinfo);
+	EIDMW_APL_API PhotoPteid(CByteArray &photo, CByteArray &cbeff, CByteArray &facialrechdr, CByteArray &facialinfo,
+							 CByteArray &imageinfo);
 	EIDMW_APL_API PhotoPteid(CByteArray &photo);
 	EIDMW_APL_API virtual ~PhotoPteid();
-	EIDMW_APL_API CByteArray *getPhotoPNG();						/**< Return field Photo in png format */
-	EIDMW_APL_API CByteArray *getPhotoRaw();						/**< Return field Photo in the original jp2 format */
+	EIDMW_APL_API CByteArray *getPhotoPNG(); /**< Return field Photo in png format */
+	EIDMW_APL_API CByteArray *getPhotoRaw(); /**< Return field Photo in the original jp2 format */
 	EIDMW_APL_API CByteArray *getCbeff();
 	EIDMW_APL_API CByteArray *getFacialrechdr();
 	EIDMW_APL_API CByteArray *getFacialinfo();

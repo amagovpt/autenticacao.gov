@@ -30,8 +30,8 @@
 #ifndef __CACHE__H__
 #define __CACHE__H__
 
-extern BOOL	CacheCertificate(const char * Path, PBYTE data, int data_len);
-extern BOOL getCacheFilePath(char *filename_bin, char* path, DWORD path_len);
-extern BOOL readFromCache(const char *cache_path, char * Buf);
+extern BOOL CacheCertificate(const char *Path, PBYTE data, int data_len);
+extern BOOL getCacheFilePath(char *filename_bin, char *path, DWORD path_len);
+extern BOOL readFromCache(const char *cache_path, char *Buf);
 
 #endif

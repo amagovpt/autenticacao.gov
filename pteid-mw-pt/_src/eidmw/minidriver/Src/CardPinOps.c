@@ -41,65 +41,48 @@
 //
 
 #define WHERE "CardAuthenticatePin()"
-DWORD WINAPI   CardAuthenticatePin
-	(
-	__in                 PCARD_DATA  pCardData,
-	__in                 LPWSTR      pwszUserId,
-	__in_bcount(cbPin)   PBYTE       pbPin,
-	__in                 DWORD       cbPin,
-	__out_opt            PDWORD      pcAttemptsRemaining
-	)
-{
+DWORD WINAPI CardAuthenticatePin(__in PCARD_DATA pCardData, __in LPWSTR pwszUserId, __in_bcount(cbPin) PBYTE pbPin,
+								 __in DWORD cbPin, __out_opt PDWORD pcAttemptsRemaining) {
 	DWORD dwReturn = SCARD_S_SUCCESS;
 	PIN_INFO pbPinInfo;
 	DWORD dwDataLen;
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
-	
 
 	/********************/
 	/* Check Parameters */
 	/********************/
-	if ( pCardData == NULL )
-	{
+	if (pCardData == NULL) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if(wcscmp(pwszUserId, L"user") != 0 && wcscmp(pwszUserId, L"anonymous") != 0
-		&& wcscmp(pwszUserId, L"admin") != 0)
-	{
+	if (wcscmp(pwszUserId, L"user") != 0 && wcscmp(pwszUserId, L"anonymous") != 0 &&
+		wcscmp(pwszUserId, L"admin") != 0) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pwszUserId]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if(pbPin == NULL || cbPin == 0)
-	{	
+	if (pbPin == NULL || cbPin == 0) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pbPin][cbPin]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	dwReturn = CardGetProperty(pCardData, 
-		CP_CARD_PIN_INFO, 
-		(PBYTE) &pbPinInfo, 
-		sizeof(pbPinInfo), 
-		&dwDataLen, 
-		ROLE_DIGSIG); /* Apparently CardAuthenticatePin() assumes authentication PIN */
+	dwReturn = CardGetProperty(pCardData, CP_CARD_PIN_INFO, (PBYTE)&pbPinInfo, sizeof(pbPinInfo), &dwDataLen,
+							   ROLE_DIGSIG); /* Apparently CardAuthenticatePin() assumes authentication PIN */
 
 	if (dwReturn != 0) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "CardGetProperty Failed: %02X", dwReturn);
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if ( pbPinInfo.PinType == ExternalPinType ) {	
+	if (pbPinInfo.PinType == ExternalPinType) {
 		dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, FALSE, 0);
-	} 
-	else {
+	} else {
 		dwReturn = cal_auth_pin(pCardData, pbPin, cbPin, pcAttemptsRemaining, 0);
 	}
 
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
+	if (dwReturn != SCARD_S_SUCCESS) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Logon: [0x%02X]", dwReturn);
 		CLEANUP(dwReturn);
 	}
@@ -108,7 +91,7 @@ cleanup:
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
 
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -119,21 +102,16 @@ cleanup:
 //
 
 #define WHERE "CardGetChallenge()"
-DWORD WINAPI   CardGetChallenge
-	(
-	__in                                   PCARD_DATA  pCardData,
-	__deref_out_bcount(*pcbChallengeData)  PBYTE       *ppbChallengeData,
-	__out                                  PDWORD      pcbChallengeData
-	)
-{
-	DWORD    dwReturn = SCARD_S_SUCCESS;
+DWORD WINAPI CardGetChallenge(__in PCARD_DATA pCardData, __deref_out_bcount(*pcbChallengeData) PBYTE *ppbChallengeData,
+							  __out PDWORD pcbChallengeData) {
+	DWORD dwReturn = SCARD_S_SUCCESS;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -144,22 +122,16 @@ cleanup:
 //
 
 #define WHERE "CardAuthenticateChallenge()"
-DWORD WINAPI   CardAuthenticateChallenge
-	(
-	__in                             PCARD_DATA  pCardData,
-	__in_bcount(cbResponseData)      PBYTE       pbResponseData,
-	__in                             DWORD       cbResponseData,
-	__out_opt                        PDWORD      pcAttemptsRemaining
-	)
-{
-	DWORD    dwReturn = SCARD_S_SUCCESS;
+DWORD WINAPI CardAuthenticateChallenge(__in PCARD_DATA pCardData, __in_bcount(cbResponseData) PBYTE pbResponseData,
+									   __in DWORD cbResponseData, __out_opt PDWORD pcAttemptsRemaining) {
+	DWORD dwReturn = SCARD_S_SUCCESS;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -185,13 +157,7 @@ cleanup:
 //
 
 #define WHERE "CardDeauthenticate()"
-DWORD WINAPI   CardDeauthenticate
-	(
-	__in     PCARD_DATA  pCardData,
-	__in     LPWSTR      pwszUserId,
-	__in     DWORD       dwFlags
-	)
-{
+DWORD WINAPI CardDeauthenticate(__in PCARD_DATA pCardData, __in LPWSTR pwszUserId, __in DWORD dwFlags) {
 	return SCARD_E_UNSUPPORTED_FEATURE;
 }
 #undef WHERE
@@ -203,18 +169,9 @@ DWORD WINAPI   CardDeauthenticate
 //
 
 #define WHERE "CardAuthenticateEx()"
-DWORD WINAPI   CardAuthenticateEx  
-	(
-	__in                                   PCARD_DATA     pCardData,
-	__in                                   PIN_ID         PinId,
-	__in                                   DWORD          dwFlags,
-	__in                                   PBYTE          pbPinData,
-	__in                                   DWORD          cbPinData,
-	__deref_out_bcount_opt(*pcbSessionPin) PBYTE          *ppbSessionPin,
-	__out_opt                              PDWORD         pcbSessionPin,
-	__out_opt                              PDWORD         pcAttemptsRemaining
-	)
-{
+DWORD WINAPI CardAuthenticateEx(__in PCARD_DATA pCardData, __in PIN_ID PinId, __in DWORD dwFlags, __in PBYTE pbPinData,
+								__in DWORD cbPinData, __deref_out_bcount_opt(*pcbSessionPin) PBYTE *ppbSessionPin,
+								__out_opt PDWORD pcbSessionPin, __out_opt PDWORD pcAttemptsRemaining) {
 
 	/*
 	__in                 PCARD_DATA  pCardData,
@@ -234,36 +191,25 @@ DWORD WINAPI   CardAuthenticateEx
 	/********************/
 	/* Check Parameters */
 	/********************/
-	if ( pCardData == NULL )
-	{
+	if (pCardData == NULL) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
-	if ( ( PinId != ROLE_DIGSIG   ) &&
-		( PinId != ROLE_NONREP   ) )
-	{
+	if ((PinId != ROLE_DIGSIG) && (PinId != ROLE_NONREP)) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [PinId]:[0x%02X]", PinId);
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if ( ( (dwFlags & CARD_AUTHENTICATE_SESSION_PIN         ) == CARD_AUTHENTICATE_SESSION_PIN         ) ||
-		( (dwFlags & CARD_AUTHENTICATE_GENERATE_SESSION_PIN) == CARD_AUTHENTICATE_GENERATE_SESSION_PIN) )
-	{
-		if ( ( ppbSessionPin == NULL ) ||
-			( pcbSessionPin == NULL ) )
-		{
+	if (((dwFlags & CARD_AUTHENTICATE_SESSION_PIN) == CARD_AUTHENTICATE_SESSION_PIN) ||
+		((dwFlags & CARD_AUTHENTICATE_GENERATE_SESSION_PIN) == CARD_AUTHENTICATE_GENERATE_SESSION_PIN)) {
+		if ((ppbSessionPin == NULL) || (pcbSessionPin == NULL)) {
 			LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [ppbSessionPin][pcbSessionPin]");
 			CLEANUP(SCARD_E_INVALID_PARAMETER);
 		}
 	}
 
 	/* External Pin?  */
-	dwReturn = CardGetProperty(pCardData, 
-		CP_CARD_PIN_INFO, 
-		(PBYTE) &pbPinInfo, 
-		sizeof(pbPinInfo), 
-		&dwDataLen, 
-		PinId);
+	dwReturn = CardGetProperty(pCardData, CP_CARD_PIN_INFO, (PBYTE)&pbPinInfo, sizeof(pbPinInfo), &dwDataLen, PinId);
 	if (dwReturn != 0) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "CardGetProperty Failed: %02X", dwReturn);
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
@@ -271,23 +217,22 @@ DWORD WINAPI   CardAuthenticateEx
 
 	specific_pin_id = PinId == ROLE_DIGSIG ? 0 : 1;
 
-	if ( pbPinInfo.PinType == ExternalPinType ) {	
-		dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, (dwFlags & CARD_PIN_SILENT_CONTEXT ) == CARD_PIN_SILENT_CONTEXT,
-				specific_pin_id);
-	} 
-	else {
+	if (pbPinInfo.PinType == ExternalPinType) {
+		dwReturn =
+			PteidAuthenticateExternal(pCardData, pcAttemptsRemaining,
+									  (dwFlags & CARD_PIN_SILENT_CONTEXT) == CARD_PIN_SILENT_CONTEXT, specific_pin_id);
+	} else {
 		dwReturn = cal_auth_pin(pCardData, pbPinData, cbPinData, pcAttemptsRemaining, specific_pin_id);
 	}
 
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
+	if (dwReturn != SCARD_S_SUCCESS) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Logon: [0x%02X]", dwReturn);
 		CLEANUP(dwReturn);
 	}
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -298,23 +243,17 @@ cleanup:
 //
 
 #define WHERE "CardGetChallengeEx()"
-DWORD WINAPI   CardGetChallengeEx
-	(
-	__in                                   PCARD_DATA  pCardData,
-	__in                                   PIN_ID      PinId,
-	__deref_out_bcount(*pcbChallengeData)  PBYTE       *ppbChallengeData,
-	__out                                  PDWORD      pcbChallengeData,
-	__in                                   DWORD       dwFlags
-	)
-{
-	DWORD    dwReturn = SCARD_S_SUCCESS;
+DWORD WINAPI CardGetChallengeEx(__in PCARD_DATA pCardData, __in PIN_ID PinId,
+								__deref_out_bcount(*pcbChallengeData) PBYTE *ppbChallengeData,
+								__out PDWORD pcbChallengeData, __in DWORD dwFlags) {
+	DWORD dwReturn = SCARD_S_SUCCESS;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -325,15 +264,8 @@ cleanup:
 //
 
 #define WHERE "CardDeauthenticateEx()"
-DWORD WINAPI   CardDeauthenticateEx
-	(
-	__in  PCARD_DATA  pCardData,
-	__in  PIN_SET     PinId,
-	__in  DWORD       dwFlags
-	)
-{
+DWORD WINAPI CardDeauthenticateEx(__in PCARD_DATA pCardData, __in PIN_SET PinId, __in DWORD dwFlags) {
 	return SCARD_E_UNSUPPORTED_FEATURE;
-	
 }
 #undef WHERE
 
@@ -344,28 +276,19 @@ DWORD WINAPI   CardDeauthenticateEx
 //
 
 #define WHERE "CardChangeAuthenticatorEx()"
-DWORD WINAPI   CardChangeAuthenticatorEx
-	(
-	__in                                PCARD_DATA  pCardData,
-	__in                                DWORD       dwFlags,
-	__in                                PIN_ID      dwAuthenticatingPinId,
-	__in_bcount(cbCurrentAuthenticator) PBYTE       pbAuthenticatingPinData,
-	__in                                DWORD       cbAuthenticatingPinData,
-	__in                                PIN_ID      dwTargetPinId,
-	__in_bcount(cbNewAuthenticator)     PBYTE       pbTargetData,
-	__in                                DWORD       cbTargetData,
-	__in                                DWORD       cRetryCount,
-	__out_opt                           PDWORD      pcAttemptsRemaining
-	)
-{
-	DWORD    dwReturn = SCARD_S_SUCCESS;
+DWORD WINAPI CardChangeAuthenticatorEx(__in PCARD_DATA pCardData, __in DWORD dwFlags, __in PIN_ID dwAuthenticatingPinId,
+									   __in_bcount(cbCurrentAuthenticator) PBYTE pbAuthenticatingPinData,
+									   __in DWORD cbAuthenticatingPinData, __in PIN_ID dwTargetPinId,
+									   __in_bcount(cbNewAuthenticator) PBYTE pbTargetData, __in DWORD cbTargetData,
+									   __in DWORD cRetryCount, __out_opt PDWORD pcAttemptsRemaining) {
+	DWORD dwReturn = SCARD_S_SUCCESS;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -376,26 +299,18 @@ cleanup:
 //
 
 #define WHERE "CardUnblockPin()"
-DWORD WINAPI   CardUnblockPin
-	(
-	__in                                PCARD_DATA  pCardData,
-	__in                                LPWSTR      pwszUserId,
-	__in_bcount(cbAuthenticationData)   PBYTE       pbAuthenticationData,
-	__in                                DWORD       cbAuthenticationData,
-	__in_bcount(cbNewPinData)           PBYTE       pbNewPinData,
-	__in                                DWORD       cbNewPinData,
-	__in                                DWORD       cRetryCount,
-	__in                                DWORD       dwFlags
-	)
-{
-	DWORD    dwReturn = SCARD_S_SUCCESS;
+DWORD WINAPI CardUnblockPin(__in PCARD_DATA pCardData, __in LPWSTR pwszUserId,
+							__in_bcount(cbAuthenticationData) PBYTE pbAuthenticationData,
+							__in DWORD cbAuthenticationData, __in_bcount(cbNewPinData) PBYTE pbNewPinData,
+							__in DWORD cbNewPinData, __in DWORD cRetryCount, __in DWORD dwFlags) {
+	DWORD dwReturn = SCARD_S_SUCCESS;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -406,27 +321,20 @@ cleanup:
 //
 
 #define WHERE "CardChangeAuthenticator()"
-DWORD WINAPI   CardChangeAuthenticator
-	(
-	__in                                   PCARD_DATA    pCardData,
-	__in                                   LPWSTR        pwszUserId,
-	__in_bcount(cbCurrentAuthenticator)    PBYTE         pbCurrentAuthenticator,
-	__in                                   DWORD         cbCurrentAuthenticator,
-	__in_bcount(cbNewAuthenticator)        PBYTE         pbNewAuthenticator,
-	__in                                   DWORD         cbNewAuthenticator,
-	__in                                   DWORD         cRetryCount,
-	__in                                   DWORD         dwFlags,
-	__out_opt                              PDWORD        pcAttemptsRemaining
-	)
-{
-	DWORD    dwReturn = SCARD_S_SUCCESS;
+DWORD WINAPI CardChangeAuthenticator(__in PCARD_DATA pCardData, __in LPWSTR pwszUserId,
+									 __in_bcount(cbCurrentAuthenticator) PBYTE pbCurrentAuthenticator,
+									 __in DWORD cbCurrentAuthenticator,
+									 __in_bcount(cbNewAuthenticator) PBYTE pbNewAuthenticator,
+									 __in DWORD cbNewAuthenticator, __in DWORD cRetryCount, __in DWORD dwFlags,
+									 __out_opt PDWORD pcAttemptsRemaining) {
+	DWORD dwReturn = SCARD_S_SUCCESS;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 

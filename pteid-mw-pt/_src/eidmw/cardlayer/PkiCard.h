@@ -34,73 +34,67 @@
 
 #include "Card.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 class PaceAuthentication;
-class CPkiCard : public CCard
-{
+class CPkiCard : public CCard {
 public:
-    CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
-    virtual ~CPkiCard(void);
+	CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
+	virtual ~CPkiCard(void);
 
-    virtual tCardType GetType() = 0;
+	virtual tCardType GetType() = 0;
 
-    virtual CByteArray GetSerialNrBytes() = 0;
+	virtual CByteArray GetSerialNrBytes() = 0;
 
-    virtual void SelectApplication(const CByteArray & oAID);
+	virtual void SelectApplication(const CByteArray &oAID);
 
-    virtual CByteArray ReadUncachedFile(const std::string & csPath,
-        unsigned long ulOffset = 0, unsigned long ulMaxLen = FULL_FILE);
-    virtual void WriteUncachedFile(const std::string & csPath, unsigned long ulOffset,
-        const CByteArray & oData);
+	virtual CByteArray ReadUncachedFile(const std::string &csPath, unsigned long ulOffset = 0,
+										unsigned long ulMaxLen = FULL_FILE);
+	virtual void WriteUncachedFile(const std::string &csPath, unsigned long ulOffset, const CByteArray &oData);
 
-    virtual DlgPinUsage PinUsage2Dlg(const tPin & Pin, const tPrivKey *pKey) = 0;
+	virtual DlgPinUsage PinUsage2Dlg(const tPin &Pin, const tPrivKey *pKey) = 0;
 
-    virtual unsigned long PinStatus(const tPin & Pin) = 0;
-    virtual CByteArray RootCAPubKey() = 0;
-    virtual bool Activate(const char *pinCode, CByteArray &BCDDate,bool blockActivationPIN) = 0;
-    virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft, unsigned long unblockFlags) = 0;
-    
-    virtual bool PinCmd(tPinOperation operation, const tPin & Pin,
-        const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
-        bool bShowDlg=true, void *wndGeometry = 0, unsigned long unblockFlags=0);
+	virtual unsigned long PinStatus(const tPin &Pin) = 0;
+	virtual CByteArray RootCAPubKey() = 0;
+	virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN) = 0;
+	virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin,
+						   unsigned long &triesLeft, unsigned long unblockFlags) = 0;
 
-    virtual bool PinCmdIAS(tPinOperation operation, const tPin & Pin,
-        const std::string & csPin1, const std::string & csPin2,
-        unsigned long & ulRemaining, const tPrivKey *pKey = NULL,
-        bool bShowDlg=true, void *wndGeometry = 0 );
+	virtual bool PinCmd(tPinOperation operation, const tPin &Pin, const std::string &csPin1, const std::string &csPin2,
+						unsigned long &ulRemaining, const tPrivKey *pKey = NULL, bool bShowDlg = true,
+						void *wndGeometry = 0, unsigned long unblockFlags = 0);
 
-    virtual CByteArray Sign(const tPrivKey & key, const tPin & Pin,
-        unsigned long paddingType, const CByteArray & oData);
+	virtual bool PinCmdIAS(tPinOperation operation, const tPin &Pin, const std::string &csPin1,
+						   const std::string &csPin2, unsigned long &ulRemaining, const tPrivKey *pKey = NULL,
+						   bool bShowDlg = true, void *wndGeometry = 0);
 
-    virtual CByteArray GetRandom(unsigned long ulLen);
+	virtual CByteArray Sign(const tPrivKey &key, const tPin &Pin, unsigned long paddingType, const CByteArray &oData);
+
+	virtual CByteArray GetRandom(unsigned long ulLen);
 
 protected:
-    virtual bool SelectApplet();
-	virtual tFileInfo SelectFile(const std::string & csPath, bool bReturnFileInfo = false);
-    virtual CByteArray SelectByPath(const std::string & csPath, bool bReturnFileInfo = false) = 0;
+	virtual bool SelectApplet();
+	virtual tFileInfo SelectFile(const std::string &csPath, bool bReturnFileInfo = false);
+	virtual CByteArray SelectByPath(const std::string &csPath, bool bReturnFileInfo = false) = 0;
 
-    virtual CByteArray ReadBinary(unsigned long ulOffset, unsigned long ulLen);
-    virtual CByteArray UpdateBinary(unsigned long ulOffset, const CByteArray & oData);
+	virtual CByteArray ReadBinary(unsigned long ulOffset, unsigned long ulLen);
+	virtual CByteArray UpdateBinary(unsigned long ulOffset, const CByteArray &oData);
 
-	virtual unsigned char PinUsage2Pinpad(const tPin & Pin, const tPrivKey *pKey);
-    virtual void showPinDialog(tPinOperation operation, const tPin & Pin,
-        std::string & csPin1, std::string & csPin2, const tPrivKey *pKey, void *wndGeometry = 0 ) = 0;
+	virtual unsigned char PinUsage2Pinpad(const tPin &Pin, const tPrivKey *pKey);
+	virtual void showPinDialog(tPinOperation operation, const tPin &Pin, std::string &csPin1, std::string &csPin2,
+							   const tPrivKey *pKey, void *wndGeometry = 0) = 0;
 
-    virtual CByteArray MakePinCmd(tPinOperation operation, const tPin & Pin, bool specialP1Value=false);
-    virtual CByteArray MakePinCmdIAS(tPinOperation operation, const tPin & Pin, void *wndGeometry = 0 );
-    virtual CByteArray MakePinBuf(const tPin & Pin, const std::string & csPin, bool bEmptyPin, bool bPukMerge);
+	virtual CByteArray MakePinCmd(tPinOperation operation, const tPin &Pin, bool specialP1Value = false);
+	virtual CByteArray MakePinCmdIAS(tPinOperation operation, const tPin &Pin, void *wndGeometry = 0);
+	virtual CByteArray MakePinBuf(const tPin &Pin, const std::string &csPin, bool bEmptyPin, bool bPukMerge);
 
-    virtual void SetSecurityEnv(const tPrivKey & key, unsigned long algo,
-        unsigned long ulInputLen) = 0;
-    virtual CByteArray SignInternal(const tPrivKey & key, unsigned long algo,
-        const CByteArray & oData, const tPin *pPin = NULL) = 0;
+	virtual void SetSecurityEnv(const tPrivKey &key, unsigned long algo, unsigned long ulInputLen) = 0;
+	virtual CByteArray SignInternal(const tPrivKey &key, unsigned long algo, const CByteArray &oData,
+									const tPin *pPin = NULL) = 0;
 
 	tSelectAppletMode m_selectAppletMode;
-    CByteArray m_lastSelectedApplication;
+	CByteArray m_lastSelectedApplication;
 };
 
-}
+} // namespace eIDMW
 #endif

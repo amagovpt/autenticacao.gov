@@ -25,20 +25,18 @@
 
 #include "Export.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 #ifdef WIN32
-#pragma warning(disable:4290)			// Allow for 'throw()' specifications	
+#pragma warning(disable : 4290) // Allow for 'throw()' specifications
 #endif
 
-class CCardReaderInfo
-{
+class CCardReaderInfo {
 public:
 	EIDMW_CAL_API static CCardReaderInfo *GetCardReaderInfo(void);
 
 	EIDMW_CAL_API void CollectInfo(void);
 
-	EIDMW_CAL_API int GetNoOfReaders(void)	{return m_NoOfReaders;};
+	EIDMW_CAL_API int GetNoOfReaders(void) { return m_NoOfReaders; };
 
 private:
 	CCardReaderInfo(void);
@@ -46,7 +44,6 @@ private:
 	static CCardReaderInfo *m_CardReaderInfo;
 
 	int m_NoOfReaders;
-
 };
 
-}
+} // namespace eIDMW

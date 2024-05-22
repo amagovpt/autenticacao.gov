@@ -24,7 +24,6 @@
 #ifndef __LANGUTIL_H__
 #define __LANGUTIL_H__
 
-
 #pragma once
 #ifdef _WIN32
 #include <windows.h>
@@ -34,19 +33,24 @@
 #endif
 #include "dialogs.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-class DLGS_EXPORT CLang
-{
+class DLGS_EXPORT CLang {
 public:
-	static tLanguage GetLang()			{ if(!ms_InitOk) Init(); return ms_Lang; }
+	static tLanguage GetLang() {
+		if (!ms_InitOk)
+			Init();
+		return ms_Lang;
+	}
 	static const wchar_t *GetLangW();
 	static unsigned long GetLangL();
-	static void SetLang(tLanguage lang)	{ ms_Lang=lang; ms_InitOk=true; }
+	static void SetLang(tLanguage lang) {
+		ms_Lang = lang;
+		ms_InitOk = true;
+	}
 	static void SetLangW(const wchar_t *lang);
 	static void SetLangL(unsigned long lang);
-	static void ResetInit()				{ ms_InitOk=false; }
+	static void ResetInit() { ms_InitOk = false; }
 
 private:
 	CLang() {};
@@ -54,37 +58,31 @@ private:
 	static void Init();
 
 private:
-	static bool   ms_InitOk;
-	static tLanguage   ms_Lang;
-
+	static bool ms_InitOk;
+	static tLanguage ms_Lang;
 };
 
 #ifdef _WIN32
-	static HFONT GetSystemFont()
-	{
-		BOOL fResult;
-		HFONT TextFont;
-		NONCLIENTMETRICS nc;
-		nc.cbSize = sizeof(NONCLIENTMETRICS);
-		
-		//Get the default system font taking into account theme and resolutions, etc...
-		fResult = SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &nc, 0);
-		
-		if( fResult )     
-		{
-			LOGFONT lf = nc.lfMessageFont;
+static HFONT GetSystemFont() {
+	BOOL fResult;
+	HFONT TextFont;
+	NONCLIENTMETRICS nc;
+	nc.cbSize = sizeof(NONCLIENTMETRICS);
 
-			TextFont = CreateFont(lf.lfHeight, lf.lfWidth, 
-				lf.lfEscapement, lf.lfOrientation, lf.lfWeight, 
-				lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet, 
-				lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality, 
-				lf.lfPitchAndFamily, lf.lfFaceName); 
-		}
+	// Get the default system font taking into account theme and resolutions, etc...
+	fResult = SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &nc, 0);
 
-		return TextFont;
+	if (fResult) {
+		LOGFONT lf = nc.lfMessageFont;
 
-	};
+		TextFont = CreateFont(lf.lfHeight, lf.lfWidth, lf.lfEscapement, lf.lfOrientation, lf.lfWeight, lf.lfItalic,
+							  lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet, lf.lfOutPrecision, lf.lfClipPrecision,
+							  lf.lfQuality, lf.lfPitchAndFamily, lf.lfFaceName);
+	}
+
+	return TextFont;
+};
 #endif
 
-}
+} // namespace eIDMW
 #endif //__LANGUTIL_H__

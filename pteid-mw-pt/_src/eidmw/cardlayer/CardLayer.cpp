@@ -23,20 +23,16 @@
 #include "CardLayer.h"
 #include "Cache.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-CCardLayer::CCardLayer(void)
-{
+CCardLayer::CCardLayer(void) {
 	m_ulReaderCount = 0;
 	for (unsigned long i = 0; i < MAX_READERS; i++)
 		m_tpReaders[i] = NULL;
 }
 
-CCardLayer::~CCardLayer(void)
-{
-	for (unsigned long i = 0; i < MAX_READERS; i++)
-	{
+CCardLayer::~CCardLayer(void) {
+	for (unsigned long i = 0; i < MAX_READERS; i++) {
 		if (m_tpReaders[i] != NULL) {
 			delete m_tpReaders[i];
 			m_tpReaders[i] = NULL;
@@ -44,13 +40,11 @@ CCardLayer::~CCardLayer(void)
 	}
 }
 
-DlgPinOperation PinOperation2Dlg(tPinOperation operation)
-{
-	switch (operation)
-	{
+DlgPinOperation PinOperation2Dlg(tPinOperation operation) {
+	switch (operation) {
 	case PIN_OP_CHANGE:
 		return DLG_PIN_OP_CHANGE;
-		//We ignore the RESET with no change case for now
+		// We ignore the RESET with no change case for now
 	case PIN_OP_RESET:
 		return DLG_PIN_OP_UNBLOCK_CHANGE;
 	case PIN_OP_RESET_NO_PUK:
@@ -60,10 +54,7 @@ DlgPinOperation PinOperation2Dlg(tPinOperation operation)
 	}
 }
 
-void CCardLayer::ForceRelease(void)
-{
-	m_oContext.m_oPCSC.ReleaseContext();
-}
+void CCardLayer::ForceRelease(void) { m_oContext.m_oPCSC.ReleaseContext(); }
 
 /**
  * This is something you typically do just once, unless you
@@ -72,19 +63,15 @@ void CCardLayer::ForceRelease(void)
  * change, so you have to call this function only in
  * C_GetSlotList().
  */
-CReadersInfo CCardLayer::ListReaders()
-{
+CReadersInfo CCardLayer::ListReaders() {
 	CReadersInfo theReadersInfo;
 	CByteArray oReaders;
 
 	// Do an SCardEstablishContext() if not done yet
-	try
-	{
+	try {
 		m_oContext.m_oPCSC.EstablishContext();
 		oReaders = m_oContext.m_oPCSC.ListReaders();
-	}
-	catch(CMWException &e)
-	{
+	} catch (CMWException &e) {
 		unsigned long err = e.GetError();
 		if (err == EIDMW_ERR_NO_READER)
 			return theReadersInfo;
@@ -94,47 +81,40 @@ CReadersInfo CCardLayer::ListReaders()
 
 	theReadersInfo = CReadersInfo(&m_oContext.m_oPCSC, oReaders);
 
-	if (oReaders.Size() != 0) 
-	{
-		m_szDefaultReaderName = (char *) oReaders.GetBytes();
+	if (oReaders.Size() != 0) {
+		m_szDefaultReaderName = (char *)oReaders.GetBytes();
 	}
 
 	return theReadersInfo;
 }
 
-CReader & CCardLayer::getReader(const std::string &csReaderName)
-{
+CReader &CCardLayer::getReader(const std::string &csReaderName) {
 	// Do an SCardEstablishContext() if not done yet
 	m_oContext.m_oPCSC.EstablishContext();
 
 	CReader *pRet = NULL;
 
 	// If csReaderName == "", take the default (= first found) reader name
-	const std::string *pcsReaderName = (csReaderName.size() == 0) ?
-		GetDefaultReader() : &csReaderName;
+	const std::string *pcsReaderName = (csReaderName.size() == 0) ? GetDefaultReader() : &csReaderName;
 	if (pcsReaderName->size() == 0)
 		throw CMWEXCEPTION(EIDMW_ERR_NO_READER);
 
-	//std::cout << "pcsReaderName = " << *pcsReaderName <<"\n";
+	// std::cout << "pcsReaderName = " << *pcsReaderName <<"\n";
 
 	// First check if the reader doesn't exist already
-	for (unsigned long i = 0; i < MAX_READERS; i++)
-	{
+	for (unsigned long i = 0; i < MAX_READERS; i++) {
 		if (m_tpReaders[i] != NULL) {
-			//std::cout <<"...Readerx: " <<m_tpReaders[i]->GetReaderName() << "\n";
-			if (m_tpReaders[i]->GetReaderName() == *pcsReaderName)
-			{
-				pRet =  m_tpReaders[i];
+			// std::cout <<"...Readerx: " <<m_tpReaders[i]->GetReaderName() << "\n";
+			if (m_tpReaders[i]->GetReaderName() == *pcsReaderName) {
+				pRet = m_tpReaders[i];
 				break;
 			}
 		}
 	}
 
 	// No CReader object for this readername -> make one
-	if (pRet == NULL)
-	{	
-		for (unsigned long i = 0; i < MAX_READERS; i++)
-		{
+	if (pRet == NULL) {
+		for (unsigned long i = 0; i < MAX_READERS; i++) {
 			if (m_tpReaders[i] == NULL) {
 				pRet = new CReader(*pcsReaderName, &m_oContext);
 				m_tpReaders[i] = pRet;
@@ -144,31 +124,25 @@ CReader & CCardLayer::getReader(const std::string &csReaderName)
 	}
 
 	// No room in m_tpReaders -> throw an exception
-	if (pRet == NULL)
-	{	
+	if (pRet == NULL) {
 		throw CMWEXCEPTION(EIDMW_ERR_LIMIT);
 	}
-	
+
 	return *pRet;
 }
 
-std::string * CCardLayer::GetDefaultReader()
-{
+std::string *CCardLayer::GetDefaultReader() {
 	std::string *pRet = &m_szDefaultReaderName;
 
-	if (m_szDefaultReaderName.size() == 0)
-	{
+	if (m_szDefaultReaderName.size() == 0) {
 		CByteArray csReaders = m_oContext.m_oPCSC.ListReaders();
 		if (csReaders.Size() != 0)
-			m_szDefaultReaderName = (char *) csReaders.GetBytes();
+			m_szDefaultReaderName = (char *)csReaders.GetBytes();
 	}
 
 	return pRet;
 }
 
-bool CCardLayer::DeleteFromCache(const std::string & csSerialNr)
-{
-	return CCache::Delete(csSerialNr);
-}
+bool CCardLayer::DeleteFromCache(const std::string &csSerialNr) { return CCache::Delete(csSerialNr); }
 
-}
+} // namespace eIDMW

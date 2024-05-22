@@ -25,13 +25,11 @@
 #include <openssl/x509.h>
 #include <openssl/ocsp.h>
 
-namespace eIDMW
-{
-    PAdESExtender::PAdESExtender(PDFSignature *signedPdfDoc) 
-    {
-        m_signedPdfDoc = signedPdfDoc;
-        m_calledFromLtaMethod = false;
-    }
+namespace eIDMW {
+PAdESExtender::PAdESExtender(PDFSignature *signedPdfDoc) {
+	m_signedPdfDoc = signedPdfDoc;
+	m_calledFromLtaMethod = false;
+}
 
     bool PAdESExtender::addT()
     {
@@ -46,435 +44,409 @@ namespace eIDMW
         const char *hexToken = NULL;
         unsigned long len = doc->getSigByteArray(&to_sign);
 
-        if (len == 0) {
-            MWLOG(LEV_ERROR, MOD_APL, "%s: getSigByteArray() failed! Invalid signature_offset.", __FUNCTION__);
-            return false;
-        }
+	if (len == 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: getSigByteArray() failed! Invalid signature_offset.", __FUNCTION__);
+		return false;
+	}
 
-        TSAClient tsp;
+	TSAClient tsp;
 
-        //Compute SHA-256 of the signed digest
-        CByteArray data(to_sign, len);
-        CByteArray hashToBeSigned;
-        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
-        cryptoFwk->GetHash(data, FWK_ALGO_SHA256, &hashToBeSigned);
+	// Compute SHA-256 of the signed digest
+	CByteArray data(to_sign, len);
+	CByteArray hashToBeSigned;
+	APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+	cryptoFwk->GetHash(data, FWK_ALGO_SHA256, &hashToBeSigned);
 
-        tsp.timestamp_data(hashToBeSigned.GetBytes(), hashToBeSigned.Size());
-        CByteArray tsresp = tsp.getResponse();
+	tsp.timestamp_data(hashToBeSigned.GetBytes(), hashToBeSigned.Size());
+	CByteArray tsresp = tsp.getResponse();
 
-        unsigned char *timestamp_token = NULL;
-        int tsp_token_len = 0;
+	unsigned char *timestamp_token = NULL;
+	int tsp_token_len = 0;
 
-        if (tsresp.Size() == 0) {
-            MWLOG(LEV_ERROR, MOD_APL, "LTV: Timestamp Error - response is empty");
-            success = false;
-            goto cleanup;
-        }
+	if (tsresp.Size() == 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "LTV: Timestamp Error - response is empty");
+		success = false;
+		goto cleanup;
+	}
 
-        timestamp_token = tsresp.GetBytes();
-        tsp_token_len = tsresp.Size();
-        
-        if (!getTokenFromTsResponse(timestamp_token, tsp_token_len, &tsToken, &tsTokenLen)) {
-            MWLOG(LEV_ERROR, MOD_APL, "LTV: Error getting TimeStampToken from respnse.");
-            success = false;
-            goto cleanup;
-        }
+	timestamp_token = tsresp.GetBytes();
+	tsp_token_len = tsresp.Size();
 
-        hexToken = bin2AsciiHex(tsToken, tsTokenLen);
+	if (!getTokenFromTsResponse(timestamp_token, tsp_token_len, &tsToken, &tsTokenLen)) {
+		MWLOG(LEV_ERROR, MOD_APL, "LTV: Error getting TimeStampToken from respnse.");
+		success = false;
+		goto cleanup;
+	}
 
-        doc->closeSignature((const char *)hexToken);
-        m_signedPdfDoc->save();
+	hexToken = bin2AsciiHex(tsToken, tsTokenLen);
 
-    cleanup:
-        if (hexToken)
-            delete[] hexToken;
+	doc->closeSignature((const char *)hexToken);
+	m_signedPdfDoc->save();
 
-        if (to_sign)
-            free(to_sign);
+cleanup:
+	if (hexToken)
+		delete[] hexToken;
 
-        return success;
-    }
+	if (to_sign)
+		free(to_sign);
 
-    bool PAdESExtender::findIssuerInEidStore(APL_CryptoFwkPteid * cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba) {
-        bool issuer_found = false;
-        APL_Certifs eidstore;
+	return success;
+}
 
-        for (unsigned long i = 0; i != eidstore.countAll(); i++) {
-            const CByteArray & candidate_issuer = eidstore.getCert(i)->getData();
-            if (cryptoFwk->isIssuer(certif_ba, candidate_issuer)) {
-                issuer_found = true;
-                issuer_ba.ClearContents();
-                issuer_ba.Append(candidate_issuer);
-                MWLOG(LEV_INFO, MOD_APL, "%s: Found issuer: %s", eidstore.getCert(i)->getOwnerName(), __FUNCTION__);
-                break;
-            }
+bool PAdESExtender::findIssuerInEidStore(APL_CryptoFwkPteid *cryptoFwk, CByteArray &certif_ba, CByteArray &issuer_ba) {
+	bool issuer_found = false;
+	APL_Certifs eidstore;
 
-        }
+	for (unsigned long i = 0; i != eidstore.countAll(); i++) {
+		const CByteArray &candidate_issuer = eidstore.getCert(i)->getData();
+		if (cryptoFwk->isIssuer(certif_ba, candidate_issuer)) {
+			issuer_found = true;
+			issuer_ba.ClearContents();
+			issuer_ba.Append(candidate_issuer);
+			MWLOG(LEV_INFO, MOD_APL, "%s: Found issuer: %s", eidstore.getCert(i)->getOwnerName(), __FUNCTION__);
+			break;
+		}
+	}
 
-        return issuer_found;
-    }
+	return issuer_found;
+}
 
-    /* 
-       Extract the OCSP signing certificate from the response and add it to m_validationData
-       The return value means if we need to add revocation info (CRL) for the OCSP certificate itself
-    */
-    bool PAdESExtender::addOCSPCertToValidationData(CByteArray &ocsp_response_ba, CByteArray &out_ocsp_cert) {
-        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
-        bool check_revocation = !cryptoFwk->GetOCSPCert(ocsp_response_ba, out_ocsp_cert);
+/*
+   Extract the OCSP signing certificate from the response and add it to m_validationData
+   The return value means if we need to add revocation info (CRL) for the OCSP certificate itself
+*/
+bool PAdESExtender::addOCSPCertToValidationData(CByteArray &ocsp_response_ba, CByteArray &out_ocsp_cert) {
+	APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+	bool check_revocation = !cryptoFwk->GetOCSPCert(ocsp_response_ba, out_ocsp_cert);
 
-        int data_len = out_ocsp_cert.Size();
-        if (data_len > 0) {
-            unsigned char *data = out_ocsp_cert.GetBytes();
-            ValidationDataElement vde(data, data_len, ValidationDataElement::CERT);
-            addValidationElement(vde);
-        }
+	int data_len = out_ocsp_cert.Size();
+	if (data_len > 0) {
+		unsigned char *data = out_ocsp_cert.GetBytes();
+		ValidationDataElement vde(data, data_len, ValidationDataElement::CERT);
+		addValidationElement(vde);
+	}
 
-        return check_revocation;
-    }
+	return check_revocation;
+}
 
-    unsigned long PAdESExtender::getCertUniqueId(const unsigned char * data, int dataSize)
-    {
-        X509 *pX509 = NULL;
-        pX509 = d2i_X509(&pX509, &data, dataSize);
-        long cert_unique_id = X509_issuer_and_serial_hash(pX509);
+unsigned long PAdESExtender::getCertUniqueId(const unsigned char *data, int dataSize) {
+	X509 *pX509 = NULL;
+	pX509 = d2i_X509(&pX509, &data, dataSize);
+	long cert_unique_id = X509_issuer_and_serial_hash(pX509);
 
-        X509_free(pX509);
+	X509_free(pX509);
 
-        return cert_unique_id;
-    }
+	return cert_unique_id;
+}
 
-    ValidationDataElement* PAdESExtender::addValidationElement(ValidationDataElement &elem)
-    {
-   
-        if (elem.getType() == ValidationDataElement::CERT)
-        {
-            signed long uniqueCertId = getCertUniqueId(elem.getData(), elem.getSize());
-            if (m_certsInDoc.find(uniqueCertId) != m_certsInDoc.end())
-            {
-                return m_certsInDoc.at(uniqueCertId);
-            }
+ValidationDataElement *PAdESExtender::addValidationElement(ValidationDataElement &elem) {
 
-            /* If the cert has not been added to validation data, create new element. */
-            ValidationDataElement *newElem = new ValidationDataElement(elem);
-            m_certsInDoc.insert(std::pair<unsigned long, ValidationDataElement *>(uniqueCertId, newElem));
-            m_validationData.push_back(newElem);
-            return newElem;
-        }
-        ValidationDataElement *newElem = new ValidationDataElement(elem);
-        m_validationData.push_back(newElem);
-        return newElem;
-    }
+	if (elem.getType() == ValidationDataElement::CERT) {
+		signed long uniqueCertId = getCertUniqueId(elem.getData(), elem.getSize());
+		if (m_certsInDoc.find(uniqueCertId) != m_certsInDoc.end()) {
+			return m_certsInDoc.at(uniqueCertId);
+		}
 
-    void PAdESExtender::removeValidationElement(ValidationDataElement *elem)
-    {
+		/* If the cert has not been added to validation data, create new element. */
+		ValidationDataElement *newElem = new ValidationDataElement(elem);
+		m_certsInDoc.insert(std::pair<unsigned long, ValidationDataElement *>(uniqueCertId, newElem));
+		m_validationData.push_back(newElem);
+		return newElem;
+	}
+	ValidationDataElement *newElem = new ValidationDataElement(elem);
+	m_validationData.push_back(newElem);
+	return newElem;
+}
 
-        if (elem->getType() == ValidationDataElement::CERT)
-        {
-            signed long docCertId = getCertUniqueId(elem->getData(), elem->getSize());
-            std::vector<ValidationDataElement *>::iterator it = m_validationData.begin();
-            while(it != m_validationData.end())
-            {
-                ValidationDataElement *newVde = *it;
-                if (newVde->getType() == ValidationDataElement::CERT)
-                {
-                    signed long newVdeId = getCertUniqueId(newVde->getData(), newVde->getSize());
-                    if (newVdeId == docCertId)
-                    {
-                        it = m_validationData.erase(it);
-                        continue;
-                    }
-                }
-                it++;
-            }
-        }
-    }
+void PAdESExtender::removeValidationElement(ValidationDataElement *elem) {
 
-    bool PAdESExtender::addCRLRevocationInfo(CByteArray & cert, std::unordered_set<std::string> vri_keys) {
-        CByteArray crl;
-        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
-        if (cryptoFwk->GetCrlData(cert, crl)) {
-            ValidationDataElement crlElem(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, vri_keys);
-            addValidationElement(crlElem);
+	if (elem->getType() == ValidationDataElement::CERT) {
+		signed long docCertId = getCertUniqueId(elem->getData(), elem->getSize());
+		std::vector<ValidationDataElement *>::iterator it = m_validationData.begin();
+		while (it != m_validationData.end()) {
+			ValidationDataElement *newVde = *it;
+			if (newVde->getType() == ValidationDataElement::CERT) {
+				signed long newVdeId = getCertUniqueId(newVde->getData(), newVde->getSize());
+				if (newVdeId == docCertId) {
+					it = m_validationData.erase(it);
+					continue;
+				}
+			}
+			it++;
+		}
+	}
+}
 
-            return true;
-        }
+bool PAdESExtender::addCRLRevocationInfo(CByteArray &cert, std::unordered_set<std::string> vri_keys) {
+	CByteArray crl;
+	APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+	if (cryptoFwk->GetCrlData(cert, crl)) {
+		ValidationDataElement crlElem(crl.GetBytes(), crl.Size(), ValidationDataElement::CRL, vri_keys);
+		addValidationElement(crlElem);
 
-        return false;
-    }
+		return true;
+	}
 
-    bool isSignerCertificate(X509 * cert) {
-        uint32_t ext_key_usage = X509_get_extended_key_usage(cert);
+	return false;
+}
 
-        //Exclude OCSP signing and TSA certificates
-        if (ext_key_usage != UINT32_MAX) {
-            if (XKU_OCSP_SIGN & ext_key_usage)
-                return false;
-            else if (XKU_TIMESTAMP & ext_key_usage)
-                return false;
-        }
-        //Exclude CA certificates
-        uint32_t key_usage = X509_get_key_usage(cert);
-        if (key_usage != UINT32_MAX) {
-            if (KU_KEY_CERT_SIGN & key_usage)
-                return false;
-        }
+bool isSignerCertificate(X509 *cert) {
+	uint32_t ext_key_usage = X509_get_extended_key_usage(cert);
 
-        return true;
-    }
+	// Exclude OCSP signing and TSA certificates
+	if (ext_key_usage != UINT32_MAX) {
+		if (XKU_OCSP_SIGN & ext_key_usage)
+			return false;
+		else if (XKU_TIMESTAMP & ext_key_usage)
+			return false;
+	}
+	// Exclude CA certificates
+	uint32_t key_usage = X509_get_key_usage(cert);
+	if (key_usage != UINT32_MAX) {
+		if (KU_KEY_CERT_SIGN & key_usage)
+			return false;
+	}
 
-    using PKCS7_ptr = std::unique_ptr<PKCS7, decltype(&::PKCS7_free)>;
+	return true;
+}
 
-    bool PAdESExtender::addLT()
-    {
-        // TODO: verify if T first. Extend if not
-        bool success = true;
+using PKCS7_ptr = std::unique_ptr<PKCS7, decltype(&::PKCS7_free)>;
+
+bool PAdESExtender::addLT() {
+	// TODO: verify if T first. Extend if not
+	bool success = true;
 
         CByteArray issuerCertDataByteArray;
         size_t issuerLen;
         FWK_CertifStatus status = FWK_CERTIF_STATUS_UNCHECK;
 
-        PDFDoc *doc = m_signedPdfDoc->m_doc;
-        APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
+	PDFDoc *doc = m_signedPdfDoc->m_doc;
+	APL_CryptoFwkPteid *cryptoFwk = AppLayer.getCryptoFwk();
 
-        const char *hexHash = NULL;
-        unsigned char *signatureContents = NULL;
+	const char *hexHash = NULL;
+	unsigned char *signatureContents = NULL;
 
-        std::vector<size_t> signerCerts_idx;
-        std::unordered_set<int> sigIndexes = doc->getSignaturesIndexesUntilLastTimestamp();
+	std::vector<size_t> signerCerts_idx;
+	std::unordered_set<int> sigIndexes = doc->getSignaturesIndexesUntilLastTimestamp();
 
-        if (sigIndexes.empty()) {
-            MWLOG(LEV_ERROR, MOD_APL, "addLT(): No signatures found in the document. Pre-condition for addLT() is broken!");
-            success = false;
-            goto cleanup;
-        }
-        
-        for (auto const& idx : sigIndexes)
-        {
+	if (sigIndexes.empty()) {
+		MWLOG(LEV_ERROR, MOD_APL, "addLT(): No signatures found in the document. Pre-condition for addLT() is broken!");
+		success = false;
+		goto cleanup;
+	}
 
-            /* Compute SHA1 of signature contents to add as key of VRI dict. */
-            int length = doc->getSignatureContents(&signatureContents, idx);
-            if (length <= 0)
-            {
-                MWLOG(LEV_ERROR, MOD_APL,
-                    "addLT(): Error getting signature content.");
-                continue;
-            }
+	for (const auto &idx : sigIndexes) {
 
-            /* Compute SHA1 hash of signature to be added as VRI key. */
-            CByteArray contentBytes(signatureContents, length), hash;
-            cryptoFwk->GetHashSha1(contentBytes, &hash);
-            hexHash = bin2AsciiHex(hash.GetBytes(), hash.Size());
+		/* Compute SHA1 of signature contents to add as key of VRI dict. */
+		int length = doc->getSignatureContents(&signatureContents, idx);
+		if (length <= 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "addLT(): Error getting signature content.");
+			continue;
+		}
 
-            unsigned char * ptr = signatureContents;
-            PKCS7_ptr p7(d2i_PKCS7(NULL, (const unsigned char**)&signatureContents, length), ::PKCS7_free);
-            free(ptr);
+		/* Compute SHA1 hash of signature to be added as VRI key. */
+		CByteArray contentBytes(signatureContents, length), hash;
+		cryptoFwk->GetHashSha1(contentBytes, &hash);
+		hexHash = bin2AsciiHex(hash.GetBytes(), hash.Size());
 
-            if (p7.get() == NULL)
-            {
-                MWLOG(LEV_ERROR, MOD_APL,
-                    "addLT(): Error decoding signature content.");
-                continue;
-            }
+		unsigned char *ptr = signatureContents;
+		PKCS7_ptr p7(d2i_PKCS7(NULL, (const unsigned char **)&signatureContents, length), ::PKCS7_free);
+		free(ptr);
 
-            STACK_OF(X509) *certs = NULL;
+		if (p7.get() == NULL) {
+			MWLOG(LEV_ERROR, MOD_APL, "addLT(): Error decoding signature content.");
+			continue;
+		}
 
-            int type = OBJ_obj2nid(p7->type);
-            if (type == NID_pkcs7_signed) {
-                certs = p7->d.sign->cert;
-            }
-            else if (type == NID_pkcs7_signedAndEnveloped) {
-                certs = p7->d.signed_and_enveloped->cert;
-            }
+		STACK_OF(X509) *certs = NULL;
 
-            /* Add validation data for signature timestamp */
-            ASN1_TYPE *asn1TokenType = NULL;
-            STACK_OF(PKCS7_SIGNER_INFO) * signer_info = PKCS7_get_signer_info(p7.get());
-            asn1TokenType = PKCS7_get_attribute(sk_PKCS7_SIGNER_INFO_value(signer_info, 0), NID_id_smime_aa_timeStampToken);
-            if (asn1TokenType != NULL && asn1TokenType->type == V_ASN1_SEQUENCE)
-            {
-                PKCS7 *ts_p7 = NULL;
-                const unsigned char *token_der = asn1TokenType->value.asn1_string->data;
-                int token_len = asn1TokenType->value.asn1_string->length;
-                ts_p7 = d2i_PKCS7(NULL, &token_der, token_len);
+		int type = OBJ_obj2nid(p7->type);
+		if (type == NID_pkcs7_signed) {
+			certs = p7->d.sign->cert;
+		} else if (type == NID_pkcs7_signedAndEnveloped) {
+			certs = p7->d.signed_and_enveloped->cert;
+		}
 
-                if (ts_p7 != NULL)
-                {
-                    STACK_OF(X509) *ts_certs = NULL;
-                    int type = OBJ_obj2nid(ts_p7->type);
-                    if (type == NID_pkcs7_signed) {
-                        ts_certs = ts_p7->d.sign->cert;
-                    }
-                    else if (type == NID_pkcs7_signedAndEnveloped) {
-                        ts_certs = ts_p7->d.signed_and_enveloped->cert;
-                    }
+		/* Add validation data for signature timestamp */
+		ASN1_TYPE *asn1TokenType = NULL;
+		STACK_OF(PKCS7_SIGNER_INFO) *signer_info = PKCS7_get_signer_info(p7.get());
+		asn1TokenType = PKCS7_get_attribute(sk_PKCS7_SIGNER_INFO_value(signer_info, 0), NID_id_smime_aa_timeStampToken);
+		if (asn1TokenType != NULL && asn1TokenType->type == V_ASN1_SEQUENCE) {
+			PKCS7 *ts_p7 = NULL;
+			const unsigned char *token_der = asn1TokenType->value.asn1_string->data;
+			int token_len = asn1TokenType->value.asn1_string->length;
+			ts_p7 = d2i_PKCS7(NULL, &token_der, token_len);
 
-                    for (int i = 0; i < sk_X509_num(ts_certs); i++)
-                    {
-                        sk_X509_push(certs, sk_X509_value(ts_certs, i));
-                    }
-                }
-            }
-            
-            /* Iterate over the certificates in this signature and add them to DSS.*/
-            for (int i = 0; certs && i < sk_X509_num(certs); i++) {
-                unsigned char *certBytes = NULL;
-                X509 *cert = sk_X509_value(certs, i);
+			if (ts_p7 != NULL) {
+				STACK_OF(X509) *ts_certs = NULL;
+				int type = OBJ_obj2nid(ts_p7->type);
+				if (type == NID_pkcs7_signed) {
+					ts_certs = ts_p7->d.sign->cert;
+				} else if (type == NID_pkcs7_signedAndEnveloped) {
+					ts_certs = ts_p7->d.signed_and_enveloped->cert;
+				}
 
-                unsigned int len = i2d_X509(cert, &certBytes);
-                if (len < 0)
-                {
-                    MWLOG(LEV_ERROR, MOD_APL, "addLT(): Failed to parse certificate in signature.");
-                    success = false;
-                    goto cleanup;
-                }
-                size_t vd_size = m_validationData.size();
+				for (int i = 0; i < sk_X509_num(ts_certs); i++) {
+					sk_X509_push(certs, sk_X509_value(ts_certs, i));
+				}
+			}
+		}
 
-                ValidationDataElement certElem(certBytes, len, ValidationDataElement::CERT);
-                ValidationDataElement *addedElem = addValidationElement(certElem);
-                addedElem->addVriKey(hexHash);
-                //Add to signerCerts_idx if it's a signing cert and ignore duplicates
-                if (isSignerCertificate(cert) && m_validationData.size() > vd_size) {
+		/* Iterate over the certificates in this signature and add them to DSS.*/
+		for (int i = 0; certs && i < sk_X509_num(certs); i++) {
+			unsigned char *certBytes = NULL;
+			X509 *cert = sk_X509_value(certs, i);
 
-                    signerCerts_idx.push_back(m_validationData.size()-1);
-                }
-            }
-        }
+			unsigned int len = i2d_X509(cert, &certBytes);
+			if (len < 0) {
+				MWLOG(LEV_ERROR, MOD_APL, "addLT(): Failed to parse certificate in signature.");
+				success = false;
+				goto cleanup;
+			}
+			size_t vd_size = m_validationData.size();
 
-        //Add revocation info for all signer certificates preferably using OCSP
-        for (auto signer_cert_idx: signerCerts_idx)
-        {
-			status = FWK_CERTIF_STATUS_UNCHECK;
-            CByteArray ocsp_response;
-            bool ocsp_check_revocation = false;
-            bool foundIssuer = false;
-            ValidationDataElement *vd_elem = m_validationData[signer_cert_idx];
-            CByteArray signer_cert(vd_elem->getData(), vd_elem->getSize());
-			//Replaced full subject by "issuer - serial" for privacy reasons
-            //MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for certificate: %s", __FUNCTION__, certificate_subject_from_der(signer_cert));
+			ValidationDataElement certElem(certBytes, len, ValidationDataElement::CERT);
+			ValidationDataElement *addedElem = addValidationElement(certElem);
+			addedElem->addVriKey(hexHash);
+			// Add to signerCerts_idx if it's a signing cert and ignore duplicates
+			if (isSignerCertificate(cert) && m_validationData.size() > vd_size) {
 
-			MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for cert issued by: %s", __FUNCTION__, certificate_issuer_serial_from_der(signer_cert).c_str());
-            
-            //Find issuer for each signing cert
-            for (size_t j = 0; j < m_validationData.size(); j++)
-            {
-                if (m_validationData[j]->getType() != ValidationDataElement::CERT)
-                    continue;
+				signerCerts_idx.push_back(m_validationData.size() - 1);
+			}
+		}
+	}
 
-                issuerLen = m_validationData[j]->getSize();
-                issuerCertDataByteArray.ClearContents();
-                issuerCertDataByteArray.Append(m_validationData[j]->getData(), issuerLen);
+	// Add revocation info for all signer certificates preferably using OCSP
+	for (auto signer_cert_idx : signerCerts_idx) {
+		status = FWK_CERTIF_STATUS_UNCHECK;
+		CByteArray ocsp_response;
+		bool ocsp_check_revocation = false;
+		bool foundIssuer = false;
+		ValidationDataElement *vd_elem = m_validationData[signer_cert_idx];
+		CByteArray signer_cert(vd_elem->getData(), vd_elem->getSize());
+		// Replaced full subject by "issuer - serial" for privacy reasons
+		// MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for certificate: %s", __FUNCTION__,
+		// certificate_subject_from_der(signer_cert));
 
-                if (cryptoFwk->isIssuer(signer_cert, issuerCertDataByteArray)) {
-                    foundIssuer = true;
-                    break;
-                }
-            }
+		MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for cert issued by: %s", __FUNCTION__,
+			  certificate_issuer_serial_from_der(signer_cert).c_str());
 
-            /* Searching in eidstore may be useful to support more CA certificates in PADES-LT other than CC and CMD */
-            if (!foundIssuer) {
-                //Try to find issuer in eidstore certificates
-                foundIssuer = findIssuerInEidStore(cryptoFwk, signer_cert, issuerCertDataByteArray);
-                if (foundIssuer) {
-                    ValidationDataElement vde(issuerCertDataByteArray.GetBytes(), 
-                        issuerCertDataByteArray.Size(), ValidationDataElement::CERT, vd_elem->getVriHashKeys());
-                    addValidationElement(vde);
-                }
+		// Find issuer for each signing cert
+		for (size_t j = 0; j < m_validationData.size(); j++) {
+			if (m_validationData[j]->getType() != ValidationDataElement::CERT)
+				continue;
 
-            }
+			issuerLen = m_validationData[j]->getSize();
+			issuerCertDataByteArray.ClearContents();
+			issuerCertDataByteArray.Append(m_validationData[j]->getData(), issuerLen);
 
-            if (foundIssuer)
-            {
-                status = cryptoFwk->GetOCSPResponse(signer_cert, issuerCertDataByteArray, &ocsp_response, false);
-                
-            }
-            else {
-                MWLOG(LEV_WARN, MOD_APL, "%s: Couldn't find issuer for signing cert. Revocation info is going to be fetched from CRL", __FUNCTION__);
-            }
+			if (cryptoFwk->isIssuer(signer_cert, issuerCertDataByteArray)) {
+				foundIssuer = true;
+				break;
+			}
+		}
 
-            if (status == FWK_CERTIF_STATUS_VALID) {
-                CByteArray ocsp_responder_cert;
-                ocsp_check_revocation = addOCSPCertToValidationData(ocsp_response, ocsp_responder_cert);
+		/* Searching in eidstore may be useful to support more CA certificates in PADES-LT other than CC and CMD */
+		if (!foundIssuer) {
+			// Try to find issuer in eidstore certificates
+			foundIssuer = findIssuerInEidStore(cryptoFwk, signer_cert, issuerCertDataByteArray);
+			if (foundIssuer) {
+				ValidationDataElement vde(issuerCertDataByteArray.GetBytes(), issuerCertDataByteArray.Size(),
+										  ValidationDataElement::CERT, vd_elem->getVriHashKeys());
+				addValidationElement(vde);
+			}
+		}
 
-                ValidationDataElement ocspResponseElem(ocsp_response.GetBytes(), ocsp_response.Size(), ValidationDataElement::OCSP, vd_elem->getVriHashKeys());
-                addValidationElement(ocspResponseElem);
+		if (foundIssuer) {
+			status = cryptoFwk->GetOCSPResponse(signer_cert, issuerCertDataByteArray, &ocsp_response, false);
 
-                if (ocsp_check_revocation) {
-                    addCRLRevocationInfo(ocsp_responder_cert, vd_elem->getVriHashKeys());
-                }
-            }
-            if (status == FWK_CERTIF_STATUS_REVOKED || status == FWK_CERTIF_STATUS_SUSPENDED)
-            {
-                MWLOG(LEV_ERROR, MOD_APL, "%s: OCSP validation: revoked certificate", __FUNCTION__);
-                success = false;
-                goto cleanup;
-            }
-            else if (status == FWK_CERTIF_STATUS_UNKNOWN) {
-                MWLOG(LEV_WARN, MOD_APL, "%s: OCSP server returned unknown status so it's either a server error or the request is buggy or uses unsupported algorithm/feature", __FUNCTION__);
-                success = false;
-                goto cleanup;
-            }
-            else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR || status == FWK_CERTIF_STATUS_CONNECT) {
-                /* Use CRL if there is no OCSP response or we couldn't find the issuer (it should never happen with CC or CMD signatures) */
-                success = addCRLRevocationInfo(signer_cert, vd_elem->getVriHashKeys());
-                if (!success) {
-                    goto cleanup;
-                }
-            }
-        
-        }  //End of outer loop
+		} else {
+			MWLOG(LEV_WARN, MOD_APL,
+				  "%s: Couldn't find issuer for signing cert. Revocation info is going to be fetched from CRL",
+				  __FUNCTION__);
+		}
 
-        /* Remove from m_validationData the certs already present in document DSS. */
-        {
-            std::vector<ValidationDataElement*> certsAlreadyAdded;
-            doc->getCertsInDSS(&certsAlreadyAdded);
+		if (status == FWK_CERTIF_STATUS_VALID) {
+			CByteArray ocsp_responder_cert;
+			ocsp_check_revocation = addOCSPCertToValidationData(ocsp_response, ocsp_responder_cert);
 
-            for (auto cert : certsAlreadyAdded)
-            {
-                removeValidationElement(cert);
-                delete cert;
-            }
-        }
+			ValidationDataElement ocspResponseElem(ocsp_response.GetBytes(), ocsp_response.Size(),
+												   ValidationDataElement::OCSP, vd_elem->getVriHashKeys());
+			addValidationElement(ocspResponseElem);
 
-        doc->addDSS(m_validationData);
-        m_signedPdfDoc->save();
+			if (ocsp_check_revocation) {
+				addCRLRevocationInfo(ocsp_responder_cert, vd_elem->getVriHashKeys());
+			}
+		}
+		if (status == FWK_CERTIF_STATUS_REVOKED || status == FWK_CERTIF_STATUS_SUSPENDED) {
+			MWLOG(LEV_ERROR, MOD_APL, "%s: OCSP validation: revoked certificate", __FUNCTION__);
+			success = false;
+			goto cleanup;
+		} else if (status == FWK_CERTIF_STATUS_UNKNOWN) {
+			MWLOG(LEV_WARN, MOD_APL,
+				  "%s: OCSP server returned unknown status so it's either a server error or the request is buggy or "
+				  "uses unsupported algorithm/feature",
+				  __FUNCTION__);
+			success = false;
+			goto cleanup;
+		} else if (!foundIssuer || status == FWK_CERTIF_STATUS_ERROR || status == FWK_CERTIF_STATUS_CONNECT) {
+			/* Use CRL if there is no OCSP response or we couldn't find the issuer (it should never happen with CC or
+			 * CMD signatures) */
+			success = addCRLRevocationInfo(signer_cert, vd_elem->getVriHashKeys());
+			if (!success) {
+				goto cleanup;
+			}
+		}
 
-    cleanup:
-        if (hexHash)
-            delete[] hexHash;
+	} // End of outer loop
 
-        if (!m_calledFromLtaMethod)
-        {
-            for (auto const& validationElem : m_validationData)
-                delete validationElem;
-        }
-        
-        return success;
-    }
+	/* Remove from m_validationData the certs already present in document DSS. */
+	{
+		std::vector<ValidationDataElement *> certsAlreadyAdded;
+		doc->getCertsInDSS(&certsAlreadyAdded);
 
-    bool PAdESExtender::addLTA()
-    {
-        // TODO: verify if LT first. Extend if not
-        m_calledFromLtaMethod = true;
+		for (auto cert : certsAlreadyAdded) {
+			removeValidationElement(cert);
+			delete cert;
+		}
+	}
 
-        bool success = true;
-        if (!addLT())
-        {
-            success = false;
-            goto cleanup;
-        }
-        
-        if (!addT())
-        {
-            success = false;
-            goto cleanup;
-        }
+	doc->addDSS(m_validationData);
+	m_signedPdfDoc->save();
 
-    cleanup:
-        for (auto const& validationElem : m_validationData)
-            delete validationElem;
+cleanup:
+	if (hexHash)
+		delete[] hexHash;
 
-        m_calledFromLtaMethod = false;
+	if (!m_calledFromLtaMethod) {
+		for (const auto &validationElem : m_validationData)
+			delete validationElem;
+	}
 
-        return success;
-    }
+	return success;
 }
+
+bool PAdESExtender::addLTA() {
+	// TODO: verify if LT first. Extend if not
+	m_calledFromLtaMethod = true;
+
+	bool success = true;
+	if (!addLT()) {
+		success = false;
+		goto cleanup;
+	}
+
+	if (!addT()) {
+		success = false;
+		goto cleanup;
+	}
+
+cleanup:
+	for (const auto &validationElem : m_validationData)
+		delete validationElem;
+
+	m_calledFromLtaMethod = false;
+
+	return success;
+}
+} // namespace eIDMW

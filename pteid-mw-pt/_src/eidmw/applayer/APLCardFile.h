@@ -24,15 +24,13 @@
 #ifndef __APLCARDFILE_H__
 #define __APLCARDFILE_H__
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-typedef enum
-{
-	CARDFILESTATUS_UNREAD=-1,		/**< File not read yet */
-	CARDFILESTATUS_OK=0,			/**< File ok */
-	CARDFILESTATUS_ERROR=1,			/**< VerifyFile return an error */
-	CARDFILESTATUS_ERROR_SIGNATURE,	/**< Signature checking failed */
+typedef enum {
+	CARDFILESTATUS_UNREAD = -1,		/**< File not read yet */
+	CARDFILESTATUS_OK = 0,			/**< File ok */
+	CARDFILESTATUS_ERROR = 1,		/**< VerifyFile return an error */
+	CARDFILESTATUS_ERROR_SIGNATURE, /**< Signature checking failed */
 	CARDFILESTATUS_ERROR_HASH,		/**< Hash checking failed */
 	CARDFILESTATUS_ERROR_TEST,		/**< Validate with test certificate */
 	CARDFILESTATUS_ERROR_DATE,		/**< Validate with certificate containing bad date */

@@ -29,17 +29,17 @@ CLogger is a singleton that keep a vector of CLog (one log by group).
 
 Instance : -The instance() method give access to the singleton object
 
-Initialization : -The CLogger may be init. 
-                 -If it isn't, the default parameters are used.
-                 -The init parameters are transfered to CLog object when the CLogger create them.
-                 -The init may be call anywhere to change the parameters 
+Initialization : -The CLogger may be init.
+				 -If it isn't, the default parameters are used.
+				 -The init parameters are transfered to CLog object when the CLogger create them.
+				 -The init may be call anywhere to change the parameters
 				 but these changes only affect the future created CLog
 
 Retreive a Log : -Use the getLog() method with the name of the group as argument
 
 CLOG
 ----
-Each CLog represents a set of log file. (One set by group) 
+Each CLog represents a set of log file. (One set by group)
 The constructor is not enabled but objects are created by the logger when you ask for a new group.
 The files are closed after each write.
 
@@ -48,8 +48,8 @@ PARAMETERS
 You pass the parameters with the init method of the CLogger and it passes them to CLog at creation.
 
 These parameters are :
-*Directory : -The folder in which the log files are created. 
-             -If it doesn't exist, the current directory is used.
+*Directory : -The folder in which the log files are created.
+			 -If it doesn't exist, the current directory is used.
 *Prefix :	 -Use to define the name of the files.
 			 -The name is <Prefix>_[<Group>_]Index.log (Index begins to 0 until FileNr-1)
 *FileSize :  -The maximum size of the log file.
@@ -59,7 +59,7 @@ These parameters are :
 			 -If the FileSize is 0, this parameter is not used.
 			 -The minimum value is 2
 			 -When the last file (Index=FileNr-1) is full, the file with index 0 is removed,
-			 the File(1) is renamed to File(0), File(i) to File(i-1), 
+			 the File(1) is renamed to File(0), File(i) to File(i-1),
 			 then File(FileNr-1) become free again.
 
 *GroupInNewFile :	-If true, new log files are made for each group
@@ -69,7 +69,8 @@ USAGE
 -----
 In complement of usual object usage, some macros are defined to give simple access to methods.
 These macros are define below in this file.
-You will also find macro template to enable easy use of group. Copy these macros and customize them for your own purpose.
+You will also find macro template to enable easy use of group. Copy these macros and customize them for your own
+purpose.
 
 Example of usage through objects and macro are give at the end of this file
 */
@@ -82,7 +83,7 @@ Example of usage through objects and macro are give at the end of this file
 #include "Mutex.h"
 
 #ifndef __WFILE__
-#define WIDEN2(x) L ## x
+#define WIDEN2(x) L##x
 #define WIDEN(x) WIDEN2(x)
 #define __WFILE__ WIDEN(__FILE__)
 #endif
@@ -93,52 +94,54 @@ Example of usage through objects and macro are give at the end of this file
 
 #include <stdarg.h>
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-class CLog; //define below
+class CLog; // define below
 
 typedef enum {
-    LEV_LEVEL_NOLOG,
-    LOG_LEVEL_CRITICAL,
-    LOG_LEVEL_ERROR,
-    LOG_LEVEL_WARNING,
-    LOG_LEVEL_INFO,
-    LOG_LEVEL_DEBUG,
+	LEV_LEVEL_NOLOG,
+	LOG_LEVEL_CRITICAL,
+	LOG_LEVEL_ERROR,
+	LOG_LEVEL_WARNING,
+	LOG_LEVEL_INFO,
+	LOG_LEVEL_DEBUG,
 } tLOG_Level;
 
 #define LOG_LEVEL_DEFAULT LOG_LEVEL_ERROR
 
-class CLogger
-{
-  public:
-    EIDMW_CMN_API static CLogger &instance();
-    EIDMW_CMN_API ~CLogger();
- 
-  private:
-    CLogger();
-	CLogger(const CLogger &logger);
-	CLogger &operator= (const CLogger &logger);
+class CLogger {
+public:
+	EIDMW_CMN_API static CLogger &instance();
+	EIDMW_CMN_API ~CLogger();
 
-  public:
+private:
+	CLogger();
+	CLogger(const CLogger &logger);
+	CLogger &operator=(const CLogger &logger);
+
+public:
 	EIDMW_CMN_API void initFromConfig();
-	EIDMW_CMN_API void init(const wchar_t *directory,const wchar_t *prefix,long filesize,long filenr,tLOG_Level minlevel,bool groupinnewfile); 
-	EIDMW_CMN_API void init(const char *directory,const char *prefix,long filesize,long filenr,tLOG_Level minlevel,bool groupinnewfile); 
-	EIDMW_CMN_API CLog &getLogW(const wchar_t *group=L"");
-	EIDMW_CMN_API CLog &getLogA(const char *group="");
-	EIDMW_CMN_API void writeToGroup(const wchar_t *group,tLOG_Level level,const wchar_t *format, ...);
-	EIDMW_CMN_API void writeToGroup(const char *group,tLOG_Level level,const char *format, ...);
-	EIDMW_CMN_API void writeToGroup(const wchar_t *group,tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, ...);
-	EIDMW_CMN_API void writeToGroup(const char *group,tLOG_Level level,const int line,const char *file,const char *format, ...);
-	EIDMW_CMN_API void write(tLOG_Level level,const wchar_t *format, ...);
-	EIDMW_CMN_API void write(tLOG_Level level,const char *format, ...);
-	EIDMW_CMN_API void write(tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, ...);
-	EIDMW_CMN_API void write(tLOG_Level level,const int line,const char *file,const char *format, ...);
+	EIDMW_CMN_API void init(const wchar_t *directory, const wchar_t *prefix, long filesize, long filenr,
+							tLOG_Level minlevel, bool groupinnewfile);
+	EIDMW_CMN_API void init(const char *directory, const char *prefix, long filesize, long filenr, tLOG_Level minlevel,
+							bool groupinnewfile);
+	EIDMW_CMN_API CLog &getLogW(const wchar_t *group = L"");
+	EIDMW_CMN_API CLog &getLogA(const char *group = "");
+	EIDMW_CMN_API void writeToGroup(const wchar_t *group, tLOG_Level level, const wchar_t *format, ...);
+	EIDMW_CMN_API void writeToGroup(const char *group, tLOG_Level level, const char *format, ...);
+	EIDMW_CMN_API void writeToGroup(const wchar_t *group, tLOG_Level level, const int line, const wchar_t *file,
+									const wchar_t *format, ...);
+	EIDMW_CMN_API void writeToGroup(const char *group, tLOG_Level level, const int line, const char *file,
+									const char *format, ...);
+	EIDMW_CMN_API void write(tLOG_Level level, const wchar_t *format, ...);
+	EIDMW_CMN_API void write(tLOG_Level level, const char *format, ...);
+	EIDMW_CMN_API void write(tLOG_Level level, const int line, const wchar_t *file, const wchar_t *format, ...);
+	EIDMW_CMN_API void write(tLOG_Level level, const int line, const char *file, const char *format, ...);
 	EIDMW_CMN_API void getFileFromStdErr(std::wstring &filename);
 
-  private:
-    static std::unique_ptr<CLogger> m_instance;
-    static bool m_bApplicationLeaving;
+private:
+	static std::unique_ptr<CLogger> m_instance;
+	static bool m_bApplicationLeaving;
 
 	std::wstring m_directory;
 	std::wstring m_prefix;
@@ -147,59 +150,60 @@ class CLogger
 	tLOG_Level m_maxlevel;
 	bool m_groupinnewfile;
 
-	std::vector <CLog*> m_logStore;
+	std::vector<CLog *> m_logStore;
 };
 
-class CLog
-{
-  public:
-    EIDMW_CMN_API ~CLog();
- 
-  private:
-    CLog(const wchar_t *directory,const wchar_t *prefix,const wchar_t *group,long filesize,long filenr,tLOG_Level minlevel,bool groupinnewfile);	
-	CLog(const CLog &log);				
-	CLog &  operator= (const CLog &) ;
+class CLog {
+public:
+	EIDMW_CMN_API ~CLog();
 
-  public:
-	EIDMW_CMN_API void write(tLOG_Level level,const wchar_t *format, ...);
-	EIDMW_CMN_API void write(tLOG_Level level,const char *format, ...);
-	EIDMW_CMN_API void write(tLOG_Level level,const wchar_t *format, va_list args);
-	EIDMW_CMN_API void write(tLOG_Level level,const char *format, va_list args);
-	EIDMW_CMN_API void write(tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, ...);
-	EIDMW_CMN_API void write(tLOG_Level level,const int line,const char *file,const char *format, ...);
-	EIDMW_CMN_API void write(tLOG_Level level,const int line,const wchar_t *file,const wchar_t *format, va_list args);
-	EIDMW_CMN_API void write(tLOG_Level level,const int line,const char *file,const char *format, va_list args);
+private:
+	CLog(const wchar_t *directory, const wchar_t *prefix, const wchar_t *group, long filesize, long filenr,
+		 tLOG_Level minlevel, bool groupinnewfile);
+	CLog(const CLog &log);
+	CLog &operator=(const CLog &);
+
+public:
+	EIDMW_CMN_API void write(tLOG_Level level, const wchar_t *format, ...);
+	EIDMW_CMN_API void write(tLOG_Level level, const char *format, ...);
+	EIDMW_CMN_API void write(tLOG_Level level, const wchar_t *format, va_list args);
+	EIDMW_CMN_API void write(tLOG_Level level, const char *format, va_list args);
+	EIDMW_CMN_API void write(tLOG_Level level, const int line, const wchar_t *file, const wchar_t *format, ...);
+	EIDMW_CMN_API void write(tLOG_Level level, const int line, const char *file, const char *format, ...);
+	EIDMW_CMN_API void write(tLOG_Level level, const int line, const wchar_t *file, const wchar_t *format,
+							 va_list args);
+	EIDMW_CMN_API void write(tLOG_Level level, const int line, const char *file, const char *format, va_list args);
 
 	EIDMW_CMN_API void writeCritical(const wchar_t *format, ...);
 	EIDMW_CMN_API void writeCritical(const char *format, ...);
-	EIDMW_CMN_API void writeCritical(const int line,const wchar_t *file,const wchar_t *format, ...);
-	EIDMW_CMN_API void writeCritical(const int line,const char *file,const char *format, ...);
+	EIDMW_CMN_API void writeCritical(const int line, const wchar_t *file, const wchar_t *format, ...);
+	EIDMW_CMN_API void writeCritical(const int line, const char *file, const char *format, ...);
 	EIDMW_CMN_API void writeError(const wchar_t *format, ...);
 	EIDMW_CMN_API void writeError(const char *format, ...);
-	EIDMW_CMN_API void writeError(const int line,const wchar_t *file,const wchar_t *format, ...);
-	EIDMW_CMN_API void writeError(const int line,const char *file,const char *format, ...);
+	EIDMW_CMN_API void writeError(const int line, const wchar_t *file, const wchar_t *format, ...);
+	EIDMW_CMN_API void writeError(const int line, const char *file, const char *format, ...);
 	EIDMW_CMN_API void writeWarning(const wchar_t *format, ...);
 	EIDMW_CMN_API void writeWarning(const char *format, ...);
-	EIDMW_CMN_API void writeWarning(const int line,const wchar_t *file,const wchar_t *format, ...);
-	EIDMW_CMN_API void writeWarning(const int line,const char *file,const char *format, ...);
+	EIDMW_CMN_API void writeWarning(const int line, const wchar_t *file, const wchar_t *format, ...);
+	EIDMW_CMN_API void writeWarning(const int line, const char *file, const char *format, ...);
 	EIDMW_CMN_API void writeInfo(const wchar_t *format, ...);
 	EIDMW_CMN_API void writeInfo(const char *format, ...);
-	EIDMW_CMN_API void writeInfo(const int line,const wchar_t *file,const wchar_t *format, ...);
-	EIDMW_CMN_API void writeInfo(const int line,const char *file,const char *format, ...);
+	EIDMW_CMN_API void writeInfo(const int line, const wchar_t *file, const wchar_t *format, ...);
+	EIDMW_CMN_API void writeInfo(const int line, const char *file, const char *format, ...);
 	EIDMW_CMN_API void writeDebug(const wchar_t *format, ...);
 	EIDMW_CMN_API void writeDebug(const char *format, ...);
-	EIDMW_CMN_API void writeDebug(const int line,const wchar_t *file,const wchar_t *format, ...);
-	EIDMW_CMN_API void writeDebug(const int line,const char *file,const char *format, ...);
+	EIDMW_CMN_API void writeDebug(const int line, const wchar_t *file, const wchar_t *format, ...);
+	EIDMW_CMN_API void writeDebug(const int line, const char *file, const char *format, ...);
 
-	//USE ONLY IN MACRO
-	EIDMW_CMN_API bool writeLineHeaderW(tLOG_Level level,const int line=0,const wchar_t *file=L"");
-	EIDMW_CMN_API bool writeLineHeaderA(tLOG_Level level,const int line=0,const char *file="");
+	// USE ONLY IN MACRO
+	EIDMW_CMN_API bool writeLineHeaderW(tLOG_Level level, const int line = 0, const wchar_t *file = L"");
+	EIDMW_CMN_API bool writeLineHeaderA(tLOG_Level level, const int line = 0, const char *file = "");
 	EIDMW_CMN_API bool writeLineMessageW(const wchar_t *format, ...);
 	EIDMW_CMN_API bool writeLineMessageA(const char *format, ...);
 
 	EIDMW_CMN_API void getFilenameStdErr(std::wstring &filename);
 
-  friend class CLogger;
+	friend class CLogger;
 
 private:
 	void getFilename(std::wstring &filename, const std::wstring &prefix);
@@ -210,8 +214,8 @@ private:
 	void writeLineMessageW(const wchar_t *format, va_list argList);
 	void writeLineMessageA(const char *format, va_list argList);
 	const wchar_t *getLevel(tLOG_Level level);
-	void getLocalTimeW(std::wstring &timestamp, const wchar_t *format=L"%Y-%m-%d %H:%M:%S");
-	void getLocalTimeA(std::string &timestamp, const char *format="%Y-%m-%d %H:%M:%S");
+	void getLocalTimeW(std::wstring &timestamp, const wchar_t *format = L"%Y-%m-%d %H:%M:%S");
+	void getLocalTimeA(std::string &timestamp, const char *format = "%Y-%m-%d %H:%M:%S");
 
 	bool isFileMixingGroups();
 	long getOpenFailed();
@@ -236,43 +240,73 @@ private:
 #endif
 };
 
-//SHORTCUT MACRO
-//General use
-#define ZS_LOG_INIT			CLogger::instance().init
-#define ZS_LOG				CLogger::instance().write
-#define ZS_LOG_GROUP		CLogger::instance().writeToGroup
+// SHORTCUT MACRO
+// General use
+#define ZS_LOG_INIT CLogger::instance().init
+#define ZS_LOG CLogger::instance().write
+#define ZS_LOG_GROUP CLogger::instance().writeToGroup
 
-//Defining a level
-#define ZS_LOG_CRITICAL		CLogger::instance().getLogW(L"").writeCritical
-#define ZS_LOG_ERROR		CLogger::instance().getLogW(L"").writeError
-#define ZS_LOG_WARNING		CLogger::instance().getLogW(L"").writeWarning
-#define ZS_LOG_INFO			CLogger::instance().getLogW(L"").writeInfo
-#define ZS_LOG_DEBUG		CLogger::instance().getLogW(L"").writeDebug
+// Defining a level
+#define ZS_LOG_CRITICAL CLogger::instance().getLogW(L"").writeCritical
+#define ZS_LOG_ERROR CLogger::instance().getLogW(L"").writeError
+#define ZS_LOG_WARNING CLogger::instance().getLogW(L"").writeWarning
+#define ZS_LOG_INFO CLogger::instance().getLogW(L"").writeInfo
+#define ZS_LOG_DEBUG CLogger::instance().getLogW(L"").writeDebug
 
-//Defining a level and trace file and line
-#define ZS_LOG_CRITICAL_TRACE	!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_CRITICAL,__LINE__,__WFILE__)	? 0 : CLogger::instance().getLogW(L"").writeLineMessageW
-#define ZS_LOG_ERROR_TRACE		!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_ERROR,__LINE__,__WFILE__)		? 0 : CLogger::instance().getLogW(L"").writeLineMessageW
-#define ZS_LOG_WARNING_TRACE	!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_WARNING,__LINE__,__WFILE__)	? 0 : CLogger::instance().getLogW(L"").writeLineMessageW
-#define ZS_LOG_INFO_TRACE		!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_INFO,__LINE__,__WFILE__)		? 0 : CLogger::instance().getLogW(L"").writeLineMessageW
-#define ZS_LOG_DEBUG_TRACE		!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_DEBUG,__LINE__,__WFILE__)		? 0 : CLogger::instance().getLogW(L"").writeLineMessageW
+// Defining a level and trace file and line
+#define ZS_LOG_CRITICAL_TRACE                                                                                          \
+	!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_CRITICAL, __LINE__, __WFILE__)                        \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"").writeLineMessageW
+#define ZS_LOG_ERROR_TRACE                                                                                             \
+	!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_ERROR, __LINE__, __WFILE__)                           \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"").writeLineMessageW
+#define ZS_LOG_WARNING_TRACE                                                                                           \
+	!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_WARNING, __LINE__, __WFILE__)                         \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"").writeLineMessageW
+#define ZS_LOG_INFO_TRACE                                                                                              \
+	!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_INFO, __LINE__, __WFILE__)                            \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"").writeLineMessageW
+#define ZS_LOG_DEBUG_TRACE                                                                                             \
+	!CLogger::instance().getLogW(L"").writeLineHeaderW(LOG_LEVEL_DEBUG, __LINE__, __WFILE__)                           \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"").writeLineMessageW
 
-//MACRO EXTENSION
-//Example of extanding to a groupe named Group1
-#define ZS_LOG_GROUP1			CLogger::instance().getLogW(L"Group1").write
+// MACRO EXTENSION
+// Example of extanding to a groupe named Group1
+#define ZS_LOG_GROUP1 CLogger::instance().getLogW(L"Group1").write
 
-#define ZS_LOG_GROUP1_CRITICAL	CLogger::instance().getLogW(L"Group1").writeCritical
-#define ZS_LOG_GROUP1_ERROR		CLogger::instance().getLogW(L"Group1").writeError
-#define ZS_LOG_GROUP1_WARNING	CLogger::instance().getLogW(L"Group1").writeWarning
-#define ZS_LOG_GROUP1_INFO		CLogger::instance().getLogW(L"Group1").writeInfo
-#define ZS_LOG_GROUP1_DEBUG		CLogger::instance().getLogW(L"Group1").writeDebug
+#define ZS_LOG_GROUP1_CRITICAL CLogger::instance().getLogW(L"Group1").writeCritical
+#define ZS_LOG_GROUP1_ERROR CLogger::instance().getLogW(L"Group1").writeError
+#define ZS_LOG_GROUP1_WARNING CLogger::instance().getLogW(L"Group1").writeWarning
+#define ZS_LOG_GROUP1_INFO CLogger::instance().getLogW(L"Group1").writeInfo
+#define ZS_LOG_GROUP1_DEBUG CLogger::instance().getLogW(L"Group1").writeDebug
 
-#define ZS_LOG_GROUP1_CRITICAL_TRACE	!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_CRITICAL,__LINE__,__WFILE__)	? 0 : CLogger::instance().getLogW(L"Group1").writeLineMessageW
-#define ZS_LOG_GROUP1_ERROR_TRACE		!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_ERROR,__LINE__,__WFILE__)	? 0 : CLogger::instance().getLogW(L"Group1").writeLineMessageW
-#define ZS_LOG_GROUP1_WARNING_TRACE		!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_WARNING,__LINE__,__WFILE__)	? 0 : CLogger::instance().getLogW(L"Group1").writeLineMessageW
-#define ZS_LOG_GROUP1_INFO_TRACE		!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_INFO,__LINE__,__WFILE__)		? 0 : CLogger::instance().getLogW(L"Group1").writeLineMessageW
-#define ZS_LOG_GROUP1_DEBUG_TRACE		!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_DEBUG,__LINE__,__WFILE__)	? 0 : CLogger::instance().getLogW(L"Group1").writeLineMessageW
+#define ZS_LOG_GROUP1_CRITICAL_TRACE                                                                                   \
+	!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_CRITICAL, __LINE__, __WFILE__)                  \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"Group1").writeLineMessageW
+#define ZS_LOG_GROUP1_ERROR_TRACE                                                                                      \
+	!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_ERROR, __LINE__, __WFILE__)                     \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"Group1").writeLineMessageW
+#define ZS_LOG_GROUP1_WARNING_TRACE                                                                                    \
+	!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_WARNING, __LINE__, __WFILE__)                   \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"Group1").writeLineMessageW
+#define ZS_LOG_GROUP1_INFO_TRACE                                                                                       \
+	!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_INFO, __LINE__, __WFILE__)                      \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"Group1").writeLineMessageW
+#define ZS_LOG_GROUP1_DEBUG_TRACE                                                                                      \
+	!CLogger::instance().getLogW(L"Group1").writeLineHeaderW(LOG_LEVEL_DEBUG, __LINE__, __WFILE__)                     \
+		? 0                                                                                                            \
+		: CLogger::instance().getLogW(L"Group1").writeLineMessageW
 
-}
+} // namespace eIDMW
 
 /*
 *************
@@ -370,7 +404,8 @@ private:
 	logger.writeToGroup(L"Group1",LOG_LEVEL_ERROR,__LINE__,__WFILE__,L"Example %d: %s", i++, L"Fourth test");
 
 //Or
-	CLogger::instance().writeToGroup(L"Group1",LOG_LEVEL_ERROR,__LINE__,__WFILE__,L"Example %d: %s", i++, L"Fourth test");
+	CLogger::instance().writeToGroup(L"Group1",LOG_LEVEL_ERROR,__LINE__,__WFILE__,L"Example %d: %s", i++, L"Fourth
+test");
 
 //Macro
 	ZS_LOG_GROUP(L"Group1",LOG_LEVEL_ERROR,__LINE__,__WFILE__,L"Example %d: %s", i++, L"Fourth test");

@@ -12,24 +12,23 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
 */
 
 #include <vector>
-#define SOAP_NAMESPACE_OF_ns2	"http://Ama.Authentication.Service/"
-#define SOAP_NAMESPACE_OF_ser	"http://schemas.microsoft.com/2003/10/Serialization/"
-#define SOAP_NAMESPACE_OF_ns3	"http://schemas.datacontract.org/2004/07/Ama.Structures.CCMovelSignature"
-#define SOAP_NAMESPACE_OF_wsu	"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
-#define SOAP_NAMESPACE_OF_wsse	"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
-#define SOAP_NAMESPACE_OF_ds	"http://www.w3.org/2000/09/xmldsig#"
-#define SOAP_NAMESPACE_OF_xenc	"http://www.w3.org/2001/04/xmlenc#"
-#define SOAP_NAMESPACE_OF_wsc	"http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512"
-#define SOAP_NAMESPACE_OF_saml1	"urn:oasis:names:tc:SAML:1.0:assertion"
-#define SOAP_NAMESPACE_OF_saml2	"urn:oasis:names:tc:SAML:2.0:assertion"
+#define SOAP_NAMESPACE_OF_ns2 "http://Ama.Authentication.Service/"
+#define SOAP_NAMESPACE_OF_ser "http://schemas.microsoft.com/2003/10/Serialization/"
+#define SOAP_NAMESPACE_OF_ns3 "http://schemas.datacontract.org/2004/07/Ama.Structures.CCMovelSignature"
+#define SOAP_NAMESPACE_OF_wsu "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+#define SOAP_NAMESPACE_OF_wsse "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+#define SOAP_NAMESPACE_OF_ds "http://www.w3.org/2000/09/xmldsig#"
+#define SOAP_NAMESPACE_OF_xenc "http://www.w3.org/2001/04/xmlenc#"
+#define SOAP_NAMESPACE_OF_wsc "http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512"
+#define SOAP_NAMESPACE_OF_saml1 "urn:oasis:names:tc:SAML:1.0:assertion"
+#define SOAP_NAMESPACE_OF_saml2 "urn:oasis:names:tc:SAML:2.0:assertion"
 
 #ifndef soapStub_H
 #define soapStub_H
 #include "stdsoap2.h"
 #if GSOAP_VERSION != 20896
-# error "GSOAP VERSION 20896 MISMATCH IN GENERATED CODE VERSUS LIBRARY CODE: PLEASE REINSTALL PACKAGE"
+#error "GSOAP VERSION 20896 MISMATCH IN GENERATED CODE VERSUS LIBRARY CODE: PLEASE REINSTALL PACKAGE"
 #endif
-
 
 /******************************************************************************\
  *                                                                            *
@@ -37,14 +36,11 @@ A commercial use license is available from Genivia Inc., contact@genivia.com
  *                                                                            *
 \******************************************************************************/
 
-
 /* wsu.h:67 */
 #ifndef SOAP_TYPE_wsu__tTimestampFault
 #define SOAP_TYPE_wsu__tTimestampFault (102)
 /* wsu:tTimestampFault */
-enum wsu__tTimestampFault {
-	wsu__MessageExpired = 0
-};
+enum wsu__tTimestampFault { wsu__MessageExpired = 0 };
 #endif
 
 /* wsse.h:101 */
@@ -103,13 +99,11 @@ enum saml2__DecisionType {
  *                                                                            *
 \******************************************************************************/
 
-
 /* CCMovelDigitalSignature.h:165 */
 #ifndef SOAP_TYPE_xsd__QName
 #define SOAP_TYPE_xsd__QName (11)
 typedef std::string xsd__QName;
 #endif
-
 
 /******************************************************************************\
  *                                                                            *
@@ -117,182 +111,187 @@ typedef std::string xsd__QName;
  *                                                                            *
 \******************************************************************************/
 
-class xsd__anyType;	/* CCMovelDigitalSignature.h:158 */
-class xsd__base64Binary;	/* CCMovelDigitalSignature.h:168 */
-class xsd__ID__;	/* CCMovelDigitalSignature.h:186 */
-class xsd__IDREF__;	/* CCMovelDigitalSignature.h:196 */
-class xsd__QName__;	/* CCMovelDigitalSignature.h:203 */
-class xsd__anyURI__;	/* CCMovelDigitalSignature.h:213 */
-class xsd__base64Binary__;	/* CCMovelDigitalSignature.h:220 */
-class xsd__boolean_;	/* CCMovelDigitalSignature.h:227 */
-class xsd__byte__;	/* CCMovelDigitalSignature.h:234 */
-class xsd__dateTime_;	/* CCMovelDigitalSignature.h:241 */
-class xsd__decimal__;	/* CCMovelDigitalSignature.h:251 */
-class xsd__double_;	/* CCMovelDigitalSignature.h:258 */
-class xsd__duration__;	/* CCMovelDigitalSignature.h:268 */
-class xsd__float_;	/* CCMovelDigitalSignature.h:275 */
-class xsd__int_;	/* CCMovelDigitalSignature.h:282 */
-class xsd__long_;	/* CCMovelDigitalSignature.h:289 */
-class xsd__short_;	/* CCMovelDigitalSignature.h:296 */
-class xsd__string_;	/* CCMovelDigitalSignature.h:303 */
-class xsd__unsignedByte__;	/* CCMovelDigitalSignature.h:310 */
-class xsd__unsignedInt_;	/* CCMovelDigitalSignature.h:317 */
-class xsd__unsignedLong_;	/* CCMovelDigitalSignature.h:324 */
-class xsd__unsignedShort_;	/* CCMovelDigitalSignature.h:331 */
-class _ns2__CCMovelSign;	/* CCMovelDigitalSignature.h:344 */
-class _ns2__CCMovelSignResponse;	/* CCMovelDigitalSignature.h:346 */
-class _ns2__GetCertificate;	/* CCMovelDigitalSignature.h:348 */
-class _ns2__GetCertificateResponse;	/* CCMovelDigitalSignature.h:350 */
-class _ns2__ValidateOtp;	/* CCMovelDigitalSignature.h:352 */
-class _ns2__ValidateOtpResponse;	/* CCMovelDigitalSignature.h:354 */
-class _ns2__CCMovelMultipleSign;	/* CCMovelDigitalSignature.h:356 */
-class _ns2__CCMovelMultipleSignResponse;	/* CCMovelDigitalSignature.h:358 */
-class _ns2__ForceSMS;	/* CCMovelDigitalSignature.h:360 */
-class _ns2__ForceSMSResponse;	/* CCMovelDigitalSignature.h:362 */
-class _ns2__GetCertificateWithPin;	/* CCMovelDigitalSignature.h:364 */
-class _ns2__GetCertificateWithPinResponse;	/* CCMovelDigitalSignature.h:366 */
-class ns3__SignRequest;	/* CCMovelDigitalSignature.h:368 */
-class ns3__SignStatus;	/* CCMovelDigitalSignature.h:370 */
-class ns3__SignResponse;	/* CCMovelDigitalSignature.h:372 */
-class ns3__ArrayOfHashStructure;	/* CCMovelDigitalSignature.h:374 */
-class ns3__HashStructure;	/* CCMovelDigitalSignature.h:376 */
-class ns3__MultipleSignRequest;	/* CCMovelDigitalSignature.h:378 */
-struct __ns2__CCMovelSign;	/* CCMovelDigitalSignature.h:1134 */
-struct __ns2__GetCertificate;	/* CCMovelDigitalSignature.h:1204 */
-struct __ns2__ValidateOtp;	/* CCMovelDigitalSignature.h:1274 */
-struct __ns2__CCMovelMultipleSign;	/* CCMovelDigitalSignature.h:1344 */
-struct __ns2__ForceSMS;	/* CCMovelDigitalSignature.h:1414 */
-struct __ns2__GetCertificateWithPin;	/* CCMovelDigitalSignature.h:1484 */
-struct _wsu__Timestamp;	/* wsu.h:77 */
-struct wsse__EncodedString;	/* wsse.h:58 */
-struct _wsse__UsernameToken;	/* wsse.h:129 */
-struct _wsse__BinarySecurityToken;	/* wsse.h:142 */
-struct _wsse__Reference;	/* wsse.h:152 */
-struct _wsse__Embedded;	/* wsse.h:160 */
-struct _wsse__KeyIdentifier;	/* wsse.h:169 */
-struct _wsse__SecurityTokenReference;	/* wsse.h:179 */
-struct ds__SignatureType;	/* ds.h:47 */
-struct _c14n__InclusiveNamespaces;	/* c14n.h:24 */
-struct ds__TransformType;	/* ds.h:74 */
-struct ds__KeyInfoType;	/* ds.h:49 */
-struct ds__SignedInfoType;	/* ds.h:47 */
-struct ds__CanonicalizationMethodType;	/* ds.h:60 */
-struct ds__SignatureMethodType;	/* ds.h:63 */
-struct ds__ReferenceType;	/* ds.h:66 */
-struct ds__TransformsType;	/* ds.h:69 */
-struct ds__DigestMethodType;	/* ds.h:80 */
-struct ds__KeyValueType;	/* ds.h:85 */
-struct ds__RetrievalMethodType;	/* ds.h:86 */
-struct ds__X509DataType;	/* wsse.h:182 */
-struct ds__X509IssuerSerialType;	/* ds.h:102 */
-struct ds__DSAKeyValueType;	/* ds.h:123 */
-struct ds__RSAKeyValueType;	/* ds.h:126 */
-struct xenc__EncryptionPropertyType;	/* xenc.h:85 */
-struct xenc__EncryptedType;	/* xenc.h:54 */
-struct xenc__EncryptionMethodType;	/* xenc.h:57 */
-struct xenc__CipherDataType;	/* xenc.h:60 */
-struct xenc__CipherReferenceType;	/* xenc.h:63 */
-struct xenc__TransformsType;	/* xenc.h:66 */
-struct xenc__AgreementMethodType;	/* xenc.h:75 */
-struct xenc__ReferenceType;	/* xenc.h:78 */
-struct xenc__EncryptionPropertiesType;	/* xenc.h:81 */
-struct __xenc__union_ReferenceList;	/* xenc.h:237 */
-struct _xenc__ReferenceList;	/* xenc.h:90 */
-struct xenc__EncryptedDataType;	/* xenc.h:69 */
-struct xenc__EncryptedKeyType;	/* xenc.h:72 */
-struct wsc__SecurityContextTokenType;	/* wsc.h:88 */
-union _wsc__union_DerivedKeyTokenType;	/* wsc.h:121 */
-struct __wsc__DerivedKeyTokenType_sequence;	/* wsc.h:117 */
-struct wsc__DerivedKeyTokenType;	/* wsc.h:110 */
-struct wsc__PropertiesType;	/* wsc.h:114 */
-struct __saml1__union_AssertionType;	/* saml1.h:147 */
-struct saml1__AssertionType;	/* saml1.h:62 */
-struct __saml1__union_ConditionsType;	/* saml1.h:190 */
-struct saml1__ConditionsType;	/* saml1.h:64 */
-struct saml1__ConditionAbstractType;	/* saml1.h:66 */
-struct __saml1__union_AdviceType;	/* saml1.h:232 */
-struct saml1__AdviceType;	/* saml1.h:72 */
-struct saml1__StatementAbstractType;	/* saml1.h:74 */
-struct saml1__SubjectType;	/* saml1.h:78 */
-struct saml1__SubjectConfirmationType;	/* saml1.h:82 */
-struct saml1__SubjectLocalityType;	/* saml1.h:86 */
-struct saml1__AuthorityBindingType;	/* saml1.h:88 */
-struct __saml1__union_EvidenceType;	/* saml1.h:354 */
-struct saml1__EvidenceType;	/* saml1.h:94 */
-struct saml1__AttributeDesignatorType;	/* saml1.h:98 */
-struct saml1__AudienceRestrictionConditionType;	/* saml1.h:68 */
-struct saml1__DoNotCacheConditionType;	/* saml1.h:70 */
-struct saml1__SubjectStatementAbstractType;	/* saml1.h:76 */
-struct saml1__NameIdentifierType;	/* saml1.h:80 */
-struct saml1__ActionType;	/* saml1.h:92 */
-struct saml1__AttributeType;	/* saml1.h:100 */
-struct saml1__AuthenticationStatementType;	/* saml1.h:84 */
-struct saml1__AuthorizationDecisionStatementType;	/* saml1.h:90 */
-struct saml1__AttributeStatementType;	/* saml1.h:96 */
-struct saml2__BaseIDAbstractType;	/* saml2.h:62 */
-struct saml2__EncryptedElementType;	/* saml2.h:66 */
-struct __saml2__union_AssertionType;	/* saml2.h:197 */
-struct saml2__AssertionType;	/* saml2.h:68 */
-struct saml2__SubjectType;	/* saml2.h:70 */
-struct saml2__SubjectConfirmationType;	/* saml2.h:72 */
-struct __saml2__union_ConditionsType;	/* saml2.h:290 */
-struct saml2__ConditionsType;	/* saml2.h:78 */
-struct saml2__ConditionAbstractType;	/* saml2.h:80 */
-struct __saml2__union_AdviceType;	/* saml2.h:334 */
-struct saml2__AdviceType;	/* saml2.h:88 */
-struct saml2__StatementAbstractType;	/* saml2.h:90 */
-struct saml2__SubjectLocalityType;	/* saml2.h:94 */
-struct saml2__AuthnContextType;	/* saml2.h:96 */
-struct __saml2__union_EvidenceType;	/* saml2.h:432 */
-struct saml2__EvidenceType;	/* saml2.h:102 */
-struct saml2__AttributeType;	/* saml2.h:106 */
-struct saml2__NameIDType;	/* saml2.h:64 */
-struct saml2__SubjectConfirmationDataType;	/* saml2.h:74 */
-struct saml2__AudienceRestrictionType;	/* saml2.h:82 */
-struct saml2__OneTimeUseType;	/* saml2.h:84 */
-struct saml2__ProxyRestrictionType;	/* saml2.h:86 */
-struct saml2__AuthnStatementType;	/* saml2.h:92 */
-struct saml2__AuthzDecisionStatementType;	/* saml2.h:98 */
-struct saml2__ActionType;	/* saml2.h:100 */
-struct __saml2__union_AttributeStatementType;	/* saml2.h:674 */
-struct saml2__AttributeStatementType;	/* saml2.h:104 */
-struct saml2__KeyInfoConfirmationDataType;	/* saml2.h:76 */
-struct _wsse__Security;	/* wsse.h:196 */
-struct _wsse__Password;	/* wsse.h:130 */
+class xsd__anyType;								  /* CCMovelDigitalSignature.h:158 */
+class xsd__base64Binary;						  /* CCMovelDigitalSignature.h:168 */
+class xsd__ID__;								  /* CCMovelDigitalSignature.h:186 */
+class xsd__IDREF__;								  /* CCMovelDigitalSignature.h:196 */
+class xsd__QName__;								  /* CCMovelDigitalSignature.h:203 */
+class xsd__anyURI__;							  /* CCMovelDigitalSignature.h:213 */
+class xsd__base64Binary__;						  /* CCMovelDigitalSignature.h:220 */
+class xsd__boolean_;							  /* CCMovelDigitalSignature.h:227 */
+class xsd__byte__;								  /* CCMovelDigitalSignature.h:234 */
+class xsd__dateTime_;							  /* CCMovelDigitalSignature.h:241 */
+class xsd__decimal__;							  /* CCMovelDigitalSignature.h:251 */
+class xsd__double_;								  /* CCMovelDigitalSignature.h:258 */
+class xsd__duration__;							  /* CCMovelDigitalSignature.h:268 */
+class xsd__float_;								  /* CCMovelDigitalSignature.h:275 */
+class xsd__int_;								  /* CCMovelDigitalSignature.h:282 */
+class xsd__long_;								  /* CCMovelDigitalSignature.h:289 */
+class xsd__short_;								  /* CCMovelDigitalSignature.h:296 */
+class xsd__string_;								  /* CCMovelDigitalSignature.h:303 */
+class xsd__unsignedByte__;						  /* CCMovelDigitalSignature.h:310 */
+class xsd__unsignedInt_;						  /* CCMovelDigitalSignature.h:317 */
+class xsd__unsignedLong_;						  /* CCMovelDigitalSignature.h:324 */
+class xsd__unsignedShort_;						  /* CCMovelDigitalSignature.h:331 */
+class _ns2__CCMovelSign;						  /* CCMovelDigitalSignature.h:344 */
+class _ns2__CCMovelSignResponse;				  /* CCMovelDigitalSignature.h:346 */
+class _ns2__GetCertificate;						  /* CCMovelDigitalSignature.h:348 */
+class _ns2__GetCertificateResponse;				  /* CCMovelDigitalSignature.h:350 */
+class _ns2__ValidateOtp;						  /* CCMovelDigitalSignature.h:352 */
+class _ns2__ValidateOtpResponse;				  /* CCMovelDigitalSignature.h:354 */
+class _ns2__CCMovelMultipleSign;				  /* CCMovelDigitalSignature.h:356 */
+class _ns2__CCMovelMultipleSignResponse;		  /* CCMovelDigitalSignature.h:358 */
+class _ns2__ForceSMS;							  /* CCMovelDigitalSignature.h:360 */
+class _ns2__ForceSMSResponse;					  /* CCMovelDigitalSignature.h:362 */
+class _ns2__GetCertificateWithPin;				  /* CCMovelDigitalSignature.h:364 */
+class _ns2__GetCertificateWithPinResponse;		  /* CCMovelDigitalSignature.h:366 */
+class ns3__SignRequest;							  /* CCMovelDigitalSignature.h:368 */
+class ns3__SignStatus;							  /* CCMovelDigitalSignature.h:370 */
+class ns3__SignResponse;						  /* CCMovelDigitalSignature.h:372 */
+class ns3__ArrayOfHashStructure;				  /* CCMovelDigitalSignature.h:374 */
+class ns3__HashStructure;						  /* CCMovelDigitalSignature.h:376 */
+class ns3__MultipleSignRequest;					  /* CCMovelDigitalSignature.h:378 */
+struct __ns2__CCMovelSign;						  /* CCMovelDigitalSignature.h:1134 */
+struct __ns2__GetCertificate;					  /* CCMovelDigitalSignature.h:1204 */
+struct __ns2__ValidateOtp;						  /* CCMovelDigitalSignature.h:1274 */
+struct __ns2__CCMovelMultipleSign;				  /* CCMovelDigitalSignature.h:1344 */
+struct __ns2__ForceSMS;							  /* CCMovelDigitalSignature.h:1414 */
+struct __ns2__GetCertificateWithPin;			  /* CCMovelDigitalSignature.h:1484 */
+struct _wsu__Timestamp;							  /* wsu.h:77 */
+struct wsse__EncodedString;						  /* wsse.h:58 */
+struct _wsse__UsernameToken;					  /* wsse.h:129 */
+struct _wsse__BinarySecurityToken;				  /* wsse.h:142 */
+struct _wsse__Reference;						  /* wsse.h:152 */
+struct _wsse__Embedded;							  /* wsse.h:160 */
+struct _wsse__KeyIdentifier;					  /* wsse.h:169 */
+struct _wsse__SecurityTokenReference;			  /* wsse.h:179 */
+struct ds__SignatureType;						  /* ds.h:47 */
+struct _c14n__InclusiveNamespaces;				  /* c14n.h:24 */
+struct ds__TransformType;						  /* ds.h:74 */
+struct ds__KeyInfoType;							  /* ds.h:49 */
+struct ds__SignedInfoType;						  /* ds.h:47 */
+struct ds__CanonicalizationMethodType;			  /* ds.h:60 */
+struct ds__SignatureMethodType;					  /* ds.h:63 */
+struct ds__ReferenceType;						  /* ds.h:66 */
+struct ds__TransformsType;						  /* ds.h:69 */
+struct ds__DigestMethodType;					  /* ds.h:80 */
+struct ds__KeyValueType;						  /* ds.h:85 */
+struct ds__RetrievalMethodType;					  /* ds.h:86 */
+struct ds__X509DataType;						  /* wsse.h:182 */
+struct ds__X509IssuerSerialType;				  /* ds.h:102 */
+struct ds__DSAKeyValueType;						  /* ds.h:123 */
+struct ds__RSAKeyValueType;						  /* ds.h:126 */
+struct xenc__EncryptionPropertyType;			  /* xenc.h:85 */
+struct xenc__EncryptedType;						  /* xenc.h:54 */
+struct xenc__EncryptionMethodType;				  /* xenc.h:57 */
+struct xenc__CipherDataType;					  /* xenc.h:60 */
+struct xenc__CipherReferenceType;				  /* xenc.h:63 */
+struct xenc__TransformsType;					  /* xenc.h:66 */
+struct xenc__AgreementMethodType;				  /* xenc.h:75 */
+struct xenc__ReferenceType;						  /* xenc.h:78 */
+struct xenc__EncryptionPropertiesType;			  /* xenc.h:81 */
+struct __xenc__union_ReferenceList;				  /* xenc.h:237 */
+struct _xenc__ReferenceList;					  /* xenc.h:90 */
+struct xenc__EncryptedDataType;					  /* xenc.h:69 */
+struct xenc__EncryptedKeyType;					  /* xenc.h:72 */
+struct wsc__SecurityContextTokenType;			  /* wsc.h:88 */
+union _wsc__union_DerivedKeyTokenType;			  /* wsc.h:121 */
+struct __wsc__DerivedKeyTokenType_sequence;		  /* wsc.h:117 */
+struct wsc__DerivedKeyTokenType;				  /* wsc.h:110 */
+struct wsc__PropertiesType;						  /* wsc.h:114 */
+struct __saml1__union_AssertionType;			  /* saml1.h:147 */
+struct saml1__AssertionType;					  /* saml1.h:62 */
+struct __saml1__union_ConditionsType;			  /* saml1.h:190 */
+struct saml1__ConditionsType;					  /* saml1.h:64 */
+struct saml1__ConditionAbstractType;			  /* saml1.h:66 */
+struct __saml1__union_AdviceType;				  /* saml1.h:232 */
+struct saml1__AdviceType;						  /* saml1.h:72 */
+struct saml1__StatementAbstractType;			  /* saml1.h:74 */
+struct saml1__SubjectType;						  /* saml1.h:78 */
+struct saml1__SubjectConfirmationType;			  /* saml1.h:82 */
+struct saml1__SubjectLocalityType;				  /* saml1.h:86 */
+struct saml1__AuthorityBindingType;				  /* saml1.h:88 */
+struct __saml1__union_EvidenceType;				  /* saml1.h:354 */
+struct saml1__EvidenceType;						  /* saml1.h:94 */
+struct saml1__AttributeDesignatorType;			  /* saml1.h:98 */
+struct saml1__AudienceRestrictionConditionType;	  /* saml1.h:68 */
+struct saml1__DoNotCacheConditionType;			  /* saml1.h:70 */
+struct saml1__SubjectStatementAbstractType;		  /* saml1.h:76 */
+struct saml1__NameIdentifierType;				  /* saml1.h:80 */
+struct saml1__ActionType;						  /* saml1.h:92 */
+struct saml1__AttributeType;					  /* saml1.h:100 */
+struct saml1__AuthenticationStatementType;		  /* saml1.h:84 */
+struct saml1__AuthorizationDecisionStatementType; /* saml1.h:90 */
+struct saml1__AttributeStatementType;			  /* saml1.h:96 */
+struct saml2__BaseIDAbstractType;				  /* saml2.h:62 */
+struct saml2__EncryptedElementType;				  /* saml2.h:66 */
+struct __saml2__union_AssertionType;			  /* saml2.h:197 */
+struct saml2__AssertionType;					  /* saml2.h:68 */
+struct saml2__SubjectType;						  /* saml2.h:70 */
+struct saml2__SubjectConfirmationType;			  /* saml2.h:72 */
+struct __saml2__union_ConditionsType;			  /* saml2.h:290 */
+struct saml2__ConditionsType;					  /* saml2.h:78 */
+struct saml2__ConditionAbstractType;			  /* saml2.h:80 */
+struct __saml2__union_AdviceType;				  /* saml2.h:334 */
+struct saml2__AdviceType;						  /* saml2.h:88 */
+struct saml2__StatementAbstractType;			  /* saml2.h:90 */
+struct saml2__SubjectLocalityType;				  /* saml2.h:94 */
+struct saml2__AuthnContextType;					  /* saml2.h:96 */
+struct __saml2__union_EvidenceType;				  /* saml2.h:432 */
+struct saml2__EvidenceType;						  /* saml2.h:102 */
+struct saml2__AttributeType;					  /* saml2.h:106 */
+struct saml2__NameIDType;						  /* saml2.h:64 */
+struct saml2__SubjectConfirmationDataType;		  /* saml2.h:74 */
+struct saml2__AudienceRestrictionType;			  /* saml2.h:82 */
+struct saml2__OneTimeUseType;					  /* saml2.h:84 */
+struct saml2__ProxyRestrictionType;				  /* saml2.h:86 */
+struct saml2__AuthnStatementType;				  /* saml2.h:92 */
+struct saml2__AuthzDecisionStatementType;		  /* saml2.h:98 */
+struct saml2__ActionType;						  /* saml2.h:100 */
+struct __saml2__union_AttributeStatementType;	  /* saml2.h:674 */
+struct saml2__AttributeStatementType;			  /* saml2.h:104 */
+struct saml2__KeyInfoConfirmationDataType;		  /* saml2.h:76 */
+struct _wsse__Security;							  /* wsse.h:196 */
+struct _wsse__Password;							  /* wsse.h:130 */
 
 /* CCMovelDigitalSignature.h:158 */
 #ifndef SOAP_TYPE_xsd__anyType
 #define SOAP_TYPE_xsd__anyType (8)
 /* simple XML schema type 'xsd:anyType': */
 class SOAP_CMAC xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:anyType' wrapped by this struct
-        char *__item;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__anyType
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__anyType; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__anyType, default initialized and not managed by a soap context
-        virtual xsd__anyType *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__anyType); }
-      public:
-        /// Constructor with default initializations
-        xsd__anyType() : __item(), soap() { }
-        virtual ~xsd__anyType() { }
-        /// Friend allocator used by soap_new_xsd__anyType(struct soap*, int)
-        friend SOAP_FMAC1 xsd__anyType * SOAP_FMAC2 soap_instantiate_xsd__anyType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:anyType' wrapped by this struct
+	char *__item;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__anyType
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__anyType; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__anyType, default initialized and not managed by a soap context
+	virtual xsd__anyType *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__anyType); }
+
+public:
+	/// Constructor with default initializations
+	xsd__anyType() : __item(), soap() {}
+	virtual ~xsd__anyType() {}
+	/// Friend allocator used by soap_new_xsd__anyType(struct soap*, int)
+	friend SOAP_FMAC1 xsd__anyType *SOAP_FMAC2 soap_instantiate_xsd__anyType(struct soap *, int, const char *,
+																			 const char *, size_t *);
 };
 #endif
 
@@ -301,38 +300,43 @@ class SOAP_CMAC xsd__anyType {
 #define SOAP_TYPE_xsd__base64Binary (12)
 /* binary data attached as MTOM/MIME/DIME attachment or included as *`xsd:base64Binary`* base64: */
 class SOAP_CMAC xsd__base64Binary {
-      public:
-        unsigned char *__ptr;
-        int __size;
-        /// Optional element 'id' of XML schema type 'xsd:string'
-        char *id;
-        /// Optional element 'type' of XML schema type 'xsd:string'
-        char *type;
-        /// Optional element 'options' of XML schema type 'xsd:string'
-        char *options;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__base64Binary
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__base64Binary; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__base64Binary, default initialized and not managed by a soap context
-        virtual xsd__base64Binary *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__base64Binary); }
-      public:
-        /// Constructor with default initializations
-        xsd__base64Binary() : __ptr(), __size(), id(), type(), options() { }
-        virtual ~xsd__base64Binary() { }
-        /// Friend allocator used by soap_new_xsd__base64Binary(struct soap*, int)
-        friend SOAP_FMAC1 xsd__base64Binary * SOAP_FMAC2 soap_instantiate_xsd__base64Binary(struct soap*, int, const char*, const char*, size_t*);
+public:
+	unsigned char *__ptr;
+	int __size;
+	/// Optional element 'id' of XML schema type 'xsd:string'
+	char *id;
+	/// Optional element 'type' of XML schema type 'xsd:string'
+	char *type;
+	/// Optional element 'options' of XML schema type 'xsd:string'
+	char *options;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__base64Binary
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__base64Binary; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__base64Binary, default initialized and not managed by a soap context
+	virtual xsd__base64Binary *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__base64Binary); }
+
+public:
+	/// Constructor with default initializations
+	xsd__base64Binary() : __ptr(), __size(), id(), type(), options() {}
+	virtual ~xsd__base64Binary() {}
+	/// Friend allocator used by soap_new_xsd__base64Binary(struct soap*, int)
+	friend SOAP_FMAC1 xsd__base64Binary *SOAP_FMAC2 soap_instantiate_xsd__base64Binary(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -341,32 +345,37 @@ class SOAP_CMAC xsd__base64Binary {
 #define SOAP_TYPE_xsd__ID__ (19)
 /* simple XML schema type 'xsd:ID': */
 class SOAP_CMAC xsd__ID__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:ID' wrapped by this struct
-        std::string __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__ID__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__ID__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__ID__, default initialized and not managed by a soap context
-        virtual xsd__ID__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__ID__); }
-      public:
-        /// Constructor with default initializations
-        xsd__ID__() : __item() { }
-        virtual ~xsd__ID__() { }
-        /// Friend allocator used by soap_new_xsd__ID__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__ID__ * SOAP_FMAC2 soap_instantiate_xsd__ID__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:ID' wrapped by this struct
+	std::string __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__ID__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__ID__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__ID__, default initialized and not managed by a soap context
+	virtual xsd__ID__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__ID__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__ID__() : __item() {}
+	virtual ~xsd__ID__() {}
+	/// Friend allocator used by soap_new_xsd__ID__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__ID__ *SOAP_FMAC2 soap_instantiate_xsd__ID__(struct soap *, int, const char *, const char *,
+																	   size_t *);
 };
 #endif
 
@@ -375,32 +384,37 @@ class SOAP_CMAC xsd__ID__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__IDREF__ (21)
 /* simple XML schema type 'xsd:IDREF': */
 class SOAP_CMAC xsd__IDREF__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:IDREF' wrapped by this struct
-        std::string __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__IDREF__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__IDREF__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__IDREF__, default initialized and not managed by a soap context
-        virtual xsd__IDREF__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__IDREF__); }
-      public:
-        /// Constructor with default initializations
-        xsd__IDREF__() : __item() { }
-        virtual ~xsd__IDREF__() { }
-        /// Friend allocator used by soap_new_xsd__IDREF__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__IDREF__ * SOAP_FMAC2 soap_instantiate_xsd__IDREF__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:IDREF' wrapped by this struct
+	std::string __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__IDREF__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__IDREF__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__IDREF__, default initialized and not managed by a soap context
+	virtual xsd__IDREF__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__IDREF__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__IDREF__() : __item() {}
+	virtual ~xsd__IDREF__() {}
+	/// Friend allocator used by soap_new_xsd__IDREF__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__IDREF__ *SOAP_FMAC2 soap_instantiate_xsd__IDREF__(struct soap *, int, const char *,
+																			 const char *, size_t *);
 };
 #endif
 
@@ -409,32 +423,37 @@ class SOAP_CMAC xsd__IDREF__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__QName__ (22)
 /* simple XML schema type 'xsd:QName': */
 class SOAP_CMAC xsd__QName__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:QName' wrapped by this struct
-        std::string __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__QName__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__QName__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__QName__, default initialized and not managed by a soap context
-        virtual xsd__QName__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__QName__); }
-      public:
-        /// Constructor with default initializations
-        xsd__QName__() : __item() { }
-        virtual ~xsd__QName__() { }
-        /// Friend allocator used by soap_new_xsd__QName__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__QName__ * SOAP_FMAC2 soap_instantiate_xsd__QName__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:QName' wrapped by this struct
+	std::string __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__QName__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__QName__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__QName__, default initialized and not managed by a soap context
+	virtual xsd__QName__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__QName__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__QName__() : __item() {}
+	virtual ~xsd__QName__() {}
+	/// Friend allocator used by soap_new_xsd__QName__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__QName__ *SOAP_FMAC2 soap_instantiate_xsd__QName__(struct soap *, int, const char *,
+																			 const char *, size_t *);
 };
 #endif
 
@@ -443,32 +462,37 @@ class SOAP_CMAC xsd__QName__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__anyURI__ (24)
 /* simple XML schema type 'xsd:anyURI': */
 class SOAP_CMAC xsd__anyURI__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:anyURI' wrapped by this struct
-        std::string __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__anyURI__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__anyURI__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__anyURI__, default initialized and not managed by a soap context
-        virtual xsd__anyURI__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__anyURI__); }
-      public:
-        /// Constructor with default initializations
-        xsd__anyURI__() : __item() { }
-        virtual ~xsd__anyURI__() { }
-        /// Friend allocator used by soap_new_xsd__anyURI__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__anyURI__ * SOAP_FMAC2 soap_instantiate_xsd__anyURI__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:anyURI' wrapped by this struct
+	std::string __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__anyURI__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__anyURI__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__anyURI__, default initialized and not managed by a soap context
+	virtual xsd__anyURI__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__anyURI__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__anyURI__() : __item() {}
+	virtual ~xsd__anyURI__() {}
+	/// Friend allocator used by soap_new_xsd__anyURI__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__anyURI__ *SOAP_FMAC2 soap_instantiate_xsd__anyURI__(struct soap *, int, const char *,
+																			   const char *, size_t *);
 };
 #endif
 
@@ -477,32 +501,38 @@ class SOAP_CMAC xsd__anyURI__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__base64Binary__ (25)
 /* simple XML schema type 'xsd:base64Binary': */
 class SOAP_CMAC xsd__base64Binary__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:base64Binary' wrapped by this struct
-        xsd__base64Binary __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__base64Binary__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__base64Binary__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__base64Binary__, default initialized and not managed by a soap context
-        virtual xsd__base64Binary__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__base64Binary__); }
-      public:
-        /// Constructor with default initializations
-        xsd__base64Binary__() : __item() { }
-        virtual ~xsd__base64Binary__() { }
-        /// Friend allocator used by soap_new_xsd__base64Binary__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__base64Binary__ * SOAP_FMAC2 soap_instantiate_xsd__base64Binary__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:base64Binary' wrapped by this struct
+	xsd__base64Binary __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__base64Binary__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__base64Binary__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__base64Binary__, default initialized and not managed by a soap context
+	virtual xsd__base64Binary__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__base64Binary__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__base64Binary__() : __item() {}
+	virtual ~xsd__base64Binary__() {}
+	/// Friend allocator used by soap_new_xsd__base64Binary__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__base64Binary__ *SOAP_FMAC2 soap_instantiate_xsd__base64Binary__(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -511,32 +541,37 @@ class SOAP_CMAC xsd__base64Binary__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__boolean_ (26)
 /* simple XML schema type 'xsd:boolean': */
 class SOAP_CMAC xsd__boolean_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:boolean' wrapped by this struct
-        bool __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__boolean_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__boolean_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__boolean_, default initialized and not managed by a soap context
-        virtual xsd__boolean_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__boolean_); }
-      public:
-        /// Constructor with default initializations
-        xsd__boolean_() : __item() { }
-        virtual ~xsd__boolean_() { }
-        /// Friend allocator used by soap_new_xsd__boolean_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__boolean_ * SOAP_FMAC2 soap_instantiate_xsd__boolean_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:boolean' wrapped by this struct
+	bool __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__boolean_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__boolean_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__boolean_, default initialized and not managed by a soap context
+	virtual xsd__boolean_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__boolean_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__boolean_() : __item() {}
+	virtual ~xsd__boolean_() {}
+	/// Friend allocator used by soap_new_xsd__boolean_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__boolean_ *SOAP_FMAC2 soap_instantiate_xsd__boolean_(struct soap *, int, const char *,
+																			   const char *, size_t *);
 };
 #endif
 
@@ -545,32 +580,37 @@ class SOAP_CMAC xsd__boolean_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__byte__ (28)
 /* simple XML schema type 'xsd:byte': */
 class SOAP_CMAC xsd__byte__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:byte' wrapped by this struct
-        char __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__byte__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__byte__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__byte__, default initialized and not managed by a soap context
-        virtual xsd__byte__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__byte__); }
-      public:
-        /// Constructor with default initializations
-        xsd__byte__() : __item() { }
-        virtual ~xsd__byte__() { }
-        /// Friend allocator used by soap_new_xsd__byte__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__byte__ * SOAP_FMAC2 soap_instantiate_xsd__byte__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:byte' wrapped by this struct
+	char __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__byte__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__byte__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__byte__, default initialized and not managed by a soap context
+	virtual xsd__byte__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__byte__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__byte__() : __item() {}
+	virtual ~xsd__byte__() {}
+	/// Friend allocator used by soap_new_xsd__byte__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__byte__ *SOAP_FMAC2 soap_instantiate_xsd__byte__(struct soap *, int, const char *,
+																		   const char *, size_t *);
 };
 #endif
 
@@ -579,32 +619,37 @@ class SOAP_CMAC xsd__byte__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__dateTime_ (29)
 /* simple XML schema type 'xsd:dateTime': */
 class SOAP_CMAC xsd__dateTime_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:dateTime' wrapped by this struct
-        time_t __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__dateTime_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__dateTime_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__dateTime_, default initialized and not managed by a soap context
-        virtual xsd__dateTime_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__dateTime_); }
-      public:
-        /// Constructor with default initializations
-        xsd__dateTime_() : __item() { }
-        virtual ~xsd__dateTime_() { }
-        /// Friend allocator used by soap_new_xsd__dateTime_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__dateTime_ * SOAP_FMAC2 soap_instantiate_xsd__dateTime_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:dateTime' wrapped by this struct
+	time_t __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__dateTime_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__dateTime_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__dateTime_, default initialized and not managed by a soap context
+	virtual xsd__dateTime_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__dateTime_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__dateTime_() : __item() {}
+	virtual ~xsd__dateTime_() {}
+	/// Friend allocator used by soap_new_xsd__dateTime_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__dateTime_ *SOAP_FMAC2 soap_instantiate_xsd__dateTime_(struct soap *, int, const char *,
+																				 const char *, size_t *);
 };
 #endif
 
@@ -613,32 +658,37 @@ class SOAP_CMAC xsd__dateTime_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__decimal__ (32)
 /* simple XML schema type 'xsd:decimal': */
 class SOAP_CMAC xsd__decimal__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:decimal' wrapped by this struct
-        std::string __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__decimal__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__decimal__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__decimal__, default initialized and not managed by a soap context
-        virtual xsd__decimal__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__decimal__); }
-      public:
-        /// Constructor with default initializations
-        xsd__decimal__() : __item() { }
-        virtual ~xsd__decimal__() { }
-        /// Friend allocator used by soap_new_xsd__decimal__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__decimal__ * SOAP_FMAC2 soap_instantiate_xsd__decimal__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:decimal' wrapped by this struct
+	std::string __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__decimal__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__decimal__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__decimal__, default initialized and not managed by a soap context
+	virtual xsd__decimal__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__decimal__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__decimal__() : __item() {}
+	virtual ~xsd__decimal__() {}
+	/// Friend allocator used by soap_new_xsd__decimal__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__decimal__ *SOAP_FMAC2 soap_instantiate_xsd__decimal__(struct soap *, int, const char *,
+																				 const char *, size_t *);
 };
 #endif
 
@@ -647,32 +697,37 @@ class SOAP_CMAC xsd__decimal__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__double_ (33)
 /* simple XML schema type 'xsd:double': */
 class SOAP_CMAC xsd__double_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:double' wrapped by this struct
-        double __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__double_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__double_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__double_, default initialized and not managed by a soap context
-        virtual xsd__double_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__double_); }
-      public:
-        /// Constructor with default initializations
-        xsd__double_() : __item() { }
-        virtual ~xsd__double_() { }
-        /// Friend allocator used by soap_new_xsd__double_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__double_ * SOAP_FMAC2 soap_instantiate_xsd__double_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:double' wrapped by this struct
+	double __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__double_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__double_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__double_, default initialized and not managed by a soap context
+	virtual xsd__double_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__double_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__double_() : __item() {}
+	virtual ~xsd__double_() {}
+	/// Friend allocator used by soap_new_xsd__double_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__double_ *SOAP_FMAC2 soap_instantiate_xsd__double_(struct soap *, int, const char *,
+																			 const char *, size_t *);
 };
 #endif
 
@@ -681,32 +736,37 @@ class SOAP_CMAC xsd__double_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__duration__ (36)
 /* simple XML schema type 'xsd:duration': */
 class SOAP_CMAC xsd__duration__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:duration' wrapped by this struct
-        std::string __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__duration__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__duration__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__duration__, default initialized and not managed by a soap context
-        virtual xsd__duration__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__duration__); }
-      public:
-        /// Constructor with default initializations
-        xsd__duration__() : __item() { }
-        virtual ~xsd__duration__() { }
-        /// Friend allocator used by soap_new_xsd__duration__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__duration__ * SOAP_FMAC2 soap_instantiate_xsd__duration__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:duration' wrapped by this struct
+	std::string __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__duration__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__duration__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__duration__, default initialized and not managed by a soap context
+	virtual xsd__duration__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__duration__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__duration__() : __item() {}
+	virtual ~xsd__duration__() {}
+	/// Friend allocator used by soap_new_xsd__duration__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__duration__ *SOAP_FMAC2 soap_instantiate_xsd__duration__(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 
@@ -715,32 +775,37 @@ class SOAP_CMAC xsd__duration__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__float_ (37)
 /* simple XML schema type 'xsd:float': */
 class SOAP_CMAC xsd__float_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:float' wrapped by this struct
-        float __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__float_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__float_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__float_, default initialized and not managed by a soap context
-        virtual xsd__float_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__float_); }
-      public:
-        /// Constructor with default initializations
-        xsd__float_() : __item() { }
-        virtual ~xsd__float_() { }
-        /// Friend allocator used by soap_new_xsd__float_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__float_ * SOAP_FMAC2 soap_instantiate_xsd__float_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:float' wrapped by this struct
+	float __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__float_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__float_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__float_, default initialized and not managed by a soap context
+	virtual xsd__float_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__float_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__float_() : __item() {}
+	virtual ~xsd__float_() {}
+	/// Friend allocator used by soap_new_xsd__float_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__float_ *SOAP_FMAC2 soap_instantiate_xsd__float_(struct soap *, int, const char *,
+																		   const char *, size_t *);
 };
 #endif
 
@@ -749,32 +814,37 @@ class SOAP_CMAC xsd__float_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__int_ (39)
 /* simple XML schema type 'xsd:int': */
 class SOAP_CMAC xsd__int_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:int' wrapped by this struct
-        int __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__int_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__int_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__int_, default initialized and not managed by a soap context
-        virtual xsd__int_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__int_); }
-      public:
-        /// Constructor with default initializations
-        xsd__int_() : __item() { }
-        virtual ~xsd__int_() { }
-        /// Friend allocator used by soap_new_xsd__int_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__int_ * SOAP_FMAC2 soap_instantiate_xsd__int_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:int' wrapped by this struct
+	int __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__int_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__int_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__int_, default initialized and not managed by a soap context
+	virtual xsd__int_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__int_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__int_() : __item() {}
+	virtual ~xsd__int_() {}
+	/// Friend allocator used by soap_new_xsd__int_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__int_ *SOAP_FMAC2 soap_instantiate_xsd__int_(struct soap *, int, const char *, const char *,
+																	   size_t *);
 };
 #endif
 
@@ -783,32 +853,37 @@ class SOAP_CMAC xsd__int_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__long_ (40)
 /* simple XML schema type 'xsd:long': */
 class SOAP_CMAC xsd__long_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:long' wrapped by this struct
-        LONG64 __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__long_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__long_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__long_, default initialized and not managed by a soap context
-        virtual xsd__long_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__long_); }
-      public:
-        /// Constructor with default initializations
-        xsd__long_() : __item() { }
-        virtual ~xsd__long_() { }
-        /// Friend allocator used by soap_new_xsd__long_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__long_ * SOAP_FMAC2 soap_instantiate_xsd__long_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:long' wrapped by this struct
+	LONG64 __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__long_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__long_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__long_, default initialized and not managed by a soap context
+	virtual xsd__long_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__long_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__long_() : __item() {}
+	virtual ~xsd__long_() {}
+	/// Friend allocator used by soap_new_xsd__long_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__long_ *SOAP_FMAC2 soap_instantiate_xsd__long_(struct soap *, int, const char *, const char *,
+																		 size_t *);
 };
 #endif
 
@@ -817,32 +892,37 @@ class SOAP_CMAC xsd__long_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__short_ (42)
 /* simple XML schema type 'xsd:short': */
 class SOAP_CMAC xsd__short_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:short' wrapped by this struct
-        short __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__short_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__short_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__short_, default initialized and not managed by a soap context
-        virtual xsd__short_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__short_); }
-      public:
-        /// Constructor with default initializations
-        xsd__short_() : __item() { }
-        virtual ~xsd__short_() { }
-        /// Friend allocator used by soap_new_xsd__short_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__short_ * SOAP_FMAC2 soap_instantiate_xsd__short_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:short' wrapped by this struct
+	short __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__short_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__short_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__short_, default initialized and not managed by a soap context
+	virtual xsd__short_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__short_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__short_() : __item() {}
+	virtual ~xsd__short_() {}
+	/// Friend allocator used by soap_new_xsd__short_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__short_ *SOAP_FMAC2 soap_instantiate_xsd__short_(struct soap *, int, const char *,
+																		   const char *, size_t *);
 };
 #endif
 
@@ -851,32 +931,37 @@ class SOAP_CMAC xsd__short_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__string_ (44)
 /* simple XML schema type 'xsd:string': */
 class SOAP_CMAC xsd__string_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:string' wrapped by this struct
-        std::string __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__string_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__string_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__string_, default initialized and not managed by a soap context
-        virtual xsd__string_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__string_); }
-      public:
-        /// Constructor with default initializations
-        xsd__string_() : __item() { }
-        virtual ~xsd__string_() { }
-        /// Friend allocator used by soap_new_xsd__string_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__string_ * SOAP_FMAC2 soap_instantiate_xsd__string_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:string' wrapped by this struct
+	std::string __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__string_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__string_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__string_, default initialized and not managed by a soap context
+	virtual xsd__string_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__string_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__string_() : __item() {}
+	virtual ~xsd__string_() {}
+	/// Friend allocator used by soap_new_xsd__string_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__string_ *SOAP_FMAC2 soap_instantiate_xsd__string_(struct soap *, int, const char *,
+																			 const char *, size_t *);
 };
 #endif
 
@@ -885,32 +970,38 @@ class SOAP_CMAC xsd__string_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__unsignedByte__ (45)
 /* simple XML schema type 'xsd:unsignedByte': */
 class SOAP_CMAC xsd__unsignedByte__ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:unsignedByte' wrapped by this struct
-        unsigned char __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__unsignedByte__
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__unsignedByte__; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__unsignedByte__, default initialized and not managed by a soap context
-        virtual xsd__unsignedByte__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__unsignedByte__); }
-      public:
-        /// Constructor with default initializations
-        xsd__unsignedByte__() : __item() { }
-        virtual ~xsd__unsignedByte__() { }
-        /// Friend allocator used by soap_new_xsd__unsignedByte__(struct soap*, int)
-        friend SOAP_FMAC1 xsd__unsignedByte__ * SOAP_FMAC2 soap_instantiate_xsd__unsignedByte__(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:unsignedByte' wrapped by this struct
+	unsigned char __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__unsignedByte__
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__unsignedByte__; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__unsignedByte__, default initialized and not managed by a soap context
+	virtual xsd__unsignedByte__ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__unsignedByte__); }
+
+public:
+	/// Constructor with default initializations
+	xsd__unsignedByte__() : __item() {}
+	virtual ~xsd__unsignedByte__() {}
+	/// Friend allocator used by soap_new_xsd__unsignedByte__(struct soap*, int)
+	friend SOAP_FMAC1 xsd__unsignedByte__ *SOAP_FMAC2 soap_instantiate_xsd__unsignedByte__(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -919,32 +1010,37 @@ class SOAP_CMAC xsd__unsignedByte__ : public xsd__anyType {
 #define SOAP_TYPE_xsd__unsignedInt_ (46)
 /* simple XML schema type 'xsd:unsignedInt': */
 class SOAP_CMAC xsd__unsignedInt_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:unsignedInt' wrapped by this struct
-        unsigned int __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__unsignedInt_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__unsignedInt_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__unsignedInt_, default initialized and not managed by a soap context
-        virtual xsd__unsignedInt_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__unsignedInt_); }
-      public:
-        /// Constructor with default initializations
-        xsd__unsignedInt_() : __item() { }
-        virtual ~xsd__unsignedInt_() { }
-        /// Friend allocator used by soap_new_xsd__unsignedInt_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__unsignedInt_ * SOAP_FMAC2 soap_instantiate_xsd__unsignedInt_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:unsignedInt' wrapped by this struct
+	unsigned int __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__unsignedInt_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__unsignedInt_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__unsignedInt_, default initialized and not managed by a soap context
+	virtual xsd__unsignedInt_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__unsignedInt_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__unsignedInt_() : __item() {}
+	virtual ~xsd__unsignedInt_() {}
+	/// Friend allocator used by soap_new_xsd__unsignedInt_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__unsignedInt_ *SOAP_FMAC2 soap_instantiate_xsd__unsignedInt_(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -953,32 +1049,38 @@ class SOAP_CMAC xsd__unsignedInt_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__unsignedLong_ (47)
 /* simple XML schema type 'xsd:unsignedLong': */
 class SOAP_CMAC xsd__unsignedLong_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:unsignedLong' wrapped by this struct
-        ULONG64 __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__unsignedLong_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__unsignedLong_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__unsignedLong_, default initialized and not managed by a soap context
-        virtual xsd__unsignedLong_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__unsignedLong_); }
-      public:
-        /// Constructor with default initializations
-        xsd__unsignedLong_() : __item() { }
-        virtual ~xsd__unsignedLong_() { }
-        /// Friend allocator used by soap_new_xsd__unsignedLong_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__unsignedLong_ * SOAP_FMAC2 soap_instantiate_xsd__unsignedLong_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:unsignedLong' wrapped by this struct
+	ULONG64 __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__unsignedLong_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__unsignedLong_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__unsignedLong_, default initialized and not managed by a soap context
+	virtual xsd__unsignedLong_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__unsignedLong_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__unsignedLong_() : __item() {}
+	virtual ~xsd__unsignedLong_() {}
+	/// Friend allocator used by soap_new_xsd__unsignedLong_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__unsignedLong_ *SOAP_FMAC2 soap_instantiate_xsd__unsignedLong_(struct soap *, int,
+																						 const char *, const char *,
+																						 size_t *);
 };
 #endif
 
@@ -987,32 +1089,38 @@ class SOAP_CMAC xsd__unsignedLong_ : public xsd__anyType {
 #define SOAP_TYPE_xsd__unsignedShort_ (49)
 /* simple XML schema type 'xsd:unsignedShort': */
 class SOAP_CMAC xsd__unsignedShort_ : public xsd__anyType {
-      public:
-        /// Simple content of XML schema type 'xsd:unsignedShort' wrapped by this struct
-        unsigned short __item;
-      public:
-        /// Return unique type id SOAP_TYPE_xsd__unsignedShort_
-        virtual long soap_type(void) const { return SOAP_TYPE_xsd__unsignedShort_; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type xsd__unsignedShort_, default initialized and not managed by a soap context
-        virtual xsd__unsignedShort_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__unsignedShort_); }
-      public:
-        /// Constructor with default initializations
-        xsd__unsignedShort_() : __item() { }
-        virtual ~xsd__unsignedShort_() { }
-        /// Friend allocator used by soap_new_xsd__unsignedShort_(struct soap*, int)
-        friend SOAP_FMAC1 xsd__unsignedShort_ * SOAP_FMAC2 soap_instantiate_xsd__unsignedShort_(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Simple content of XML schema type 'xsd:unsignedShort' wrapped by this struct
+	unsigned short __item;
+
+public:
+	/// Return unique type id SOAP_TYPE_xsd__unsignedShort_
+	virtual long soap_type(void) const { return SOAP_TYPE_xsd__unsignedShort_; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type xsd__unsignedShort_, default initialized and not managed by a soap context
+	virtual xsd__unsignedShort_ *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(xsd__unsignedShort_); }
+
+public:
+	/// Constructor with default initializations
+	xsd__unsignedShort_() : __item() {}
+	virtual ~xsd__unsignedShort_() {}
+	/// Friend allocator used by soap_new_xsd__unsignedShort_(struct soap*, int)
+	friend SOAP_FMAC1 xsd__unsignedShort_ *SOAP_FMAC2 soap_instantiate_xsd__unsignedShort_(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -1021,34 +1129,39 @@ class SOAP_CMAC xsd__unsignedShort_ : public xsd__anyType {
 #define SOAP_TYPE__ns2__CCMovelSign (51)
 /* complex XML schema type 'ns2:CCMovelSign': */
 class SOAP_CMAC _ns2__CCMovelSign {
-      public:
-        /// Optional element 'ns2:request' of XML schema type 'ns3:SignRequest'
-        ns3__SignRequest *request;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__CCMovelSign
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__CCMovelSign; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__CCMovelSign, default initialized and not managed by a soap context
-        virtual _ns2__CCMovelSign *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__CCMovelSign); }
-      public:
-        /// Constructor with default initializations
-        _ns2__CCMovelSign() : request(), soap() { }
-        virtual ~_ns2__CCMovelSign() { }
-        /// Friend allocator used by soap_new__ns2__CCMovelSign(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__CCMovelSign * SOAP_FMAC2 soap_instantiate__ns2__CCMovelSign(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:request' of XML schema type 'ns3:SignRequest'
+	ns3__SignRequest *request;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__CCMovelSign
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__CCMovelSign; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__CCMovelSign, default initialized and not managed by a soap context
+	virtual _ns2__CCMovelSign *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__CCMovelSign); }
+
+public:
+	/// Constructor with default initializations
+	_ns2__CCMovelSign() : request(), soap() {}
+	virtual ~_ns2__CCMovelSign() {}
+	/// Friend allocator used by soap_new__ns2__CCMovelSign(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__CCMovelSign *SOAP_FMAC2 soap_instantiate__ns2__CCMovelSign(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -1057,34 +1170,39 @@ class SOAP_CMAC _ns2__CCMovelSign {
 #define SOAP_TYPE__ns2__CCMovelSignResponse (52)
 /* complex XML schema type 'ns2:CCMovelSignResponse': */
 class SOAP_CMAC _ns2__CCMovelSignResponse {
-      public:
-        /// Optional element 'ns2:CCMovelSignResult' of XML schema type 'ns3:SignStatus'
-        ns3__SignStatus *CCMovelSignResult;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__CCMovelSignResponse
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__CCMovelSignResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__CCMovelSignResponse, default initialized and not managed by a soap context
-        virtual _ns2__CCMovelSignResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__CCMovelSignResponse); }
-      public:
-        /// Constructor with default initializations
-        _ns2__CCMovelSignResponse() : CCMovelSignResult(), soap() { }
-        virtual ~_ns2__CCMovelSignResponse() { }
-        /// Friend allocator used by soap_new__ns2__CCMovelSignResponse(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__CCMovelSignResponse * SOAP_FMAC2 soap_instantiate__ns2__CCMovelSignResponse(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:CCMovelSignResult' of XML schema type 'ns3:SignStatus'
+	ns3__SignStatus *CCMovelSignResult;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__CCMovelSignResponse
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__CCMovelSignResponse; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__CCMovelSignResponse, default initialized and not managed by a soap context
+	virtual _ns2__CCMovelSignResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__CCMovelSignResponse); }
+
+public:
+	/// Constructor with default initializations
+	_ns2__CCMovelSignResponse() : CCMovelSignResult(), soap() {}
+	virtual ~_ns2__CCMovelSignResponse() {}
+	/// Friend allocator used by soap_new__ns2__CCMovelSignResponse(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__CCMovelSignResponse *SOAP_FMAC2
+	soap_instantiate__ns2__CCMovelSignResponse(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1093,36 +1211,42 @@ class SOAP_CMAC _ns2__CCMovelSignResponse {
 #define SOAP_TYPE__ns2__GetCertificate (53)
 /* complex XML schema type 'ns2:GetCertificate': */
 class SOAP_CMAC _ns2__GetCertificate {
-      public:
-        /// Optional element 'ns2:applicationId' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *applicationId;
-        /// Optional element 'ns2:userId' of XML schema type 'xsd:string'
-        std::string *userId;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__GetCertificate
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__GetCertificate; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__GetCertificate, default initialized and not managed by a soap context
-        virtual _ns2__GetCertificate *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__GetCertificate); }
-      public:
-        /// Constructor with default initializations
-        _ns2__GetCertificate() : applicationId(), userId(), soap() { }
-        virtual ~_ns2__GetCertificate() { }
-        /// Friend allocator used by soap_new__ns2__GetCertificate(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__GetCertificate * SOAP_FMAC2 soap_instantiate__ns2__GetCertificate(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:applicationId' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *applicationId;
+	/// Optional element 'ns2:userId' of XML schema type 'xsd:string'
+	std::string *userId;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__GetCertificate
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__GetCertificate; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__GetCertificate, default initialized and not managed by a soap context
+	virtual _ns2__GetCertificate *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__GetCertificate); }
+
+public:
+	/// Constructor with default initializations
+	_ns2__GetCertificate() : applicationId(), userId(), soap() {}
+	virtual ~_ns2__GetCertificate() {}
+	/// Friend allocator used by soap_new__ns2__GetCertificate(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__GetCertificate *SOAP_FMAC2 soap_instantiate__ns2__GetCertificate(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -1131,34 +1255,41 @@ class SOAP_CMAC _ns2__GetCertificate {
 #define SOAP_TYPE__ns2__GetCertificateResponse (54)
 /* complex XML schema type 'ns2:GetCertificateResponse': */
 class SOAP_CMAC _ns2__GetCertificateResponse {
-      public:
-        /// Optional element 'ns2:GetCertificateResult' of XML schema type 'xsd:string'
-        std::string *GetCertificateResult;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__GetCertificateResponse
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__GetCertificateResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__GetCertificateResponse, default initialized and not managed by a soap context
-        virtual _ns2__GetCertificateResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__GetCertificateResponse); }
-      public:
-        /// Constructor with default initializations
-        _ns2__GetCertificateResponse() : GetCertificateResult(), soap() { }
-        virtual ~_ns2__GetCertificateResponse() { }
-        /// Friend allocator used by soap_new__ns2__GetCertificateResponse(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__GetCertificateResponse * SOAP_FMAC2 soap_instantiate__ns2__GetCertificateResponse(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:GetCertificateResult' of XML schema type 'xsd:string'
+	std::string *GetCertificateResult;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__GetCertificateResponse
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__GetCertificateResponse; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__GetCertificateResponse, default initialized and not managed by a soap context
+	virtual _ns2__GetCertificateResponse *soap_alloc(void) const {
+		return SOAP_NEW_UNMANAGED(_ns2__GetCertificateResponse);
+	}
+
+public:
+	/// Constructor with default initializations
+	_ns2__GetCertificateResponse() : GetCertificateResult(), soap() {}
+	virtual ~_ns2__GetCertificateResponse() {}
+	/// Friend allocator used by soap_new__ns2__GetCertificateResponse(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__GetCertificateResponse *SOAP_FMAC2
+	soap_instantiate__ns2__GetCertificateResponse(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1167,38 +1298,43 @@ class SOAP_CMAC _ns2__GetCertificateResponse {
 #define SOAP_TYPE__ns2__ValidateOtp (55)
 /* complex XML schema type 'ns2:ValidateOtp': */
 class SOAP_CMAC _ns2__ValidateOtp {
-      public:
-        /// Optional element 'ns2:code' of XML schema type 'xsd:string'
-        std::string *code;
-        /// Optional element 'ns2:processId' of XML schema type 'xsd:string'
-        std::string *processId;
-        /// Optional element 'ns2:applicationId' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *applicationId;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__ValidateOtp
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__ValidateOtp; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__ValidateOtp, default initialized and not managed by a soap context
-        virtual _ns2__ValidateOtp *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__ValidateOtp); }
-      public:
-        /// Constructor with default initializations
-        _ns2__ValidateOtp() : code(), processId(), applicationId(), soap() { }
-        virtual ~_ns2__ValidateOtp() { }
-        /// Friend allocator used by soap_new__ns2__ValidateOtp(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__ValidateOtp * SOAP_FMAC2 soap_instantiate__ns2__ValidateOtp(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:code' of XML schema type 'xsd:string'
+	std::string *code;
+	/// Optional element 'ns2:processId' of XML schema type 'xsd:string'
+	std::string *processId;
+	/// Optional element 'ns2:applicationId' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *applicationId;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__ValidateOtp
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__ValidateOtp; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__ValidateOtp, default initialized and not managed by a soap context
+	virtual _ns2__ValidateOtp *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__ValidateOtp); }
+
+public:
+	/// Constructor with default initializations
+	_ns2__ValidateOtp() : code(), processId(), applicationId(), soap() {}
+	virtual ~_ns2__ValidateOtp() {}
+	/// Friend allocator used by soap_new__ns2__ValidateOtp(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__ValidateOtp *SOAP_FMAC2 soap_instantiate__ns2__ValidateOtp(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -1207,34 +1343,39 @@ class SOAP_CMAC _ns2__ValidateOtp {
 #define SOAP_TYPE__ns2__ValidateOtpResponse (56)
 /* complex XML schema type 'ns2:ValidateOtpResponse': */
 class SOAP_CMAC _ns2__ValidateOtpResponse {
-      public:
-        /// Optional element 'ns2:ValidateOtpResult' of XML schema type 'ns3:SignResponse'
-        ns3__SignResponse *ValidateOtpResult;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__ValidateOtpResponse
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__ValidateOtpResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__ValidateOtpResponse, default initialized and not managed by a soap context
-        virtual _ns2__ValidateOtpResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__ValidateOtpResponse); }
-      public:
-        /// Constructor with default initializations
-        _ns2__ValidateOtpResponse() : ValidateOtpResult(), soap() { }
-        virtual ~_ns2__ValidateOtpResponse() { }
-        /// Friend allocator used by soap_new__ns2__ValidateOtpResponse(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__ValidateOtpResponse * SOAP_FMAC2 soap_instantiate__ns2__ValidateOtpResponse(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:ValidateOtpResult' of XML schema type 'ns3:SignResponse'
+	ns3__SignResponse *ValidateOtpResult;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__ValidateOtpResponse
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__ValidateOtpResponse; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__ValidateOtpResponse, default initialized and not managed by a soap context
+	virtual _ns2__ValidateOtpResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__ValidateOtpResponse); }
+
+public:
+	/// Constructor with default initializations
+	_ns2__ValidateOtpResponse() : ValidateOtpResult(), soap() {}
+	virtual ~_ns2__ValidateOtpResponse() {}
+	/// Friend allocator used by soap_new__ns2__ValidateOtpResponse(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__ValidateOtpResponse *SOAP_FMAC2
+	soap_instantiate__ns2__ValidateOtpResponse(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1243,36 +1384,41 @@ class SOAP_CMAC _ns2__ValidateOtpResponse {
 #define SOAP_TYPE__ns2__CCMovelMultipleSign (57)
 /* complex XML schema type 'ns2:CCMovelMultipleSign': */
 class SOAP_CMAC _ns2__CCMovelMultipleSign {
-      public:
-        /// Optional element 'ns2:request' of XML schema type 'ns3:MultipleSignRequest'
-        ns3__MultipleSignRequest *request;
-        /// Optional element 'ns2:documents' of XML schema type 'ns3:ArrayOfHashStructure'
-        ns3__ArrayOfHashStructure *documents;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__CCMovelMultipleSign
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__CCMovelMultipleSign; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__CCMovelMultipleSign, default initialized and not managed by a soap context
-        virtual _ns2__CCMovelMultipleSign *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__CCMovelMultipleSign); }
-      public:
-        /// Constructor with default initializations
-        _ns2__CCMovelMultipleSign() : request(), documents(), soap() { }
-        virtual ~_ns2__CCMovelMultipleSign() { }
-        /// Friend allocator used by soap_new__ns2__CCMovelMultipleSign(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__CCMovelMultipleSign * SOAP_FMAC2 soap_instantiate__ns2__CCMovelMultipleSign(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:request' of XML schema type 'ns3:MultipleSignRequest'
+	ns3__MultipleSignRequest *request;
+	/// Optional element 'ns2:documents' of XML schema type 'ns3:ArrayOfHashStructure'
+	ns3__ArrayOfHashStructure *documents;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__CCMovelMultipleSign
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__CCMovelMultipleSign; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__CCMovelMultipleSign, default initialized and not managed by a soap context
+	virtual _ns2__CCMovelMultipleSign *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__CCMovelMultipleSign); }
+
+public:
+	/// Constructor with default initializations
+	_ns2__CCMovelMultipleSign() : request(), documents(), soap() {}
+	virtual ~_ns2__CCMovelMultipleSign() {}
+	/// Friend allocator used by soap_new__ns2__CCMovelMultipleSign(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__CCMovelMultipleSign *SOAP_FMAC2
+	soap_instantiate__ns2__CCMovelMultipleSign(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1281,34 +1427,42 @@ class SOAP_CMAC _ns2__CCMovelMultipleSign {
 #define SOAP_TYPE__ns2__CCMovelMultipleSignResponse (58)
 /* complex XML schema type 'ns2:CCMovelMultipleSignResponse': */
 class SOAP_CMAC _ns2__CCMovelMultipleSignResponse {
-      public:
-        /// Optional element 'ns2:CCMovelMultipleSignResult' of XML schema type 'ns3:SignStatus'
-        ns3__SignStatus *CCMovelMultipleSignResult;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__CCMovelMultipleSignResponse
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__CCMovelMultipleSignResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__CCMovelMultipleSignResponse, default initialized and not managed by a soap context
-        virtual _ns2__CCMovelMultipleSignResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__CCMovelMultipleSignResponse); }
-      public:
-        /// Constructor with default initializations
-        _ns2__CCMovelMultipleSignResponse() : CCMovelMultipleSignResult(), soap() { }
-        virtual ~_ns2__CCMovelMultipleSignResponse() { }
-        /// Friend allocator used by soap_new__ns2__CCMovelMultipleSignResponse(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__CCMovelMultipleSignResponse * SOAP_FMAC2 soap_instantiate__ns2__CCMovelMultipleSignResponse(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:CCMovelMultipleSignResult' of XML schema type 'ns3:SignStatus'
+	ns3__SignStatus *CCMovelMultipleSignResult;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__CCMovelMultipleSignResponse
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__CCMovelMultipleSignResponse; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__CCMovelMultipleSignResponse, default initialized and not managed by a soap
+	/// context
+	virtual _ns2__CCMovelMultipleSignResponse *soap_alloc(void) const {
+		return SOAP_NEW_UNMANAGED(_ns2__CCMovelMultipleSignResponse);
+	}
+
+public:
+	/// Constructor with default initializations
+	_ns2__CCMovelMultipleSignResponse() : CCMovelMultipleSignResult(), soap() {}
+	virtual ~_ns2__CCMovelMultipleSignResponse() {}
+	/// Friend allocator used by soap_new__ns2__CCMovelMultipleSignResponse(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__CCMovelMultipleSignResponse *SOAP_FMAC2
+	soap_instantiate__ns2__CCMovelMultipleSignResponse(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1317,38 +1471,43 @@ class SOAP_CMAC _ns2__CCMovelMultipleSignResponse {
 #define SOAP_TYPE__ns2__ForceSMS (59)
 /* complex XML schema type 'ns2:ForceSMS': */
 class SOAP_CMAC _ns2__ForceSMS {
-      public:
-        /// Optional element 'ns2:processId' of XML schema type 'xsd:string'
-        std::string *processId;
-        /// Optional element 'ns2:citizenId' of XML schema type 'xsd:string'
-        std::string *citizenId;
-        /// Optional element 'ns2:applicationId' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *applicationId;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__ForceSMS
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__ForceSMS; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__ForceSMS, default initialized and not managed by a soap context
-        virtual _ns2__ForceSMS *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__ForceSMS); }
-      public:
-        /// Constructor with default initializations
-        _ns2__ForceSMS() : processId(), citizenId(), applicationId(), soap() { }
-        virtual ~_ns2__ForceSMS() { }
-        /// Friend allocator used by soap_new__ns2__ForceSMS(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__ForceSMS * SOAP_FMAC2 soap_instantiate__ns2__ForceSMS(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:processId' of XML schema type 'xsd:string'
+	std::string *processId;
+	/// Optional element 'ns2:citizenId' of XML schema type 'xsd:string'
+	std::string *citizenId;
+	/// Optional element 'ns2:applicationId' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *applicationId;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__ForceSMS
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__ForceSMS; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__ForceSMS, default initialized and not managed by a soap context
+	virtual _ns2__ForceSMS *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__ForceSMS); }
+
+public:
+	/// Constructor with default initializations
+	_ns2__ForceSMS() : processId(), citizenId(), applicationId(), soap() {}
+	virtual ~_ns2__ForceSMS() {}
+	/// Friend allocator used by soap_new__ns2__ForceSMS(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__ForceSMS *SOAP_FMAC2 soap_instantiate__ns2__ForceSMS(struct soap *, int, const char *,
+																				 const char *, size_t *);
 };
 #endif
 
@@ -1357,34 +1516,41 @@ class SOAP_CMAC _ns2__ForceSMS {
 #define SOAP_TYPE__ns2__ForceSMSResponse (60)
 /* complex XML schema type 'ns2:ForceSMSResponse': */
 class SOAP_CMAC _ns2__ForceSMSResponse {
-      public:
-        /// Optional element 'ns2:ForceSMSResult' of XML schema type 'ns3:SignStatus'
-        ns3__SignStatus *ForceSMSResult;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__ForceSMSResponse
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__ForceSMSResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__ForceSMSResponse, default initialized and not managed by a soap context
-        virtual _ns2__ForceSMSResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__ForceSMSResponse); }
-      public:
-        /// Constructor with default initializations
-        _ns2__ForceSMSResponse() : ForceSMSResult(), soap() { }
-        virtual ~_ns2__ForceSMSResponse() { }
-        /// Friend allocator used by soap_new__ns2__ForceSMSResponse(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__ForceSMSResponse * SOAP_FMAC2 soap_instantiate__ns2__ForceSMSResponse(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:ForceSMSResult' of XML schema type 'ns3:SignStatus'
+	ns3__SignStatus *ForceSMSResult;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__ForceSMSResponse
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__ForceSMSResponse; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__ForceSMSResponse, default initialized and not managed by a soap context
+	virtual _ns2__ForceSMSResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__ForceSMSResponse); }
+
+public:
+	/// Constructor with default initializations
+	_ns2__ForceSMSResponse() : ForceSMSResult(), soap() {}
+	virtual ~_ns2__ForceSMSResponse() {}
+	/// Friend allocator used by soap_new__ns2__ForceSMSResponse(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__ForceSMSResponse *SOAP_FMAC2 soap_instantiate__ns2__ForceSMSResponse(struct soap *, int,
+																								 const char *,
+																								 const char *,
+																								 size_t *);
 };
 #endif
 
@@ -1393,38 +1559,45 @@ class SOAP_CMAC _ns2__ForceSMSResponse {
 #define SOAP_TYPE__ns2__GetCertificateWithPin (61)
 /* complex XML schema type 'ns2:GetCertificateWithPin': */
 class SOAP_CMAC _ns2__GetCertificateWithPin {
-      public:
-        /// Optional element 'ns2:applicationId' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *applicationId;
-        /// Optional element 'ns2:userId' of XML schema type 'xsd:string'
-        std::string *userId;
-        /// Optional element 'ns2:signaturePin' of XML schema type 'xsd:string'
-        std::string *signaturePin;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__GetCertificateWithPin
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__GetCertificateWithPin; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__GetCertificateWithPin, default initialized and not managed by a soap context
-        virtual _ns2__GetCertificateWithPin *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__GetCertificateWithPin); }
-      public:
-        /// Constructor with default initializations
-        _ns2__GetCertificateWithPin() : applicationId(), userId(), signaturePin(), soap() { }
-        virtual ~_ns2__GetCertificateWithPin() { }
-        /// Friend allocator used by soap_new__ns2__GetCertificateWithPin(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__GetCertificateWithPin * SOAP_FMAC2 soap_instantiate__ns2__GetCertificateWithPin(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:applicationId' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *applicationId;
+	/// Optional element 'ns2:userId' of XML schema type 'xsd:string'
+	std::string *userId;
+	/// Optional element 'ns2:signaturePin' of XML schema type 'xsd:string'
+	std::string *signaturePin;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__GetCertificateWithPin
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__GetCertificateWithPin; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__GetCertificateWithPin, default initialized and not managed by a soap context
+	virtual _ns2__GetCertificateWithPin *soap_alloc(void) const {
+		return SOAP_NEW_UNMANAGED(_ns2__GetCertificateWithPin);
+	}
+
+public:
+	/// Constructor with default initializations
+	_ns2__GetCertificateWithPin() : applicationId(), userId(), signaturePin(), soap() {}
+	virtual ~_ns2__GetCertificateWithPin() {}
+	/// Friend allocator used by soap_new__ns2__GetCertificateWithPin(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__GetCertificateWithPin *SOAP_FMAC2
+	soap_instantiate__ns2__GetCertificateWithPin(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1433,34 +1606,42 @@ class SOAP_CMAC _ns2__GetCertificateWithPin {
 #define SOAP_TYPE__ns2__GetCertificateWithPinResponse (62)
 /* complex XML schema type 'ns2:GetCertificateWithPinResponse': */
 class SOAP_CMAC _ns2__GetCertificateWithPinResponse {
-      public:
-        /// Optional element 'ns2:GetCertificateWithPinResult' of XML schema type 'ns3:SignStatus'
-        ns3__SignStatus *GetCertificateWithPinResult;
-        /// Context that manages this object
-        struct soap *soap;
-      public:
-        /// Return unique type id SOAP_TYPE__ns2__GetCertificateWithPinResponse
-        virtual long soap_type(void) const { return SOAP_TYPE__ns2__GetCertificateWithPinResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type _ns2__GetCertificateWithPinResponse, default initialized and not managed by a soap context
-        virtual _ns2__GetCertificateWithPinResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(_ns2__GetCertificateWithPinResponse); }
-      public:
-        /// Constructor with default initializations
-        _ns2__GetCertificateWithPinResponse() : GetCertificateWithPinResult(), soap() { }
-        virtual ~_ns2__GetCertificateWithPinResponse() { }
-        /// Friend allocator used by soap_new__ns2__GetCertificateWithPinResponse(struct soap*, int)
-        friend SOAP_FMAC1 _ns2__GetCertificateWithPinResponse * SOAP_FMAC2 soap_instantiate__ns2__GetCertificateWithPinResponse(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns2:GetCertificateWithPinResult' of XML schema type 'ns3:SignStatus'
+	ns3__SignStatus *GetCertificateWithPinResult;
+	/// Context that manages this object
+	struct soap *soap;
+
+public:
+	/// Return unique type id SOAP_TYPE__ns2__GetCertificateWithPinResponse
+	virtual long soap_type(void) const { return SOAP_TYPE__ns2__GetCertificateWithPinResponse; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type _ns2__GetCertificateWithPinResponse, default initialized and not managed by a soap
+	/// context
+	virtual _ns2__GetCertificateWithPinResponse *soap_alloc(void) const {
+		return SOAP_NEW_UNMANAGED(_ns2__GetCertificateWithPinResponse);
+	}
+
+public:
+	/// Constructor with default initializations
+	_ns2__GetCertificateWithPinResponse() : GetCertificateWithPinResult(), soap() {}
+	virtual ~_ns2__GetCertificateWithPinResponse() {}
+	/// Friend allocator used by soap_new__ns2__GetCertificateWithPinResponse(struct soap*, int)
+	friend SOAP_FMAC1 _ns2__GetCertificateWithPinResponse *SOAP_FMAC2
+	soap_instantiate__ns2__GetCertificateWithPinResponse(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1469,40 +1650,45 @@ class SOAP_CMAC _ns2__GetCertificateWithPinResponse {
 #define SOAP_TYPE_ns3__SignRequest (63)
 /* complex XML schema type 'ns3:SignRequest': */
 class SOAP_CMAC ns3__SignRequest : public xsd__anyType {
-      public:
-        /// Required nillable (xsi:nil when NULL) element 'ns3:ApplicationId' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *ApplicationId;
-        /// Optional element 'ns3:DocName' of XML schema type 'xsd:string'
-        std::string *DocName;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Hash' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *Hash;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Pin' of XML schema type 'xsd:string'
-        std::string *Pin;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:UserId' of XML schema type 'xsd:string'
-        std::string *UserId;
-      public:
-        /// Return unique type id SOAP_TYPE_ns3__SignRequest
-        virtual long soap_type(void) const { return SOAP_TYPE_ns3__SignRequest; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type ns3__SignRequest, default initialized and not managed by a soap context
-        virtual ns3__SignRequest *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__SignRequest); }
-      public:
-        /// Constructor with default initializations
-        ns3__SignRequest() : ApplicationId(), DocName(), Hash(), Pin(), UserId() { }
-        virtual ~ns3__SignRequest() { }
-        /// Friend allocator used by soap_new_ns3__SignRequest(struct soap*, int)
-        friend SOAP_FMAC1 ns3__SignRequest * SOAP_FMAC2 soap_instantiate_ns3__SignRequest(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Required nillable (xsi:nil when NULL) element 'ns3:ApplicationId' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *ApplicationId;
+	/// Optional element 'ns3:DocName' of XML schema type 'xsd:string'
+	std::string *DocName;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Hash' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *Hash;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Pin' of XML schema type 'xsd:string'
+	std::string *Pin;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:UserId' of XML schema type 'xsd:string'
+	std::string *UserId;
+
+public:
+	/// Return unique type id SOAP_TYPE_ns3__SignRequest
+	virtual long soap_type(void) const { return SOAP_TYPE_ns3__SignRequest; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type ns3__SignRequest, default initialized and not managed by a soap context
+	virtual ns3__SignRequest *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__SignRequest); }
+
+public:
+	/// Constructor with default initializations
+	ns3__SignRequest() : ApplicationId(), DocName(), Hash(), Pin(), UserId() {}
+	virtual ~ns3__SignRequest() {}
+	/// Friend allocator used by soap_new_ns3__SignRequest(struct soap*, int)
+	friend SOAP_FMAC1 ns3__SignRequest *SOAP_FMAC2 soap_instantiate_ns3__SignRequest(struct soap *, int, const char *,
+																					 const char *, size_t *);
 };
 #endif
 
@@ -1511,40 +1697,45 @@ class SOAP_CMAC ns3__SignRequest : public xsd__anyType {
 #define SOAP_TYPE_ns3__SignStatus (64)
 /* complex XML schema type 'ns3:SignStatus': */
 class SOAP_CMAC ns3__SignStatus : public xsd__anyType {
-      public:
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Code' of XML schema type 'xsd:string'
-        std::string *Code;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Field' of XML schema type 'xsd:string'
-        std::string *Field;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:FieldValue' of XML schema type 'xsd:string'
-        std::string *FieldValue;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Message' of XML schema type 'xsd:string'
-        std::string *Message;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:ProcessId' of XML schema type 'xsd:string'
-        std::string *ProcessId;
-      public:
-        /// Return unique type id SOAP_TYPE_ns3__SignStatus
-        virtual long soap_type(void) const { return SOAP_TYPE_ns3__SignStatus; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type ns3__SignStatus, default initialized and not managed by a soap context
-        virtual ns3__SignStatus *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__SignStatus); }
-      public:
-        /// Constructor with default initializations
-        ns3__SignStatus() : Code(), Field(), FieldValue(), Message(), ProcessId() { }
-        virtual ~ns3__SignStatus() { }
-        /// Friend allocator used by soap_new_ns3__SignStatus(struct soap*, int)
-        friend SOAP_FMAC1 ns3__SignStatus * SOAP_FMAC2 soap_instantiate_ns3__SignStatus(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Code' of XML schema type 'xsd:string'
+	std::string *Code;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Field' of XML schema type 'xsd:string'
+	std::string *Field;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:FieldValue' of XML schema type 'xsd:string'
+	std::string *FieldValue;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Message' of XML schema type 'xsd:string'
+	std::string *Message;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:ProcessId' of XML schema type 'xsd:string'
+	std::string *ProcessId;
+
+public:
+	/// Return unique type id SOAP_TYPE_ns3__SignStatus
+	virtual long soap_type(void) const { return SOAP_TYPE_ns3__SignStatus; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type ns3__SignStatus, default initialized and not managed by a soap context
+	virtual ns3__SignStatus *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__SignStatus); }
+
+public:
+	/// Constructor with default initializations
+	ns3__SignStatus() : Code(), Field(), FieldValue(), Message(), ProcessId() {}
+	virtual ~ns3__SignStatus() {}
+	/// Friend allocator used by soap_new_ns3__SignStatus(struct soap*, int)
+	friend SOAP_FMAC1 ns3__SignStatus *SOAP_FMAC2 soap_instantiate_ns3__SignStatus(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 
@@ -1553,38 +1744,44 @@ class SOAP_CMAC ns3__SignStatus : public xsd__anyType {
 #define SOAP_TYPE_ns3__SignResponse (65)
 /* complex XML schema type 'ns3:SignResponse': */
 class SOAP_CMAC ns3__SignResponse : public xsd__anyType {
-      public:
-        /// Required nillable (xsi:nil when NULL) element 'ns3:ArrayOfHashStructure' of XML schema type 'ns3:ArrayOfHashStructure'
-        ns3__ArrayOfHashStructure *ArrayOfHashStructure;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Signature' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *Signature;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Status' of XML schema type 'ns3:SignStatus'
-        ns3__SignStatus *Status;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:certificate' of XML schema type 'xsd:string'
-        std::string *certificate;
-      public:
-        /// Return unique type id SOAP_TYPE_ns3__SignResponse
-        virtual long soap_type(void) const { return SOAP_TYPE_ns3__SignResponse; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type ns3__SignResponse, default initialized and not managed by a soap context
-        virtual ns3__SignResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__SignResponse); }
-      public:
-        /// Constructor with default initializations
-        ns3__SignResponse() : ArrayOfHashStructure(), Signature(), Status(), certificate() { }
-        virtual ~ns3__SignResponse() { }
-        /// Friend allocator used by soap_new_ns3__SignResponse(struct soap*, int)
-        friend SOAP_FMAC1 ns3__SignResponse * SOAP_FMAC2 soap_instantiate_ns3__SignResponse(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Required nillable (xsi:nil when NULL) element 'ns3:ArrayOfHashStructure' of XML schema type
+	/// 'ns3:ArrayOfHashStructure'
+	ns3__ArrayOfHashStructure *ArrayOfHashStructure;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Signature' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *Signature;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Status' of XML schema type 'ns3:SignStatus'
+	ns3__SignStatus *Status;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:certificate' of XML schema type 'xsd:string'
+	std::string *certificate;
+
+public:
+	/// Return unique type id SOAP_TYPE_ns3__SignResponse
+	virtual long soap_type(void) const { return SOAP_TYPE_ns3__SignResponse; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type ns3__SignResponse, default initialized and not managed by a soap context
+	virtual ns3__SignResponse *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__SignResponse); }
+
+public:
+	/// Constructor with default initializations
+	ns3__SignResponse() : ArrayOfHashStructure(), Signature(), Status(), certificate() {}
+	virtual ~ns3__SignResponse() {}
+	/// Friend allocator used by soap_new_ns3__SignResponse(struct soap*, int)
+	friend SOAP_FMAC1 ns3__SignResponse *SOAP_FMAC2 soap_instantiate_ns3__SignResponse(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -1593,32 +1790,37 @@ class SOAP_CMAC ns3__SignResponse : public xsd__anyType {
 #define SOAP_TYPE_ns3__ArrayOfHashStructure (66)
 /* complex XML schema type 'ns3:ArrayOfHashStructure': */
 class SOAP_CMAC ns3__ArrayOfHashStructure : public xsd__anyType {
-      public:
-        /// Optional element 'ns3:HashStructure' of XML schema type 'ns3:HashStructure'
-        std::vector<ns3__HashStructure *> HashStructure;
-      public:
-        /// Return unique type id SOAP_TYPE_ns3__ArrayOfHashStructure
-        virtual long soap_type(void) const { return SOAP_TYPE_ns3__ArrayOfHashStructure; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type ns3__ArrayOfHashStructure, default initialized and not managed by a soap context
-        virtual ns3__ArrayOfHashStructure *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__ArrayOfHashStructure); }
-      public:
-        /// Constructor with default initializations
-        ns3__ArrayOfHashStructure() : HashStructure() { }
-        virtual ~ns3__ArrayOfHashStructure() { }
-        /// Friend allocator used by soap_new_ns3__ArrayOfHashStructure(struct soap*, int)
-        friend SOAP_FMAC1 ns3__ArrayOfHashStructure * SOAP_FMAC2 soap_instantiate_ns3__ArrayOfHashStructure(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Optional element 'ns3:HashStructure' of XML schema type 'ns3:HashStructure'
+	std::vector<ns3__HashStructure *> HashStructure;
+
+public:
+	/// Return unique type id SOAP_TYPE_ns3__ArrayOfHashStructure
+	virtual long soap_type(void) const { return SOAP_TYPE_ns3__ArrayOfHashStructure; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type ns3__ArrayOfHashStructure, default initialized and not managed by a soap context
+	virtual ns3__ArrayOfHashStructure *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__ArrayOfHashStructure); }
+
+public:
+	/// Constructor with default initializations
+	ns3__ArrayOfHashStructure() : HashStructure() {}
+	virtual ~ns3__ArrayOfHashStructure() {}
+	/// Friend allocator used by soap_new_ns3__ArrayOfHashStructure(struct soap*, int)
+	friend SOAP_FMAC1 ns3__ArrayOfHashStructure *SOAP_FMAC2
+	soap_instantiate_ns3__ArrayOfHashStructure(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1627,36 +1829,42 @@ class SOAP_CMAC ns3__ArrayOfHashStructure : public xsd__anyType {
 #define SOAP_TYPE_ns3__HashStructure (67)
 /* complex XML schema type 'ns3:HashStructure': */
 class SOAP_CMAC ns3__HashStructure : public xsd__anyType {
-      public:
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Hash' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *Hash;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Name' of XML schema type 'xsd:string'
-        std::string *Name;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:id' of XML schema type 'xsd:string'
-        std::string *id;
-      public:
-        /// Return unique type id SOAP_TYPE_ns3__HashStructure
-        virtual long soap_type(void) const { return SOAP_TYPE_ns3__HashStructure; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type ns3__HashStructure, default initialized and not managed by a soap context
-        virtual ns3__HashStructure *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__HashStructure); }
-      public:
-        /// Constructor with default initializations
-        ns3__HashStructure() : Hash(), Name(), id() { }
-        virtual ~ns3__HashStructure() { }
-        /// Friend allocator used by soap_new_ns3__HashStructure(struct soap*, int)
-        friend SOAP_FMAC1 ns3__HashStructure * SOAP_FMAC2 soap_instantiate_ns3__HashStructure(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Hash' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *Hash;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Name' of XML schema type 'xsd:string'
+	std::string *Name;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:id' of XML schema type 'xsd:string'
+	std::string *id;
+
+public:
+	/// Return unique type id SOAP_TYPE_ns3__HashStructure
+	virtual long soap_type(void) const { return SOAP_TYPE_ns3__HashStructure; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type ns3__HashStructure, default initialized and not managed by a soap context
+	virtual ns3__HashStructure *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__HashStructure); }
+
+public:
+	/// Constructor with default initializations
+	ns3__HashStructure() : Hash(), Name(), id() {}
+	virtual ~ns3__HashStructure() {}
+	/// Friend allocator used by soap_new_ns3__HashStructure(struct soap*, int)
+	friend SOAP_FMAC1 ns3__HashStructure *SOAP_FMAC2 soap_instantiate_ns3__HashStructure(struct soap *, int,
+																						 const char *, const char *,
+																						 size_t *);
 };
 #endif
 
@@ -1665,36 +1873,43 @@ class SOAP_CMAC ns3__HashStructure : public xsd__anyType {
 #define SOAP_TYPE_ns3__MultipleSignRequest (68)
 /* complex XML schema type 'ns3:MultipleSignRequest': */
 class SOAP_CMAC ns3__MultipleSignRequest : public xsd__anyType {
-      public:
-        /// Required nillable (xsi:nil when NULL) element 'ns3:ApplicationId' of XML schema type 'xsd:base64Binary'
-        xsd__base64Binary *ApplicationId;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:Pin' of XML schema type 'xsd:string'
-        std::string *Pin;
-        /// Required nillable (xsi:nil when NULL) element 'ns3:UserId' of XML schema type 'xsd:string'
-        std::string *UserId;
-      public:
-        /// Return unique type id SOAP_TYPE_ns3__MultipleSignRequest
-        virtual long soap_type(void) const { return SOAP_TYPE_ns3__MultipleSignRequest; }
-        /// (Re)set members to default values
-        virtual void soap_default(struct soap*);
-        /// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic) structures
-        virtual void soap_serialize(struct soap*) const;
-        /// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
-        virtual int soap_put(struct soap*, const char *tag, const char *type) const;
-        /// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
-        virtual int soap_out(struct soap*, const char *tag, int id, const char *type) const;
-        /// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
-        virtual void *soap_get(struct soap*, const char *tag, const char *type);
-        /// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or NULL on error
-        virtual void *soap_in(struct soap*, const char *tag, const char *type);
-        /// Return a new object of type ns3__MultipleSignRequest, default initialized and not managed by a soap context
-        virtual ns3__MultipleSignRequest *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__MultipleSignRequest); }
-      public:
-        /// Constructor with default initializations
-        ns3__MultipleSignRequest() : ApplicationId(), Pin(), UserId() { }
-        virtual ~ns3__MultipleSignRequest() { }
-        /// Friend allocator used by soap_new_ns3__MultipleSignRequest(struct soap*, int)
-        friend SOAP_FMAC1 ns3__MultipleSignRequest * SOAP_FMAC2 soap_instantiate_ns3__MultipleSignRequest(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/// Required nillable (xsi:nil when NULL) element 'ns3:ApplicationId' of XML schema type 'xsd:base64Binary'
+	xsd__base64Binary *ApplicationId;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:Pin' of XML schema type 'xsd:string'
+	std::string *Pin;
+	/// Required nillable (xsi:nil when NULL) element 'ns3:UserId' of XML schema type 'xsd:string'
+	std::string *UserId;
+
+public:
+	/// Return unique type id SOAP_TYPE_ns3__MultipleSignRequest
+	virtual long soap_type(void) const { return SOAP_TYPE_ns3__MultipleSignRequest; }
+	/// (Re)set members to default values
+	virtual void soap_default(struct soap *);
+	/// Serialize object to prepare for SOAP 1.1/1.2 encoded output (or with SOAP_XML_GRAPH) by analyzing its (cyclic)
+	/// structures
+	virtual void soap_serialize(struct soap *) const;
+	/// Output object in XML, compliant with SOAP 1.1 encoding style, return error code or SOAP_OK
+	virtual int soap_put(struct soap *, const char *tag, const char *type) const;
+	/// Output object in XML, with tag and optional id attribute and xsi:type, return error code or SOAP_OK
+	virtual int soap_out(struct soap *, const char *tag, int id, const char *type) const;
+	/// Get object from XML, compliant with SOAP 1.1 encoding style, return pointer to object or NULL on error
+	virtual void *soap_get(struct soap *, const char *tag, const char *type);
+	/// Get object from XML, with matching tag and type (NULL matches any tag and type), return pointer to object or
+	/// NULL on error
+	virtual void *soap_in(struct soap *, const char *tag, const char *type);
+	/// Return a new object of type ns3__MultipleSignRequest, default initialized and not managed by a soap context
+	virtual ns3__MultipleSignRequest *soap_alloc(void) const { return SOAP_NEW_UNMANAGED(ns3__MultipleSignRequest); }
+
+public:
+	/// Constructor with default initializations
+	ns3__MultipleSignRequest() : ApplicationId(), Pin(), UserId() {}
+	virtual ~ns3__MultipleSignRequest() {}
+	/// Friend allocator used by soap_new_ns3__MultipleSignRequest(struct soap*, int)
+	friend SOAP_FMAC1 ns3__MultipleSignRequest *SOAP_FMAC2 soap_instantiate_ns3__MultipleSignRequest(struct soap *, int,
+																									 const char *,
+																									 const char *,
+																									 size_t *);
 };
 #endif
 
@@ -1703,16 +1918,19 @@ class SOAP_CMAC ns3__MultipleSignRequest : public xsd__anyType {
 #define SOAP_TYPE___ns2__CCMovelSign (81)
 /* Wrapper: */
 struct SOAP_CMAC __ns2__CCMovelSign {
-      public:
-        /** Optional element 'ns2:CCMovelSign' of XML schema type 'ns2:CCMovelSign' */
-        _ns2__CCMovelSign *ns2__CCMovelSign;
-      public:
-        /** Return unique type id SOAP_TYPE___ns2__CCMovelSign */
-        long soap_type() const { return SOAP_TYPE___ns2__CCMovelSign; }
-        /** Constructor with member initializations */
-        __ns2__CCMovelSign() : ns2__CCMovelSign() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __ns2__CCMovelSign * SOAP_FMAC2 soap_instantiate___ns2__CCMovelSign(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ns2:CCMovelSign' of XML schema type 'ns2:CCMovelSign' */
+	_ns2__CCMovelSign *ns2__CCMovelSign;
+
+public:
+	/** Return unique type id SOAP_TYPE___ns2__CCMovelSign */
+	long soap_type() const { return SOAP_TYPE___ns2__CCMovelSign; }
+	/** Constructor with member initializations */
+	__ns2__CCMovelSign() : ns2__CCMovelSign() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __ns2__CCMovelSign *SOAP_FMAC2 soap_instantiate___ns2__CCMovelSign(struct soap *, int,
+																						 const char *, const char *,
+																						 size_t *);
 };
 #endif
 
@@ -1721,16 +1939,19 @@ struct SOAP_CMAC __ns2__CCMovelSign {
 #define SOAP_TYPE___ns2__GetCertificate (85)
 /* Wrapper: */
 struct SOAP_CMAC __ns2__GetCertificate {
-      public:
-        /** Optional element 'ns2:GetCertificate' of XML schema type 'ns2:GetCertificate' */
-        _ns2__GetCertificate *ns2__GetCertificate;
-      public:
-        /** Return unique type id SOAP_TYPE___ns2__GetCertificate */
-        long soap_type() const { return SOAP_TYPE___ns2__GetCertificate; }
-        /** Constructor with member initializations */
-        __ns2__GetCertificate() : ns2__GetCertificate() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __ns2__GetCertificate * SOAP_FMAC2 soap_instantiate___ns2__GetCertificate(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ns2:GetCertificate' of XML schema type 'ns2:GetCertificate' */
+	_ns2__GetCertificate *ns2__GetCertificate;
+
+public:
+	/** Return unique type id SOAP_TYPE___ns2__GetCertificate */
+	long soap_type() const { return SOAP_TYPE___ns2__GetCertificate; }
+	/** Constructor with member initializations */
+	__ns2__GetCertificate() : ns2__GetCertificate() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __ns2__GetCertificate *SOAP_FMAC2 soap_instantiate___ns2__GetCertificate(struct soap *, int,
+																							   const char *,
+																							   const char *, size_t *);
 };
 #endif
 
@@ -1739,16 +1960,19 @@ struct SOAP_CMAC __ns2__GetCertificate {
 #define SOAP_TYPE___ns2__ValidateOtp (89)
 /* Wrapper: */
 struct SOAP_CMAC __ns2__ValidateOtp {
-      public:
-        /** Optional element 'ns2:ValidateOtp' of XML schema type 'ns2:ValidateOtp' */
-        _ns2__ValidateOtp *ns2__ValidateOtp;
-      public:
-        /** Return unique type id SOAP_TYPE___ns2__ValidateOtp */
-        long soap_type() const { return SOAP_TYPE___ns2__ValidateOtp; }
-        /** Constructor with member initializations */
-        __ns2__ValidateOtp() : ns2__ValidateOtp() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __ns2__ValidateOtp * SOAP_FMAC2 soap_instantiate___ns2__ValidateOtp(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ns2:ValidateOtp' of XML schema type 'ns2:ValidateOtp' */
+	_ns2__ValidateOtp *ns2__ValidateOtp;
+
+public:
+	/** Return unique type id SOAP_TYPE___ns2__ValidateOtp */
+	long soap_type() const { return SOAP_TYPE___ns2__ValidateOtp; }
+	/** Constructor with member initializations */
+	__ns2__ValidateOtp() : ns2__ValidateOtp() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __ns2__ValidateOtp *SOAP_FMAC2 soap_instantiate___ns2__ValidateOtp(struct soap *, int,
+																						 const char *, const char *,
+																						 size_t *);
 };
 #endif
 
@@ -1757,16 +1981,18 @@ struct SOAP_CMAC __ns2__ValidateOtp {
 #define SOAP_TYPE___ns2__CCMovelMultipleSign (93)
 /* Wrapper: */
 struct SOAP_CMAC __ns2__CCMovelMultipleSign {
-      public:
-        /** Optional element 'ns2:CCMovelMultipleSign' of XML schema type 'ns2:CCMovelMultipleSign' */
-        _ns2__CCMovelMultipleSign *ns2__CCMovelMultipleSign;
-      public:
-        /** Return unique type id SOAP_TYPE___ns2__CCMovelMultipleSign */
-        long soap_type() const { return SOAP_TYPE___ns2__CCMovelMultipleSign; }
-        /** Constructor with member initializations */
-        __ns2__CCMovelMultipleSign() : ns2__CCMovelMultipleSign() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __ns2__CCMovelMultipleSign * SOAP_FMAC2 soap_instantiate___ns2__CCMovelMultipleSign(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ns2:CCMovelMultipleSign' of XML schema type 'ns2:CCMovelMultipleSign' */
+	_ns2__CCMovelMultipleSign *ns2__CCMovelMultipleSign;
+
+public:
+	/** Return unique type id SOAP_TYPE___ns2__CCMovelMultipleSign */
+	long soap_type() const { return SOAP_TYPE___ns2__CCMovelMultipleSign; }
+	/** Constructor with member initializations */
+	__ns2__CCMovelMultipleSign() : ns2__CCMovelMultipleSign() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __ns2__CCMovelMultipleSign *SOAP_FMAC2
+	soap_instantiate___ns2__CCMovelMultipleSign(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1775,16 +2001,18 @@ struct SOAP_CMAC __ns2__CCMovelMultipleSign {
 #define SOAP_TYPE___ns2__ForceSMS (97)
 /* Wrapper: */
 struct SOAP_CMAC __ns2__ForceSMS {
-      public:
-        /** Optional element 'ns2:ForceSMS' of XML schema type 'ns2:ForceSMS' */
-        _ns2__ForceSMS *ns2__ForceSMS;
-      public:
-        /** Return unique type id SOAP_TYPE___ns2__ForceSMS */
-        long soap_type() const { return SOAP_TYPE___ns2__ForceSMS; }
-        /** Constructor with member initializations */
-        __ns2__ForceSMS() : ns2__ForceSMS() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __ns2__ForceSMS * SOAP_FMAC2 soap_instantiate___ns2__ForceSMS(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ns2:ForceSMS' of XML schema type 'ns2:ForceSMS' */
+	_ns2__ForceSMS *ns2__ForceSMS;
+
+public:
+	/** Return unique type id SOAP_TYPE___ns2__ForceSMS */
+	long soap_type() const { return SOAP_TYPE___ns2__ForceSMS; }
+	/** Constructor with member initializations */
+	__ns2__ForceSMS() : ns2__ForceSMS() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __ns2__ForceSMS *SOAP_FMAC2 soap_instantiate___ns2__ForceSMS(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 
@@ -1793,16 +2021,18 @@ struct SOAP_CMAC __ns2__ForceSMS {
 #define SOAP_TYPE___ns2__GetCertificateWithPin (101)
 /* Wrapper: */
 struct SOAP_CMAC __ns2__GetCertificateWithPin {
-      public:
-        /** Optional element 'ns2:GetCertificateWithPin' of XML schema type 'ns2:GetCertificateWithPin' */
-        _ns2__GetCertificateWithPin *ns2__GetCertificateWithPin;
-      public:
-        /** Return unique type id SOAP_TYPE___ns2__GetCertificateWithPin */
-        long soap_type() const { return SOAP_TYPE___ns2__GetCertificateWithPin; }
-        /** Constructor with member initializations */
-        __ns2__GetCertificateWithPin() : ns2__GetCertificateWithPin() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __ns2__GetCertificateWithPin * SOAP_FMAC2 soap_instantiate___ns2__GetCertificateWithPin(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ns2:GetCertificateWithPin' of XML schema type 'ns2:GetCertificateWithPin' */
+	_ns2__GetCertificateWithPin *ns2__GetCertificateWithPin;
+
+public:
+	/** Return unique type id SOAP_TYPE___ns2__GetCertificateWithPin */
+	long soap_type() const { return SOAP_TYPE___ns2__GetCertificateWithPin; }
+	/** Constructor with member initializations */
+	__ns2__GetCertificateWithPin() : ns2__GetCertificateWithPin() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __ns2__GetCertificateWithPin *SOAP_FMAC2
+	soap_instantiate___ns2__GetCertificateWithPin(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1811,20 +2041,22 @@ struct SOAP_CMAC __ns2__GetCertificateWithPin {
 #define SOAP_TYPE__wsu__Timestamp (103)
 /* complex XML schema type 'wsu:Timestamp': */
 struct SOAP_CMAC _wsu__Timestamp {
-      public:
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-        /** Optional element 'wsu:Created' of XML schema type 'xsd:string' */
-        char *Created;
-        /** Optional element 'wsu:Expires' of XML schema type 'xsd:string' */
-        char *Expires;
-      public:
-        /** Return unique type id SOAP_TYPE__wsu__Timestamp */
-        long soap_type() const { return SOAP_TYPE__wsu__Timestamp; }
-        /** Constructor with member initializations */
-        _wsu__Timestamp() : wsu__Id(), Created(), Expires() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsu__Timestamp * SOAP_FMAC2 soap_instantiate__wsu__Timestamp(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+	/** Optional element 'wsu:Created' of XML schema type 'xsd:string' */
+	char *Created;
+	/** Optional element 'wsu:Expires' of XML schema type 'xsd:string' */
+	char *Expires;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsu__Timestamp */
+	long soap_type() const { return SOAP_TYPE__wsu__Timestamp; }
+	/** Constructor with member initializations */
+	_wsu__Timestamp() : wsu__Id(), Created(), Expires() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsu__Timestamp *SOAP_FMAC2 soap_instantiate__wsu__Timestamp(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 
@@ -1833,20 +2065,23 @@ struct SOAP_CMAC _wsu__Timestamp {
 #define SOAP_TYPE_wsse__EncodedString (104)
 /* simple XML schema type 'wsse:EncodedString': */
 struct SOAP_CMAC wsse__EncodedString {
-      public:
-        /** Simple content of XML schema type 'xsd:string' wrapped by this struct */
-        char *__item;
-        /** Optional attribute 'EncodingType' of XML schema type 'xsd:string' */
-        char *EncodingType;
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-      public:
-        /** Return unique type id SOAP_TYPE_wsse__EncodedString */
-        long soap_type() const { return SOAP_TYPE_wsse__EncodedString; }
-        /** Constructor with member initializations */
-        wsse__EncodedString() : __item(), EncodingType(), wsu__Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 wsse__EncodedString * SOAP_FMAC2 soap_instantiate_wsse__EncodedString(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Simple content of XML schema type 'xsd:string' wrapped by this struct */
+	char *__item;
+	/** Optional attribute 'EncodingType' of XML schema type 'xsd:string' */
+	char *EncodingType;
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+
+public:
+	/** Return unique type id SOAP_TYPE_wsse__EncodedString */
+	long soap_type() const { return SOAP_TYPE_wsse__EncodedString; }
+	/** Constructor with member initializations */
+	wsse__EncodedString() : __item(), EncodingType(), wsu__Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 wsse__EncodedString *SOAP_FMAC2 soap_instantiate_wsse__EncodedString(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -1855,28 +2090,31 @@ struct SOAP_CMAC wsse__EncodedString {
 #define SOAP_TYPE__wsse__UsernameToken (106)
 /* complex XML schema type 'wsse:UsernameToken': */
 struct SOAP_CMAC _wsse__UsernameToken {
-      public:
-        /** Optional element 'wsse:Username' of XML schema type 'xsd:string' */
-        char *Username;
-        /** Optional element 'wsse:Password' of XML schema type 'wsse:Password' */
-        struct _wsse__Password *Password;
-        /** Optional element 'wsse:Nonce' of XML schema type 'wsse:EncodedString' */
-        struct wsse__EncodedString *Nonce;
-        /** Optional element 'wsse:Salt' of XML schema type 'xsd:string' */
-        char *Salt;
-        /** Optional element 'wsse:Iteration' of XML schema type 'xsd:unsignedInt' */
-        unsigned int *Iteration;
-        /** Optional element 'wsu:Created' of XML schema type 'xsd:string' */
-        char *wsu__Created;
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-      public:
-        /** Return unique type id SOAP_TYPE__wsse__UsernameToken */
-        long soap_type() const { return SOAP_TYPE__wsse__UsernameToken; }
-        /** Constructor with member initializations */
-        _wsse__UsernameToken() : Username(), Password(), Nonce(), Salt(), Iteration(), wsu__Created(), wsu__Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsse__UsernameToken * SOAP_FMAC2 soap_instantiate__wsse__UsernameToken(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'wsse:Username' of XML schema type 'xsd:string' */
+	char *Username;
+	/** Optional element 'wsse:Password' of XML schema type 'wsse:Password' */
+	struct _wsse__Password *Password;
+	/** Optional element 'wsse:Nonce' of XML schema type 'wsse:EncodedString' */
+	struct wsse__EncodedString *Nonce;
+	/** Optional element 'wsse:Salt' of XML schema type 'xsd:string' */
+	char *Salt;
+	/** Optional element 'wsse:Iteration' of XML schema type 'xsd:unsignedInt' */
+	unsigned int *Iteration;
+	/** Optional element 'wsu:Created' of XML schema type 'xsd:string' */
+	char *wsu__Created;
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsse__UsernameToken */
+	long soap_type() const { return SOAP_TYPE__wsse__UsernameToken; }
+	/** Constructor with member initializations */
+	_wsse__UsernameToken() : Username(), Password(), Nonce(), Salt(), Iteration(), wsu__Created(), wsu__Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsse__UsernameToken *SOAP_FMAC2 soap_instantiate__wsse__UsernameToken(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -1885,22 +2123,24 @@ struct SOAP_CMAC _wsse__UsernameToken {
 #define SOAP_TYPE__wsse__BinarySecurityToken (111)
 /* simple XML schema type 'wsse:BinarySecurityToken': */
 struct SOAP_CMAC _wsse__BinarySecurityToken {
-      public:
-        /** Simple content of XML schema type 'xsd:string' wrapped by this struct */
-        char *__item;
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-        /** Optional attribute 'ValueType' of XML schema type 'xsd:string' */
-        char *ValueType;
-        /** Optional attribute 'EncodingType' of XML schema type 'xsd:string' */
-        char *EncodingType;
-      public:
-        /** Return unique type id SOAP_TYPE__wsse__BinarySecurityToken */
-        long soap_type() const { return SOAP_TYPE__wsse__BinarySecurityToken; }
-        /** Constructor with member initializations */
-        _wsse__BinarySecurityToken() : __item(), wsu__Id(), ValueType(), EncodingType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsse__BinarySecurityToken * SOAP_FMAC2 soap_instantiate__wsse__BinarySecurityToken(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Simple content of XML schema type 'xsd:string' wrapped by this struct */
+	char *__item;
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+	/** Optional attribute 'ValueType' of XML schema type 'xsd:string' */
+	char *ValueType;
+	/** Optional attribute 'EncodingType' of XML schema type 'xsd:string' */
+	char *EncodingType;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsse__BinarySecurityToken */
+	long soap_type() const { return SOAP_TYPE__wsse__BinarySecurityToken; }
+	/** Constructor with member initializations */
+	_wsse__BinarySecurityToken() : __item(), wsu__Id(), ValueType(), EncodingType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsse__BinarySecurityToken *SOAP_FMAC2
+	soap_instantiate__wsse__BinarySecurityToken(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -1909,18 +2149,20 @@ struct SOAP_CMAC _wsse__BinarySecurityToken {
 #define SOAP_TYPE__wsse__Reference (112)
 /* complex XML schema type 'wsse:Reference': */
 struct SOAP_CMAC _wsse__Reference {
-      public:
-        /** Optional attribute 'URI' of XML schema type 'xsd:string' */
-        char *URI;
-        /** Optional attribute 'ValueType' of XML schema type 'xsd:string' */
-        char *ValueType;
-      public:
-        /** Return unique type id SOAP_TYPE__wsse__Reference */
-        long soap_type() const { return SOAP_TYPE__wsse__Reference; }
-        /** Constructor with member initializations */
-        _wsse__Reference() : URI(), ValueType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsse__Reference * SOAP_FMAC2 soap_instantiate__wsse__Reference(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'URI' of XML schema type 'xsd:string' */
+	char *URI;
+	/** Optional attribute 'ValueType' of XML schema type 'xsd:string' */
+	char *ValueType;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsse__Reference */
+	long soap_type() const { return SOAP_TYPE__wsse__Reference; }
+	/** Constructor with member initializations */
+	_wsse__Reference() : URI(), ValueType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsse__Reference *SOAP_FMAC2 soap_instantiate__wsse__Reference(struct soap *, int, const char *,
+																					 const char *, size_t *);
 };
 #endif
 
@@ -1929,18 +2171,20 @@ struct SOAP_CMAC _wsse__Reference {
 #define SOAP_TYPE__wsse__Embedded (113)
 /* complex XML schema type 'wsse:Embedded': */
 struct SOAP_CMAC _wsse__Embedded {
-      public:
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-        /** Optional attribute 'ValueType' of XML schema type 'xsd:string' */
-        char *ValueType;
-      public:
-        /** Return unique type id SOAP_TYPE__wsse__Embedded */
-        long soap_type() const { return SOAP_TYPE__wsse__Embedded; }
-        /** Constructor with member initializations */
-        _wsse__Embedded() : wsu__Id(), ValueType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsse__Embedded * SOAP_FMAC2 soap_instantiate__wsse__Embedded(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+	/** Optional attribute 'ValueType' of XML schema type 'xsd:string' */
+	char *ValueType;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsse__Embedded */
+	long soap_type() const { return SOAP_TYPE__wsse__Embedded; }
+	/** Constructor with member initializations */
+	_wsse__Embedded() : wsu__Id(), ValueType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsse__Embedded *SOAP_FMAC2 soap_instantiate__wsse__Embedded(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 
@@ -1949,22 +2193,25 @@ struct SOAP_CMAC _wsse__Embedded {
 #define SOAP_TYPE__wsse__KeyIdentifier (114)
 /* simple XML schema type 'wsse:KeyIdentifier': */
 struct SOAP_CMAC _wsse__KeyIdentifier {
-      public:
-        /** Simple content of XML schema type 'xsd:string' wrapped by this struct */
-        char *__item;
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-        /** Optional attribute 'ValueType' of XML schema type 'xsd:string' */
-        char *ValueType;
-        /** Optional attribute 'EncodingType' of XML schema type 'xsd:string' */
-        char *EncodingType;
-      public:
-        /** Return unique type id SOAP_TYPE__wsse__KeyIdentifier */
-        long soap_type() const { return SOAP_TYPE__wsse__KeyIdentifier; }
-        /** Constructor with member initializations */
-        _wsse__KeyIdentifier() : __item(), wsu__Id(), ValueType(), EncodingType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsse__KeyIdentifier * SOAP_FMAC2 soap_instantiate__wsse__KeyIdentifier(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Simple content of XML schema type 'xsd:string' wrapped by this struct */
+	char *__item;
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+	/** Optional attribute 'ValueType' of XML schema type 'xsd:string' */
+	char *ValueType;
+	/** Optional attribute 'EncodingType' of XML schema type 'xsd:string' */
+	char *EncodingType;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsse__KeyIdentifier */
+	long soap_type() const { return SOAP_TYPE__wsse__KeyIdentifier; }
+	/** Constructor with member initializations */
+	_wsse__KeyIdentifier() : __item(), wsu__Id(), ValueType(), EncodingType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsse__KeyIdentifier *SOAP_FMAC2 soap_instantiate__wsse__KeyIdentifier(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -1973,28 +2220,31 @@ struct SOAP_CMAC _wsse__KeyIdentifier {
 #define SOAP_TYPE__wsse__SecurityTokenReference (115)
 /* complex XML schema type 'wsse:SecurityTokenReference': */
 struct SOAP_CMAC _wsse__SecurityTokenReference {
-      public:
-        /** Optional element 'wsse:Reference' of XML schema type 'wsse:Reference' */
-        struct _wsse__Reference *Reference;
-        /** Optional element 'wsse:KeyIdentifier' of XML schema type 'wsse:KeyIdentifier' */
-        struct _wsse__KeyIdentifier *KeyIdentifier;
-        /** Optional element 'wsse:Embedded' of XML schema type 'wsse:Embedded' */
-        struct _wsse__Embedded *Embedded;
-        /** Optional element 'ds:X509Data' of XML schema type 'ds:X509DataType' */
-        struct ds__X509DataType *ds__X509Data;
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-        /** Optional attribute 'wsc:Instance' of XML schema type 'xsd:string' */
-        char *wsc__Instance;
-        /** Optional attribute 'Usage' of XML schema type 'xsd:string' */
-        char *Usage;
-      public:
-        /** Return unique type id SOAP_TYPE__wsse__SecurityTokenReference */
-        long soap_type() const { return SOAP_TYPE__wsse__SecurityTokenReference; }
-        /** Constructor with member initializations */
-        _wsse__SecurityTokenReference() : Reference(), KeyIdentifier(), Embedded(), ds__X509Data(), wsu__Id(), wsc__Instance(), Usage() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsse__SecurityTokenReference * SOAP_FMAC2 soap_instantiate__wsse__SecurityTokenReference(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'wsse:Reference' of XML schema type 'wsse:Reference' */
+	struct _wsse__Reference *Reference;
+	/** Optional element 'wsse:KeyIdentifier' of XML schema type 'wsse:KeyIdentifier' */
+	struct _wsse__KeyIdentifier *KeyIdentifier;
+	/** Optional element 'wsse:Embedded' of XML schema type 'wsse:Embedded' */
+	struct _wsse__Embedded *Embedded;
+	/** Optional element 'ds:X509Data' of XML schema type 'ds:X509DataType' */
+	struct ds__X509DataType *ds__X509Data;
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+	/** Optional attribute 'wsc:Instance' of XML schema type 'xsd:string' */
+	char *wsc__Instance;
+	/** Optional attribute 'Usage' of XML schema type 'xsd:string' */
+	char *Usage;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsse__SecurityTokenReference */
+	long soap_type() const { return SOAP_TYPE__wsse__SecurityTokenReference; }
+	/** Constructor with member initializations */
+	_wsse__SecurityTokenReference()
+		: Reference(), KeyIdentifier(), Embedded(), ds__X509Data(), wsu__Id(), wsc__Instance(), Usage() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsse__SecurityTokenReference *SOAP_FMAC2
+	soap_instantiate__wsse__SecurityTokenReference(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2003,22 +2253,24 @@ struct SOAP_CMAC _wsse__SecurityTokenReference {
 #define SOAP_TYPE_ds__SignatureType (122)
 /* complex XML schema type 'ds:SignatureType': */
 struct SOAP_CMAC ds__SignatureType {
-      public:
-        /** Optional element 'ds:SignedInfo' of XML schema type 'ds:SignedInfoType' */
-        struct ds__SignedInfoType *SignedInfo;
-        /** Optional element 'ds:SignatureValue' of XML schema type 'ds:SignatureValue' */
-        char *SignatureValue;
-        /** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfoType' */
-        struct ds__KeyInfoType *KeyInfo;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__SignatureType */
-        long soap_type() const { return SOAP_TYPE_ds__SignatureType; }
-        /** Constructor with member initializations */
-        ds__SignatureType() : SignedInfo(), SignatureValue(), KeyInfo(), Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__SignatureType * SOAP_FMAC2 soap_instantiate_ds__SignatureType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ds:SignedInfo' of XML schema type 'ds:SignedInfoType' */
+	struct ds__SignedInfoType *SignedInfo;
+	/** Optional element 'ds:SignatureValue' of XML schema type 'ds:SignatureValue' */
+	char *SignatureValue;
+	/** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfoType' */
+	struct ds__KeyInfoType *KeyInfo;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__SignatureType */
+	long soap_type() const { return SOAP_TYPE_ds__SignatureType; }
+	/** Constructor with member initializations */
+	ds__SignatureType() : SignedInfo(), SignatureValue(), KeyInfo(), Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__SignatureType *SOAP_FMAC2 soap_instantiate_ds__SignatureType(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -2027,16 +2279,18 @@ struct SOAP_CMAC ds__SignatureType {
 #define SOAP_TYPE__c14n__InclusiveNamespaces (132)
 /* complex XML schema type 'c14n:InclusiveNamespaces': */
 struct SOAP_CMAC _c14n__InclusiveNamespaces {
-      public:
-        /** Optional attribute 'PrefixList' of XML schema type 'xsd:string' */
-        char *PrefixList;
-      public:
-        /** Return unique type id SOAP_TYPE__c14n__InclusiveNamespaces */
-        long soap_type() const { return SOAP_TYPE__c14n__InclusiveNamespaces; }
-        /** Constructor with member initializations */
-        _c14n__InclusiveNamespaces() : PrefixList() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _c14n__InclusiveNamespaces * SOAP_FMAC2 soap_instantiate__c14n__InclusiveNamespaces(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'PrefixList' of XML schema type 'xsd:string' */
+	char *PrefixList;
+
+public:
+	/** Return unique type id SOAP_TYPE__c14n__InclusiveNamespaces */
+	long soap_type() const { return SOAP_TYPE__c14n__InclusiveNamespaces; }
+	/** Constructor with member initializations */
+	_c14n__InclusiveNamespaces() : PrefixList() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _c14n__InclusiveNamespaces *SOAP_FMAC2
+	soap_instantiate__c14n__InclusiveNamespaces(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2045,19 +2299,21 @@ struct SOAP_CMAC _c14n__InclusiveNamespaces {
 #define SOAP_TYPE_ds__TransformType (133)
 /* complex XML schema type 'ds:TransformType': */
 struct SOAP_CMAC ds__TransformType {
-      public:
-        /** Optional element 'c14n:InclusiveNamespaces' of XML schema type 'c14n:InclusiveNamespaces' */
-        struct _c14n__InclusiveNamespaces *c14n__InclusiveNamespaces;
-        char *__any;
-        /** Optional attribute 'Algorithm' of XML schema type 'xsd:string' */
-        char *Algorithm;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__TransformType */
-        long soap_type() const { return SOAP_TYPE_ds__TransformType; }
-        /** Constructor with member initializations */
-        ds__TransformType() : c14n__InclusiveNamespaces(), __any(), Algorithm() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__TransformType * SOAP_FMAC2 soap_instantiate_ds__TransformType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'c14n:InclusiveNamespaces' of XML schema type 'c14n:InclusiveNamespaces' */
+	struct _c14n__InclusiveNamespaces *c14n__InclusiveNamespaces;
+	char *__any;
+	/** Optional attribute 'Algorithm' of XML schema type 'xsd:string' */
+	char *Algorithm;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__TransformType */
+	long soap_type() const { return SOAP_TYPE_ds__TransformType; }
+	/** Constructor with member initializations */
+	ds__TransformType() : c14n__InclusiveNamespaces(), __any(), Algorithm() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__TransformType *SOAP_FMAC2 soap_instantiate_ds__TransformType(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -2066,26 +2322,28 @@ struct SOAP_CMAC ds__TransformType {
 #define SOAP_TYPE_ds__KeyInfoType (125)
 /* complex XML schema type 'ds:KeyInfoType': */
 struct SOAP_CMAC ds__KeyInfoType {
-      public:
-        /** Optional element 'ds:KeyName' of XML schema type 'xsd:string' */
-        char *KeyName;
-        /** Optional element 'ds:KeyValue' of XML schema type 'ds:KeyValueType' */
-        struct ds__KeyValueType *KeyValue;
-        /** Optional element 'ds:RetrievalMethod' of XML schema type 'ds:RetrievalMethodType' */
-        struct ds__RetrievalMethodType *RetrievalMethod;
-        /** Optional element 'ds:X509Data' of XML schema type 'ds:X509DataType' */
-        struct ds__X509DataType *X509Data;
-        /** Optional element 'wsse:SecurityTokenReference' of XML schema type 'wsse:SecurityTokenReference' */
-        struct _wsse__SecurityTokenReference *wsse__SecurityTokenReference;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__KeyInfoType */
-        long soap_type() const { return SOAP_TYPE_ds__KeyInfoType; }
-        /** Constructor with member initializations */
-        ds__KeyInfoType() : KeyName(), KeyValue(), RetrievalMethod(), X509Data(), wsse__SecurityTokenReference(), Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__KeyInfoType * SOAP_FMAC2 soap_instantiate_ds__KeyInfoType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ds:KeyName' of XML schema type 'xsd:string' */
+	char *KeyName;
+	/** Optional element 'ds:KeyValue' of XML schema type 'ds:KeyValueType' */
+	struct ds__KeyValueType *KeyValue;
+	/** Optional element 'ds:RetrievalMethod' of XML schema type 'ds:RetrievalMethodType' */
+	struct ds__RetrievalMethodType *RetrievalMethod;
+	/** Optional element 'ds:X509Data' of XML schema type 'ds:X509DataType' */
+	struct ds__X509DataType *X509Data;
+	/** Optional element 'wsse:SecurityTokenReference' of XML schema type 'wsse:SecurityTokenReference' */
+	struct _wsse__SecurityTokenReference *wsse__SecurityTokenReference;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__KeyInfoType */
+	long soap_type() const { return SOAP_TYPE_ds__KeyInfoType; }
+	/** Constructor with member initializations */
+	ds__KeyInfoType() : KeyName(), KeyValue(), RetrievalMethod(), X509Data(), wsse__SecurityTokenReference(), Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__KeyInfoType *SOAP_FMAC2 soap_instantiate_ds__KeyInfoType(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 
@@ -2094,23 +2352,27 @@ struct SOAP_CMAC ds__KeyInfoType {
 #define SOAP_TYPE_ds__SignedInfoType (123)
 /* complex XML schema type 'ds:SignedInfoType': */
 struct SOAP_CMAC ds__SignedInfoType {
-      public:
-        /** Required element 'ds:CanonicalizationMethod' of XML schema type 'ds:CanonicalizationMethodType' */
-        struct ds__CanonicalizationMethodType *CanonicalizationMethod;
-        /** Required element 'ds:SignatureMethod' of XML schema type 'ds:SignatureMethodType' */
-        struct ds__SignatureMethodType *SignatureMethod;
-        /** Sequence of elements 'ds:Reference' of XML schema type 'ds:ReferenceType' stored in dynamic array Reference of length __sizeReference */
-        int __sizeReference;
-        struct ds__ReferenceType **Reference;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__SignedInfoType */
-        long soap_type() const { return SOAP_TYPE_ds__SignedInfoType; }
-        /** Constructor with member initializations */
-        ds__SignedInfoType() : CanonicalizationMethod(), SignatureMethod(), __sizeReference(), Reference(), Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__SignedInfoType * SOAP_FMAC2 soap_instantiate_ds__SignedInfoType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'ds:CanonicalizationMethod' of XML schema type 'ds:CanonicalizationMethodType' */
+	struct ds__CanonicalizationMethodType *CanonicalizationMethod;
+	/** Required element 'ds:SignatureMethod' of XML schema type 'ds:SignatureMethodType' */
+	struct ds__SignatureMethodType *SignatureMethod;
+	/** Sequence of elements 'ds:Reference' of XML schema type 'ds:ReferenceType' stored in dynamic array Reference of
+	 * length __sizeReference */
+	int __sizeReference;
+	struct ds__ReferenceType **Reference;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__SignedInfoType */
+	long soap_type() const { return SOAP_TYPE_ds__SignedInfoType; }
+	/** Constructor with member initializations */
+	ds__SignedInfoType() : CanonicalizationMethod(), SignatureMethod(), __sizeReference(), Reference(), Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__SignedInfoType *SOAP_FMAC2 soap_instantiate_ds__SignedInfoType(struct soap *, int,
+																						 const char *, const char *,
+																						 size_t *);
 };
 #endif
 
@@ -2119,18 +2381,20 @@ struct SOAP_CMAC ds__SignedInfoType {
 #define SOAP_TYPE_ds__CanonicalizationMethodType (128)
 /* complex XML schema type 'ds:CanonicalizationMethodType': */
 struct SOAP_CMAC ds__CanonicalizationMethodType {
-      public:
-        /** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
-        char *Algorithm;
-        /** Optional element 'c14n:InclusiveNamespaces' of XML schema type 'c14n:InclusiveNamespaces' */
-        struct _c14n__InclusiveNamespaces *c14n__InclusiveNamespaces;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__CanonicalizationMethodType */
-        long soap_type() const { return SOAP_TYPE_ds__CanonicalizationMethodType; }
-        /** Constructor with member initializations */
-        ds__CanonicalizationMethodType() : Algorithm(), c14n__InclusiveNamespaces() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__CanonicalizationMethodType * SOAP_FMAC2 soap_instantiate_ds__CanonicalizationMethodType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
+	char *Algorithm;
+	/** Optional element 'c14n:InclusiveNamespaces' of XML schema type 'c14n:InclusiveNamespaces' */
+	struct _c14n__InclusiveNamespaces *c14n__InclusiveNamespaces;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__CanonicalizationMethodType */
+	long soap_type() const { return SOAP_TYPE_ds__CanonicalizationMethodType; }
+	/** Constructor with member initializations */
+	ds__CanonicalizationMethodType() : Algorithm(), c14n__InclusiveNamespaces() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__CanonicalizationMethodType *SOAP_FMAC2
+	soap_instantiate_ds__CanonicalizationMethodType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2139,18 +2403,22 @@ struct SOAP_CMAC ds__CanonicalizationMethodType {
 #define SOAP_TYPE_ds__SignatureMethodType (129)
 /* complex XML schema type 'ds:SignatureMethodType': */
 struct SOAP_CMAC ds__SignatureMethodType {
-      public:
-        /** Optional element 'ds:HMACOutputLength' of XML schema type 'xsd:int' */
-        int *HMACOutputLength;
-        /** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
-        char *Algorithm;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__SignatureMethodType */
-        long soap_type() const { return SOAP_TYPE_ds__SignatureMethodType; }
-        /** Constructor with member initializations */
-        ds__SignatureMethodType() : HMACOutputLength(), Algorithm() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__SignatureMethodType * SOAP_FMAC2 soap_instantiate_ds__SignatureMethodType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ds:HMACOutputLength' of XML schema type 'xsd:int' */
+	int *HMACOutputLength;
+	/** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
+	char *Algorithm;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__SignatureMethodType */
+	long soap_type() const { return SOAP_TYPE_ds__SignatureMethodType; }
+	/** Constructor with member initializations */
+	ds__SignatureMethodType() : HMACOutputLength(), Algorithm() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__SignatureMethodType *SOAP_FMAC2 soap_instantiate_ds__SignatureMethodType(struct soap *, int,
+																								   const char *,
+																								   const char *,
+																								   size_t *);
 };
 #endif
 
@@ -2159,26 +2427,28 @@ struct SOAP_CMAC ds__SignatureMethodType {
 #define SOAP_TYPE_ds__ReferenceType (130)
 /* complex XML schema type 'ds:ReferenceType': */
 struct SOAP_CMAC ds__ReferenceType {
-      public:
-        /** Optional element 'ds:Transforms' of XML schema type 'ds:TransformsType' */
-        struct ds__TransformsType *Transforms;
-        /** Required element 'ds:DigestMethod' of XML schema type 'ds:DigestMethodType' */
-        struct ds__DigestMethodType *DigestMethod;
-        /** Required element 'ds:DigestValue' of XML schema type 'xsd:string' */
-        char *DigestValue;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-        /** Optional attribute 'URI' of XML schema type 'xsd:string' */
-        char *URI;
-        /** Optional attribute 'Type' of XML schema type 'xsd:string' */
-        char *Type;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__ReferenceType */
-        long soap_type() const { return SOAP_TYPE_ds__ReferenceType; }
-        /** Constructor with member initializations */
-        ds__ReferenceType() : Transforms(), DigestMethod(), DigestValue(), Id(), URI(), Type() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__ReferenceType * SOAP_FMAC2 soap_instantiate_ds__ReferenceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ds:Transforms' of XML schema type 'ds:TransformsType' */
+	struct ds__TransformsType *Transforms;
+	/** Required element 'ds:DigestMethod' of XML schema type 'ds:DigestMethodType' */
+	struct ds__DigestMethodType *DigestMethod;
+	/** Required element 'ds:DigestValue' of XML schema type 'xsd:string' */
+	char *DigestValue;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+	/** Optional attribute 'URI' of XML schema type 'xsd:string' */
+	char *URI;
+	/** Optional attribute 'Type' of XML schema type 'xsd:string' */
+	char *Type;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__ReferenceType */
+	long soap_type() const { return SOAP_TYPE_ds__ReferenceType; }
+	/** Constructor with member initializations */
+	ds__ReferenceType() : Transforms(), DigestMethod(), DigestValue(), Id(), URI(), Type() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__ReferenceType *SOAP_FMAC2 soap_instantiate_ds__ReferenceType(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -2187,17 +2457,21 @@ struct SOAP_CMAC ds__ReferenceType {
 #define SOAP_TYPE_ds__TransformsType (131)
 /* complex XML schema type 'ds:TransformsType': */
 struct SOAP_CMAC ds__TransformsType {
-      public:
-        /** Sequence of elements 'ds:Transform' of XML schema type 'ds:TransformType' stored in dynamic array Transform of length __sizeTransform */
-        int __sizeTransform;
-        struct ds__TransformType *Transform;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__TransformsType */
-        long soap_type() const { return SOAP_TYPE_ds__TransformsType; }
-        /** Constructor with member initializations */
-        ds__TransformsType() : __sizeTransform(), Transform() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__TransformsType * SOAP_FMAC2 soap_instantiate_ds__TransformsType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements 'ds:Transform' of XML schema type 'ds:TransformType' stored in dynamic array Transform of
+	 * length __sizeTransform */
+	int __sizeTransform;
+	struct ds__TransformType *Transform;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__TransformsType */
+	long soap_type() const { return SOAP_TYPE_ds__TransformsType; }
+	/** Constructor with member initializations */
+	ds__TransformsType() : __sizeTransform(), Transform() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__TransformsType *SOAP_FMAC2 soap_instantiate_ds__TransformsType(struct soap *, int,
+																						 const char *, const char *,
+																						 size_t *);
 };
 #endif
 
@@ -2206,16 +2480,19 @@ struct SOAP_CMAC ds__TransformsType {
 #define SOAP_TYPE_ds__DigestMethodType (136)
 /* complex XML schema type 'ds:DigestMethodType': */
 struct SOAP_CMAC ds__DigestMethodType {
-      public:
-        /** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
-        char *Algorithm;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__DigestMethodType */
-        long soap_type() const { return SOAP_TYPE_ds__DigestMethodType; }
-        /** Constructor with member initializations */
-        ds__DigestMethodType() : Algorithm() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__DigestMethodType * SOAP_FMAC2 soap_instantiate_ds__DigestMethodType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
+	char *Algorithm;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__DigestMethodType */
+	long soap_type() const { return SOAP_TYPE_ds__DigestMethodType; }
+	/** Constructor with member initializations */
+	ds__DigestMethodType() : Algorithm() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__DigestMethodType *SOAP_FMAC2 soap_instantiate_ds__DigestMethodType(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -2224,18 +2501,20 @@ struct SOAP_CMAC ds__DigestMethodType {
 #define SOAP_TYPE_ds__KeyValueType (137)
 /* complex XML schema type 'ds:KeyValueType': */
 struct SOAP_CMAC ds__KeyValueType {
-      public:
-        /** Optional element 'ds:DSAKeyValue' of XML schema type 'ds:DSAKeyValueType' */
-        struct ds__DSAKeyValueType *DSAKeyValue;
-        /** Optional element 'ds:RSAKeyValue' of XML schema type 'ds:RSAKeyValueType' */
-        struct ds__RSAKeyValueType *RSAKeyValue;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__KeyValueType */
-        long soap_type() const { return SOAP_TYPE_ds__KeyValueType; }
-        /** Constructor with member initializations */
-        ds__KeyValueType() : DSAKeyValue(), RSAKeyValue() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__KeyValueType * SOAP_FMAC2 soap_instantiate_ds__KeyValueType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ds:DSAKeyValue' of XML schema type 'ds:DSAKeyValueType' */
+	struct ds__DSAKeyValueType *DSAKeyValue;
+	/** Optional element 'ds:RSAKeyValue' of XML schema type 'ds:RSAKeyValueType' */
+	struct ds__RSAKeyValueType *RSAKeyValue;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__KeyValueType */
+	long soap_type() const { return SOAP_TYPE_ds__KeyValueType; }
+	/** Constructor with member initializations */
+	ds__KeyValueType() : DSAKeyValue(), RSAKeyValue() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__KeyValueType *SOAP_FMAC2 soap_instantiate_ds__KeyValueType(struct soap *, int, const char *,
+																					 const char *, size_t *);
 };
 #endif
 
@@ -2244,20 +2523,24 @@ struct SOAP_CMAC ds__KeyValueType {
 #define SOAP_TYPE_ds__RetrievalMethodType (139)
 /* complex XML schema type 'ds:RetrievalMethodType': */
 struct SOAP_CMAC ds__RetrievalMethodType {
-      public:
-        /** Optional element 'ds:Transforms' of XML schema type 'ds:TransformsType' */
-        struct ds__TransformsType *Transforms;
-        /** Optional attribute 'URI' of XML schema type 'xsd:string' */
-        char *URI;
-        /** Optional attribute 'Type' of XML schema type 'xsd:string' */
-        char *Type;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__RetrievalMethodType */
-        long soap_type() const { return SOAP_TYPE_ds__RetrievalMethodType; }
-        /** Constructor with member initializations */
-        ds__RetrievalMethodType() : Transforms(), URI(), Type() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__RetrievalMethodType * SOAP_FMAC2 soap_instantiate_ds__RetrievalMethodType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ds:Transforms' of XML schema type 'ds:TransformsType' */
+	struct ds__TransformsType *Transforms;
+	/** Optional attribute 'URI' of XML schema type 'xsd:string' */
+	char *URI;
+	/** Optional attribute 'Type' of XML schema type 'xsd:string' */
+	char *Type;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__RetrievalMethodType */
+	long soap_type() const { return SOAP_TYPE_ds__RetrievalMethodType; }
+	/** Constructor with member initializations */
+	ds__RetrievalMethodType() : Transforms(), URI(), Type() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__RetrievalMethodType *SOAP_FMAC2 soap_instantiate_ds__RetrievalMethodType(struct soap *, int,
+																								   const char *,
+																								   const char *,
+																								   size_t *);
 };
 #endif
 
@@ -2266,24 +2549,26 @@ struct SOAP_CMAC ds__RetrievalMethodType {
 #define SOAP_TYPE_ds__X509DataType (119)
 /* complex XML schema type 'ds:X509DataType': */
 struct SOAP_CMAC ds__X509DataType {
-      public:
-        /** Optional element 'ds:X509IssuerSerial' of XML schema type 'ds:X509IssuerSerialType' */
-        struct ds__X509IssuerSerialType *X509IssuerSerial;
-        /** Optional element 'ds:X509SKI' of XML schema type 'xsd:string' */
-        char *X509SKI;
-        /** Optional element 'ds:X509SubjectName' of XML schema type 'xsd:string' */
-        char *X509SubjectName;
-        /** Optional element 'ds:X509Certificate' of XML schema type 'xsd:string' */
-        char *X509Certificate;
-        /** Optional element 'ds:X509CRL' of XML schema type 'xsd:string' */
-        char *X509CRL;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__X509DataType */
-        long soap_type() const { return SOAP_TYPE_ds__X509DataType; }
-        /** Constructor with member initializations */
-        ds__X509DataType() : X509IssuerSerial(), X509SKI(), X509SubjectName(), X509Certificate(), X509CRL() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__X509DataType * SOAP_FMAC2 soap_instantiate_ds__X509DataType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ds:X509IssuerSerial' of XML schema type 'ds:X509IssuerSerialType' */
+	struct ds__X509IssuerSerialType *X509IssuerSerial;
+	/** Optional element 'ds:X509SKI' of XML schema type 'xsd:string' */
+	char *X509SKI;
+	/** Optional element 'ds:X509SubjectName' of XML schema type 'xsd:string' */
+	char *X509SubjectName;
+	/** Optional element 'ds:X509Certificate' of XML schema type 'xsd:string' */
+	char *X509Certificate;
+	/** Optional element 'ds:X509CRL' of XML schema type 'xsd:string' */
+	char *X509CRL;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__X509DataType */
+	long soap_type() const { return SOAP_TYPE_ds__X509DataType; }
+	/** Constructor with member initializations */
+	ds__X509DataType() : X509IssuerSerial(), X509SKI(), X509SubjectName(), X509Certificate(), X509CRL() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__X509DataType *SOAP_FMAC2 soap_instantiate_ds__X509DataType(struct soap *, int, const char *,
+																					 const char *, size_t *);
 };
 #endif
 
@@ -2292,18 +2577,22 @@ struct SOAP_CMAC ds__X509DataType {
 #define SOAP_TYPE_ds__X509IssuerSerialType (143)
 /* complex XML schema type 'ds:X509IssuerSerialType': */
 struct SOAP_CMAC ds__X509IssuerSerialType {
-      public:
-        /** Required element 'ds:X509IssuerName' of XML schema type 'xsd:string' */
-        char *X509IssuerName;
-        /** Required element 'ds:X509SerialNumber' of XML schema type 'xsd:string' */
-        char *X509SerialNumber;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__X509IssuerSerialType */
-        long soap_type() const { return SOAP_TYPE_ds__X509IssuerSerialType; }
-        /** Constructor with member initializations */
-        ds__X509IssuerSerialType() : X509IssuerName(), X509SerialNumber() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__X509IssuerSerialType * SOAP_FMAC2 soap_instantiate_ds__X509IssuerSerialType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'ds:X509IssuerName' of XML schema type 'xsd:string' */
+	char *X509IssuerName;
+	/** Required element 'ds:X509SerialNumber' of XML schema type 'xsd:string' */
+	char *X509SerialNumber;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__X509IssuerSerialType */
+	long soap_type() const { return SOAP_TYPE_ds__X509IssuerSerialType; }
+	/** Constructor with member initializations */
+	ds__X509IssuerSerialType() : X509IssuerName(), X509SerialNumber() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__X509IssuerSerialType *SOAP_FMAC2 soap_instantiate_ds__X509IssuerSerialType(struct soap *, int,
+																									 const char *,
+																									 const char *,
+																									 size_t *);
 };
 #endif
 
@@ -2312,28 +2601,31 @@ struct SOAP_CMAC ds__X509IssuerSerialType {
 #define SOAP_TYPE_ds__DSAKeyValueType (144)
 /* complex XML schema type 'ds:DSAKeyValueType': */
 struct SOAP_CMAC ds__DSAKeyValueType {
-      public:
-        /** Optional element 'ds:G' of XML schema type 'xsd:string' */
-        char *G;
-        /** Required element 'ds:Y' of XML schema type 'xsd:string' */
-        char *Y;
-        /** Optional element 'ds:J' of XML schema type 'xsd:string' */
-        char *J;
-        /** Required element 'ds:P' of XML schema type 'xsd:string' */
-        char *P;
-        /** Required element 'ds:Q' of XML schema type 'xsd:string' */
-        char *Q;
-        /** Required element 'ds:Seed' of XML schema type 'xsd:string' */
-        char *Seed;
-        /** Required element 'ds:PgenCounter' of XML schema type 'xsd:string' */
-        char *PgenCounter;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__DSAKeyValueType */
-        long soap_type() const { return SOAP_TYPE_ds__DSAKeyValueType; }
-        /** Constructor with member initializations */
-        ds__DSAKeyValueType() : G(), Y(), J(), P(), Q(), Seed(), PgenCounter() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__DSAKeyValueType * SOAP_FMAC2 soap_instantiate_ds__DSAKeyValueType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'ds:G' of XML schema type 'xsd:string' */
+	char *G;
+	/** Required element 'ds:Y' of XML schema type 'xsd:string' */
+	char *Y;
+	/** Optional element 'ds:J' of XML schema type 'xsd:string' */
+	char *J;
+	/** Required element 'ds:P' of XML schema type 'xsd:string' */
+	char *P;
+	/** Required element 'ds:Q' of XML schema type 'xsd:string' */
+	char *Q;
+	/** Required element 'ds:Seed' of XML schema type 'xsd:string' */
+	char *Seed;
+	/** Required element 'ds:PgenCounter' of XML schema type 'xsd:string' */
+	char *PgenCounter;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__DSAKeyValueType */
+	long soap_type() const { return SOAP_TYPE_ds__DSAKeyValueType; }
+	/** Constructor with member initializations */
+	ds__DSAKeyValueType() : G(), Y(), J(), P(), Q(), Seed(), PgenCounter() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__DSAKeyValueType *SOAP_FMAC2 soap_instantiate_ds__DSAKeyValueType(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -2342,18 +2634,21 @@ struct SOAP_CMAC ds__DSAKeyValueType {
 #define SOAP_TYPE_ds__RSAKeyValueType (145)
 /* complex XML schema type 'ds:RSAKeyValueType': */
 struct SOAP_CMAC ds__RSAKeyValueType {
-      public:
-        /** Required element 'ds:Modulus' of XML schema type 'xsd:string' */
-        char *Modulus;
-        /** Required element 'ds:Exponent' of XML schema type 'xsd:string' */
-        char *Exponent;
-      public:
-        /** Return unique type id SOAP_TYPE_ds__RSAKeyValueType */
-        long soap_type() const { return SOAP_TYPE_ds__RSAKeyValueType; }
-        /** Constructor with member initializations */
-        ds__RSAKeyValueType() : Modulus(), Exponent() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 ds__RSAKeyValueType * SOAP_FMAC2 soap_instantiate_ds__RSAKeyValueType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'ds:Modulus' of XML schema type 'xsd:string' */
+	char *Modulus;
+	/** Required element 'ds:Exponent' of XML schema type 'xsd:string' */
+	char *Exponent;
+
+public:
+	/** Return unique type id SOAP_TYPE_ds__RSAKeyValueType */
+	long soap_type() const { return SOAP_TYPE_ds__RSAKeyValueType; }
+	/** Constructor with member initializations */
+	ds__RSAKeyValueType() : Modulus(), Exponent() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 ds__RSAKeyValueType *SOAP_FMAC2 soap_instantiate_ds__RSAKeyValueType(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -2362,18 +2657,20 @@ struct SOAP_CMAC ds__RSAKeyValueType {
 #define SOAP_TYPE_xenc__EncryptionPropertyType (167)
 /* complex XML schema type 'xenc:EncryptionPropertyType': */
 struct SOAP_CMAC xenc__EncryptionPropertyType {
-      public:
-        /** Optional attribute 'Target' of XML schema type 'xsd:string' */
-        char *Target;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__EncryptionPropertyType */
-        long soap_type() const { return SOAP_TYPE_xenc__EncryptionPropertyType; }
-        /** Constructor with member initializations */
-        xenc__EncryptionPropertyType() : Target(), Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__EncryptionPropertyType * SOAP_FMAC2 soap_instantiate_xenc__EncryptionPropertyType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'Target' of XML schema type 'xsd:string' */
+	char *Target;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__EncryptionPropertyType */
+	long soap_type() const { return SOAP_TYPE_xenc__EncryptionPropertyType; }
+	/** Constructor with member initializations */
+	xenc__EncryptionPropertyType() : Target(), Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__EncryptionPropertyType *SOAP_FMAC2
+	soap_instantiate_xenc__EncryptionPropertyType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2382,30 +2679,35 @@ struct SOAP_CMAC xenc__EncryptionPropertyType {
 #define SOAP_TYPE_xenc__EncryptedType (157)
 /* complex XML schema type 'xenc:EncryptedType': */
 struct SOAP_CMAC xenc__EncryptedType {
-      public:
-        /** Optional element 'xenc:EncryptionMethod' of XML schema type 'xenc:EncryptionMethodType' */
-        struct xenc__EncryptionMethodType *EncryptionMethod;
-        /** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' */
-        struct ds__KeyInfoType *ds__KeyInfo;
-        /** Required element 'xenc:CipherData' of XML schema type 'xenc:CipherDataType' */
-        struct xenc__CipherDataType *CipherData;
-        /** Optional element 'xenc:EncryptionProperties' of XML schema type 'xenc:EncryptionPropertiesType' */
-        struct xenc__EncryptionPropertiesType *EncryptionProperties;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-        /** Optional attribute 'Type' of XML schema type 'xsd:string' */
-        char *Type;
-        /** Optional attribute 'MimeType' of XML schema type 'xsd:string' */
-        char *MimeType;
-        /** Optional attribute 'Encoding' of XML schema type 'xsd:string' */
-        char *Encoding;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__EncryptedType */
-        long soap_type() const { return SOAP_TYPE_xenc__EncryptedType; }
-        /** Constructor with member initializations */
-        xenc__EncryptedType() : EncryptionMethod(), ds__KeyInfo(), CipherData(), EncryptionProperties(), Id(), Type(), MimeType(), Encoding() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__EncryptedType * SOAP_FMAC2 soap_instantiate_xenc__EncryptedType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'xenc:EncryptionMethod' of XML schema type 'xenc:EncryptionMethodType' */
+	struct xenc__EncryptionMethodType *EncryptionMethod;
+	/** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' */
+	struct ds__KeyInfoType *ds__KeyInfo;
+	/** Required element 'xenc:CipherData' of XML schema type 'xenc:CipherDataType' */
+	struct xenc__CipherDataType *CipherData;
+	/** Optional element 'xenc:EncryptionProperties' of XML schema type 'xenc:EncryptionPropertiesType' */
+	struct xenc__EncryptionPropertiesType *EncryptionProperties;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+	/** Optional attribute 'Type' of XML schema type 'xsd:string' */
+	char *Type;
+	/** Optional attribute 'MimeType' of XML schema type 'xsd:string' */
+	char *MimeType;
+	/** Optional attribute 'Encoding' of XML schema type 'xsd:string' */
+	char *Encoding;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__EncryptedType */
+	long soap_type() const { return SOAP_TYPE_xenc__EncryptedType; }
+	/** Constructor with member initializations */
+	xenc__EncryptedType()
+		: EncryptionMethod(), ds__KeyInfo(), CipherData(), EncryptionProperties(), Id(), Type(), MimeType(),
+		  Encoding() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__EncryptedType *SOAP_FMAC2 soap_instantiate_xenc__EncryptedType(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -2414,23 +2716,25 @@ struct SOAP_CMAC xenc__EncryptedType {
 #define SOAP_TYPE_xenc__EncryptionMethodType (158)
 /* complex XML schema type 'xenc:EncryptionMethodType': */
 struct SOAP_CMAC xenc__EncryptionMethodType {
-      public:
-        /** Optional element 'xenc:KeySize' of XML schema type 'xsd:int' */
-        int *KeySize;
-        /** Optional element 'xenc:OAEPparams' of XML schema type 'xsd:string' */
-        char *OAEPparams;
-        /** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
-        char *Algorithm;
-        /** Optional element 'ds:DigestMethod' of XML schema type 'ds:DigestMethodType' */
-        struct ds__DigestMethodType *ds__DigestMethod;
-        char *__mixed;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__EncryptionMethodType */
-        long soap_type() const { return SOAP_TYPE_xenc__EncryptionMethodType; }
-        /** Constructor with member initializations */
-        xenc__EncryptionMethodType() : KeySize(), OAEPparams(), Algorithm(), ds__DigestMethod(), __mixed() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__EncryptionMethodType * SOAP_FMAC2 soap_instantiate_xenc__EncryptionMethodType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'xenc:KeySize' of XML schema type 'xsd:int' */
+	int *KeySize;
+	/** Optional element 'xenc:OAEPparams' of XML schema type 'xsd:string' */
+	char *OAEPparams;
+	/** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
+	char *Algorithm;
+	/** Optional element 'ds:DigestMethod' of XML schema type 'ds:DigestMethodType' */
+	struct ds__DigestMethodType *ds__DigestMethod;
+	char *__mixed;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__EncryptionMethodType */
+	long soap_type() const { return SOAP_TYPE_xenc__EncryptionMethodType; }
+	/** Constructor with member initializations */
+	xenc__EncryptionMethodType() : KeySize(), OAEPparams(), Algorithm(), ds__DigestMethod(), __mixed() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__EncryptionMethodType *SOAP_FMAC2
+	soap_instantiate_xenc__EncryptionMethodType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2439,18 +2743,21 @@ struct SOAP_CMAC xenc__EncryptionMethodType {
 #define SOAP_TYPE_xenc__CipherDataType (159)
 /* complex XML schema type 'xenc:CipherDataType': */
 struct SOAP_CMAC xenc__CipherDataType {
-      public:
-        /** Optional element 'xenc:CipherValue' of XML schema type 'xsd:string' */
-        char *CipherValue;
-        /** Optional element 'xenc:CipherReference' of XML schema type 'xenc:CipherReferenceType' */
-        struct xenc__CipherReferenceType *CipherReference;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__CipherDataType */
-        long soap_type() const { return SOAP_TYPE_xenc__CipherDataType; }
-        /** Constructor with member initializations */
-        xenc__CipherDataType() : CipherValue(), CipherReference() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__CipherDataType * SOAP_FMAC2 soap_instantiate_xenc__CipherDataType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'xenc:CipherValue' of XML schema type 'xsd:string' */
+	char *CipherValue;
+	/** Optional element 'xenc:CipherReference' of XML schema type 'xenc:CipherReferenceType' */
+	struct xenc__CipherReferenceType *CipherReference;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__CipherDataType */
+	long soap_type() const { return SOAP_TYPE_xenc__CipherDataType; }
+	/** Constructor with member initializations */
+	xenc__CipherDataType() : CipherValue(), CipherReference() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__CipherDataType *SOAP_FMAC2 soap_instantiate_xenc__CipherDataType(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -2459,18 +2766,20 @@ struct SOAP_CMAC xenc__CipherDataType {
 #define SOAP_TYPE_xenc__CipherReferenceType (160)
 /* complex XML schema type 'xenc:CipherReferenceType': */
 struct SOAP_CMAC xenc__CipherReferenceType {
-      public:
-        /** Optional element 'xenc:Transforms' of XML schema type 'xenc:TransformsType' */
-        struct xenc__TransformsType *Transforms;
-        /** Required attribute 'URI' of XML schema type 'xsd:string' */
-        char *URI;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__CipherReferenceType */
-        long soap_type() const { return SOAP_TYPE_xenc__CipherReferenceType; }
-        /** Constructor with member initializations */
-        xenc__CipherReferenceType() : Transforms(), URI() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__CipherReferenceType * SOAP_FMAC2 soap_instantiate_xenc__CipherReferenceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'xenc:Transforms' of XML schema type 'xenc:TransformsType' */
+	struct xenc__TransformsType *Transforms;
+	/** Required attribute 'URI' of XML schema type 'xsd:string' */
+	char *URI;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__CipherReferenceType */
+	long soap_type() const { return SOAP_TYPE_xenc__CipherReferenceType; }
+	/** Constructor with member initializations */
+	xenc__CipherReferenceType() : Transforms(), URI() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__CipherReferenceType *SOAP_FMAC2
+	soap_instantiate_xenc__CipherReferenceType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2479,16 +2788,19 @@ struct SOAP_CMAC xenc__CipherReferenceType {
 #define SOAP_TYPE_xenc__TransformsType (161)
 /* complex XML schema type 'xenc:TransformsType': */
 struct SOAP_CMAC xenc__TransformsType {
-      public:
-        /** Required element 'ds:Transform' of XML schema type 'ds:Transform' */
-        struct ds__TransformType ds__Transform;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__TransformsType */
-        long soap_type() const { return SOAP_TYPE_xenc__TransformsType; }
-        /** Constructor with member initializations */
-        xenc__TransformsType() : ds__Transform() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__TransformsType * SOAP_FMAC2 soap_instantiate_xenc__TransformsType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'ds:Transform' of XML schema type 'ds:Transform' */
+	struct ds__TransformType ds__Transform;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__TransformsType */
+	long soap_type() const { return SOAP_TYPE_xenc__TransformsType; }
+	/** Constructor with member initializations */
+	xenc__TransformsType() : ds__Transform() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__TransformsType *SOAP_FMAC2 soap_instantiate_xenc__TransformsType(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -2497,23 +2809,25 @@ struct SOAP_CMAC xenc__TransformsType {
 #define SOAP_TYPE_xenc__AgreementMethodType (164)
 /* complex XML schema type 'xenc:AgreementMethodType': */
 struct SOAP_CMAC xenc__AgreementMethodType {
-      public:
-        /** Optional element 'xenc:KA-Nonce' of XML schema type 'xsd:string' */
-        char *KA_Nonce;
-        /** Optional element 'xenc:OriginatorKeyInfo' of XML schema type 'ds:KeyInfoType' */
-        struct ds__KeyInfoType *OriginatorKeyInfo;
-        /** Optional element 'xenc:RecipientKeyInfo' of XML schema type 'ds:KeyInfoType' */
-        struct ds__KeyInfoType *RecipientKeyInfo;
-        /** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
-        char *Algorithm;
-        char *__mixed;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__AgreementMethodType */
-        long soap_type() const { return SOAP_TYPE_xenc__AgreementMethodType; }
-        /** Constructor with member initializations */
-        xenc__AgreementMethodType() : KA_Nonce(), OriginatorKeyInfo(), RecipientKeyInfo(), Algorithm(), __mixed() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__AgreementMethodType * SOAP_FMAC2 soap_instantiate_xenc__AgreementMethodType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'xenc:KA-Nonce' of XML schema type 'xsd:string' */
+	char *KA_Nonce;
+	/** Optional element 'xenc:OriginatorKeyInfo' of XML schema type 'ds:KeyInfoType' */
+	struct ds__KeyInfoType *OriginatorKeyInfo;
+	/** Optional element 'xenc:RecipientKeyInfo' of XML schema type 'ds:KeyInfoType' */
+	struct ds__KeyInfoType *RecipientKeyInfo;
+	/** Required attribute 'Algorithm' of XML schema type 'xsd:string' */
+	char *Algorithm;
+	char *__mixed;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__AgreementMethodType */
+	long soap_type() const { return SOAP_TYPE_xenc__AgreementMethodType; }
+	/** Constructor with member initializations */
+	xenc__AgreementMethodType() : KA_Nonce(), OriginatorKeyInfo(), RecipientKeyInfo(), Algorithm(), __mixed() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__AgreementMethodType *SOAP_FMAC2
+	soap_instantiate_xenc__AgreementMethodType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2522,16 +2836,19 @@ struct SOAP_CMAC xenc__AgreementMethodType {
 #define SOAP_TYPE_xenc__ReferenceType (165)
 /* complex XML schema type 'xenc:ReferenceType': */
 struct SOAP_CMAC xenc__ReferenceType {
-      public:
-        /** Required attribute 'URI' of XML schema type 'xsd:string' */
-        char *URI;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__ReferenceType */
-        long soap_type() const { return SOAP_TYPE_xenc__ReferenceType; }
-        /** Constructor with member initializations */
-        xenc__ReferenceType() : URI() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__ReferenceType * SOAP_FMAC2 soap_instantiate_xenc__ReferenceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required attribute 'URI' of XML schema type 'xsd:string' */
+	char *URI;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__ReferenceType */
+	long soap_type() const { return SOAP_TYPE_xenc__ReferenceType; }
+	/** Constructor with member initializations */
+	xenc__ReferenceType() : URI() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__ReferenceType *SOAP_FMAC2 soap_instantiate_xenc__ReferenceType(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -2540,19 +2857,22 @@ struct SOAP_CMAC xenc__ReferenceType {
 #define SOAP_TYPE_xenc__EncryptionPropertiesType (166)
 /* complex XML schema type 'xenc:EncryptionPropertiesType': */
 struct SOAP_CMAC xenc__EncryptionPropertiesType {
-      public:
-        /** Sequence of at least 1 elements 'xenc:EncryptionProperty' of XML schema type 'xenc:EncryptionPropertyType' stored in dynamic array EncryptionProperty of length __sizeEncryptionProperty */
-        int __sizeEncryptionProperty;
-        struct xenc__EncryptionPropertyType *EncryptionProperty;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__EncryptionPropertiesType */
-        long soap_type() const { return SOAP_TYPE_xenc__EncryptionPropertiesType; }
-        /** Constructor with member initializations */
-        xenc__EncryptionPropertiesType() : __sizeEncryptionProperty(), EncryptionProperty(), Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__EncryptionPropertiesType * SOAP_FMAC2 soap_instantiate_xenc__EncryptionPropertiesType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of at least 1 elements 'xenc:EncryptionProperty' of XML schema type 'xenc:EncryptionPropertyType'
+	 * stored in dynamic array EncryptionProperty of length __sizeEncryptionProperty */
+	int __sizeEncryptionProperty;
+	struct xenc__EncryptionPropertyType *EncryptionProperty;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__EncryptionPropertiesType */
+	long soap_type() const { return SOAP_TYPE_xenc__EncryptionPropertiesType; }
+	/** Constructor with member initializations */
+	xenc__EncryptionPropertiesType() : __sizeEncryptionProperty(), EncryptionProperty(), Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__EncryptionPropertiesType *SOAP_FMAC2
+	soap_instantiate_xenc__EncryptionPropertiesType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2561,18 +2881,20 @@ struct SOAP_CMAC xenc__EncryptionPropertiesType {
 #define SOAP_TYPE___xenc__union_ReferenceList (176)
 /* Wrapper: */
 struct SOAP_CMAC __xenc__union_ReferenceList {
-      public:
-        /** Optional element 'xenc:DataReference' of XML schema type 'xenc:ReferenceType' */
-        struct xenc__ReferenceType *DataReference;
-        /** Optional element 'xenc:KeyReference' of XML schema type 'xenc:ReferenceType' */
-        struct xenc__ReferenceType *KeyReference;
-      public:
-        /** Return unique type id SOAP_TYPE___xenc__union_ReferenceList */
-        long soap_type() const { return SOAP_TYPE___xenc__union_ReferenceList; }
-        /** Constructor with member initializations */
-        __xenc__union_ReferenceList() : DataReference(), KeyReference() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __xenc__union_ReferenceList * SOAP_FMAC2 soap_instantiate___xenc__union_ReferenceList(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'xenc:DataReference' of XML schema type 'xenc:ReferenceType' */
+	struct xenc__ReferenceType *DataReference;
+	/** Optional element 'xenc:KeyReference' of XML schema type 'xenc:ReferenceType' */
+	struct xenc__ReferenceType *KeyReference;
+
+public:
+	/** Return unique type id SOAP_TYPE___xenc__union_ReferenceList */
+	long soap_type() const { return SOAP_TYPE___xenc__union_ReferenceList; }
+	/** Constructor with member initializations */
+	__xenc__union_ReferenceList() : DataReference(), KeyReference() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __xenc__union_ReferenceList *SOAP_FMAC2
+	soap_instantiate___xenc__union_ReferenceList(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2581,17 +2903,21 @@ struct SOAP_CMAC __xenc__union_ReferenceList {
 #define SOAP_TYPE__xenc__ReferenceList (168)
 /* complex XML schema type 'xenc:ReferenceList': */
 struct SOAP_CMAC _xenc__ReferenceList {
-      public:
-        /** Sequence of at least 1 elements '-union-ReferenceList' of XML schema type '-xenc:union-ReferenceList' stored in dynamic array __union_ReferenceList of length __size_ReferenceList */
-        int __size_ReferenceList;
-        struct __xenc__union_ReferenceList *__union_ReferenceList;
-      public:
-        /** Return unique type id SOAP_TYPE__xenc__ReferenceList */
-        long soap_type() const { return SOAP_TYPE__xenc__ReferenceList; }
-        /** Constructor with member initializations */
-        _xenc__ReferenceList() : __size_ReferenceList(), __union_ReferenceList() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _xenc__ReferenceList * SOAP_FMAC2 soap_instantiate__xenc__ReferenceList(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of at least 1 elements '-union-ReferenceList' of XML schema type '-xenc:union-ReferenceList' stored in
+	 * dynamic array __union_ReferenceList of length __size_ReferenceList */
+	int __size_ReferenceList;
+	struct __xenc__union_ReferenceList *__union_ReferenceList;
+
+public:
+	/** Return unique type id SOAP_TYPE__xenc__ReferenceList */
+	long soap_type() const { return SOAP_TYPE__xenc__ReferenceList; }
+	/** Constructor with member initializations */
+	_xenc__ReferenceList() : __size_ReferenceList(), __union_ReferenceList() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _xenc__ReferenceList *SOAP_FMAC2 soap_instantiate__xenc__ReferenceList(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -2600,30 +2926,36 @@ struct SOAP_CMAC _xenc__ReferenceList {
 #define SOAP_TYPE_xenc__EncryptedDataType (162)
 /* complex XML schema type 'xenc:EncryptedDataType': */
 struct SOAP_CMAC xenc__EncryptedDataType {
-      public:
-        /** Optional element 'xenc:EncryptionMethod' of XML schema type 'xenc:EncryptionMethodType' */
-        struct xenc__EncryptionMethodType *EncryptionMethod;
-        /** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' */
-        struct ds__KeyInfoType *ds__KeyInfo;
-        /** Required element 'xenc:CipherData' of XML schema type 'xenc:CipherDataType' */
-        struct xenc__CipherDataType *CipherData;
-        /** Optional element 'xenc:EncryptionProperties' of XML schema type 'xenc:EncryptionPropertiesType' */
-        struct xenc__EncryptionPropertiesType *EncryptionProperties;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-        /** Optional attribute 'Type' of XML schema type 'xsd:string' */
-        char *Type;
-        /** Optional attribute 'MimeType' of XML schema type 'xsd:string' */
-        char *MimeType;
-        /** Optional attribute 'Encoding' of XML schema type 'xsd:string' */
-        char *Encoding;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__EncryptedDataType */
-        long soap_type() const { return SOAP_TYPE_xenc__EncryptedDataType; }
-        /** Constructor with member initializations */
-        xenc__EncryptedDataType() : EncryptionMethod(), ds__KeyInfo(), CipherData(), EncryptionProperties(), Id(), Type(), MimeType(), Encoding() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__EncryptedDataType * SOAP_FMAC2 soap_instantiate_xenc__EncryptedDataType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'xenc:EncryptionMethod' of XML schema type 'xenc:EncryptionMethodType' */
+	struct xenc__EncryptionMethodType *EncryptionMethod;
+	/** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' */
+	struct ds__KeyInfoType *ds__KeyInfo;
+	/** Required element 'xenc:CipherData' of XML schema type 'xenc:CipherDataType' */
+	struct xenc__CipherDataType *CipherData;
+	/** Optional element 'xenc:EncryptionProperties' of XML schema type 'xenc:EncryptionPropertiesType' */
+	struct xenc__EncryptionPropertiesType *EncryptionProperties;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+	/** Optional attribute 'Type' of XML schema type 'xsd:string' */
+	char *Type;
+	/** Optional attribute 'MimeType' of XML schema type 'xsd:string' */
+	char *MimeType;
+	/** Optional attribute 'Encoding' of XML schema type 'xsd:string' */
+	char *Encoding;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__EncryptedDataType */
+	long soap_type() const { return SOAP_TYPE_xenc__EncryptedDataType; }
+	/** Constructor with member initializations */
+	xenc__EncryptedDataType()
+		: EncryptionMethod(), ds__KeyInfo(), CipherData(), EncryptionProperties(), Id(), Type(), MimeType(),
+		  Encoding() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__EncryptedDataType *SOAP_FMAC2 soap_instantiate_xenc__EncryptedDataType(struct soap *, int,
+																								   const char *,
+																								   const char *,
+																								   size_t *);
 };
 #endif
 
@@ -2632,36 +2964,42 @@ struct SOAP_CMAC xenc__EncryptedDataType {
 #define SOAP_TYPE_xenc__EncryptedKeyType (163)
 /* complex XML schema type 'xenc:EncryptedKeyType': */
 struct SOAP_CMAC xenc__EncryptedKeyType {
-      public:
-        /** Optional element 'xenc:EncryptionMethod' of XML schema type 'xenc:EncryptionMethodType' */
-        struct xenc__EncryptionMethodType *EncryptionMethod;
-        /** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' */
-        struct ds__KeyInfoType *ds__KeyInfo;
-        /** Required element 'xenc:CipherData' of XML schema type 'xenc:CipherDataType' */
-        struct xenc__CipherDataType *CipherData;
-        /** Optional element 'xenc:EncryptionProperties' of XML schema type 'xenc:EncryptionPropertiesType' */
-        struct xenc__EncryptionPropertiesType *EncryptionProperties;
-        /** Optional attribute 'Id' of XML schema type 'xsd:string' */
-        char *Id;
-        /** Optional attribute 'Type' of XML schema type 'xsd:string' */
-        char *Type;
-        /** Optional attribute 'MimeType' of XML schema type 'xsd:string' */
-        char *MimeType;
-        /** Optional attribute 'Encoding' of XML schema type 'xsd:string' */
-        char *Encoding;
-        /** Optional element 'xenc:ReferenceList' of XML schema type 'xenc:ReferenceList' */
-        struct _xenc__ReferenceList *ReferenceList;
-        /** Optional element 'xenc:CarriedKeyName' of XML schema type 'xsd:string' */
-        char *CarriedKeyName;
-        /** Optional attribute 'Recipient' of XML schema type 'xsd:string' */
-        char *Recipient;
-      public:
-        /** Return unique type id SOAP_TYPE_xenc__EncryptedKeyType */
-        long soap_type() const { return SOAP_TYPE_xenc__EncryptedKeyType; }
-        /** Constructor with member initializations */
-        xenc__EncryptedKeyType() : EncryptionMethod(), ds__KeyInfo(), CipherData(), EncryptionProperties(), Id(), Type(), MimeType(), Encoding(), ReferenceList(), CarriedKeyName(), Recipient() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 xenc__EncryptedKeyType * SOAP_FMAC2 soap_instantiate_xenc__EncryptedKeyType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'xenc:EncryptionMethod' of XML schema type 'xenc:EncryptionMethodType' */
+	struct xenc__EncryptionMethodType *EncryptionMethod;
+	/** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' */
+	struct ds__KeyInfoType *ds__KeyInfo;
+	/** Required element 'xenc:CipherData' of XML schema type 'xenc:CipherDataType' */
+	struct xenc__CipherDataType *CipherData;
+	/** Optional element 'xenc:EncryptionProperties' of XML schema type 'xenc:EncryptionPropertiesType' */
+	struct xenc__EncryptionPropertiesType *EncryptionProperties;
+	/** Optional attribute 'Id' of XML schema type 'xsd:string' */
+	char *Id;
+	/** Optional attribute 'Type' of XML schema type 'xsd:string' */
+	char *Type;
+	/** Optional attribute 'MimeType' of XML schema type 'xsd:string' */
+	char *MimeType;
+	/** Optional attribute 'Encoding' of XML schema type 'xsd:string' */
+	char *Encoding;
+	/** Optional element 'xenc:ReferenceList' of XML schema type 'xenc:ReferenceList' */
+	struct _xenc__ReferenceList *ReferenceList;
+	/** Optional element 'xenc:CarriedKeyName' of XML schema type 'xsd:string' */
+	char *CarriedKeyName;
+	/** Optional attribute 'Recipient' of XML schema type 'xsd:string' */
+	char *Recipient;
+
+public:
+	/** Return unique type id SOAP_TYPE_xenc__EncryptedKeyType */
+	long soap_type() const { return SOAP_TYPE_xenc__EncryptedKeyType; }
+	/** Constructor with member initializations */
+	xenc__EncryptedKeyType()
+		: EncryptionMethod(), ds__KeyInfo(), CipherData(), EncryptionProperties(), Id(), Type(), MimeType(), Encoding(),
+		  ReferenceList(), CarriedKeyName(), Recipient() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 xenc__EncryptedKeyType *SOAP_FMAC2 soap_instantiate_xenc__EncryptedKeyType(struct soap *, int,
+																								 const char *,
+																								 const char *,
+																								 size_t *);
 };
 #endif
 
@@ -2670,20 +3008,22 @@ struct SOAP_CMAC xenc__EncryptedKeyType {
 #define SOAP_TYPE_wsc__SecurityContextTokenType (182)
 /* complex XML schema type 'wsc:SecurityContextTokenType': */
 struct SOAP_CMAC wsc__SecurityContextTokenType {
-      public:
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-        /** Optional element 'wsc:Identifier' of XML schema type 'xsd:string' */
-        char *Identifier;
-        /** Optional element 'wsc:Instance' of XML schema type 'xsd:string' */
-        char *Instance;
-      public:
-        /** Return unique type id SOAP_TYPE_wsc__SecurityContextTokenType */
-        long soap_type() const { return SOAP_TYPE_wsc__SecurityContextTokenType; }
-        /** Constructor with member initializations */
-        wsc__SecurityContextTokenType() : wsu__Id(), Identifier(), Instance() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 wsc__SecurityContextTokenType * SOAP_FMAC2 soap_instantiate_wsc__SecurityContextTokenType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+	/** Optional element 'wsc:Identifier' of XML schema type 'xsd:string' */
+	char *Identifier;
+	/** Optional element 'wsc:Instance' of XML schema type 'xsd:string' */
+	char *Instance;
+
+public:
+	/** Return unique type id SOAP_TYPE_wsc__SecurityContextTokenType */
+	long soap_type() const { return SOAP_TYPE_wsc__SecurityContextTokenType; }
+	/** Constructor with member initializations */
+	wsc__SecurityContextTokenType() : wsu__Id(), Identifier(), Instance() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 wsc__SecurityContextTokenType *SOAP_FMAC2
+	soap_instantiate_wsc__SecurityContextTokenType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2691,12 +3031,12 @@ struct SOAP_CMAC wsc__SecurityContextTokenType {
 #ifndef SOAP_TYPE__wsc__union_DerivedKeyTokenType
 #define SOAP_TYPE__wsc__union_DerivedKeyTokenType (187)
 /* union serializable only when used as a member of a struct or class with a union variant selector */
-union _wsc__union_DerivedKeyTokenType
-{
-        #define SOAP_UNION__wsc__union_DerivedKeyTokenType_Generation	(1)	/**< union variant selector value for member Generation */
-        ULONG64 Generation;
-        #define SOAP_UNION__wsc__union_DerivedKeyTokenType_Offset	(2)	/**< union variant selector value for member Offset */
-        ULONG64 Offset;
+union _wsc__union_DerivedKeyTokenType {
+#define SOAP_UNION__wsc__union_DerivedKeyTokenType_Generation                                                          \
+	(1) /**< union variant selector value for member Generation */
+	ULONG64 Generation;
+#define SOAP_UNION__wsc__union_DerivedKeyTokenType_Offset (2) /**< union variant selector value for member Offset */
+	ULONG64 Offset;
 };
 #endif
 
@@ -2705,19 +3045,22 @@ union _wsc__union_DerivedKeyTokenType
 #define SOAP_TYPE___wsc__DerivedKeyTokenType_sequence (186)
 /* Wrapper: */
 struct SOAP_CMAC __wsc__DerivedKeyTokenType_sequence {
-      public:
-        /** Union with union _wsc__union_DerivedKeyTokenType variant selector __union_DerivedKeyTokenType set to one of: SOAP_UNION__wsc__union_DerivedKeyTokenType_Generation SOAP_UNION__wsc__union_DerivedKeyTokenType_Offset */
-        int __union_DerivedKeyTokenType;
-        union _wsc__union_DerivedKeyTokenType union_DerivedKeyTokenType;
-        /** Optional element 'wsc:Length' of XML schema type 'xsd:unsignedLong' */
-        ULONG64 *Length;
-      public:
-        /** Return unique type id SOAP_TYPE___wsc__DerivedKeyTokenType_sequence */
-        long soap_type() const { return SOAP_TYPE___wsc__DerivedKeyTokenType_sequence; }
-        /** Constructor with member initializations */
-        __wsc__DerivedKeyTokenType_sequence() : __union_DerivedKeyTokenType(), Length() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __wsc__DerivedKeyTokenType_sequence * SOAP_FMAC2 soap_instantiate___wsc__DerivedKeyTokenType_sequence(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Union with union _wsc__union_DerivedKeyTokenType variant selector __union_DerivedKeyTokenType set to one of:
+	 * SOAP_UNION__wsc__union_DerivedKeyTokenType_Generation SOAP_UNION__wsc__union_DerivedKeyTokenType_Offset */
+	int __union_DerivedKeyTokenType;
+	union _wsc__union_DerivedKeyTokenType union_DerivedKeyTokenType;
+	/** Optional element 'wsc:Length' of XML schema type 'xsd:unsignedLong' */
+	ULONG64 *Length;
+
+public:
+	/** Return unique type id SOAP_TYPE___wsc__DerivedKeyTokenType_sequence */
+	long soap_type() const { return SOAP_TYPE___wsc__DerivedKeyTokenType_sequence; }
+	/** Constructor with member initializations */
+	__wsc__DerivedKeyTokenType_sequence() : __union_DerivedKeyTokenType(), Length() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __wsc__DerivedKeyTokenType_sequence *SOAP_FMAC2
+	soap_instantiate___wsc__DerivedKeyTokenType_sequence(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2726,27 +3069,33 @@ struct SOAP_CMAC __wsc__DerivedKeyTokenType_sequence {
 #define SOAP_TYPE_wsc__DerivedKeyTokenType (183)
 /* complex XML schema type 'wsc:DerivedKeyTokenType': */
 struct SOAP_CMAC wsc__DerivedKeyTokenType {
-      public:
-        /** Optional element 'wsse:SecurityTokenReference' of XML schema type 'wsse:SecurityTokenReference' */
-        struct _wsse__SecurityTokenReference *wsse__SecurityTokenReference;
-        /** Optional element 'wsc:Properties' of XML schema type 'wsc:PropertiesType' */
-        struct wsc__PropertiesType *Properties;
-        struct __wsc__DerivedKeyTokenType_sequence *__DerivedKeyTokenType_sequence;
-        /** Optional element 'wsc:Label' of XML schema type 'xsd:string' */
-        char *Label;
-        /** Optional element 'wsc:Nonce' of XML schema type 'xsd:string' */
-        char *Nonce;
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-        /** Optional attribute 'Algorithm' of XML schema type 'xsd:string' */
-        char *Algorithm;
-      public:
-        /** Return unique type id SOAP_TYPE_wsc__DerivedKeyTokenType */
-        long soap_type() const { return SOAP_TYPE_wsc__DerivedKeyTokenType; }
-        /** Constructor with member initializations */
-        wsc__DerivedKeyTokenType() : wsse__SecurityTokenReference(), Properties(), __DerivedKeyTokenType_sequence(), Label(), Nonce(), wsu__Id(), Algorithm() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 wsc__DerivedKeyTokenType * SOAP_FMAC2 soap_instantiate_wsc__DerivedKeyTokenType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'wsse:SecurityTokenReference' of XML schema type 'wsse:SecurityTokenReference' */
+	struct _wsse__SecurityTokenReference *wsse__SecurityTokenReference;
+	/** Optional element 'wsc:Properties' of XML schema type 'wsc:PropertiesType' */
+	struct wsc__PropertiesType *Properties;
+	struct __wsc__DerivedKeyTokenType_sequence *__DerivedKeyTokenType_sequence;
+	/** Optional element 'wsc:Label' of XML schema type 'xsd:string' */
+	char *Label;
+	/** Optional element 'wsc:Nonce' of XML schema type 'xsd:string' */
+	char *Nonce;
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+	/** Optional attribute 'Algorithm' of XML schema type 'xsd:string' */
+	char *Algorithm;
+
+public:
+	/** Return unique type id SOAP_TYPE_wsc__DerivedKeyTokenType */
+	long soap_type() const { return SOAP_TYPE_wsc__DerivedKeyTokenType; }
+	/** Constructor with member initializations */
+	wsc__DerivedKeyTokenType()
+		: wsse__SecurityTokenReference(), Properties(), __DerivedKeyTokenType_sequence(), Label(), Nonce(), wsu__Id(),
+		  Algorithm() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 wsc__DerivedKeyTokenType *SOAP_FMAC2 soap_instantiate_wsc__DerivedKeyTokenType(struct soap *, int,
+																									 const char *,
+																									 const char *,
+																									 size_t *);
 };
 #endif
 
@@ -2755,13 +3104,15 @@ struct SOAP_CMAC wsc__DerivedKeyTokenType {
 #define SOAP_TYPE_wsc__PropertiesType (184)
 /* complex XML schema type 'wsc:PropertiesType': */
 struct SOAP_CMAC wsc__PropertiesType {
-      public:
-        /** Return unique type id SOAP_TYPE_wsc__PropertiesType */
-        long soap_type() const { return SOAP_TYPE_wsc__PropertiesType; }
-        /** Constructor with member initializations */
-        wsc__PropertiesType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 wsc__PropertiesType * SOAP_FMAC2 soap_instantiate_wsc__PropertiesType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Return unique type id SOAP_TYPE_wsc__PropertiesType */
+	long soap_type() const { return SOAP_TYPE_wsc__PropertiesType; }
+	/** Constructor with member initializations */
+	wsc__PropertiesType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 wsc__PropertiesType *SOAP_FMAC2 soap_instantiate_wsc__PropertiesType(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -2770,62 +3121,74 @@ struct SOAP_CMAC wsc__PropertiesType {
 #define SOAP_TYPE___saml1__union_AssertionType (213)
 /* Wrapper: */
 struct SOAP_CMAC __saml1__union_AssertionType {
-      public:
-        /** Optional element 'saml1:Statement' of XML schema type 'saml1:StatementAbstractType' */
-        struct saml1__StatementAbstractType *saml1__Statement;
-        /** Optional element 'saml1:SubjectStatement' of XML schema type 'saml1:SubjectStatementAbstractType' */
-        struct saml1__SubjectStatementAbstractType *saml1__SubjectStatement;
-        /** Optional element 'saml1:AuthenticationStatement' of XML schema type 'saml1:AuthenticationStatementType' */
-        struct saml1__AuthenticationStatementType *saml1__AuthenticationStatement;
-        /** Optional element 'saml1:AuthorizationDecisionStatement' of XML schema type 'saml1:AuthorizationDecisionStatementType' */
-        struct saml1__AuthorizationDecisionStatementType *saml1__AuthorizationDecisionStatement;
-        /** Optional element 'saml1:AttributeStatement' of XML schema type 'saml1:AttributeStatementType' */
-        struct saml1__AttributeStatementType *saml1__AttributeStatement;
-      public:
-        /** Return unique type id SOAP_TYPE___saml1__union_AssertionType */
-        long soap_type() const { return SOAP_TYPE___saml1__union_AssertionType; }
-        /** Constructor with member initializations */
-        __saml1__union_AssertionType() : saml1__Statement(), saml1__SubjectStatement(), saml1__AuthenticationStatement(), saml1__AuthorizationDecisionStatement(), saml1__AttributeStatement() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml1__union_AssertionType * SOAP_FMAC2 soap_instantiate___saml1__union_AssertionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml1:Statement' of XML schema type 'saml1:StatementAbstractType' */
+	struct saml1__StatementAbstractType *saml1__Statement;
+	/** Optional element 'saml1:SubjectStatement' of XML schema type 'saml1:SubjectStatementAbstractType' */
+	struct saml1__SubjectStatementAbstractType *saml1__SubjectStatement;
+	/** Optional element 'saml1:AuthenticationStatement' of XML schema type 'saml1:AuthenticationStatementType' */
+	struct saml1__AuthenticationStatementType *saml1__AuthenticationStatement;
+	/** Optional element 'saml1:AuthorizationDecisionStatement' of XML schema type
+	 * 'saml1:AuthorizationDecisionStatementType' */
+	struct saml1__AuthorizationDecisionStatementType *saml1__AuthorizationDecisionStatement;
+	/** Optional element 'saml1:AttributeStatement' of XML schema type 'saml1:AttributeStatementType' */
+	struct saml1__AttributeStatementType *saml1__AttributeStatement;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml1__union_AssertionType */
+	long soap_type() const { return SOAP_TYPE___saml1__union_AssertionType; }
+	/** Constructor with member initializations */
+	__saml1__union_AssertionType()
+		: saml1__Statement(), saml1__SubjectStatement(), saml1__AuthenticationStatement(),
+		  saml1__AuthorizationDecisionStatement(), saml1__AttributeStatement() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml1__union_AssertionType *SOAP_FMAC2
+	soap_instantiate___saml1__union_AssertionType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
 /* saml1.h:62 */
 #ifndef SOAP_TYPE_saml1__AssertionType
 #define SOAP_TYPE_saml1__AssertionType (190)
-/* Type saml1__AssertionType is a recursive data type, (in)directly referencing itself through its (base or derived class) members */
+/* Type saml1__AssertionType is a recursive data type, (in)directly referencing itself through its (base or derived
+ * class) members */
 /* complex XML schema type 'saml1:AssertionType': */
 struct SOAP_CMAC saml1__AssertionType {
-      public:
-        /** Optional element 'saml1:Conditions' of XML schema type 'saml1:ConditionsType' */
-        struct saml1__ConditionsType *saml1__Conditions;
-        /** Optional element 'saml1:Advice' of XML schema type 'saml1:AdviceType' */
-        struct saml1__AdviceType *saml1__Advice;
-        /** Sequence of elements '-union-AssertionType' of XML schema type '-saml1:union-AssertionType' stored in dynamic array __union_AssertionType of length __size_AssertionType */
-        int __size_AssertionType;
-        struct __saml1__union_AssertionType *__union_AssertionType;
-        /** Optional element 'ds:Signature' of XML schema type 'ds:Signature' */
-        struct ds__SignatureType *ds__Signature;
-        /** Required attribute 'MajorVersion' of XML schema type 'xsd:string' */
-        char *MajorVersion;
-        /** Required attribute 'MinorVersion' of XML schema type 'xsd:string' */
-        char *MinorVersion;
-        /** Required attribute 'AssertionID' of XML schema type 'xsd:string' */
-        char *AssertionID;
-        /** Required attribute 'Issuer' of XML schema type 'xsd:string' */
-        char *Issuer;
-        /** Required attribute 'IssueInstant' of XML schema type 'xsd:dateTime' */
-        time_t IssueInstant;
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AssertionType */
-        long soap_type() const { return SOAP_TYPE_saml1__AssertionType; }
-        /** Constructor with member initializations */
-        saml1__AssertionType() : saml1__Conditions(), saml1__Advice(), __size_AssertionType(), __union_AssertionType(), ds__Signature(), MajorVersion(), MinorVersion(), AssertionID(), Issuer(), IssueInstant(), wsu__Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AssertionType * SOAP_FMAC2 soap_instantiate_saml1__AssertionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml1:Conditions' of XML schema type 'saml1:ConditionsType' */
+	struct saml1__ConditionsType *saml1__Conditions;
+	/** Optional element 'saml1:Advice' of XML schema type 'saml1:AdviceType' */
+	struct saml1__AdviceType *saml1__Advice;
+	/** Sequence of elements '-union-AssertionType' of XML schema type '-saml1:union-AssertionType' stored in dynamic
+	 * array __union_AssertionType of length __size_AssertionType */
+	int __size_AssertionType;
+	struct __saml1__union_AssertionType *__union_AssertionType;
+	/** Optional element 'ds:Signature' of XML schema type 'ds:Signature' */
+	struct ds__SignatureType *ds__Signature;
+	/** Required attribute 'MajorVersion' of XML schema type 'xsd:string' */
+	char *MajorVersion;
+	/** Required attribute 'MinorVersion' of XML schema type 'xsd:string' */
+	char *MinorVersion;
+	/** Required attribute 'AssertionID' of XML schema type 'xsd:string' */
+	char *AssertionID;
+	/** Required attribute 'Issuer' of XML schema type 'xsd:string' */
+	char *Issuer;
+	/** Required attribute 'IssueInstant' of XML schema type 'xsd:dateTime' */
+	time_t IssueInstant;
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AssertionType */
+	long soap_type() const { return SOAP_TYPE_saml1__AssertionType; }
+	/** Constructor with member initializations */
+	saml1__AssertionType()
+		: saml1__Conditions(), saml1__Advice(), __size_AssertionType(), __union_AssertionType(), ds__Signature(),
+		  MajorVersion(), MinorVersion(), AssertionID(), Issuer(), IssueInstant(), wsu__Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AssertionType *SOAP_FMAC2 soap_instantiate_saml1__AssertionType(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -2834,20 +3197,24 @@ struct SOAP_CMAC saml1__AssertionType {
 #define SOAP_TYPE___saml1__union_ConditionsType (221)
 /* Wrapper: */
 struct SOAP_CMAC __saml1__union_ConditionsType {
-      public:
-        /** Optional element 'saml1:AudienceRestrictionCondition' of XML schema type 'saml1:AudienceRestrictionConditionType' */
-        struct saml1__AudienceRestrictionConditionType *saml1__AudienceRestrictionCondition;
-        /** Optional element 'saml1:DoNotCacheCondition' of XML schema type 'saml1:DoNotCacheConditionType' */
-        struct saml1__DoNotCacheConditionType *saml1__DoNotCacheCondition;
-        /** Optional element 'saml1:Condition' of XML schema type 'saml1:ConditionAbstractType' */
-        struct saml1__ConditionAbstractType *saml1__Condition;
-      public:
-        /** Return unique type id SOAP_TYPE___saml1__union_ConditionsType */
-        long soap_type() const { return SOAP_TYPE___saml1__union_ConditionsType; }
-        /** Constructor with member initializations */
-        __saml1__union_ConditionsType() : saml1__AudienceRestrictionCondition(), saml1__DoNotCacheCondition(), saml1__Condition() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml1__union_ConditionsType * SOAP_FMAC2 soap_instantiate___saml1__union_ConditionsType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml1:AudienceRestrictionCondition' of XML schema type
+	 * 'saml1:AudienceRestrictionConditionType' */
+	struct saml1__AudienceRestrictionConditionType *saml1__AudienceRestrictionCondition;
+	/** Optional element 'saml1:DoNotCacheCondition' of XML schema type 'saml1:DoNotCacheConditionType' */
+	struct saml1__DoNotCacheConditionType *saml1__DoNotCacheCondition;
+	/** Optional element 'saml1:Condition' of XML schema type 'saml1:ConditionAbstractType' */
+	struct saml1__ConditionAbstractType *saml1__Condition;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml1__union_ConditionsType */
+	long soap_type() const { return SOAP_TYPE___saml1__union_ConditionsType; }
+	/** Constructor with member initializations */
+	__saml1__union_ConditionsType()
+		: saml1__AudienceRestrictionCondition(), saml1__DoNotCacheCondition(), saml1__Condition() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml1__union_ConditionsType *SOAP_FMAC2
+	soap_instantiate___saml1__union_ConditionsType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2856,21 +3223,25 @@ struct SOAP_CMAC __saml1__union_ConditionsType {
 #define SOAP_TYPE_saml1__ConditionsType (191)
 /* complex XML schema type 'saml1:ConditionsType': */
 struct SOAP_CMAC saml1__ConditionsType {
-      public:
-        /** Sequence of elements '-union-ConditionsType' of XML schema type '-saml1:union-ConditionsType' stored in dynamic array __union_ConditionsType of length __size_ConditionsType */
-        int __size_ConditionsType;
-        struct __saml1__union_ConditionsType *__union_ConditionsType;
-        /** Optional attribute 'NotBefore' of XML schema type 'xsd:dateTime' */
-        time_t *NotBefore;
-        /** Optional attribute 'NotOnOrAfter' of XML schema type 'xsd:dateTime' */
-        time_t *NotOnOrAfter;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__ConditionsType */
-        long soap_type() const { return SOAP_TYPE_saml1__ConditionsType; }
-        /** Constructor with member initializations */
-        saml1__ConditionsType() : __size_ConditionsType(), __union_ConditionsType(), NotBefore(), NotOnOrAfter() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__ConditionsType * SOAP_FMAC2 soap_instantiate_saml1__ConditionsType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements '-union-ConditionsType' of XML schema type '-saml1:union-ConditionsType' stored in dynamic
+	 * array __union_ConditionsType of length __size_ConditionsType */
+	int __size_ConditionsType;
+	struct __saml1__union_ConditionsType *__union_ConditionsType;
+	/** Optional attribute 'NotBefore' of XML schema type 'xsd:dateTime' */
+	time_t *NotBefore;
+	/** Optional attribute 'NotOnOrAfter' of XML schema type 'xsd:dateTime' */
+	time_t *NotOnOrAfter;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__ConditionsType */
+	long soap_type() const { return SOAP_TYPE_saml1__ConditionsType; }
+	/** Constructor with member initializations */
+	saml1__ConditionsType() : __size_ConditionsType(), __union_ConditionsType(), NotBefore(), NotOnOrAfter() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__ConditionsType *SOAP_FMAC2 soap_instantiate_saml1__ConditionsType(struct soap *, int,
+																							   const char *,
+																							   const char *, size_t *);
 };
 #endif
 
@@ -2879,13 +3250,14 @@ struct SOAP_CMAC saml1__ConditionsType {
 #define SOAP_TYPE_saml1__ConditionAbstractType (192)
 /* complex XML schema type 'saml1:ConditionAbstractType': */
 struct SOAP_CMAC saml1__ConditionAbstractType {
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__ConditionAbstractType */
-        long soap_type() const { return SOAP_TYPE_saml1__ConditionAbstractType; }
-        /** Constructor with member initializations */
-        saml1__ConditionAbstractType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__ConditionAbstractType * SOAP_FMAC2 soap_instantiate_saml1__ConditionAbstractType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Return unique type id SOAP_TYPE_saml1__ConditionAbstractType */
+	long soap_type() const { return SOAP_TYPE_saml1__ConditionAbstractType; }
+	/** Constructor with member initializations */
+	saml1__ConditionAbstractType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__ConditionAbstractType *SOAP_FMAC2
+	soap_instantiate_saml1__ConditionAbstractType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2894,18 +3266,20 @@ struct SOAP_CMAC saml1__ConditionAbstractType {
 #define SOAP_TYPE___saml1__union_AdviceType (227)
 /* Wrapper: */
 struct SOAP_CMAC __saml1__union_AdviceType {
-      public:
-        /** Optional element 'saml1:AssertionIDReference' of XML schema type 'xsd:string' */
-        char *saml1__AssertionIDReference;
-        /** Optional element 'saml1:Assertion' of XML schema type 'saml1:AssertionType' */
-        struct saml1__AssertionType *saml1__Assertion;
-      public:
-        /** Return unique type id SOAP_TYPE___saml1__union_AdviceType */
-        long soap_type() const { return SOAP_TYPE___saml1__union_AdviceType; }
-        /** Constructor with member initializations */
-        __saml1__union_AdviceType() : saml1__AssertionIDReference(), saml1__Assertion() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml1__union_AdviceType * SOAP_FMAC2 soap_instantiate___saml1__union_AdviceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml1:AssertionIDReference' of XML schema type 'xsd:string' */
+	char *saml1__AssertionIDReference;
+	/** Optional element 'saml1:Assertion' of XML schema type 'saml1:AssertionType' */
+	struct saml1__AssertionType *saml1__Assertion;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml1__union_AdviceType */
+	long soap_type() const { return SOAP_TYPE___saml1__union_AdviceType; }
+	/** Constructor with member initializations */
+	__saml1__union_AdviceType() : saml1__AssertionIDReference(), saml1__Assertion() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml1__union_AdviceType *SOAP_FMAC2
+	soap_instantiate___saml1__union_AdviceType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2914,17 +3288,20 @@ struct SOAP_CMAC __saml1__union_AdviceType {
 #define SOAP_TYPE_saml1__AdviceType (195)
 /* complex XML schema type 'saml1:AdviceType': */
 struct SOAP_CMAC saml1__AdviceType {
-      public:
-        /** Sequence of elements '-union-AdviceType' of XML schema type '-saml1:union-AdviceType' stored in dynamic array __union_AdviceType of length __size_AdviceType */
-        int __size_AdviceType;
-        struct __saml1__union_AdviceType *__union_AdviceType;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AdviceType */
-        long soap_type() const { return SOAP_TYPE_saml1__AdviceType; }
-        /** Constructor with member initializations */
-        saml1__AdviceType() : __size_AdviceType(), __union_AdviceType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AdviceType * SOAP_FMAC2 soap_instantiate_saml1__AdviceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements '-union-AdviceType' of XML schema type '-saml1:union-AdviceType' stored in dynamic array
+	 * __union_AdviceType of length __size_AdviceType */
+	int __size_AdviceType;
+	struct __saml1__union_AdviceType *__union_AdviceType;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AdviceType */
+	long soap_type() const { return SOAP_TYPE_saml1__AdviceType; }
+	/** Constructor with member initializations */
+	saml1__AdviceType() : __size_AdviceType(), __union_AdviceType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AdviceType *SOAP_FMAC2 soap_instantiate_saml1__AdviceType(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -2933,13 +3310,14 @@ struct SOAP_CMAC saml1__AdviceType {
 #define SOAP_TYPE_saml1__StatementAbstractType (196)
 /* complex XML schema type 'saml1:StatementAbstractType': */
 struct SOAP_CMAC saml1__StatementAbstractType {
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__StatementAbstractType */
-        long soap_type() const { return SOAP_TYPE_saml1__StatementAbstractType; }
-        /** Constructor with member initializations */
-        saml1__StatementAbstractType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__StatementAbstractType * SOAP_FMAC2 soap_instantiate_saml1__StatementAbstractType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Return unique type id SOAP_TYPE_saml1__StatementAbstractType */
+	long soap_type() const { return SOAP_TYPE_saml1__StatementAbstractType; }
+	/** Constructor with member initializations */
+	saml1__StatementAbstractType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__StatementAbstractType *SOAP_FMAC2
+	soap_instantiate_saml1__StatementAbstractType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2948,18 +3326,21 @@ struct SOAP_CMAC saml1__StatementAbstractType {
 #define SOAP_TYPE_saml1__SubjectType (198)
 /* complex XML schema type 'saml1:SubjectType': */
 struct SOAP_CMAC saml1__SubjectType {
-      public:
-        /** Optional element 'saml1:NameIdentifier' of XML schema type 'saml1:NameIdentifierType' */
-        struct saml1__NameIdentifierType *saml1__NameIdentifier;
-        /** Optional element 'saml1:SubjectConfirmation' of XML schema type 'saml1:SubjectConfirmationType' */
-        struct saml1__SubjectConfirmationType *saml1__SubjectConfirmation;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__SubjectType */
-        long soap_type() const { return SOAP_TYPE_saml1__SubjectType; }
-        /** Constructor with member initializations */
-        saml1__SubjectType() : saml1__NameIdentifier(), saml1__SubjectConfirmation() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__SubjectType * SOAP_FMAC2 soap_instantiate_saml1__SubjectType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml1:NameIdentifier' of XML schema type 'saml1:NameIdentifierType' */
+	struct saml1__NameIdentifierType *saml1__NameIdentifier;
+	/** Optional element 'saml1:SubjectConfirmation' of XML schema type 'saml1:SubjectConfirmationType' */
+	struct saml1__SubjectConfirmationType *saml1__SubjectConfirmation;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__SubjectType */
+	long soap_type() const { return SOAP_TYPE_saml1__SubjectType; }
+	/** Constructor with member initializations */
+	saml1__SubjectType() : saml1__NameIdentifier(), saml1__SubjectConfirmation() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__SubjectType *SOAP_FMAC2 soap_instantiate_saml1__SubjectType(struct soap *, int,
+																						 const char *, const char *,
+																						 size_t *);
 };
 #endif
 
@@ -2968,21 +3349,25 @@ struct SOAP_CMAC saml1__SubjectType {
 #define SOAP_TYPE_saml1__SubjectConfirmationType (200)
 /* complex XML schema type 'saml1:SubjectConfirmationType': */
 struct SOAP_CMAC saml1__SubjectConfirmationType {
-      public:
-        /** Sequence of at least 1 elements 'saml1:ConfirmationMethod' of XML schema type 'xsd:string' stored in dynamic array saml1__ConfirmationMethod of length __sizeConfirmationMethod */
-        int __sizeConfirmationMethod;
-        char **saml1__ConfirmationMethod;
-        /** Optional element 'saml1:SubjectConfirmationData' of XML schema type 'xsd:anyType' */
-        char *saml1__SubjectConfirmationData;
-        /** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' */
-        struct ds__KeyInfoType *ds__KeyInfo;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__SubjectConfirmationType */
-        long soap_type() const { return SOAP_TYPE_saml1__SubjectConfirmationType; }
-        /** Constructor with member initializations */
-        saml1__SubjectConfirmationType() : __sizeConfirmationMethod(), saml1__ConfirmationMethod(), saml1__SubjectConfirmationData(), ds__KeyInfo() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__SubjectConfirmationType * SOAP_FMAC2 soap_instantiate_saml1__SubjectConfirmationType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of at least 1 elements 'saml1:ConfirmationMethod' of XML schema type 'xsd:string' stored in dynamic
+	 * array saml1__ConfirmationMethod of length __sizeConfirmationMethod */
+	int __sizeConfirmationMethod;
+	char **saml1__ConfirmationMethod;
+	/** Optional element 'saml1:SubjectConfirmationData' of XML schema type 'xsd:anyType' */
+	char *saml1__SubjectConfirmationData;
+	/** Optional element 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' */
+	struct ds__KeyInfoType *ds__KeyInfo;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__SubjectConfirmationType */
+	long soap_type() const { return SOAP_TYPE_saml1__SubjectConfirmationType; }
+	/** Constructor with member initializations */
+	saml1__SubjectConfirmationType()
+		: __sizeConfirmationMethod(), saml1__ConfirmationMethod(), saml1__SubjectConfirmationData(), ds__KeyInfo() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__SubjectConfirmationType *SOAP_FMAC2
+	soap_instantiate_saml1__SubjectConfirmationType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -2991,18 +3376,20 @@ struct SOAP_CMAC saml1__SubjectConfirmationType {
 #define SOAP_TYPE_saml1__SubjectLocalityType (202)
 /* complex XML schema type 'saml1:SubjectLocalityType': */
 struct SOAP_CMAC saml1__SubjectLocalityType {
-      public:
-        /** Optional attribute 'IPAddress' of XML schema type 'xsd:string' */
-        char *IPAddress;
-        /** Optional attribute 'DNSAddress' of XML schema type 'xsd:string' */
-        char *DNSAddress;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__SubjectLocalityType */
-        long soap_type() const { return SOAP_TYPE_saml1__SubjectLocalityType; }
-        /** Constructor with member initializations */
-        saml1__SubjectLocalityType() : IPAddress(), DNSAddress() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__SubjectLocalityType * SOAP_FMAC2 soap_instantiate_saml1__SubjectLocalityType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'IPAddress' of XML schema type 'xsd:string' */
+	char *IPAddress;
+	/** Optional attribute 'DNSAddress' of XML schema type 'xsd:string' */
+	char *DNSAddress;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__SubjectLocalityType */
+	long soap_type() const { return SOAP_TYPE_saml1__SubjectLocalityType; }
+	/** Constructor with member initializations */
+	saml1__SubjectLocalityType() : IPAddress(), DNSAddress() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__SubjectLocalityType *SOAP_FMAC2
+	soap_instantiate_saml1__SubjectLocalityType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3011,20 +3398,22 @@ struct SOAP_CMAC saml1__SubjectLocalityType {
 #define SOAP_TYPE_saml1__AuthorityBindingType (203)
 /* complex XML schema type 'saml1:AuthorityBindingType': */
 struct SOAP_CMAC saml1__AuthorityBindingType {
-      public:
-        /** Required attribute 'AuthorityKind' of XML schema type 'xsd:QName' */
-        char *AuthorityKind;
-        /** Required attribute 'Location' of XML schema type 'xsd:string' */
-        char *Location;
-        /** Required attribute 'Binding' of XML schema type 'xsd:string' */
-        char *Binding;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AuthorityBindingType */
-        long soap_type() const { return SOAP_TYPE_saml1__AuthorityBindingType; }
-        /** Constructor with member initializations */
-        saml1__AuthorityBindingType() : AuthorityKind(), Location(), Binding() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AuthorityBindingType * SOAP_FMAC2 soap_instantiate_saml1__AuthorityBindingType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required attribute 'AuthorityKind' of XML schema type 'xsd:QName' */
+	char *AuthorityKind;
+	/** Required attribute 'Location' of XML schema type 'xsd:string' */
+	char *Location;
+	/** Required attribute 'Binding' of XML schema type 'xsd:string' */
+	char *Binding;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AuthorityBindingType */
+	long soap_type() const { return SOAP_TYPE_saml1__AuthorityBindingType; }
+	/** Constructor with member initializations */
+	saml1__AuthorityBindingType() : AuthorityKind(), Location(), Binding() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AuthorityBindingType *SOAP_FMAC2
+	soap_instantiate_saml1__AuthorityBindingType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3033,18 +3422,20 @@ struct SOAP_CMAC saml1__AuthorityBindingType {
 #define SOAP_TYPE___saml1__union_EvidenceType (233)
 /* Wrapper: */
 struct SOAP_CMAC __saml1__union_EvidenceType {
-      public:
-        /** Optional element 'saml1:AssertionIDReference' of XML schema type 'xsd:string' */
-        char *saml1__AssertionIDReference;
-        /** Optional element 'saml1:Assertion' of XML schema type 'saml1:AssertionType' */
-        struct saml1__AssertionType *saml1__Assertion;
-      public:
-        /** Return unique type id SOAP_TYPE___saml1__union_EvidenceType */
-        long soap_type() const { return SOAP_TYPE___saml1__union_EvidenceType; }
-        /** Constructor with member initializations */
-        __saml1__union_EvidenceType() : saml1__AssertionIDReference(), saml1__Assertion() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml1__union_EvidenceType * SOAP_FMAC2 soap_instantiate___saml1__union_EvidenceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml1:AssertionIDReference' of XML schema type 'xsd:string' */
+	char *saml1__AssertionIDReference;
+	/** Optional element 'saml1:Assertion' of XML schema type 'saml1:AssertionType' */
+	struct saml1__AssertionType *saml1__Assertion;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml1__union_EvidenceType */
+	long soap_type() const { return SOAP_TYPE___saml1__union_EvidenceType; }
+	/** Constructor with member initializations */
+	__saml1__union_EvidenceType() : saml1__AssertionIDReference(), saml1__Assertion() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml1__union_EvidenceType *SOAP_FMAC2
+	soap_instantiate___saml1__union_EvidenceType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3053,17 +3444,21 @@ struct SOAP_CMAC __saml1__union_EvidenceType {
 #define SOAP_TYPE_saml1__EvidenceType (206)
 /* complex XML schema type 'saml1:EvidenceType': */
 struct SOAP_CMAC saml1__EvidenceType {
-      public:
-        /** Sequence of elements '-union-EvidenceType' of XML schema type '-saml1:union-EvidenceType' stored in dynamic array __union_EvidenceType of length __size_EvidenceType */
-        int __size_EvidenceType;
-        struct __saml1__union_EvidenceType *__union_EvidenceType;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__EvidenceType */
-        long soap_type() const { return SOAP_TYPE_saml1__EvidenceType; }
-        /** Constructor with member initializations */
-        saml1__EvidenceType() : __size_EvidenceType(), __union_EvidenceType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__EvidenceType * SOAP_FMAC2 soap_instantiate_saml1__EvidenceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements '-union-EvidenceType' of XML schema type '-saml1:union-EvidenceType' stored in dynamic
+	 * array __union_EvidenceType of length __size_EvidenceType */
+	int __size_EvidenceType;
+	struct __saml1__union_EvidenceType *__union_EvidenceType;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__EvidenceType */
+	long soap_type() const { return SOAP_TYPE_saml1__EvidenceType; }
+	/** Constructor with member initializations */
+	saml1__EvidenceType() : __size_EvidenceType(), __union_EvidenceType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__EvidenceType *SOAP_FMAC2 soap_instantiate_saml1__EvidenceType(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -3072,18 +3467,20 @@ struct SOAP_CMAC saml1__EvidenceType {
 #define SOAP_TYPE_saml1__AttributeDesignatorType (208)
 /* complex XML schema type 'saml1:AttributeDesignatorType': */
 struct SOAP_CMAC saml1__AttributeDesignatorType {
-      public:
-        /** Required attribute 'AttributeName' of XML schema type 'xsd:string' */
-        char *AttributeName;
-        /** Required attribute 'AttributeNamespace' of XML schema type 'xsd:string' */
-        char *AttributeNamespace;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AttributeDesignatorType */
-        long soap_type() const { return SOAP_TYPE_saml1__AttributeDesignatorType; }
-        /** Constructor with member initializations */
-        saml1__AttributeDesignatorType() : AttributeName(), AttributeNamespace() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AttributeDesignatorType * SOAP_FMAC2 soap_instantiate_saml1__AttributeDesignatorType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required attribute 'AttributeName' of XML schema type 'xsd:string' */
+	char *AttributeName;
+	/** Required attribute 'AttributeNamespace' of XML schema type 'xsd:string' */
+	char *AttributeNamespace;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AttributeDesignatorType */
+	long soap_type() const { return SOAP_TYPE_saml1__AttributeDesignatorType; }
+	/** Constructor with member initializations */
+	saml1__AttributeDesignatorType() : AttributeName(), AttributeNamespace() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AttributeDesignatorType *SOAP_FMAC2
+	soap_instantiate_saml1__AttributeDesignatorType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3092,17 +3489,20 @@ struct SOAP_CMAC saml1__AttributeDesignatorType {
 #define SOAP_TYPE_saml1__AudienceRestrictionConditionType (193)
 /* complex XML schema type 'saml1:AudienceRestrictionConditionType': */
 struct SOAP_CMAC saml1__AudienceRestrictionConditionType {
-      public:
-        /** Sequence of at least 1 elements 'saml1:Audience' of XML schema type 'xsd:string' stored in dynamic array saml1__Audience of length __sizeAudience */
-        int __sizeAudience;
-        char **saml1__Audience;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AudienceRestrictionConditionType */
-        long soap_type() const { return SOAP_TYPE_saml1__AudienceRestrictionConditionType; }
-        /** Constructor with member initializations */
-        saml1__AudienceRestrictionConditionType() : __sizeAudience(), saml1__Audience() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AudienceRestrictionConditionType * SOAP_FMAC2 soap_instantiate_saml1__AudienceRestrictionConditionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of at least 1 elements 'saml1:Audience' of XML schema type 'xsd:string' stored in dynamic array
+	 * saml1__Audience of length __sizeAudience */
+	int __sizeAudience;
+	char **saml1__Audience;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AudienceRestrictionConditionType */
+	long soap_type() const { return SOAP_TYPE_saml1__AudienceRestrictionConditionType; }
+	/** Constructor with member initializations */
+	saml1__AudienceRestrictionConditionType() : __sizeAudience(), saml1__Audience() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AudienceRestrictionConditionType *SOAP_FMAC2
+	soap_instantiate_saml1__AudienceRestrictionConditionType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3111,13 +3511,14 @@ struct SOAP_CMAC saml1__AudienceRestrictionConditionType {
 #define SOAP_TYPE_saml1__DoNotCacheConditionType (194)
 /* complex XML schema type 'saml1:DoNotCacheConditionType': */
 struct SOAP_CMAC saml1__DoNotCacheConditionType {
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__DoNotCacheConditionType */
-        long soap_type() const { return SOAP_TYPE_saml1__DoNotCacheConditionType; }
-        /** Constructor with member initializations */
-        saml1__DoNotCacheConditionType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__DoNotCacheConditionType * SOAP_FMAC2 soap_instantiate_saml1__DoNotCacheConditionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Return unique type id SOAP_TYPE_saml1__DoNotCacheConditionType */
+	long soap_type() const { return SOAP_TYPE_saml1__DoNotCacheConditionType; }
+	/** Constructor with member initializations */
+	saml1__DoNotCacheConditionType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__DoNotCacheConditionType *SOAP_FMAC2
+	soap_instantiate_saml1__DoNotCacheConditionType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3126,16 +3527,18 @@ struct SOAP_CMAC saml1__DoNotCacheConditionType {
 #define SOAP_TYPE_saml1__SubjectStatementAbstractType (197)
 /* complex XML schema type 'saml1:SubjectStatementAbstractType': */
 struct SOAP_CMAC saml1__SubjectStatementAbstractType {
-      public:
-        /** Required element 'saml1:Subject' of XML schema type 'saml1:SubjectType' */
-        struct saml1__SubjectType *saml1__Subject;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__SubjectStatementAbstractType */
-        long soap_type() const { return SOAP_TYPE_saml1__SubjectStatementAbstractType; }
-        /** Constructor with member initializations */
-        saml1__SubjectStatementAbstractType() : saml1__Subject() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__SubjectStatementAbstractType * SOAP_FMAC2 soap_instantiate_saml1__SubjectStatementAbstractType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'saml1:Subject' of XML schema type 'saml1:SubjectType' */
+	struct saml1__SubjectType *saml1__Subject;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__SubjectStatementAbstractType */
+	long soap_type() const { return SOAP_TYPE_saml1__SubjectStatementAbstractType; }
+	/** Constructor with member initializations */
+	saml1__SubjectStatementAbstractType() : saml1__Subject() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__SubjectStatementAbstractType *SOAP_FMAC2
+	soap_instantiate_saml1__SubjectStatementAbstractType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3144,20 +3547,22 @@ struct SOAP_CMAC saml1__SubjectStatementAbstractType {
 #define SOAP_TYPE_saml1__NameIdentifierType (199)
 /* simple XML schema type 'saml1:NameIdentifierType': */
 struct SOAP_CMAC saml1__NameIdentifierType {
-      public:
-        /** Simple content of XML schema type 'xsd:string' wrapped by this struct */
-        char *__item;
-        /** Optional attribute 'NameQualifier' of XML schema type 'xsd:string' */
-        char *NameQualifier;
-        /** Optional attribute 'Format' of XML schema type 'xsd:string' */
-        char *Format;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__NameIdentifierType */
-        long soap_type() const { return SOAP_TYPE_saml1__NameIdentifierType; }
-        /** Constructor with member initializations */
-        saml1__NameIdentifierType() : __item(), NameQualifier(), Format() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__NameIdentifierType * SOAP_FMAC2 soap_instantiate_saml1__NameIdentifierType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Simple content of XML schema type 'xsd:string' wrapped by this struct */
+	char *__item;
+	/** Optional attribute 'NameQualifier' of XML schema type 'xsd:string' */
+	char *NameQualifier;
+	/** Optional attribute 'Format' of XML schema type 'xsd:string' */
+	char *Format;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__NameIdentifierType */
+	long soap_type() const { return SOAP_TYPE_saml1__NameIdentifierType; }
+	/** Constructor with member initializations */
+	saml1__NameIdentifierType() : __item(), NameQualifier(), Format() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__NameIdentifierType *SOAP_FMAC2
+	soap_instantiate_saml1__NameIdentifierType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3166,18 +3571,20 @@ struct SOAP_CMAC saml1__NameIdentifierType {
 #define SOAP_TYPE_saml1__ActionType (205)
 /* simple XML schema type 'saml1:ActionType': */
 struct SOAP_CMAC saml1__ActionType {
-      public:
-        /** Simple content of XML schema type 'xsd:string' wrapped by this struct */
-        char *__item;
-        /** Optional attribute 'Namespace' of XML schema type 'xsd:string' */
-        char *Namespace;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__ActionType */
-        long soap_type() const { return SOAP_TYPE_saml1__ActionType; }
-        /** Constructor with member initializations */
-        saml1__ActionType() : __item(), Namespace() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__ActionType * SOAP_FMAC2 soap_instantiate_saml1__ActionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Simple content of XML schema type 'xsd:string' wrapped by this struct */
+	char *__item;
+	/** Optional attribute 'Namespace' of XML schema type 'xsd:string' */
+	char *Namespace;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__ActionType */
+	long soap_type() const { return SOAP_TYPE_saml1__ActionType; }
+	/** Constructor with member initializations */
+	saml1__ActionType() : __item(), Namespace() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__ActionType *SOAP_FMAC2 soap_instantiate_saml1__ActionType(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -3186,21 +3593,25 @@ struct SOAP_CMAC saml1__ActionType {
 #define SOAP_TYPE_saml1__AttributeType (209)
 /* complex XML schema type 'saml1:AttributeType': */
 struct SOAP_CMAC saml1__AttributeType {
-      public:
-        /** Required attribute 'AttributeName' of XML schema type 'xsd:string' */
-        char *AttributeName;
-        /** Required attribute 'AttributeNamespace' of XML schema type 'xsd:string' */
-        char *AttributeNamespace;
-        /** Sequence of at least 1 elements 'saml1:AttributeValue' of XML schema type 'xsd:anyType' stored in dynamic array saml1__AttributeValue of length __sizeAttributeValue */
-        int __sizeAttributeValue;
-        char **saml1__AttributeValue;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AttributeType */
-        long soap_type() const { return SOAP_TYPE_saml1__AttributeType; }
-        /** Constructor with member initializations */
-        saml1__AttributeType() : AttributeName(), AttributeNamespace(), __sizeAttributeValue(), saml1__AttributeValue() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AttributeType * SOAP_FMAC2 soap_instantiate_saml1__AttributeType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required attribute 'AttributeName' of XML schema type 'xsd:string' */
+	char *AttributeName;
+	/** Required attribute 'AttributeNamespace' of XML schema type 'xsd:string' */
+	char *AttributeNamespace;
+	/** Sequence of at least 1 elements 'saml1:AttributeValue' of XML schema type 'xsd:anyType' stored in dynamic array
+	 * saml1__AttributeValue of length __sizeAttributeValue */
+	int __sizeAttributeValue;
+	char **saml1__AttributeValue;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AttributeType */
+	long soap_type() const { return SOAP_TYPE_saml1__AttributeType; }
+	/** Constructor with member initializations */
+	saml1__AttributeType() : AttributeName(), AttributeNamespace(), __sizeAttributeValue(), saml1__AttributeValue() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AttributeType *SOAP_FMAC2 soap_instantiate_saml1__AttributeType(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -3209,25 +3620,30 @@ struct SOAP_CMAC saml1__AttributeType {
 #define SOAP_TYPE_saml1__AuthenticationStatementType (201)
 /* complex XML schema type 'saml1:AuthenticationStatementType': */
 struct SOAP_CMAC saml1__AuthenticationStatementType {
-      public:
-        /** Required element 'saml1:Subject' of XML schema type 'saml1:SubjectType' */
-        struct saml1__SubjectType *saml1__Subject;
-        /** Optional element 'saml1:SubjectLocality' of XML schema type 'saml1:SubjectLocalityType' */
-        struct saml1__SubjectLocalityType *saml1__SubjectLocality;
-        /** Sequence of elements 'saml1:AuthorityBinding' of XML schema type 'saml1:AuthorityBindingType' stored in dynamic array saml1__AuthorityBinding of length __sizeAuthorityBinding */
-        int __sizeAuthorityBinding;
-        struct saml1__AuthorityBindingType *saml1__AuthorityBinding;
-        /** Required attribute 'AuthenticationMethod' of XML schema type 'xsd:string' */
-        char *AuthenticationMethod;
-        /** Required attribute 'AuthenticationInstant' of XML schema type 'xsd:dateTime' */
-        time_t AuthenticationInstant;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AuthenticationStatementType */
-        long soap_type() const { return SOAP_TYPE_saml1__AuthenticationStatementType; }
-        /** Constructor with member initializations */
-        saml1__AuthenticationStatementType() : saml1__Subject(), saml1__SubjectLocality(), __sizeAuthorityBinding(), saml1__AuthorityBinding(), AuthenticationMethod(), AuthenticationInstant() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AuthenticationStatementType * SOAP_FMAC2 soap_instantiate_saml1__AuthenticationStatementType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'saml1:Subject' of XML schema type 'saml1:SubjectType' */
+	struct saml1__SubjectType *saml1__Subject;
+	/** Optional element 'saml1:SubjectLocality' of XML schema type 'saml1:SubjectLocalityType' */
+	struct saml1__SubjectLocalityType *saml1__SubjectLocality;
+	/** Sequence of elements 'saml1:AuthorityBinding' of XML schema type 'saml1:AuthorityBindingType' stored in dynamic
+	 * array saml1__AuthorityBinding of length __sizeAuthorityBinding */
+	int __sizeAuthorityBinding;
+	struct saml1__AuthorityBindingType *saml1__AuthorityBinding;
+	/** Required attribute 'AuthenticationMethod' of XML schema type 'xsd:string' */
+	char *AuthenticationMethod;
+	/** Required attribute 'AuthenticationInstant' of XML schema type 'xsd:dateTime' */
+	time_t AuthenticationInstant;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AuthenticationStatementType */
+	long soap_type() const { return SOAP_TYPE_saml1__AuthenticationStatementType; }
+	/** Constructor with member initializations */
+	saml1__AuthenticationStatementType()
+		: saml1__Subject(), saml1__SubjectLocality(), __sizeAuthorityBinding(), saml1__AuthorityBinding(),
+		  AuthenticationMethod(), AuthenticationInstant() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AuthenticationStatementType *SOAP_FMAC2
+	soap_instantiate_saml1__AuthenticationStatementType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3236,25 +3652,30 @@ struct SOAP_CMAC saml1__AuthenticationStatementType {
 #define SOAP_TYPE_saml1__AuthorizationDecisionStatementType (204)
 /* complex XML schema type 'saml1:AuthorizationDecisionStatementType': */
 struct SOAP_CMAC saml1__AuthorizationDecisionStatementType {
-      public:
-        /** Required element 'saml1:Subject' of XML schema type 'saml1:SubjectType' */
-        struct saml1__SubjectType *saml1__Subject;
-        /** Sequence of at least 1 elements 'saml1:Action' of XML schema type 'saml1:ActionType' stored in dynamic array saml1__Action of length __sizeAction */
-        int __sizeAction;
-        struct saml1__ActionType *saml1__Action;
-        /** Optional element 'saml1:Evidence' of XML schema type 'saml1:EvidenceType' */
-        struct saml1__EvidenceType *saml1__Evidence;
-        /** Required attribute 'Resource' of XML schema type 'xsd:string' */
-        char *Resource;
-        /** Required attribute 'Decision' of XML schema type 'saml1:DecisionType' */
-        enum saml1__DecisionType Decision;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AuthorizationDecisionStatementType */
-        long soap_type() const { return SOAP_TYPE_saml1__AuthorizationDecisionStatementType; }
-        /** Constructor with member initializations */
-        saml1__AuthorizationDecisionStatementType() : saml1__Subject(), __sizeAction(), saml1__Action(), saml1__Evidence(), Resource(), Decision() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AuthorizationDecisionStatementType * SOAP_FMAC2 soap_instantiate_saml1__AuthorizationDecisionStatementType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'saml1:Subject' of XML schema type 'saml1:SubjectType' */
+	struct saml1__SubjectType *saml1__Subject;
+	/** Sequence of at least 1 elements 'saml1:Action' of XML schema type 'saml1:ActionType' stored in dynamic array
+	 * saml1__Action of length __sizeAction */
+	int __sizeAction;
+	struct saml1__ActionType *saml1__Action;
+	/** Optional element 'saml1:Evidence' of XML schema type 'saml1:EvidenceType' */
+	struct saml1__EvidenceType *saml1__Evidence;
+	/** Required attribute 'Resource' of XML schema type 'xsd:string' */
+	char *Resource;
+	/** Required attribute 'Decision' of XML schema type 'saml1:DecisionType' */
+	enum saml1__DecisionType Decision;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AuthorizationDecisionStatementType */
+	long soap_type() const { return SOAP_TYPE_saml1__AuthorizationDecisionStatementType; }
+	/** Constructor with member initializations */
+	saml1__AuthorizationDecisionStatementType()
+		: saml1__Subject(), __sizeAction(), saml1__Action(), saml1__Evidence(), Resource(), Decision() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AuthorizationDecisionStatementType *SOAP_FMAC2
+	soap_instantiate_saml1__AuthorizationDecisionStatementType(struct soap *, int, const char *, const char *,
+															   size_t *);
 };
 #endif
 
@@ -3263,19 +3684,22 @@ struct SOAP_CMAC saml1__AuthorizationDecisionStatementType {
 #define SOAP_TYPE_saml1__AttributeStatementType (207)
 /* complex XML schema type 'saml1:AttributeStatementType': */
 struct SOAP_CMAC saml1__AttributeStatementType {
-      public:
-        /** Required element 'saml1:Subject' of XML schema type 'saml1:SubjectType' */
-        struct saml1__SubjectType *saml1__Subject;
-        /** Sequence of at least 1 elements 'saml1:Attribute' of XML schema type 'saml1:AttributeType' stored in dynamic array saml1__Attribute of length __sizeAttribute */
-        int __sizeAttribute;
-        struct saml1__AttributeType *saml1__Attribute;
-      public:
-        /** Return unique type id SOAP_TYPE_saml1__AttributeStatementType */
-        long soap_type() const { return SOAP_TYPE_saml1__AttributeStatementType; }
-        /** Constructor with member initializations */
-        saml1__AttributeStatementType() : saml1__Subject(), __sizeAttribute(), saml1__Attribute() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml1__AttributeStatementType * SOAP_FMAC2 soap_instantiate_saml1__AttributeStatementType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'saml1:Subject' of XML schema type 'saml1:SubjectType' */
+	struct saml1__SubjectType *saml1__Subject;
+	/** Sequence of at least 1 elements 'saml1:Attribute' of XML schema type 'saml1:AttributeType' stored in dynamic
+	 * array saml1__Attribute of length __sizeAttribute */
+	int __sizeAttribute;
+	struct saml1__AttributeType *saml1__Attribute;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml1__AttributeStatementType */
+	long soap_type() const { return SOAP_TYPE_saml1__AttributeStatementType; }
+	/** Constructor with member initializations */
+	saml1__AttributeStatementType() : saml1__Subject(), __sizeAttribute(), saml1__Attribute() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml1__AttributeStatementType *SOAP_FMAC2
+	soap_instantiate_saml1__AttributeStatementType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3284,18 +3708,20 @@ struct SOAP_CMAC saml1__AttributeStatementType {
 #define SOAP_TYPE_saml2__BaseIDAbstractType (267)
 /* complex XML schema type 'saml2:BaseIDAbstractType': */
 struct SOAP_CMAC saml2__BaseIDAbstractType {
-      public:
-        /** Optional attribute 'NameQualifier' of XML schema type 'xsd:string' */
-        char *NameQualifier;
-        /** Optional attribute 'SPNameQualifier' of XML schema type 'xsd:string' */
-        char *SPNameQualifier;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__BaseIDAbstractType */
-        long soap_type() const { return SOAP_TYPE_saml2__BaseIDAbstractType; }
-        /** Constructor with member initializations */
-        saml2__BaseIDAbstractType() : NameQualifier(), SPNameQualifier() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__BaseIDAbstractType * SOAP_FMAC2 soap_instantiate_saml2__BaseIDAbstractType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'NameQualifier' of XML schema type 'xsd:string' */
+	char *NameQualifier;
+	/** Optional attribute 'SPNameQualifier' of XML schema type 'xsd:string' */
+	char *SPNameQualifier;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__BaseIDAbstractType */
+	long soap_type() const { return SOAP_TYPE_saml2__BaseIDAbstractType; }
+	/** Constructor with member initializations */
+	saml2__BaseIDAbstractType() : NameQualifier(), SPNameQualifier() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__BaseIDAbstractType *SOAP_FMAC2
+	soap_instantiate_saml2__BaseIDAbstractType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3304,19 +3730,22 @@ struct SOAP_CMAC saml2__BaseIDAbstractType {
 #define SOAP_TYPE_saml2__EncryptedElementType (269)
 /* complex XML schema type 'saml2:EncryptedElementType': */
 struct SOAP_CMAC saml2__EncryptedElementType {
-      public:
-        /** Required element 'xenc:EncryptedData' of XML schema type 'xenc:EncryptedDataType' */
-        struct xenc__EncryptedDataType xenc__EncryptedData;
-        /** Sequence of elements 'xenc:EncryptedKey' of XML schema type 'xenc:EncryptedKeyType' stored in dynamic array xenc__EncryptedKey of length __sizexenc__EncryptedKey */
-        int __sizexenc__EncryptedKey;
-        struct xenc__EncryptedKeyType **xenc__EncryptedKey;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__EncryptedElementType */
-        long soap_type() const { return SOAP_TYPE_saml2__EncryptedElementType; }
-        /** Constructor with member initializations */
-        saml2__EncryptedElementType() : xenc__EncryptedData(), __sizexenc__EncryptedKey(), xenc__EncryptedKey() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__EncryptedElementType * SOAP_FMAC2 soap_instantiate_saml2__EncryptedElementType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'xenc:EncryptedData' of XML schema type 'xenc:EncryptedDataType' */
+	struct xenc__EncryptedDataType xenc__EncryptedData;
+	/** Sequence of elements 'xenc:EncryptedKey' of XML schema type 'xenc:EncryptedKeyType' stored in dynamic array
+	 * xenc__EncryptedKey of length __sizexenc__EncryptedKey */
+	int __sizexenc__EncryptedKey;
+	struct xenc__EncryptedKeyType **xenc__EncryptedKey;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__EncryptedElementType */
+	long soap_type() const { return SOAP_TYPE_saml2__EncryptedElementType; }
+	/** Constructor with member initializations */
+	saml2__EncryptedElementType() : xenc__EncryptedData(), __sizexenc__EncryptedKey(), xenc__EncryptedKey() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__EncryptedElementType *SOAP_FMAC2
+	soap_instantiate_saml2__EncryptedElementType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3325,60 +3754,70 @@ struct SOAP_CMAC saml2__EncryptedElementType {
 #define SOAP_TYPE___saml2__union_AssertionType (297)
 /* Wrapper: */
 struct SOAP_CMAC __saml2__union_AssertionType {
-      public:
-        /** Optional element 'saml2:Statement' of XML schema type 'saml2:StatementAbstractType' */
-        struct saml2__StatementAbstractType *saml2__Statement;
-        /** Optional element 'saml2:AuthnStatement' of XML schema type 'saml2:AuthnStatementType' */
-        struct saml2__AuthnStatementType *saml2__AuthnStatement;
-        /** Optional element 'saml2:AuthzDecisionStatement' of XML schema type 'saml2:AuthzDecisionStatementType' */
-        struct saml2__AuthzDecisionStatementType *saml2__AuthzDecisionStatement;
-        /** Optional element 'saml2:AttributeStatement' of XML schema type 'saml2:AttributeStatementType' */
-        struct saml2__AttributeStatementType *saml2__AttributeStatement;
-      public:
-        /** Return unique type id SOAP_TYPE___saml2__union_AssertionType */
-        long soap_type() const { return SOAP_TYPE___saml2__union_AssertionType; }
-        /** Constructor with member initializations */
-        __saml2__union_AssertionType() : saml2__Statement(), saml2__AuthnStatement(), saml2__AuthzDecisionStatement(), saml2__AttributeStatement() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml2__union_AssertionType * SOAP_FMAC2 soap_instantiate___saml2__union_AssertionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:Statement' of XML schema type 'saml2:StatementAbstractType' */
+	struct saml2__StatementAbstractType *saml2__Statement;
+	/** Optional element 'saml2:AuthnStatement' of XML schema type 'saml2:AuthnStatementType' */
+	struct saml2__AuthnStatementType *saml2__AuthnStatement;
+	/** Optional element 'saml2:AuthzDecisionStatement' of XML schema type 'saml2:AuthzDecisionStatementType' */
+	struct saml2__AuthzDecisionStatementType *saml2__AuthzDecisionStatement;
+	/** Optional element 'saml2:AttributeStatement' of XML schema type 'saml2:AttributeStatementType' */
+	struct saml2__AttributeStatementType *saml2__AttributeStatement;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml2__union_AssertionType */
+	long soap_type() const { return SOAP_TYPE___saml2__union_AssertionType; }
+	/** Constructor with member initializations */
+	__saml2__union_AssertionType()
+		: saml2__Statement(), saml2__AuthnStatement(), saml2__AuthzDecisionStatement(), saml2__AttributeStatement() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml2__union_AssertionType *SOAP_FMAC2
+	soap_instantiate___saml2__union_AssertionType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
 /* saml2.h:68 */
 #ifndef SOAP_TYPE_saml2__AssertionType
 #define SOAP_TYPE_saml2__AssertionType (270)
-/* Type saml2__AssertionType is a recursive data type, (in)directly referencing itself through its (base or derived class) members */
+/* Type saml2__AssertionType is a recursive data type, (in)directly referencing itself through its (base or derived
+ * class) members */
 /* complex XML schema type 'saml2:AssertionType': */
 struct SOAP_CMAC saml2__AssertionType {
-      public:
-        /** Required element 'saml2:Issuer' of XML schema type 'saml2:NameIDType' */
-        struct saml2__NameIDType *saml2__Issuer;
-        /** Optional element 'ds:Signature' of XML schema type 'ds:Signature' */
-        struct ds__SignatureType *ds__Signature;
-        /** Optional element 'saml2:Subject' of XML schema type 'saml2:SubjectType' */
-        struct saml2__SubjectType *saml2__Subject;
-        /** Optional element 'saml2:Conditions' of XML schema type 'saml2:ConditionsType' */
-        struct saml2__ConditionsType *saml2__Conditions;
-        /** Optional element 'saml2:Advice' of XML schema type 'saml2:AdviceType' */
-        struct saml2__AdviceType *saml2__Advice;
-        /** Sequence of elements '-union-AssertionType' of XML schema type '-saml2:union-AssertionType' stored in dynamic array __union_AssertionType of length __size_AssertionType */
-        int __size_AssertionType;
-        struct __saml2__union_AssertionType *__union_AssertionType;
-        /** Required attribute 'Version' of XML schema type 'xsd:string' */
-        char *Version;
-        /** Required attribute 'ID' of XML schema type 'xsd:string' */
-        char *ID;
-        /** Required attribute 'IssueInstant' of XML schema type 'xsd:dateTime' */
-        time_t IssueInstant;
-        /** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
-        char *wsu__Id;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__AssertionType */
-        long soap_type() const { return SOAP_TYPE_saml2__AssertionType; }
-        /** Constructor with member initializations */
-        saml2__AssertionType() : saml2__Issuer(), ds__Signature(), saml2__Subject(), saml2__Conditions(), saml2__Advice(), __size_AssertionType(), __union_AssertionType(), Version(), ID(), IssueInstant(), wsu__Id() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__AssertionType * SOAP_FMAC2 soap_instantiate_saml2__AssertionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Required element 'saml2:Issuer' of XML schema type 'saml2:NameIDType' */
+	struct saml2__NameIDType *saml2__Issuer;
+	/** Optional element 'ds:Signature' of XML schema type 'ds:Signature' */
+	struct ds__SignatureType *ds__Signature;
+	/** Optional element 'saml2:Subject' of XML schema type 'saml2:SubjectType' */
+	struct saml2__SubjectType *saml2__Subject;
+	/** Optional element 'saml2:Conditions' of XML schema type 'saml2:ConditionsType' */
+	struct saml2__ConditionsType *saml2__Conditions;
+	/** Optional element 'saml2:Advice' of XML schema type 'saml2:AdviceType' */
+	struct saml2__AdviceType *saml2__Advice;
+	/** Sequence of elements '-union-AssertionType' of XML schema type '-saml2:union-AssertionType' stored in dynamic
+	 * array __union_AssertionType of length __size_AssertionType */
+	int __size_AssertionType;
+	struct __saml2__union_AssertionType *__union_AssertionType;
+	/** Required attribute 'Version' of XML schema type 'xsd:string' */
+	char *Version;
+	/** Required attribute 'ID' of XML schema type 'xsd:string' */
+	char *ID;
+	/** Required attribute 'IssueInstant' of XML schema type 'xsd:dateTime' */
+	time_t IssueInstant;
+	/** Optional attribute 'wsu:Id' of XML schema type 'xsd:string' */
+	char *wsu__Id;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__AssertionType */
+	long soap_type() const { return SOAP_TYPE_saml2__AssertionType; }
+	/** Constructor with member initializations */
+	saml2__AssertionType()
+		: saml2__Issuer(), ds__Signature(), saml2__Subject(), saml2__Conditions(), saml2__Advice(),
+		  __size_AssertionType(), __union_AssertionType(), Version(), ID(), IssueInstant(), wsu__Id() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__AssertionType *SOAP_FMAC2 soap_instantiate_saml2__AssertionType(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -3387,23 +3826,29 @@ struct SOAP_CMAC saml2__AssertionType {
 #define SOAP_TYPE_saml2__SubjectType (271)
 /* complex XML schema type 'saml2:SubjectType': */
 struct SOAP_CMAC saml2__SubjectType {
-      public:
-        /** Optional element 'saml2:BaseID' of XML schema type 'saml2:BaseIDAbstractType' */
-        struct saml2__BaseIDAbstractType *saml2__BaseID;
-        /** Optional element 'saml2:NameID' of XML schema type 'saml2:NameIDType' */
-        struct saml2__NameIDType *saml2__NameID;
-        /** Optional element 'saml2:EncryptedID' of XML schema type 'saml2:EncryptedElementType' */
-        struct saml2__EncryptedElementType *saml2__EncryptedID;
-        /** Sequence of elements 'saml2:SubjectConfirmation' of XML schema type 'saml2:SubjectConfirmationType' stored in dynamic array saml2__SubjectConfirmation of length __sizeSubjectConfirmation */
-        int __sizeSubjectConfirmation;
-        struct saml2__SubjectConfirmationType *saml2__SubjectConfirmation;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__SubjectType */
-        long soap_type() const { return SOAP_TYPE_saml2__SubjectType; }
-        /** Constructor with member initializations */
-        saml2__SubjectType() : saml2__BaseID(), saml2__NameID(), saml2__EncryptedID(), __sizeSubjectConfirmation(), saml2__SubjectConfirmation() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__SubjectType * SOAP_FMAC2 soap_instantiate_saml2__SubjectType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:BaseID' of XML schema type 'saml2:BaseIDAbstractType' */
+	struct saml2__BaseIDAbstractType *saml2__BaseID;
+	/** Optional element 'saml2:NameID' of XML schema type 'saml2:NameIDType' */
+	struct saml2__NameIDType *saml2__NameID;
+	/** Optional element 'saml2:EncryptedID' of XML schema type 'saml2:EncryptedElementType' */
+	struct saml2__EncryptedElementType *saml2__EncryptedID;
+	/** Sequence of elements 'saml2:SubjectConfirmation' of XML schema type 'saml2:SubjectConfirmationType' stored in
+	 * dynamic array saml2__SubjectConfirmation of length __sizeSubjectConfirmation */
+	int __sizeSubjectConfirmation;
+	struct saml2__SubjectConfirmationType *saml2__SubjectConfirmation;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__SubjectType */
+	long soap_type() const { return SOAP_TYPE_saml2__SubjectType; }
+	/** Constructor with member initializations */
+	saml2__SubjectType()
+		: saml2__BaseID(), saml2__NameID(), saml2__EncryptedID(), __sizeSubjectConfirmation(),
+		  saml2__SubjectConfirmation() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__SubjectType *SOAP_FMAC2 soap_instantiate_saml2__SubjectType(struct soap *, int,
+																						 const char *, const char *,
+																						 size_t *);
 };
 #endif
 
@@ -3412,24 +3857,27 @@ struct SOAP_CMAC saml2__SubjectType {
 #define SOAP_TYPE_saml2__SubjectConfirmationType (272)
 /* complex XML schema type 'saml2:SubjectConfirmationType': */
 struct SOAP_CMAC saml2__SubjectConfirmationType {
-      public:
-        /** Optional element 'saml2:BaseID' of XML schema type 'saml2:BaseIDAbstractType' */
-        struct saml2__BaseIDAbstractType *saml2__BaseID;
-        /** Optional element 'saml2:NameID' of XML schema type 'saml2:NameIDType' */
-        struct saml2__NameIDType *saml2__NameID;
-        /** Optional element 'saml2:EncryptedID' of XML schema type 'saml2:EncryptedElementType' */
-        struct saml2__EncryptedElementType *saml2__EncryptedID;
-        /** Optional element 'saml2:SubjectConfirmationData' of XML schema type 'saml2:SubjectConfirmationDataType' */
-        struct saml2__SubjectConfirmationDataType *saml2__SubjectConfirmationData;
-        /** Required attribute 'Method' of XML schema type 'xsd:string' */
-        char *Method;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__SubjectConfirmationType */
-        long soap_type() const { return SOAP_TYPE_saml2__SubjectConfirmationType; }
-        /** Constructor with member initializations */
-        saml2__SubjectConfirmationType() : saml2__BaseID(), saml2__NameID(), saml2__EncryptedID(), saml2__SubjectConfirmationData(), Method() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__SubjectConfirmationType * SOAP_FMAC2 soap_instantiate_saml2__SubjectConfirmationType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:BaseID' of XML schema type 'saml2:BaseIDAbstractType' */
+	struct saml2__BaseIDAbstractType *saml2__BaseID;
+	/** Optional element 'saml2:NameID' of XML schema type 'saml2:NameIDType' */
+	struct saml2__NameIDType *saml2__NameID;
+	/** Optional element 'saml2:EncryptedID' of XML schema type 'saml2:EncryptedElementType' */
+	struct saml2__EncryptedElementType *saml2__EncryptedID;
+	/** Optional element 'saml2:SubjectConfirmationData' of XML schema type 'saml2:SubjectConfirmationDataType' */
+	struct saml2__SubjectConfirmationDataType *saml2__SubjectConfirmationData;
+	/** Required attribute 'Method' of XML schema type 'xsd:string' */
+	char *Method;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__SubjectConfirmationType */
+	long soap_type() const { return SOAP_TYPE_saml2__SubjectConfirmationType; }
+	/** Constructor with member initializations */
+	saml2__SubjectConfirmationType()
+		: saml2__BaseID(), saml2__NameID(), saml2__EncryptedID(), saml2__SubjectConfirmationData(), Method() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__SubjectConfirmationType *SOAP_FMAC2
+	soap_instantiate_saml2__SubjectConfirmationType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3438,22 +3886,25 @@ struct SOAP_CMAC saml2__SubjectConfirmationType {
 #define SOAP_TYPE___saml2__union_ConditionsType (307)
 /* Wrapper: */
 struct SOAP_CMAC __saml2__union_ConditionsType {
-      public:
-        /** Optional element 'saml2:Condition' of XML schema type 'saml2:ConditionAbstractType' */
-        struct saml2__ConditionAbstractType *saml2__Condition;
-        /** Optional element 'saml2:AudienceRestriction' of XML schema type 'saml2:AudienceRestrictionType' */
-        struct saml2__AudienceRestrictionType *saml2__AudienceRestriction;
-        /** Optional element 'saml2:OneTimeUse' of XML schema type 'saml2:OneTimeUseType' */
-        struct saml2__OneTimeUseType *saml2__OneTimeUse;
-        /** Optional element 'saml2:ProxyRestriction' of XML schema type 'saml2:ProxyRestrictionType' */
-        struct saml2__ProxyRestrictionType *saml2__ProxyRestriction;
-      public:
-        /** Return unique type id SOAP_TYPE___saml2__union_ConditionsType */
-        long soap_type() const { return SOAP_TYPE___saml2__union_ConditionsType; }
-        /** Constructor with member initializations */
-        __saml2__union_ConditionsType() : saml2__Condition(), saml2__AudienceRestriction(), saml2__OneTimeUse(), saml2__ProxyRestriction() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml2__union_ConditionsType * SOAP_FMAC2 soap_instantiate___saml2__union_ConditionsType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:Condition' of XML schema type 'saml2:ConditionAbstractType' */
+	struct saml2__ConditionAbstractType *saml2__Condition;
+	/** Optional element 'saml2:AudienceRestriction' of XML schema type 'saml2:AudienceRestrictionType' */
+	struct saml2__AudienceRestrictionType *saml2__AudienceRestriction;
+	/** Optional element 'saml2:OneTimeUse' of XML schema type 'saml2:OneTimeUseType' */
+	struct saml2__OneTimeUseType *saml2__OneTimeUse;
+	/** Optional element 'saml2:ProxyRestriction' of XML schema type 'saml2:ProxyRestrictionType' */
+	struct saml2__ProxyRestrictionType *saml2__ProxyRestriction;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml2__union_ConditionsType */
+	long soap_type() const { return SOAP_TYPE___saml2__union_ConditionsType; }
+	/** Constructor with member initializations */
+	__saml2__union_ConditionsType()
+		: saml2__Condition(), saml2__AudienceRestriction(), saml2__OneTimeUse(), saml2__ProxyRestriction() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml2__union_ConditionsType *SOAP_FMAC2
+	soap_instantiate___saml2__union_ConditionsType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3462,21 +3913,25 @@ struct SOAP_CMAC __saml2__union_ConditionsType {
 #define SOAP_TYPE_saml2__ConditionsType (275)
 /* complex XML schema type 'saml2:ConditionsType': */
 struct SOAP_CMAC saml2__ConditionsType {
-      public:
-        /** Sequence of elements '-union-ConditionsType' of XML schema type '-saml2:union-ConditionsType' stored in dynamic array __union_ConditionsType of length __size_ConditionsType */
-        int __size_ConditionsType;
-        struct __saml2__union_ConditionsType *__union_ConditionsType;
-        /** Optional attribute 'NotBefore' of XML schema type 'xsd:dateTime' */
-        time_t *NotBefore;
-        /** Optional attribute 'NotOnOrAfter' of XML schema type 'xsd:dateTime' */
-        time_t *NotOnOrAfter;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__ConditionsType */
-        long soap_type() const { return SOAP_TYPE_saml2__ConditionsType; }
-        /** Constructor with member initializations */
-        saml2__ConditionsType() : __size_ConditionsType(), __union_ConditionsType(), NotBefore(), NotOnOrAfter() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__ConditionsType * SOAP_FMAC2 soap_instantiate_saml2__ConditionsType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements '-union-ConditionsType' of XML schema type '-saml2:union-ConditionsType' stored in dynamic
+	 * array __union_ConditionsType of length __size_ConditionsType */
+	int __size_ConditionsType;
+	struct __saml2__union_ConditionsType *__union_ConditionsType;
+	/** Optional attribute 'NotBefore' of XML schema type 'xsd:dateTime' */
+	time_t *NotBefore;
+	/** Optional attribute 'NotOnOrAfter' of XML schema type 'xsd:dateTime' */
+	time_t *NotOnOrAfter;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__ConditionsType */
+	long soap_type() const { return SOAP_TYPE_saml2__ConditionsType; }
+	/** Constructor with member initializations */
+	saml2__ConditionsType() : __size_ConditionsType(), __union_ConditionsType(), NotBefore(), NotOnOrAfter() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__ConditionsType *SOAP_FMAC2 soap_instantiate_saml2__ConditionsType(struct soap *, int,
+																							   const char *,
+																							   const char *, size_t *);
 };
 #endif
 
@@ -3485,13 +3940,14 @@ struct SOAP_CMAC saml2__ConditionsType {
 #define SOAP_TYPE_saml2__ConditionAbstractType (276)
 /* complex XML schema type 'saml2:ConditionAbstractType': */
 struct SOAP_CMAC saml2__ConditionAbstractType {
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__ConditionAbstractType */
-        long soap_type() const { return SOAP_TYPE_saml2__ConditionAbstractType; }
-        /** Constructor with member initializations */
-        saml2__ConditionAbstractType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__ConditionAbstractType * SOAP_FMAC2 soap_instantiate_saml2__ConditionAbstractType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Return unique type id SOAP_TYPE_saml2__ConditionAbstractType */
+	long soap_type() const { return SOAP_TYPE_saml2__ConditionAbstractType; }
+	/** Constructor with member initializations */
+	saml2__ConditionAbstractType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__ConditionAbstractType *SOAP_FMAC2
+	soap_instantiate_saml2__ConditionAbstractType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3500,22 +3956,25 @@ struct SOAP_CMAC saml2__ConditionAbstractType {
 #define SOAP_TYPE___saml2__union_AdviceType (313)
 /* Wrapper: */
 struct SOAP_CMAC __saml2__union_AdviceType {
-      public:
-        /** Optional element 'saml2:AssertionIDRef' of XML schema type 'xsd:string' */
-        char *saml2__AssertionIDRef;
-        /** Optional element 'saml2:AssertionURIRef' of XML schema type 'xsd:string' */
-        char *saml2__AssertionURIRef;
-        /** Optional element 'saml2:Assertion' of XML schema type 'saml2:AssertionType' */
-        struct saml2__AssertionType *saml2__Assertion;
-        /** Optional element 'saml2:EncryptedAssertion' of XML schema type 'saml2:EncryptedElementType' */
-        struct saml2__EncryptedElementType *saml2__EncryptedAssertion;
-      public:
-        /** Return unique type id SOAP_TYPE___saml2__union_AdviceType */
-        long soap_type() const { return SOAP_TYPE___saml2__union_AdviceType; }
-        /** Constructor with member initializations */
-        __saml2__union_AdviceType() : saml2__AssertionIDRef(), saml2__AssertionURIRef(), saml2__Assertion(), saml2__EncryptedAssertion() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml2__union_AdviceType * SOAP_FMAC2 soap_instantiate___saml2__union_AdviceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:AssertionIDRef' of XML schema type 'xsd:string' */
+	char *saml2__AssertionIDRef;
+	/** Optional element 'saml2:AssertionURIRef' of XML schema type 'xsd:string' */
+	char *saml2__AssertionURIRef;
+	/** Optional element 'saml2:Assertion' of XML schema type 'saml2:AssertionType' */
+	struct saml2__AssertionType *saml2__Assertion;
+	/** Optional element 'saml2:EncryptedAssertion' of XML schema type 'saml2:EncryptedElementType' */
+	struct saml2__EncryptedElementType *saml2__EncryptedAssertion;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml2__union_AdviceType */
+	long soap_type() const { return SOAP_TYPE___saml2__union_AdviceType; }
+	/** Constructor with member initializations */
+	__saml2__union_AdviceType()
+		: saml2__AssertionIDRef(), saml2__AssertionURIRef(), saml2__Assertion(), saml2__EncryptedAssertion() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml2__union_AdviceType *SOAP_FMAC2
+	soap_instantiate___saml2__union_AdviceType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3524,17 +3983,20 @@ struct SOAP_CMAC __saml2__union_AdviceType {
 #define SOAP_TYPE_saml2__AdviceType (280)
 /* complex XML schema type 'saml2:AdviceType': */
 struct SOAP_CMAC saml2__AdviceType {
-      public:
-        /** Sequence of elements '-union-AdviceType' of XML schema type '-saml2:union-AdviceType' stored in dynamic array __union_AdviceType of length __size_AdviceType */
-        int __size_AdviceType;
-        struct __saml2__union_AdviceType *__union_AdviceType;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__AdviceType */
-        long soap_type() const { return SOAP_TYPE_saml2__AdviceType; }
-        /** Constructor with member initializations */
-        saml2__AdviceType() : __size_AdviceType(), __union_AdviceType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__AdviceType * SOAP_FMAC2 soap_instantiate_saml2__AdviceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements '-union-AdviceType' of XML schema type '-saml2:union-AdviceType' stored in dynamic array
+	 * __union_AdviceType of length __size_AdviceType */
+	int __size_AdviceType;
+	struct __saml2__union_AdviceType *__union_AdviceType;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__AdviceType */
+	long soap_type() const { return SOAP_TYPE_saml2__AdviceType; }
+	/** Constructor with member initializations */
+	saml2__AdviceType() : __size_AdviceType(), __union_AdviceType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__AdviceType *SOAP_FMAC2 soap_instantiate_saml2__AdviceType(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -3543,13 +4005,14 @@ struct SOAP_CMAC saml2__AdviceType {
 #define SOAP_TYPE_saml2__StatementAbstractType (281)
 /* complex XML schema type 'saml2:StatementAbstractType': */
 struct SOAP_CMAC saml2__StatementAbstractType {
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__StatementAbstractType */
-        long soap_type() const { return SOAP_TYPE_saml2__StatementAbstractType; }
-        /** Constructor with member initializations */
-        saml2__StatementAbstractType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__StatementAbstractType * SOAP_FMAC2 soap_instantiate_saml2__StatementAbstractType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Return unique type id SOAP_TYPE_saml2__StatementAbstractType */
+	long soap_type() const { return SOAP_TYPE_saml2__StatementAbstractType; }
+	/** Constructor with member initializations */
+	saml2__StatementAbstractType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__StatementAbstractType *SOAP_FMAC2
+	soap_instantiate_saml2__StatementAbstractType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3558,18 +4021,20 @@ struct SOAP_CMAC saml2__StatementAbstractType {
 #define SOAP_TYPE_saml2__SubjectLocalityType (283)
 /* complex XML schema type 'saml2:SubjectLocalityType': */
 struct SOAP_CMAC saml2__SubjectLocalityType {
-      public:
-        /** Optional attribute 'Address' of XML schema type 'xsd:string' */
-        char *Address;
-        /** Optional attribute 'DNSName' of XML schema type 'xsd:string' */
-        char *DNSName;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__SubjectLocalityType */
-        long soap_type() const { return SOAP_TYPE_saml2__SubjectLocalityType; }
-        /** Constructor with member initializations */
-        saml2__SubjectLocalityType() : Address(), DNSName() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__SubjectLocalityType * SOAP_FMAC2 soap_instantiate_saml2__SubjectLocalityType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'Address' of XML schema type 'xsd:string' */
+	char *Address;
+	/** Optional attribute 'DNSName' of XML schema type 'xsd:string' */
+	char *DNSName;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__SubjectLocalityType */
+	long soap_type() const { return SOAP_TYPE_saml2__SubjectLocalityType; }
+	/** Constructor with member initializations */
+	saml2__SubjectLocalityType() : Address(), DNSName() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__SubjectLocalityType *SOAP_FMAC2
+	soap_instantiate_saml2__SubjectLocalityType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3578,23 +4043,30 @@ struct SOAP_CMAC saml2__SubjectLocalityType {
 #define SOAP_TYPE_saml2__AuthnContextType (284)
 /* complex XML schema type 'saml2:AuthnContextType': */
 struct SOAP_CMAC saml2__AuthnContextType {
-      public:
-        /** Optional element 'saml2:AuthnContextClassRef' of XML schema type 'xsd:string' */
-        char *saml2__AuthnContextClassRef;
-        /** Optional element 'saml2:AuthnContextDecl' of XML schema type 'xsd:anyType' */
-        char *saml2__AuthnContextDecl;
-        /** Optional element 'saml2:AuthnContextDeclRef' of XML schema type 'xsd:string' */
-        char *saml2__AuthnContextDeclRef;
-        /** Sequence of elements 'saml2:AuthenticatingAuthority' of XML schema type 'xsd:string' stored in dynamic array saml2__AuthenticatingAuthority of length __sizeAuthenticatingAuthority */
-        int __sizeAuthenticatingAuthority;
-        char **saml2__AuthenticatingAuthority;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__AuthnContextType */
-        long soap_type() const { return SOAP_TYPE_saml2__AuthnContextType; }
-        /** Constructor with member initializations */
-        saml2__AuthnContextType() : saml2__AuthnContextClassRef(), saml2__AuthnContextDecl(), saml2__AuthnContextDeclRef(), __sizeAuthenticatingAuthority(), saml2__AuthenticatingAuthority() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__AuthnContextType * SOAP_FMAC2 soap_instantiate_saml2__AuthnContextType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:AuthnContextClassRef' of XML schema type 'xsd:string' */
+	char *saml2__AuthnContextClassRef;
+	/** Optional element 'saml2:AuthnContextDecl' of XML schema type 'xsd:anyType' */
+	char *saml2__AuthnContextDecl;
+	/** Optional element 'saml2:AuthnContextDeclRef' of XML schema type 'xsd:string' */
+	char *saml2__AuthnContextDeclRef;
+	/** Sequence of elements 'saml2:AuthenticatingAuthority' of XML schema type 'xsd:string' stored in dynamic array
+	 * saml2__AuthenticatingAuthority of length __sizeAuthenticatingAuthority */
+	int __sizeAuthenticatingAuthority;
+	char **saml2__AuthenticatingAuthority;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__AuthnContextType */
+	long soap_type() const { return SOAP_TYPE_saml2__AuthnContextType; }
+	/** Constructor with member initializations */
+	saml2__AuthnContextType()
+		: saml2__AuthnContextClassRef(), saml2__AuthnContextDecl(), saml2__AuthnContextDeclRef(),
+		  __sizeAuthenticatingAuthority(), saml2__AuthenticatingAuthority() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__AuthnContextType *SOAP_FMAC2 soap_instantiate_saml2__AuthnContextType(struct soap *, int,
+																								   const char *,
+																								   const char *,
+																								   size_t *);
 };
 #endif
 
@@ -3603,22 +4075,25 @@ struct SOAP_CMAC saml2__AuthnContextType {
 #define SOAP_TYPE___saml2__union_EvidenceType (316)
 /* Wrapper: */
 struct SOAP_CMAC __saml2__union_EvidenceType {
-      public:
-        /** Optional element 'saml2:AssertionIDRef' of XML schema type 'xsd:string' */
-        char *saml2__AssertionIDRef;
-        /** Optional element 'saml2:AssertionURIRef' of XML schema type 'xsd:string' */
-        char *saml2__AssertionURIRef;
-        /** Optional element 'saml2:Assertion' of XML schema type 'saml2:AssertionType' */
-        struct saml2__AssertionType *saml2__Assertion;
-        /** Optional element 'saml2:EncryptedAssertion' of XML schema type 'saml2:EncryptedElementType' */
-        struct saml2__EncryptedElementType *saml2__EncryptedAssertion;
-      public:
-        /** Return unique type id SOAP_TYPE___saml2__union_EvidenceType */
-        long soap_type() const { return SOAP_TYPE___saml2__union_EvidenceType; }
-        /** Constructor with member initializations */
-        __saml2__union_EvidenceType() : saml2__AssertionIDRef(), saml2__AssertionURIRef(), saml2__Assertion(), saml2__EncryptedAssertion() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml2__union_EvidenceType * SOAP_FMAC2 soap_instantiate___saml2__union_EvidenceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:AssertionIDRef' of XML schema type 'xsd:string' */
+	char *saml2__AssertionIDRef;
+	/** Optional element 'saml2:AssertionURIRef' of XML schema type 'xsd:string' */
+	char *saml2__AssertionURIRef;
+	/** Optional element 'saml2:Assertion' of XML schema type 'saml2:AssertionType' */
+	struct saml2__AssertionType *saml2__Assertion;
+	/** Optional element 'saml2:EncryptedAssertion' of XML schema type 'saml2:EncryptedElementType' */
+	struct saml2__EncryptedElementType *saml2__EncryptedAssertion;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml2__union_EvidenceType */
+	long soap_type() const { return SOAP_TYPE___saml2__union_EvidenceType; }
+	/** Constructor with member initializations */
+	__saml2__union_EvidenceType()
+		: saml2__AssertionIDRef(), saml2__AssertionURIRef(), saml2__Assertion(), saml2__EncryptedAssertion() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml2__union_EvidenceType *SOAP_FMAC2
+	soap_instantiate___saml2__union_EvidenceType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3627,17 +4102,21 @@ struct SOAP_CMAC __saml2__union_EvidenceType {
 #define SOAP_TYPE_saml2__EvidenceType (287)
 /* complex XML schema type 'saml2:EvidenceType': */
 struct SOAP_CMAC saml2__EvidenceType {
-      public:
-        /** Sequence of elements '-union-EvidenceType' of XML schema type '-saml2:union-EvidenceType' stored in dynamic array __union_EvidenceType of length __size_EvidenceType */
-        int __size_EvidenceType;
-        struct __saml2__union_EvidenceType *__union_EvidenceType;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__EvidenceType */
-        long soap_type() const { return SOAP_TYPE_saml2__EvidenceType; }
-        /** Constructor with member initializations */
-        saml2__EvidenceType() : __size_EvidenceType(), __union_EvidenceType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__EvidenceType * SOAP_FMAC2 soap_instantiate_saml2__EvidenceType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements '-union-EvidenceType' of XML schema type '-saml2:union-EvidenceType' stored in dynamic
+	 * array __union_EvidenceType of length __size_EvidenceType */
+	int __size_EvidenceType;
+	struct __saml2__union_EvidenceType *__union_EvidenceType;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__EvidenceType */
+	long soap_type() const { return SOAP_TYPE_saml2__EvidenceType; }
+	/** Constructor with member initializations */
+	saml2__EvidenceType() : __size_EvidenceType(), __union_EvidenceType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__EvidenceType *SOAP_FMAC2 soap_instantiate_saml2__EvidenceType(struct soap *, int,
+																						   const char *, const char *,
+																						   size_t *);
 };
 #endif
 
@@ -3646,23 +4125,27 @@ struct SOAP_CMAC saml2__EvidenceType {
 #define SOAP_TYPE_saml2__AttributeType (289)
 /* complex XML schema type 'saml2:AttributeType': */
 struct SOAP_CMAC saml2__AttributeType {
-      public:
-        /** Sequence of elements 'saml2:AttributeValue' of XML schema type 'xsd:anyType' stored in dynamic array saml2__AttributeValue of length __sizeAttributeValue */
-        int __sizeAttributeValue;
-        char **saml2__AttributeValue;
-        /** Required attribute 'Name' of XML schema type 'xsd:string' */
-        char *Name;
-        /** Optional attribute 'NameFormat' of XML schema type 'xsd:string' */
-        char *NameFormat;
-        /** Optional attribute 'FriendlyName' of XML schema type 'xsd:string' */
-        char *FriendlyName;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__AttributeType */
-        long soap_type() const { return SOAP_TYPE_saml2__AttributeType; }
-        /** Constructor with member initializations */
-        saml2__AttributeType() : __sizeAttributeValue(), saml2__AttributeValue(), Name(), NameFormat(), FriendlyName() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__AttributeType * SOAP_FMAC2 soap_instantiate_saml2__AttributeType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements 'saml2:AttributeValue' of XML schema type 'xsd:anyType' stored in dynamic array
+	 * saml2__AttributeValue of length __sizeAttributeValue */
+	int __sizeAttributeValue;
+	char **saml2__AttributeValue;
+	/** Required attribute 'Name' of XML schema type 'xsd:string' */
+	char *Name;
+	/** Optional attribute 'NameFormat' of XML schema type 'xsd:string' */
+	char *NameFormat;
+	/** Optional attribute 'FriendlyName' of XML schema type 'xsd:string' */
+	char *FriendlyName;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__AttributeType */
+	long soap_type() const { return SOAP_TYPE_saml2__AttributeType; }
+	/** Constructor with member initializations */
+	saml2__AttributeType() : __sizeAttributeValue(), saml2__AttributeValue(), Name(), NameFormat(), FriendlyName() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__AttributeType *SOAP_FMAC2 soap_instantiate_saml2__AttributeType(struct soap *, int,
+																							 const char *, const char *,
+																							 size_t *);
 };
 #endif
 
@@ -3671,24 +4154,26 @@ struct SOAP_CMAC saml2__AttributeType {
 #define SOAP_TYPE_saml2__NameIDType (268)
 /* simple XML schema type 'saml2:NameIDType': */
 struct SOAP_CMAC saml2__NameIDType {
-      public:
-        /** Simple content of XML schema type 'xsd:string' wrapped by this struct */
-        char *__item;
-        /** Optional attribute 'Format' of XML schema type 'xsd:string' */
-        char *Format;
-        /** Optional attribute 'SPProvidedID' of XML schema type 'xsd:string' */
-        char *SPProvidedID;
-        /** Optional attribute 'NameQualifier' of XML schema type 'xsd:string' */
-        char *NameQualifier;
-        /** Optional attribute 'SPNameQualifier' of XML schema type 'xsd:string' */
-        char *SPNameQualifier;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__NameIDType */
-        long soap_type() const { return SOAP_TYPE_saml2__NameIDType; }
-        /** Constructor with member initializations */
-        saml2__NameIDType() : __item(), Format(), SPProvidedID(), NameQualifier(), SPNameQualifier() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__NameIDType * SOAP_FMAC2 soap_instantiate_saml2__NameIDType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Simple content of XML schema type 'xsd:string' wrapped by this struct */
+	char *__item;
+	/** Optional attribute 'Format' of XML schema type 'xsd:string' */
+	char *Format;
+	/** Optional attribute 'SPProvidedID' of XML schema type 'xsd:string' */
+	char *SPProvidedID;
+	/** Optional attribute 'NameQualifier' of XML schema type 'xsd:string' */
+	char *NameQualifier;
+	/** Optional attribute 'SPNameQualifier' of XML schema type 'xsd:string' */
+	char *SPNameQualifier;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__NameIDType */
+	long soap_type() const { return SOAP_TYPE_saml2__NameIDType; }
+	/** Constructor with member initializations */
+	saml2__NameIDType() : __item(), Format(), SPProvidedID(), NameQualifier(), SPNameQualifier() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__NameIDType *SOAP_FMAC2 soap_instantiate_saml2__NameIDType(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -3697,25 +4182,28 @@ struct SOAP_CMAC saml2__NameIDType {
 #define SOAP_TYPE_saml2__SubjectConfirmationDataType (273)
 /* complex XML schema type 'saml2:SubjectConfirmationDataType': */
 struct SOAP_CMAC saml2__SubjectConfirmationDataType {
-      public:
-        /** Optional attribute 'NotBefore' of XML schema type 'xsd:dateTime' */
-        time_t *NotBefore;
-        /** Optional attribute 'NotOnOrAfter' of XML schema type 'xsd:dateTime' */
-        time_t *NotOnOrAfter;
-        /** Optional attribute 'Recipient' of XML schema type 'xsd:string' */
-        char *Recipient;
-        /** Optional attribute 'InResponseTo' of XML schema type 'xsd:string' */
-        char *InResponseTo;
-        /** Optional attribute 'Address' of XML schema type 'xsd:string' */
-        char *Address;
-        char *__mixed;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__SubjectConfirmationDataType */
-        long soap_type() const { return SOAP_TYPE_saml2__SubjectConfirmationDataType; }
-        /** Constructor with member initializations */
-        saml2__SubjectConfirmationDataType() : NotBefore(), NotOnOrAfter(), Recipient(), InResponseTo(), Address(), __mixed() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__SubjectConfirmationDataType * SOAP_FMAC2 soap_instantiate_saml2__SubjectConfirmationDataType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional attribute 'NotBefore' of XML schema type 'xsd:dateTime' */
+	time_t *NotBefore;
+	/** Optional attribute 'NotOnOrAfter' of XML schema type 'xsd:dateTime' */
+	time_t *NotOnOrAfter;
+	/** Optional attribute 'Recipient' of XML schema type 'xsd:string' */
+	char *Recipient;
+	/** Optional attribute 'InResponseTo' of XML schema type 'xsd:string' */
+	char *InResponseTo;
+	/** Optional attribute 'Address' of XML schema type 'xsd:string' */
+	char *Address;
+	char *__mixed;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__SubjectConfirmationDataType */
+	long soap_type() const { return SOAP_TYPE_saml2__SubjectConfirmationDataType; }
+	/** Constructor with member initializations */
+	saml2__SubjectConfirmationDataType()
+		: NotBefore(), NotOnOrAfter(), Recipient(), InResponseTo(), Address(), __mixed() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__SubjectConfirmationDataType *SOAP_FMAC2
+	soap_instantiate_saml2__SubjectConfirmationDataType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3724,17 +4212,20 @@ struct SOAP_CMAC saml2__SubjectConfirmationDataType {
 #define SOAP_TYPE_saml2__AudienceRestrictionType (277)
 /* complex XML schema type 'saml2:AudienceRestrictionType': */
 struct SOAP_CMAC saml2__AudienceRestrictionType {
-      public:
-        /** Sequence of at least 1 elements 'saml2:Audience' of XML schema type 'xsd:string' stored in dynamic array saml2__Audience of length __sizeAudience */
-        int __sizeAudience;
-        char **saml2__Audience;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__AudienceRestrictionType */
-        long soap_type() const { return SOAP_TYPE_saml2__AudienceRestrictionType; }
-        /** Constructor with member initializations */
-        saml2__AudienceRestrictionType() : __sizeAudience(), saml2__Audience() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__AudienceRestrictionType * SOAP_FMAC2 soap_instantiate_saml2__AudienceRestrictionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of at least 1 elements 'saml2:Audience' of XML schema type 'xsd:string' stored in dynamic array
+	 * saml2__Audience of length __sizeAudience */
+	int __sizeAudience;
+	char **saml2__Audience;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__AudienceRestrictionType */
+	long soap_type() const { return SOAP_TYPE_saml2__AudienceRestrictionType; }
+	/** Constructor with member initializations */
+	saml2__AudienceRestrictionType() : __sizeAudience(), saml2__Audience() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__AudienceRestrictionType *SOAP_FMAC2
+	soap_instantiate_saml2__AudienceRestrictionType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3743,13 +4234,15 @@ struct SOAP_CMAC saml2__AudienceRestrictionType {
 #define SOAP_TYPE_saml2__OneTimeUseType (278)
 /* complex XML schema type 'saml2:OneTimeUseType': */
 struct SOAP_CMAC saml2__OneTimeUseType {
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__OneTimeUseType */
-        long soap_type() const { return SOAP_TYPE_saml2__OneTimeUseType; }
-        /** Constructor with member initializations */
-        saml2__OneTimeUseType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__OneTimeUseType * SOAP_FMAC2 soap_instantiate_saml2__OneTimeUseType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Return unique type id SOAP_TYPE_saml2__OneTimeUseType */
+	long soap_type() const { return SOAP_TYPE_saml2__OneTimeUseType; }
+	/** Constructor with member initializations */
+	saml2__OneTimeUseType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__OneTimeUseType *SOAP_FMAC2 soap_instantiate_saml2__OneTimeUseType(struct soap *, int,
+																							   const char *,
+																							   const char *, size_t *);
 };
 #endif
 
@@ -3758,19 +4251,22 @@ struct SOAP_CMAC saml2__OneTimeUseType {
 #define SOAP_TYPE_saml2__ProxyRestrictionType (279)
 /* complex XML schema type 'saml2:ProxyRestrictionType': */
 struct SOAP_CMAC saml2__ProxyRestrictionType {
-      public:
-        /** Sequence of elements 'saml2:Audience' of XML schema type 'xsd:string' stored in dynamic array saml2__Audience of length __sizeAudience */
-        int __sizeAudience;
-        char **saml2__Audience;
-        /** Optional attribute 'Count' of XML schema type 'xsd:string' */
-        char *Count;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__ProxyRestrictionType */
-        long soap_type() const { return SOAP_TYPE_saml2__ProxyRestrictionType; }
-        /** Constructor with member initializations */
-        saml2__ProxyRestrictionType() : __sizeAudience(), saml2__Audience(), Count() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__ProxyRestrictionType * SOAP_FMAC2 soap_instantiate_saml2__ProxyRestrictionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements 'saml2:Audience' of XML schema type 'xsd:string' stored in dynamic array saml2__Audience of
+	 * length __sizeAudience */
+	int __sizeAudience;
+	char **saml2__Audience;
+	/** Optional attribute 'Count' of XML schema type 'xsd:string' */
+	char *Count;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__ProxyRestrictionType */
+	long soap_type() const { return SOAP_TYPE_saml2__ProxyRestrictionType; }
+	/** Constructor with member initializations */
+	saml2__ProxyRestrictionType() : __sizeAudience(), saml2__Audience(), Count() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__ProxyRestrictionType *SOAP_FMAC2
+	soap_instantiate_saml2__ProxyRestrictionType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3779,24 +4275,27 @@ struct SOAP_CMAC saml2__ProxyRestrictionType {
 #define SOAP_TYPE_saml2__AuthnStatementType (282)
 /* complex XML schema type 'saml2:AuthnStatementType': */
 struct SOAP_CMAC saml2__AuthnStatementType {
-      public:
-        /** Optional element 'saml2:SubjectLocality' of XML schema type 'saml2:SubjectLocalityType' */
-        struct saml2__SubjectLocalityType *saml2__SubjectLocality;
-        /** Required element 'saml2:AuthnContext' of XML schema type 'saml2:AuthnContextType' */
-        struct saml2__AuthnContextType *saml2__AuthnContext;
-        /** Required attribute 'AuthnInstant' of XML schema type 'xsd:dateTime' */
-        time_t AuthnInstant;
-        /** Optional attribute 'SessionIndex' of XML schema type 'xsd:string' */
-        char *SessionIndex;
-        /** Optional attribute 'SessionNotOnOrAfter' of XML schema type 'xsd:dateTime' */
-        time_t *SessionNotOnOrAfter;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__AuthnStatementType */
-        long soap_type() const { return SOAP_TYPE_saml2__AuthnStatementType; }
-        /** Constructor with member initializations */
-        saml2__AuthnStatementType() : saml2__SubjectLocality(), saml2__AuthnContext(), AuthnInstant(), SessionIndex(), SessionNotOnOrAfter() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__AuthnStatementType * SOAP_FMAC2 soap_instantiate_saml2__AuthnStatementType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:SubjectLocality' of XML schema type 'saml2:SubjectLocalityType' */
+	struct saml2__SubjectLocalityType *saml2__SubjectLocality;
+	/** Required element 'saml2:AuthnContext' of XML schema type 'saml2:AuthnContextType' */
+	struct saml2__AuthnContextType *saml2__AuthnContext;
+	/** Required attribute 'AuthnInstant' of XML schema type 'xsd:dateTime' */
+	time_t AuthnInstant;
+	/** Optional attribute 'SessionIndex' of XML schema type 'xsd:string' */
+	char *SessionIndex;
+	/** Optional attribute 'SessionNotOnOrAfter' of XML schema type 'xsd:dateTime' */
+	time_t *SessionNotOnOrAfter;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__AuthnStatementType */
+	long soap_type() const { return SOAP_TYPE_saml2__AuthnStatementType; }
+	/** Constructor with member initializations */
+	saml2__AuthnStatementType()
+		: saml2__SubjectLocality(), saml2__AuthnContext(), AuthnInstant(), SessionIndex(), SessionNotOnOrAfter() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__AuthnStatementType *SOAP_FMAC2
+	soap_instantiate_saml2__AuthnStatementType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3805,23 +4304,26 @@ struct SOAP_CMAC saml2__AuthnStatementType {
 #define SOAP_TYPE_saml2__AuthzDecisionStatementType (285)
 /* complex XML schema type 'saml2:AuthzDecisionStatementType': */
 struct SOAP_CMAC saml2__AuthzDecisionStatementType {
-      public:
-        /** Sequence of at least 1 elements 'saml2:Action' of XML schema type 'saml2:ActionType' stored in dynamic array saml2__Action of length __sizeAction */
-        int __sizeAction;
-        struct saml2__ActionType *saml2__Action;
-        /** Optional element 'saml2:Evidence' of XML schema type 'saml2:EvidenceType' */
-        struct saml2__EvidenceType *saml2__Evidence;
-        /** Required attribute 'Resource' of XML schema type 'xsd:string' */
-        char *Resource;
-        /** Required attribute 'Decision' of XML schema type 'saml2:DecisionType' */
-        enum saml2__DecisionType Decision;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__AuthzDecisionStatementType */
-        long soap_type() const { return SOAP_TYPE_saml2__AuthzDecisionStatementType; }
-        /** Constructor with member initializations */
-        saml2__AuthzDecisionStatementType() : __sizeAction(), saml2__Action(), saml2__Evidence(), Resource(), Decision() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__AuthzDecisionStatementType * SOAP_FMAC2 soap_instantiate_saml2__AuthzDecisionStatementType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of at least 1 elements 'saml2:Action' of XML schema type 'saml2:ActionType' stored in dynamic array
+	 * saml2__Action of length __sizeAction */
+	int __sizeAction;
+	struct saml2__ActionType *saml2__Action;
+	/** Optional element 'saml2:Evidence' of XML schema type 'saml2:EvidenceType' */
+	struct saml2__EvidenceType *saml2__Evidence;
+	/** Required attribute 'Resource' of XML schema type 'xsd:string' */
+	char *Resource;
+	/** Required attribute 'Decision' of XML schema type 'saml2:DecisionType' */
+	enum saml2__DecisionType Decision;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__AuthzDecisionStatementType */
+	long soap_type() const { return SOAP_TYPE_saml2__AuthzDecisionStatementType; }
+	/** Constructor with member initializations */
+	saml2__AuthzDecisionStatementType() : __sizeAction(), saml2__Action(), saml2__Evidence(), Resource(), Decision() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__AuthzDecisionStatementType *SOAP_FMAC2
+	soap_instantiate_saml2__AuthzDecisionStatementType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3830,18 +4332,20 @@ struct SOAP_CMAC saml2__AuthzDecisionStatementType {
 #define SOAP_TYPE_saml2__ActionType (286)
 /* simple XML schema type 'saml2:ActionType': */
 struct SOAP_CMAC saml2__ActionType {
-      public:
-        /** Simple content of XML schema type 'xsd:string' wrapped by this struct */
-        char *__item;
-        /** Required attribute 'Namespace' of XML schema type 'xsd:string' */
-        char *Namespace;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__ActionType */
-        long soap_type() const { return SOAP_TYPE_saml2__ActionType; }
-        /** Constructor with member initializations */
-        saml2__ActionType() : __item(), Namespace() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__ActionType * SOAP_FMAC2 soap_instantiate_saml2__ActionType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Simple content of XML schema type 'xsd:string' wrapped by this struct */
+	char *__item;
+	/** Required attribute 'Namespace' of XML schema type 'xsd:string' */
+	char *Namespace;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__ActionType */
+	long soap_type() const { return SOAP_TYPE_saml2__ActionType; }
+	/** Constructor with member initializations */
+	saml2__ActionType() : __item(), Namespace() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__ActionType *SOAP_FMAC2 soap_instantiate_saml2__ActionType(struct soap *, int, const char *,
+																					   const char *, size_t *);
 };
 #endif
 
@@ -3850,18 +4354,20 @@ struct SOAP_CMAC saml2__ActionType {
 #define SOAP_TYPE___saml2__union_AttributeStatementType (322)
 /* Wrapper: */
 struct SOAP_CMAC __saml2__union_AttributeStatementType {
-      public:
-        /** Optional element 'saml2:Attribute' of XML schema type 'saml2:AttributeType' */
-        struct saml2__AttributeType *saml2__Attribute;
-        /** Optional element 'saml2:EncryptedAttribute' of XML schema type 'saml2:EncryptedElementType' */
-        struct saml2__EncryptedElementType *saml2__EncryptedAttribute;
-      public:
-        /** Return unique type id SOAP_TYPE___saml2__union_AttributeStatementType */
-        long soap_type() const { return SOAP_TYPE___saml2__union_AttributeStatementType; }
-        /** Constructor with member initializations */
-        __saml2__union_AttributeStatementType() : saml2__Attribute(), saml2__EncryptedAttribute() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 __saml2__union_AttributeStatementType * SOAP_FMAC2 soap_instantiate___saml2__union_AttributeStatementType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'saml2:Attribute' of XML schema type 'saml2:AttributeType' */
+	struct saml2__AttributeType *saml2__Attribute;
+	/** Optional element 'saml2:EncryptedAttribute' of XML schema type 'saml2:EncryptedElementType' */
+	struct saml2__EncryptedElementType *saml2__EncryptedAttribute;
+
+public:
+	/** Return unique type id SOAP_TYPE___saml2__union_AttributeStatementType */
+	long soap_type() const { return SOAP_TYPE___saml2__union_AttributeStatementType; }
+	/** Constructor with member initializations */
+	__saml2__union_AttributeStatementType() : saml2__Attribute(), saml2__EncryptedAttribute() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 __saml2__union_AttributeStatementType *SOAP_FMAC2
+	soap_instantiate___saml2__union_AttributeStatementType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3870,17 +4376,20 @@ struct SOAP_CMAC __saml2__union_AttributeStatementType {
 #define SOAP_TYPE_saml2__AttributeStatementType (288)
 /* complex XML schema type 'saml2:AttributeStatementType': */
 struct SOAP_CMAC saml2__AttributeStatementType {
-      public:
-        /** Sequence of elements '-union-AttributeStatementType' of XML schema type '-saml2:union-AttributeStatementType' stored in dynamic array __union_AttributeStatementType of length __size_AttributeStatementType */
-        int __size_AttributeStatementType;
-        struct __saml2__union_AttributeStatementType *__union_AttributeStatementType;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__AttributeStatementType */
-        long soap_type() const { return SOAP_TYPE_saml2__AttributeStatementType; }
-        /** Constructor with member initializations */
-        saml2__AttributeStatementType() : __size_AttributeStatementType(), __union_AttributeStatementType() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__AttributeStatementType * SOAP_FMAC2 soap_instantiate_saml2__AttributeStatementType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of elements '-union-AttributeStatementType' of XML schema type '-saml2:union-AttributeStatementType'
+	 * stored in dynamic array __union_AttributeStatementType of length __size_AttributeStatementType */
+	int __size_AttributeStatementType;
+	struct __saml2__union_AttributeStatementType *__union_AttributeStatementType;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__AttributeStatementType */
+	long soap_type() const { return SOAP_TYPE_saml2__AttributeStatementType; }
+	/** Constructor with member initializations */
+	saml2__AttributeStatementType() : __size_AttributeStatementType(), __union_AttributeStatementType() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__AttributeStatementType *SOAP_FMAC2
+	soap_instantiate_saml2__AttributeStatementType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3889,17 +4398,20 @@ struct SOAP_CMAC saml2__AttributeStatementType {
 #define SOAP_TYPE_saml2__KeyInfoConfirmationDataType (274)
 /* complex XML schema type 'saml2:KeyInfoConfirmationDataType': */
 struct SOAP_CMAC saml2__KeyInfoConfirmationDataType {
-      public:
-        /** Sequence of at least 1 elements 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' stored in dynamic array ds__KeyInfo of length __sizeds__KeyInfo */
-        int __sizeds__KeyInfo;
-        struct ds__KeyInfoType **ds__KeyInfo;
-      public:
-        /** Return unique type id SOAP_TYPE_saml2__KeyInfoConfirmationDataType */
-        long soap_type() const { return SOAP_TYPE_saml2__KeyInfoConfirmationDataType; }
-        /** Constructor with member initializations */
-        saml2__KeyInfoConfirmationDataType() : __sizeds__KeyInfo(), ds__KeyInfo() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 saml2__KeyInfoConfirmationDataType * SOAP_FMAC2 soap_instantiate_saml2__KeyInfoConfirmationDataType(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Sequence of at least 1 elements 'ds:KeyInfo' of XML schema type 'ds:KeyInfo' stored in dynamic array ds__KeyInfo
+	 * of length __sizeds__KeyInfo */
+	int __sizeds__KeyInfo;
+	struct ds__KeyInfoType **ds__KeyInfo;
+
+public:
+	/** Return unique type id SOAP_TYPE_saml2__KeyInfoConfirmationDataType */
+	long soap_type() const { return SOAP_TYPE_saml2__KeyInfoConfirmationDataType; }
+	/** Constructor with member initializations */
+	saml2__KeyInfoConfirmationDataType() : __sizeds__KeyInfo(), ds__KeyInfo() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 saml2__KeyInfoConfirmationDataType *SOAP_FMAC2
+	soap_instantiate_saml2__KeyInfoConfirmationDataType(struct soap *, int, const char *, const char *, size_t *);
 };
 #endif
 
@@ -3908,36 +4420,41 @@ struct SOAP_CMAC saml2__KeyInfoConfirmationDataType {
 #define SOAP_TYPE__wsse__Security (359)
 /* complex XML schema type 'wsse:Security': */
 struct SOAP_CMAC _wsse__Security {
-      public:
-        /** Optional element 'wsu:Timestamp' of XML schema type 'wsu:Timestamp' */
-        struct _wsu__Timestamp *wsu__Timestamp;
-        /** Optional element 'wsse:UsernameToken' of XML schema type 'wsse:UsernameToken' */
-        struct _wsse__UsernameToken *UsernameToken;
-        /** Optional element 'wsse:BinarySecurityToken' of XML schema type 'wsse:BinarySecurityToken' */
-        struct _wsse__BinarySecurityToken *BinarySecurityToken;
-        /** Optional element 'xenc:EncryptedKey' of XML schema type 'xenc:EncryptedKeyType' */
-        struct xenc__EncryptedKeyType *xenc__EncryptedKey;
-        /** Optional element 'xenc:ReferenceList' of XML schema type 'xenc:ReferenceList' */
-        struct _xenc__ReferenceList *xenc__ReferenceList;
-        /** Optional element 'wsc:SecurityContextToken' of XML schema type 'wsc:SecurityContextTokenType' */
-        struct wsc__SecurityContextTokenType *wsc__SecurityContextToken;
-        /** Optional element 'ds:Signature' of XML schema type 'ds:SignatureType' */
-        struct ds__SignatureType *ds__Signature;
-        /** Optional element 'saml1:Assertion' of XML schema type 'saml1:AssertionType' */
-        struct saml1__AssertionType *saml1__Assertion;
-        /** Optional element 'saml2:Assertion' of XML schema type 'saml2:AssertionType' */
-        struct saml2__AssertionType *saml2__Assertion;
-        /** Optional attribute 'SOAP-ENV:actor' of XML schema type 'xsd:string' */
-        char *SOAP_ENV__actor;
-        /** Optional attribute 'SOAP-ENV:role' of XML schema type 'xsd:string' */
-        char *SOAP_ENV__role;
-      public:
-        /** Return unique type id SOAP_TYPE__wsse__Security */
-        long soap_type() const { return SOAP_TYPE__wsse__Security; }
-        /** Constructor with member initializations */
-        _wsse__Security() : wsu__Timestamp(), UsernameToken(), BinarySecurityToken(), xenc__EncryptedKey(), xenc__ReferenceList(), wsc__SecurityContextToken(), ds__Signature(), saml1__Assertion(), saml2__Assertion(), SOAP_ENV__actor(), SOAP_ENV__role() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsse__Security * SOAP_FMAC2 soap_instantiate__wsse__Security(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'wsu:Timestamp' of XML schema type 'wsu:Timestamp' */
+	struct _wsu__Timestamp *wsu__Timestamp;
+	/** Optional element 'wsse:UsernameToken' of XML schema type 'wsse:UsernameToken' */
+	struct _wsse__UsernameToken *UsernameToken;
+	/** Optional element 'wsse:BinarySecurityToken' of XML schema type 'wsse:BinarySecurityToken' */
+	struct _wsse__BinarySecurityToken *BinarySecurityToken;
+	/** Optional element 'xenc:EncryptedKey' of XML schema type 'xenc:EncryptedKeyType' */
+	struct xenc__EncryptedKeyType *xenc__EncryptedKey;
+	/** Optional element 'xenc:ReferenceList' of XML schema type 'xenc:ReferenceList' */
+	struct _xenc__ReferenceList *xenc__ReferenceList;
+	/** Optional element 'wsc:SecurityContextToken' of XML schema type 'wsc:SecurityContextTokenType' */
+	struct wsc__SecurityContextTokenType *wsc__SecurityContextToken;
+	/** Optional element 'ds:Signature' of XML schema type 'ds:SignatureType' */
+	struct ds__SignatureType *ds__Signature;
+	/** Optional element 'saml1:Assertion' of XML schema type 'saml1:AssertionType' */
+	struct saml1__AssertionType *saml1__Assertion;
+	/** Optional element 'saml2:Assertion' of XML schema type 'saml2:AssertionType' */
+	struct saml2__AssertionType *saml2__Assertion;
+	/** Optional attribute 'SOAP-ENV:actor' of XML schema type 'xsd:string' */
+	char *SOAP_ENV__actor;
+	/** Optional attribute 'SOAP-ENV:role' of XML schema type 'xsd:string' */
+	char *SOAP_ENV__role;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsse__Security */
+	long soap_type() const { return SOAP_TYPE__wsse__Security; }
+	/** Constructor with member initializations */
+	_wsse__Security()
+		: wsu__Timestamp(), UsernameToken(), BinarySecurityToken(), xenc__EncryptedKey(), xenc__ReferenceList(),
+		  wsc__SecurityContextToken(), ds__Signature(), saml1__Assertion(), saml2__Assertion(), SOAP_ENV__actor(),
+		  SOAP_ENV__role() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsse__Security *SOAP_FMAC2 soap_instantiate__wsse__Security(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 
@@ -3946,18 +4463,20 @@ struct SOAP_CMAC _wsse__Security {
 #define SOAP_TYPE__wsse__Password (107)
 /* simple XML schema type 'wsse:Password': */
 struct SOAP_CMAC _wsse__Password {
-      public:
-        /** Simple content of XML schema type 'xsd:string' wrapped by this struct */
-        char *__item;
-        /** Optional attribute 'Type' of XML schema type 'xsd:string' */
-        char *Type;
-      public:
-        /** Return unique type id SOAP_TYPE__wsse__Password */
-        long soap_type() const { return SOAP_TYPE__wsse__Password; }
-        /** Constructor with member initializations */
-        _wsse__Password() : __item(), Type() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 _wsse__Password * SOAP_FMAC2 soap_instantiate__wsse__Password(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Simple content of XML schema type 'xsd:string' wrapped by this struct */
+	char *__item;
+	/** Optional attribute 'Type' of XML schema type 'xsd:string' */
+	char *Type;
+
+public:
+	/** Return unique type id SOAP_TYPE__wsse__Password */
+	long soap_type() const { return SOAP_TYPE__wsse__Password; }
+	/** Constructor with member initializations */
+	_wsse__Password() : __item(), Type() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 _wsse__Password *SOAP_FMAC2 soap_instantiate__wsse__Password(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 
@@ -3967,16 +4486,18 @@ struct SOAP_CMAC _wsse__Password {
 #define SOAP_TYPE_SOAP_ENV__Header (365)
 /* SOAP_ENV__Header: */
 struct SOAP_CMAC SOAP_ENV__Header {
-      public:
-        /** MustUnderstand */
-        struct _wsse__Security *wsse__Security;
-      public:
-        /** Return unique type id SOAP_TYPE_SOAP_ENV__Header */
-        long soap_type() const { return SOAP_TYPE_SOAP_ENV__Header; }
-        /** Constructor with member initializations */
-        SOAP_ENV__Header() : wsse__Security() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 SOAP_ENV__Header * SOAP_FMAC2 soap_instantiate_SOAP_ENV__Header(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** MustUnderstand */
+	struct _wsse__Security *wsse__Security;
+
+public:
+	/** Return unique type id SOAP_TYPE_SOAP_ENV__Header */
+	long soap_type() const { return SOAP_TYPE_SOAP_ENV__Header; }
+	/** Constructor with member initializations */
+	SOAP_ENV__Header() : wsse__Security() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 SOAP_ENV__Header *SOAP_FMAC2 soap_instantiate_SOAP_ENV__Header(struct soap *, int, const char *,
+																					 const char *, size_t *);
 };
 #endif
 #endif
@@ -3985,21 +4506,24 @@ struct SOAP_CMAC SOAP_ENV__Header {
 #ifndef WITH_NOGLOBAL
 #ifndef SOAP_TYPE_SOAP_ENV__Code
 #define SOAP_TYPE_SOAP_ENV__Code (367)
-/* Type SOAP_ENV__Code is a recursive data type, (in)directly referencing itself through its (base or derived class) members */
+/* Type SOAP_ENV__Code is a recursive data type, (in)directly referencing itself through its (base or derived class)
+ * members */
 /* SOAP_ENV__Code: */
 struct SOAP_CMAC SOAP_ENV__Code {
-      public:
-        /** Optional element 'SOAP-ENV:Value' of XML schema type 'xsd:QName' */
-        char *SOAP_ENV__Value;
-        /** Optional element 'SOAP-ENV:Subcode' of XML schema type 'SOAP-ENV:Code' */
-        struct SOAP_ENV__Code *SOAP_ENV__Subcode;
-      public:
-        /** Return unique type id SOAP_TYPE_SOAP_ENV__Code */
-        long soap_type() const { return SOAP_TYPE_SOAP_ENV__Code; }
-        /** Constructor with member initializations */
-        SOAP_ENV__Code() : SOAP_ENV__Value(), SOAP_ENV__Subcode() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 SOAP_ENV__Code * SOAP_FMAC2 soap_instantiate_SOAP_ENV__Code(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'SOAP-ENV:Value' of XML schema type 'xsd:QName' */
+	char *SOAP_ENV__Value;
+	/** Optional element 'SOAP-ENV:Subcode' of XML schema type 'SOAP-ENV:Code' */
+	struct SOAP_ENV__Code *SOAP_ENV__Subcode;
+
+public:
+	/** Return unique type id SOAP_TYPE_SOAP_ENV__Code */
+	long soap_type() const { return SOAP_TYPE_SOAP_ENV__Code; }
+	/** Constructor with member initializations */
+	SOAP_ENV__Code() : SOAP_ENV__Value(), SOAP_ENV__Subcode() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 SOAP_ENV__Code *SOAP_FMAC2 soap_instantiate_SOAP_ENV__Code(struct soap *, int, const char *,
+																				 const char *, size_t *);
 };
 #endif
 #endif
@@ -4010,19 +4534,22 @@ struct SOAP_CMAC SOAP_ENV__Code {
 #define SOAP_TYPE_SOAP_ENV__Detail (369)
 /* SOAP_ENV__Detail: */
 struct SOAP_CMAC SOAP_ENV__Detail {
-      public:
-        char *__any;
-        /** Any type of element 'fault' assigned to fault with its SOAP_TYPE_<typename> assigned to __type */
-        /** Do not create a cyclic data structure through this member unless SOAP encoding or SOAP_XML_GRAPH are used for id-ref serialization */
-        int __type;
-        void *fault;
-      public:
-        /** Return unique type id SOAP_TYPE_SOAP_ENV__Detail */
-        long soap_type() const { return SOAP_TYPE_SOAP_ENV__Detail; }
-        /** Constructor with member initializations */
-        SOAP_ENV__Detail() : __any(), __type(), fault() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 SOAP_ENV__Detail * SOAP_FMAC2 soap_instantiate_SOAP_ENV__Detail(struct soap*, int, const char*, const char*, size_t*);
+public:
+	char *__any;
+	/** Any type of element 'fault' assigned to fault with its SOAP_TYPE_<typename> assigned to __type */
+	/** Do not create a cyclic data structure through this member unless SOAP encoding or SOAP_XML_GRAPH are used for
+	 * id-ref serialization */
+	int __type;
+	void *fault;
+
+public:
+	/** Return unique type id SOAP_TYPE_SOAP_ENV__Detail */
+	long soap_type() const { return SOAP_TYPE_SOAP_ENV__Detail; }
+	/** Constructor with member initializations */
+	SOAP_ENV__Detail() : __any(), __type(), fault() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 SOAP_ENV__Detail *SOAP_FMAC2 soap_instantiate_SOAP_ENV__Detail(struct soap *, int, const char *,
+																					 const char *, size_t *);
 };
 #endif
 #endif
@@ -4033,16 +4560,18 @@ struct SOAP_CMAC SOAP_ENV__Detail {
 #define SOAP_TYPE_SOAP_ENV__Reason (372)
 /* SOAP_ENV__Reason: */
 struct SOAP_CMAC SOAP_ENV__Reason {
-      public:
-        /** Optional element 'SOAP-ENV:Text' of XML schema type 'xsd:string' */
-        char *SOAP_ENV__Text;
-      public:
-        /** Return unique type id SOAP_TYPE_SOAP_ENV__Reason */
-        long soap_type() const { return SOAP_TYPE_SOAP_ENV__Reason; }
-        /** Constructor with member initializations */
-        SOAP_ENV__Reason() : SOAP_ENV__Text() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 SOAP_ENV__Reason * SOAP_FMAC2 soap_instantiate_SOAP_ENV__Reason(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'SOAP-ENV:Text' of XML schema type 'xsd:string' */
+	char *SOAP_ENV__Text;
+
+public:
+	/** Return unique type id SOAP_TYPE_SOAP_ENV__Reason */
+	long soap_type() const { return SOAP_TYPE_SOAP_ENV__Reason; }
+	/** Constructor with member initializations */
+	SOAP_ENV__Reason() : SOAP_ENV__Text() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 SOAP_ENV__Reason *SOAP_FMAC2 soap_instantiate_SOAP_ENV__Reason(struct soap *, int, const char *,
+																					 const char *, size_t *);
 };
 #endif
 #endif
@@ -4053,32 +4582,36 @@ struct SOAP_CMAC SOAP_ENV__Reason {
 #define SOAP_TYPE_SOAP_ENV__Fault (373)
 /* SOAP_ENV__Fault: */
 struct SOAP_CMAC SOAP_ENV__Fault {
-      public:
-        /** Optional element 'faultcode' of XML schema type 'xsd:QName' */
-        char *faultcode;
-        /** Optional element 'faultstring' of XML schema type 'xsd:string' */
-        char *faultstring;
-        /** Optional element 'faultactor' of XML schema type 'xsd:string' */
-        char *faultactor;
-        /** Optional element 'detail' of XML schema type 'SOAP-ENV:Detail' */
-        struct SOAP_ENV__Detail *detail;
-        /** Optional element 'SOAP-ENV:Code' of XML schema type 'SOAP-ENV:Code' */
-        struct SOAP_ENV__Code *SOAP_ENV__Code;
-        /** Optional element 'SOAP-ENV:Reason' of XML schema type 'SOAP-ENV:Reason' */
-        struct SOAP_ENV__Reason *SOAP_ENV__Reason;
-        /** Optional element 'SOAP-ENV:Node' of XML schema type 'xsd:string' */
-        char *SOAP_ENV__Node;
-        /** Optional element 'SOAP-ENV:Role' of XML schema type 'xsd:string' */
-        char *SOAP_ENV__Role;
-        /** Optional element 'SOAP-ENV:Detail' of XML schema type 'SOAP-ENV:Detail' */
-        struct SOAP_ENV__Detail *SOAP_ENV__Detail;
-      public:
-        /** Return unique type id SOAP_TYPE_SOAP_ENV__Fault */
-        long soap_type() const { return SOAP_TYPE_SOAP_ENV__Fault; }
-        /** Constructor with member initializations */
-        SOAP_ENV__Fault() : faultcode(), faultstring(), faultactor(), detail(), SOAP_ENV__Code(), SOAP_ENV__Reason(), SOAP_ENV__Node(), SOAP_ENV__Role(), SOAP_ENV__Detail() { }
-        /** Friend allocator */
-        friend SOAP_FMAC1 SOAP_ENV__Fault * SOAP_FMAC2 soap_instantiate_SOAP_ENV__Fault(struct soap*, int, const char*, const char*, size_t*);
+public:
+	/** Optional element 'faultcode' of XML schema type 'xsd:QName' */
+	char *faultcode;
+	/** Optional element 'faultstring' of XML schema type 'xsd:string' */
+	char *faultstring;
+	/** Optional element 'faultactor' of XML schema type 'xsd:string' */
+	char *faultactor;
+	/** Optional element 'detail' of XML schema type 'SOAP-ENV:Detail' */
+	struct SOAP_ENV__Detail *detail;
+	/** Optional element 'SOAP-ENV:Code' of XML schema type 'SOAP-ENV:Code' */
+	struct SOAP_ENV__Code *SOAP_ENV__Code;
+	/** Optional element 'SOAP-ENV:Reason' of XML schema type 'SOAP-ENV:Reason' */
+	struct SOAP_ENV__Reason *SOAP_ENV__Reason;
+	/** Optional element 'SOAP-ENV:Node' of XML schema type 'xsd:string' */
+	char *SOAP_ENV__Node;
+	/** Optional element 'SOAP-ENV:Role' of XML schema type 'xsd:string' */
+	char *SOAP_ENV__Role;
+	/** Optional element 'SOAP-ENV:Detail' of XML schema type 'SOAP-ENV:Detail' */
+	struct SOAP_ENV__Detail *SOAP_ENV__Detail;
+
+public:
+	/** Return unique type id SOAP_TYPE_SOAP_ENV__Fault */
+	long soap_type() const { return SOAP_TYPE_SOAP_ENV__Fault; }
+	/** Constructor with member initializations */
+	SOAP_ENV__Fault()
+		: faultcode(), faultstring(), faultactor(), detail(), SOAP_ENV__Code(), SOAP_ENV__Reason(), SOAP_ENV__Node(),
+		  SOAP_ENV__Role(), SOAP_ENV__Detail() {}
+	/** Friend allocator */
+	friend SOAP_FMAC1 SOAP_ENV__Fault *SOAP_FMAC2 soap_instantiate_SOAP_ENV__Fault(struct soap *, int, const char *,
+																				   const char *, size_t *);
 };
 #endif
 #endif
@@ -4088,7 +4621,6 @@ struct SOAP_CMAC SOAP_ENV__Fault {
  * Typedefs                                                                   *
  *                                                                            *
 \******************************************************************************/
-
 
 /* (built-in):0 */
 #ifndef SOAP_TYPE__XML
@@ -4527,7 +5059,6 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
  * Serializable Types                                                         *
  *                                                                            *
 \******************************************************************************/
-
 
 /* xsd__byte has binding name 'xsd__byte' for type 'xsd:byte' */
 #ifndef SOAP_TYPE_xsd__byte
@@ -5019,7 +5550,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml2__AttributeType (289)
 #endif
 
-/* struct saml2__AttributeStatementType has binding name 'saml2__AttributeStatementType' for type 'saml2:AttributeStatementType' */
+/* struct saml2__AttributeStatementType has binding name 'saml2__AttributeStatementType' for type
+ * 'saml2:AttributeStatementType' */
 #ifndef SOAP_TYPE_saml2__AttributeStatementType
 #define SOAP_TYPE_saml2__AttributeStatementType (288)
 #endif
@@ -5034,7 +5566,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml2__ActionType (286)
 #endif
 
-/* struct saml2__AuthzDecisionStatementType has binding name 'saml2__AuthzDecisionStatementType' for type 'saml2:AuthzDecisionStatementType' */
+/* struct saml2__AuthzDecisionStatementType has binding name 'saml2__AuthzDecisionStatementType' for type
+ * 'saml2:AuthzDecisionStatementType' */
 #ifndef SOAP_TYPE_saml2__AuthzDecisionStatementType
 #define SOAP_TYPE_saml2__AuthzDecisionStatementType (285)
 #endif
@@ -5044,7 +5577,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml2__AuthnContextType (284)
 #endif
 
-/* struct saml2__SubjectLocalityType has binding name 'saml2__SubjectLocalityType' for type 'saml2:SubjectLocalityType' */
+/* struct saml2__SubjectLocalityType has binding name 'saml2__SubjectLocalityType' for type 'saml2:SubjectLocalityType'
+ */
 #ifndef SOAP_TYPE_saml2__SubjectLocalityType
 #define SOAP_TYPE_saml2__SubjectLocalityType (283)
 #endif
@@ -5054,7 +5588,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml2__AuthnStatementType (282)
 #endif
 
-/* struct saml2__StatementAbstractType has binding name 'saml2__StatementAbstractType' for type 'saml2:StatementAbstractType' */
+/* struct saml2__StatementAbstractType has binding name 'saml2__StatementAbstractType' for type
+ * 'saml2:StatementAbstractType' */
 #ifndef SOAP_TYPE_saml2__StatementAbstractType
 #define SOAP_TYPE_saml2__StatementAbstractType (281)
 #endif
@@ -5064,7 +5599,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml2__AdviceType (280)
 #endif
 
-/* struct saml2__ProxyRestrictionType has binding name 'saml2__ProxyRestrictionType' for type 'saml2:ProxyRestrictionType' */
+/* struct saml2__ProxyRestrictionType has binding name 'saml2__ProxyRestrictionType' for type
+ * 'saml2:ProxyRestrictionType' */
 #ifndef SOAP_TYPE_saml2__ProxyRestrictionType
 #define SOAP_TYPE_saml2__ProxyRestrictionType (279)
 #endif
@@ -5074,12 +5610,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml2__OneTimeUseType (278)
 #endif
 
-/* struct saml2__AudienceRestrictionType has binding name 'saml2__AudienceRestrictionType' for type 'saml2:AudienceRestrictionType' */
+/* struct saml2__AudienceRestrictionType has binding name 'saml2__AudienceRestrictionType' for type
+ * 'saml2:AudienceRestrictionType' */
 #ifndef SOAP_TYPE_saml2__AudienceRestrictionType
 #define SOAP_TYPE_saml2__AudienceRestrictionType (277)
 #endif
 
-/* struct saml2__ConditionAbstractType has binding name 'saml2__ConditionAbstractType' for type 'saml2:ConditionAbstractType' */
+/* struct saml2__ConditionAbstractType has binding name 'saml2__ConditionAbstractType' for type
+ * 'saml2:ConditionAbstractType' */
 #ifndef SOAP_TYPE_saml2__ConditionAbstractType
 #define SOAP_TYPE_saml2__ConditionAbstractType (276)
 #endif
@@ -5089,17 +5627,20 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml2__ConditionsType (275)
 #endif
 
-/* struct saml2__KeyInfoConfirmationDataType has binding name 'saml2__KeyInfoConfirmationDataType' for type 'saml2:KeyInfoConfirmationDataType' */
+/* struct saml2__KeyInfoConfirmationDataType has binding name 'saml2__KeyInfoConfirmationDataType' for type
+ * 'saml2:KeyInfoConfirmationDataType' */
 #ifndef SOAP_TYPE_saml2__KeyInfoConfirmationDataType
 #define SOAP_TYPE_saml2__KeyInfoConfirmationDataType (274)
 #endif
 
-/* struct saml2__SubjectConfirmationDataType has binding name 'saml2__SubjectConfirmationDataType' for type 'saml2:SubjectConfirmationDataType' */
+/* struct saml2__SubjectConfirmationDataType has binding name 'saml2__SubjectConfirmationDataType' for type
+ * 'saml2:SubjectConfirmationDataType' */
 #ifndef SOAP_TYPE_saml2__SubjectConfirmationDataType
 #define SOAP_TYPE_saml2__SubjectConfirmationDataType (273)
 #endif
 
-/* struct saml2__SubjectConfirmationType has binding name 'saml2__SubjectConfirmationType' for type 'saml2:SubjectConfirmationType' */
+/* struct saml2__SubjectConfirmationType has binding name 'saml2__SubjectConfirmationType' for type
+ * 'saml2:SubjectConfirmationType' */
 #ifndef SOAP_TYPE_saml2__SubjectConfirmationType
 #define SOAP_TYPE_saml2__SubjectConfirmationType (272)
 #endif
@@ -5114,7 +5655,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml2__AssertionType (270)
 #endif
 
-/* struct saml2__EncryptedElementType has binding name 'saml2__EncryptedElementType' for type 'saml2:EncryptedElementType' */
+/* struct saml2__EncryptedElementType has binding name 'saml2__EncryptedElementType' for type
+ * 'saml2:EncryptedElementType' */
 #ifndef SOAP_TYPE_saml2__EncryptedElementType
 #define SOAP_TYPE_saml2__EncryptedElementType (269)
 #endif
@@ -5234,12 +5776,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml1__AttributeType (209)
 #endif
 
-/* struct saml1__AttributeDesignatorType has binding name 'saml1__AttributeDesignatorType' for type 'saml1:AttributeDesignatorType' */
+/* struct saml1__AttributeDesignatorType has binding name 'saml1__AttributeDesignatorType' for type
+ * 'saml1:AttributeDesignatorType' */
 #ifndef SOAP_TYPE_saml1__AttributeDesignatorType
 #define SOAP_TYPE_saml1__AttributeDesignatorType (208)
 #endif
 
-/* struct saml1__AttributeStatementType has binding name 'saml1__AttributeStatementType' for type 'saml1:AttributeStatementType' */
+/* struct saml1__AttributeStatementType has binding name 'saml1__AttributeStatementType' for type
+ * 'saml1:AttributeStatementType' */
 #ifndef SOAP_TYPE_saml1__AttributeStatementType
 #define SOAP_TYPE_saml1__AttributeStatementType (207)
 #endif
@@ -5254,27 +5798,32 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml1__ActionType (205)
 #endif
 
-/* struct saml1__AuthorizationDecisionStatementType has binding name 'saml1__AuthorizationDecisionStatementType' for type 'saml1:AuthorizationDecisionStatementType' */
+/* struct saml1__AuthorizationDecisionStatementType has binding name 'saml1__AuthorizationDecisionStatementType' for
+ * type 'saml1:AuthorizationDecisionStatementType' */
 #ifndef SOAP_TYPE_saml1__AuthorizationDecisionStatementType
 #define SOAP_TYPE_saml1__AuthorizationDecisionStatementType (204)
 #endif
 
-/* struct saml1__AuthorityBindingType has binding name 'saml1__AuthorityBindingType' for type 'saml1:AuthorityBindingType' */
+/* struct saml1__AuthorityBindingType has binding name 'saml1__AuthorityBindingType' for type
+ * 'saml1:AuthorityBindingType' */
 #ifndef SOAP_TYPE_saml1__AuthorityBindingType
 #define SOAP_TYPE_saml1__AuthorityBindingType (203)
 #endif
 
-/* struct saml1__SubjectLocalityType has binding name 'saml1__SubjectLocalityType' for type 'saml1:SubjectLocalityType' */
+/* struct saml1__SubjectLocalityType has binding name 'saml1__SubjectLocalityType' for type 'saml1:SubjectLocalityType'
+ */
 #ifndef SOAP_TYPE_saml1__SubjectLocalityType
 #define SOAP_TYPE_saml1__SubjectLocalityType (202)
 #endif
 
-/* struct saml1__AuthenticationStatementType has binding name 'saml1__AuthenticationStatementType' for type 'saml1:AuthenticationStatementType' */
+/* struct saml1__AuthenticationStatementType has binding name 'saml1__AuthenticationStatementType' for type
+ * 'saml1:AuthenticationStatementType' */
 #ifndef SOAP_TYPE_saml1__AuthenticationStatementType
 #define SOAP_TYPE_saml1__AuthenticationStatementType (201)
 #endif
 
-/* struct saml1__SubjectConfirmationType has binding name 'saml1__SubjectConfirmationType' for type 'saml1:SubjectConfirmationType' */
+/* struct saml1__SubjectConfirmationType has binding name 'saml1__SubjectConfirmationType' for type
+ * 'saml1:SubjectConfirmationType' */
 #ifndef SOAP_TYPE_saml1__SubjectConfirmationType
 #define SOAP_TYPE_saml1__SubjectConfirmationType (200)
 #endif
@@ -5289,12 +5838,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml1__SubjectType (198)
 #endif
 
-/* struct saml1__SubjectStatementAbstractType has binding name 'saml1__SubjectStatementAbstractType' for type 'saml1:SubjectStatementAbstractType' */
+/* struct saml1__SubjectStatementAbstractType has binding name 'saml1__SubjectStatementAbstractType' for type
+ * 'saml1:SubjectStatementAbstractType' */
 #ifndef SOAP_TYPE_saml1__SubjectStatementAbstractType
 #define SOAP_TYPE_saml1__SubjectStatementAbstractType (197)
 #endif
 
-/* struct saml1__StatementAbstractType has binding name 'saml1__StatementAbstractType' for type 'saml1:StatementAbstractType' */
+/* struct saml1__StatementAbstractType has binding name 'saml1__StatementAbstractType' for type
+ * 'saml1:StatementAbstractType' */
 #ifndef SOAP_TYPE_saml1__StatementAbstractType
 #define SOAP_TYPE_saml1__StatementAbstractType (196)
 #endif
@@ -5304,17 +5855,20 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_saml1__AdviceType (195)
 #endif
 
-/* struct saml1__DoNotCacheConditionType has binding name 'saml1__DoNotCacheConditionType' for type 'saml1:DoNotCacheConditionType' */
+/* struct saml1__DoNotCacheConditionType has binding name 'saml1__DoNotCacheConditionType' for type
+ * 'saml1:DoNotCacheConditionType' */
 #ifndef SOAP_TYPE_saml1__DoNotCacheConditionType
 #define SOAP_TYPE_saml1__DoNotCacheConditionType (194)
 #endif
 
-/* struct saml1__AudienceRestrictionConditionType has binding name 'saml1__AudienceRestrictionConditionType' for type 'saml1:AudienceRestrictionConditionType' */
+/* struct saml1__AudienceRestrictionConditionType has binding name 'saml1__AudienceRestrictionConditionType' for type
+ * 'saml1:AudienceRestrictionConditionType' */
 #ifndef SOAP_TYPE_saml1__AudienceRestrictionConditionType
 #define SOAP_TYPE_saml1__AudienceRestrictionConditionType (193)
 #endif
 
-/* struct saml1__ConditionAbstractType has binding name 'saml1__ConditionAbstractType' for type 'saml1:ConditionAbstractType' */
+/* struct saml1__ConditionAbstractType has binding name 'saml1__ConditionAbstractType' for type
+ * 'saml1:ConditionAbstractType' */
 #ifndef SOAP_TYPE_saml1__ConditionAbstractType
 #define SOAP_TYPE_saml1__ConditionAbstractType (192)
 #endif
@@ -5339,7 +5893,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_wsc__DerivedKeyTokenType (183)
 #endif
 
-/* struct wsc__SecurityContextTokenType has binding name 'wsc__SecurityContextTokenType' for type 'wsc:SecurityContextTokenType' */
+/* struct wsc__SecurityContextTokenType has binding name 'wsc__SecurityContextTokenType' for type
+ * 'wsc:SecurityContextTokenType' */
 #ifndef SOAP_TYPE_wsc__SecurityContextTokenType
 #define SOAP_TYPE_wsc__SecurityContextTokenType (182)
 #endif
@@ -5349,12 +5904,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE__xenc__ReferenceList (168)
 #endif
 
-/* struct xenc__EncryptionPropertyType has binding name 'xenc__EncryptionPropertyType' for type 'xenc:EncryptionPropertyType' */
+/* struct xenc__EncryptionPropertyType has binding name 'xenc__EncryptionPropertyType' for type
+ * 'xenc:EncryptionPropertyType' */
 #ifndef SOAP_TYPE_xenc__EncryptionPropertyType
 #define SOAP_TYPE_xenc__EncryptionPropertyType (167)
 #endif
 
-/* struct xenc__EncryptionPropertiesType has binding name 'xenc__EncryptionPropertiesType' for type 'xenc:EncryptionPropertiesType' */
+/* struct xenc__EncryptionPropertiesType has binding name 'xenc__EncryptionPropertiesType' for type
+ * 'xenc:EncryptionPropertiesType' */
 #ifndef SOAP_TYPE_xenc__EncryptionPropertiesType
 #define SOAP_TYPE_xenc__EncryptionPropertiesType (166)
 #endif
@@ -5394,7 +5951,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_xenc__CipherDataType (159)
 #endif
 
-/* struct xenc__EncryptionMethodType has binding name 'xenc__EncryptionMethodType' for type 'xenc:EncryptionMethodType' */
+/* struct xenc__EncryptionMethodType has binding name 'xenc__EncryptionMethodType' for type 'xenc:EncryptionMethodType'
+ */
 #ifndef SOAP_TYPE_xenc__EncryptionMethodType
 #define SOAP_TYPE_xenc__EncryptionMethodType (158)
 #endif
@@ -5469,7 +6027,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_ds__SignatureMethodType (129)
 #endif
 
-/* struct ds__CanonicalizationMethodType has binding name 'ds__CanonicalizationMethodType' for type 'ds:CanonicalizationMethodType' */
+/* struct ds__CanonicalizationMethodType has binding name 'ds__CanonicalizationMethodType' for type
+ * 'ds:CanonicalizationMethodType' */
 #ifndef SOAP_TYPE_ds__CanonicalizationMethodType
 #define SOAP_TYPE_ds__CanonicalizationMethodType (128)
 #endif
@@ -5569,7 +6128,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTods__SignatureType (364)
 #endif
 
-/* struct wsc__SecurityContextTokenType * has binding name 'PointerTowsc__SecurityContextTokenType' for type 'wsc:SecurityContextTokenType' */
+/* struct wsc__SecurityContextTokenType * has binding name 'PointerTowsc__SecurityContextTokenType' for type
+ * 'wsc:SecurityContextTokenType' */
 #ifndef SOAP_TYPE_PointerTowsc__SecurityContextTokenType
 #define SOAP_TYPE_PointerTowsc__SecurityContextTokenType (363)
 #endif
@@ -5634,7 +6194,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerToPointerTo_ds__KeyInfo (325)
 #endif
 
-/* struct __saml2__union_AttributeStatementType * has binding name 'PointerTo__saml2__union_AttributeStatementType' for type '-saml2:union-AttributeStatementType' */
+/* struct __saml2__union_AttributeStatementType * has binding name 'PointerTo__saml2__union_AttributeStatementType' for
+ * type '-saml2:union-AttributeStatementType' */
 #ifndef SOAP_TYPE_PointerTo__saml2__union_AttributeStatementType
 #define SOAP_TYPE_PointerTo__saml2__union_AttributeStatementType (324)
 #endif
@@ -5654,22 +6215,26 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTosaml2__ActionType (320)
 #endif
 
-/* struct saml2__AuthnContextType * has binding name 'PointerTosaml2__AuthnContextType' for type 'saml2:AuthnContextType' */
+/* struct saml2__AuthnContextType * has binding name 'PointerTosaml2__AuthnContextType' for type
+ * 'saml2:AuthnContextType' */
 #ifndef SOAP_TYPE_PointerTosaml2__AuthnContextType
 #define SOAP_TYPE_PointerTosaml2__AuthnContextType (319)
 #endif
 
-/* struct saml2__SubjectLocalityType * has binding name 'PointerTosaml2__SubjectLocalityType' for type 'saml2:SubjectLocalityType' */
+/* struct saml2__SubjectLocalityType * has binding name 'PointerTosaml2__SubjectLocalityType' for type
+ * 'saml2:SubjectLocalityType' */
 #ifndef SOAP_TYPE_PointerTosaml2__SubjectLocalityType
 #define SOAP_TYPE_PointerTosaml2__SubjectLocalityType (318)
 #endif
 
-/* struct __saml2__union_EvidenceType * has binding name 'PointerTo__saml2__union_EvidenceType' for type '-saml2:union-EvidenceType' */
+/* struct __saml2__union_EvidenceType * has binding name 'PointerTo__saml2__union_EvidenceType' for type
+ * '-saml2:union-EvidenceType' */
 #ifndef SOAP_TYPE_PointerTo__saml2__union_EvidenceType
 #define SOAP_TYPE_PointerTo__saml2__union_EvidenceType (317)
 #endif
 
-/* struct __saml2__union_AdviceType * has binding name 'PointerTo__saml2__union_AdviceType' for type '-saml2:union-AdviceType' */
+/* struct __saml2__union_AdviceType * has binding name 'PointerTo__saml2__union_AdviceType' for type
+ * '-saml2:union-AdviceType' */
 #ifndef SOAP_TYPE_PointerTo__saml2__union_AdviceType
 #define SOAP_TYPE_PointerTo__saml2__union_AdviceType (315)
 #endif
@@ -5679,12 +6244,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTosaml2__AssertionType (314)
 #endif
 
-/* struct __saml2__union_ConditionsType * has binding name 'PointerTo__saml2__union_ConditionsType' for type '-saml2:union-ConditionsType' */
+/* struct __saml2__union_ConditionsType * has binding name 'PointerTo__saml2__union_ConditionsType' for type
+ * '-saml2:union-ConditionsType' */
 #ifndef SOAP_TYPE_PointerTo__saml2__union_ConditionsType
 #define SOAP_TYPE_PointerTo__saml2__union_ConditionsType (312)
 #endif
 
-/* struct saml2__ProxyRestrictionType * has binding name 'PointerTosaml2__ProxyRestrictionType' for type 'saml2:ProxyRestrictionType' */
+/* struct saml2__ProxyRestrictionType * has binding name 'PointerTosaml2__ProxyRestrictionType' for type
+ * 'saml2:ProxyRestrictionType' */
 #ifndef SOAP_TYPE_PointerTosaml2__ProxyRestrictionType
 #define SOAP_TYPE_PointerTosaml2__ProxyRestrictionType (311)
 #endif
@@ -5694,57 +6261,68 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTosaml2__OneTimeUseType (310)
 #endif
 
-/* struct saml2__AudienceRestrictionType * has binding name 'PointerTosaml2__AudienceRestrictionType' for type 'saml2:AudienceRestrictionType' */
+/* struct saml2__AudienceRestrictionType * has binding name 'PointerTosaml2__AudienceRestrictionType' for type
+ * 'saml2:AudienceRestrictionType' */
 #ifndef SOAP_TYPE_PointerTosaml2__AudienceRestrictionType
 #define SOAP_TYPE_PointerTosaml2__AudienceRestrictionType (309)
 #endif
 
-/* struct saml2__ConditionAbstractType * has binding name 'PointerTosaml2__ConditionAbstractType' for type 'saml2:ConditionAbstractType' */
+/* struct saml2__ConditionAbstractType * has binding name 'PointerTosaml2__ConditionAbstractType' for type
+ * 'saml2:ConditionAbstractType' */
 #ifndef SOAP_TYPE_PointerTosaml2__ConditionAbstractType
 #define SOAP_TYPE_PointerTosaml2__ConditionAbstractType (308)
 #endif
 
-/* struct saml2__SubjectConfirmationDataType * has binding name 'PointerTosaml2__SubjectConfirmationDataType' for type 'saml2:SubjectConfirmationDataType' */
+/* struct saml2__SubjectConfirmationDataType * has binding name 'PointerTosaml2__SubjectConfirmationDataType' for type
+ * 'saml2:SubjectConfirmationDataType' */
 #ifndef SOAP_TYPE_PointerTosaml2__SubjectConfirmationDataType
 #define SOAP_TYPE_PointerTosaml2__SubjectConfirmationDataType (306)
 #endif
 
-/* struct saml2__SubjectConfirmationType * has binding name 'PointerTosaml2__SubjectConfirmationType' for type 'saml2:SubjectConfirmationType' */
+/* struct saml2__SubjectConfirmationType * has binding name 'PointerTosaml2__SubjectConfirmationType' for type
+ * 'saml2:SubjectConfirmationType' */
 #ifndef SOAP_TYPE_PointerTosaml2__SubjectConfirmationType
 #define SOAP_TYPE_PointerTosaml2__SubjectConfirmationType (305)
 #endif
 
-/* struct saml2__EncryptedElementType * has binding name 'PointerTosaml2__EncryptedElementType' for type 'saml2:EncryptedElementType' */
+/* struct saml2__EncryptedElementType * has binding name 'PointerTosaml2__EncryptedElementType' for type
+ * 'saml2:EncryptedElementType' */
 #ifndef SOAP_TYPE_PointerTosaml2__EncryptedElementType
 #define SOAP_TYPE_PointerTosaml2__EncryptedElementType (304)
 #endif
 
-/* struct saml2__BaseIDAbstractType * has binding name 'PointerTosaml2__BaseIDAbstractType' for type 'saml2:BaseIDAbstractType' */
+/* struct saml2__BaseIDAbstractType * has binding name 'PointerTosaml2__BaseIDAbstractType' for type
+ * 'saml2:BaseIDAbstractType' */
 #ifndef SOAP_TYPE_PointerTosaml2__BaseIDAbstractType
 #define SOAP_TYPE_PointerTosaml2__BaseIDAbstractType (303)
 #endif
 
-/* struct __saml2__union_AssertionType * has binding name 'PointerTo__saml2__union_AssertionType' for type '-saml2:union-AssertionType' */
+/* struct __saml2__union_AssertionType * has binding name 'PointerTo__saml2__union_AssertionType' for type
+ * '-saml2:union-AssertionType' */
 #ifndef SOAP_TYPE_PointerTo__saml2__union_AssertionType
 #define SOAP_TYPE_PointerTo__saml2__union_AssertionType (302)
 #endif
 
-/* struct saml2__AttributeStatementType * has binding name 'PointerTosaml2__AttributeStatementType' for type 'saml2:AttributeStatementType' */
+/* struct saml2__AttributeStatementType * has binding name 'PointerTosaml2__AttributeStatementType' for type
+ * 'saml2:AttributeStatementType' */
 #ifndef SOAP_TYPE_PointerTosaml2__AttributeStatementType
 #define SOAP_TYPE_PointerTosaml2__AttributeStatementType (301)
 #endif
 
-/* struct saml2__AuthzDecisionStatementType * has binding name 'PointerTosaml2__AuthzDecisionStatementType' for type 'saml2:AuthzDecisionStatementType' */
+/* struct saml2__AuthzDecisionStatementType * has binding name 'PointerTosaml2__AuthzDecisionStatementType' for type
+ * 'saml2:AuthzDecisionStatementType' */
 #ifndef SOAP_TYPE_PointerTosaml2__AuthzDecisionStatementType
 #define SOAP_TYPE_PointerTosaml2__AuthzDecisionStatementType (300)
 #endif
 
-/* struct saml2__AuthnStatementType * has binding name 'PointerTosaml2__AuthnStatementType' for type 'saml2:AuthnStatementType' */
+/* struct saml2__AuthnStatementType * has binding name 'PointerTosaml2__AuthnStatementType' for type
+ * 'saml2:AuthnStatementType' */
 #ifndef SOAP_TYPE_PointerTosaml2__AuthnStatementType
 #define SOAP_TYPE_PointerTosaml2__AuthnStatementType (299)
 #endif
 
-/* struct saml2__StatementAbstractType * has binding name 'PointerTosaml2__StatementAbstractType' for type 'saml2:StatementAbstractType' */
+/* struct saml2__StatementAbstractType * has binding name 'PointerTosaml2__StatementAbstractType' for type
+ * 'saml2:StatementAbstractType' */
 #ifndef SOAP_TYPE_PointerTosaml2__StatementAbstractType
 #define SOAP_TYPE_PointerTosaml2__StatementAbstractType (298)
 #endif
@@ -5769,12 +6347,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTosaml2__NameIDType (293)
 #endif
 
-/* struct xenc__EncryptedKeyType ** has binding name 'PointerToPointerToxenc__EncryptedKeyType' for type 'xenc:EncryptedKeyType' */
+/* struct xenc__EncryptedKeyType ** has binding name 'PointerToPointerToxenc__EncryptedKeyType' for type
+ * 'xenc:EncryptedKeyType' */
 #ifndef SOAP_TYPE_PointerToPointerToxenc__EncryptedKeyType
 #define SOAP_TYPE_PointerToPointerToxenc__EncryptedKeyType (292)
 #endif
 
-/* struct xenc__EncryptedKeyType * has binding name 'PointerToxenc__EncryptedKeyType' for type 'xenc:EncryptedKeyType' */
+/* struct xenc__EncryptedKeyType * has binding name 'PointerToxenc__EncryptedKeyType' for type 'xenc:EncryptedKeyType'
+ */
 #ifndef SOAP_TYPE_PointerToxenc__EncryptedKeyType
 #define SOAP_TYPE_PointerToxenc__EncryptedKeyType (291)
 #endif
@@ -5819,12 +6399,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTosaml1__ActionType (239)
 #endif
 
-/* struct saml1__AuthorityBindingType * has binding name 'PointerTosaml1__AuthorityBindingType' for type 'saml1:AuthorityBindingType' */
+/* struct saml1__AuthorityBindingType * has binding name 'PointerTosaml1__AuthorityBindingType' for type
+ * 'saml1:AuthorityBindingType' */
 #ifndef SOAP_TYPE_PointerTosaml1__AuthorityBindingType
 #define SOAP_TYPE_PointerTosaml1__AuthorityBindingType (238)
 #endif
 
-/* struct saml1__SubjectLocalityType * has binding name 'PointerTosaml1__SubjectLocalityType' for type 'saml1:SubjectLocalityType' */
+/* struct saml1__SubjectLocalityType * has binding name 'PointerTosaml1__SubjectLocalityType' for type
+ * 'saml1:SubjectLocalityType' */
 #ifndef SOAP_TYPE_PointerTosaml1__SubjectLocalityType
 #define SOAP_TYPE_PointerTosaml1__SubjectLocalityType (237)
 #endif
@@ -5839,7 +6421,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTosaml1__SubjectType (235)
 #endif
 
-/* struct __saml1__union_EvidenceType * has binding name 'PointerTo__saml1__union_EvidenceType' for type '-saml1:union-EvidenceType' */
+/* struct __saml1__union_EvidenceType * has binding name 'PointerTo__saml1__union_EvidenceType' for type
+ * '-saml1:union-EvidenceType' */
 #ifndef SOAP_TYPE_PointerTo__saml1__union_EvidenceType
 #define SOAP_TYPE_PointerTo__saml1__union_EvidenceType (234)
 #endif
@@ -5849,17 +6432,20 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTostring (232)
 #endif
 
-/* struct saml1__SubjectConfirmationType * has binding name 'PointerTosaml1__SubjectConfirmationType' for type 'saml1:SubjectConfirmationType' */
+/* struct saml1__SubjectConfirmationType * has binding name 'PointerTosaml1__SubjectConfirmationType' for type
+ * 'saml1:SubjectConfirmationType' */
 #ifndef SOAP_TYPE_PointerTosaml1__SubjectConfirmationType
 #define SOAP_TYPE_PointerTosaml1__SubjectConfirmationType (231)
 #endif
 
-/* struct saml1__NameIdentifierType * has binding name 'PointerTosaml1__NameIdentifierType' for type 'saml1:NameIdentifierType' */
+/* struct saml1__NameIdentifierType * has binding name 'PointerTosaml1__NameIdentifierType' for type
+ * 'saml1:NameIdentifierType' */
 #ifndef SOAP_TYPE_PointerTosaml1__NameIdentifierType
 #define SOAP_TYPE_PointerTosaml1__NameIdentifierType (230)
 #endif
 
-/* struct __saml1__union_AdviceType * has binding name 'PointerTo__saml1__union_AdviceType' for type '-saml1:union-AdviceType' */
+/* struct __saml1__union_AdviceType * has binding name 'PointerTo__saml1__union_AdviceType' for type
+ * '-saml1:union-AdviceType' */
 #ifndef SOAP_TYPE_PointerTo__saml1__union_AdviceType
 #define SOAP_TYPE_PointerTo__saml1__union_AdviceType (229)
 #endif
@@ -5874,22 +6460,26 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTodateTime (226)
 #endif
 
-/* struct __saml1__union_ConditionsType * has binding name 'PointerTo__saml1__union_ConditionsType' for type '-saml1:union-ConditionsType' */
+/* struct __saml1__union_ConditionsType * has binding name 'PointerTo__saml1__union_ConditionsType' for type
+ * '-saml1:union-ConditionsType' */
 #ifndef SOAP_TYPE_PointerTo__saml1__union_ConditionsType
 #define SOAP_TYPE_PointerTo__saml1__union_ConditionsType (225)
 #endif
 
-/* struct saml1__ConditionAbstractType * has binding name 'PointerTosaml1__ConditionAbstractType' for type 'saml1:ConditionAbstractType' */
+/* struct saml1__ConditionAbstractType * has binding name 'PointerTosaml1__ConditionAbstractType' for type
+ * 'saml1:ConditionAbstractType' */
 #ifndef SOAP_TYPE_PointerTosaml1__ConditionAbstractType
 #define SOAP_TYPE_PointerTosaml1__ConditionAbstractType (224)
 #endif
 
-/* struct saml1__DoNotCacheConditionType * has binding name 'PointerTosaml1__DoNotCacheConditionType' for type 'saml1:DoNotCacheConditionType' */
+/* struct saml1__DoNotCacheConditionType * has binding name 'PointerTosaml1__DoNotCacheConditionType' for type
+ * 'saml1:DoNotCacheConditionType' */
 #ifndef SOAP_TYPE_PointerTosaml1__DoNotCacheConditionType
 #define SOAP_TYPE_PointerTosaml1__DoNotCacheConditionType (223)
 #endif
 
-/* struct saml1__AudienceRestrictionConditionType * has binding name 'PointerTosaml1__AudienceRestrictionConditionType' for type 'saml1:AudienceRestrictionConditionType' */
+/* struct saml1__AudienceRestrictionConditionType * has binding name 'PointerTosaml1__AudienceRestrictionConditionType'
+ * for type 'saml1:AudienceRestrictionConditionType' */
 #ifndef SOAP_TYPE_PointerTosaml1__AudienceRestrictionConditionType
 #define SOAP_TYPE_PointerTosaml1__AudienceRestrictionConditionType (222)
 #endif
@@ -5899,32 +6489,38 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTo_ds__Signature (220)
 #endif
 
-/* struct __saml1__union_AssertionType * has binding name 'PointerTo__saml1__union_AssertionType' for type '-saml1:union-AssertionType' */
+/* struct __saml1__union_AssertionType * has binding name 'PointerTo__saml1__union_AssertionType' for type
+ * '-saml1:union-AssertionType' */
 #ifndef SOAP_TYPE_PointerTo__saml1__union_AssertionType
 #define SOAP_TYPE_PointerTo__saml1__union_AssertionType (219)
 #endif
 
-/* struct saml1__AttributeStatementType * has binding name 'PointerTosaml1__AttributeStatementType' for type 'saml1:AttributeStatementType' */
+/* struct saml1__AttributeStatementType * has binding name 'PointerTosaml1__AttributeStatementType' for type
+ * 'saml1:AttributeStatementType' */
 #ifndef SOAP_TYPE_PointerTosaml1__AttributeStatementType
 #define SOAP_TYPE_PointerTosaml1__AttributeStatementType (218)
 #endif
 
-/* struct saml1__AuthorizationDecisionStatementType * has binding name 'PointerTosaml1__AuthorizationDecisionStatementType' for type 'saml1:AuthorizationDecisionStatementType' */
+/* struct saml1__AuthorizationDecisionStatementType * has binding name
+ * 'PointerTosaml1__AuthorizationDecisionStatementType' for type 'saml1:AuthorizationDecisionStatementType' */
 #ifndef SOAP_TYPE_PointerTosaml1__AuthorizationDecisionStatementType
 #define SOAP_TYPE_PointerTosaml1__AuthorizationDecisionStatementType (217)
 #endif
 
-/* struct saml1__AuthenticationStatementType * has binding name 'PointerTosaml1__AuthenticationStatementType' for type 'saml1:AuthenticationStatementType' */
+/* struct saml1__AuthenticationStatementType * has binding name 'PointerTosaml1__AuthenticationStatementType' for type
+ * 'saml1:AuthenticationStatementType' */
 #ifndef SOAP_TYPE_PointerTosaml1__AuthenticationStatementType
 #define SOAP_TYPE_PointerTosaml1__AuthenticationStatementType (216)
 #endif
 
-/* struct saml1__SubjectStatementAbstractType * has binding name 'PointerTosaml1__SubjectStatementAbstractType' for type 'saml1:SubjectStatementAbstractType' */
+/* struct saml1__SubjectStatementAbstractType * has binding name 'PointerTosaml1__SubjectStatementAbstractType' for type
+ * 'saml1:SubjectStatementAbstractType' */
 #ifndef SOAP_TYPE_PointerTosaml1__SubjectStatementAbstractType
 #define SOAP_TYPE_PointerTosaml1__SubjectStatementAbstractType (215)
 #endif
 
-/* struct saml1__StatementAbstractType * has binding name 'PointerTosaml1__StatementAbstractType' for type 'saml1:StatementAbstractType' */
+/* struct saml1__StatementAbstractType * has binding name 'PointerTosaml1__StatementAbstractType' for type
+ * 'saml1:StatementAbstractType' */
 #ifndef SOAP_TYPE_PointerTosaml1__StatementAbstractType
 #define SOAP_TYPE_PointerTosaml1__StatementAbstractType (214)
 #endif
@@ -5939,7 +6535,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTosaml1__ConditionsType (211)
 #endif
 
-/* struct __wsc__DerivedKeyTokenType_sequence * has binding name 'PointerTo__wsc__DerivedKeyTokenType_sequence' for type '-wsc:DerivedKeyTokenType-sequence' */
+/* struct __wsc__DerivedKeyTokenType_sequence * has binding name 'PointerTo__wsc__DerivedKeyTokenType_sequence' for type
+ * '-wsc:DerivedKeyTokenType-sequence' */
 #ifndef SOAP_TYPE_PointerTo__wsc__DerivedKeyTokenType_sequence
 #define SOAP_TYPE_PointerTo__wsc__DerivedKeyTokenType_sequence (189)
 #endif
@@ -5964,7 +6561,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTo_xenc__ReferenceList (179)
 #endif
 
-/* struct __xenc__union_ReferenceList * has binding name 'PointerTo__xenc__union_ReferenceList' for type '-xenc:union-ReferenceList' */
+/* struct __xenc__union_ReferenceList * has binding name 'PointerTo__xenc__union_ReferenceList' for type
+ * '-xenc:union-ReferenceList' */
 #ifndef SOAP_TYPE_PointerTo__xenc__union_ReferenceList
 #define SOAP_TYPE_PointerTo__xenc__union_ReferenceList (178)
 #endif
@@ -5974,7 +6572,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerToxenc__ReferenceType (177)
 #endif
 
-/* struct xenc__EncryptionPropertyType * has binding name 'PointerToxenc__EncryptionPropertyType' for type 'xenc:EncryptionPropertyType' */
+/* struct xenc__EncryptionPropertyType * has binding name 'PointerToxenc__EncryptionPropertyType' for type
+ * 'xenc:EncryptionPropertyType' */
 #ifndef SOAP_TYPE_PointerToxenc__EncryptionPropertyType
 #define SOAP_TYPE_PointerToxenc__EncryptionPropertyType (175)
 #endif
@@ -5984,12 +6583,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerToxenc__TransformsType (174)
 #endif
 
-/* struct xenc__CipherReferenceType * has binding name 'PointerToxenc__CipherReferenceType' for type 'xenc:CipherReferenceType' */
+/* struct xenc__CipherReferenceType * has binding name 'PointerToxenc__CipherReferenceType' for type
+ * 'xenc:CipherReferenceType' */
 #ifndef SOAP_TYPE_PointerToxenc__CipherReferenceType
 #define SOAP_TYPE_PointerToxenc__CipherReferenceType (173)
 #endif
 
-/* struct xenc__EncryptionPropertiesType * has binding name 'PointerToxenc__EncryptionPropertiesType' for type 'xenc:EncryptionPropertiesType' */
+/* struct xenc__EncryptionPropertiesType * has binding name 'PointerToxenc__EncryptionPropertiesType' for type
+ * 'xenc:EncryptionPropertiesType' */
 #ifndef SOAP_TYPE_PointerToxenc__EncryptionPropertiesType
 #define SOAP_TYPE_PointerToxenc__EncryptionPropertiesType (172)
 #endif
@@ -6004,12 +6605,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTo_ds__KeyInfo (170)
 #endif
 
-/* struct xenc__EncryptionMethodType * has binding name 'PointerToxenc__EncryptionMethodType' for type 'xenc:EncryptionMethodType' */
+/* struct xenc__EncryptionMethodType * has binding name 'PointerToxenc__EncryptionMethodType' for type
+ * 'xenc:EncryptionMethodType' */
 #ifndef SOAP_TYPE_PointerToxenc__EncryptionMethodType
 #define SOAP_TYPE_PointerToxenc__EncryptionMethodType (169)
 #endif
 
-/* struct ds__X509IssuerSerialType * has binding name 'PointerTods__X509IssuerSerialType' for type 'ds:X509IssuerSerialType' */
+/* struct ds__X509IssuerSerialType * has binding name 'PointerTods__X509IssuerSerialType' for type
+ * 'ds:X509IssuerSerialType' */
 #ifndef SOAP_TYPE_PointerTods__X509IssuerSerialType
 #define SOAP_TYPE_PointerTods__X509IssuerSerialType (156)
 #endif
@@ -6054,12 +6657,14 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTods__ReferenceType (148)
 #endif
 
-/* struct ds__SignatureMethodType * has binding name 'PointerTods__SignatureMethodType' for type 'ds:SignatureMethodType' */
+/* struct ds__SignatureMethodType * has binding name 'PointerTods__SignatureMethodType' for type
+ * 'ds:SignatureMethodType' */
 #ifndef SOAP_TYPE_PointerTods__SignatureMethodType
 #define SOAP_TYPE_PointerTods__SignatureMethodType (147)
 #endif
 
-/* struct ds__CanonicalizationMethodType * has binding name 'PointerTods__CanonicalizationMethodType' for type 'ds:CanonicalizationMethodType' */
+/* struct ds__CanonicalizationMethodType * has binding name 'PointerTods__CanonicalizationMethodType' for type
+ * 'ds:CanonicalizationMethodType' */
 #ifndef SOAP_TYPE_PointerTods__CanonicalizationMethodType
 #define SOAP_TYPE_PointerTods__CanonicalizationMethodType (146)
 #endif
@@ -6069,7 +6674,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTo_wsse__SecurityTokenReference (141)
 #endif
 
-/* struct ds__RetrievalMethodType * has binding name 'PointerTods__RetrievalMethodType' for type 'ds:RetrievalMethodType' */
+/* struct ds__RetrievalMethodType * has binding name 'PointerTods__RetrievalMethodType' for type
+ * 'ds:RetrievalMethodType' */
 #ifndef SOAP_TYPE_PointerTods__RetrievalMethodType
 #define SOAP_TYPE_PointerTods__RetrievalMethodType (140)
 #endif
@@ -6169,7 +6775,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_PointerTons3__HashStructure (76)
 #endif
 
-/* ns3__ArrayOfHashStructure * has binding name 'PointerTons3__ArrayOfHashStructure' for type 'ns3:ArrayOfHashStructure' */
+/* ns3__ArrayOfHashStructure * has binding name 'PointerTons3__ArrayOfHashStructure' for type 'ns3:ArrayOfHashStructure'
+ */
 #ifndef SOAP_TYPE_PointerTons3__ArrayOfHashStructure
 #define SOAP_TYPE_PointerTons3__ArrayOfHashStructure (75)
 #endif
@@ -6224,7 +6831,8 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
 #define SOAP_TYPE_string (4)
 #endif
 
-/* std::vector<ns3__HashStructure *>  has binding name 'std__vectorTemplateOfPointerTons3__HashStructure' for type 'ns3:HashStructure' */
+/* std::vector<ns3__HashStructure *>  has binding name 'std__vectorTemplateOfPointerTons3__HashStructure' for type
+ * 'ns3:HashStructure' */
 #ifndef SOAP_TYPE_std__vectorTemplateOfPointerTons3__HashStructure
 #define SOAP_TYPE_std__vectorTemplateOfPointerTons3__HashStructure (77)
 #endif
@@ -6234,7 +6842,6 @@ typedef struct saml2__EncryptedElementType _saml2__EncryptedAttribute;
  * Externals                                                                  *
  *                                                                            *
 \******************************************************************************/
-
 
 #endif
 

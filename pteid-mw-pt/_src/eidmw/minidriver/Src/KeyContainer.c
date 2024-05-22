@@ -32,25 +32,17 @@
 //
 
 #define WHERE "CardCreateContainer()"
-DWORD WINAPI   CardCreateContainer
-               (
-                  __in      PCARD_DATA  pCardData,
-                  __in      BYTE        bContainerIndex,
-                  __in      DWORD       dwFlags,
-                  __in      DWORD       dwKeySpec,
-                  __in      DWORD       dwKeySize,
-                  __in      PBYTE       pbKeyData
-               )
-{
-   DWORD    dwReturn = 0;
-   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
+DWORD WINAPI CardCreateContainer(__in PCARD_DATA pCardData, __in BYTE bContainerIndex, __in DWORD dwFlags,
+								 __in DWORD dwKeySpec, __in DWORD dwKeySize, __in PBYTE pbKeyData) {
+	DWORD dwReturn = 0;
+	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
-   CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
+	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 
-   LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-   return(dwReturn);
+	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -63,22 +55,16 @@ cleanup:
 //
 
 #define WHERE "CardDeleteContainer()"
-DWORD WINAPI   CardDeleteContainer
-               (
-                  __in      PCARD_DATA  pCardData,
-                  __in      BYTE        bContainerIndex,
-                  __in      DWORD       dwReserved
-               )
-{
-   DWORD    dwReturn = 0;
-   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
+DWORD WINAPI CardDeleteContainer(__in PCARD_DATA pCardData, __in BYTE bContainerIndex, __in DWORD dwReserved) {
+	DWORD dwReturn = 0;
+	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
-   CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
+	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 
-   LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-   return(dwReturn);
+	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -94,12 +80,12 @@ cleanup:
 //          The pbSigPublicKey and pbKeyExPublicKey buffers contain the
 //          Signature and Key Exchange public keys, respectively, if they
 //          exist.  The format of these buffers is a Crypto
-//          API PUBLICKEYBLOB - 
+//          API PUBLICKEYBLOB -
 //
 //              BLOBHEADER
 //              RSAPUBKEY
 //              modulus
-//          
+//
 //          In the case of ECC public keys, the pbSigPublicKey will contain
 //          the ECDSA key and pbKeyExPublicKey will contain the ECDH key if
 //          they exist. ECC key structure -
@@ -110,61 +96,49 @@ cleanup:
 //
 
 #define WHERE "CardGetContainerInfo()"
-DWORD WINAPI   CardGetContainerInfo
-               (
-                  __in      PCARD_DATA       pCardData,
-                  __in      BYTE             bContainerIndex,
-                  __in      DWORD            dwFlags,
-                  __in      PCONTAINER_INFO  pContainerInfo
-               )
-{
+DWORD WINAPI CardGetContainerInfo(__in PCARD_DATA pCardData, __in BYTE bContainerIndex, __in DWORD dwFlags,
+								  __in PCONTAINER_INFO pContainerInfo) {
 
-   DWORD                dwReturn  = 0;
-   DWORD                dwVersion = 0;
-   DWORD                cbCertif = 0;
-   DWORD				dwCertSpec = 0;
-   PBYTE				pbCertif = NULL;
+	DWORD dwReturn = 0;
+	DWORD dwVersion = 0;
+	DWORD cbCertif = 0;
+	DWORD dwCertSpec = 0;
+	PBYTE pbCertif = NULL;
 
-   LogTrace(LOGTYPE_INFO, WHERE, "Enter API...[%d]", bContainerIndex);
+	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...[%d]", bContainerIndex);
 
-   /********************/
-   /* Check Parameters */
-   /********************/
-   if ( pCardData == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
+	/********************/
+	/* Check Parameters */
+	/********************/
+	if (pCardData == NULL) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
+		CLEANUP(SCARD_E_INVALID_PARAMETER);
+	}
 
-   if ( ( bContainerIndex != 0 ) &&
-        ( bContainerIndex != 1 ) )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [bContainerIndex]");
-      CLEANUP(SCARD_E_NO_KEY_CONTAINER);
-   }
+	if ((bContainerIndex != 0) && (bContainerIndex != 1)) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [bContainerIndex]");
+		CLEANUP(SCARD_E_NO_KEY_CONTAINER);
+	}
 
-   if ( dwFlags != 0 )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwFlags]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
+	if (dwFlags != 0) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwFlags]");
+		CLEANUP(SCARD_E_INVALID_PARAMETER);
+	}
 
-   if ( pContainerInfo == NULL )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pContainerInfo]");
-      CLEANUP(SCARD_E_INVALID_PARAMETER);
-   }
+	if (pContainerInfo == NULL) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pContainerInfo]");
+		CLEANUP(SCARD_E_INVALID_PARAMETER);
+	}
 
-   dwVersion = (pContainerInfo->dwVersion == 0) ? 1 : pContainerInfo->dwVersion;
-   if ( dwVersion != CONTAINER_INFO_CURRENT_VERSION )
-   {
-      LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pContainerInfo->dwVersion]");
-      CLEANUP(ERROR_REVISION_MISMATCH );
-   }
+	dwVersion = (pContainerInfo->dwVersion == 0) ? 1 : pContainerInfo->dwVersion;
+	if (dwVersion != CONTAINER_INFO_CURRENT_VERSION) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pContainerInfo->dwVersion]");
+		CLEANUP(ERROR_REVISION_MISMATCH);
+	}
 
-    /*
-    * Authentication Certificate
-    */
+	/*
+	 * Authentication Certificate
+	 */
 	if (bContainerIndex == 0) {
 		LogTrace(LOGTYPE_INFO, WHERE, "Creating Authentication public key container...");
 		dwCertSpec = CERT_AUTH;
@@ -175,13 +149,11 @@ DWORD WINAPI   CardGetContainerInfo
 	}
 
 	/*
-	* Public key is not being read from certificate on IAS v5 cards
-	*/
-	if (card_type != IAS_V5_CARD)
-	{
+	 * Public key is not being read from certificate on IAS v5 cards
+	 */
+	if (card_type != IAS_V5_CARD) {
 		dwReturn = cal_read_cert(pCardData, dwCertSpec, &cbCertif, &pbCertif);
-		if (dwReturn != SCARD_S_SUCCESS)
-		{
+		if (dwReturn != SCARD_S_SUCCESS) {
 			if (bContainerIndex == 0)
 				LogTrace(LOGTYPE_ERROR, WHERE, "cal_read_cert[CERT_AUTH] returned [%d]", dwReturn);
 			if (bContainerIndex == 1)
@@ -191,31 +163,25 @@ DWORD WINAPI   CardGetContainerInfo
 	}
 
 #ifdef _DEBUG
-	//LogDumpHex(cbCertif, (char *)pbCertif);
-	//if (bContainerIndex == 0)
+	// LogDumpHex(cbCertif, (char *)pbCertif);
+	// if (bContainerIndex == 0)
 	//	LogDumpBin ("C:\\SmartCardMinidriverTest\\auth.crt", cbCertif, (char *)pbCertif);
-	//if (bContainerIndex == 1)
+	// if (bContainerIndex == 1)
 	//	LogDumpBin ("C:\\SmartCardMinidriverTest\\nonrep.crt", cbCertif, (char *)pbCertif);
 #endif
-   
-   /* Container Info */
-	pContainerInfo->dwVersion  = CONTAINER_INFO_CURRENT_VERSION;
-	pContainerInfo->dwReserved = 0;
-	
-	if (card_type == IAS_V5_CARD)
-		dwReturn = cal_read_pub_key(pCardData,
-			dwCertSpec,
-			&(pContainerInfo->cbSigPublicKey),
-			&(pContainerInfo->pbSigPublicKey));
-	else 
-		dwReturn = PteidGetPubKey(pCardData, 
-			cbCertif, 
-			pbCertif, 
-			&(pContainerInfo->cbSigPublicKey), 
-			&(pContainerInfo->pbSigPublicKey));
 
-	if ( dwReturn != SCARD_S_SUCCESS )
-	{
+	/* Container Info */
+	pContainerInfo->dwVersion = CONTAINER_INFO_CURRENT_VERSION;
+	pContainerInfo->dwReserved = 0;
+
+	if (card_type == IAS_V5_CARD)
+		dwReturn = cal_read_pub_key(pCardData, dwCertSpec, &(pContainerInfo->cbSigPublicKey),
+									&(pContainerInfo->pbSigPublicKey));
+	else
+		dwReturn = PteidGetPubKey(pCardData, cbCertif, pbCertif, &(pContainerInfo->cbSigPublicKey),
+								  &(pContainerInfo->pbSigPublicKey));
+
+	if (dwReturn != SCARD_S_SUCCESS) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "PteidGetPubKey returned [%d]", dwReturn);
 		CLEANUP(SCARD_E_UNEXPECTED);
 	}
@@ -229,10 +195,10 @@ DWORD WINAPI   CardGetContainerInfo
 	LogTrace(LOGTYPE_DEBUG, WHERE, "SigPublicKey [%d]", pContainerInfo->cbSigPublicKey);
 	LogDumpHex(pContainerInfo->cbSigPublicKey, pContainerInfo->pbSigPublicKey);
 #endif
-	
+
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 

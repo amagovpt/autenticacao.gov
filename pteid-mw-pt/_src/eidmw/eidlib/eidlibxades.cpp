@@ -19,14 +19,10 @@
 #include "SigContainer.h"
 #include "ByteArray.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-
-
-PTEID_ByteArray PTEID_Card::SignXades(const char *output_path, const char * const* paths, unsigned int n_paths,
-	PTEID_SignatureLevel level)
-{
+PTEID_ByteArray PTEID_Card::SignXades(const char *output_path, const char *const *paths, unsigned int n_paths,
+									  PTEID_SignatureLevel level) {
 
 	PTEID_ByteArray out;
 
@@ -43,9 +39,7 @@ PTEID_ByteArray PTEID_Card::SignXades(const char *output_path, const char * cons
 	return out;
 }
 
-
-void PTEID_Card::SignXadesIndividual(const char *output_path, const char *const * path, unsigned int n_paths)
-{
+void PTEID_Card::SignXadesIndividual(const char *output_path, const char *const *path, unsigned int n_paths) {
 
 	BEGIN_TRY_CATCH
 
@@ -54,11 +48,9 @@ void PTEID_Card::SignXadesIndividual(const char *output_path, const char *const 
 	pcard->SignXadesIndividual((const char **)path, n_paths, output_path);
 
 	END_TRY_CATCH
-
 }
 
-void PTEID_Card::SignXadesTIndividual(const char *output_path, const char *const * path, unsigned int n_paths)
-{
+void PTEID_Card::SignXadesTIndividual(const char *output_path, const char *const *path, unsigned int n_paths) {
 
 	BEGIN_TRY_CATCH
 
@@ -67,11 +59,9 @@ void PTEID_Card::SignXadesTIndividual(const char *output_path, const char *const
 	pcard->SignXadesTIndividual((const char **)path, n_paths, output_path);
 
 	END_TRY_CATCH
-
 }
 
-PTEID_ByteArray PTEID_Card::SignXadesT(const char *output_path, const char *const * path, unsigned int n_paths)
-{
+PTEID_ByteArray PTEID_Card::SignXadesT(const char *output_path, const char *const *path, unsigned int n_paths) {
 
 	PTEID_ByteArray out;
 
@@ -88,8 +78,7 @@ PTEID_ByteArray PTEID_Card::SignXadesT(const char *output_path, const char *cons
 	return out;
 }
 
-void PTEID_Card::SignXadesAIndividual(const char *output_path, const char *const * path, unsigned int n_paths)
-{
+void PTEID_Card::SignXadesAIndividual(const char *output_path, const char *const *path, unsigned int n_paths) {
 	BEGIN_TRY_CATCH
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
@@ -97,11 +86,9 @@ void PTEID_Card::SignXadesAIndividual(const char *output_path, const char *const
 	pcard->SignXadesAIndividual((const char **)path, n_paths, output_path);
 
 	END_TRY_CATCH
-
 }
 
-PTEID_ByteArray PTEID_Card::SignXadesA(const char *output_path, const char *const * path, unsigned int n_paths)
-{
+PTEID_ByteArray PTEID_Card::SignXadesA(const char *output_path, const char *const *path, unsigned int n_paths) {
 
 	PTEID_ByteArray out;
 
@@ -118,8 +105,7 @@ PTEID_ByteArray PTEID_Card::SignXadesA(const char *output_path, const char *cons
 	return out;
 }
 
-void PTEID_Card::SignASiC(const char *path, PTEID_SignatureLevel level)
-{
+void PTEID_Card::SignASiC(const char *path, PTEID_SignatureLevel level) {
 	BEGIN_TRY_CATCH
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
@@ -128,27 +114,18 @@ void PTEID_Card::SignASiC(const char *path, PTEID_SignatureLevel level)
 	END_TRY_CATCH
 }
 
-PTEID_ASICContainer::PTEID_ASICContainer(const char *input_path)
-{
-	m_impl = new SigContainer(input_path);
-}
+PTEID_ASICContainer::PTEID_ASICContainer(const char *input_path) { m_impl = new SigContainer(input_path); }
 
-PTEID_ASICContainer::~PTEID_ASICContainer()
-{
-	delete (SigContainer *)m_impl;
-}
+PTEID_ASICContainer::~PTEID_ASICContainer() { delete (SigContainer *)m_impl; }
 
-long PTEID_ASICContainer::countInputFiles()
-{
+long PTEID_ASICContainer::countInputFiles() {
 
 	if (m_files.size() == 0) {
-		
+
 		try {
 			SigContainer *container = (SigContainer *)m_impl;
 			m_files = container->listInputFiles();
-		}
-		catch(CMWException &e)
-		{
+		} catch (CMWException &e) {
 			throw PTEID_Exception::THROWException(e);
 		}
 	}
@@ -156,36 +133,29 @@ long PTEID_ASICContainer::countInputFiles()
 	return m_files.size();
 }
 
-const char * PTEID_ASICContainer::getInputFile(long file_n)
-{
+const char *PTEID_ASICContainer::getInputFile(long file_n) {
 
 	if (m_files.size() == 0) {
-		
+
 		try {
 			SigContainer *container = (SigContainer *)m_impl;
 			m_files = container->listInputFiles();
-			
-		}
-		catch(CMWException &e)
-		{
+
+		} catch (CMWException &e) {
 			throw PTEID_Exception::THROWException(e);
 		}
-
 	}
 
 	return m_files.at(file_n).c_str();
 }
 
-void PTEID_ASICContainer::extract(const char *filename, const char * out_dir)
-{
+void PTEID_ASICContainer::extract(const char *filename, const char *out_dir) {
 	try {
 		SigContainer *container = (SigContainer *)m_impl;
 		container->extract(filename, out_dir);
-	}
-	catch (CMWException &e) {
+	} catch (CMWException &e) {
 		throw PTEID_Exception::THROWException(e);
 	}
-
 }
 
-}
+} // namespace eIDMW

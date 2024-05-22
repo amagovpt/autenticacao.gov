@@ -22,7 +22,6 @@
 #ifndef __WINMACROS__
 #define __WINMACROS__
 
-
 // taken from WinDef.h
 #ifndef MAX_PATH
 #define MAX_PATH 260
@@ -36,7 +35,6 @@
 #define OUT
 #endif
 
-
 // taken from WinDev.h
 #undef pascal
 #if (!defined(_MAC)) && ((_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED))
@@ -45,41 +43,39 @@
 #define pascal
 #endif
 #ifdef _MAC
-#define CALLBACK    PASCAL
+#define CALLBACK PASCAL
 #ifdef _68K_
-#define PASCAL      __pascal
+#define PASCAL __pascal
 #else
 #define PASCAL
 #endif
 #elif (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
-#define PASCAL      __stdcall
+#define PASCAL __stdcall
 #else
-#define PASCAL      pascal
+#define PASCAL pascal
 #endif
 
 #include "pcsclite.h"
-//typedef unsigned long *PDWORD;
+// typedef unsigned long *PDWORD;
 
 // taken from WinDef.h
-#define FAR                
-#define MAKEWORD(a, b)      ((WORD)(((BYTE)((DWORD_PTR)(a) & 0xff)) | ((WORD)((BYTE)((DWORD_PTR)(b) & 0xff))) << 8))
+#define FAR
+#define MAKEWORD(a, b) ((WORD)(((BYTE)((DWORD_PTR)(a) & 0xff)) | ((WORD)((BYTE)((DWORD_PTR)(b) & 0xff))) << 8))
 // derived from BaseTsd.h
 typedef unsigned long int UINT_PTR, *PUINT_PTR;
 
+// taken from WinSock.h
+typedef UINT_PTR SOCKET;
 
 // taken from WinSock.h
-typedef UINT_PTR  SOCKET;
-
-// taken from WinSock.h
-#define INVALID_SOCKET  (SOCKET)(~0)
+#define INVALID_SOCKET (SOCKET)(~0)
 
 // taken from WinSCard.h
 #define WINSCARDAPI
 // taken from WinDef.h
 #define WINAPI
-  
+
 // taken from SCardErr.h
-#define SCARD_E_UNEXPECTED               ((DWORD)0x8010001FL)
+#define SCARD_E_UNEXPECTED ((DWORD)0x8010001FL)
 
 #endif
-

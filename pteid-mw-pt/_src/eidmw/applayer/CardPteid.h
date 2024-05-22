@@ -38,141 +38,146 @@
 
 #include "asn1_idfile.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 class APL_EIDCard;
 
-/******************************************************************************//**
-  * Class that represent the file containing Trace informations on a PTEID card
-  *
-  * This class is for internal use in APL_EIDCard
-  *
-  * To get APL_EidFile_Trace object, we have to ask it from APL_EIDCard
- *********************************************************************************/
-class APL_EidFile_Trace : public APL_CardFile
-{
+/******************************************************************************/ /**
+																				  * Class that represent the file
+																				  *containing Trace informations on a
+																				  *PTEID card
+																				  *
+																				  * This class is for internal use in
+																				  *APL_EIDCard
+																				  *
+																				  * To get APL_EidFile_Trace object, we
+																				  *have to ask it from APL_EIDCard
+																				  *********************************************************************************/
+class APL_EidFile_Trace : public APL_CardFile {
 public:
 	/**
-	  * Destructor
-	  */
+	 * Destructor
+	 */
 	virtual ~APL_EidFile_Trace();
-	const char *getValidation();				/**< Return field Validation */
-	bool isActive();							/**< Return the card activation state (true = active) */
+	const char *getValidation(); /**< Return field Validation */
+	bool isActive();			 /**< Return the card activation state (true = active) */
 
 protected:
 	/**
-	  * Constructor
-	  *		Used only in APL_EIDCard::getFileTrace()
-	  */
+	 * Constructor
+	 *		Used only in APL_EIDCard::getFileTrace()
+	 */
 	APL_EidFile_Trace(APL_EIDCard *card, CByteArray &appID);
 
 private:
-	APL_EidFile_Trace(const APL_EidFile_Trace& file);				/**< Copy not allowed - not implemented */
-	APL_EidFile_Trace &operator= (const APL_EidFile_Trace& file);	/**< Copy not allowed - not implemented */
+	APL_EidFile_Trace(const APL_EidFile_Trace &file);			 /**< Copy not allowed - not implemented */
+	APL_EidFile_Trace &operator=(const APL_EidFile_Trace &file); /**< Copy not allowed - not implemented */
 	void doSODCheck(bool check) {}
 
 	/**
-	  * Check if the ID signature correspond to this file
-	  * @return - if bad signature file => status of signature file
-	  * @return - if signature error => CARDFILESTATUS_ERROR_SIGNATURE
-	  * @return - else => CARDFILESTATUS_ERROR_OK
-	  */
+	 * Check if the ID signature correspond to this file
+	 * @return - if bad signature file => status of signature file
+	 * @return - if signature error => CARDFILESTATUS_ERROR_SIGNATURE
+	 * @return - else => CARDFILESTATUS_ERROR_OK
+	 */
 	virtual tCardFileStatus VerifyFile();
 
 	/**
-	  * Map all the fields with the content of the file (APL_CardFile::m_data)
-	  */
+	 * Map all the fields with the content of the file (APL_CardFile::m_data)
+	 */
 	virtual bool MapFields();
 
 	/**
-	  * Empty all fields
-	  */
+	 * Empty all fields
+	 */
 	virtual void EmptyFields();
 
 	/**
-	  * Return true if data can be showned
-	  */
+	 * Return true if data can be showned
+	 */
 	virtual bool ShowData();
 
-	std::string m_Validation;							/**< Field Validation */
+	std::string m_Validation; /**< Field Validation */
 	bool isCardActive;
 
-	friend 	APL_EidFile_Trace *APL_EIDCard::getFileTrace();	/**< This method must access protected constructor */
+	friend APL_EidFile_Trace *APL_EIDCard::getFileTrace(); /**< This method must access protected constructor */
 };
 
-/******************************************************************************//**
-  * Class that represent the file containing ID informations on a PTEID card
-  *
-  * This class is for internal use in APL_EIDCard
-  *
-  * To get APL_EidFile_ID object, we have to ask it from APL_EIDCard 
- *********************************************************************************/
-class APL_EidFile_ID : public APL_CardFile
-{
+/******************************************************************************/ /**
+																				  * Class that represent the file
+																				  *containing ID informations on a PTEID
+																				  *card
+																				  *
+																				  * This class is for internal use in
+																				  *APL_EIDCard
+																				  *
+																				  * To get APL_EidFile_ID object, we
+																				  *have to ask it from APL_EIDCard
+																				  *********************************************************************************/
+class APL_EidFile_ID : public APL_CardFile {
 public:
 	/**
-	  * Destructor
-	  */
+	 * Destructor
+	 */
 	virtual ~APL_EidFile_ID();
 	void doSODCheck(bool check);
 
-	const char *getDocumentVersion();				/**< Return field DocumentVersion */
-	const char *getCountry();						/**< Return field Country */
-	const char *getDocumentType();					/**< Return field DocumentType */
-	const char *getGivenName();						/**< Return field GivenName */
-	const char *getSurname();						/**< Return field Surname */
-	const char *getGender();						/**< Return field Gender */
-	const char *getDateOfBirth();					/**< Return field DateOfBirth */
-	const char *getNationality();					/**< Return field Nationality */
-	const char *getValidityBeginDate();				/**< Return field ValidityBeginDate */
-	const char *getValidityEndDate();				/**< Return field ValidityEndDate */
-	const char *getLocalofRequest();				/**< Return field LocalofRequest */
+	const char *getDocumentVersion();	/**< Return field DocumentVersion */
+	const char *getCountry();			/**< Return field Country */
+	const char *getDocumentType();		/**< Return field DocumentType */
+	const char *getGivenName();			/**< Return field GivenName */
+	const char *getSurname();			/**< Return field Surname */
+	const char *getGender();			/**< Return field Gender */
+	const char *getDateOfBirth();		/**< Return field DateOfBirth */
+	const char *getNationality();		/**< Return field Nationality */
+	const char *getValidityBeginDate(); /**< Return field ValidityBeginDate */
+	const char *getValidityEndDate();	/**< Return field ValidityEndDate */
+	const char *getLocalofRequest();	/**< Return field LocalofRequest */
 	/*New status for PTeid-ng */
-	const char *getHeight();						/**< Return field Height */
-	const char *getDocumentNumber();				/**< Return field DocumentNumber */
-	const char *getCivilianIdNumber();				/**< Return field CivilianIdNumber */
-	const char *getTaxNo();							/**< Return field TaxNo */
-	const char *getSocialSecurityNumber();			/**< Return field SocialSecurityNumber */
-	const char *getHealthNumber();					/**< Return field HealthNumber */
-	const char *getIssuingEntity();					/**< Return field IssuingEntity */
-	const char *getGivenNameFather();				/**< Return field GivenNameFather */
-	const char *getSurnameFather();					/**< Return field SurnameFather */
-	const char *getGivenNameMother();				/**< Return field GivenNameMother */
-	const char *getSurnameMother();					/**< Return field SurnameMother */
-	const char *getParents();						/**< Return field Parents */
-	APLPublicKey *getCardAuthKeyObj();				/**< Return object Authentication Key */
-	const char *getMRZ1();							/**< Return field MRZ block 1*/
-	const char *getMRZ2();							/**< Return field MRZ block 2*/
-	const char *getMRZ3();							/**< Return field MRZ block 3*/
-	const char *getAccidentalIndications();			/**< Return field AccidentalIndications */
-	const CByteArray& getPhotoHash();				/**< Return field PhotoHash */
+	const char *getHeight();				/**< Return field Height */
+	const char *getDocumentNumber();		/**< Return field DocumentNumber */
+	const char *getCivilianIdNumber();		/**< Return field CivilianIdNumber */
+	const char *getTaxNo();					/**< Return field TaxNo */
+	const char *getSocialSecurityNumber();	/**< Return field SocialSecurityNumber */
+	const char *getHealthNumber();			/**< Return field HealthNumber */
+	const char *getIssuingEntity();			/**< Return field IssuingEntity */
+	const char *getGivenNameFather();		/**< Return field GivenNameFather */
+	const char *getSurnameFather();			/**< Return field SurnameFather */
+	const char *getGivenNameMother();		/**< Return field GivenNameMother */
+	const char *getSurnameMother();			/**< Return field SurnameMother */
+	const char *getParents();				/**< Return field Parents */
+	APLPublicKey *getCardAuthKeyObj();		/**< Return object Authentication Key */
+	const char *getMRZ1();					/**< Return field MRZ block 1*/
+	const char *getMRZ2();					/**< Return field MRZ block 2*/
+	const char *getMRZ3();					/**< Return field MRZ block 3*/
+	const char *getAccidentalIndications(); /**< Return field AccidentalIndications */
+	const CByteArray &getPhotoHash();		/**< Return field PhotoHash */
 
-	virtual const char *getDocumentPAN();					/**< Return field DocumentPAN */
-	virtual PhotoPteid *getPhotoObj();						/**< Return object Photo */
+	virtual const char *getDocumentPAN(); /**< Return field DocumentPAN */
+	virtual PhotoPteid *getPhotoObj();	  /**< Return object Photo */
 protected:
 	/**
-	  * Constructor
-	  *		Used only in APL_EIDCard::getFileID()
-	  */    
+	 * Constructor
+	 *		Used only in APL_EIDCard::getFileID()
+	 */
 	APL_EidFile_ID(APL_EIDCard *card);
 	APL_EidFile_ID(APL_EIDCard *card, const char *csPath);
 
 private:
-	APL_EidFile_ID(const APL_EidFile_ID& file);				/**< Copy not allowed - not implemented */
-	APL_EidFile_ID &operator= (const APL_EidFile_ID& file);	/**< Copy not allowed - not implemented */
+	APL_EidFile_ID(const APL_EidFile_ID &file);			   /**< Copy not allowed - not implemented */
+	APL_EidFile_ID &operator=(const APL_EidFile_ID &file); /**< Copy not allowed - not implemented */
 
 	/**
-	  * Check if the ID signature correspond to this file
-	  * @return - if bad signature file => status of signature file
-	  * @return - if signature error => CARDFILESTATUS_ERROR_SIGNATURE
-	  * @return - else => CARDFILESTATUS_ERROR_OK
-	  */
+	 * Check if the ID signature correspond to this file
+	 * @return - if bad signature file => status of signature file
+	 * @return - if signature error => CARDFILESTATUS_ERROR_SIGNATURE
+	 * @return - else => CARDFILESTATUS_ERROR_OK
+	 */
 	virtual tCardFileStatus VerifyFile();
 
 	/**
-	  * Map all the fields with the content of the file (APL_CardFile::m_data)
-	  */
+	 * Map all the fields with the content of the file (APL_CardFile::m_data)
+	 */
 	virtual bool MapFields();
 
 	virtual void MapFieldsInternal();
@@ -182,61 +187,63 @@ private:
 	virtual void PackPictureData(CByteArray &cb);
 
 	/**
-	  * Empty all fields
-	  */
+	 * Empty all fields
+	 */
 	virtual void EmptyFields();
 
 	/**
-	  * Return true if data can be showned 
-	  */
+	 * Return true if data can be showned
+	 */
 	virtual bool ShowData();
 
 protected:
-	std::string m_DocumentVersion;							/**< Field DocumentVersion */
-	std::string m_Country;									/**< Field Country */
-	std::string m_DocumentType;								/**< Field DocumentType */
-	std::string m_GivenName;								/**< Field GivenName */
-	std::string m_Surname;									/**< Field Surname */
-	std::string m_Gender;									/**< Field Gender */
-	std::string m_DateOfBirth;								/**< Field DateOfBirth */
-	std::string m_Nationality;								/**< Field Nationality */
-	std::string m_CivilianIdNumber;							/**< Field NationalNumber */
-	std::string m_ValidityBeginDate;						/**< Field ValidityBeginDate */
-	std::string m_ValidityEndDate;							/**< Field ValidityEndDate */
-	std::string m_LocalofRequest;							/**< Field IssuingMunicipality */
-	std::string m_Height;									/**< Field Height */
-	std::string m_ChipNumber;								/**< Field ChipNumber */
-	std::string m_DocumentNumber;							/**< Field DocumentNumber */
-	std::string m_TaxNo;									/**< Field TaxNo */
-	std::string m_SocialSecurityNo;							/**< Field SocialSecurityNo */
-	std::string m_HealthNo;									/**< Field HealthNo */
-	std::string m_IssuingEntity;							/**< Field IssuingEntity */
-	std::string m_GivenNameFather;							/**< Field GivenNameFather */
-	std::string m_SurnameFather;							/**< Field SurnameFather */
-	std::string m_GivenNameMother;							/**< Field GivenNameMother */
-	std::string m_SurnameMother;							/**< Field SurnameMother */
-	std::string m_AccidentalIndications;					/**< Field AccidentalIndications */
-	PhotoPteid* m_photo;										/**< object photo */
-	std::string m_MRZ1;										/**< Field MRZ block 1 */
-	std::string m_MRZ2;										/**< Field MRZ block 2 */
-	std::string m_MRZ3;										/**< Field MRZ block 3 */
-	CByteArray m_PhotoHash;									/**< Field PhotoHash */	
-	APLPublicKey* cardKey;
+	std::string m_DocumentVersion;		 /**< Field DocumentVersion */
+	std::string m_Country;				 /**< Field Country */
+	std::string m_DocumentType;			 /**< Field DocumentType */
+	std::string m_GivenName;			 /**< Field GivenName */
+	std::string m_Surname;				 /**< Field Surname */
+	std::string m_Gender;				 /**< Field Gender */
+	std::string m_DateOfBirth;			 /**< Field DateOfBirth */
+	std::string m_Nationality;			 /**< Field Nationality */
+	std::string m_CivilianIdNumber;		 /**< Field NationalNumber */
+	std::string m_ValidityBeginDate;	 /**< Field ValidityBeginDate */
+	std::string m_ValidityEndDate;		 /**< Field ValidityEndDate */
+	std::string m_LocalofRequest;		 /**< Field IssuingMunicipality */
+	std::string m_Height;				 /**< Field Height */
+	std::string m_ChipNumber;			 /**< Field ChipNumber */
+	std::string m_DocumentNumber;		 /**< Field DocumentNumber */
+	std::string m_TaxNo;				 /**< Field TaxNo */
+	std::string m_SocialSecurityNo;		 /**< Field SocialSecurityNo */
+	std::string m_HealthNo;				 /**< Field HealthNo */
+	std::string m_IssuingEntity;		 /**< Field IssuingEntity */
+	std::string m_GivenNameFather;		 /**< Field GivenNameFather */
+	std::string m_SurnameFather;		 /**< Field SurnameFather */
+	std::string m_GivenNameMother;		 /**< Field GivenNameMother */
+	std::string m_SurnameMother;		 /**< Field SurnameMother */
+	std::string m_AccidentalIndications; /**< Field AccidentalIndications */
+	PhotoPteid *m_photo;				 /**< object photo */
+	std::string m_MRZ1;					 /**< Field MRZ block 1 */
+	std::string m_MRZ2;					 /**< Field MRZ block 2 */
+	std::string m_MRZ3;					 /**< Field MRZ block 3 */
+	CByteArray m_PhotoHash;				 /**< Field PhotoHash */
+	APLPublicKey *cardKey;
 
-friend 	APL_EidFile_ID *APL_EIDCard::getFileID();	/**< This method must access protected constructor */
+	friend APL_EidFile_ID *APL_EIDCard::getFileID(); /**< This method must access protected constructor */
 };
 
-/******************************************************************************//**
-  * Class that represent the file containing biometric information on a PTEID card IAS5
-  *
-  * This class is for internal use in APL_EidFile_ID_V2
- *********************************************************************************/
-class APL_EidFile_Photo : public APL_CardFile
-{
+/******************************************************************************/ /**
+																				  * Class that represent the file
+																				  *containing biometric information on a
+																				  *PTEID card IAS5
+																				  *
+																				  * This class is for internal use in
+																				  *APL_EidFile_ID_V2
+																				  *********************************************************************************/
+class APL_EidFile_Photo : public APL_CardFile {
 public:
 	virtual ~APL_EidFile_Photo();
 
-	CByteArray& getPhotoRaw();
+	CByteArray &getPhotoRaw();
 	void doSODCheck(bool check);
 
 	APL_EidFile_Photo(APL_EIDCard *card);
@@ -252,22 +259,24 @@ private:
 	CByteArray m_PhotoRaw;
 };
 
-/******************************************************************************//**
-  * Class that represent the file containing MRZ informations on a PTEID card IAS5
-  *
-  * This class is for internal use in APL_EidFile_ID_V2
- *********************************************************************************/
-class APL_EidFile_MRZ : public APL_CardFile
-{
+/******************************************************************************/ /**
+																				  * Class that represent the file
+																				  *containing MRZ informations on a
+																				  *PTEID card IAS5
+																				  *
+																				  * This class is for internal use in
+																				  *APL_EidFile_ID_V2
+																				  *********************************************************************************/
+class APL_EidFile_MRZ : public APL_CardFile {
 public:
 	virtual ~APL_EidFile_MRZ();
 	void doSODCheck(bool check);
-	const char* getMRZ();
+	const char *getMRZ();
 	APL_EidFile_MRZ(APL_EIDCard *card);
 
 private:
-	APL_EidFile_MRZ(const APL_EidFile_MRZ &file);			   	/**< Copy not allowed - not implemented */
-	APL_EidFile_MRZ &operator=(const APL_EidFile_MRZ &file); 	/**< Copy not allowed - not implemented */
+	APL_EidFile_MRZ(const APL_EidFile_MRZ &file);			 /**< Copy not allowed - not implemented */
+	APL_EidFile_MRZ &operator=(const APL_EidFile_MRZ &file); /**< Copy not allowed - not implemented */
 
 	virtual tCardFileStatus VerifyFile();
 	virtual void EmptyFields();
@@ -276,36 +285,35 @@ private:
 	std::string m_Mrz;
 };
 
-class APL_EidFile_ID_V2 : public APL_EidFile_ID
-{
+class APL_EidFile_ID_V2 : public APL_EidFile_ID {
 public:
 	/**
 	 * Destructor
 	 */
 	virtual ~APL_EidFile_ID_V2();
-	
+
 	/**
 	 * Initializes, loads, verificates SOD and returns the photo object.
 	 * This is done as a way to defer the loading of the photo file from
 	 * the main APL_EidFile_ID_V2::ShowData.
-	*/
-	virtual PhotoPteid *getPhotoObj();						/**< Return object Photo */
+	 */
+	virtual PhotoPteid *getPhotoObj(); /**< Return object Photo */
 
 	/**
 	 * Document PAN is now depecrecated for ID_V2.
 	 * Returns empty string
-	*/
+	 */
 	virtual const char *getDocumentPAN();
 
 protected:
 	/**
 	 * Constructor
 	 *		Used only in APL_EIDCard::getFileID()
-	*/
+	 */
 	APL_EidFile_ID_V2(APL_EIDCard *card);
 
 private:
-	APL_EidFile_ID_V2(const APL_EidFile_ID_V2 &file);			   /**< Copy not allowed - not implemented */
+	APL_EidFile_ID_V2(const APL_EidFile_ID_V2 &file);			 /**< Copy not allowed - not implemented */
 	APL_EidFile_ID_V2 &operator=(const APL_EidFile_ID_V2 &file); /**< Copy not allowed - not implemented */
 
 	/**
@@ -315,7 +323,7 @@ private:
 	 * @return - else => CARDFILESTATUS_ERROR_OK
 	 */
 	virtual tCardFileStatus VerifyFile();
-	
+
 	virtual void MapFieldsInternal();
 
 	/**
@@ -326,33 +334,36 @@ private:
 	bool LoadMRZFile();
 	bool LoadPhotoFile();
 
-	APL_EidFile_MRZ* m_EidFile_MRZ;
-	APL_EidFile_Photo* m_EidFile_Photo;
+	APL_EidFile_MRZ *m_EidFile_MRZ;
+	APL_EidFile_Photo *m_EidFile_Photo;
 
-friend 	APL_EidFile_ID *APL_EIDCard::getFileID();	/**< This method must access protected constructor */
+	friend APL_EidFile_ID *APL_EIDCard::getFileID(); /**< This method must access protected constructor */
 };
 
-/******************************************************************************//**
-  * Class that represents the file containing citizen address information on a PTEID card
-  *
-  * This class is for internal use in APL_EIDCard
-  *
-  * To get APL_EidFile_Address object, we have to ask it from APL_EIDCard 
-  *********************************************************************************/
-class APL_EidFile_Address : public APL_CardFile
-{
+/******************************************************************************/ /**
+																				  * Class that represents the file
+																				  *containing citizen address
+																				  *information on a PTEID card
+																				  *
+																				  * This class is for internal use in
+																				  *APL_EIDCard
+																				  *
+																				  * To get APL_EidFile_Address object,
+																				  *we have to ask it from APL_EIDCard
+																				  *********************************************************************************/
+class APL_EidFile_Address : public APL_CardFile {
 public:
 	/**
-	  * Destructor
-	  */
+	 * Destructor
+	 */
 	virtual ~APL_EidFile_Address();
 
-	bool isNationalAddress();							/** is the address a portuguese address? */
-	const char *getCountryCode();						/** residence country */
+	bool isNationalAddress();	  /** is the address a portuguese address? */
+	const char *getCountryCode(); /** residence country */
 
 	const char *getDistrict();
 	const char *getDistrictCode();
-	const char *getMunicipality();						/** Return field Municipality */
+	const char *getMunicipality(); /** Return field Municipality */
 	const char *getMunicipalityCode();
 	const char *getCivilParish();
 	const char *getCivilParishCode();
@@ -382,53 +393,52 @@ public:
 
 protected:
 	/**
-	  * Constructor
-	  *		Used only in APL_EIDCard::getFileAddress()
-	  */    
+	 * Constructor
+	 *		Used only in APL_EIDCard::getFileAddress()
+	 */
 	APL_EidFile_Address(APL_EIDCard *card);
 
 private:
-	APL_EidFile_Address(const APL_EidFile_Address& file);				/**< Copy not allowed - not implemented */
-	APL_EidFile_Address &operator= (const APL_EidFile_Address& file);	/**< Copy not allowed - not implemented */
+	APL_EidFile_Address(const APL_EidFile_Address &file);			 /**< Copy not allowed - not implemented */
+	APL_EidFile_Address &operator=(const APL_EidFile_Address &file); /**< Copy not allowed - not implemented */
 
 	/**
-	  * Check if the Address signature correspond to the file
-	  * @return - if bad signature file => status of signature file
-	  * @return - if signature error => CARDFILESTATUS_ERROR_SIGNATURE
-	  * @return - else => CARDFILESTATUS_ERROR_OK
-	  */
+	 * Check if the Address signature correspond to the file
+	 * @return - if bad signature file => status of signature file
+	 * @return - if signature error => CARDFILESTATUS_ERROR_SIGNATURE
+	 * @return - else => CARDFILESTATUS_ERROR_OK
+	 */
 	virtual tCardFileStatus VerifyFile();
 
 	/**
-	  * Map all the fields with the content of the file (APL_CardFile::m_data)
-	  */
+	 * Map all the fields with the content of the file (APL_CardFile::m_data)
+	 */
 	virtual void AddressFields();
 	virtual void ForeignerAddressFields();
 	virtual bool MapFields();
-	virtual void EmptyFields();									/**< Empty all fields */
+	virtual void EmptyFields(); /**< Empty all fields */
 	void PackAddressData(CByteArray &cb, bool isNational);
 	void MapFieldsInternal();
 
 	/**
-	  * Return true if data can be showned 
-	  */
+	 * Return true if data can be showned
+	 */
 	virtual bool ShowData();
-
 
 	std::string m_AddressFile;
 
-	std::string m_AddressType;								/**< Field Address type */
-	std::string m_CountryCode;								/**< Field Country code*/
+	std::string m_AddressType; /**< Field Address type */
+	std::string m_CountryCode; /**< Field Country code*/
 
-	std::string m_DistrictCode;								/**< Field District Code*/
-	std::string m_DistrictDescription;						/**< Field District Description*/
-	std::string m_MunicipalityCode;							/**< Field Municipality Code*/
-	std::string m_MunicipalityDescription;					/**< Field Municipality Description*/
-	std::string m_CivilParishCode;							/**< Field Civil Parish Code*/
-	std::string m_CivilParishDescription;					/**< Field Civil Parish Description*/
-	std::string m_AbbrStreetType;							/**< Field Abbreviated Street Type*/
-	std::string m_StreetType;								/**< Field Street Type*/
-	std::string m_StreetName;								/**< Field Street Name*/
+	std::string m_DistrictCode;			   /**< Field District Code*/
+	std::string m_DistrictDescription;	   /**< Field District Description*/
+	std::string m_MunicipalityCode;		   /**< Field Municipality Code*/
+	std::string m_MunicipalityDescription; /**< Field Municipality Description*/
+	std::string m_CivilParishCode;		   /**< Field Civil Parish Code*/
+	std::string m_CivilParishDescription;  /**< Field Civil Parish Description*/
+	std::string m_AbbrStreetType;		   /**< Field Abbreviated Street Type*/
+	std::string m_StreetType;			   /**< Field Street Type*/
+	std::string m_StreetName;			   /**< Field Street Name*/
 	std::string m_AbbrBuildingType;
 	std::string m_BuildingType;
 	std::string m_DoorNo;
@@ -449,61 +459,61 @@ private:
 
 	std::string m_Generated_Address_Code;
 
-	static const std::string m_NATIONAL;			/**< portuguese addresses 'N' in the address type field*/
-	static const std::string m_FOREIGN;				/**< foreign addresses have 'I' in the address type field*/
+	static const std::string m_NATIONAL; /**< portuguese addresses 'N' in the address type field*/
+	static const std::string m_FOREIGN;	 /**< foreign addresses have 'I' in the address type field*/
 
-friend 	APL_EidFile_Address *APL_EIDCard::getFileAddress();	/**< This method must access protected constructor */
-
+	friend APL_EidFile_Address *APL_EIDCard::getFileAddress(); /**< This method must access protected constructor */
 };
 
-
-/******************************************************************************//**
-  * Class that represent the file containing the SOD on a PTEID card
-  *
-  * This class is for internal use in APL_EIDCard
-  *
-  * To get APL_EidFile_Sod object, we have to ask it from APL_EIDCard
-  *********************************************************************************/
-class APL_EidFile_Sod : public APL_CardFile
-{
+/******************************************************************************/ /**
+																				  * Class that represent the file
+																				  *containing the SOD on a PTEID card
+																				  *
+																				  * This class is for internal use in
+																				  *APL_EIDCard
+																				  *
+																				  * To get APL_EidFile_Sod object, we
+																				  *have to ask it from APL_EIDCard
+																				  *********************************************************************************/
+class APL_EidFile_Sod : public APL_CardFile {
 public:
 	/**
-	  * Destructor
-	  */
+	 * Destructor
+	 */
 	virtual ~APL_EidFile_Sod();
 
 	tCardFileStatus VerifyFile();
 
-	const CByteArray& getMrzHash();
+	const CByteArray &getMrzHash();
 
-	const CByteArray& getAddressHash();
+	const CByteArray &getAddressHash();
 
-	const CByteArray& getPictureHash();
+	const CByteArray &getPictureHash();
 
-	const CByteArray& getCardPublicKeyHash();
+	const CByteArray &getCardPublicKeyHash();
 
-	const CByteArray& getIdHash();
+	const CByteArray &getIdHash();
 
 	void doSODCheck(bool check);
 
 protected:
 	/**
-	  * Constructor
-	  *		Used only in APL_EIDCard::getFileSod()
-	  */    
+	 * Constructor
+	 *		Used only in APL_EIDCard::getFileSod()
+	 */
 	APL_EidFile_Sod(APL_EIDCard *card);
-	APL_EidFile_Sod(APL_EIDCard *card, const char* csPath);
+	APL_EidFile_Sod(APL_EIDCard *card, const char *csPath);
 
 private:
-	APL_EidFile_Sod(const APL_EidFile_Sod& file);				/**< Copy not allowed - not implemented */
-	APL_EidFile_Sod &operator= (const APL_EidFile_Sod& file);	/**< Copy not allowed - not implemented */
+	APL_EidFile_Sod(const APL_EidFile_Sod &file);			 /**< Copy not allowed - not implemented */
+	APL_EidFile_Sod &operator=(const APL_EidFile_Sod &file); /**< Copy not allowed - not implemented */
 
 	virtual bool MapFields();
 	virtual void EmptyFields();
 
 	/**
-	  * Return true if data can be showned
-	  */
+	 * Return true if data can be showned
+	 */
 	virtual bool ShowData();
 
 	CByteArray m_mrzHash;
@@ -513,101 +523,105 @@ private:
 	CByteArray m_picHash;
 	CByteArray m_encapsulatedContent;
 
-friend 	APL_EidFile_Sod *APL_EIDCard::getFileSod();	/**< This method must access protected constructor */
+	friend APL_EidFile_Sod *APL_EIDCard::getFileSod(); /**< This method must access protected constructor */
 };
 
-/******************************************************************************//**
-  * Class that represent the file containing the Personal Data on a PTEID card
-  *
-  * This class is for internal use in APL_EIDCard
-  *
-  * To get APL_EidFile_PersoData object, we have to ask it from APL_EIDCard
-  *********************************************************************************/
-class APL_EidFile_PersoData : public APL_CardFile
-{
+/******************************************************************************/ /**
+																				  * Class that represent the file
+																				  *containing the Personal Data on a
+																				  *PTEID card
+																				  *
+																				  * This class is for internal use in
+																				  *APL_EIDCard
+																				  *
+																				  * To get APL_EidFile_PersoData object,
+																				  *we have to ask it from APL_EIDCard
+																				  *********************************************************************************/
+class APL_EidFile_PersoData : public APL_CardFile {
 public:
 	/**
-	  * Destructor
-	  */
+	 * Destructor
+	 */
 	virtual ~APL_EidFile_PersoData();
 
-	const char *getPersoData(bool forceMap=false); /* Get PersonalData */
+	const char *getPersoData(bool forceMap = false); /* Get PersonalData */
 
 protected:
 	/**
-	  * Constructor
-	  *		Used only in APL_EIDCard::getFilePersoData()
-	  */
+	 * Constructor
+	 *		Used only in APL_EIDCard::getFilePersoData()
+	 */
 	APL_EidFile_PersoData(APL_EIDCard *card);
 
 private:
-	APL_EidFile_PersoData(const APL_EidFile_PersoData& file);				/**< Copy not allowed - not implemented */
-	APL_EidFile_PersoData &operator= (const APL_EidFile_PersoData& file);	/**< Copy not allowed - not implemented */
-
+	APL_EidFile_PersoData(const APL_EidFile_PersoData &file);			 /**< Copy not allowed - not implemented */
+	APL_EidFile_PersoData &operator=(const APL_EidFile_PersoData &file); /**< Copy not allowed - not implemented */
 
 	/**
-	  * Check if the hash in the ID file correspond to this file
-	  * @return - if bad ID file => status of ID file
-	  * @return - if hash error => CARDFILESTATUS_ERROR_HASH
-	  * @return - else => CARDFILESTATUS_ERROR_OK
-	  */
+	 * Check if the hash in the ID file correspond to this file
+	 * @return - if bad ID file => status of ID file
+	 * @return - if hash error => CARDFILESTATUS_ERROR_HASH
+	 * @return - else => CARDFILESTATUS_ERROR_OK
+	 */
 	virtual tCardFileStatus VerifyFile();
-	virtual bool MapFields();										/**< Nothing to do m_data contains the file */
-	virtual void EmptyFields();										/**< Nothing to do m_data contains the file */
+	virtual bool MapFields();	/**< Nothing to do m_data contains the file */
+	virtual void EmptyFields(); /**< Nothing to do m_data contains the file */
 	void doSODCheck(bool check) {}
 
 	/**
-	  * Return true if data can be showned
-	  */
+	 * Return true if data can be showned
+	 */
 	virtual bool ShowData();
 
-	std::string m_PersoData;                                            	/**< Field PersoData */
+	std::string m_PersoData; /**< Field PersoData */
 
-
-friend 	APL_EidFile_PersoData *APL_EIDCard::getFilePersoData();	/**< This method must access protected constructor */
+	friend APL_EidFile_PersoData *APL_EIDCard::getFilePersoData(); /**< This method must access protected constructor */
 };
 
-/******************************************************************************//**
-  * Class that represent the Token info file on a PTEID card
-  *
-  * This class is for internal use in APL_EIDCard
-  *
-  * To get APL_EidFile_TokenInfo object, we have to ask it from APL_EIDCard 
-  *********************************************************************************/
-class APL_EidFile_TokenInfo : public APL_CardFile
-{
+/******************************************************************************/ /**
+																				  * Class that represent the Token info
+																				  *file on a PTEID card
+																				  *
+																				  * This class is for internal use in
+																				  *APL_EIDCard
+																				  *
+																				  * To get APL_EidFile_TokenInfo object,
+																				  *we have to ask it from APL_EIDCard
+																				  *********************************************************************************/
+class APL_EidFile_TokenInfo : public APL_CardFile {
 public:
 	/**
-	  * Destructor
-	  */
+	 * Destructor
+	 */
 	virtual ~APL_EidFile_TokenInfo();
 
-	const char *getGraphicalPersonalisation();				/**< Return the Graphical Personalisation of the file */
-	const char *getElectricalPersonalisation();				/**< Return the Electrical Personalisation of the file */
-	const char *getElectricalPersonalisationInterface();	/**< Return the Electrical Personalisation Interface of the file */
+	const char *getGraphicalPersonalisation();	/**< Return the Graphical Personalisation of the file */
+	const char *getElectricalPersonalisation(); /**< Return the Electrical Personalisation of the file */
+	const char *
+	getElectricalPersonalisationInterface(); /**< Return the Electrical Personalisation Interface of the file */
 
 protected:
 	/**
-	  * Constructor
-	  *		Used only in APL_EIDCard::getFileTokenInfo()
-	  */    
+	 * Constructor
+	 *		Used only in APL_EIDCard::getFileTokenInfo()
+	 */
 	APL_EidFile_TokenInfo(APL_EIDCard *card);
 
 private:
-	APL_EidFile_TokenInfo(const APL_EidFile_TokenInfo& file);				/**< Copy not allowed - not implemented */
-	APL_EidFile_TokenInfo &operator= (const APL_EidFile_TokenInfo& file);	/**< Copy not allowed - not implemented */
+	APL_EidFile_TokenInfo(const APL_EidFile_TokenInfo &file);			 /**< Copy not allowed - not implemented */
+	APL_EidFile_TokenInfo &operator=(const APL_EidFile_TokenInfo &file); /**< Copy not allowed - not implemented */
 
-	virtual tCardFileStatus VerifyFile();	/**< Always return CARDFILESTATUS_OK */
-	virtual bool MapFields();				/**< Map the fields with the content of the file */
-	virtual void EmptyFields();				/**< Empty all the fields */
+	virtual tCardFileStatus VerifyFile(); /**< Always return CARDFILESTATUS_OK */
+	virtual bool MapFields();			  /**< Map the fields with the content of the file */
+	virtual void EmptyFields();			  /**< Empty all the fields */
 	void doSODCheck(bool check) {}
 
-	std::string m_GraphicalPersonalisation;				/**< The Graphical Personalisation of the file */
-	std::string m_ElectricalPersonalisation;			/**< The Electrical Personalisation of the file */
-	std::string m_ElectricalPersonalisationInterface;	/**< The Electrical Personalisation Interface of the file */
+	std::string m_GraphicalPersonalisation;			  /**< The Graphical Personalisation of the file */
+	std::string m_ElectricalPersonalisation;		  /**< The Electrical Personalisation of the file */
+	std::string m_ElectricalPersonalisationInterface; /**< The Electrical Personalisation Interface of the file */
 
-friend 	APL_EidFile_TokenInfo *APL_EIDCard::getFileTokenInfo();	/**< This method must access protected constructor */
+	friend APL_EidFile_TokenInfo *APL_EIDCard::getFileTokenInfo(); /**< This method must access protected constructor */
 };
-}
+} // namespace eIDMW
 
 #endif //__CARDEID_H__

@@ -17,33 +17,32 @@
 
 namespace eIDMW {
 
-class ScapSettings
-{
+class ScapSettings {
 public:
-    ScapSettings();
+	ScapSettings();
 
-    void setScapServerHost(const QString &host);
-    std::string getScapServerHost();
-    void setScapServerPort(int server_port);
-    std::string getScapServerPort();
+	void setScapServerHost(const QString &host);
+	std::string getScapServerHost();
+	void setScapServerPort(int server_port);
+	std::string getScapServerPort();
 
-    void setSecretKey(const std::string &secretKey, const std::string &nic);
-    std::string getSecretKey(const std::string &nic);
-    void resetScapKeys();
+	void setSecretKey(const std::string &secretKey, const std::string &nic);
+	std::string getSecretKey(const std::string &nic);
+	void resetScapKeys();
 
-    void setAppID(const QString &appID);
-    const QString getAppID();
+	void setAppID(const QString &appID);
+	const QString getAppID();
 
-    QString getCacheDir();
+	QString getCacheDir();
 
-    static bool secretKeyExists();
+	static bool secretKeyExists();
 
 private:
-    QString m_scap_server_host;
-    QString m_scap_server_port;
+	QString m_scap_server_host;
+	QString m_scap_server_port;
 
-    QString m_appID;
-    QString m_cache_dir;
+	QString m_appID;
+	QString m_cache_dir;
 };
 
-};
+}; // namespace eIDMW

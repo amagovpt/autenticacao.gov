@@ -22,17 +22,11 @@
 
 #include "dlgWndBase.h"
 
-dlgWndBase::dlgWndBase( QWidget *parent ) : QDialog(parent)
-{
-}
+dlgWndBase::dlgWndBase(QWidget *parent) : QDialog(parent) {}
 
-dlgWndBase::~dlgWndBase()
-{
+dlgWndBase::~dlgWndBase() {}
 
-}
-
-int dlgWndBase::exec()
-{
+int dlgWndBase::exec() {
 	show();
 	raise();
 	return QDialog::exec();

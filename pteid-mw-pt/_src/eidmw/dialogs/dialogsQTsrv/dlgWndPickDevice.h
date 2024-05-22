@@ -28,25 +28,24 @@
 
 using namespace eIDMW;
 
-class dlgWndPickDevice : public dlgWndBase
-{
-    Q_OBJECT
+class dlgWndPickDevice : public dlgWndBase {
+	Q_OBJECT
 
 public:
-    dlgWndPickDevice(QWidget *parent = NULL, Type_WndGeometry *wndGeometry = NULL );
-    ~dlgWndPickDevice();
+	dlgWndPickDevice(QWidget *parent = NULL, Type_WndGeometry *wndGeometry = NULL);
+	~dlgWndPickDevice();
 
-    DlgDevice getOutDevice() { return m_outDevice; };
+	DlgDevice getOutDevice() { return m_outDevice; };
 
 private:
-    Ui::dlgWndPickDeviceClass ui;
-    bool m_Id_OK = false;
-    bool m_Code_OK = false;
-    DlgDevice m_outDevice = (DlgDevice)-1;
+	Ui::dlgWndPickDeviceClass ui;
+	bool m_Id_OK = false;
+	bool m_Code_OK = false;
+	DlgDevice m_outDevice = (DlgDevice)-1;
 
 private slots:
-    void on_radioDeviceCC_clicked() { m_outDevice = DlgDevice::DLG_CC; };
-    void on_radioDeviceCMD_clicked() { m_outDevice = DlgDevice::DLG_CMD; };
+	void on_radioDeviceCC_clicked() { m_outDevice = DlgDevice::DLG_CC; };
+	void on_radioDeviceCMD_clicked() { m_outDevice = DlgDevice::DLG_CMD; };
 };
 
 #endif // DLGWNDPICKDEVICE_H

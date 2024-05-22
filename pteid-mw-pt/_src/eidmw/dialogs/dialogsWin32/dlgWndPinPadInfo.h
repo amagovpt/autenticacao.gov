@@ -27,8 +27,7 @@
 
 using namespace eIDMW;
 
-class dlgWndPinpadInfo : public Win32Dialog
-{
+class dlgWndPinpadInfo : public Win32Dialog {
 
 	PteidControls::TextData titleData, headerData, warningTextData;
 	HWND hwndAnim;
@@ -43,15 +42,12 @@ class dlgWndPinpadInfo : public Win32Dialog
 	UINT_PTR m_timer;
 
 public:
-	dlgWndPinpadInfo( unsigned long ulHandle, DlgPinUsage usage, 
-		DlgPinOperation operation, const std::wstring & csReader, 
-		const std::wstring & title, const std::wstring & Message, HWND Parent = NULL );
+	dlgWndPinpadInfo(unsigned long ulHandle, DlgPinUsage usage, DlgPinOperation operation, const std::wstring &csReader,
+					 const std::wstring &title, const std::wstring &Message, HWND Parent = NULL);
 	virtual ~dlgWndPinpadInfo();
 
-	virtual LRESULT ProcecEvent
-				(	UINT		uMsg,			// Message For This Window
-					WPARAM		wParam,			// Additional Message Information
-					LPARAM		lParam );		// Additional Message Information
-    void stopExec();
+	virtual LRESULT ProcecEvent(UINT uMsg,		// Message For This Window
+								WPARAM wParam,	// Additional Message Information
+								LPARAM lParam); // Additional Message Information
+	void stopExec();
 };
-

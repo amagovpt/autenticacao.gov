@@ -50,22 +50,21 @@ Takes care of
 #endif
 
 #ifndef SCARD_ATTR_VENDOR_IFD_VERSION
-#define SCARD_ATTR_VENDOR_IFD_VERSION	 ((DWORD)0x00010102)
+#define SCARD_ATTR_VENDOR_IFD_VERSION ((DWORD)0x00010102)
 #endif
 #else
 #include <winscard.h>
 #endif
 
-#define IOCTL_SMARTCARD_SET_CARD_TYPE	SCARD_CTL_CODE(2060)
+#define IOCTL_SMARTCARD_SET_CARD_TYPE SCARD_CTL_CODE(2060)
 
-//#include <winscard.h>
+// #include <winscard.h>
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 // Copied from PCSC
-#define EIDMW_STATE_CHANGED   0x00000002
-#define EIDMW_STATE_PRESENT   0x00000020
+#define EIDMW_STATE_CHANGED 0x00000002
+#define EIDMW_STATE_PRESENT 0x00000020
 
 /**
  * Provides an abstraction of the PCSC SCARD_READERSTATE struct.
@@ -74,17 +73,16 @@ namespace eIDMW
  * except that the SCARD_STATE_CHANGED is only set when a card
  * insert/removal occurred (as opposed to Windows' PCSC).
  */
-typedef struct  {
-    std::string csReader;
-    unsigned long ulCurrentState; // the state when we last checked
-    unsigned long ulEventState;   // the state after the new check
+typedef struct {
+	std::string csReader;
+	unsigned long ulCurrentState; // the state when we last checked
+	unsigned long ulEventState;	  // the state after the new check
 } tReaderInfo;
 
-class EIDMW_CAL_API CPCSC
-{
+class EIDMW_CAL_API CPCSC {
 public:
-    CPCSC(void);
-    ~CPCSC(void);
+	CPCSC(void);
+	~CPCSC(void);
 
 	void EstablishContext();
 
@@ -98,15 +96,13 @@ public:
 	CByteArray ListReaders();
 
 	/** Returns true if something changed */
-	bool GetStatusChange(unsigned long ulTimeout,
-		tReaderInfo *pReaderInfos, unsigned long ulReaderCount);
+	bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount);
 
 	bool Status(const std::string &csReader);
 
-    std::pair<SCARDHANDLE, DWORD> Connect(const std::string &csReader,
-		unsigned long ulShareMode = SCARD_SHARE_SHARED,
-		unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1);
-    void Disconnect(SCARDHANDLE hCard, tDisconnectMode disconnectMode);
+	std::pair<SCARDHANDLE, DWORD> Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+										  unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1);
+	void Disconnect(SCARDHANDLE hCard, tDisconnectMode disconnectMode);
 
 	CByteArray GetATR(SCARDHANDLE hCard);
 	CByteArray GetIFDVersion(SCARDHANDLE hCard);
@@ -118,24 +114,24 @@ public:
 	 */
 	bool Status(SCARDHANDLE hCard);
 
-	CByteArray Transmit(SCARDHANDLE hCard, const CByteArray &oCmdAPDU,
-		long *plRetVal, const void *pSendPci = NULL, void *pRecvPci = NULL);
+	CByteArray Transmit(SCARDHANDLE hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,
+						void *pRecvPci = NULL);
 	void Recover(SCARDHANDLE hCard, unsigned long *pulLockCount);
-	CByteArray Control(SCARDHANDLE hCard, unsigned long ulControl,
-		const CByteArray &oCmd, unsigned long ulMaxResponseSize = CTRL_BUF_LEN);
+	CByteArray Control(SCARDHANDLE hCard, unsigned long ulControl, const CByteArray &oCmd,
+					   unsigned long ulMaxResponseSize = CTRL_BUF_LEN);
 
-    void BeginTransaction(SCARDHANDLE hCard);
-    void EndTransaction(SCARDHANDLE hCard);
+	void BeginTransaction(SCARDHANDLE hCard);
+	void EndTransaction(SCARDHANDLE hCard);
 
-	//unsigned long GetContext();
+	// unsigned long GetContext();
 	SCARDCONTEXT GetContext();
 
-    long SW12ToErr(unsigned long ulSW12);
+	long SW12ToErr(unsigned long ulSW12);
 
 private:
 	long PcscToErr(unsigned long lRet);
 
-    //unsigned long m_hContext;
+	// unsigned long m_hContext;
 	SCARDCONTEXT m_hContext;
 
 	friend class CPinpad;
@@ -143,9 +139,8 @@ private:
 	int m_iTimeoutCount;
 	int m_iListReadersCount;
 
-    unsigned long m_ulCardTxDelay;          //delay before each transmission to a smartcard; in millie-seconds, default 1
-
+	unsigned long m_ulCardTxDelay; // delay before each transmission to a smartcard; in millie-seconds, default 1
 };
 
-}
+} // namespace eIDMW
 #endif

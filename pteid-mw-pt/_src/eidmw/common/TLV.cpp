@@ -25,33 +25,24 @@
 
 #include "TLV.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CTLV::CTLV()
-{
-    SetTag(0x00);
+CTLV::CTLV() { SetTag(0x00); }
+
+CTLV::CTLV(const CTLV &oTlv) {
+	SetTag(oTlv.m_ucTag);
+	SetData(oTlv.m_Data);
 }
 
-CTLV::CTLV(const CTLV & oTlv)
-{
-    SetTag(oTlv.m_ucTag);
-    SetData(oTlv.m_Data); 
+CTLV::CTLV(unsigned char ucTag, const unsigned char *pucData, unsigned long ulLen) {
+	SetTag(ucTag);
+	SetData(pucData, ulLen);
 }
 
-CTLV::CTLV(unsigned char ucTag, const unsigned char *pucData, unsigned long ulLen)
-{
-    SetTag(ucTag);
-    SetData(pucData, ulLen); 
-}
+CTLV::~CTLV() {}
 
-CTLV::~CTLV()
-{
-
-}
-
-}  // namespace eIDMW
+} // namespace eIDMW

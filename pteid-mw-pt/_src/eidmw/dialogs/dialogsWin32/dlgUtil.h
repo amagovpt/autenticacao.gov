@@ -21,8 +21,7 @@
 #ifndef __DLG_UTIL_H__
 #define __DLG_UTIL_H__
 
-namespace eIDMW
-{
-    void ScaleDimensions(int *width, int *height);
+namespace eIDMW {
+void ScaleDimensions(int *width, int *height);
 }
 #endif //__LANGUTIL_H__

@@ -20,16 +20,15 @@
 
 **************************************************************************** */
 
-#define LOGTYPE_ERROR       0
-#define LOGTYPE_WARNING     1
-#define LOGTYPE_INFO        2
-#define LOGTYPE_DEBUG       3
+#define LOGTYPE_ERROR 0
+#define LOGTYPE_WARNING 1
+#define LOGTYPE_INFO 2
+#define LOGTYPE_DEBUG 3
 
-#define LOGTYPE_NONE        666
+#define LOGTYPE_NONE 666
 
 extern void LogInit(void);
-extern void LogTrace(int info, const char *pWhere, const char *format,... );
+extern void LogTrace(int info, const char *pWhere, const char *format, ...);
 
 extern void LogDumpHex(int iStreamLg, unsigned char *pa_cStream);
 extern void LogDumpBin(char *fileName, int iStreamLg, unsigned char *pa_cStream);
-

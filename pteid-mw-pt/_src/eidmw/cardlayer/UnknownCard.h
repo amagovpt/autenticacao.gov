@@ -27,30 +27,26 @@
 
 #include "Card.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-class CUnknownCard : public CCard
-{
+class CUnknownCard : public CCard {
 public:
-	static bool IsUnknownCard(SCARDHANDLE hCard, CContext *poContext,
-		CByteArray & oData);
+	static bool IsUnknownCard(SCARDHANDLE hCard, CContext *poContext, CByteArray &oData);
 
-	CUnknownCard(SCARDHANDLE hCard, CContext *poContext,
-		GenericPinpad *poPinpad, const CByteArray & oData);
-    ~CUnknownCard(void);
+	CUnknownCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const CByteArray &oData);
+	~CUnknownCard(void);
 
-    virtual CByteArray ReadUncachedFile(const std::string & csPath,
-        unsigned long ulOffset = 0, unsigned long ulMaxLen = FULL_FILE);
+	virtual CByteArray ReadUncachedFile(const std::string &csPath, unsigned long ulOffset = 0,
+										unsigned long ulMaxLen = FULL_FILE);
 
-    virtual void InitEncryptionKey();
+	virtual void InitEncryptionKey();
 	virtual void ReadSerialNumber();
 
-    tCardType GetType();
+	tCardType GetType();
 
-    std::string GetSerialNr();
+	std::string GetSerialNr();
 
 	std::string GetLabel();
 };
 
-}
+} // namespace eIDMW

@@ -8,13 +8,13 @@
 /* #undef ENABLE_LIBCURL */
 
 /* Use libjpeg instead of builtin jpeg decoder. */
-//#define ENABLE_LIBJPEG 1
+// #define ENABLE_LIBJPEG 1
 
 /* Use libopenjpeg instead of builtin jpeg2000 decoder. */
 /* #undef ENABLE_LIBOPENJPEG */
 
 /* Build against libpng. */
-//#define ENABLE_LIBPNG 1
+// #define ENABLE_LIBPNG 1
 
 /* Build against libtiff. */
 /* #undef ENABLE_LIBTIFF */
@@ -29,7 +29,7 @@
 /* #undef HAVE_CAIRO */
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
-   */
+ */
 #define HAVE_DIRENT_H 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
@@ -46,8 +46,8 @@
 
 /* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
 #ifndef _WIN32
- #define HAVE_FSEEKO 1
- #endif
+#define HAVE_FSEEKO 1
+#endif
 
 /* Define to 1 if you have the `ftell64' function. */
 /* #undef HAVE_FTELL64 */
@@ -114,14 +114,14 @@
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
-   */
+ */
 /* #undef HAVE_SYS_DIR_H */
 
 /* Define to 1 if you have the <sys/mman.h> header file. */
 /* #undef HAVE_SYS_MMAN_H */
 
 /* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
-   */
+ */
 /* #undef HAVE_SYS_NDIR_H */
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
@@ -145,7 +145,7 @@
 /* #undef ICONV_CONST */
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+ */
 #define LT_OBJDIR ".libs/"
 
 /* Enable multithreading support. */
@@ -221,13 +221,13 @@
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
 #if defined AC_APPLE_UNIVERSAL_BUILD
-# if defined __BIG_ENDIAN__
-#  define WORDS_BIGENDIAN 1
-# endif
+#if defined __BIG_ENDIAN__
+#define WORDS_BIGENDIAN 1
+#endif
 #else
-# ifndef WORDS_BIGENDIAN
+#ifndef WORDS_BIGENDIAN
 /* #  undef WORDS_BIGENDIAN */
-# endif
+#endif
 #endif
 
 /* Define to 1 if the X Window System is missing or not being used. */
@@ -241,7 +241,6 @@
 #ifdef _UNIXWARE
 #define HAVE_BOOLEAN
 #endif
-
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64

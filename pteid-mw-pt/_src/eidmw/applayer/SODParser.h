@@ -26,7 +26,7 @@ class SODAttributes;
 class SODParser {
 public:
 	virtual ~SODParser();
-	void ParseSodEncapsulatedContent(const CByteArray& contents, const std::vector<int>& valid_tags);
+	void ParseSodEncapsulatedContent(const CByteArray &contents, const std::vector<int> &valid_tags);
 	SODAttributes &getHashes();
 
 private:

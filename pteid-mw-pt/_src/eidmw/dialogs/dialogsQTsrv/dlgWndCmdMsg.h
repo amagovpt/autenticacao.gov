@@ -28,18 +28,18 @@
 
 using namespace eIDMW;
 
-class dlgWndCmdMsg : public dlgWndBase
-{
-    Q_OBJECT
+class dlgWndCmdMsg : public dlgWndBase {
+	Q_OBJECT
 
 public:
-    dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType type, QString &message, unsigned long ulHandle, QWidget *parent = NULL, Type_WndGeometry *wndGeometry = NULL );
-    ~dlgWndCmdMsg();
+	dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType type, QString &message, unsigned long ulHandle,
+				 QWidget *parent = NULL, Type_WndGeometry *wndGeometry = NULL);
+	~dlgWndCmdMsg();
 
 private:
-    Ui::dlgWndCmdMsgClass ui;
-    unsigned long m_ulHandle = 0;
-    QMovie *m_movie = NULL;
+	Ui::dlgWndCmdMsgClass ui;
+	unsigned long m_ulHandle = 0;
+	QMovie *m_movie = NULL;
 };
 
 #endif // DLGWNDCMDMSG_H

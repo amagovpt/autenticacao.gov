@@ -39,33 +39,30 @@
 #include "P15Objects.h"
 #include "InternalConst.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 class CContext;
 
-class EIDMW_CAL_API CPinpad
-{
+class EIDMW_CAL_API CPinpad {
 public:
-    CPinpad(CContext *poContext,
-			 const std::string & csReader);
+	CPinpad(CContext *poContext, const std::string &csReader);
 
-    bool UsePinpad();
+	bool UsePinpad();
 	void Init(SCARDHANDLE hCard);
-	int getTlvPropertiesIoctl() { return m_ioctlTlvProperties;  }
-    GenericPinpad *getPinpadHandler();
+	int getTlvPropertiesIoctl() { return m_ioctlTlvProperties; }
+	GenericPinpad *getPinpadHandler();
 
 protected:
-	CByteArray PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
-		tPinOperation operation, unsigned char ucPintype,
-		const std::string & csPinLabel,	bool bShowDlg, void *wndGeometry = 0 );
+	CByteArray PinpadControl(unsigned long ulControl, const CByteArray &oCmd, tPinOperation operation,
+							 unsigned char ucPintype, const std::string &csPinLabel, bool bShowDlg,
+							 void *wndGeometry = 0);
 	void GetFeatureList();
 
 	CContext *m_poContext;
-    SCARDHANDLE m_hCard;
+	SCARDHANDLE m_hCard;
 	std::string m_csReader;
 
-	bool m_bCanVerifyUnlock;  // Can do operations with 1 PIN
-	bool m_bCanChangeUnlock;  // Can do operations with 2 PINs
+	bool m_bCanVerifyUnlock; // Can do operations with 1 PIN
+	bool m_bCanChangeUnlock; // Can do operations with 2 PINs
 
 	unsigned long m_ioctlVerifyStart;
 	unsigned long m_ioctlVerifyFinish;
@@ -78,5 +75,5 @@ protected:
 	unsigned short m_usReaderFirmVers;
 };
 
-}
+} // namespace eIDMW
 #endif

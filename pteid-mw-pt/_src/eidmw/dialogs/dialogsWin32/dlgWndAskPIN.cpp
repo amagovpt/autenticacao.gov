@@ -33,7 +33,7 @@
 #include "Config.h"
 #include "resource.h"
 
-#define IDC_STATIC_TITLE  0
+#define IDC_STATIC_TITLE 0
 #define IDB_OK IDOK
 #define IDB_CANCEL IDCANCEL
 #define IDC_STATIC_HEADER 3
@@ -42,28 +42,25 @@
 
 std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-
-
-dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinUsage, std::wstring & title, std::wstring & Header, std::wstring & PINName, HWND Parent)
-:Win32Dialog(L"WndAskPIN")
-{
+dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinUsage, std::wstring &title, std::wstring &Header,
+						   std::wstring &PINName, HWND Parent)
+	: Win32Dialog(L"WndAskPIN") {
 	PinResult[0] = ' ';
 	PinResult[1] = (char)0;
 
 	// Added for accessibility
 	std::wstring tmpTitle = L"";
-	tmpTitle += title;	
+	tmpTitle += title;
 	tmpTitle += Header;
 	tmpTitle += PINName;
 
 	int window_height = 230;
 	int window_width = 430;
 
-	if( CreateWnd( tmpTitle.c_str() , window_width, window_height, IDI_APPICON, Parent ) )
-	{
+	if (CreateWnd(tmpTitle.c_str(), window_width, window_height, IDI_APPICON, Parent)) {
 
 		RECT clientRect;
-		GetClientRect( m_hWnd, &clientRect );
+		GetClientRect(m_hWnd, &clientRect);
 
 		int contentX = (int)(clientRect.right * 0.05);
 		int paddingY = (int)(clientRect.bottom * 0.078);
@@ -82,33 +79,27 @@ dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinUsage, std::wstrin
 		titleData.text = title.c_str();
 		titleData.font = PteidControls::StandardFontHeader;
 		titleData.color = BLUE;
-		HWND hTitle = PteidControls::CreateText(
-			contentX, paddingY,
-			contentWidth, titleHeight,
-			m_hWnd, (HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
+		HWND hTitle = PteidControls::CreateText(contentX, paddingY, contentWidth, titleHeight, m_hWnd,
+												(HMENU)IDC_STATIC_TITLE, m_hInstance, &titleData);
 
 		// HEADER
 		headerData.font = PteidControls::StandardFontBold;
 		headerData.text = Header.c_str();
-		HWND hHeader = PteidControls::CreateText(
-			contentX, headerY,
-			contentWidth, headerHeight,
-			m_hWnd, (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
+		HWND hHeader = PteidControls::CreateText(contentX, headerY, contentWidth, headerHeight, m_hWnd,
+												 (HMENU)IDC_STATIC_HEADER, m_hInstance, &headerData);
 
 		// TEXT EDIT
 		textFieldData.title = PINName.c_str();
 		textFieldData.isPassword = true;
-		//Max Length of PINs for PTEID cards as currently defined by INCM personalization
+		// Max Length of PINs for PTEID cards as currently defined by INCM personalization
 		textFieldData.minLength = 4;
 		textFieldData.maxLength = 8;
 
 		if (pinInfo.ulFlags & PIN_FLAG_DIGITS)
 			textFieldData.isNumeric = true;
 
-		HWND hTextEdit = PteidControls::CreateTextField(
-			contentX, pinY,
-			contentWidth, editFieldHeight,
-			m_hWnd, (HMENU)IDC_EDIT, m_hInstance, &textFieldData);
+		HWND hTextEdit = PteidControls::CreateTextField(contentX, pinY, contentWidth, editFieldHeight, m_hWnd,
+														(HMENU)IDC_EDIT, m_hInstance, &textFieldData);
 		SetFocus(textFieldData.getMainWnd());
 
 		// BUTTONS
@@ -117,158 +108,137 @@ dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinUsage, std::wstrin
 		okBtnProcData.text = GETSTRING_DLG(Confirm);
 		cancelBtnProcData.text = GETSTRING_DLG(Cancel);
 
-		HWND Cancel_Btn = PteidControls::CreateButton(
-			contentX, buttonY, buttonWidth, buttonHeight,
-			m_hWnd, (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
+		HWND Cancel_Btn = PteidControls::CreateButton(contentX, buttonY, buttonWidth, buttonHeight, m_hWnd,
+													  (HMENU)IDB_CANCEL, m_hInstance, &cancelBtnProcData);
 
-		HWND OK_Btn = PteidControls::CreateButton(
-			contentX + buttonWidth + buttonSpacing, buttonY, buttonWidth, buttonHeight,
-			m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
-
+		HWND OK_Btn = PteidControls::CreateButton(contentX + buttonWidth + buttonSpacing, buttonY, buttonWidth,
+												  buttonHeight, m_hWnd, (HMENU)IDB_OK, m_hInstance, &okBtnProcData);
 	}
 }
 
-dlgWndAskPIN::~dlgWndAskPIN()
-{
+dlgWndAskPIN::~dlgWndAskPIN() {
 	EnableWindow(m_parent, TRUE);
-	KillWindow( );
+	KillWindow();
 }
 
-void dlgWndAskPIN::GetPinResult()
-{
+void dlgWndAskPIN::GetPinResult() {
 	wchar_t nameBuf[128];
 	long len = (long)SendMessage(textFieldData.getMainWnd(), WM_GETTEXTLENGTH, 0, 0);
-	if( len < 128 )
-	{
+	if (len < 128) {
 		SendMessage(textFieldData.getMainWnd(), WM_GETTEXT, (WPARAM)(sizeof(nameBuf)), (LPARAM)nameBuf);
-		wcscpy_s( PinResult, nameBuf );
+		wcscpy_s(PinResult, nameBuf);
 	}
 }
 
-LRESULT dlgWndAskPIN::ProcecEvent
-			(	UINT		uMsg,			// Message For This Window
-				WPARAM		wParam,			// Additional Message Information
-				LPARAM		lParam )		// Additional Message Information
+LRESULT dlgWndAskPIN::ProcecEvent(UINT uMsg,	 // Message For This Window
+								  WPARAM wParam, // Additional Message Information
+								  LPARAM lParam) // Additional Message Information
 {
 	PAINTSTRUCT ps;
 
-	switch( uMsg )
-	{ 
-		case WM_COMMAND:
-		{
-			switch( LOWORD(wParam) )
-			{
-				case IDC_EDIT:
-				{
-					if( EN_CHANGE == HIWORD(wParam) )
-					{
-						okBtnProcData.setEnabled(textFieldData.isAcceptableInput());
-					}
-					return TRUE;
-				}
-
-				case IDB_OK:
-					if (okBtnProcData.isEnabled()) 
-					{
-						GetPinResult();
-						dlgResult = eIDMW::DLG_OK;
-						close();
-					}
-					return TRUE;
-
-				case IDB_CANCEL:
-					dlgResult = eIDMW::DLG_CANCEL;
-					close();
-					return TRUE;
-
-				default:
-					return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+	switch (uMsg) {
+	case WM_COMMAND: {
+		switch (LOWORD(wParam)) {
+		case IDC_EDIT: {
+			if (EN_CHANGE == HIWORD(wParam)) {
+				okBtnProcData.setEnabled(textFieldData.isAcceptableInput());
 			}
-		}
-		
-
-		case WM_SIZE:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_SIZE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			if( IsIconic( m_hWnd ) )
-				return 0;
-			break;
+			return TRUE;
 		}
 
-		case WM_PAINT:
-		{
-			m_hDC = BeginPaint( m_hWnd, &ps );
-
-			MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
-
-			DrawApplicationIcon(m_hDC, m_hWnd);
-
-			EndPaint( m_hWnd, &ps );
-
-			SetForegroundWindow( m_hWnd );
-
-			return 0;
-		}
-
-		case WM_ACTIVATE:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_ACTIVATE (wParam=%X, lParam=%X)",wParam,lParam);
-			break;
-		}
-
-		case WM_NCACTIVATE:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_NCACTIVATE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			if(!wParam)
-			{
-				SetFocus( m_hWnd );
-				return 0;
+		case IDB_OK:
+			if (okBtnProcData.isEnabled()) {
+				GetPinResult();
+				dlgResult = eIDMW::DLG_OK;
+				close();
 			}
-			break;
-		}
+			return TRUE;
 
-		case WM_SETFOCUS:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_SETFOCUS (wParam=%X, lParam=%X)",wParam,lParam);
-			break;
-		}
-
-		case WM_KILLFOCUS:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_KILLFOCUS (wParam=%X, lParam=%X)",wParam,lParam);
-
-			break;
-		}
-
-		case WM_CREATE:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_CREATE (wParam=%X, lParam=%X)",wParam,lParam);
-			break;
-		}
-
-		case WM_CLOSE:
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)",wParam,lParam);
-
-			if( IsIconic( m_hWnd ) )
-				return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
-
-			ShowWindow( m_hWnd, SW_MINIMIZE );
-			return 0;
-		}
-
-		case WM_DESTROY: 
-		{
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_DESTROY (wParam=%X, lParam=%X)",wParam,lParam);
-			break;
-		}
+		case IDB_CANCEL:
+			dlgResult = eIDMW::DLG_CANCEL;
+			close();
+			return TRUE;
 
 		default:
-		{
-			break;
+			return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 		}
 	}
-	return DefWindowProc( m_hWnd, uMsg, wParam, lParam );
+
+	case WM_SIZE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_SIZE (wParam=%X, lParam=%X)", wParam, lParam);
+
+		if (IsIconic(m_hWnd))
+			return 0;
+		break;
+	}
+
+	case WM_PAINT: {
+		m_hDC = BeginPaint(m_hWnd, &ps);
+
+		MWLOG(LEV_DEBUG, MOD_DLG, L"Processing event WM_PAINT - Mapping mode: %d", GetMapMode(m_hDC));
+
+		DrawApplicationIcon(m_hDC, m_hWnd);
+
+		EndPaint(m_hWnd, &ps);
+
+		SetForegroundWindow(m_hWnd);
+
+		return 0;
+	}
+
+	case WM_ACTIVATE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_ACTIVATE (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+		break;
+	}
+
+	case WM_NCACTIVATE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_NCACTIVATE (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+
+		if (!wParam) {
+			SetFocus(m_hWnd);
+			return 0;
+		}
+		break;
+	}
+
+	case WM_SETFOCUS: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_SETFOCUS (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+		break;
+	}
+
+	case WM_KILLFOCUS: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_KILLFOCUS (wParam=%X, lParam=%X)", wParam,
+			  lParam);
+
+		break;
+	}
+
+	case WM_CREATE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_CREATE (wParam=%X, lParam=%X)", wParam, lParam);
+		break;
+	}
+
+	case WM_CLOSE: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_CLOSE (wParam=%X, lParam=%X)", wParam, lParam);
+
+		if (IsIconic(m_hWnd))
+			return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
+
+		ShowWindow(m_hWnd, SW_MINIMIZE);
+		return 0;
+	}
+
+	case WM_DESTROY: {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> dlgWndAskPIN::ProcecEvent WM_DESTROY (wParam=%X, lParam=%X)", wParam, lParam);
+		break;
+	}
+
+	default: {
+		break;
+	}
+	}
+	return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
 }

@@ -26,7 +26,7 @@
 * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-//Need to include this before bcrypt.h for the basic Windows types
+// Need to include this before bcrypt.h for the basic Windows types
 #include <Windows.h>
 #include <bcrypt.h>
 #include "globmdrv.h"
@@ -47,20 +47,15 @@
 //
 
 #define WHERE "CardRSADecrypt()"
-DWORD WINAPI   CardRSADecrypt
-	(
-	__in        PCARD_DATA              pCardData,
-	__inout     PCARD_RSA_DECRYPT_INFO  pInfo
-	)
-{
-	DWORD    dwReturn = 0;
+DWORD WINAPI CardRSADecrypt(__in PCARD_DATA pCardData, __inout PCARD_RSA_DECRYPT_INFO pInfo) {
+	DWORD dwReturn = 0;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -74,24 +69,19 @@ cleanup:
 //
 
 #define WHERE "CardConstructDHAgreement()"
-DWORD WINAPI   CardConstructDHAgreement
-	(
-	__in     PCARD_DATA pCardData,
-	__in     PCARD_DH_AGREEMENT_INFO pAgreementInfo
-	)
-{
-	DWORD    dwReturn = 0;
+DWORD WINAPI CardConstructDHAgreement(__in PCARD_DATA pCardData, __in PCARD_DH_AGREEMENT_INFO pAgreementInfo) {
+	DWORD dwReturn = 0;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
-	/* 
-	* For RSA-only card minidrivers, this entry point is not defined and is
-	* set to NULL in the CARD_DATA structure returned from CardAcquireContext
-	*/
+	/*
+	 * For RSA-only card minidrivers, this entry point is not defined and is
+	 * set to NULL in the CARD_DATA structure returned from CardAcquireContext
+	 */
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -100,29 +90,24 @@ cleanup:
 //
 // Function:  CardDeriveKey
 //
-// Purpose: Generate a dervived session key using a generated agreed 
+// Purpose: Generate a dervived session key using a generated agreed
 // secret and various other parameters.
 //
 
 #define WHERE "CardDeriveKey()"
-DWORD WINAPI CardDeriveKey
-	(
-	__in    PCARD_DATA        pCardData,
-	__in    PCARD_DERIVE_KEY  pAgreementInfo
-	)
-{
-	DWORD    dwReturn = 0;
+DWORD WINAPI CardDeriveKey(__in PCARD_DATA pCardData, __in PCARD_DERIVE_KEY pAgreementInfo) {
+	DWORD dwReturn = 0;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
-	/* 
-	* For RSA-only card minidrivers, this entry point is not defined and is
-	* set to NULL in the CARD_DATA structure returned from CardAcquireContext
-	*/
+	/*
+	 * For RSA-only card minidrivers, this entry point is not defined and is
+	 * set to NULL in the CARD_DATA structure returned from CardAcquireContext
+	 */
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -133,25 +118,19 @@ cleanup:
 //
 
 #define WHERE "CardDestroyDHAgreement()"
-DWORD WINAPI   CardDestroyDHAgreement
-	(
-	__in PCARD_DATA pCardData,
-	__in BYTE       bSecretAgreementIndex,
-	__in DWORD      dwFlags
-	)
-{
-	DWORD    dwReturn = 0;
+DWORD WINAPI CardDestroyDHAgreement(__in PCARD_DATA pCardData, __in BYTE bSecretAgreementIndex, __in DWORD dwFlags) {
+	DWORD dwReturn = 0;
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
-	/* 
-	* For RSA-only card minidrivers, this entry point is not defined and is
-	* set to NULL in the CARD_DATA structure returned from CardAcquireContext
-	*/
+	/*
+	 * For RSA-only card minidrivers, this entry point is not defined and is
+	 * set to NULL in the CARD_DATA structure returned from CardAcquireContext
+	 */
 	CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -164,97 +143,80 @@ cleanup:
 //
 
 #define WHERE "CardSignData()"
-DWORD WINAPI   CardSignData
-	(
-	__in      PCARD_DATA          pCardData,
-	__in      PCARD_SIGNING_INFO  pInfo
-	)
-{
-	DWORD                      dwReturn       = 0;
+DWORD WINAPI CardSignData(__in PCARD_DATA pCardData, __in PCARD_SIGNING_INFO pInfo) {
+	DWORD dwReturn = 0;
 
-	BCRYPT_PKCS1_PADDING_INFO  *PkcsPadInfo = NULL;
-	BCRYPT_PSS_PADDING_INFO    *PssPadInfo  = NULL;
+	BCRYPT_PKCS1_PADDING_INFO *PkcsPadInfo = NULL;
+	BCRYPT_PSS_PADDING_INFO *PssPadInfo = NULL;
 
-	unsigned int               uiHashAlgo   = HASH_ALGO_NONE;
-	
+	unsigned int uiHashAlgo = HASH_ALGO_NONE;
+
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 	LogTrace(LOGTYPE_INFO, WHERE, "CardSignData called with pInfo->aiHashAlg: %d", pInfo->aiHashAlg);
 
 	/********************/
 	/* Check Parameters */
 	/********************/
-	if ( pCardData == NULL )
-	{
+	if (pCardData == NULL) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
-	if ( pInfo == NULL )
-	{
+	if (pInfo == NULL) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if ( ( pInfo->dwVersion != CARD_SIGNING_INFO_BASIC_VERSION   ) &&
-		( pInfo->dwVersion != CARD_SIGNING_INFO_CURRENT_VERSION ) )
-	{
+	if ((pInfo->dwVersion != CARD_SIGNING_INFO_BASIC_VERSION) &&
+		(pInfo->dwVersion != CARD_SIGNING_INFO_CURRENT_VERSION)) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->dwVersion][0x%X]", pInfo->dwVersion);
 		CLEANUP(ERROR_REVISION_MISMATCH);
 	}
 
-	if ( pInfo->pbData == NULL )
-	{
+	if (pInfo->pbData == NULL) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->pbData]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if ( ( pInfo->bContainerIndex != 0 ) &&
-		( pInfo->bContainerIndex != 1 ) )
-	{
+	if ((pInfo->bContainerIndex != 0) && (pInfo->bContainerIndex != 1)) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->bContainerIndex]");
 		CLEANUP(SCARD_E_NO_KEY_CONTAINER);
 	}
 
-	if ( pInfo->dwKeySpec != AT_SIGNATURE && (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE)) && pInfo->dwKeySpec != pInfo->dwKeySpec == AT_ECDSA_P256)
-	{
+	if (pInfo->dwKeySpec != AT_SIGNATURE && (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE)) &&
+		pInfo->dwKeySpec != pInfo->dwKeySpec == AT_ECDSA_P256) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->dwKeySpec]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if ( pInfo->dwSigningFlags == 0xFFFFFFFF )
-	{
+	if (pInfo->dwSigningFlags == 0xFFFFFFFF) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->dwSigningFlags]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 
-	if ( ( pInfo->dwSigningFlags & CARD_BUFFER_SIZE_ONLY ) == CARD_BUFFER_SIZE_ONLY)
-	{
+	if ((pInfo->dwSigningFlags & CARD_BUFFER_SIZE_ONLY) == CARD_BUFFER_SIZE_ONLY) {
 		LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_BUFFER_SIZE_ONLY for card_type: %d", card_type);
-		//TODO: hardcoded signature length
+		// TODO: hardcoded signature length
 		if (card_type == IAS_V5_CARD) {
 			pInfo->cbSignedData = 64;
-		}
-		else {
+		} else {
 			pInfo->cbSignedData = g_keySize / 8;
 		}
 		CLEANUP(SCARD_S_SUCCESS);
 	}
 
-	if ( pInfo->aiHashAlg == 0xFFFFFFFF )
-	{
-		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->aiHashAlg][0x%X]",pInfo->aiHashAlg);
+	if (pInfo->aiHashAlg == 0xFFFFFFFF) {
+		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->aiHashAlg][0x%X]", pInfo->aiHashAlg);
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
-	
-	//SHA-512 is the largest supported hash
-	//TODO: check for the version of this hash in "DigestInfo format"
-	if (pInfo->cbData > SHA512_LEN)
-	{
+
+	// SHA-512 is the largest supported hash
+	// TODO: check for the version of this hash in "DigestInfo format"
+	if (pInfo->cbData > SHA512_LEN) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter (Hash Size): %d", pInfo->cbData);
 		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 	}
-	//Only apps using classic CAPI specify the algo in aiHashAlg
-	switch(pInfo->aiHashAlg)
-	{
+	// Only apps using classic CAPI specify the algo in aiHashAlg
+	switch (pInfo->aiHashAlg) {
 	case CALG_SHA1:
 		uiHashAlgo = HASH_ALGO_SHA1;
 		break;
@@ -267,54 +229,41 @@ DWORD WINAPI   CardSignData
 	case CALG_SHA_512:
 		uiHashAlgo = HASH_ALGO_SHA_512;
 		break;
-	//CNG apps specify the algo in PADDING_INFO struct
+	// CNG apps specify the algo in PADDING_INFO struct
 	case 0:
-		if ( ( pInfo->dwSigningFlags & CARD_PADDING_INFO_PRESENT ) == CARD_PADDING_INFO_PRESENT)
-		{
+		if ((pInfo->dwSigningFlags & CARD_PADDING_INFO_PRESENT) == CARD_PADDING_INFO_PRESENT) {
 			if (card_type == IAS_V5_CARD) {
 				LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_PADDING_INFO_PRESENT using ECC IAS v5 card");
 				CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 			}
 			LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwSigningFlags: CARD_PADDING_INFO_PRESENT");
-			if ( pInfo->pPaddingInfo == NULL )
-			{
+			if (pInfo->pPaddingInfo == NULL) {
 				LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pInfo->pPaddingInfo]");
 				CLEANUP(SCARD_E_INVALID_PARAMETER);
 			}
 
-			switch(pInfo->dwPaddingType)
-			{
+			switch (pInfo->dwPaddingType) {
 			case CARD_PADDING_PKCS1:
 				LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwPaddingType: CARD_PADDING_PKCS1");
 
-				PkcsPadInfo = (BCRYPT_PKCS1_PADDING_INFO *) pInfo->pPaddingInfo;
+				PkcsPadInfo = (BCRYPT_PKCS1_PADDING_INFO *)pInfo->pPaddingInfo;
 
-				LogTrace(LOGTYPE_INFO, WHERE, "PkcsPadInfo->pszAlgId: %S", PkcsPadInfo->pszAlgId == NULL ? L"NULL" : PkcsPadInfo->pszAlgId);
+				LogTrace(LOGTYPE_INFO, WHERE, "PkcsPadInfo->pszAlgId: %S",
+						 PkcsPadInfo->pszAlgId == NULL ? L"NULL" : PkcsPadInfo->pszAlgId);
 
-				if ( PkcsPadInfo->pszAlgId == NULL )
-				{
+				if (PkcsPadInfo->pszAlgId == NULL) {
 					LogTrace(LOGTYPE_INFO, WHERE, "PkcsPadInfo->pszAlgId = NULL: PKCS#1 Sign...");
 
 					uiHashAlgo = HASH_ALGO_NONE;
-				}
-				else if ( wcscmp(PkcsPadInfo->pszAlgId, L"SHA1") == 0 ) 
-				{
+				} else if (wcscmp(PkcsPadInfo->pszAlgId, L"SHA1") == 0) {
 					uiHashAlgo = HASH_ALGO_SHA1;
-				}
-				else if ( wcscmp(PkcsPadInfo->pszAlgId, L"SHA256") == 0 ) 
-				{
+				} else if (wcscmp(PkcsPadInfo->pszAlgId, L"SHA256") == 0) {
 					uiHashAlgo = HASH_ALGO_SHA_256;
-				}
-				else if ( wcscmp(PkcsPadInfo->pszAlgId, L"SHA384") == 0 ) 
-				{
+				} else if (wcscmp(PkcsPadInfo->pszAlgId, L"SHA384") == 0) {
 					uiHashAlgo = HASH_ALGO_SHA_384;
-				}
-				else if ( wcscmp(PkcsPadInfo->pszAlgId, L"SHA512") == 0 ) 
-				{
+				} else if (wcscmp(PkcsPadInfo->pszAlgId, L"SHA512") == 0) {
 					uiHashAlgo = HASH_ALGO_SHA_512;
-				}
-				else
-				{
+				} else {
 					LogTrace(LOGTYPE_ERROR, WHERE, "[PkcsPadInfo->pszAlgId] unsupported...");
 					CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 				}
@@ -331,11 +280,8 @@ DWORD WINAPI   CardSignData
 				LogTrace(LOGTYPE_INFO, WHERE, "pInfo->dwPaddingType: UNSUPPORTED");
 				break;
 			}
-		}
-		else
-		{
-			if (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE))
-			{
+		} else {
+			if (pInfo->dwKeySpec != (AT_SIGNATURE | AT_KEYEXCHANGE)) {
 				LogTrace(LOGTYPE_ERROR, WHERE, "[pInfo->pPaddingInfo] unsupported...");
 				CLEANUP(SCARD_E_INVALID_PARAMETER);
 			}
@@ -352,14 +298,9 @@ DWORD WINAPI   CardSignData
 	LogDumpHex(pInfo->cbData, (char *)pInfo->pbData);
 #endif
 
-	dwReturn = cal_sign_data(pCardData, 
-		pInfo->bContainerIndex,
-		pInfo->cbData, 
-		pInfo->pbData, 
-		&(pInfo->cbSignedData), 
-		&(pInfo->pbSignedData), PssPadInfo != NULL);
-	if ( dwReturn != 0 )
-	{
+	dwReturn = cal_sign_data(pCardData, pInfo->bContainerIndex, pInfo->cbData, pInfo->pbData, &(pInfo->cbSignedData),
+							 &(pInfo->pbSignedData), PssPadInfo != NULL);
+	if (dwReturn != 0) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "PteidSignData() returned [0x%X]", dwReturn);
 		CLEANUP(dwReturn);
 	}
@@ -371,7 +312,7 @@ DWORD WINAPI   CardSignData
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 
@@ -382,48 +323,37 @@ cleanup:
 //
 
 #define WHERE "CardQueryKeySizes()"
-DWORD WINAPI   CardQueryKeySizes
-	(
-	__in      PCARD_DATA       pCardData,
-	__in      DWORD            dwKeySpec,
-	__in      DWORD            dwFlags,
-	__in      PCARD_KEY_SIZES  pKeySizes
-	)
-{
-	DWORD    dwReturn       = 0;
-	DWORD    dwVersion      = 0;
-	int      iUnSupported   = 0;
-	int      iInValid       = 0;
+DWORD WINAPI CardQueryKeySizes(__in PCARD_DATA pCardData, __in DWORD dwKeySpec, __in DWORD dwFlags,
+							   __in PCARD_KEY_SIZES pKeySizes) {
+	DWORD dwReturn = 0;
+	DWORD dwVersion = 0;
+	int iUnSupported = 0;
+	int iInValid = 0;
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
 
 	/********************/
 	/* Check Parameters */
 	/********************/
-	if ( pCardData == NULL )
-	{
+	if (pCardData == NULL) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pCardData]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
-	if ( dwFlags != 0 )
-	{
+	if (dwFlags != 0) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwKeySpec]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
-	if ( pKeySizes == NULL )
-	{
+	if (pKeySizes == NULL) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pKeySizes]");
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
 	dwVersion = (pKeySizes->dwVersion == 0) ? 1 : pKeySizes->dwVersion;
-	if ( dwVersion != CARD_KEY_SIZES_CURRENT_VERSION )
-	{
+	if (dwVersion != CARD_KEY_SIZES_CURRENT_VERSION) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [pKeySizes->dwVersion]");
-		CLEANUP(ERROR_REVISION_MISMATCH );
+		CLEANUP(ERROR_REVISION_MISMATCH);
 	}
 
-	switch(dwKeySpec)
-	{
+	switch (dwKeySpec) {
 	case AT_ECDSA_P256:
 		pKeySizes->dwMinimumBitlen = 256;
 		pKeySizes->dwDefaultBitlen = 256;
@@ -437,7 +367,7 @@ DWORD WINAPI   CardQueryKeySizes
 	case AT_ECDSA_P521:
 		iUnSupported++;
 		break;
-	//RSA keys
+	// RSA keys
 	case AT_KEYEXCHANGE:
 	case AT_SIGNATURE:
 		pKeySizes->dwMinimumBitlen = 1024;
@@ -449,20 +379,18 @@ DWORD WINAPI   CardQueryKeySizes
 		iInValid++;
 		break;
 	}
-	if ( iInValid )
-	{
+	if (iInValid) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Invalid parameter [dwKeySpec][%d]", dwKeySpec);
 		CLEANUP(SCARD_E_INVALID_PARAMETER);
 	}
-	if ( iUnSupported )
-	{
+	if (iUnSupported) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Unsupported parameter [dwKeySpec][%d]", dwKeySpec);
 		CLEANUP(SCARD_E_UNSUPPORTED_FEATURE);
 	}
 
 cleanup:
 	LogTrace(LOGTYPE_INFO, WHERE, "Exit API...");
-	return(dwReturn);
+	return (dwReturn);
 }
 #undef WHERE
 

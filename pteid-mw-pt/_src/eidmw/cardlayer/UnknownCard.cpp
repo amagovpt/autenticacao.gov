@@ -22,55 +22,30 @@
 **************************************************************************** */
 #include "UnknownCard.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-bool CUnknownCard::IsUnknownCard(SCARDHANDLE hCard, CContext *poContext,
-	CByteArray & oData)
-{
+bool CUnknownCard::IsUnknownCard(SCARDHANDLE hCard, CContext *poContext, CByteArray &oData) {
 	// This function shouldn't be called.
 	return true;
 }
 
-CUnknownCard::CUnknownCard(SCARDHANDLE hCard, CContext *poContext,
-	GenericPinpad *poPinpad, const CByteArray & oData) :
-CCard(hCard, poContext, poPinpad)
-{
-}
+CUnknownCard::CUnknownCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const CByteArray &oData)
+	: CCard(hCard, poContext, poPinpad) {}
 
-CUnknownCard::~CUnknownCard(void)
-{
-}
+CUnknownCard::~CUnknownCard(void) {}
 
-CByteArray CUnknownCard::ReadUncachedFile(const std::string &csPath,
-    unsigned long ulOffset, unsigned long ulMaxLen)
-{
-    throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
-
-void CUnknownCard::InitEncryptionKey()
-{
-    throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
-
-void CUnknownCard::ReadSerialNumber()
-{
+CByteArray CUnknownCard::ReadUncachedFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen) {
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
-tCardType CUnknownCard::GetType()
-{
-    return CARD_UNKNOWN;
-}
+void CUnknownCard::InitEncryptionKey() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
-std::string CUnknownCard::GetSerialNr()
-{
-    return "";
-}
+void CUnknownCard::ReadSerialNumber() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
-std::string CUnknownCard::GetLabel()
-{
-    return "Unknown";
-}
+tCardType CUnknownCard::GetType() { return CARD_UNKNOWN; }
 
-}
+std::string CUnknownCard::GetSerialNr() { return ""; }
+
+std::string CUnknownCard::GetLabel() { return "Unknown"; }
+
+} // namespace eIDMW

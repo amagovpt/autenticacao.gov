@@ -26,37 +26,32 @@
 #include "Config.h"
 #include "Util.h"
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-bool CLang::ms_InitOk=false;
-tLanguage CLang::ms_Lang=LANG_EN;
+bool CLang::ms_InitOk = false;
+tLanguage CLang::ms_Lang = LANG_EN;
 
-const wchar_t *CLang::GetLangW()
-{
-	if(!ms_InitOk) 
+const wchar_t *CLang::GetLangW() {
+	if (!ms_InitOk)
 		Init();
 
-	switch(ms_Lang)
-	{
+	switch (ms_Lang) {
 	case LANG_EN:
 		return LANG_STRCODE_EN;
 	case LANG_NL:
 		return LANG_STRCODE_NL;
-	//case LANG_PT:
+	// case LANG_PT:
 	//	return LANG_STRCODE_PT;
 	default:
 		return LANG_STRCODE_EN;
 	}
 }
 
-unsigned long CLang::GetLangL()
-{
-	if(!ms_InitOk) 
+unsigned long CLang::GetLangL() {
+	if (!ms_InitOk)
 		Init();
 
-	switch(ms_Lang)
-	{
+	switch (ms_Lang) {
 	case LANG_EN:
 		return DLG_LANG_EN;
 	case LANG_NL:
@@ -65,47 +60,43 @@ unsigned long CLang::GetLangL()
 		return DLG_LANG_EN;
 	}
 }
-void CLang::SetLangW(const wchar_t *lang)
-{
-	ms_InitOk=true;
+void CLang::SetLangW(const wchar_t *lang) {
+	ms_InitOk = true;
 
-	if(wcscmp(lang,LANG_STRCODE_EN)==0)
-		ms_Lang=LANG_EN;
-	else if(wcscmp(lang,LANG_STRCODE_NL)==0)
-		ms_Lang=LANG_NL;
-	//else if(wcscmp(lang,LANG_STRCODE_PT)==0)
+	if (wcscmp(lang, LANG_STRCODE_EN) == 0)
+		ms_Lang = LANG_EN;
+	else if (wcscmp(lang, LANG_STRCODE_NL) == 0)
+		ms_Lang = LANG_NL;
+	// else if(wcscmp(lang,LANG_STRCODE_PT)==0)
 	//	ms_Lang=LANG_PT;
 	else
-		ms_InitOk=false;
+		ms_InitOk = false;
 }
 
-void CLang::SetLangL(unsigned long lang)
-{
+void CLang::SetLangL(unsigned long lang) {
 
-	switch(lang)
-	{
+	switch (lang) {
 	case DLG_LANG_EN:
-		ms_Lang=LANG_EN;
+		ms_Lang = LANG_EN;
 		break;
 	case DLG_LANG_NL:
-		ms_Lang=LANG_NL;
+		ms_Lang = LANG_NL;
 		break;
 	default:
-		ms_Lang=LANG_EN;
+		ms_Lang = LANG_EN;
 		break;
 	}
 }
 
-void CLang::Init()
-{
+void CLang::Init() {
 	std::wstring lang = CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE);
 
-	if(wcscmp(L"nl",lang.c_str())==0)
-		ms_Lang=LANG_NL;
+	if (wcscmp(L"nl", lang.c_str()) == 0)
+		ms_Lang = LANG_NL;
 	else
-		ms_Lang=LANG_EN;
+		ms_Lang = LANG_EN;
 
-	ms_InitOk=true;
+	ms_InitOk = true;
 }
 
-}
+} // namespace eIDMW

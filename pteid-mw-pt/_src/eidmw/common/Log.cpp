@@ -31,15 +31,10 @@
 
 #define DO_LOGGING
 
+namespace eIDMW {
 
-
-namespace eIDMW
-{
-
-tLOG_Level MapLevel(tLevel levelIn)
-{
-	switch(levelIn)
-	{
+tLOG_Level MapLevel(tLevel levelIn) {
+	switch (levelIn) {
 	case LEV_CRIT:
 		return LOG_LEVEL_CRITICAL;
 	case LEV_ERROR:
@@ -55,85 +50,79 @@ tLOG_Level MapLevel(tLevel levelIn)
 	}
 }
 
-CLog &MapModule(tModule moduleIn)
-{
+CLog &MapModule(tModule moduleIn) {
 	std::wstring group;
 
-    switch(moduleIn)
-	{
-		case MOD_CAL:
-			group = L"cardlayer";
-			break;
-		case MOD_P11:
-			group = L"pkcs11";
-			break;
-		case MOD_LIB:
-			group = L"eidlib";
-			break;
-		case MOD_GUI:
-			group = L"eidgui";
-			break;
-		case MOD_TA:
-			group = L"trayapplet";
-			break;
-		case MOD_DLG:
-			group = L"dialog";
-			break;
-		case MOD_CSP:
-			group = L"CSP";
-			break;
-		case MOD_TEST:
-			group = L"unit_test";
-			break;
-		case MOD_APL:
-			group = L"applayer";
-			break;
-		case MOD_CRL:
-			group = L"crlservice";
-			break;
-		case MOD_SSL:
-			group = L"openssl";
-			break;
-		case MOD_SDK:
-			group = L"sdk";
-			break;
-		case MOD_CMD:
-			group = L"CCMovel";
-			break;
-		case MOD_KSP:
-			group = L"KSP";
-			break;
-		case MOD_SCAP:
-			group = L"SCAP";
-			break;
-		default:
-			group = L"";
-			break;
+	switch (moduleIn) {
+	case MOD_CAL:
+		group = L"cardlayer";
+		break;
+	case MOD_P11:
+		group = L"pkcs11";
+		break;
+	case MOD_LIB:
+		group = L"eidlib";
+		break;
+	case MOD_GUI:
+		group = L"eidgui";
+		break;
+	case MOD_TA:
+		group = L"trayapplet";
+		break;
+	case MOD_DLG:
+		group = L"dialog";
+		break;
+	case MOD_CSP:
+		group = L"CSP";
+		break;
+	case MOD_TEST:
+		group = L"unit_test";
+		break;
+	case MOD_APL:
+		group = L"applayer";
+		break;
+	case MOD_CRL:
+		group = L"crlservice";
+		break;
+	case MOD_SSL:
+		group = L"openssl";
+		break;
+	case MOD_SDK:
+		group = L"sdk";
+		break;
+	case MOD_CMD:
+		group = L"CCMovel";
+		break;
+	case MOD_KSP:
+		group = L"KSP";
+		break;
+	case MOD_SCAP:
+		group = L"SCAP";
+		break;
+	default:
+		group = L"";
+		break;
 	}
 
 	return CLogger::instance().getLogW(group.c_str());
 }
 
 // MWLOG(tLevel level, tModule mod, const char *format, ...)
-bool MWLOG(tLevel level, tModule mod, const wchar_t *format, ...)
-{
+bool MWLOG(tLevel level, tModule mod, const wchar_t *format, ...) {
 
 #ifdef DO_LOGGING
 
-	try
-	{
-		CLog &log=MapModule(mod);
+	try {
+		CLog &log = MapModule(mod);
 
 		va_list args;
 		va_start(args, format);
 
-		log.write(MapLevel(level),format,args);
+		log.write(MapLevel(level), format, args);
 
 		va_end(args);
-	}
-	catch(CMWException &e)
-	{
-		if(e.GetError()!=(long)EIDMW_ERR_LOGGER_APPLEAVING)
+	} catch (CMWException &e) {
+		if (e.GetError() != (long)EIDMW_ERR_LOGGER_APPLEAVING)
 			throw e;
 
 		return false;
@@ -144,22 +133,18 @@ bool MWLOG(tLevel level, tModule mod, const wchar_t *format, ...)
 	return true;
 }
 
-bool MWLOG(tLevel level, tModule mod, const char *format, ...)
-{
-	try
-	{
-		CLog &log=MapModule(mod);
+bool MWLOG(tLevel level, tModule mod, const char *format, ...) {
+	try {
+		CLog &log = MapModule(mod);
 
 		va_list args;
 		va_start(args, format);
 
-		log.write(MapLevel(level),format,args);
+		log.write(MapLevel(level), format, args);
 
 		va_end(args);
-	}
-	catch(CMWException &e)
-	{
-		if(e.GetError()!=(long)EIDMW_ERR_LOGGER_APPLEAVING)
+	} catch (CMWException &e) {
+		if (e.GetError() != (long)EIDMW_ERR_LOGGER_APPLEAVING)
 			throw e;
 
 		return false;
@@ -169,31 +154,25 @@ bool MWLOG(tLevel level, tModule mod, const char *format, ...)
 }
 
 // MWLOG(tLevel level, tModule mod, CMWEXCEPTION theException)
-bool MWLOG(tLevel level, tModule mod, CMWException theException)
-{
+bool MWLOG(tLevel level, tModule mod, CMWException theException) {
 
 #ifdef DO_LOGGING
 
-	//char buffer[256];
-	//sprintf_s(buffer,sizeof(buffer), "Exception thrown at file = %s, line = %s", theException.GetFile(), theException.GetLine());
-	//return MWLOG(level, mod, "  %s", buffer);
-	try
-	{
-		CLog &log=MapModule(mod);
+	// char buffer[256];
+	// sprintf_s(buffer,sizeof(buffer), "Exception thrown at file = %s, line = %s", theException.GetFile(),
+	// theException.GetLine()); return MWLOG(level, mod, "  %s", buffer);
+	try {
+		CLog &log = MapModule(mod);
 
-		if (theException.GetLine()==0)
-		{
-			log.write(MapLevel(level),L"Exception 0x%0x thrown", theException.GetError());
+		if (theException.GetLine() == 0) {
+			log.write(MapLevel(level), L"Exception 0x%0x thrown", theException.GetError());
+		} else {
+			int line = (int)theException.GetLine();
+			log.write(MapLevel(level), line, utilStringWiden(theException.GetFile()).c_str(), L"Exception 0x%0x thrown",
+					  theException.GetError());
 		}
-		else
-		{
-			int line = (int) theException.GetLine();
-			log.write(MapLevel(level),line,utilStringWiden(theException.GetFile()).c_str(),L"Exception 0x%0x thrown",theException.GetError());
-		}
-	}
-	catch(CMWException &e)
-	{
-		if(e.GetError()!=(long)EIDMW_ERR_LOGGER_APPLEAVING)
+	} catch (CMWException &e) {
+		if (e.GetError() != (long)EIDMW_ERR_LOGGER_APPLEAVING)
 			throw e;
 
 		return false;
@@ -204,4 +183,4 @@ bool MWLOG(tLevel level, tModule mod, CMWException theException)
 	return true;
 }
 
-}
+} // namespace eIDMW

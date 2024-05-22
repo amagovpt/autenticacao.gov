@@ -30,17 +30,15 @@
 #include <map>
 #include <string>
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 /** Thread class to handle a callback */
-class EIDMW_CAL_API CEventCallbackThread : public CThread
-{
+class EIDMW_CAL_API CEventCallbackThread : public CThread {
 public:
 	CEventCallbackThread();
 
-	CEventCallbackThread(const std::string & csReader,
-		void (* callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef);
+	CEventCallbackThread(const std::string &csReader, void (*callback)(long lRet, unsigned long ulState, void *pvRef),
+						 void *pvRef);
 
 	void Run();
 
@@ -51,7 +49,7 @@ public:
 private:
 	bool m_bStop;
 	std::string m_csReader;
-	void (* m_callback)(long lRet, unsigned long ulState, void *pvRef);
+	void (*m_callback)(long lRet, unsigned long ulState, void *pvRef);
 	unsigned long m_ulCurrentState;
 	bool m_bRunning;
 	void *m_pvRef;
@@ -59,16 +57,15 @@ private:
 
 ////////////////////////////////////////////////////////////////
 
-class EIDMW_CAL_API CThreadPool
-{
+class EIDMW_CAL_API CThreadPool {
 public:
 	CThreadPool();
 
 	~CThreadPool();
 
-	CEventCallbackThread & NewThread(const std::string & csReader,
-		void (* callback)(long lRet, unsigned long ulState, void *pvRef),
-		unsigned long & ulHandle, void *pvRef);
+	CEventCallbackThread &NewThread(const std::string &csReader,
+									void (*callback)(long lRet, unsigned long ulState, void *pvRef),
+									unsigned long &ulHandle, void *pvRef);
 
 	void RemoveThread(unsigned long ulHandle);
 
@@ -81,13 +78,13 @@ private:
 #ifdef WIN32
 // See http://groups.google.com/group/microsoft.public.vc.stl/msg/c4dfeb8987d7b8f0
 #pragma warning(push)
-#pragma warning(disable:4251)
+#pragma warning(disable : 4251)
 #endif
-	std::map <unsigned long, CEventCallbackThread> m_pool;
+	std::map<unsigned long, CEventCallbackThread> m_pool;
 #ifdef WIN32
 #pragma warning(pop)
 #endif
 };
 
-}
+} // namespace eIDMW
 #endif

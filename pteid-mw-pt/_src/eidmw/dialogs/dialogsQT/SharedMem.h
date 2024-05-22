@@ -26,35 +26,30 @@
 #include "sys/shm.h"
 #include <string>
 
-namespace eIDMW
-{
+namespace eIDMW {
 
-  class SharedMem
-  {
-  private:
-    int m_iShmid;
-    unsigned int m_iAttachedProcs;
-    key_t m_tKey;
-    std::string m_csFilename;
-    
-    
-  public:
-    SharedMem();
-    ~SharedMem();
+class SharedMem {
+private:
+	int m_iShmid;
+	unsigned int m_iAttachedProcs;
+	key_t m_tKey;
+	std::string m_csFilename;
 
-    void Attach(size_t tMemorySize, 
-		const char *csReadableFilePath,
-		void ** content);
+public:
+	SharedMem();
+	~SharedMem();
 
-    void Detach(void* content);  
+	void Attach(size_t tMemorySize, const char *csReadableFilePath, void **content);
 
-    static void Delete(int iSegmentID);
-    static int getNAttached(int iSegmentID);
+	void Detach(void *content);
 
-    int getID(){return m_iShmid;};
-    
-    std::string getFilename() {return m_csFilename;};
-  };
+	static void Delete(int iSegmentID);
+	static int getNAttached(int iSegmentID);
 
-}
+	int getID() { return m_iShmid; };
+
+	std::string getFilename() { return m_csFilename; };
+};
+
+} // namespace eIDMW
 #endif

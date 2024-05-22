@@ -51,61 +51,50 @@
 #include <iostream>
 #include <vector>
 
-namespace eIDMW
-{
+namespace eIDMW {
 class CContext;
 
 class PinpadDialogThread;
 
-class EIDMW_CAL_API GenericPinpad
-{
+class EIDMW_CAL_API GenericPinpad {
 public:
-   //Warning: This ctor shouldn't be used, it's just a workaround for a convoluted Pinpad detection process
-   GenericPinpad()
-   {
-	   m_ulLangCode = 0x0409;
-   }
+	// Warning: This ctor shouldn't be used, it's just a workaround for a convoluted Pinpad detection process
+	GenericPinpad() { m_ulLangCode = 0x0409; }
 
-   GenericPinpad(CContext *poContext, SCARDHANDLE hCard,
-		const std::string & csReader);
+	GenericPinpad(CContext *poContext, SCARDHANDLE hCard, const std::string &csReader);
 
-   virtual CByteArray PinCmd(tPinOperation operation,
-		const tPin & pin, unsigned char ucPinType,
-        const CByteArray & oAPDU, unsigned long & ulRemaining, void *wndGeometry = 0 );
+	virtual CByteArray PinCmd(tPinOperation operation, const tPin &pin, unsigned char ucPinType,
+							  const CByteArray &oAPDU, unsigned long &ulRemaining, void *wndGeometry = 0);
 
-   unsigned int m_fully_built;
+	unsigned int m_fully_built;
 
 protected:
-	CByteArray PinpadControl(unsigned long ulControl, const CByteArray & oCmd,
-		tPinOperation operation, unsigned char ucPintype,
-		const std::string & csPinLabel, void *wndGeometry = 0 );
+	CByteArray PinpadControl(unsigned long ulControl, const CByteArray &oCmd, tPinOperation operation,
+							 unsigned char ucPintype, const std::string &csPinLabel, void *wndGeometry = 0);
 
 	void GetFeatureList();
 
 	bool IsGemsafe(CByteArray &atr);
 
-	bool ShowDlg(tPinOperation operation, unsigned char ucPintype,
-		const std::string & csPinLabel, const std::string & csReader,
-		PinpadDialogThread **pinpadDlgThreads, void *wndGeometry = 0);
+	bool ShowDlg(tPinOperation operation, unsigned char ucPintype, const std::string &csPinLabel,
+				 const std::string &csReader, PinpadDialogThread **pinpadDlgThreads, void *wndGeometry = 0);
 	/** To close the dialog opened by PinCmd() */
 	void CloseDlg(PinpadDialogThread *pinpadDlgThread);
 
 	unsigned long GetLanguage();
 
-	unsigned char ToFormatString(const tPin & pin);
-	unsigned char ToPinBlockString(const tPin & pin);
-	unsigned char ToPinLengthFormat(const tPin & pin);
-	unsigned char GetMaxPinLen(const tPin & pin);
+	unsigned char ToFormatString(const tPin &pin);
+	unsigned char ToPinBlockString(const tPin &pin);
+	unsigned char ToPinLengthFormat(const tPin &pin);
+	unsigned char GetMaxPinLen(const tPin &pin);
 
 	// For PIN verify and unblock without PIN change (1 PIN needed)
-	virtual CByteArray PinCmd1(tPinOperation operation,
-			const tPin & pin, unsigned char ucPinType,
-			const CByteArray & oAPDU, unsigned long & ulRemaining, void *wndGeometry = 0 );
+	virtual CByteArray PinCmd1(tPinOperation operation, const tPin &pin, unsigned char ucPinType,
+							   const CByteArray &oAPDU, unsigned long &ulRemaining, void *wndGeometry = 0);
 
 	// For PIN change and unblock with PIN change (2 PINs needed)
-	virtual CByteArray PinCmd2(tPinOperation operation,
-			const tPin & pin, unsigned char ucPinType,
-			const CByteArray & oAPDU, unsigned long & ulRemaining, void *wndGeometry = 0 );
+	virtual CByteArray PinCmd2(tPinOperation operation, const tPin &pin, unsigned char ucPinType,
+							   const CByteArray &oAPDU, unsigned long &ulRemaining, void *wndGeometry = 0);
 
 	CContext *m_poContext;
 	SCARDHANDLE m_hCard;
@@ -114,8 +103,8 @@ protected:
 	bool m_bUsePinpadLib;
 	unsigned long m_ulLangCode;
 
-	bool m_bCanVerifyUnlock;  // Can do operations with 1 PIN
-	bool m_bCanChangeUnlock;  // Can do operations with 2 PINs
+	bool m_bCanVerifyUnlock; // Can do operations with 1 PIN
+	bool m_bCanChangeUnlock; // Can do operations with 2 PINs
 
 	unsigned long m_ioctlVerifyStart;
 	unsigned long m_ioctlVerifyFinish;
@@ -127,30 +116,26 @@ protected:
 	std::vector<PinpadDialogThread *> pinpadDlgThreads;
 };
 
-class PinpadDialogThread : public CThread
-{
+class PinpadDialogThread : public CThread {
 public:
-
-	PinpadDialogThread(DlgPinOperation operation, const wchar_t *csReader,
-		DlgPinUsage usage, const wchar_t *csPinName, const wchar_t *csMessage, void *wndGeometry)
-	{
+	PinpadDialogThread(DlgPinOperation operation, const wchar_t *csReader, DlgPinUsage usage, const wchar_t *csPinName,
+					   const wchar_t *csMessage, void *wndGeometry) {
 		m_operation = operation;
 		m_csReader = std::wstring(csReader);
 		m_usage = usage;
 		m_csPinName = std::wstring(csPinName);
 		m_csMessage = std::wstring(csMessage);
-		//m_pulHandle = pulHandle;
+		// m_pulHandle = pulHandle;
 		m_wndGeometry = wndGeometry;
 	}
 
-	~PinpadDialogThread() {
-		RequestStop();
-	}
+	~PinpadDialogThread() { RequestStop(); }
 
 	void Run();
 	void Stop();
 
 	unsigned long m_pulHandle;
+
 private:
 	DlgPinOperation m_operation;
 	std::wstring m_csReader;
@@ -159,5 +144,5 @@ private:
 	void *m_wndGeometry;
 };
 
-}
+} // namespace eIDMW
 #endif

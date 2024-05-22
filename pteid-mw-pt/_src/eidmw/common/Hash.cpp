@@ -25,15 +25,10 @@
 
 using namespace eIDMW;
 
-CHash::CHash()
-{
-	m_bInitialized = false;
-}
+CHash::CHash() { m_bInitialized = false; }
 
-unsigned long CHash::GetHashLength(tHashAlgo algo)
-{
-	switch(algo)
-	{
+unsigned long CHash::GetHashLength(tHashAlgo algo) {
+	switch (algo) {
 	case ALGO_SHA1:
 		return 20;
 	case ALGO_SHA256:
@@ -45,26 +40,18 @@ unsigned long CHash::GetHashLength(tHashAlgo algo)
 	default:
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
-
 }
 
-CByteArray CHash::Hash(tHashAlgo algo, const CByteArray & data)
-{
-	return Hash(algo, data, 0, data.Size());
-}
+CByteArray CHash::Hash(tHashAlgo algo, const CByteArray &data) { return Hash(algo, data, 0, data.Size()); }
 
-CByteArray CHash::Hash(tHashAlgo algo, const CByteArray & data,
-	unsigned long ulOffset, unsigned long ulLen)
-{
+CByteArray CHash::Hash(tHashAlgo algo, const CByteArray &data, unsigned long ulOffset, unsigned long ulLen) {
 	Init(algo);
 	Update(data, ulOffset, ulLen);
 	return GetHash();
 }
 
-void CHash::Init(tHashAlgo algo)
-{
-	switch(algo)
-	{
+void CHash::Init(tHashAlgo algo) {
+	switch (algo) {
 	case ALGO_SHA1:
 		sha1_init(&m_md1);
 		break;
@@ -85,22 +72,16 @@ void CHash::Init(tHashAlgo algo)
 	m_bInitialized = true;
 }
 
-void CHash::Update(const CByteArray & data)
-{
-	Update(data, 0, data.Size());
-}
+void CHash::Update(const CByteArray &data) { Update(data, 0, data.Size()); }
 
-void CHash::Update(const CByteArray & data, unsigned long ulOffset, unsigned long ulLen)
-{
+void CHash::Update(const CByteArray &data, unsigned long ulOffset, unsigned long ulLen) {
 	if (!m_bInitialized)
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 
-	if (ulLen != 0)
-	{
+	if (ulLen != 0) {
 		const unsigned char *pucData = data.GetBytes() + ulOffset;
 
-		switch(m_Algo)
-		{
+		switch (m_Algo) {
 		case ALGO_SHA1:
 			sha1_process(&m_md1, pucData, ulLen);
 			break;
@@ -119,8 +100,7 @@ void CHash::Update(const CByteArray & data, unsigned long ulOffset, unsigned lon
 	}
 }
 
-CByteArray CHash::GetHash()
-{
+CByteArray CHash::GetHash() {
 	if (!m_bInitialized)
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 
@@ -129,8 +109,7 @@ CByteArray CHash::GetHash()
 	// hash result
 	unsigned char tucHash[64]; // make sure this is enough if other hashes are added!!!
 
-	switch(m_Algo)
-	{
+	switch (m_Algo) {
 	case ALGO_SHA1:
 		sha1_done(&m_md1, tucHash);
 		break;

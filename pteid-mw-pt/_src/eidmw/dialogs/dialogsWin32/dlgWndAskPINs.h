@@ -27,8 +27,7 @@
 
 using namespace eIDMW;
 
-class dlgWndAskPINs : public Win32Dialog
-{
+class dlgWndAskPINs : public Win32Dialog {
 	void GetPinResult();
 	bool CheckPin2Result();
 
@@ -39,18 +38,18 @@ class dlgWndAskPINs : public Win32Dialog
 	bool m_dontAskPIN1;
 	unsigned char m_UK_InputField;
 
-	const wchar_t * szHeader;
-	const wchar_t * szPIN;
+	const wchar_t *szHeader;
+	const wchar_t *szPIN;
 
 public:
-	dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring & Header, std::wstring & title, bool isUnlock, bool dontAskPUK, HWND Parent = NULL);
+	dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, std::wstring &Header, std::wstring &title, bool isUnlock,
+				  bool dontAskPUK, HWND Parent = NULL);
 	virtual ~dlgWndAskPINs();
 
 	wchar_t Pin1Result[128];
 	wchar_t Pin2Result[128];
 
-	virtual LRESULT ProcecEvent
-				(	UINT		uMsg,			// Message For This Window
-					WPARAM		wParam,			// Additional Message Information
-					LPARAM		lParam );		// Additional Message Information
+	virtual LRESULT ProcecEvent(UINT uMsg,		// Message For This Window
+								WPARAM wParam,	// Additional Message Information
+								LPARAM lParam); // Additional Message Information
 };

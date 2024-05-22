@@ -26,16 +26,15 @@
 
 using namespace eIDMW;
 
-class dlgWndCmdMsg : public Win32Dialog
-{
-    PteidControls::TextData titleData, textTopData, textBottomData;
-    PteidControls::ButtonData btnProcData;
+class dlgWndCmdMsg : public Win32Dialog {
+	PteidControls::TextData titleData, textTopData, textBottomData;
+	PteidControls::ButtonData btnProcData;
 	int m_angle = 0;
 	int img_x = 0, img_y = 0;
 
 	ULONG_PTR gdiplusToken = NULL;
 
-    HICON imageIco;
+	HICON imageIco;
 	RECT m_client_rectangle = {0};
 	UINT_PTR m_timer;
 
@@ -43,17 +42,15 @@ class dlgWndCmdMsg : public Win32Dialog
 	const int outer_circle_diameter = circle_diameter + 30;
 	const int ANIMATION_DURATION = 100;
 
-    DlgCmdMsgType type;
+	DlgCmdMsgType type;
 
 public:
-    dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);
-    virtual ~dlgWndCmdMsg();
+	dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, const wchar_t *message, HWND Parent = NULL);
+	virtual ~dlgWndCmdMsg();
 
-    virtual LRESULT ProcecEvent
-        (UINT		uMsg,			// Message For This Window
-        WPARAM		wParam,			// Additional Message Information
-        LPARAM		lParam);		// Additional Message Information
-    
-    void stopExec();
+	virtual LRESULT ProcecEvent(UINT uMsg,		// Message For This Window
+								WPARAM wParam,	// Additional Message Information
+								LPARAM lParam); // Additional Message Information
+
+	void stopExec();
 };
-

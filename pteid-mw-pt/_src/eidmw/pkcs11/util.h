@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#define DUMP_TEMPLATE_MAX	32
+// #define DUMP_TEMPLATE_MAX	32
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,8 +41,7 @@ void util_unlock(void *lock);
 void strcpy_n(unsigned char *to, const char *from, size_t n, char padding);
 
 #ifdef __cplusplus
-   }
+}
 #endif
 
 #endif
-

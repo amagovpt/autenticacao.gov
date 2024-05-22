@@ -14,512 +14,485 @@
 #include "RemoteAddress.h"
 #include <optional>
 
-namespace eIDMW
-{
+namespace eIDMW {
 
 CByteArray getSodData(APL_EIDCard *card) {
 
-    const CByteArray sod_data = card->getSod().getData();
-    const unsigned char *data_p = sod_data.GetBytes();
+	const CByteArray sod_data = card->getSod().getData();
+	const unsigned char *data_p = sod_data.GetBytes();
 
-    //Trim the padding 0x00 bytes parsing the length from the top-level ASN.1 object 77 82 [XX YY]
-    int sodLen = int((data_p[2] << 8) + data_p[3] + 4);
+	// Trim the padding 0x00 bytes parsing the length from the top-level ASN.1 object 77 82 [XX YY]
+	int sodLen = int((data_p[2] << 8) + data_p[3] + 4);
 
-    return CByteArray(data_p, sodLen);
+	return CByteArray(data_p, sodLen);
 }
 
-
 CByteArray getAuthCert(APL_EIDCard *card) {
-    APL_Certifs * certificates = card->getCertificates();
-    const CByteArray &ba = certificates->getAuthentication()->getData();
+	APL_Certifs *certificates = card->getCertificates();
+	const CByteArray &ba = certificates->getAuthentication()->getData();
 
-    const unsigned char *data_p = ba.GetBytes();
+	const unsigned char *data_p = ba.GetBytes();
 
-    //Trim the padding 0x00 bytes parsing the length from the top-level ASN.1 object 30 82 [XX YY]
-    int certificate_len = int((data_p[2] << 8) + data_p[3] + 4);
+	// Trim the padding 0x00 bytes parsing the length from the top-level ASN.1 object 30 82 [XX YY]
+	int certificate_len = int((data_p[2] << 8) + data_p[3] + 4);
 
-    return CByteArray(data_p, certificate_len);
+	return CByteArray(data_p, certificate_len);
 }
 
 void parseErrorStatusForGetAddress(cJSON *json_item, RA_GetAddressResponse *resp) {
-    cJSON *error_item = cJSON_GetObjectItem(json_item, "ErrorStatus");
-    if (cJSON_IsObject(error_item)) {
-        cJSON * error_code = cJSON_GetObjectItem(error_item, "code");
-        resp->error_code = error_code->valueint;
+	cJSON *error_item = cJSON_GetObjectItem(json_item, "ErrorStatus");
+	if (cJSON_IsObject(error_item)) {
+		cJSON *error_code = cJSON_GetObjectItem(error_item, "code");
+		resp->error_code = error_code->valueint;
 
-        cJSON * description = cJSON_GetObjectItem(error_item, "description");
-        if (cJSON_IsString(description))
-            resp->error_msg = description->valuestring;
-
-    }
+		cJSON *description = cJSON_GetObjectItem(error_item, "description");
+		if (cJSON_IsString(description))
+			resp->error_msg = description->valuestring;
+	}
 }
-
 
 /* JSON parsing functions */
 
-RA_SignChallengeResponse parseSignChallengeResponse(const char * json_str) {
-    RA_SignChallengeResponse resp;
+RA_SignChallengeResponse parseSignChallengeResponse(const char *json_str) {
+	RA_SignChallengeResponse resp;
 
-    cJSON *signed_challenge = cJSON_Parse(json_str);
-    cJSON *item = NULL;
-    if (signed_challenge == NULL) {
-        MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for parseSignChallengeResponse!");
-        MWLOG(LEV_DEBUG, MOD_APL, "SignChallengeResponse - malformed JSON data: %s", json_str);
-        return resp;
-    }
+	cJSON *signed_challenge = cJSON_Parse(json_str);
+	cJSON *item = NULL;
+	if (signed_challenge == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for parseSignChallengeResponse!");
+		MWLOG(LEV_DEBUG, MOD_APL, "SignChallengeResponse - malformed JSON data: %s", json_str);
+		return resp;
+	}
 
-    item = cJSON_GetObjectItem(signed_challenge, "ChallengeResponse");
+	item = cJSON_GetObjectItem(signed_challenge, "ChallengeResponse");
 
-    if (!cJSON_IsObject(item)) {
-        item = cJSON_GetObjectItem(signed_challenge, "ErrorStatus");
-        if (cJSON_IsObject(item)) {
-            cJSON * error_code = cJSON_GetObjectItem(item, "code");
-            resp.error_code = error_code->valueint;
+	if (!cJSON_IsObject(item)) {
+		item = cJSON_GetObjectItem(signed_challenge, "ErrorStatus");
+		if (cJSON_IsObject(item)) {
+			cJSON *error_code = cJSON_GetObjectItem(item, "code");
+			resp.error_code = error_code->valueint;
+		}
+		cJSON_Delete(signed_challenge);
+		return resp;
+	}
 
-        }
-        cJSON_Delete(signed_challenge);
-        return resp;
-    }
+	if (!cJSON_IsObject(item)) {
+		item = cJSON_GetObjectItem(signed_challenge, "ErrorStatus");
+		if (cJSON_IsObject(item)) {
+			cJSON *error_code = cJSON_GetObjectItem(item, "code");
+			resp.error_code = error_code->valueint;
+		}
+		cJSON_Delete(signed_challenge);
+		return resp;
+	}
 
-    if (!cJSON_IsObject(item)) {
-        item = cJSON_GetObjectItem(signed_challenge, "ErrorStatus");
-        if (cJSON_IsObject(item)) {
-            cJSON * error_code = cJSON_GetObjectItem(item, "code");
-            resp.error_code = error_code->valueint;
+	cJSON *item2 = cJSON_GetObjectItem(item, "signedChallenge");
 
-        }
-        cJSON_Delete(signed_challenge);
-        return resp;
-    }
+	if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
+		resp.signed_challenge.append(item2->valuestring);
+	}
 
-    cJSON * item2 = cJSON_GetObjectItem(item, "signedChallenge");
+	item2 = cJSON_GetObjectItem(item, "SetSECommand");
+	if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
+		resp.set_se_command.append(item2->valuestring);
+	}
 
-    if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
-        resp.signed_challenge.append(item2->valuestring);
-    }
+	item2 = cJSON_GetObjectItem(item, "InternalAuthenticateCommand");
+	if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
+		resp.internal_auth_command.append(item2->valuestring);
+	}
 
-    item2 = cJSON_GetObjectItem(item, "SetSECommand");
-    if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
-        resp.set_se_command.append(item2->valuestring);
-    }
+	cJSON_Delete(signed_challenge);
 
-    item2 = cJSON_GetObjectItem(item, "InternalAuthenticateCommand");
-    if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
-        resp.internal_auth_command.append(item2->valuestring);
-    }
-
-    cJSON_Delete(signed_challenge);
-
-    return resp;
-
+	return resp;
 }
 
-int parseRemoteAddressErrorCode(const char * json_str) {
-    int error_code = -1;
-    cJSON *error = cJSON_Parse(json_str);
-    if (error == NULL) {
-        MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
-        return error_code;
-    }
-    cJSON * item = cJSON_GetObjectItem(error, "code");
+int parseRemoteAddressErrorCode(const char *json_str) {
+	int error_code = -1;
+	cJSON *error = cJSON_Parse(json_str);
+	if (error == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+		return error_code;
+	}
+	cJSON *item = cJSON_GetObjectItem(error, "code");
 
-    if (cJSON_IsNumber(item)) {
-       error_code = item->valueint;
-    }
+	if (cJSON_IsNumber(item)) {
+		error_code = item->valueint;
+	}
 
-    cJSON_Delete(error);
+	cJSON_Delete(error);
 
-    return error_code;
+	return error_code;
 }
 
-std::string parseECDH1Response(const char * json_str) {
-    cJSON *ecdh = cJSON_Parse(json_str);
-    std::string kifd;
+std::string parseECDH1Response(const char *json_str) {
+	cJSON *ecdh = cJSON_Parse(json_str);
+	std::string kifd;
 
-    cJSON *item = NULL;
-    if (ecdh == NULL)
-    {
-        MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
-        MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
-        return kifd;
-    }
-    item = cJSON_GetObjectItem(ecdh, "ecdh_kifd");
+	cJSON *item = NULL;
+	if (ecdh == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+		MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
+		return kifd;
+	}
+	item = cJSON_GetObjectItem(ecdh, "ecdh_kifd");
 
-    if (cJSON_IsString(item) && (item->valuestring != NULL)) {
-        kifd.append(item->valuestring);
-    }
+	if (cJSON_IsString(item) && (item->valuestring != NULL)) {
+		kifd.append(item->valuestring);
+	}
 
-    return kifd;
+	return kifd;
 }
 
-RA_ECDH2Response parseECDH2Response(const char * json_str) {
-    RA_ECDH2Response resp;
-    cJSON *ecdh = cJSON_Parse(json_str);
+RA_ECDH2Response parseECDH2Response(const char *json_str) {
+	RA_ECDH2Response resp;
+	cJSON *ecdh = cJSON_Parse(json_str);
 
-    cJSON *apdu_array = NULL;
-    if (ecdh == NULL)
-    {
-        MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
-        MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
-        return resp;
-    }
-    apdu_array = cJSON_GetObjectItem(ecdh, "external_auth_apdus");
+	cJSON *apdu_array = NULL;
+	if (ecdh == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+		MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
+		return resp;
+	}
+	apdu_array = cJSON_GetObjectItem(ecdh, "external_auth_apdus");
 
-    //TODO: error handling: external_auth_apdus can be null/empty
-    if (cJSON_IsArray(apdu_array)) {
-        for (int i=0; i < cJSON_GetArraySize(apdu_array); i++) {
-            cJSON * item = cJSON_GetArrayItem(apdu_array, i);
-            if (cJSON_IsString(item))
-                resp.external_auth_apdus.push_back(item->valuestring);
-        }
-    }
+	// TODO: error handling: external_auth_apdus can be null/empty
+	if (cJSON_IsArray(apdu_array)) {
+		for (int i = 0; i < cJSON_GetArraySize(apdu_array); i++) {
+			cJSON *item = cJSON_GetArrayItem(apdu_array, i);
+			if (cJSON_IsString(item))
+				resp.external_auth_apdus.push_back(item->valuestring);
+		}
+	}
 
-    cJSON_Delete(ecdh);
+	cJSON_Delete(ecdh);
 
-    return resp;
+	return resp;
 }
 
 std::optional<RA_MutualAuthResponse> parseMutualAuthResponse1(const char *json_str) {
-    RA_MutualAuthResponse resp;
-    cJSON *mutual_auth = cJSON_Parse(json_str);
+	RA_MutualAuthResponse resp;
+	cJSON *mutual_auth = cJSON_Parse(json_str);
 
-    cJSON *apdu_array = NULL;
-    if (mutual_auth == NULL)
-    {
-        MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
-        MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
-        return {};
-    }
+	cJSON *apdu_array = NULL;
+	if (mutual_auth == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to parse JSON!", __FUNCTION__);
+		MWLOG(LEV_DEBUG, MOD_APL, "Malformed JSON data: %s", json_str);
+		return {};
+	}
 
-    apdu_array = cJSON_GetObjectItem(mutual_auth, "internal_auth_commands");
+	apdu_array = cJSON_GetObjectItem(mutual_auth, "internal_auth_commands");
 
-    if (cJSON_IsArray(apdu_array)) {
-        for (int i=0; i < cJSON_GetArraySize(apdu_array); i++) {
-            cJSON * item = cJSON_GetArrayItem(apdu_array, i);
-            if (cJSON_IsString(item))
-                resp.internal_auth_commands.push_back(item->valuestring);
-        }
-    }
-    else {
-        return {};
-    }
+	if (cJSON_IsArray(apdu_array)) {
+		for (int i = 0; i < cJSON_GetArraySize(apdu_array); i++) {
+			cJSON *item = cJSON_GetArrayItem(apdu_array, i);
+			if (cJSON_IsString(item))
+				resp.internal_auth_commands.push_back(item->valuestring);
+		}
+	} else {
+		return {};
+	}
 
-    cJSON* item = cJSON_GetObjectItem(mutual_auth, "signed_challenge_command");
+	cJSON *item = cJSON_GetObjectItem(mutual_auth, "signed_challenge_command");
 
-    if (cJSON_IsString(item) && (item->valuestring != NULL)) {
-        resp.signed_challenge_command.append(item->valuestring);
-    }
-    else {
-        return {};
-    }
-    item = cJSON_GetObjectItem(mutual_auth, "pin_status_command");
+	if (cJSON_IsString(item) && (item->valuestring != NULL)) {
+		resp.signed_challenge_command.append(item->valuestring);
+	} else {
+		return {};
+	}
+	item = cJSON_GetObjectItem(mutual_auth, "pin_status_command");
 
-    if (cJSON_IsString(item) && (item->valuestring != NULL)) {
-        resp.pin_status_command.append(item->valuestring);
-    }
+	if (cJSON_IsString(item) && (item->valuestring != NULL)) {
+		resp.pin_status_command.append(item->valuestring);
+	}
 
-    cJSON_Delete(mutual_auth);
+	cJSON_Delete(mutual_auth);
 
-    return resp;
+	return resp;
 }
 
+RA_DHParamsResponse parseDHParamsResponse(const char *json_str) {
 
-RA_DHParamsResponse parseDHParamsResponse(const char * json_str) {
+	RA_DHParamsResponse resp;
 
-    RA_DHParamsResponse resp;
+	cJSON *dh_params = cJSON_Parse(json_str);
+	cJSON *item = NULL;
+	if (dh_params == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for DHparamsResponse!");
+		MWLOG(LEV_DEBUG, MOD_APL, "DHParamsResponse - malformed JSON data: %s", json_str);
+		return resp;
+	}
 
-    cJSON *dh_params = cJSON_Parse(json_str);
-    cJSON *item = NULL;
-    if (dh_params == NULL)
-    {
-        MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for DHparamsResponse!");
-        MWLOG(LEV_DEBUG, MOD_APL, "DHParamsResponse - malformed JSON data: %s", json_str);
-        return resp;
-    }
+	item = cJSON_GetObjectItem(dh_params, "DHParamsResponse");
 
-    item = cJSON_GetObjectItem(dh_params, "DHParamsResponse");
+	if (!cJSON_IsObject(item)) {
+		// Error response: get Error Status and write it to resp
+		item = cJSON_GetObjectItem(dh_params, "ErrorStatus");
+		if (cJSON_IsObject(item)) {
+			cJSON *error_code = cJSON_GetObjectItem(item, "code");
+			resp.error_code = error_code->valueint;
+		}
+		cJSON_Delete(dh_params);
+		return resp;
+	}
 
-    if (!cJSON_IsObject(item)) {
-        //Error response: get Error Status and write it to resp
-        item = cJSON_GetObjectItem(dh_params, "ErrorStatus");
-        if (cJSON_IsObject(item)) {
-            cJSON * error_code = cJSON_GetObjectItem(item, "code");
-            resp.error_code = error_code->valueint;
+	cJSON *item2 = cJSON_GetObjectItem(item, "kifd");
 
-        }
-        cJSON_Delete(dh_params);
-        return resp;
-    }
+	if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
+		resp.kifd.append(item2->valuestring);
+	}
 
-    cJSON * item2 = cJSON_GetObjectItem(item, "kifd");
+	item2 = cJSON_GetObjectItem(item, "c_cv_ifd_aut");
+	if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
+		resp.cv_ifd_cert.append(item2->valuestring);
+	}
 
-    if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
-        resp.kifd.append(item2->valuestring);
-    }
+	cJSON_Delete(dh_params);
 
-    item2 = cJSON_GetObjectItem(item, "c_cv_ifd_aut");
-    if (cJSON_IsString(item2) && (item2->valuestring != NULL)) {
-        resp.cv_ifd_cert.append(item2->valuestring);
-    }
-
-    cJSON_Delete(dh_params);
-
-    return resp;
+	return resp;
 }
 
+RA_GetAddressResponse *validateReadAddressResponse(const char *json_str) {
 
-RA_GetAddressResponse * validateReadAddressResponse(const char * json_str) {
+	RA_GetAddressResponse *resp = new RA_GetAddressResponse();
 
-    RA_GetAddressResponse *resp = new RA_GetAddressResponse();
+	cJSON *cjson_obj = cJSON_Parse(json_str);
+	cJSON *item = NULL;
+	if (cjson_obj == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for ReadAddressResponse!");
+		MWLOG(LEV_DEBUG, MOD_APL, "ReadAddressResponse - malformed JSON data: %s", json_str);
+		resp->error_code = -1;
+		return resp;
+	}
 
-    cJSON *cjson_obj = cJSON_Parse(json_str);
-    cJSON *item = NULL;
-    if (cjson_obj == NULL)
-    {
-        MWLOG(LEV_ERROR, MOD_APL, "Failed to parse JSON for ReadAddressResponse!");
-        MWLOG(LEV_DEBUG, MOD_APL, "ReadAddressResponse - malformed JSON data: %s", json_str);
-        resp->error_code = -1;
-        return resp;
-    }
+	item = cJSON_GetObjectItem(cjson_obj, "readAddressResponse");
 
-    item = cJSON_GetObjectItem(cjson_obj, "readAddressResponse");
+	if (!cJSON_IsObject(item)) {
+		// Error response: get Error Status and write it to resp
+		parseErrorStatusForGetAddress(cjson_obj, resp);
+		resp->parent_json = cjson_obj;
+		return resp;
+	}
 
-    if (!cJSON_IsObject(item)) {
-        //Error response: get Error Status and write it to resp
-        parseErrorStatusForGetAddress(cjson_obj, resp);
-        resp->parent_json = cjson_obj;
-        return resp;
-    }
+	cJSON *item2 = cJSON_GetObjectItem(item, "addr");
+	if (cJSON_IsObject(item2)) {
+		// This is a national address
+		resp->is_foreign_address = false;
+		resp->address_obj = item2;
+	} else {
+		item2 = cJSON_GetObjectItem(item, "foreign_addr");
 
-    cJSON * item2 = cJSON_GetObjectItem(item, "addr");
-    if (cJSON_IsObject(item2)) {
-        //This is a national address
-        resp->is_foreign_address = false;
-        resp->address_obj = item2;
-    }
-    else {
-        item2 = cJSON_GetObjectItem(item, "foreign_addr");
+		if (cJSON_IsObject(item2)) {
+			resp->is_foreign_address = true;
+			resp->address_obj = item2;
+		} else {
+			MWLOG(LEV_ERROR, MOD_APL, "Invalid ReadAddressResponse: both addr and foreign_addr are NULL!");
+			parseErrorStatusForGetAddress(item, resp);
+		}
+	}
 
-        if (cJSON_IsObject(item2)) {
-            resp->is_foreign_address = true;
-            resp->address_obj = item2;        
-        }
-        else {
-            MWLOG(LEV_ERROR, MOD_APL, "Invalid ReadAddressResponse: both addr and foreign_addr are NULL!");
-            parseErrorStatusForGetAddress(item, resp);
-        }
-    }
-
-    resp->parent_json = cjson_obj;
-    return resp;
+	resp->parent_json = cjson_obj;
+	return resp;
 }
 
-char * build_json_ecdh1(CByteArray &ecdh_params, CByteArray &id_file,
-                   CByteArray &sod, CByteArray &auth_cert, std::string &icc_serial) {
-    cJSON *parent = cJSON_CreateObject();
+char *build_json_ecdh1(CByteArray &ecdh_params, CByteArray &id_file, CByteArray &sod, CByteArray &auth_cert,
+					   std::string &icc_serial) {
+	cJSON *parent = cJSON_CreateObject();
 
-    cJSON_AddItemToObject(parent,"ecdh_params", cJSON_CreateString(byteArrayToHexString(ecdh_params)));
-    cJSON_AddItemToObject(parent,"sod", cJSON_CreateString(byteArrayToHexString(sod)));
-    cJSON_AddItemToObject(parent,"auth_cert", cJSON_CreateString(byteArrayToHexString(auth_cert)));
-    cJSON_AddItemToObject(parent,"id_dg13", cJSON_CreateString(byteArrayToHexString(id_file)));
-    cJSON_AddItemToObject(parent,"icc_serial", cJSON_CreateString(icc_serial.c_str()));
+	cJSON_AddItemToObject(parent, "ecdh_params", cJSON_CreateString(byteArrayToHexString(ecdh_params)));
+	cJSON_AddItemToObject(parent, "sod", cJSON_CreateString(byteArrayToHexString(sod)));
+	cJSON_AddItemToObject(parent, "auth_cert", cJSON_CreateString(byteArrayToHexString(auth_cert)));
+	cJSON_AddItemToObject(parent, "id_dg13", cJSON_CreateString(byteArrayToHexString(id_file)));
+	cJSON_AddItemToObject(parent, "icc_serial", cJSON_CreateString(icc_serial.c_str()));
 
-    char * json_str = cJSON_PrintUnformatted(parent);
-    cJSON_Delete(parent);
+	char *json_str = cJSON_PrintUnformatted(parent);
+	cJSON_Delete(parent);
 
-    return json_str;
-
+	return json_str;
 }
 
-char * build_json_ecdh2(char * ecdh_kicc) {
-    cJSON *parent = cJSON_CreateObject();
+char *build_json_ecdh2(char *ecdh_kicc) {
+	cJSON *parent = cJSON_CreateObject();
 
-    cJSON_AddItemToObject(parent,"ecdh_kicc", cJSON_CreateString(ecdh_kicc));
+	cJSON_AddItemToObject(parent, "ecdh_kicc", cJSON_CreateString(ecdh_kicc));
 
-    char * json_str = cJSON_PrintUnformatted(parent);
-    cJSON_Delete(parent);
+	char *json_str = cJSON_PrintUnformatted(parent);
+	cJSON_Delete(parent);
 
-    return json_str;
+	return json_str;
 }
 
 char *buildArrayOfStringsJSON(const char *array_name, std::vector<std::string> string_v) {
-    cJSON *parent = cJSON_CreateObject();
-    cJSON * array = cJSON_CreateArray();
+	cJSON *parent = cJSON_CreateObject();
+	cJSON *array = cJSON_CreateArray();
 
-    for (auto s: string_v) {
-        cJSON_AddItemToArray(array, cJSON_CreateString(s.c_str()));
-    }
-    cJSON_AddItemToObject(parent, array_name, array);
+	for (auto s : string_v) {
+		cJSON_AddItemToArray(array, cJSON_CreateString(s.c_str()));
+	}
+	cJSON_AddItemToObject(parent, array_name, array);
 
-    char * json_str = cJSON_PrintUnformatted(parent);
-    cJSON_Delete(parent);
+	char *json_str = cJSON_PrintUnformatted(parent);
+	cJSON_Delete(parent);
 
-    return json_str;
+	return json_str;
 }
 
-char * build_json_mutualauth_1(std::vector<std::string> ecdh_apdu_responses) {
+char *build_json_mutualauth_1(std::vector<std::string> ecdh_apdu_responses) {
 
-    return buildArrayOfStringsJSON("external_auth_responses", ecdh_apdu_responses);
+	return buildArrayOfStringsJSON("external_auth_responses", ecdh_apdu_responses);
 }
 
-char * build_json_mutualauth_2(std::vector<std::string> internal_auth_apdu_responses) {
-    //TODO: review this
-    return buildArrayOfStringsJSON("internal_auth_responses", internal_auth_apdu_responses);
+char *build_json_mutualauth_2(std::vector<std::string> internal_auth_apdu_responses) {
+	// TODO: review this
+	return buildArrayOfStringsJSON("internal_auth_responses", internal_auth_apdu_responses);
 }
 
+cJSON *buildIDObject(APL_EidFile_ID &id_file) {
+	cJSON *parent = cJSON_CreateObject();
 
-cJSON * buildIDObject(APL_EidFile_ID &id_file) {
-    cJSON *parent = cJSON_CreateObject();
+	cJSON_AddItemToObject(parent, "Surname", cJSON_CreateString(id_file.getSurname()));
+	cJSON_AddItemToObject(parent, "Givenname", cJSON_CreateString(id_file.getGivenName()));
+	cJSON_AddItemToObject(parent, "Sex", cJSON_CreateString(id_file.getGender()));
+	cJSON_AddItemToObject(parent, "Height", cJSON_CreateString(id_file.getHeight()));
+	cJSON_AddItemToObject(parent, "Country", cJSON_CreateString(id_file.getCountry()));
+	cJSON_AddItemToObject(parent, "Birthdate", cJSON_CreateString(id_file.getDateOfBirth()));
+	cJSON_AddItemToObject(parent, "GivenNameFather", cJSON_CreateString(id_file.getGivenNameFather()));
+	cJSON_AddItemToObject(parent, "SurnameFather", cJSON_CreateString(id_file.getSurnameFather()));
+	cJSON_AddItemToObject(parent, "GivenNameMother", cJSON_CreateString(id_file.getGivenNameMother()));
+	cJSON_AddItemToObject(parent, "SurnameMother", cJSON_CreateString(id_file.getSurnameMother()));
+	cJSON_AddItemToObject(parent, "Documenttype", cJSON_CreateString(id_file.getDocumentType()));
+	cJSON_AddItemToObject(parent, "Documentnum", cJSON_CreateString(id_file.getDocumentNumber()));
+	cJSON_AddItemToObject(parent, "CivilianIdNumber", cJSON_CreateString(id_file.getCivilianIdNumber()));
+	cJSON_AddItemToObject(parent, "Documentversion", cJSON_CreateString(id_file.getDocumentVersion()));
+	cJSON_AddItemToObject(parent, "DocumentPAN", cJSON_CreateString(id_file.getDocumentPAN()));
+	cJSON_AddItemToObject(parent, "Nationality", cJSON_CreateString(id_file.getNationality()));
+	cJSON_AddItemToObject(parent, "Validityenddate", cJSON_CreateString(id_file.getValidityEndDate()));
+	cJSON_AddItemToObject(parent, "Validitybegindate", cJSON_CreateString(id_file.getValidityBeginDate()));
+	cJSON_AddItemToObject(parent, "PlaceOfRequest", cJSON_CreateString(id_file.getLocalofRequest()));
+	cJSON_AddItemToObject(parent, "IssuingEntity", cJSON_CreateString(id_file.getIssuingEntity()));
+	cJSON_AddItemToObject(parent, "NISS", cJSON_CreateString(id_file.getSocialSecurityNumber()));
+	cJSON_AddItemToObject(parent, "NSNS", cJSON_CreateString(id_file.getHealthNumber()));
+	cJSON_AddItemToObject(parent, "NIF", cJSON_CreateString(id_file.getTaxNo()));
+	cJSON_AddItemToObject(parent, "AccidentalIndications", cJSON_CreateString(id_file.getAccidentalIndications()));
 
-    cJSON_AddItemToObject(parent,"Surname", cJSON_CreateString(id_file.getSurname()));
-    cJSON_AddItemToObject(parent,"Givenname", cJSON_CreateString(id_file.getGivenName()));
-    cJSON_AddItemToObject(parent,"Sex", cJSON_CreateString(id_file.getGender()));
-    cJSON_AddItemToObject(parent,"Height", cJSON_CreateString(id_file.getHeight()));
-    cJSON_AddItemToObject(parent,"Country", cJSON_CreateString(id_file.getCountry()));
-    cJSON_AddItemToObject(parent,"Birthdate", cJSON_CreateString(id_file.getDateOfBirth()));
-    cJSON_AddItemToObject(parent,"GivenNameFather", cJSON_CreateString(id_file.getGivenNameFather()));
-    cJSON_AddItemToObject(parent,"SurnameFather", cJSON_CreateString(id_file.getSurnameFather()));
-    cJSON_AddItemToObject(parent,"GivenNameMother", cJSON_CreateString(id_file.getGivenNameMother()));
-    cJSON_AddItemToObject(parent,"SurnameMother", cJSON_CreateString(id_file.getSurnameMother()));
-    cJSON_AddItemToObject(parent,"Documenttype", cJSON_CreateString(id_file.getDocumentType()));
-    cJSON_AddItemToObject(parent,"Documentnum", cJSON_CreateString(id_file.getDocumentNumber()));
-    cJSON_AddItemToObject(parent,"CivilianIdNumber", cJSON_CreateString(id_file.getCivilianIdNumber()));
-    cJSON_AddItemToObject(parent,"Documentversion", cJSON_CreateString(id_file.getDocumentVersion()));
-    cJSON_AddItemToObject(parent,"DocumentPAN", cJSON_CreateString(id_file.getDocumentPAN()));
-    cJSON_AddItemToObject(parent,"Nationality", cJSON_CreateString(id_file.getNationality()));
-    cJSON_AddItemToObject(parent,"Validityenddate", cJSON_CreateString(id_file.getValidityEndDate()));
-    cJSON_AddItemToObject(parent,"Validitybegindate", cJSON_CreateString(id_file.getValidityBeginDate()));
-    cJSON_AddItemToObject(parent,"PlaceOfRequest", cJSON_CreateString(id_file.getLocalofRequest()));
-    cJSON_AddItemToObject(parent,"IssuingEntity", cJSON_CreateString(id_file.getIssuingEntity()));
-    cJSON_AddItemToObject(parent,"NISS", cJSON_CreateString(id_file.getSocialSecurityNumber()));
-    cJSON_AddItemToObject(parent,"NSNS", cJSON_CreateString(id_file.getHealthNumber()));
-    cJSON_AddItemToObject(parent,"NIF", cJSON_CreateString(id_file.getTaxNo()));
-    cJSON_AddItemToObject(parent,"AccidentalIndications", cJSON_CreateString(id_file.getAccidentalIndications()));
-
-    return parent;
+	return parent;
 }
 
-cJSON * buildAddressObject(APL_EidFile_Address &addr) {
-    cJSON *parent = cJSON_CreateObject();
+cJSON *buildAddressObject(APL_EidFile_Address &addr) {
+	cJSON *parent = cJSON_CreateObject();
 
-    cJSON_AddItemToObject(parent, "countryCode", cJSON_CreateString(addr.getCountryCode()));
-    cJSON_AddItemToObject(parent, "district", cJSON_CreateString(addr.getDistrict()));
-    cJSON_AddItemToObject(parent, "districtCode", cJSON_CreateString(addr.getDistrictCode()));
-    cJSON_AddItemToObject(parent, "municipality", cJSON_CreateString(addr.getMunicipality()));
-    cJSON_AddItemToObject(parent, "municipalityCode", cJSON_CreateString(addr.getMunicipalityCode()));
-    cJSON_AddItemToObject(parent, "parish", cJSON_CreateString(addr.getCivilParish()));
-    cJSON_AddItemToObject(parent, "parishCode", cJSON_CreateString(addr.getCivilParishCode()));
-    cJSON_AddItemToObject(parent, "streetType", cJSON_CreateString(addr.getStreetType()));
-    cJSON_AddItemToObject(parent, "abbrStreetType", cJSON_CreateString(addr.getAbbrStreetType()));
-    cJSON_AddItemToObject(parent, "streetName", cJSON_CreateString(addr.getStreetName()));
-    cJSON_AddItemToObject(parent, "buildingType", cJSON_CreateString(addr.getBuildingType()));
-    cJSON_AddItemToObject(parent, "abbrBuildingType", cJSON_CreateString(addr.getAbbrBuildingType()));
-    cJSON_AddItemToObject(parent, "doorNo", cJSON_CreateString(addr.getDoorNo()));
-    cJSON_AddItemToObject(parent, "floor", cJSON_CreateString(addr.getFloor()));
-    cJSON_AddItemToObject(parent, "place", cJSON_CreateString(addr.getPlace()));
-    cJSON_AddItemToObject(parent, "side", cJSON_CreateString(addr.getSide()));
-    cJSON_AddItemToObject(parent, "locality", cJSON_CreateString(addr.getLocality()));
-    cJSON_AddItemToObject(parent, "zip4", cJSON_CreateString(addr.getZip4()));
-    cJSON_AddItemToObject(parent, "zip3", cJSON_CreateString(addr.getZip3()));
-    cJSON_AddItemToObject(parent, "postalLocality", cJSON_CreateString(addr.getPostalLocality()));
-    cJSON_AddItemToObject(parent, "generatedAddressCode", cJSON_CreateString(addr.getGeneratedAddressCode()));
+	cJSON_AddItemToObject(parent, "countryCode", cJSON_CreateString(addr.getCountryCode()));
+	cJSON_AddItemToObject(parent, "district", cJSON_CreateString(addr.getDistrict()));
+	cJSON_AddItemToObject(parent, "districtCode", cJSON_CreateString(addr.getDistrictCode()));
+	cJSON_AddItemToObject(parent, "municipality", cJSON_CreateString(addr.getMunicipality()));
+	cJSON_AddItemToObject(parent, "municipalityCode", cJSON_CreateString(addr.getMunicipalityCode()));
+	cJSON_AddItemToObject(parent, "parish", cJSON_CreateString(addr.getCivilParish()));
+	cJSON_AddItemToObject(parent, "parishCode", cJSON_CreateString(addr.getCivilParishCode()));
+	cJSON_AddItemToObject(parent, "streetType", cJSON_CreateString(addr.getStreetType()));
+	cJSON_AddItemToObject(parent, "abbrStreetType", cJSON_CreateString(addr.getAbbrStreetType()));
+	cJSON_AddItemToObject(parent, "streetName", cJSON_CreateString(addr.getStreetName()));
+	cJSON_AddItemToObject(parent, "buildingType", cJSON_CreateString(addr.getBuildingType()));
+	cJSON_AddItemToObject(parent, "abbrBuildingType", cJSON_CreateString(addr.getAbbrBuildingType()));
+	cJSON_AddItemToObject(parent, "doorNo", cJSON_CreateString(addr.getDoorNo()));
+	cJSON_AddItemToObject(parent, "floor", cJSON_CreateString(addr.getFloor()));
+	cJSON_AddItemToObject(parent, "place", cJSON_CreateString(addr.getPlace()));
+	cJSON_AddItemToObject(parent, "side", cJSON_CreateString(addr.getSide()));
+	cJSON_AddItemToObject(parent, "locality", cJSON_CreateString(addr.getLocality()));
+	cJSON_AddItemToObject(parent, "zip4", cJSON_CreateString(addr.getZip4()));
+	cJSON_AddItemToObject(parent, "zip3", cJSON_CreateString(addr.getZip3()));
+	cJSON_AddItemToObject(parent, "postalLocality", cJSON_CreateString(addr.getPostalLocality()));
+	cJSON_AddItemToObject(parent, "generatedAddressCode", cJSON_CreateString(addr.getGeneratedAddressCode()));
 
-    return parent;
+	return parent;
 }
 
-cJSON * buildForeignAddressObject(APL_EidFile_Address &addr) {
-    cJSON *parent = cJSON_CreateObject();
+cJSON *buildForeignAddressObject(APL_EidFile_Address &addr) {
+	cJSON *parent = cJSON_CreateObject();
 
-    cJSON_AddItemToObject(parent, "countryCode", cJSON_CreateString(addr.getCountryCode()));
-    cJSON_AddItemToObject(parent, "foreignCountry",        cJSON_CreateString(addr.getForeignCountry()));
-    cJSON_AddItemToObject(parent, "foreignGenericAddress", cJSON_CreateString(addr.getForeignAddress()));
-    cJSON_AddItemToObject(parent, "foreignCity",           cJSON_CreateString(addr.getForeignCity()));
-    cJSON_AddItemToObject(parent, "foreignRegion",         cJSON_CreateString(addr.getForeignRegion()));
-    cJSON_AddItemToObject(parent, "foreignLocality",       cJSON_CreateString(addr.getForeignLocality()));
-    cJSON_AddItemToObject(parent, "foreignPostalCode",     cJSON_CreateString(addr.getForeignPostalCode()));
-    cJSON_AddItemToObject(parent, "generatedAddressCode",  cJSON_CreateString(addr.getGeneratedAddressCode()));
+	cJSON_AddItemToObject(parent, "countryCode", cJSON_CreateString(addr.getCountryCode()));
+	cJSON_AddItemToObject(parent, "foreignCountry", cJSON_CreateString(addr.getForeignCountry()));
+	cJSON_AddItemToObject(parent, "foreignGenericAddress", cJSON_CreateString(addr.getForeignAddress()));
+	cJSON_AddItemToObject(parent, "foreignCity", cJSON_CreateString(addr.getForeignCity()));
+	cJSON_AddItemToObject(parent, "foreignRegion", cJSON_CreateString(addr.getForeignRegion()));
+	cJSON_AddItemToObject(parent, "foreignLocality", cJSON_CreateString(addr.getForeignLocality()));
+	cJSON_AddItemToObject(parent, "foreignPostalCode", cJSON_CreateString(addr.getForeignPostalCode()));
+	cJSON_AddItemToObject(parent, "generatedAddressCode", cJSON_CreateString(addr.getGeneratedAddressCode()));
 
-
-    return parent;
+	return parent;
 }
 
-char * build_json_obj_dhparams(DHParams &dh, APL_EidFile_ID *id_file, APL_EidFile_Address *addr,
-                   CByteArray &sod, CByteArray &auth_cert)
-{
+char *build_json_obj_dhparams(DHParams &dh, APL_EidFile_ID *id_file, APL_EidFile_Address *addr, CByteArray &sod,
+							  CByteArray &auth_cert) {
 
-    if (id_file == NULL) {
-        MWLOG(LEV_ERROR, MOD_APL, "%s: Illegal NULL parameter id_file", __FUNCTION__);
-        return NULL;
+	if (id_file == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Illegal NULL parameter id_file", __FUNCTION__);
+		return NULL;
 
-    }
-    else if (addr == NULL) {
-        MWLOG(LEV_ERROR, MOD_APL, "%s: Illegal NULL parameter addr", __FUNCTION__);
-        return NULL;
-    }
+	} else if (addr == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Illegal NULL parameter addr", __FUNCTION__);
+		return NULL;
+	}
 
-    cJSON *parent = cJSON_CreateObject();
-    cJSON *root = cJSON_CreateObject();
+	cJSON *parent = cJSON_CreateObject();
+	cJSON *root = cJSON_CreateObject();
 
-    cJSON_AddItemToObject(root, "P", cJSON_CreateString(dh.dh_p));
-    cJSON_AddItemToObject(root, "Q", cJSON_CreateString(dh.dh_q));
-    cJSON_AddItemToObject(root, "G", cJSON_CreateString(dh.dh_g));
+	cJSON_AddItemToObject(root, "P", cJSON_CreateString(dh.dh_p));
+	cJSON_AddItemToObject(root, "Q", cJSON_CreateString(dh.dh_q));
+	cJSON_AddItemToObject(root, "G", cJSON_CreateString(dh.dh_g));
 
-    cJSON_AddItemToObject(root, "sod", cJSON_CreateString(byteArrayToHexString(sod)));
-    cJSON_AddItemToObject(root, "auth_cert", cJSON_CreateString(byteArrayToHexString(auth_cert)));
-    cJSON_AddItemToObject(root, "card_auth_public_key", cJSON_CreateString(dh.card_auth_public_key));
-    cJSON_AddItemToObject(root, "cvc_ca_public_key", cJSON_CreateString(dh.cvc_ca_public_key));
+	cJSON_AddItemToObject(root, "sod", cJSON_CreateString(byteArrayToHexString(sod)));
+	cJSON_AddItemToObject(root, "auth_cert", cJSON_CreateString(byteArrayToHexString(auth_cert)));
+	cJSON_AddItemToObject(root, "card_auth_public_key", cJSON_CreateString(dh.card_auth_public_key));
+	cJSON_AddItemToObject(root, "cvc_ca_public_key", cJSON_CreateString(dh.cvc_ca_public_key));
 
+	cJSON_AddItemToObject(root, "id", buildIDObject(*id_file));
+	if (addr->isNationalAddress()) {
+		cJSON_AddItemToObject(root, "addr", buildAddressObject(*addr));
+	} else {
+		cJSON_AddItemToObject(root, "foreign_addr", buildForeignAddressObject(*addr));
+	}
 
-    cJSON_AddItemToObject(root, "id", buildIDObject(*id_file));
-    if (addr->isNationalAddress()) {
-        cJSON_AddItemToObject(root, "addr", buildAddressObject(*addr));
-    }
-    else {
-        cJSON_AddItemToObject(root, "foreign_addr", buildForeignAddressObject(*addr));
-    }
+	cJSON_AddItemToObject(parent, "DHParams", root);
 
-    cJSON_AddItemToObject(parent, "DHParams", root);
+	char *json_str = cJSON_PrintUnformatted(parent);
 
-    char * json_str = cJSON_PrintUnformatted(parent);
+	cJSON_Delete(parent);
 
-    cJSON_Delete(parent);
-
-    return json_str;
+	return json_str;
 }
 
-char * build_json_obj_sign_challenge(char * challenge, char * kicc) {
+char *build_json_obj_sign_challenge(char *challenge, char *kicc) {
 
-    cJSON *parent = cJSON_CreateObject();
-    cJSON *root = cJSON_CreateObject();
+	cJSON *parent = cJSON_CreateObject();
+	cJSON *root = cJSON_CreateObject();
 
-    cJSON_AddItemToObject(root, "challenge", cJSON_CreateString(challenge));
-    cJSON_AddItemToObject(root, "kicc", cJSON_CreateString(kicc));
+	cJSON_AddItemToObject(root, "challenge", cJSON_CreateString(challenge));
+	cJSON_AddItemToObject(root, "kicc", cJSON_CreateString(kicc));
 
+	cJSON_AddItemToObject(parent, "Challenge", root);
 
-    cJSON_AddItemToObject(parent, "Challenge", root);
+	char *json_str = cJSON_PrintUnformatted(parent);
 
-    char * json_str = cJSON_PrintUnformatted(parent);
+	cJSON_Delete(parent);
 
-    cJSON_Delete(parent);
-
-    return json_str;
+	return json_str;
 }
 
-char * build_json_obj_read_address(CByteArray & set_se_response, CByteArray &internal_authenticate_response) {
-    cJSON *parent = cJSON_CreateObject();
-    cJSON *root = cJSON_CreateObject();
+char *build_json_obj_read_address(CByteArray &set_se_response, CByteArray &internal_authenticate_response) {
+	cJSON *parent = cJSON_CreateObject();
+	cJSON *root = cJSON_CreateObject();
 
-    cJSON_AddItemToObject(root, "SetSEResponse", cJSON_CreateString(byteArrayToHexString(set_se_response)));
-    cJSON_AddItemToObject(root, "InternalAuthenticateResponse", cJSON_CreateString(byteArrayToHexString(internal_authenticate_response)));
+	cJSON_AddItemToObject(root, "SetSEResponse", cJSON_CreateString(byteArrayToHexString(set_se_response)));
+	cJSON_AddItemToObject(root, "InternalAuthenticateResponse",
+						  cJSON_CreateString(byteArrayToHexString(internal_authenticate_response)));
 
+	cJSON_AddItemToObject(parent, "ReadAddress", root);
 
-    cJSON_AddItemToObject(parent, "ReadAddress", root);
+	char *json_str = cJSON_PrintUnformatted(parent);
 
-    char * json_str = cJSON_PrintUnformatted(parent);
+	cJSON_Delete(parent);
 
-    cJSON_Delete(parent);
-
-    return json_str;
+	return json_str;
 }
 
-}
+} // namespace eIDMW

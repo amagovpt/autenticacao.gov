@@ -1,4 +1,4 @@
-#include <windows.h> 
+#include <windows.h>
 #include <Shlwapi.h>
 #include <vector>
 #include <algorithm>
@@ -6,8 +6,8 @@
 
 #define MAX_KEY_LENGTH 255
 
-void loopFiles(const std::wstring &directoryPath, std::wstring mask, std::function<bool(const std::wstring &fullFilePath, const std::wstring &fileName)> callback)
-{
+void loopFiles(const std::wstring &directoryPath, std::wstring mask,
+			   std::function<bool(const std::wstring &fullFilePath, const std::wstring &fileName)> callback) {
 	WIN32_FIND_DATA ffd;
 	HANDLE hFind;
 	DWORD a = 0;
@@ -19,10 +19,8 @@ void loopFiles(const std::wstring &directoryPath, std::wstring mask, std::functi
 	if (hFind == INVALID_HANDLE_VALUE)
 		return;
 
-	do
-	{
-		if (wcscmp(ffd.cFileName, L".") != 0 || wcscmp(ffd.cFileName, L"..") != 0)
-		{
+	do {
+		if (wcscmp(ffd.cFileName, L".") != 0 || wcscmp(ffd.cFileName, L"..") != 0) {
 			std::wstring fullFilePath = directoryPath;
 			fullFilePath += L"\\";
 			fullFilePath += ffd.cFileName;
@@ -36,14 +34,12 @@ void loopFiles(const std::wstring &directoryPath, std::wstring mask, std::functi
 	FindClose(hFind);
 }
 
-std::wstring getFileExtension(const std::wstring &fileName)
-{
+std::wstring getFileExtension(const std::wstring &fileName) {
 	auto i = fileName.find(L".");
 	return fileName.substr(i);
 }
 
-bool getAppDataDirectoryForUser(TCHAR *userSID, _Out_ std::wstring &value)
-{
+bool getAppDataDirectoryForUser(TCHAR *userSID, _Out_ std::wstring &value) {
 	std::wstring appDataKeyPath = userSID;
 	appDataKeyPath += L"\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders";
 
@@ -57,8 +53,7 @@ bool getAppDataDirectoryForUser(TCHAR *userSID, _Out_ std::wstring &value)
 	WCHAR szBuffer[512];
 	DWORD dwBufferSize = sizeof(szBuffer);
 	lRes = RegQueryValueExW(appDataKey, L"AppData", 0, NULL, (LPBYTE)szBuffer, &dwBufferSize);
-	if (lRes == ERROR_SUCCESS)
-	{
+	if (lRes == ERROR_SUCCESS) {
 		value = szBuffer;
 		RegCloseKey(appDataKey);
 		return true;
@@ -68,8 +63,7 @@ bool getAppDataDirectoryForUser(TCHAR *userSID, _Out_ std::wstring &value)
 	return false;
 }
 
-bool isSIDUser(TCHAR *userSID)
-{
+bool isSIDUser(TCHAR *userSID) {
 	// Users SID start with S-1-5-21-
 	// We are filtering out keys that end in _Classes because they do not have information
 	// about Shell Folders
@@ -77,8 +71,7 @@ bool isSIDUser(TCHAR *userSID)
 	return user.find(L"S-1-5-21-") == 0 && user.find(L"_Classes") == -1;
 }
 
-int main()
-{
+int main() {
 	HKEY hKey = HKEY_USERS;
 
 	TCHAR achKey[MAX_KEY_LENGTH];
@@ -87,28 +80,18 @@ int main()
 	DWORD cchClassName = MAX_PATH;
 	DWORD cSubKeys = 0;
 
-	LSTATUS retCode = RegQueryInfoKey(
-		hKey,
-		achClass,
-		&cchClassName,
-		NULL,
-		&cSubKeys,
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-	if (retCode != ERROR_SUCCESS) return 0;
+	LSTATUS retCode =
+		RegQueryInfoKey(hKey, achClass, &cchClassName, NULL, &cSubKeys, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	if (retCode != ERROR_SUCCESS)
+		return 0;
 
-	for (DWORD i = 0; i < cSubKeys; i++)
-	{
+	for (DWORD i = 0; i < cSubKeys; i++) {
 		cbName = MAX_KEY_LENGTH;
-		retCode = RegEnumKeyEx(
-			hKey,
-			i,
-			achKey,
-			&cbName,
-			NULL, NULL, NULL, NULL);
-		if (retCode == ERROR_NO_MORE_ITEMS) break;
+		retCode = RegEnumKeyEx(hKey, i, achKey, &cbName, NULL, NULL, NULL, NULL);
+		if (retCode == ERROR_NO_MORE_ITEMS)
+			break;
 
-		if (isSIDUser(achKey))
-		{
+		if (isSIDUser(achKey)) {
 			std::wstring appDataDirectory;
 			bool foundAppData = getAppDataDirectoryForUser(achKey, appDataDirectory);
 
@@ -116,32 +99,32 @@ int main()
 			std::wstring eidmwCacheDirectoryPath = appDataDirectory + L"\\.eidmwcache";
 			std::wstring scapAttributesDirectoryPath = eidmwCacheDirectoryPath + L"\\scap_attributes";
 
-			if (foundAppData)
-			{
-				if (PathFileExists(cacheFilesDirectoryPath.c_str()))
-				{
-					//Delete all files with these extensions
-					std::vector<std::wstring> extensions = { L".ebin", L".bin" };
-					//Delete all files with these names
-					std::vector<std::wstring> files = { L"updateCertsLog.txt", L"updateNewsLog.txt" };
-					loopFiles(cacheFilesDirectoryPath, L"*.*", [&](const std::wstring &fullFilePath, const std::wstring &fileName) {
-						auto fileExt = getFileExtension(fileName);
-						if (std::find(extensions.begin(), extensions.end(), fileExt) != extensions.end())
-							DeleteFile(fullFilePath.c_str());
+			if (foundAppData) {
+				if (PathFileExists(cacheFilesDirectoryPath.c_str())) {
+					// Delete all files with these extensions
+					std::vector<std::wstring> extensions = {L".ebin", L".bin"};
+					// Delete all files with these names
+					std::vector<std::wstring> files = {L"updateCertsLog.txt", L"updateNewsLog.txt"};
+					loopFiles(cacheFilesDirectoryPath, L"*.*",
+							  [&](const std::wstring &fullFilePath, const std::wstring &fileName) {
+								  auto fileExt = getFileExtension(fileName);
+								  if (std::find(extensions.begin(), extensions.end(), fileExt) != extensions.end())
+									  DeleteFile(fullFilePath.c_str());
 
-						if (std::find(files.begin(), files.end(), fileName) != files.end())
-							DeleteFile(fullFilePath.c_str());
+								  if (std::find(files.begin(), files.end(), fileName) != files.end())
+									  DeleteFile(fullFilePath.c_str());
 
-						return false;
-					});
+								  return false;
+							  });
 				}
 
-				if (PathFileExists(eidmwCacheDirectoryPath.c_str()) && PathFileExists(scapAttributesDirectoryPath.c_str()))
-				{
-					loopFiles(scapAttributesDirectoryPath, L"*.json", [&](const std::wstring &fullFilePath, const std::wstring &fileName) {
-						DeleteFile(fullFilePath.c_str());
-						return false;
-					});
+				if (PathFileExists(eidmwCacheDirectoryPath.c_str()) &&
+					PathFileExists(scapAttributesDirectoryPath.c_str())) {
+					loopFiles(scapAttributesDirectoryPath, L"*.json",
+							  [&](const std::wstring &fullFilePath, const std::wstring &fileName) {
+								  DeleteFile(fullFilePath.c_str());
+								  return false;
+							  });
 				}
 
 				if (PathIsDirectoryEmpty(cacheFilesDirectoryPath.c_str()))
