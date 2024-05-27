@@ -195,7 +195,7 @@ PDFRectangle PDFSignature::computeSigLocationFromSectorLandscape(double page_hei
 	double vert_align = 16; // Add this to vertically center inside each cell
 	// Number of columns for portrait layout
 	int columns = 4;
-	double signature_height = m_small_signature ? m_sig_height / 2.0 : m_sig_height;
+	double signature_height = m_small_signature ? SEAL_REDUCED_HEIGHT : m_sig_height;
 	int MAX_SECTOR = m_small_signature ? 40 : 20;
 	const double n_lines = MAX_SECTOR / 4.0;
 
@@ -241,7 +241,7 @@ PDFRectangle PDFSignature::computeSigLocationFromSector(double page_height, doub
 		  m_small_signature);
 
 	int MAX_SECTOR = m_small_signature ? 36 : 18;
-	double signature_height = m_small_signature ? m_sig_height / 2.0 : m_sig_height;
+	double signature_height = m_small_signature ? SEAL_REDUCED_HEIGHT : m_sig_height;
 	const double n_lines = MAX_SECTOR / 3.0;
 	// Add padding, adjust to subtly tweak the location
 	// The units for x_pad, y_pad, sig_height and sig_width are postscript
@@ -604,7 +604,7 @@ int PDFSignature::signSingleFile(const char *location, const char *reason, const
 				location_x = 1.0;
 
 			double sig_width = m_sig_width;
-			double actual_sig_height = m_small_signature ? m_sig_height / 2.0 : m_sig_height;
+			double actual_sig_height = m_small_signature ? SEAL_REDUCED_HEIGHT : m_sig_height;
 
 			// Visible signature never will be smaller than page
 			// Except if the page is smaller then minimum size
