@@ -228,11 +228,14 @@ public:
 	 */
 	PTEIDSDK_API PTEID_ByteArray &operator=(const PTEID_ByteArray &bytearray);
 
-	NOEXPORT_PTEIDSDK
-	PTEID_ByteArray(const SDK_Context *context,
-					const CByteArray &impl); /**< For internal use : construct from lower level object*/
-	NOEXPORT_PTEIDSDK PTEID_ByteArray &
-	operator=(const CByteArray &bytearray); /**< For internal use : copy from lower level object*/
+	/**
+	* For internal use: construct from lower level object 
+	*/
+	NOEXPORT_PTEIDSDK PTEID_ByteArray(const SDK_Context *context, const CByteArray &impl);
+	/**
+	* For internal use: copy from lower level object 
+	*/
+	NOEXPORT_PTEIDSDK PTEID_ByteArray &	operator=(const CByteArray &bytearray); 
 };
 
 class PhotoPteid;
@@ -404,8 +407,10 @@ public:
 	;
 	PTEIDSDK_API bool flushCache(); /**< Flush the cache */
 
-	NOEXPORT_PTEIDSDK PTEID_ReaderContext &
-	getReader(APL_ReaderContext *pAplReader); /**< For internal use - Not exported*/
+	/** 
+	* For internal use - Not exported
+	*/
+	NOEXPORT_PTEIDSDK PTEID_ReaderContext &	getReader(APL_ReaderContext *pAplReader);
 
 private:
 	PTEID_ReaderSet(); /**< For internal use : Constructor */
