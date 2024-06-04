@@ -2143,7 +2143,7 @@
     </message>
     <message>
         <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
-        <translation>PDF files with XFA forms are not supported.</translation>
+        <translation>PDF Files with XFA forms can be signed using Adobe Acrobat.</translation>
     </message>
     <message>
         <source>STR_EXPIRED_SIGN_CERT</source>

@@ -2141,7 +2141,7 @@
     </message>
     <message>
         <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
-        <translation>Ficheiros PDF com formulários XFA não são suportados.</translation>
+        <translation>Ficheiros PDF com formulários XFA podem ser assinados com o Adobe Acrobat.</translation>
     </message>
     <message>
         <source>STR_EXPIRED_SIGN_CERT</source>

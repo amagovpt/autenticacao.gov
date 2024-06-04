@@ -349,12 +349,14 @@ int PDFSignature::getPageCount() {
 		MWLOG(LEV_WARN, MOD_APL, "%s - Failed to parse PDF! Error code: %d", __FUNCTION__, m_doc->getErrorCode());
 		return -1;
 	}
+	
+	if (m_doc->containsXfaForm()) {
+		return -3;
+	}
+
 	if (m_doc->isEncrypted()) {
 		MWLOG(LEV_WARN, MOD_APL, "%s - Protected PDF: unsupported at the moment", __FUNCTION__);
 		return -2;
-	}
-	if (m_doc->containsXfaForm()) {
-		return -3;
 	}
 	return m_doc->getNumPages();
 }

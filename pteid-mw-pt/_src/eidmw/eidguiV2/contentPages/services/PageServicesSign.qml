@@ -1289,9 +1289,6 @@ PageServicesSignForm {
                         else if (pageCount === Constants.XFA_FORM_PDF_ERROR) {
                             console.log("Error loading pdf with XFA forms")
                             bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_XFA_FORM_PDF_ERROR_MSG")
-                                + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
-                                + "<a href=" + link + ">"
-                                + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
                         } else {
                             console.log("Generic Error loading pdf file")
                             bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")
