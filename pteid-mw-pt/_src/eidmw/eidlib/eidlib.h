@@ -6,7 +6,7 @@
  * Copyright (C) 2011-2012 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
  * Copyright (C) 2011-2012 Rui Martinho - <rui.martinho@ama.pt>
- * Copyright (C) 2012-2014, 2016-2019 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012-2014, 2016-2024 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2016-2017 Luiz Lemos - <luiz.lemos@caixamagica.pt>
  * Copyright (C) 2017-2021 Adriano Campos - <adrianoribeirocampos@gmail.com>
  * Copyright (C) 2018-2019 Veniamin Craciun - <veniamin.craciun@caixamagica.pt>
@@ -112,10 +112,10 @@ struct SDK_Context;
 class CMutex;
 class PTEID_Exception;
 
-/******************************************************************************/ /**
-																				  * Base class for the object of PTEID
-																				  *SDK (Can not be instantiated).
-																				  *********************************************************************************/
+/**
+ * Base class for the object of PTEID SDK (Can not be instantiated).
+ */
+
 class PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_Object() = 0; /**< Destructor */
@@ -136,9 +136,8 @@ protected:
 	PTEID_Object *getObject(void *impl);				  /**< For internal use : Return an object by its impl */
 	void delObject(unsigned long idx);					  /**< For internal use : Delete an object by its index */
 	void delObject(void *impl);							  /**< For internal use : Delete an object by its impl */
-
-	void checkContextStillOk()
-		const; /**< For internal use : check if the Context is still correct (the card hasn't changed) */
+	/** For internal use : check if the Context is still correct (the card hasn't changed) */
+	void checkContextStillOk() const;
 
 	PTEID_Object(const PTEID_Object &obj);			  /**< Copy not allowed - not implemented */
 	PTEID_Object &operator=(const PTEID_Object &obj); /**< Copy not allowed - not implemented */
@@ -146,8 +145,8 @@ protected:
 	bool m_delimpl;				   /**< For internal use : m_impl object must be deleted */
 	void *m_impl;				   /**< For internal use : pimpl pointer */
 	unsigned long m_ulIndexExtAdd; /**< For internal use : extended add object */
-	std::map<unsigned long, PTEID_Object *>
-		m_objects; /**< For internal use : Map of object instantiated within this PTEID_Object */
+	/** For internal use : Map of object instantiated within this PTEID_Object */
+	std::map<unsigned long, PTEID_Object *> m_objects;
 
 	SDK_Context *m_context; /**< For internal use : context structure */
 
@@ -228,14 +227,16 @@ public:
 	 */
 	PTEIDSDK_API PTEID_ByteArray &operator=(const PTEID_ByteArray &bytearray);
 
+#if !defined SWIG
 	/**
-	* For internal use: construct from lower level object 
-	*/
-	NOEXPORT_PTEIDSDK PTEID_ByteArray(const SDK_Context *context, const CByteArray &impl);
+	 * For internal use: construct from lower level object
+	 */
+	PTEID_ByteArray(const SDK_Context *context, const CByteArray &impl);
 	/**
-	* For internal use: copy from lower level object 
-	*/
-	NOEXPORT_PTEIDSDK PTEID_ByteArray &	operator=(const CByteArray &bytearray); 
+	 * For internal use: copy from lower level object
+	 */
+	PTEID_ByteArray &operator=(const CByteArray &bytearray);
+#endif
 };
 
 class PhotoPteid;
@@ -308,21 +309,14 @@ private:
 class PTEID_ReaderContext;
 class APL_ReaderContext;
 
-/******************************************************************************/ /**
-																				  * This is a singleton class that is
-																				  *the starting point to get all other
-																				  *objects. You get an instance from the
-																				  *static instance() method (or using
-																				  *the define ReaderSet). Then you get a
-																				  *READER
-																				  *(PTEID_ReaderContext)
-																				  *		-> from this reader, you a CARD
-																				  *(PTEID_Card or derived class)
-																				  *			-> from this card, you get
-																				  *identity or address objects
-																				  *(PTEID_EId or PTEID_Address)
-																				  *				-> ...
-																				  *********************************************************************************/
+/**
+ * This is a singleton class that is the starting point to get all other objects.
+ * You get an instance from the static instance() method (or using the define ReaderSet).
+ * Then you get a READER							(PTEID_ReaderContext)
+ *		-> from this reader, you a CARD				(PTEID_Card or derived class)
+ *			-> from this card, you get identity or address objects	(PTEID_EId or PTEID_Address)
+ *				-> ...
+ */
 class PTEID_ReaderSet : public PTEID_Object {
 public:
 	PTEIDSDK_API static PTEID_ReaderSet &instance(); /**< Return the singleton object (create it at first use) */
@@ -407,10 +401,10 @@ public:
 	;
 	PTEIDSDK_API bool flushCache(); /**< Flush the cache */
 
-	/** 
-	* For internal use - Not exported
-	*/
-	NOEXPORT_PTEIDSDK PTEID_ReaderContext &	getReader(APL_ReaderContext *pAplReader);
+	/**
+	 * For internal use - Not exported
+	 */
+	NOEXPORT_PTEIDSDK PTEID_ReaderContext &getReader(APL_ReaderContext *pAplReader);
 
 private:
 	PTEID_ReaderSet(); /**< For internal use : Constructor */
@@ -422,19 +416,15 @@ private:
 class PTEID_Card;
 class PTEID_EIDCard;
 
-/******************************************************************************/ /**
-																				  * This class represent a reader.
-																				  * You get reader object from the
-																				  *ReaderSet either by its index
-																				  *(getReaderByNum) or by its name
-																				  *(getReaderByName). Once you have a
-																				  *reader object, you can check if a
-																				  *card is present (isCardPresent). Then
-																				  *you can ask which type of card is in
-																				  *the reader with getCardType() and
-																				  *then get a card object using one of
-																				  *this method : getCard or getEIDCard.
-																				  *********************************************************************************/
+/**
+ * This class represent a reader.
+ * You get a reader object from the ReaderSet
+ *		either by its index (getReaderByNum) or by its name (getReaderByName).
+ * Once you have a reader object, you can check if a card is present (isCardPresent).
+ * Then you can ask which type of card is in the reader with getCardType()
+ *	and then get a card object using one of this methods :
+ *	getCard or getEIDCard.
+ */
 class PTEID_ReaderContext : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_ReaderContext(); /**< Destructor */
@@ -535,11 +525,10 @@ class APL_Card;
 class PTEID_Certificate;
 class PTEID_Certificates;
 
-/******************************************************************************/ /**
-																				  * Interface class for objects with
-																				  *Signing capabilities.
-																				  * @since 3.8.0
-																				  *********************************************************************************/
+/**
+ * Interface class for objects with Signing capabilities.
+ * @since 3.8.0
+ */
 class PTEID_SigningDevice {
 public:
 	/**
@@ -722,12 +711,11 @@ public:
 	PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() = 0;
 };
 
-/******************************************************************************/ /**
-																				  * Abstract base class for all the card
-																				  *type supported. The
-																				  *PTEID_ReaderContext::getCard() method
-																				  *will return such an object.
-																				  *********************************************************************************/
+/**
+ * Abstract base class for all the card types supported.
+ * PTEID_ReaderContext::getCard() method
+ * will return such an object.
+ */
 class PTEID_Card : public PTEID_Object, public PTEID_SigningDevice {
 public:
 	PTEIDSDK_API virtual ~PTEID_Card() = 0; /**< Destructor */
@@ -857,9 +845,9 @@ class PTEID_Pins;
 class PTEID_Certificates;
 class APL_SmartCard;
 
-/******************************************************************************/ /**
-																				  * Abstract base class for Smart card.
-																				  *********************************************************************************/
+/**
+ * Abstract base class for Smart card.
+ */
 class PTEID_SmartCard : public PTEID_Card {
 public:
 	PTEIDSDK_API virtual ~PTEID_SmartCard() = 0; /**< Destructor */
@@ -940,10 +928,10 @@ class PTEID_XmlUserRequestedInfo;
 class PTEID_CCXML_Doc;
 class PDFSignature;
 
-/*
-   Helper class to deal with ASIC signature containers used by pteid-mw to deliver XAdES signatures "attached to their
-   input files"
-*/
+/**
+ * Helper class to deal with ASIC signature containers used by pteid-mw to deliver XAdES signatures
+ * "attached to their input files"
+ */
 class PTEID_ASICContainer {
 public:
 	PTEIDSDK_API PTEID_ASICContainer(const char *input_path);
@@ -962,11 +950,10 @@ private:
 };
 
 /**
-	Helper class for the PTEID_EIDCard::SignPDF() methods - it defines multiple options that affect the signature
-   operation e.g Signature in batch mode, adding a cryptographic timestamp, small format visible signature and custom
-   image in the visible signature
-*/
-
+ * Helper class for the PTEID_EIDCard::SignPDF() methods - it defines multiple options that affect the signature
+ * operation e.g Signature in batch mode, adding a cryptographic timestamp, small format visible signature and custom
+ * image in the visible signature
+ */
 class PTEID_PDFSignature {
 public:
 	PTEIDSDK_API PTEID_PDFSignature();
@@ -1045,11 +1032,10 @@ class SecurityContext;
 
 class SSLConnection;
 
-/******************************************************************************/ /**
-																				  * This class represents a Portugal EID
-																				  *card. To get such an object you have
-																				  *to ask it from the ReaderContext.
-																				  *********************************************************************************/
+/**
+ * This class represents a Portugal EID card.
+ * To get such an object you have to ask it from the ReaderContext.
+ */
 class PTEID_EIDCard : public PTEID_SmartCard {
 public:
 	PTEIDSDK_API virtual ~PTEID_EIDCard(); /**< Destructor */
@@ -1097,11 +1083,10 @@ private:
 											  int iChallengeLen);
 };
 
-/******************************************************************************/ /**
-																				  * This class is a client for signing
-																				  *with Chave Móvel Digital.
-																				  * @since 3.8.0
-																				  *********************************************************************************/
+/**
+ * This class is a client for signing with Chave Móvel Digital.
+ * @since 3.8.0
+ */
 class PTEID_CMDSignatureClient : public PTEID_Object, public PTEID_SigningDevice {
 public:
 	PTEIDSDK_API PTEID_CMDSignatureClient();		  /**< Default constructor */
@@ -1199,13 +1184,11 @@ private:
 		m_certificates; /**< For internal use : certificates to be returned by getCertificates. */
 };
 
-/******************************************************************************/ /**
-																				  * Singleton class - Factory used to
-																				  *obtain signing devices. Optionally,
-																				  *opens a dialog to let user choose
-																				  *signing device type.
-																				  * @since 3.8.0
-																				  *********************************************************************************/
+/**
+ * Singleton class - Factory used to obtain signing devices.
+ * Optionally, opens a dialog to let user choose signing device type.
+ * @since 3.8.0
+ */
 class PTEID_SigningDeviceFactory {
 public:
 	PTEIDSDK_API static PTEID_SigningDeviceFactory &instance(); /**< Return the singleton object */
@@ -1234,12 +1217,11 @@ private:
 };
 
 class APL_XmlUserRequestedInfo;
-/******************************************************************************/ /**
-																				  * This class will contain information
-																				  *about the data to be included in the
-																				  *XML file returned by
-																				  *PTEID_EIDCard::getXmlCCDoc
-																				  *********************************************************************************/
+
+/**
+ * This class will contain information about the data to be included in the XML file returned by
+ * PTEID_EIDCard::getXmlCCDoc
+ */
 class PTEID_XmlUserRequestedInfo : public PTEID_Object {
 public:
 	PTEIDSDK_API PTEID_XmlUserRequestedInfo();
@@ -1261,11 +1243,10 @@ private:
 
 class APL_DocVersionInfo;
 
-/******************************************************************************/ /**
-																				  * Class for the info document.
-																				  * You can get such an object from
-																				  *PTEID_EIDCard::getVersionInfo().
-																				  *********************************************************************************/
+/**
+ * Class for the info document.
+ * You can get such an object from PTEID_EIDCard::getVersionInfo().
+ */
 class PTEID_CardVersionInfo : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_CardVersionInfo(); /**< Destructor */
@@ -1303,11 +1284,10 @@ private:
 
 class APL_SodEid;
 
-/******************************************************************************/ /**
-																				  * Class for the SOD document on an EID
-																				  *Card. You can get such an object from
-																				  *PTEID_EIDCard::getSod().
-																				  *********************************************************************************/
+/**
+ * Class for the SOD document on an EID Card.
+ * You can get such an object from PTEID_EIDCard::getSod().
+ */
 class PTEID_Sod : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_Sod(); /**< Destructor */
@@ -1326,11 +1306,10 @@ private:
 
 class APL_DocEId;
 
-/******************************************************************************/ /**
-																				  * Class for the ID document on a EID
-																				  *Card. You can get such an object from
-																				  *PTEID_EIDCard::getID().
-																				  *********************************************************************************/
+/**
+ * Class for the ID document on a EID Card.
+ * You can get such an object from PTEID_EIDCard::getID().
+ */
 class PTEID_EId : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_EId(); /**< Destructor */
@@ -1378,11 +1357,10 @@ private:
 
 class APL_AddrEId;
 
-/******************************************************************************/ /**
-																				  * Class for the Address document on a
-																				  *EID Card. You can get such an object
-																				  *from PTEID_EIDCard::getAddr().
-																				  *********************************************************************************/
+/**
+ * Class for the Address information associated to an EID Card.
+ * You can get such an object from PTEID_EIDCard::getAddr().
+ */
 class PTEID_Address : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_Address(); /**< Destructor */
@@ -1418,8 +1396,8 @@ public:
 	PTEIDSDK_API const char *getForeignCity();	  /**< Return foreign address city */
 	PTEIDSDK_API const char *getForeignRegion();  /**< Return foreign address region */
 	PTEIDSDK_API const char *getForeignLocality(); /**< Return foreign address locality */
-	PTEIDSDK_API const char *
-	getForeignPostalCode(); /**< Return foreign address postal code - format is country-dependent */
+	/** Return foreign address postal code - format is country-dependent */
+	PTEIDSDK_API const char *getForeignPostalCode();
 
 private:
 	PTEID_Address(const PTEID_Address &doc);			/**< Copy not allowed - not implemented */
@@ -1453,10 +1431,9 @@ private:
 class PTEID_Pin;
 class APL_Pins;
 
-/******************************************************************************/ /**
-																				  * Container class for all pins on the
-																				  *card.
-																				  *********************************************************************************/
+/**
+ * Container class for all pins on the card.
+ */
 class PTEID_Pins : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_Pins(); /**< Destructor */
@@ -1487,13 +1464,13 @@ private:
 
 class APL_Pin;
 
-/******************************************************************************/ /**
-																				  * Class that represent one Pin.
-																				  *********************************************************************************/
+/**
+ * Class that represent one card PIN.
+ */
 class PTEID_Pin : public PTEID_Object {
 public:
-	/** PIN reference value for the authentication PIN. It can be used as parameter for @ref
-	 * PTEID_Pins::getPinByPinRef() */
+	/** PIN reference value for the authentication PIN.
+	 *  It can be used as parameter for @ref PTEID_Pins::getPinByPinRef() */
 	static const unsigned long AUTH_PIN = 129;
 	/** PIN reference value for the signature PIN. It can be used as parameter for @ref PTEID_Pins::getPinByPinRef() */
 	static const unsigned long SIGN_PIN = 130;
@@ -1584,10 +1561,9 @@ private:
 
 class APL_Certifs;
 
-/******************************************************************************/ /**
-																				  * Container class for all certificates
-																				  *on the card.
-																				  *********************************************************************************/
+/**
+ * Container class for all certificates on the card.
+ */
 class PTEID_Certificates : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_Certificates(); /**< Destructor */
@@ -1642,10 +1618,9 @@ private:
 
 class APL_Certif;
 
-/******************************************************************************/ /**
-																				  * Class that represents one
-																				  *certificate.
-																				  *********************************************************************************/
+/**
+ * Class that represents one certificate.
+ */
 class PTEID_Certificate : public PTEID_Object {
 public:
 	static const unsigned long CITIZEN_AUTH = 0;
@@ -1797,9 +1772,9 @@ private:
 	PTEID_Config(APL_Config *impl); /**< For internal use : Constructor */
 };
 
-/******************************************************************************/ /**
-																				  * Function for Logging.
-																				  *********************************************************************************/
+/**
+ * Function used for Logging
+ */
 PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const char *format, ...);
 
 #if !defined SWIG
