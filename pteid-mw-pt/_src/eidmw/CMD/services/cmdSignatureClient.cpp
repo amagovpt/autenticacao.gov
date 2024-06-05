@@ -44,7 +44,7 @@ bool CMDSignatureClient::shouldShowProgressDialogs() {
 		MWLOG(LEV_INFO, MOD_CMD, "Error returned by GetModuleFileNameA: %d", GetLastError());
 		return true;
 	}
-	return strstr(buf, "OUTLOOK.EXE") == NULL;
+	return strstr(buf, "pteidguiV2.exe") != NULL;
 #else
 	return true;
 #endif
