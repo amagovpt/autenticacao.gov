@@ -278,7 +278,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>cmd.exe /C "$(ProjectDir)prebuild.bat"</PreBuildEvent>
+    <PreBuildEvent>cmd.exe /C "$(ProjectDir)prebuild.bat $(ProjectDir)"</PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>

@@ -66,6 +66,9 @@ minidriver/Build/
 jar/
 lib/
 bin/
+eidlibdotnetsdk/bin
+eidlibdotnetsdk/obj
+eidlibdotnetsdk/Properties
 
 # Files generated on MacOS
 ###################

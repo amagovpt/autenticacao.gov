@@ -286,6 +286,7 @@
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll"/>
+        <File Source="$(var.PTEID_BUILD_FOLDER_X86)libdotnetsdk.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)cmdServices.dll" />
         <File Source="$(var.PTEID_BUILD_FOLDER_X86)cmdKsp.dll" />

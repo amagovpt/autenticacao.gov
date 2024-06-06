@@ -257,9 +257,10 @@
 				<Component Win64="no" Id="Runtime35" Guid="{41F033E4-0669-4FD6-8B8E-DE31FE3AAE24}" SharedDllRefCount="yes">
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidapplayer.dll" KeyPath="yes" />
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
+			  	<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" />
-					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
+          <File Source="$(var.PTEID_BUILD_FOLDER_X86)libdotnetsdk.dll" />
+          <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)cmdServices.dll" />
@@ -289,7 +290,9 @@
 					  <File Id="pteidlib_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll"/>
 					  <File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
             <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
-			      <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
+            <File Id="pteidlibdotnetsdk_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libdotnetsdk.dll" />
+
+          <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
 			      <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
 			      <File Id="cmdServices_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)cmdServices.dll" />
             <File Id="cmdKsp_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)cmdKsp.dll" />

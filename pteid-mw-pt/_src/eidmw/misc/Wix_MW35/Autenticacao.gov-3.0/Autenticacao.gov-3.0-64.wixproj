@@ -60,6 +60,9 @@
     <Compile Include="qml-app.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PreBuildEvent>cmd.exe /C "$(ProjectDir)..\..\..\eidlibdotnetsdk\build.bat  $(ProjectDir)\..\..\..\_Binaries35\x64\Release win7-x64"</PreBuildEvent>
+  </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.
