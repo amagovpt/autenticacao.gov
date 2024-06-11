@@ -1,5 +1,11 @@
 #!/bin/bash
 
+
+set -v
+
+echo "Revision number prebuild: $REVISION_NUM"
+
+
 IFS=$'\n\r'
 
 while read line; 
@@ -9,10 +15,12 @@ do
 
     command=$name=$value
 
-    #echo "$command"
+    echo "$command"
     export "${command?}"
 
 done < ../release_data
+
+echo "Revision copyright: $COPYRIGHT"
 
 mkdir -p Properties
 touch -a ./Properties/AssemblyInfo.cs

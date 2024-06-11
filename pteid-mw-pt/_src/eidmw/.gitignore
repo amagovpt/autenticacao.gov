@@ -27,6 +27,12 @@ eidlibCS/obj
 eidlibCS/Properties
 eidlibCS_Wrapper/Build
 eidlibCS_Wrapper/GeneratedFiles
+eidlibdotnetsdk/Properties
+eidlibdotnetsdk/Build
+eidlibdotnetsdk/GeneratedFiles
+eidlibdotnetsdk/publish
+eidlibdotnetsdk/bin
+eidlibdotnetsdk/obj
 eidlibNodeJS_Wrapper/GeneratedFiles
 eidlibNodeJS_Wrapper/build
 eidlibJava_Wrapper/Build
