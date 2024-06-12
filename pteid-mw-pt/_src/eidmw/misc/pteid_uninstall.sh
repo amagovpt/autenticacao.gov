@@ -29,6 +29,8 @@ rm -f /usr/local/lib/libfontconfig.1.dylib
 rm -f /usr/local/lib/libzip.5.3.dylib
 rm -f /usr/local/lib/libzip.5.dylib
 rm -f /usr/local/lib/libcurl.4.dylib
+rm -f /usr/local/lib/libdotnetsdk.dylib
+rm -f /usr/local/lib/libdotnetsdk.dll
 
 #SDK header files
 rm -f /usr/local/include/eidlib.h
