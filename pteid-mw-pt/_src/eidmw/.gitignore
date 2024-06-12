@@ -33,6 +33,7 @@ eidlibdotnetsdk/GeneratedFiles
 eidlibdotnetsdk/publish
 eidlibdotnetsdk/bin
 eidlibdotnetsdk/obj
+eidlibdotnetsdk/*.dylib
 eidlibNodeJS_Wrapper/GeneratedFiles
 eidlibNodeJS_Wrapper/build
 eidlibJava_Wrapper/Build

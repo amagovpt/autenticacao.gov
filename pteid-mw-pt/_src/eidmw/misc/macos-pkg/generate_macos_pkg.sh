@@ -32,6 +32,11 @@ cd $LIB_DIR
 git_revision=`git rev-list --count HEAD`
 popd
 
+pushd $PWD
+cd ../../eidlibdotnetsdk
+sh ./generate_cs.sh
+popd
+
 VERSION="3.12.0.$git_revision"
 
 echo "Packaging PTEID version $VERSION"
@@ -64,6 +69,8 @@ cp $EIDLIB_DIR/../common/eidErrors.h system-libs/include
 recreate_dir $LIB_BUNDLE_DIR
 copy_external_dylibs $LIB_BUNDLE_DIR
 cp -af $LIB_DIR/*.dylib $LIB_BUNDLE_DIR
+cp -af ../../eidlibdotnetsdk/libdotnetsdk.dylib $LIB_BUNDLE_DIR
+cp -af ../../eidlibdotnetsdk/bin/Release/net8.0/osx-x64/libdotnetsdk.dll $LIB_BUNDLE_DIR
 recreate_dir $LIB_BUNDLE_DIR/pteid_jni/
 cp -af $JAR_DIR/pteidlibj.jar $LIB_BUNDLE_DIR/pteid_jni/
 cd system-libs
