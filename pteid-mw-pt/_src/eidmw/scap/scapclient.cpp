@@ -193,18 +193,16 @@ std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<S
 	std::string certified_by;
 	std::string certified_attributes;
 
-	std::set<std::string> NIPC_set;
 	std::set<std::string> provider_names;
 
 	std::string separator = "";
 	for (const auto &provider_attributes_pair : group_by_provider(attributes)) {
 		const ScapProvider &provider = provider_attributes_pair.first;
-		NIPC_set.insert(provider.nipc);
 		certified_attributes += separator + join_attribute_strings(provider_attributes_pair.second);
 
 		if (provider.type == "ENTERPRISE") {
 			provider_names.insert("SCAP");
-			certified_attributes += " de " + provider.name;
+			certified_attributes += " de " + provider.name + "\nVATPT-" + provider.nipc;
 		} else {
 			provider_names.insert(provider.name);
 		}
@@ -219,30 +217,26 @@ std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<S
 		separator = " e ";
 	}
 
-	for (std::string NIPC : NIPC_set) {
-		certified_attributes += "VATPT-" + NIPC + "\n";
-	}
-
 	return std::make_pair(certified_by, certified_attributes);
 }
 
 // returns string of format: "Entidade: X. Na qualidade de: Y. Subatributos: X1:Y1;(...) Xn:Yn. E na qualidade de (...)"
 static std::string format_reason_field_string(const ScapTransaction &transaction,
-											  const std::vector<ScapAttribute> &attributes) {
-	// Set of NIPC
-	std::string NIPC;
+	const std::vector<ScapAttribute> &attributes) {
+	std::string provider_nipc;
 
-	// Looks for the NIPC in the attributes, since the transaction's attributes don't have the NIPC
+	// Look for provider NIPC in the attributes, since the transaction's attributes don't have the NIPC
 	for (const ScapAttribute &attribute : attributes) {
-		if (attribute.provider.name == transaction.provider_name) {
-			NIPC = attribute.provider.nipc;
+		if (attribute.provider.name == transaction.provider_name && attribute.provider.type == "ENTERPRISE") {
+			provider_nipc = attribute.provider.nipc;
 			break;
 		}
 	}
 
 	std::string reason = "Entidade: " + transaction.provider_name + ". ";
-
-	reason += "VATPT-" + NIPC + ".";
+	if (!provider_nipc.empty()) {
+		reason += "VATPT-" + provider_nipc + ".";
+	}
 
 	reason += " Na qualidade de: ";
 
