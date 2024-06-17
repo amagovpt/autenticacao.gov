@@ -52,7 +52,7 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PreBuildEvent>cmd.exe /C "$(ProjectDir)\..\..\..\eidlibdotnetsdk\build.bat $(ProjectDir)\..\..\..\_Binaries35\Win32\Release win7-x86"</PreBuildEvent>
+    <PreBuildEvent>cmd.exe /C "$(ProjectDir)\..\..\..\eidlibdotnetsdk\build.bat $(ProjectDir)\..\..\..\_Binaries35\Win32\Release win-x86"</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
