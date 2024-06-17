@@ -27,7 +27,7 @@
     <!-- Run script for Windows -->
     <Message Text="Executing PreBuild target..." Importance="high" />
     <Exec Command="cmd.exe /C prebuilddotnet.bat $(ProjectDir)" Condition="'$(OS)' == 'Windows_NT'" />
-    <Exec Command="sh ../eidlibCS/prebuild.sh" Condition="'$(OS)' != 'Windows_NT'" />
+    <Exec Command="../eidlibCS/prebuild.sh" Condition="'$(OS)' != 'Windows_NT'" />
   </Target>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
