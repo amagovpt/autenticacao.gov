@@ -259,7 +259,6 @@
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlib.dll" />
 			  	<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibj.dll"/>
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidlibCS_Wrapper.dll" />
-          <File Source="$(var.PTEID_BUILD_FOLDER_X86)libdotnetsdk.dll" />
           <File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcardlayer.dll" />
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidcommon.dll" />
 					<File Source="$(var.PTEID_BUILD_FOLDER_X86)pteidDlgsWin32.dll" />
@@ -290,7 +289,6 @@
 					  <File Id="pteidlib_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlib.dll"/>
 					  <File Id="pteidlibj_64.dll"        Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibj.dll"/>
             <File Id="pteidlibCS_Wrapper_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidlibCS_Wrapper.dll" />
-            <File Id="pteidlibdotnetsdk_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)libdotnetsdk.dll" />
 
           <File Id="pteidcommon_64.dll"    Source="$(var.PTEID_BUILD_FOLDER_X64)pteidcommon.dll" />
 			      <File Id="pteidDlgsWin32_64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidDlgsWin32.dll" />
@@ -335,6 +333,7 @@
 			<DirectoryRef Id="CSHARP_SDK">
 				<Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
 		          <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlib_dotnet.dll" KeyPath="yes"/>
+				  <File Source="$(var.PTEID_BUILD_FOLDER_X64)libdotnetsdk.dll" />
 				</Component>
 			</DirectoryRef>
 
