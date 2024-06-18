@@ -333,7 +333,7 @@
 			<DirectoryRef Id="CSHARP_SDK">
 				<Component Id="CSharp_SDK_Component" Guid="{67F8BF67-A48C-4711-9AB7-CAC056FA6C35}">
 		          <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)pteidlib_dotnet.dll" KeyPath="yes"/>
-				  <File Source="$(var.PTEID_BUILD_FOLDER_X64)libdotnetsdk.dll" />
+				  <File Source="$(var.PTEID_BUILD_FOLDER_AnyCPU)libdotnetsdk.dll" />
 				</Component>
 			</DirectoryRef>
 
