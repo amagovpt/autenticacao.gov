@@ -92,6 +92,11 @@ Rectangle {
         source: controler.getFontFile("myriad")
     }
 
+    onPropertyReducedCheckedChanged: {
+        if (!propertyReducedChecked)
+            pdfPreview.updateSealData()
+    }
+
     Keys.onUpPressed: {
         moveUp(stepSizeY)
         toggleFocus()
