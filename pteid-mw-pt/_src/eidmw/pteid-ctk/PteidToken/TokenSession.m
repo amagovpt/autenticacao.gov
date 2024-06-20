@@ -9,6 +9,8 @@
 #import "PteidSession.h"
 #include <os/log.h>
 
+#import <Security/SecAsn1Coder.h>
+
 @implementation PteidAuthOperation
 
 - (nullable instancetype)initWithSession:(PteidTokenSession *)session {
@@ -51,7 +53,7 @@
 	NSData *data = [NSData dataWithBytes:template length:sizeof template];
 	// using PINByteOffset:0 (in stead of 5) as requested due to not currently used
 	//(see
-	// https://developer.apple.com/documentation/cryptotokenkit/tksmartcard/1390289-userinteractionforsecurepinverif?language=objc)
+	//https://developer.apple.com/documentation/cryptotokenkit/tksmartcard/1390289-userinteractionforsecurepinverif?language=objc)
 	userInter = [self.smartCard userInteractionForSecurePINVerificationWithPINFormat:PINFormat
 																				APDU:data
 																	   PINByteOffset:0];
@@ -258,10 +260,16 @@
 
 	BOOL returnValue = [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureRaw] &&
 					   [algorithm supportsAlgorithm:kSecKeyAlgorithmRSASignatureDigestPKCS1v15Raw];
-	if (!returnValue && self.card_type == CARD_IAS_V4_OR_GREATER) {
+	if (!returnValue && self.card_type == CARD_IAS_V4) {
 		returnValue = [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA256] ||
 					  [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA384] ||
 					  [algorithm isAlgorithm:kSecKeyAlgorithmRSASignatureDigestPSSSHA512];
+
+	} else if (!returnValue && self.card_type == CARD_IAS_V5) {
+		returnValue = [algorithm supportsAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962] ||
+					  [algorithm supportsAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA256] ||
+					  [algorithm supportsAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA384] ||
+					  [algorithm supportsAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA512];
 	}
 
 	NSLog(@"PTEID supportsOperation returning %i", returnValue);
@@ -390,11 +398,40 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
 		NSLog(@"RSA-PSS SHA-512 selected");
 		dst_bytes[2] = 0x65;
 		hash_to_sign = dataToSign;
+	} else if ([algorithm isAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962]) {
+		NSLog(@"ECDSA pre calculated, data size: %lu", dataToSign.length);
+		switch (dataToSign.length) {
+		case 32:
+			dst_bytes[2] = 0x44;
+			break;
+		case 48:
+			dst_bytes[2] = 0x54;
+			break;
+		case 64:
+			dst_bytes[2] = 0x64;
+			break;
+		default:
+			NSLog(@"ECDSA unable to select correct algo type!");
+			break;
+		}
+		hash_to_sign = dataToSign;
+	} else if ([algorithm isAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA256]) {
+		NSLog(@"ECDSA SHA-256 selected");
+		dst_bytes[2] = 0x44;
+		hash_to_sign = dataToSign;
+	} else if ([algorithm isAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA384]) {
+		NSLog(@"ECDSA SHA-384 selected");
+		dst_bytes[2] = 0x54;
+		hash_to_sign = dataToSign;
+	} else if ([algorithm isAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA512]) {
+		NSLog(@"ECDSA SHA-512 selected");
+		dst_bytes[2] = 0x64;
+		hash_to_sign = dataToSign;
 	}
 
 	prefix_pso_hash[1] = (unsigned char)[hash_to_sign length];
 
-	dst_bytes[5] = _use_auth_key ? 0x02 : 0x01;
+	dst_bytes[5] = _card_type == CARD_IAS_V5 ? _use_auth_key ? 0x06 : 0x08 : _use_auth_key ? 0x02 : 0x01;
 	NSMutableData *pso_hash_data = [NSMutableData alloc];
 	[pso_hash_data appendBytes:prefix_pso_hash length:sizeof(prefix_pso_hash)];
 	[pso_hash_data appendBytes:hash_to_sign.bytes length:hash_to_sign.length];
@@ -428,6 +465,32 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
 	if (signature == nil) {
 		NSLog(@"PteidTokenSession signData signature transmission error: %@", *error);
 		return nil;
+	} else {
+		if ([algorithm isAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962] ||
+			[algorithm isAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA256] ||
+			[algorithm isAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA384] ||
+			[algorithm isAlgorithm:kSecKeyAlgorithmECDSASignatureDigestX962SHA512]) {
+			typedef struct {
+				SecAsn1Item r;
+				SecAsn1Item s;
+			} ECDSA;
+			static const SecAsn1Template ECDSATemplate[] = {{SEC_ASN1_SEQUENCE, 0, nil, sizeof(ECDSA)},
+															{SEC_ASN1_INTEGER, offsetof(ECDSA, r)},
+															{SEC_ASN1_INTEGER, offsetof(ECDSA, s)},
+															{0}};
+			uint8 *bytes = (uint8 *)signature.bytes;
+			ECDSA ecdsa = {
+				{signature.length / 2, bytes},
+				{signature.length / 2, bytes + (signature.length / 2)},
+			};
+			SecAsn1CoderRef coder;
+			SecAsn1CoderCreate(&coder);
+			SecAsn1Item ber = {0, nil};
+			OSStatus ortn = SecAsn1EncodeItem(coder, &ecdsa, ECDSATemplate, &ber);
+			signature = [NSData dataWithBytes:ber.Data length:ber.Length];
+			SecAsn1CoderRelease(coder);
+			NSLog(@"TokenSession SecAsn1EncodeItem %i %@", ortn, signature);
+		}
 	}
 	switch (sw) {
 	case 0x6982:

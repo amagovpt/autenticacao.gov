@@ -99,32 +99,49 @@ NSData *readCompleteFile(TKSmartCard *card, NSData *file, NSError **error) {
 	return fileData;
 }
 
-NSString *readCardSerialNumber(TKSmartCard *card, NSError **error) {
+NSString *readCardSerialNumber(TKSmartCard *card, CardType cardType, NSError **error) {
 	uint8_t df_id_5f00[] = {0x5f, 0x00};
 	uint8_t fileid_ef_id[] = {0xef, 0x02};
+
 	uint8_t offset_pan = 0xB6;
 	NSNumber *len_pan = @16;
 	NSString *serial = NULL;
+	if (cardType <= CARD_IAS_V4) {
+		NSData *file_id = [NSData dataWithBytes:fileid_ef_id length:sizeof fileid_ef_id];
+		NSData *df_id = [NSData dataWithBytes:df_id_5f00 length:sizeof df_id_5f00];
+		// Select 5F00 DF
+		if (!selectFile(card, 0x00, 0x0C, df_id, error)) {
+			return nil;
+		}
+		// Select ID file
+		if (!selectFile(card, 0x02, 0x0C, file_id, error)) {
+			return nil;
+		}
 
-	NSData *file_id = [NSData dataWithBytes:fileid_ef_id length:sizeof fileid_ef_id];
-	NSData *df_id = [NSData dataWithBytes:df_id_5f00 length:sizeof df_id_5f00];
-	// Select 5F00 DF
-	if (!selectFile(card, 0x00, 0x0C, df_id, error)) {
-		return nil;
-	}
-	// Select ID file
-	if (!selectFile(card, 0x02, 0x0C, file_id, error)) {
-		return nil;
-	}
-
-	UInt16 sw = 0;
-	NSData *data = [card sendIns:0xB0 p1:00 p2:offset_pan data:nil le:len_pan sw:&sw error:error];
-	if (sw == 0x9000) {
-		serial = [[NSString alloc] initWithBytes:[data bytes]
-										  length:[len_pan unsignedIntValue]
-										encoding:NSUTF8StringEncoding];
+		UInt16 sw = 0;
+		NSData *data = [card sendIns:0xB0 p1:00 p2:offset_pan data:nil le:len_pan sw:&sw error:error];
+		if (sw == 0x9000) {
+			serial = [[NSString alloc] initWithBytes:[data bytes]
+											  length:[len_pan unsignedIntValue]
+											encoding:NSUTF8StringEncoding];
+		} else {
+			NSLog(@"ReadBinary for serial number failed with SW=%04x, cardtype: %lu", sw, cardType);
+		}
 	} else {
-		NSLog(@"ReadBinary for serial number failed with SW=%04x", sw);
+		UInt16 sw = 0;
+		NSData *data = [card sendIns:0xCA p1:0x9F p2:0x7F data:nil le:@0 sw:&sw error:error];
+		if (sw == 0x9000) {
+			NSData *serialData = [data subdataWithRange:NSMakeRange(13, 8)];
+			NSMutableString *mutableSerial = [NSMutableString string];
+			const uint8_t *bytes = [serialData bytes];
+			NSUInteger length = [serialData length];
+			for (NSUInteger i = 0; i < length; i++) {
+				[mutableSerial appendFormat:@"%02X", bytes[i]];
+			}
+			serial = [NSString stringWithString:mutableSerial];
+		} else {
+			NSLog(@"ReadBinary for serial number failed with SW=%04x , cardtype: %lu", sw, cardType);
+		}
 	}
 
 	return serial;
@@ -139,8 +156,10 @@ CardType getAppletVersion(TKSmartCard *card, NSError **error) {
 
 		if (major_version == '3')
 			return CARD_IAS_V3;
-		else if (major_version >= '4')
-			return CARD_IAS_V4_OR_GREATER;
+		else if (major_version == '4')
+			return CARD_IAS_V4;
+		else if (major_version == '5')
+			return CARD_IAS_V5;
 		else
 			return CARD_IAS_LEGACY;
 	} else {
@@ -243,16 +262,43 @@ BOOL check_nonnull_objects(int n, ...) {
 
 	uint8_t fileid_auth_cert[] = {0xef, 0x09};
 	uint8_t fileid_sign_cert[] = {0xef, 0x08};
+
+	uint8_t fileid_auth_cert_cc2[] = {0xef, 0x02};
+	uint8_t fileid_sign_cert_cc2[] = {0xef, 0x04};
 	// Intermediate CA certificates
 	uint8_t fileid_auth_ca_cert[] = {0xef, 0x10};
 	uint8_t fileid_sign_ca_cert[] = {0xef, 0x0F};
 
-	instanceID = readCardSerialNumber(smartCard, error);
+	uint8_t fileid_auth_ca_cert_cc2[] = {0xef, 0x06};
+	uint8_t fileid_sign_ca_cert_cc2[] = {0xef, 0x08};
 
-	NSData *cert_file_id1 = [NSData dataWithBytes:fileid_auth_cert length:sizeof fileid_auth_cert];
-	NSData *cert_file_id2 = [NSData dataWithBytes:fileid_sign_cert length:sizeof fileid_sign_cert];
-	NSData *cert_file_id3 = [NSData dataWithBytes:fileid_auth_ca_cert length:sizeof fileid_auth_ca_cert];
-	NSData *cert_file_id4 = [NSData dataWithBytes:fileid_sign_ca_cert length:sizeof fileid_sign_ca_cert];
+	_card_type = getAppletVersion(smartCard, error);
+
+	NSLog(@"card type read= %lu", _card_type);
+
+	instanceID = readCardSerialNumber(smartCard, _card_type, error);
+	NSData *cert_file_id1 = nil;
+	NSData *cert_file_id2 = nil;
+	NSData *cert_file_id3 = nil;
+	NSData *cert_file_id4 = nil;
+	if (_card_type <= CARD_IAS_V4) {
+		cert_file_id1 = [NSData dataWithBytes:fileid_auth_cert length:sizeof fileid_auth_cert];
+		cert_file_id2 = [NSData dataWithBytes:fileid_sign_cert length:sizeof fileid_sign_cert];
+		cert_file_id3 = [NSData dataWithBytes:fileid_auth_ca_cert length:sizeof fileid_auth_ca_cert];
+		cert_file_id4 = [NSData dataWithBytes:fileid_sign_ca_cert length:sizeof fileid_sign_ca_cert];
+	} else {
+		cert_file_id1 = [NSData dataWithBytes:fileid_auth_cert_cc2 length:sizeof fileid_auth_cert_cc2];
+		cert_file_id2 = [NSData dataWithBytes:fileid_sign_cert_cc2 length:sizeof fileid_sign_cert_cc2];
+		cert_file_id3 = [NSData dataWithBytes:fileid_auth_ca_cert_cc2 length:sizeof fileid_auth_ca_cert_cc2];
+		cert_file_id4 = [NSData dataWithBytes:fileid_sign_ca_cert_cc2 length:sizeof fileid_sign_ca_cert_cc2];
+		uint8_t df_id_5f00[] = {0x5f, 0x00};
+		NSData *df_id = [NSData dataWithBytes:df_id_5f00 length:sizeof df_id_5f00];
+		// Select 5F00 DF
+		if (!selectFile(smartCard, 0x00, 0x0C, df_id, error)) {
+			NSLog(@"Couldn't select 5F00 DF!!");
+			return nil;
+		}
+	}
 
 	NSLog(@"instanceID= %@", instanceID);
 
@@ -263,8 +309,6 @@ BOOL check_nonnull_objects(int n, ...) {
 		NSData *cert_file_sign = readCompleteFile(smartCard, cert_file_id2, error);
 		NSData *cert_file_ca_auth = readCompleteFile(smartCard, cert_file_id3, error);
 		NSData *cert_file_ca_sign = readCompleteFile(smartCard, cert_file_id4, error);
-
-		_card_type = getAppletVersion(smartCard, error);
 
 		if (check_nonnull_objects(4, cert_file_auth, cert_file_sign, cert_file_ca_auth, cert_file_ca_sign)) {
 			NSLog(@"Read certificates files with size: %lu, %lu bytes", [cert_file_auth length],

@@ -27,7 +27,10 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>com.apple.ctk.aid</key>
-			<string>604632FF000002</string>
+			<array>
+				<string>604632FF000002</string>
+				<string>604632FF000004</string>
+			</array>
 			<key>com.apple.ctk.class-id</key>
 			<string>pt.cartaodecidadao.SmartCardApp.PteidToken</string>
 			<key>com.apple.ctk.driver-class</key>
