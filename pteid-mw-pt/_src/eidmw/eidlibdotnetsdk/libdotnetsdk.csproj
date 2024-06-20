@@ -15,6 +15,7 @@
         <PublishTrimmed>true</PublishTrimmed>
         <PublishReadyToRun>true</PublishReadyToRun>
         <Platforms>AnyCPU</Platforms>
+        <AssemblyName>pteidlib_dotnet8+</AssemblyName>
     </PropertyGroup>
 
     <Target Name="_FixRootAssembly" AfterTargets="PrepareForILLink">
