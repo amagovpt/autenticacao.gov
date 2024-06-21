@@ -12,6 +12,8 @@ echo "############# Starting codesigning script #############"
 echo ""
 DYLIB_DIR=system-libs/lib
 
+codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp $DYLIB_DIR/pteidlib_dotnet8+.dll
+
 for file in $DYLIB_DIR/*.dylib
 do
 	if test -h $file
