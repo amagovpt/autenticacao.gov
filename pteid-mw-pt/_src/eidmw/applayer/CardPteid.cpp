@@ -1723,19 +1723,19 @@ bool APL_EidFile_Sod::MapFields() {
 		valid_tags = PTEID_FILE_VALID_SOD_FILE_TAGS;
 
 	parser.ParseSodEncapsulatedContent(m_encapsulatedContent, valid_tags);
-	SODAttributes &attr = parser.getHashes();
+	SODAttributes &attr = parser.getAttributes();
 
 	// Hashes are sorted differently based on card type
 	if (card_type == APL_CARDTYPE_PTEID_IAS5) {
-		m_mrzHash.Append(attr.hashes[0]);
-		m_picHash.Append(attr.hashes[1]);
-		m_idHash.Append(attr.hashes[2]);
-		m_pkHash.Append(attr.hashes[4]);
+		m_mrzHash.Append(attr.get(PTEID_SOD_TAG_MRZ));
+		m_picHash.Append(attr.get(PTEID_SOD_TAG_PHOTO_V2));
+		m_idHash.Append(attr.get(PTEID_SOD_TAG_ID_V2));
+		m_pkHash.Append(attr.get(PTEID_SOD_TAG_PK_AA));
 	} else {
-		m_idHash.Append(attr.hashes[0]);
-		m_addressHash.Append(attr.hashes[1]);
-		m_picHash.Append(attr.hashes[2]);
-		m_pkHash.Append(attr.hashes[3]);
+		m_idHash.Append(attr.get(PTEID_SOD_TAG_ID));
+		m_addressHash.Append(attr.get(PTEID_SOD_TAG_ADDRESS));
+		m_picHash.Append(attr.get(PTEID_SOD_TAG_PHOTO));
+		m_pkHash.Append(attr.get(PTEID_SOD_TAG_PK));
 	}
 
 	m_mappedFields = true;

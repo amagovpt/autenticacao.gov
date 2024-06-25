@@ -27,7 +27,7 @@ class SODParser {
 public:
 	virtual ~SODParser();
 	void ParseSodEncapsulatedContent(const CByteArray &contents, const std::vector<int> &valid_tags);
-	SODAttributes &getHashes();
+	SODAttributes &getAttributes();
 
 private:
 	SODAttributes *attr;
@@ -35,7 +35,12 @@ private:
 
 class SODAttributes {
 public:
-	CByteArray hashes[12];
+	void add(unsigned short tag, CByteArray value);
+	const CByteArray &get(unsigned short tag);
+	const std::unordered_map<unsigned short, CByteArray> &getHashes();
+
+private:
+	std::unordered_map<unsigned short, CByteArray> m_hashes;
 };
 
 } /* namespace eIDMW */

@@ -86,7 +86,6 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
 	attr = new SODAttributes();
-	int i = 0;
 	while (xLev2Item.l_data > 0) {
 
 		if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item) != 0) || (xLev3Item.tag != ASN_SEQUENCE))
@@ -102,8 +101,7 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 				(xLev4Item.tag != ASN_OCTET_STRING))
 				throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
 
-			attr->hashes[i].Append(xLev4Item.p_data, xLev4Item.l_data);
-			i++;
+			attr->add(read_tag, {xLev4Item.p_data, xLev4Item.l_data});
 		} else {
 			MWLOG(LEV_INFO, MOD_APL, "SODParser: unexpected datagroup tag: %d", read_tag);
 			// throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_VALUE);
@@ -111,6 +109,12 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 	}
 }
 
-SODAttributes &SODParser::getHashes() { return *attr; }
+SODAttributes &SODParser::getAttributes() { return *attr; }
+
+void SODAttributes::add(unsigned short tag, CByteArray value) { m_hashes[tag] = value; }
+
+const CByteArray &SODAttributes::get(unsigned short tag) { return m_hashes.at(tag); }
+
+const std::unordered_map<unsigned short, CByteArray> &SODAttributes::getHashes() { return m_hashes; }
 
 } /* namespace eIDMW */
