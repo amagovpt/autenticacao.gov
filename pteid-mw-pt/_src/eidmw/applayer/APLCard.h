@@ -72,6 +72,7 @@ enum APL_SignatureLevel { LEVEL_BASIC, LEVEL_TIMESTAMP, LEVEL_LT, LEVEL_LTV };
 
 enum APL_PACEAuthenticationType {
 	APL_PACE_CAN,
+	APL_PACE_MRZ,
 	APL_PACE_UNSUPPORTED,
 };
 

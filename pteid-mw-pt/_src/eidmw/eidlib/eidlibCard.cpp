@@ -189,7 +189,9 @@ void PTEID_Card::initPaceAuthentication(const char *secret, size_t length, PTEID
 	APL_PACEAuthenticationType type = APL_PACE_UNSUPPORTED;
 	if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN)
 		type = APL_PACEAuthenticationType::APL_PACE_CAN;
-	else {
+	else if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_MRZ) {
+		type = APL_PACEAuthenticationType::APL_PACE_MRZ;
+	} else {
 		// not supported
 	}
 	BEGIN_TRY_CATCH
