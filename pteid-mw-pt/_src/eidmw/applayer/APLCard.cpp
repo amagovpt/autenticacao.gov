@@ -562,7 +562,7 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex) {
 // ICAO
 APL_ICAO::APL_ICAO(APL_ReaderContext *reader) : m_reader(reader) {}
 
-const std::unordered_map<APL_ICAO::DataGroupID, std::string> APL_ICAO::dataGroupPaths = {
+const std::unordered_map<APL_ICAO::DataGroupID, std::string> APL_ICAO::DATAGROUP_PATHS = {
 	{APL_ICAO::DataGroupID::DG1, "0101"},  {APL_ICAO::DataGroupID::DG2, "0102"},  {APL_ICAO::DataGroupID::DG3, "0103"},
 	{APL_ICAO::DataGroupID::DG4, "0104"},  {APL_ICAO::DataGroupID::DG5, "0105"},  {APL_ICAO::DataGroupID::DG6, "0106"},
 	{APL_ICAO::DataGroupID::DG7, "0107"},  {APL_ICAO::DataGroupID::DG8, "0108"},  {APL_ICAO::DataGroupID::DG9, "0109"},
@@ -571,16 +571,20 @@ const std::unordered_map<APL_ICAO::DataGroupID, std::string> APL_ICAO::dataGroup
 	{APL_ICAO::DataGroupID::DG16, "0110"},
 };
 
+const std::vector<int> APL_ICAO::EXPECTED_TAGS = {
+	DG1, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16,
+};
+
 std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	std::vector<DataGroupID> datagroups;
 	BEGIN_CAL_OPERATION(m_reader);
 	{
 		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 
-		CByteArray oData = m_reader->getCalReader()->ReadFile("011D").GetBytes(65);
+		CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH).GetBytes(65);
 
 		SODParser parser;
-		parser.ParseSodEncapsulatedContent(oData, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16});
+		parser.ParseSodEncapsulatedContent(oData, EXPECTED_TAGS);
 		SODAttributes &attr = parser.getAttributes();
 
 		for (const auto &hash : attr.getHashes()) {
@@ -613,7 +617,7 @@ CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
 
 	m_reader->CalLock();
 	try {
-		out = m_reader->getCalReader()->ReadFile(dataGroupPaths.at(tag));
+		out = m_reader->getCalReader()->ReadFile(DATAGROUP_PATHS.at(tag));
 	} catch (CMWException &e) {
 		m_reader->CalUnlock();
 		if (e.GetError() == EIDMW_ERR_INCOMPATIBLE_READER)

@@ -315,24 +315,7 @@ protected:
 
 class APL_ICAO {
 public:
-	enum class DataGroupID {
-		DG1 = 0x01,
-		DG2,
-		DG3,
-		DG4,
-		DG5,
-		DG6,
-		DG7,
-		DG8,
-		DG9,
-		DG10,
-		DG11,
-		DG12,
-		DG13,
-		DG14,
-		DG15,
-		DG16
-	};
+	enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
 
 	EIDMW_APL_API virtual void initPaceAuthentication(const char *secret, size_t length,
 													  APL_PACEAuthenticationType secretType);
@@ -342,9 +325,11 @@ public:
 	// pass in master certificates list
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
+
 	static constexpr unsigned char MRTD_APPLICATION[] = {0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
-	static constexpr unsigned char SOD_PATH[] = "011D";
-	static const std::unordered_map<APL_ICAO::DataGroupID, std::string> dataGroupPaths;
+	static constexpr const char *SOD_PATH = "011D";
+	static const std::unordered_map<APL_ICAO::DataGroupID, std::string> DATAGROUP_PATHS;
+	static const std::vector<int> EXPECTED_TAGS;
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);
