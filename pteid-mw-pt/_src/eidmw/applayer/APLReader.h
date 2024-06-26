@@ -258,6 +258,7 @@ private:
 class CReader;
 
 class APL_Card;
+class APL_ICAO;
 class APL_EIDCard;
 
 /******************************************************************************/ /**
@@ -336,6 +337,8 @@ public:
       */
 	EIDMW_APL_API bool isCardContactless() const;
 
+	EIDMW_APL_API APL_ICAO *getICAOCard();
+
 	/**
 	  * Get the EIdcard in the reader
 	  * If there is no EIdcard in the reader NULL is return
@@ -395,6 +398,7 @@ private:
 	CMutex m_newcardmutex;
 
 	APL_Card *m_card;	  /**< Pointer to the card in the reader */
+	APL_ICAO *m_icao;
 	CReader *m_calreader; /**< Pointer to the reader object in the cardlayer */
 	tCardStatus m_status; /**< Hold the status of the reader */
 

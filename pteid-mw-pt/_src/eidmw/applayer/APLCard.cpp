@@ -39,6 +39,7 @@
 #include "PDFSignature.h"
 #include "MiscUtil.h"
 #include "Log.h"
+#include "SODParser.h"
 
 #include <time.h>
 #include <sys/types.h>
@@ -113,7 +114,9 @@ void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_
 
 	if (secretType == APL_PACEAuthenticationType::APL_PACE_CAN)
 		paceSecretType = PaceSecretType::PACECAN;
-	else {
+	else if (secretType == APL_PACEAuthenticationType::APL_PACE_MRZ) {
+		paceSecretType = PaceSecretType::PACEMRZ;
+	} else {
 		// not supported types
 	}
 
@@ -553,6 +556,76 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex) {
 	out = m_reader->getCalReader()->GetCert(ulIndex);
 	END_CAL_OPERATION(m_reader)
 
+	return out;
+}
+
+// ICAO
+APL_ICAO::APL_ICAO(APL_ReaderContext *reader) : m_reader(reader) {}
+
+const std::unordered_map<APL_ICAO::DataGroupID, std::string> APL_ICAO::dataGroupPaths = {
+	{APL_ICAO::DataGroupID::DG1, "0101"},  {APL_ICAO::DataGroupID::DG2, "0102"},  {APL_ICAO::DataGroupID::DG3, "0103"},
+	{APL_ICAO::DataGroupID::DG4, "0104"},  {APL_ICAO::DataGroupID::DG5, "0105"},  {APL_ICAO::DataGroupID::DG6, "0106"},
+	{APL_ICAO::DataGroupID::DG7, "0107"},  {APL_ICAO::DataGroupID::DG8, "0108"},  {APL_ICAO::DataGroupID::DG9, "0109"},
+	{APL_ICAO::DataGroupID::DG10, "010A"}, {APL_ICAO::DataGroupID::DG11, "010B"}, {APL_ICAO::DataGroupID::DG12, "010C"},
+	{APL_ICAO::DataGroupID::DG13, "010D"}, {APL_ICAO::DataGroupID::DG14, "010E"}, {APL_ICAO::DataGroupID::DG15, "010F"},
+	{APL_ICAO::DataGroupID::DG16, "0110"},
+};
+
+std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
+	std::vector<DataGroupID> datagroups;
+	BEGIN_CAL_OPERATION(m_reader);
+	{
+		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
+
+		CByteArray oData = m_reader->getCalReader()->ReadFile("011D").GetBytes(65);
+
+		SODParser parser;
+		parser.ParseSodEncapsulatedContent(oData, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16});
+		SODAttributes &attr = parser.getAttributes();
+
+		for (const auto &hash : attr.getHashes()) {
+			datagroups.emplace_back(static_cast<DataGroupID>(hash.first));
+		}
+	}
+	END_CAL_OPERATION(m_reader);
+
+	return datagroups;
+}
+
+void APL_ICAO::initPaceAuthentication(const char *secret, size_t length, APL_PACEAuthenticationType secretType) {
+	PaceSecretType paceSecretType = PaceSecretType::PACECAN;
+
+	if (secretType == APL_PACEAuthenticationType::APL_PACE_CAN)
+		paceSecretType = PaceSecretType::PACECAN;
+	else if (secretType == APL_PACEAuthenticationType::APL_PACE_MRZ) {
+		paceSecretType = PaceSecretType::PACEMRZ;
+	} else {
+		// not supported types
+	}
+
+	BEGIN_CAL_OPERATION(m_reader)
+	m_reader->getCalReader()->initPaceAuthentication(secret, length, paceSecretType);
+	END_CAL_OPERATION(m_reader)
+}
+
+CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
+	CByteArray out;
+
+	m_reader->CalLock();
+	try {
+		out = m_reader->getCalReader()->ReadFile(dataGroupPaths.at(tag));
+	} catch (CMWException &e) {
+		m_reader->CalUnlock();
+		if (e.GetError() == EIDMW_ERR_INCOMPATIBLE_READER)
+			throw e;
+
+		return {};
+	} catch (...) {
+		m_reader->CalUnlock();
+		throw;
+		return {};
+	}
+	m_reader->CalUnlock();
 	return out;
 }
 

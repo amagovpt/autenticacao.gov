@@ -421,6 +421,7 @@ private:
 
 class PTEID_Card;
 class PTEID_EIDCard;
+class ICAO_Card;
 
 /**
  * This class represent a reader.
@@ -495,6 +496,8 @@ public:
 	 **/
 	PTEIDSDK_API PTEID_EIDCard &getEIDCard();
 
+	PTEIDSDK_API ICAO_Card &getICAOCard();
+
 	/**
 	 * Specify a callback function to be called each time a
 	 * card is inserted/remove in/from this reader.
@@ -528,6 +531,7 @@ private:
 
 class PTEID_PDFSignature;
 class APL_Card;
+class APL_ICAO;
 class PTEID_Certificate;
 class PTEID_Certificates;
 
@@ -715,6 +719,45 @@ public:
 	 * Get type of SigningDeviceType.
 	 */
 	PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() = 0;
+};
+
+class ICAO_Card : public PTEID_Object {
+public:
+	enum class DataGroupID {
+		DG1 = 0x01,
+		DG2,
+		DG3,
+		DG4,
+		DG5,
+		DG6,
+		DG7,
+		DG8,
+		DG9,
+		DG10,
+		DG11,
+		DG12,
+		DG13,
+		DG14,
+		DG15,
+		DG16
+	};
+
+	PTEIDSDK_API virtual std::vector<DataGroupID> getAvailableDatagroups();
+
+	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length,
+													 PTEID_CardPaceSecretType secretType);
+
+	PTEIDSDK_API virtual PTEID_ByteArray readDatagroup(DataGroupID tag);
+
+protected:
+	ICAO_Card(const SDK_Context *context, APL_ICAO *impl); /**< For internal use : Constructor */
+
+private:
+	ICAO_Card(const ICAO_Card &card) = delete;			  /**< Copy not allowed - not implemented */
+	ICAO_Card &operator=(const ICAO_Card &card) = delete; /**< Copy not allowed - not implemented */
+
+	friend ICAO_Card &
+	PTEID_ReaderContext::getICAOCard(); /**< For internal use : This method must access protected constructor */
 };
 
 /**

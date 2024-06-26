@@ -753,6 +753,59 @@ const char *PTEID_EIDCard::readPersonalNotes() {
 }
 
 /*****************************************************************************************
+--------------------------------------- ICAO_Card ----------------------------------------
+*****************************************************************************************/
+ICAO_Card::ICAO_Card(const SDK_Context *context, APL_ICAO *impl) : PTEID_Object(context, impl) {
+	std::cout << "Called ICAO_Card constructor\n";
+}
+
+std::vector<ICAO_Card::DataGroupID> ICAO_Card::getAvailableDatagroups() {
+	std::vector<DataGroupID> availableDatagroups;
+
+	BEGIN_TRY_CATCH
+	auto icao = static_cast<APL_ICAO *>(m_impl);
+	auto datagroups = icao->getAvailableDatagroups();
+	for (const auto &dg : datagroups) {
+		availableDatagroups.emplace_back(static_cast<DataGroupID>(dg));
+	}
+
+	END_TRY_CATCH
+
+	return availableDatagroups;
+}
+
+void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType) {
+	std::cout << "Called ICAO_Card::initPaceAuthentication\n";
+
+	APL_PACEAuthenticationType type = APL_PACE_UNSUPPORTED;
+	if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN)
+		type = APL_PACEAuthenticationType::APL_PACE_CAN;
+	else if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_MRZ) {
+		type = APL_PACEAuthenticationType::APL_PACE_MRZ;
+	} else {
+		// not supported
+	}
+
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	icao->initPaceAuthentication(secret, length, type);
+	END_TRY_CATCH
+}
+
+PTEID_ByteArray ICAO_Card::readDatagroup(ICAO_Card::DataGroupID tag) {
+	std::cout << "Called ICAO_Card::readDatagroup\n";
+	PTEID_ByteArray out;
+
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	CByteArray result = icao->readDatagroup(static_cast<APL_ICAO::DataGroupID>(tag));
+	out.Append(result.GetBytes(), result.Size());
+	END_TRY_CATCH
+
+	return out;
+}
+
+/*****************************************************************************************
 ----------------------------- PTEID_XmlUserRequestedInfo ---------------------------------
 *****************************************************************************************/
 PTEID_XmlUserRequestedInfo::PTEID_XmlUserRequestedInfo() : PTEID_Object(NULL, NULL) {

@@ -60,6 +60,7 @@ APL_CardType ConvertCardType(tCardType cardType);
 APL_ReaderContext::APL_ReaderContext(const char *readerName) {
 	m_calreader = &AppLayer.getCardLayer()->getReader(readerName);
 	m_card = NULL;
+	m_icao = NULL;
 	m_cardid = 0;
 
 	m_cal_lock = false;
@@ -232,6 +233,14 @@ APL_Card *APL_ReaderContext::getCard() {
 }
 
 bool APL_ReaderContext::isCardContactless() const { return m_card->getCalReader()->isCardContactless(); }
+
+APL_ICAO *APL_ReaderContext::getICAOCard() {
+	if (m_icao) {
+		return m_icao;
+	}
+
+	return new APL_ICAO(this);
+}
 
 APL_EIDCard *APL_ReaderContext::getEIDCard() {
 	connectCard();

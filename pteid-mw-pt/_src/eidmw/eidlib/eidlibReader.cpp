@@ -43,6 +43,7 @@
 
 // INCLUDE IN ReaderContext
 #define INCLUDE_OBJECT_CARD 1
+#define INCLUDE_OBJECT_ICAO 2
 
 // FOR ALL OBJECT
 #define INCLUDE_OBJECT_FIRST_EXTENDED_ADD 1000000
@@ -536,6 +537,31 @@ bool PTEID_ReaderContext::isCardChanged(unsigned long &ulOldId) {
 	END_TRY_CATCH
 
 	return out;
+}
+
+ICAO_Card &PTEID_ReaderContext::getICAOCard() {
+	ICAO_Card *out = nullptr;
+
+	BEGIN_TRY_CATCH
+
+	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
+	APL_ICAO *pAplIcao = pimpl->getICAOCard();
+
+	out = dynamic_cast<ICAO_Card *>(getObject(INCLUDE_OBJECT_ICAO));
+	if (!out) {
+		SDK_Context context;
+		context.contextid = m_context->contextid;
+		context.reader = static_cast<APL_ReaderContext *>(m_impl);
+		context.cardid = m_cardid;
+		context.mutex = m_context->mutex;
+
+		out = new ICAO_Card(&context, pAplIcao);
+
+		m_objects[INCLUDE_OBJECT_ICAO] = out;
+	}
+
+	END_TRY_CATCH
+	return *out;
 }
 
 PTEID_Card &PTEID_ReaderContext::getCard() {
