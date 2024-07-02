@@ -43,6 +43,7 @@
 
 #include <time.h>
 #include <sys/types.h>
+#include <openssl/err.h>
 
 namespace eIDMW {
 
@@ -642,12 +643,66 @@ void APL_ICAO::loadAvailableDataGroups() {
 	if (m_SodAttributes)
 		return;
 
-	CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH).GetBytes(65);
+	CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH);
+
+	CByteArray sod = oData.GetBytes(65);
+	// CByteArray sod = verifySodFileIntegrity(oData);
 
 	SODParser parser;
-	parser.ParseSodEncapsulatedContent(oData, EXPECTED_TAGS);
+	parser.ParseSodEncapsulatedContent(sod, EXPECTED_TAGS);
 
 	m_SodAttributes = std::make_unique<SODAttributes>(parser.getAttributes());
+}
+
+CByteArray APL_ICAO::verifySodFileIntegrity(const CByteArray &data) {
+	CByteArray contents;
+
+	PKCS7 *p7 = nullptr;
+	char *error_msg = nullptr;
+	bool sod_verified = false;
+
+	ERR_load_crypto_strings();
+	OpenSSL_add_all_digests();
+
+	const unsigned char *temp = data.GetBytes();
+	size_t length = data.Size();
+	temp += 4; // Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
+
+	p7 = d2i_PKCS7(nullptr, &temp, length);
+	if (!p7) {
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed t o devoce SOD PKCS7 object! Openssl errors:\n%s",
+			  error_msg != nullptr ? error_msg : "N/A");
+		free(error_msg);
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_INVALID_PKCS7);
+	}
+
+	X509_STORE *store = X509_STORE_new();
+
+	// TODO: load all root certificates here
+
+	BIO *out = BIO_new(BIO_s_mem());
+	sod_verified = PKCS7_verify(p7, nullptr, store, nullptr, out, 0) == 1;
+	if (sod_verified) {
+		unsigned char *p;
+		size_t size = BIO_get_mem_data(out, &p);
+		contents.Append(p, size);
+	} else {
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Error validating SOD signature. OpenSSL errors:\n%s",
+			  error_msg != nullptr ? error_msg : "N/A");
+		free(error_msg);
+	}
+
+	X509_STORE_free(store);
+	BIO_free_all(out);
+	PKCS7_free(p7);
+
+	if (!sod_verified) {
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_VERIFY_SOD_SIGN);
+	}
+
+	return contents;
 }
 
 bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
