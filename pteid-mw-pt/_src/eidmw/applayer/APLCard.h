@@ -29,11 +29,13 @@
 
 #include <string>
 #include <unordered_map>
+#include <memory>
 #include "Export.h"
 #include "ByteArray.h"
 #include "P15Objects.h"
 #include "APLReader.h"
 #include "APLPublicKey.h"
+#include "SODParser.h"
 
 #define BEGIN_CAL_OPERATION(obj)                                                                                       \
 	obj->CalLock();                                                                                                    \
@@ -325,11 +327,14 @@ public:
 	// pass in master certificates list
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
+	std::unique_ptr<SODAttributes> m_SodAttributes;
 
 	static constexpr unsigned char MRTD_APPLICATION[] = {0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
 	static constexpr const char *SOD_PATH = "011D";
 	static const std::unordered_map<APL_ICAO::DataGroupID, std::string> DATAGROUP_PATHS;
 	static const std::vector<int> EXPECTED_TAGS;
+
+	bool verifySOD(DataGroupID tag, const CByteArray& data);
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);

@@ -258,6 +258,7 @@
 #define EIDMW_SOD_ERR_VERIFY_SOD_SIGN 0xe1d01c08
 #define EIDMW_SOD_ERR_INVALID_PKCS7 0xe1d01c09
 #define EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ 0xe1d01c0A
+#define EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG 0xe1d01c0B
 
 // Errors related to CVC authentication and Secure Messaging
 #define EIDMW_ERR_CVC_GENERIC_ERROR 0xe1d01f01

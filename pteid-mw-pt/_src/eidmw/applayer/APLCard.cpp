@@ -585,9 +585,10 @@ std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 
 		SODParser parser;
 		parser.ParseSodEncapsulatedContent(oData, EXPECTED_TAGS);
-		SODAttributes &attr = parser.getAttributes();
 
-		for (const auto &hash : attr.getHashes()) {
+		m_SodAttributes = std::make_unique<SODAttributes>(parser.getAttributes());
+
+		for (const auto &hash : m_SodAttributes->getHashes()) {
 			datagroups.emplace_back(static_cast<DataGroupID>(hash.first));
 		}
 	}
@@ -630,7 +631,24 @@ CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
 		return {};
 	}
 	m_reader->CalUnlock();
+
+	// verify sod
+	auto sod = verifySOD(tag, out);
+	if (!sod) {
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG);
+	}
+
 	return out;
+}
+
+bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
+	auto &hashes = m_SodAttributes->getHashes();
+	if (hashes.find(tag) == hashes.end()) {
+		return false;
+	}
+
+	auto cryptFwk = AppLayer.getCryptoFwk();
+	return cryptFwk->VerifyHashSha256(data, hashes.at(tag));
 }
 
 } // namespace eIDMW
