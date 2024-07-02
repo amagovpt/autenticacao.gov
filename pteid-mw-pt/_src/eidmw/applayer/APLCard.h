@@ -334,6 +334,7 @@ private:
 	static const std::unordered_map<APL_ICAO::DataGroupID, std::string> DATAGROUP_PATHS;
 	static const std::vector<int> EXPECTED_TAGS;
 
+	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray& data);
 
 protected:

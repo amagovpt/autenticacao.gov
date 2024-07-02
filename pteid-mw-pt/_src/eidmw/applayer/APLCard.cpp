@@ -581,12 +581,7 @@ std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	{
 		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 
-		CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH).GetBytes(65);
-
-		SODParser parser;
-		parser.ParseSodEncapsulatedContent(oData, EXPECTED_TAGS);
-
-		m_SodAttributes = std::make_unique<SODAttributes>(parser.getAttributes());
+		loadAvailableDataGroups();
 
 		for (const auto &hash : m_SodAttributes->getHashes()) {
 			datagroups.emplace_back(static_cast<DataGroupID>(hash.first));
@@ -618,6 +613,7 @@ CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
 
 	m_reader->CalLock();
 	try {
+		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 		out = m_reader->getCalReader()->ReadFile(DATAGROUP_PATHS.at(tag));
 	} catch (CMWException &e) {
 		m_reader->CalUnlock();
@@ -641,7 +637,24 @@ CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
 	return out;
 }
 
+void APL_ICAO::loadAvailableDataGroups() {
+	// Already loaded SOD and datagroup list
+	if (m_SodAttributes)
+		return;
+
+	CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH).GetBytes(65);
+
+	SODParser parser;
+	parser.ParseSodEncapsulatedContent(oData, EXPECTED_TAGS);
+
+	m_SodAttributes = std::make_unique<SODAttributes>(parser.getAttributes());
+}
+
 bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
+	if (!m_SodAttributes) {
+		loadAvailableDataGroups();
+	}
+
 	auto &hashes = m_SodAttributes->getHashes();
 	if (hashes.find(tag) == hashes.end()) {
 		return false;
