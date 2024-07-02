@@ -773,7 +773,6 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 		switch (e.GetError()) {
 		case EIDMW_PACE_ERR_BAD_TOKEN: {
 			err = PaceError::PaceBadToken;
-			PTEID_CardVersionInfo &verInfo = card->getVersionInfo();
 			deleteCAN();
 			break;
 		}
@@ -790,7 +789,6 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 
 	m_pace_auth_state = PaceAuthenticated;
 	// Cache correct CAN value
-	PTEID_CardVersionInfo &verInfo = card->getVersionInfo();
 	if (m_Settings.getEnablePteidCANCache()) {
 		saveCAN(can_str.c_str());
 	}
@@ -3038,13 +3036,13 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
 }
 
 void GAPI::performPACEWithCache(PTEID_EIDCard *card, CardOperation op) {
+	Q_UNUSED(card);
 	if (!m_Settings.getEnablePteidCANCache()) {
 		emit signalContactlessCANNeeded();
 		return;
 	}
 
 	const int CAN_LENGTH = 6;
-	PTEID_CardVersionInfo &verInfo = card->getVersionInfo();
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Reading cached CAN");
 
 	std::string cached_can = getCANFromCache();
@@ -3091,7 +3089,7 @@ void GAPI::connectToCard() {
 //****************************************************
 void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBackData) {
 	g_runningCallback++;
-
+	Q_UNUSED(lRet);
 	try {
 		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByName(pCallBackData->getReaderName().toLatin1());
 
@@ -3330,6 +3328,9 @@ void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
 	if (pCertContext) {
 		CertFreeCertificateContext(pCertContext);
 	}
+#else
+	Q_UNUSED(issuedBy);
+	Q_UNUSED(issuedTo);
 #endif
 }
 void GAPI::exportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath) {
@@ -3775,6 +3776,9 @@ void GAPI::cancelCMDRegisterCert() {
 void GAPI::registerCMDCertOpen(QString mobileNumber, QString pin) {
 #ifdef WIN32
 	Concurrent::run(this, &GAPI::doRegisterCMDCertOpen, mobileNumber, pin);
+#else
+	Q_UNUSED(mobileNumber);
+	Q_UNUSED(pin);
 #endif
 }
 void GAPI::doRegisterCMDCertOpen(QString mobileNumber, QString pin) {
@@ -3810,11 +3814,16 @@ void GAPI::doRegisterCMDCertOpen(QString mobileNumber, QString pin) {
 	signalUpdateProgressBar(100);
 	signalUpdateProgressStatus(tr("STR_POPUP_ERROR") + "!");
 	emit signalShowMessage(error_msg, urlLink);
+#else
+	Q_UNUSED(mobileNumber);
+	Q_UNUSED(pin);
 #endif
 }
 void GAPI::registerCMDCertClose(QString otp) {
 #ifdef WIN32
 	Concurrent::run(this, &GAPI::doRegisterCMDCertClose, otp);
+#else
+	Q_UNUSED(otp);
 #endif
 }
 void GAPI::doRegisterCMDCertClose(QString otp) {
@@ -3846,6 +3855,8 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
 	signalUpdateProgressBar(100);
 	signalUpdateProgressStatus(top_msg);
 	emit signalShowMessage(error_msg, urlLink);
+#else
+	Q_UNUSED(otp);
 #endif
 }
 
