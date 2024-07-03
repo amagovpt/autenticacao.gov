@@ -294,6 +294,12 @@ bool CERTIFICATES::StoreUserCerts(PTEID_EIDCard &Card, PCCERT_CONTEXT pCertConte
 		CertCloseStore(hMyStore, CERT_CLOSE_STORE_FORCE_FLAG);
 		hMyStore = NULL;
 	}
+#else
+	Q_UNUSED(Card);
+	Q_UNUSED(pCertContext);
+	Q_UNUSED(KeyUsageBits);
+	Q_UNUSED(cert);
+	Q_UNUSED(readerName);
 #endif
 	return true;
 }
@@ -394,6 +400,9 @@ bool CERTIFICATES::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned cha
 	}
 	return bRet;
 #else
+	Q_UNUSED(pCertContext);
+	Q_UNUSED(KeyUsageBits);
+	Q_UNUSED(readerName);
 	return true;
 #endif
 }
@@ -453,6 +462,8 @@ bool CERTIFICATES::RemoveCertificates(const char *readerName) {
 	if (nrCerts > 0) {
 		forgetCertificates(readerName);
 	}
+#else
+	Q_UNUSED(readerName);
 #endif
 	return true;
 }
@@ -557,6 +568,7 @@ bool CERTIFICATES::ImportCertificates(const char *readerName) {
 
 	return bImported;
 #else
+	Q_UNUSED(readerName);
 	return true;
 #endif
 }
