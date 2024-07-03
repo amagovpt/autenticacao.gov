@@ -550,7 +550,8 @@ public:
 		} else {
 			s.remove("pteid");
 		}
-
+#else
+	Q_UNUSED(bAutoStartup);
 #endif
 	}
 	bool getRegCertSetting(void) { return m_bRegCert; }
