@@ -305,22 +305,6 @@ void APL_ReaderContext::CalUnlock() {
 CReader *APL_ReaderContext::getCalReader() const { return m_calreader; }
 
 /*****************************************************************************************
------------------------------------- CheckRelease ---------------------------------------
-*****************************************************************************************/
-class APL_CheckRelease {
-public:
-	APL_CheckRelease() { m_ReleaseOk = true; }
-
-	~APL_CheckRelease() {
-		if (!m_ReleaseOk) {
-			fprintf(stderr,"WARNING: Please do not forget to release the SDK\n");
-		}
-	}
-
-	bool m_ReleaseOk;
-} checkRelease;
-
-/*****************************************************************************************
 ------------------------------------ CAppLayer ---------------------------------------
 *****************************************************************************************/
 CAppLayer *CAppLayer::m_instance = NULL;
@@ -356,7 +340,6 @@ CAppLayer &CAppLayer::instance() {
 		CAutoMutex autoMutex(&m_Mutex); // We lock for only one instantiation
 		if (m_instance == NULL) // We test again to be sure it isn't instantiated between the first if and the lock
 		{
-			checkRelease.m_ReleaseOk = false;
 			m_instance = new CAppLayer;
 		}
 	}
@@ -372,8 +355,6 @@ void CAppLayer::init(bool bAskForTestCard) { instance().setAskForTestCard(bAskFo
 // Release the singleton instance of the CAppLayer
 void CAppLayer::release() {
 	CAutoMutex autoMutex(&m_Mutex);
-
-	checkRelease.m_ReleaseOk = true;
 
 	delete m_instance;
 	m_instance = NULL;
