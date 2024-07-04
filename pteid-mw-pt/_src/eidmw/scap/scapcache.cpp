@@ -117,7 +117,8 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 										   provider_nipc ? provider_nipc : "",
 										   provider_logo ? provider_logo : "",
 									   },
-									   citizen_name};
+									   citizen_name,
+									   "0"};
 
 			ScapAttributeHasher id_generator;
 			attribute.unique_id = std::to_string(id_generator(attribute));
