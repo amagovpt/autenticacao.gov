@@ -771,15 +771,14 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	} catch (PTEID_PACE_ERROR e) {
 		PaceError err;
 		switch (e.GetError()) {
-		case EIDMW_PACE_ERR_BAD_TOKEN: {
+		case EIDMW_PACE_ERR_BAD_TOKEN: 
 			err = PaceError::PaceBadToken;
 			deleteCAN();
 			break;
-		}
 		case EIDMW_PACE_ERR_NOT_INITIALIZED:
 			err = PaceError::PaceUnutilized;
 			break;
-		case EIDMW_PACE_ERR_UNKNOWN:
+		default:
 			err = PaceError::PaceUnknown;
 			break;
 		}
