@@ -182,7 +182,7 @@ bool CMDServices::init(int recv_timeout, int send_timeout, int connect_timeout, 
 	// Dont output mustUnderstand attributes
 	sp->mustUnderstand = mustUnderstand;
 
-	char *ca_path = NULL;
+	const char *ca_path = nullptr;
 	std::string cacerts_file;
 
 #ifdef __linux__
