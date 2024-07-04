@@ -1028,7 +1028,7 @@ void AutoUpdates::installCertsUpdate(const QStringList &certs) {
 	}
 
 #else
-	QString filesToCopy;
+	QStringList filesToCopy;
 	bool bHaveFilesToCopy = false;
 	if (certs.length() > 0) {
 		bUpdateCertsSuccess = true;
@@ -1038,7 +1038,6 @@ void AutoUpdates::installCertsUpdate(const QStringList &certs) {
 			if (validateHash(certificateFileName, hashList.at(i))) {
 				bHaveFilesToCopy = true;
 				filesToCopy.append(certificateFileName);
-				filesToCopy.append(" ");
 			} else {
 				bUpdateCertsSuccess = false;
 			}
@@ -1049,8 +1048,24 @@ void AutoUpdates::installCertsUpdate(const QStringList &certs) {
 		QProcess proc;
 		proc.setProcessChannelMode(QProcess::MergedChannels);
 
-		QString cmd = "pkexec /bin/cp " + filesToCopy + certs_dir_str;
-		proc.start(cmd);
+		QString program = "pkexec";
+
+		QStringList arguments;
+
+		arguments.append("/bin/cp");
+
+		for (QString file : filesToCopy) {
+			arguments.append(file);
+		}
+
+		arguments.append(certs_dir_str);
+
+		QString cmd = program;
+		for (QString arg : arguments) {
+			cmd += " " + arg;
+		}
+
+		proc.start(program, arguments);
 
 		if (!proc.waitForStarted()) // default wait time 30 sec
 		{
