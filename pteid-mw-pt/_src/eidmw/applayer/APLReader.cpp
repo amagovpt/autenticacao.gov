@@ -313,8 +313,7 @@ public:
 
 	~APL_CheckRelease() {
 		if (!m_ReleaseOk) {
-			printf("ERRORere : Please do not forget to release the SDK\n");
-			throw CMWEXCEPTION(EIDMW_ERR_RELEASE_NEEDED);
+			fprintf(stderr,"WARNING: Please do not forget to release the SDK\n");
 		}
 	}
 
