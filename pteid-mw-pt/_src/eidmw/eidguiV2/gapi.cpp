@@ -585,11 +585,11 @@ void GAPI::getPersoDataFile() {
 
 	try {
 		emit signalPersoDataLoaded(QString(card->readPersonalNotes()));
-	} catch (PTEID_Exception e) {
+	} catch (PTEID_Exception &e) {
 		if (e.GetError() == EIDMW_ERR_NOT_SUPPORTED) {
 			signalPersonalDataNotSupported();
 		} else
-			throw e;
+			throw;
 	};
 
 	END_TRY_CATCH
@@ -768,7 +768,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	try {
 		card->initPaceAuthentication(can_str.c_str(), can_str.size(), PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
 		emit signalPaceSuccess();
-	} catch (PTEID_PACE_ERROR e) {
+	} catch (PTEID_PACE_ERROR &e) {
 		PaceError err;
 		switch (e.GetError()) {
 		case EIDMW_PACE_ERR_BAD_TOKEN: 
@@ -2326,11 +2326,11 @@ bool GAPI::isNotesSupported() {
 	try {
 		// try read personal notes
 		card->readPersonalNotes();
-	} catch (PTEID_Exception e) {
+	} catch (PTEID_Exception &e) {
 		if (e.GetError() == EIDMW_ERR_NOT_SUPPORTED)
 			return false;
 		else
-			throw e;
+			throw;
 	};
 
 	END_TRY_CATCH
@@ -3018,7 +3018,7 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
 	setDataCardIdentify(cardData);
 
 	// Load certificates here
-	for (int i = 0; i < ReaderSet.readerCount(); i++) {
+	for (long unsigned int i = 0; i < ReaderSet.readerCount(); i++) {
 		auto &reader = ReaderSet.getReaderByNum(i);
 		if (reader.isCardPresent() && reader.getCardContactInterface() == PTEID_CARD_CONTACTLESS) {
 			QString readerName = reader.getName();
