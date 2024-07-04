@@ -1674,7 +1674,7 @@ Guint PDFDoc::writeObject (Object* obj, Ref* ref, OutStream* outStr, XRef *xRef,
   int tmp;
 
   if(ref) 
-    outStr->printf("%i %i obj ", ref->num, ref->gen);
+    outStr->printf("%i %i obj\r\n", ref->num, ref->gen);
 
   switch (obj->getType()) {
     case objBool:
@@ -1799,7 +1799,7 @@ Guint PDFDoc::writeObject (Object* obj, Ref* ref, OutStream* outStr, XRef *xRef,
       break;
   }
   if (ref)
-    outStr->printf("endobj\r\n");
+    outStr->printf("\r\nendobj\r\n");
   return offset;
 }
 
