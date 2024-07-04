@@ -233,8 +233,7 @@ public:
 
 	~PTEID_CheckRelease() {
 		if (!m_ReleaseOk) {
-			printf("ERROR : Please do not forget to release the SDK\n");
-			throw PTEID_ExReleaseNeeded();
+			fprintf(stderr,"WARNING: Please do not forget to release the SDK\n");
 		}
 	}
 
