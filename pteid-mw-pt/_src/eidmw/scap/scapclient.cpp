@@ -280,7 +280,7 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 		if (signature_info.is_visible) {
 			const SealGeometry &seal_geometry = signature_info.seal_geometry;
 			if (seal_geometry.x >= 0 && seal_geometry.y >= 0) {
-				unsigned int selected_page;
+				int selected_page;
 				const int page_count = sig_handler->getPageCount();
 				if (signature_info.is_last_page || signature_info.selected_page < 1 ||
 					signature_info.selected_page > page_count) {

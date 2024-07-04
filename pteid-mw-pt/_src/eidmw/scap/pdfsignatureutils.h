@@ -30,7 +30,7 @@ struct PDFSignatureInfo {
 	std::string reason;
 	PTEID_SignatureLevel level;
 	bool is_visible;
-	unsigned int selected_page;
+	int selected_page;
 	bool is_last_page;
 	SealGeometry seal_geometry;
 	bool use_custom_image;
