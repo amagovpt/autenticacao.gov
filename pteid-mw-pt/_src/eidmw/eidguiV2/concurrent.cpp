@@ -24,7 +24,7 @@ bool Concurrent::waitForAll(int sec) {
 	int timestep = 1; // Polling frequency
 	while (timeleft > 0) {
 		bool allFinished = true;
-		for (size_t i = 0; i < m_futures.size(); i++) {
+		for (int i = 0; i < m_futures.size(); i++) {
 			if (!m_futures[i].isFinished()) {
 				allFinished = false;
 				break;
