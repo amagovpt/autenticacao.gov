@@ -2832,7 +2832,6 @@ void GAPI::getCardInstance(PTEID_EIDCard *&new_card) {
 		if (ReaderCount == 0) {
 			emit signalCardAccessError(NoReaderFound);
 		} else {
-			PTEID_CardType lastFoundCardType = PTEID_CARDTYPE_UNKNOWN;
 
 			// Count number of cards
 			for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
@@ -2852,7 +2851,6 @@ void GAPI::getCardInstance(PTEID_EIDCard *&new_card) {
 				// Card Reader was previously selected
 				PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(selectedReaderIndex);
 				PTEID_CardType CardType = readerContext.getCardType();
-				lastFoundCardType = CardType;
 				qDebug() << "Card Reader was previously selected CardType:" << CardType;
 				PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Card Reader was previously selected CardType: %d",
 						  CardType);
@@ -2878,7 +2876,6 @@ void GAPI::getCardInstance(PTEID_EIDCard *&new_card) {
 				if (CardIdx == 1) {
 					PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
 					PTEID_CardType CardType = readerContext.getCardType();
-					lastFoundCardType = CardType;
 					qDebug() << "Card Reader was not previously selected CardType:" << CardType;
 					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Card Reader was not previously selected CardType: %d",
 							  CardType);
