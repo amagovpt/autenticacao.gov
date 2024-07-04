@@ -157,6 +157,9 @@ CByteArray &CMDSignatureClient::SignXades(const char *output_path, const char *c
 }
 
 void CMDSignatureClient::SignXadesIndividual(const char *output_path, const char *const *paths, unsigned int n_paths) {
+	(void) output_path;
+	(void) paths;
+	(void) n_paths;
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_IMPLEMENTED);
 }
 
