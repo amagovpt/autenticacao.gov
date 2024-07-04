@@ -332,12 +332,13 @@ int main(int argc, char *argv[]) {
 
 	if (retValue == RESTART_EXIT_CODE) {
 		QProcess proc;
-		QString cmd;
-		for (QString arg : QCoreApplication::arguments()) {
-			cmd.append("\"").append(arg).append("\" ");
+		QString program = QCoreApplication::arguments().at(0);
+		QStringList arguments;
+		if (QCoreApplication::arguments().size() > 1) {
+			arguments = QCoreApplication::arguments();
+			arguments.removeFirst();
 		}
-		cmd = cmd.remove(cmd.length() - 1, 1); // remove last space
-		if (!proc.startDetached(cmd)) {
+		if (!proc.startDetached(program, arguments)) {
 			qDebug() << "Error restarting application: could not start process.";
 		}
 	}
