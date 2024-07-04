@@ -214,18 +214,16 @@ bool APL_ReaderContext::connectCard() {
 	APL_CardType cardType = APL_CARDTYPE_UNKNOWN;
 
 	cardType = getPhysicalCardType();
-
+	m_card = new APL_EIDCard(this, cardType);
 	switch (cardType) {
 	case APL_CARDTYPE_PTEID_IAS07:
 	case APL_CARDTYPE_PTEID_IAS101:
 	case APL_CARDTYPE_PTEID_IAS5:
-		m_card = new APL_EIDCard(this, cardType);
-		break;
+		return true; // New connection
 	default:
 		return false;
 	}
 
-	return true; // New connection
 }
 
 APL_Card *APL_ReaderContext::getCard() {
