@@ -20,7 +20,18 @@
 #include <QDebug>
 #include <QtQml>
 #include <QPixmap>
+
+/*
+	We are not interested in these warnings due to being an external library
+*/
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #include <poppler-qt5.h>
+
+#pragma GCC diagnostic pop
+
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QPrintDialog>
