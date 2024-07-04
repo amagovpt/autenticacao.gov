@@ -568,7 +568,7 @@ void AutoUpdates::verifyAppUpdates(const std::string &filedata) {
 
 	qDebug() << release_notes;
 
-	chooseAppVersion(distrover, archver, dist_json);
+	chooseAppVersion(distrover, dist_json);
 }
 
 std::string AutoUpdates::verifyOS(const std::string &param) {
@@ -595,9 +595,9 @@ std::string AutoUpdates::verifyOS(const std::string &param) {
 	return distrostr;
 }
 
-void AutoUpdates::chooseAppVersion(const std::string &distro, const std::string &arch, cJSON *dist_json) {
+void AutoUpdates::chooseAppVersion(const std::string &distro, cJSON *dist_json) {
 	qDebug() << "C++ AUTO UPDATES: chooseAppVersion";
-
+	
 	std::string downloadurl;
 
 #ifdef WIN32
@@ -1273,6 +1273,7 @@ bool AutoUpdates::verifyPackageSignature(const std::string &pkg) {
 
 	return result;
 #else
+	Q_UNUSED(pkg);
 	return true;
 #endif
 }
