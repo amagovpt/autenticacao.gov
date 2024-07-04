@@ -495,7 +495,7 @@ void CMDProgressDlgThread::Stop(unsigned long ulSleepFrequency) {
 	the dialog is showing. This is important to ensure the correct handle to close is already set! */
 	for (size_t i = 0; i < 100; i++) // 10 seconds should be enough to show the dialog...
 	{
-		SleepMillisecs(100);
+		SleepMillisecs(ulSleepFrequency);
 		if (m_oldDlgHandle != m_dlgHandle)
 			break;
 	}
