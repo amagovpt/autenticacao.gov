@@ -485,6 +485,8 @@ void getOutlookVersion(std::wstring &version) {
 		return;
 	}
 	version.assign(abValueDat, 20, 23);
+#else
+	Q_UNUSED(version);
 #endif
 }
 
