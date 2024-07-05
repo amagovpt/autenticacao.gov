@@ -30,6 +30,7 @@
 #include <string>
 #include <regex>
 #include <algorithm>
+#include <cstdio>
 
 // For the setSSO calls
 #include "CardLayer.h"
@@ -876,8 +877,9 @@ void PDFSignature::save() {
 	int final_ret = copyfile_ok ? errNone : errOpenFile;
 	DeleteFileW(tmpFilename);
 #else
-	char tmpFilename[L_tmpnam];
-	if (!tmpnam(tmpFilename)) {
+	char tmpFilename[] = "/tmp/fileXXXXXX";
+	int fd = mkstemp(tmpFilename);
+	if (fd == -1){
 		MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred generating tmp filename");
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 	}
@@ -888,6 +890,7 @@ void PDFSignature::save() {
 	int final_ret = tmpDoc->saveAs(m_outputName);
 	delete tmpDoc;
 	tmpDoc = NULL;
+
 	std::remove(utf8FilenameTmp.c_str());
 #endif
 
