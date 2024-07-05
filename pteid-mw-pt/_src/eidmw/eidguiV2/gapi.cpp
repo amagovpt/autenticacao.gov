@@ -24,6 +24,7 @@
 #include <QWindow>
 #include <QUuid>
 #include <QProcess>
+#include <QtGlobal>
 #include "qpainter.h"
 
 #include "CMDSignature.h"
@@ -1864,7 +1865,11 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params, long &addressError) {
 
 			pos_y += 50 * print_scale_factor;
 
-			QStringList lines = perso_data.split("\n", Qt::KeepEmptyParts);
+			#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+				QStringList lines = perso_data.split("\n", Qt::KeepEmptyParts);
+			#else 
+				QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
+			#endif
 
 			const int TEXT_LINE_HEIGHT = 20 * print_scale_factor;
 
