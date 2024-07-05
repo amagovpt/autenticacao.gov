@@ -2556,7 +2556,7 @@ void GAPI::doSignSCAP(const SCAPSignParams &params, bool isCMD) {
 									   params.reason.toStdString(),
 									   level,
 									   visible,
-									   static_cast<unsigned int>(params.page),
+									   params.page,
 									   params.isLastPage,
 									   seal_geometry,
 									   useCustomSignature(),
