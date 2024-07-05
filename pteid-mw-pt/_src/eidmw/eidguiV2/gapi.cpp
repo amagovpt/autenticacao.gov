@@ -1570,7 +1570,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params, long &addressError) {
 	print_scale_factor = printer.resolution() / 96.0;
 
 	printer.setColorMode(QPrinter::Color);
-	printer.setPaperSize(QPrinter::A4);
+	printer.setPageSize(QPageSize(QPageSize::A4));
 
 	if (params.outputFile.toUtf8().size() > 0) {
 		printer.setOutputFileName(params.outputFile.toUtf8().data());
