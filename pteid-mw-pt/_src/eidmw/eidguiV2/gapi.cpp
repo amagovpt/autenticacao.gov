@@ -1864,7 +1864,7 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params, long &addressError) {
 
 			pos_y += 50 * print_scale_factor;
 
-			QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
+			QStringList lines = perso_data.split("\n", Qt::KeepEmptyParts);
 
 			const int TEXT_LINE_HEIGHT = 20 * print_scale_factor;
 
