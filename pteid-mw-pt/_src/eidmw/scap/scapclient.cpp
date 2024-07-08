@@ -88,6 +88,10 @@ static void save_secret_key(const std::string &secret_key, const std::string &ni
 }
 
 static std::vector<CByteArray> parse_cert_chain(const std::string &cert_chain) {
+	if (cert_chain.empty()) {
+		MWLOG(LEV_ERROR, MOD_SCAP, "PEM Certificate chain is empty and will not be parsed!!");
+		return {};
+	}
 	std::vector<std::string> certs = parsePEMCertSequence((char *)cert_chain.c_str(), cert_chain.size());
 	std::vector<CByteArray> cert_chain_data;
 
