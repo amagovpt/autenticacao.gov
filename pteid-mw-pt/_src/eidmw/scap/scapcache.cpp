@@ -64,8 +64,8 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 		return result;
 	}
 
-	const size_t array_size = cJSON_GetArraySize(citizen_attributes);
-	for (size_t i = 0; i < array_size; ++i) {
+	const int array_size = cJSON_GetArraySize(citizen_attributes);
+	for (int i = 0; i < array_size; ++i) {
 		cJSON *array_item = NULL;
 		if ((array_item = cJSON_GetArrayItem(citizen_attributes, i)) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse citizenAttributes's item with index %d", __FUNCTION__, i);
@@ -93,8 +93,8 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 			return result;
 		}
 
-		const size_t attributes_array_size = cJSON_GetArraySize(attributes);
-		for (size_t j = 0; j < attributes_array_size; ++j) {
+		const int attributes_array_size = cJSON_GetArraySize(attributes);
+		for (int j = 0; j < attributes_array_size; ++j) {
 			cJSON *attribute_json = NULL;
 			if ((attribute_json = cJSON_GetArrayItem(attributes, j)) == NULL) {
 				MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse attributes's item with index %d", __FUNCTION__, j);
@@ -128,8 +128,8 @@ static std::vector<ScapAttribute> deserialize_attributes(const std::string &resp
 				MWLOG(LEV_DEBUG, MOD_SCAP, "%s failed to parse sub_attributes object", __FUNCTION__);
 			}
 
-			const size_t sub_attributes_array_size = cJSON_GetArraySize(sub_attributes);
-			for (size_t k = 0; k < sub_attributes_array_size; ++k) {
+			const int sub_attributes_array_size = cJSON_GetArraySize(sub_attributes);
+			for (int k = 0; k < sub_attributes_array_size; ++k) {
 				cJSON *sub_attribute_json = NULL;
 				if ((sub_attribute_json = cJSON_GetArrayItem(sub_attributes, k)) == NULL) {
 					MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse sub_attribute's item with index %d", __FUNCTION__,
