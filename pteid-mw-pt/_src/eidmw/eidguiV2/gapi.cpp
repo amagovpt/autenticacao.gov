@@ -614,7 +614,7 @@ void GAPI::setPersoDataFile(const QString &text) {
 
 	try {
 		card->writePersonalNotes(ba_notes);
-	} catch (PTEID_Exception &e) {
+	} catch (PTEID_Exception&) {
 		qDebug() << "Error writing personal notes!";
 		emit signalSetPersoDataFile(tr("STR_POPUP_ERROR"), tr("STR_PERSONAL_NOTES_ERROR"), false);
 		return;
@@ -2963,7 +2963,7 @@ QVariantList GAPI::getRetReaderList() {
 			emit signalSetReaderComboIndex(selectedReaderIndex);
 		}
 
-	} catch (PTEID_Exception &e) {
+	} catch (PTEID_Exception&) {
 		qDebug() << "Error getRetReaderList!";
 	}
 
@@ -3235,7 +3235,7 @@ void GAPI::setEventCallbacks(void) {
 			m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback, pCBData);
 			m_callBackData[readerName] = pCBData;
 		}
-	} catch (PTEID_Exception &e) {
+	} catch (PTEID_Exception&)  {
 		emit signalCardChanged(ET_UNKNOWN);
 	}
 }
