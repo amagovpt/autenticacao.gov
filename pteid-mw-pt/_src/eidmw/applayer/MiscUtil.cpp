@@ -505,7 +505,6 @@ char *byteArrayToHexString(const unsigned char *data, unsigned long array_len) {
 		MWLOG(LEV_ERROR, MOD_APL, "Failed to encode bytearray! Error code: %ld", ERR_get_error());
 		return "";
 	}
-	MWLOG(LEV_DEBUG, MOD_APL, "Encoded byte array of size: %ld", strlength);
 
 	return hex;
 }
