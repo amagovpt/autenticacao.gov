@@ -240,7 +240,9 @@ APL_ICAO *APL_ReaderContext::getICAOCard() {
 		return m_icao;
 	}
 
-	return new APL_ICAO(this);
+	m_icao = new APL_ICAO(this);
+
+	return m_icao;
 }
 
 APL_EIDCard *APL_ReaderContext::getEIDCard() {
