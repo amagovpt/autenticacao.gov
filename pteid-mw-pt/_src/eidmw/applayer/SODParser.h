@@ -18,6 +18,7 @@
 #include "ByteArray.h"
 #include "MWException.h"
 #include <vector>
+#include <unordered_map>
 
 namespace eIDMW {
 

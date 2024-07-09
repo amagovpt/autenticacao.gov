@@ -1,47 +1,59 @@
 /*-****************************************************************************
 
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
- * Copyright (C) 2017 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2017-2024 André Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 
 ****************************************************************************-*/
 
 /*
- * SODParser.cpp
- *
- *  Created on: Feb 14, 2012
- *      Author: ruim
+ * EF.SOD Parser
  */
 
 #include <algorithm>
+
+#include <openssl/x509.h>
+#include <openssl/asn1.h>
+#include <openssl/asn1t.h>
 
 #include "SODParser.h"
 #include "eidErrors.h"
 #include "Log.h"
 #include "MWException.h"
-#include "../pkcs11/asn1.h"
 
 extern "C" {
-#include "../pkcs11/asn1.c"
+/* ASN.1 structures and decoder functions for EF.SOD according to ICAO doc 9303 part 10, see appendix D */
+
+typedef struct {
+	ASN1_INTEGER *datagroupNumber;
+	ASN1_OCTET_STRING *dataGroupHashValue;
+} DataGroupHash;
+
+typedef struct {
+	ASN1_INTEGER *version;
+	X509_ALGOR *hashAlgorithm; // AlgorithmIdentifier is defined as X509_ALGOR in OpenSSL
+	STACK_OF(DataGroupHash) * datagroupHashValues;
+} LDSSecurityObject;
+
+DEFINE_STACK_OF(DataGroupHash)
+ASN1_SEQUENCE(DataGroupHash) = {
+	ASN1_SIMPLE(DataGroupHash, datagroupNumber, ASN1_INTEGER),
+	ASN1_SIMPLE(DataGroupHash, dataGroupHashValue, ASN1_OCTET_STRING)
+} ASN1_SEQUENCE_END(DataGroupHash)
+
+IMPLEMENT_ASN1_FUNCTIONS(DataGroupHash)
+
+ASN1_SEQUENCE(LDSSecurityObject) = {
+	ASN1_SIMPLE(LDSSecurityObject, version, ASN1_INTEGER),
+	ASN1_SIMPLE(LDSSecurityObject, hashAlgorithm, X509_ALGOR),
+	ASN1_SEQUENCE_OF(LDSSecurityObject, datagroupHashValues, DataGroupHash)
+} ASN1_SEQUENCE_END(LDSSecurityObject)
+
+IMPLEMENT_ASN1_FUNCTIONS(LDSSecurityObject)
 }
 
 namespace eIDMW {
-
-/* convert variable length binary bit-stream into int-type */
-static unsigned int bin2int(const unsigned char *p_ucDat, unsigned int iLen) {
-	unsigned int uiResult = 0;
-
-	// parameter check
-	if (iLen > 4)
-		throw CMWEXCEPTION(EIDMW_WRONG_ASN1_FORMAT);
-
-	// add all bytes
-	while (iLen--) {
-		uiResult = uiResult << 8 | *(p_ucDat++);
-	}
-	return uiResult;
-}
 
 SODParser::~SODParser() {
 	if (attr)
@@ -49,64 +61,41 @@ SODParser::~SODParser() {
 }
 
 void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const std::vector<int> &valid_tags) {
-	ASN1_ITEM xLev0Item;
-	ASN1_ITEM xLev1Item;
-	ASN1_ITEM xLev2Item;
-	ASN1_ITEM xLev3Item;
-	ASN1_ITEM xLev4Item;
 
-	xLev0Item.p_data = (unsigned char *)contents.GetBytes();
-	xLev0Item.l_data = contents.Size();
+	const unsigned char *p = contents.GetBytes();
+	int len = (int)contents.Size();
 
-	if ((asn1_next_item(&xLev0Item, &xLev1Item) != 0) || (xLev1Item.tag != ASN_SEQUENCE))
+	LDSSecurityObject *decoded_obj = d2i_LDSSecurityObject(NULL, &p, len);
+	if (!decoded_obj) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to decode SOD LDSSecurityObject!");
 		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
+	} else {
+		attr = new SODAttributes();
 
-	if ((xLev1Item.l_data < 2) || (asn1_next_item(&xLev1Item, &xLev2Item) != 0) || (xLev2Item.tag != ASN_INTEGER))
-		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-	if (bin2int(xLev2Item.p_data, xLev2Item.l_data) != 0)
-		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_VALUE);
-
-	if ((xLev1Item.l_data < 2) || (asn1_next_item(&xLev1Item, &xLev2Item) != 0) || (xLev2Item.tag != ASN_SEQUENCE))
-		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-	if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item) != 0) || (xLev3Item.tag != ASN_OID))
-		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-	// not the intended way, but for now it will do just fine.
-	if (memcmp(xLev3Item.p_data, OID_SHA256_ALGORITHM, xLev3Item.l_data) != 0)
-		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ALGO_OID);
-
-	// xlevel2 data is pointing to the optional 05 00 entry
-	// TODO (DEV-CC2): to test with final cards
-	if (xLev2Item.l_data >= 2 && (asn1_next_item(&xLev2Item, &xLev3Item) != 0 || (xLev3Item.tag != ASN_NULL)))
-		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-	if ((xLev1Item.l_data < 2) || (asn1_next_item(&xLev1Item, &xLev2Item) != 0) || (xLev2Item.tag != ASN_SEQUENCE))
-		throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-	attr = new SODAttributes();
-	while (xLev2Item.l_data > 0) {
-
-		if ((xLev2Item.l_data < 2) || (asn1_next_item(&xLev2Item, &xLev3Item) != 0) || (xLev3Item.tag != ASN_SEQUENCE))
-			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-		if ((xLev3Item.l_data < 2) || (asn1_next_item(&xLev3Item, &xLev4Item) != 0) || (xLev4Item.tag != ASN_INTEGER))
-			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-		// validate the found tag
-		const auto read_tag = bin2int(xLev4Item.p_data, xLev4Item.l_data);
-		if (std::find(valid_tags.begin(), valid_tags.end(), read_tag) != valid_tags.end()) {
-			if ((xLev3Item.l_data < 2) || (asn1_next_item(&xLev3Item, &xLev4Item) != 0) ||
-				(xLev4Item.tag != ASN_OCTET_STRING))
-				throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ASN1_TAG);
-
-			attr->add(read_tag, {xLev4Item.p_data, xLev4Item.l_data});
-		} else {
-			MWLOG(LEV_INFO, MOD_APL, "SODParser: unexpected datagroup tag: %d", read_tag);
-			// throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_VALUE);
+		X509_ALGOR *algorithm_sha256 = X509_ALGOR_new();
+		X509_ALGOR_set_md(algorithm_sha256, EVP_sha256());
+		if (X509_ALGOR_cmp(decoded_obj->hashAlgorithm, algorithm_sha256) != 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "Unexpected digest algorithm in LDSSecurityObject!");
+			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ALGO_OID);
 		}
+
+		int num_hashes = sk_DataGroupHash_num(decoded_obj->datagroupHashValues);
+
+		for (int i = 0; i < num_hashes; i++) {
+			DataGroupHash *dg_hash = sk_DataGroupHash_value(decoded_obj->datagroupHashValues, i);
+			int read_tag = ASN1_INTEGER_get(dg_hash->datagroupNumber);
+			MWLOG(LEV_INFO, MOD_APL, "Found datagroupNumber: %d", read_tag);
+			
+			if (std::find(valid_tags.begin(), valid_tags.end(), read_tag) != valid_tags.end()) {
+				attr->add(read_tag, {ASN1_STRING_get0_data(dg_hash->dataGroupHashValue),
+									 (unsigned long)ASN1_STRING_length(dg_hash->dataGroupHashValue)});
+			} else {
+				MWLOG(LEV_INFO, MOD_APL, "SODParser: unexpected datagroup tag: %d", read_tag);
+			}
+		}
+		X509_ALGOR_free(algorithm_sha256);
 	}
+	
 }
 
 SODAttributes &SODParser::getAttributes() { return *attr; }
