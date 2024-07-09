@@ -475,7 +475,7 @@ void GAPI::handleRemoteAddressErrors(long errorCode) {
 
 void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int index) {
 	// The SOD-related error codes have values in a contiguous range
-	if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_INVALID_PKCS7) {
+	if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION) {
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "SOD exception! Error code (see strings in eidErrors.h): %08lx\n",
 				  errorCode);
 		emit signalCardAccessError(SodCardReadError);

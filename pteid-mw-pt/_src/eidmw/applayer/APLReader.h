@@ -238,6 +238,11 @@ private:
 	  */
 	void readerListInit(bool bForceRefresh = false);
 
+	/**
+	  * Initialize openSSL related objects for active authentication
+	*/
+	void initializeAAContext();
+
 	static CAppLayer *m_instance; /**< Pointer to singleton object */
 	static CMutex m_Mutex;		  /**< Mutex to create the singleton */
 

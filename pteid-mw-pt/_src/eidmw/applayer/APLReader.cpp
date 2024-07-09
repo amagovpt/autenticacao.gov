@@ -47,6 +47,7 @@
 #include "MWException.h"
 #include "cryptoFwkPteid.h"
 #include "CertStatusCache.h"
+#include "aa_oids.h"
 
 #include "../_Builds/pteidversions.h"
 
@@ -392,6 +393,9 @@ void CAppLayer::startAllServices() {
 	if (!m_cryptoFwk)
 		m_cryptoFwk = new APL_CryptoFwkPteid;
 
+	//Initialize needed context for active authentication
+	initializeAAContext();
+
 	// Then start the caches (Certificates and CRL)
 	if (!m_certStatusCache)
 		m_certStatusCache = new APL_CertStatusCache(m_cryptoFwk);
@@ -464,6 +468,40 @@ void CAppLayer::readerListInit(bool bForceRefresh) {
 			}
 		}
 	}
+}
+
+void CAppLayer::initializeAAContext() {
+	const auto registerOID = [](const unsigned char* bsiOID, const char* SN, const char* LN) {
+		auto len = BSI_OID_LEN;
+
+		ASN1_OBJECT* oid = d2i_ASN1_OBJECT(nullptr, &bsiOID, len);
+		if (oid == nullptr) {
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to create ASN1 object for %s", LN);
+			return;
+		}
+
+		char oid_str[256];
+		int ret = OBJ_obj2txt(oid_str, sizeof(oid_str), oid, 1);
+		if (ret < 0) {
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to convert ASN1 object to text for %s", LN);
+			ASN1_OBJECT_free(oid);
+			return;
+		}
+		
+		auto created_nid = OBJ_create(oid_str, SN, LN);
+		if (created_nid == NID_undef) {
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to create NID for %s", LN);
+		}
+
+		ASN1_OBJECT_free(oid);
+	};
+
+	// register future possible OIDs
+	registerOID(bsiSha1OID, bsiSha1SN, bsiSha1LN);
+	registerOID(bsiSha224OID, bsiSha224SN, bsiSha224LN);
+	registerOID(bsiSha256OID, bsiSha256SN, bsiSha256LN);
+	registerOID(bsiSha384OID, bsiSha384SN, bsiSha384LN);
+	registerOID(bsiSha512OID, bsiSha512SN, bsiSha512LN);
 }
 
 // Update the stored revision/build number

@@ -492,6 +492,8 @@ private:
 	virtual bool MapFields();
 	virtual void EmptyFields();
 
+	void performActiveAuthentication();
+
 	/**
 	  * Return true if data can be showned
 	  */
@@ -501,6 +503,7 @@ private:
 	CByteArray m_idHash;
 	CByteArray m_addressHash;
 	CByteArray m_pkHash;
+	CByteArray m_secOptHash;
 	CByteArray m_picHash;
 	CByteArray m_encapsulatedContent;
 

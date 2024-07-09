@@ -273,6 +273,15 @@ const char *PTEID_Exception::GetMessage() {
 		case EIDMW_SOD_ERR_INVALID_PKCS7:
 			error_message = "SOD Error: invalid PKCS#7 object";
 			break;
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
+				error_message = "SOD Error: inconsistent MRZ data";
+				break;
+			case EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY:
+				error_message = "SOD Error: inconsistent security object";
+				break;
+			case EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION:
+				error_message = "SOD Error: active authentication failed";
+				break;
 
 		// Errors related to CVC authentication and Secure Messaging
 		case EIDMW_ERR_CVC_GENERIC_ERROR:
@@ -399,6 +408,9 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e) {
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
 	case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
 	case EIDMW_SOD_ERR_INVALID_PKCS7:
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY:
+	case EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION:
 		throw PTEID_ExSOD(e.GetError());
 	case EIDMW_PACE_ERR_BAD_TOKEN:
 	case EIDMW_PACE_ERR_NOT_INITIALIZED:

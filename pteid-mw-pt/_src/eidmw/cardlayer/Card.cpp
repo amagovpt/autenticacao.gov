@@ -28,6 +28,7 @@
 #include <limits.h>
 
 #include "PaceAuthentication.h"
+#include <openssl/x509.h>
 
 namespace eIDMW {
 
