@@ -196,6 +196,7 @@ echo "**************************************************************************
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/wd4251 /wd4275 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>userenv.lib;crypt32.lib;bcrypt_provider.lib;cmdServices.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;pteidapplayer.lib;%(AdditionalDependencies)</AdditionalDependencies>

@@ -71,13 +71,13 @@
     <OutDir>..\..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-	<TargetName>$(ProjectName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)Build\$(Platform)\$(Configuration)\obj\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-	<TargetName>$(ProjectName)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
@@ -100,7 +100,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-	  <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -112,7 +112,7 @@
     <Link>
       <AdditionalDependencies>Crypt32.lib;pteidDlgsWin32.lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\$(Configuration)\$(ProjectName).dll</OutputFile>
-	  <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_OPENSSL)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_OPENSSL)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -132,7 +132,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-	  <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -144,7 +144,7 @@
     <Link>
       <AdditionalDependencies>Crypt32.lib;pteidDlgsWin32.lib;libcrypto.lib;libssl.lib;pteidcommon.lib;pteidapplayer.lib;WS2_32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_Binaries35\$(Platform)\$(Configuration)\$(ProjectName).dll</OutputFile>
-	  <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_OPENSSL_X64)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_OPENSSL_X64)\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -204,6 +204,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/wd4251 /wd4275 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
