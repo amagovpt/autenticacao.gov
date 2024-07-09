@@ -426,7 +426,7 @@ public slots:
 	void startGettingInfoFromSignCert();
 	void startCCSignatureCertCheck();
 	void startSavingCardPhoto(QString outputFile);
-	int getStringByteLength(QString text);
+	size_t getStringByteLength(QString text);
 	void finishLoadingCardData(PTEID_EIDCard *card);
 	void finishLoadingSignCertData(PTEID_EIDCard *card);
 	void startReadingPersoNotes();
@@ -711,7 +711,7 @@ private:
 	void checkCCSignatureCert(void);
 	// void checkSignatureCertValidity(void);
 	void getInfoFromSignCert(void);
-	int findCardCertificate(QString issuedBy, QString issuedTo);
+	unsigned long findCardCertificate(QString issuedBy, QString issuedTo);
 	void doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);
 	bool useCustomSignature(void);
 	void stopAllEventCallbacks(void);

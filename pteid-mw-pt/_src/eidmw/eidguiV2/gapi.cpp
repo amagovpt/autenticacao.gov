@@ -2356,7 +2356,7 @@ void GAPI::startWritingPersoNotes(const QString &text) {
 	QFuture<void> future = Concurrent::run(this, &GAPI::setPersoDataFile, text);
 }
 
-int GAPI::getStringByteLength(QString text) {
+size_t GAPI::getStringByteLength(QString text) {
 
 	return text.toStdString().size() + 1; // '\0' should be considered as a byte
 }
@@ -3222,8 +3222,8 @@ void GAPI::setEventCallbacks(void) {
 	//----------------------------------------
 
 	try {
-		size_t maxcount = ReaderSet.readerCount(true);
-		for (size_t Ix = 0; Ix < maxcount; Ix++) {
+		unsigned long maxcount = ReaderSet.readerCount(true);
+		for (unsigned long Ix = 0; Ix < maxcount; Ix++) {
 			void (*fCallback)(long lRet, unsigned long ulState, void *pCBData);
 
 			const char *readerName = ReaderSet.getReaderName(Ix);
@@ -3281,7 +3281,7 @@ void GAPI::cleanupCallbackData(void) {
 /* findCardCertificate returns the index i of the certificate to be obtained with certificates.getCert(i).
 	This is because the copy constructor for PTEID_Certificate is not implemented.
 */
-int GAPI::findCardCertificate(QString issuedBy, QString issuedTo) {
+unsigned long GAPI::findCardCertificate(QString issuedBy, QString issuedTo) {
 	PTEID_EIDCard *card = NULL;
 	getCardInstance(card);
 	if (card == NULL) {
@@ -3289,8 +3289,8 @@ int GAPI::findCardCertificate(QString issuedBy, QString issuedTo) {
 		return -1;
 	}
 	PTEID_Certificates &certificates = card->getCertificates();
-	size_t nCerts = certificates.countAll();
-	for (size_t i = 0; i < nCerts; i++) {
+	unsigned long nCerts = certificates.countAll();
+	for (unsigned long i = 0; i < nCerts; i++) {
 		PTEID_Certificate &cert = certificates.getCert(i);
 		std::string issuerName = cert.getIssuerName();
 		std::string ownerName = cert.getOwnerName();
@@ -3309,7 +3309,7 @@ void GAPI::viewCardCertificate(QString issuedBy, QString issuedTo) {
 		return;
 	}
 	PTEID_Certificates &certificates = card->getCertificates();
-	int certIdx = findCardCertificate(issuedBy, issuedTo);
+	unsigned long certIdx = findCardCertificate(issuedBy, issuedTo);
 	if (certIdx < 0) {
 		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "viewCardCertificate: could not find certificate!");
 		return;
@@ -3346,7 +3346,7 @@ void GAPI::doExportCardCertificate(QString issuedBy, QString issuedTo, QString o
 		return;
 	}
 	PTEID_Certificates &certificates = card->getCertificates();
-	int certIdx = findCardCertificate(issuedBy, issuedTo);
+	unsigned long certIdx = findCardCertificate(issuedBy, issuedTo);
 	if (certIdx < 0) {
 		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "doExportCardCertificate: could not find certificate");
 		emit signalExportCertificates(false);
@@ -3555,7 +3555,7 @@ void GAPI::finishLoadingSignCertData(PTEID_EIDCard *card) {
 	QString NIC = cert.getSubjectSerialNumber();
 
 	// remove "BI" prefix and checkdigit
-	size_t NIC_length = 8;
+	int NIC_length = 8;
 	NIC.replace("BI", "");
 	NIC.truncate(NIC_length);
 
