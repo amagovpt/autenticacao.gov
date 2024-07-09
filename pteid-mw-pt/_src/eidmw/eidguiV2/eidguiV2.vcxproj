@@ -98,7 +98,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(PTEID_DIR_CURL_X64)\include;.;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtQuick;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\;..\_Builds;..\dialogs;..\common;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtConcurrent;$(PTEID_DIR_QT_5_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_5_X64)\include\QtWidgets;$(PTEID_DIR_QT_5_X64)\include\QtPrintSupport;$(PTEID_DIR_QT_5_X64)\include\QtANGLE;$(PTEID_DIR_QT_5_X64)\include\QtQml;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;..\scap\;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_LIBZIP_X64)\include;$(PTEID_DIR_CJSON_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 /wd4251 /wd4275 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>None</DebugInformationFormat>
