@@ -1,4 +1,5 @@
 #ifdef _WIN32
+#pragma warning(disable : 4996)
 #include <openssl/rsa.h>
 #include <openssl/ec.h>
 #endif
