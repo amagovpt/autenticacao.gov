@@ -379,7 +379,7 @@ void CMDSignatureClient::updateCertificateCache(std::vector<CByteArray> *certs) 
 	if (issuer == topCert)
 		return;
 
-	for (size_t i = 0; i < eidstore.countAll(); i++) {
+	for (unsigned long i = 0; i < eidstore.countAll(); i++) {
 		APL_Certif *caCert = eidstore.getCert(i);
 		if (caCert->isRoot() && strcmp(caCert->getOwnerName(), topCert->getIssuerName()) == 0) {
 			cmdStore->addCert(caCert->getData(), APL_CERTIF_TYPE_ROOT);
