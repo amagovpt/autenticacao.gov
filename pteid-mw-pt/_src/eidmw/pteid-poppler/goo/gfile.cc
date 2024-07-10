@@ -464,7 +464,6 @@ GBool openTempFile(GooString **name, FILE **f, const char *mode) {
   //---------- Win32 ----------
   char *tempDir;
   GooString *s, *s2;
-  char buf[32];
   FILE *f2;
   int t, i;
 
