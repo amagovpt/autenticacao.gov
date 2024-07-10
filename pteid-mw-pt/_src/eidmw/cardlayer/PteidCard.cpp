@@ -149,7 +149,7 @@ void CPteidCard::ReadSerialNumber() {
 		MWLOG(LEV_WARN, MOD_CAL, "Failed to read serial number: 0x%0x File: %s, Line:%ld", e.GetError(),
 			  e.GetFile().c_str(), e.GetLine());
 		Disconnect(DISCONNECT_LEAVE_CARD);
-	} catch (const std::exception &e) {
+	} catch (const std::exception&) {
 		MWLOG(LEV_WARN, MOD_CAL, L"Failed to read serial number std::exception thrown");
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	}
