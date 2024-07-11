@@ -3281,7 +3281,7 @@ void GAPI::cleanupCallbackData(void) {
 /* findCardCertificate returns the index i of the certificate to be obtained with certificates.getCert(i).
 	This is because the copy constructor for PTEID_Certificate is not implemented.
 */
-unsigned long GAPI::findCardCertificate(QString issuedBy, QString issuedTo) {
+int GAPI::findCardCertificate(QString issuedBy, QString issuedTo) {
 	PTEID_EIDCard *card = NULL;
 	getCardInstance(card);
 	if (card == NULL) {
@@ -3346,13 +3346,14 @@ void GAPI::doExportCardCertificate(QString issuedBy, QString issuedTo, QString o
 		return;
 	}
 	PTEID_Certificates &certificates = card->getCertificates();
-	unsigned long certIdx = findCardCertificate(issuedBy, issuedTo);
+	int certIdx = findCardCertificate(issuedBy, issuedTo);
 	if (certIdx < 0) {
 		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "doExportCardCertificate: could not find certificate");
 		emit signalExportCertificates(false);
 		return;
 	}
-	PTEID_Certificate &cert = certificates.getCert(certIdx);
+	unsigned long ulCertIdx = certIdx;
+	PTEID_Certificate &cert = certificates.getCert(ulCertIdx);
 	PTEID_ByteArray certData;
 	cert.getFormattedData(certData);
 
@@ -3360,7 +3361,13 @@ void GAPI::doExportCardCertificate(QString issuedBy, QString issuedTo, QString o
 	file.open(QIODevice::WriteOnly);
 	int bytesWritten = file.write((const char *)certData.GetBytes(), certData.Size());
 	file.close();
-	emit signalExportCertificates(bytesWritten == certData.Size());
+	if (bytesWritten < 0){
+		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "doExportCardCertificate: could not write certificate");
+		emit signalExportCertificates(false);
+		return;
+	}
+	unsigned long ulBytesWritten = bytesWritten;
+	emit signalExportCertificates(ulBytesWritten == certData.Size());
 }
 
 void GAPI::buildTree(PTEID_Certificate &cert, bool &bEx, QVariantMap &certificatesMap) {
