@@ -33,7 +33,7 @@
 // See this SO thread for the different ways to query the Windows version:
 // https://stackoverflow.com/questions/32115255/c-how-to-detect-windows-10
 DWORD getOSMajorVersion() {
-	DWORD ret = 0.0;
+	DWORD ret = 0;
 	NTSTATUS(WINAPI * RtlGetVersion)(LPOSVERSIONINFOEXW);
 	OSVERSIONINFOEXW osInfo;
 
@@ -95,7 +95,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
 
 		MWLOG(LEV_DEBUG, MOD_DLG, L"  --> PteidControls::ComboBox_Container_Proc WM_COMMAND wParam=%x", HIWORD(wParam));
 		if (HIWORD(wParam) == CBN_SELCHANGE) {
-			int itemIDx = SendMessage((HWND)lParam, (UINT)CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+			LRESULT itemIDx = SendMessage((HWND)lParam, (UINT)CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 			data->selectedIdx = itemIDx;
 			InvalidateRect(data->hMainWnd, NULL, TRUE);
 		}
