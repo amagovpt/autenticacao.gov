@@ -277,8 +277,8 @@ std::vector<ScapProvider> parse_providers(const std::string &read_buffer) {
 		return result;
 	}
 
-	const size_t array_size = cJSON_GetArraySize(attributeProviders);
-	for (size_t i = 0; i < array_size; ++i) {
+	const int array_size = cJSON_GetArraySize(attributeProviders);
+	for (int i = 0; i < array_size; ++i) {
 		cJSON *array_item = NULL;
 		if ((array_item = cJSON_GetArrayItem(attributeProviders, i)) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse attributeProviders object", __FUNCTION__);
@@ -706,8 +706,8 @@ std::vector<ScapTransaction> parse_authorization(const std::string &response) {
 		return result;
 	}
 
-	const size_t array_size = cJSON_GetArraySize(transactions);
-	for (size_t i = 0; i < array_size; ++i) {
+	const int array_size = cJSON_GetArraySize(transactions);
+	for (int i = 0; i < array_size; ++i) {
 		cJSON *array_item = NULL;
 		if ((array_item = cJSON_GetArrayItem(transactions, i)) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse transactions object", __FUNCTION__);
@@ -750,8 +750,8 @@ std::vector<ScapTransaction> parse_authorization(const std::string &response) {
 		}
 
 		std::vector<ScapAttribute> attributes;
-		const size_t array_size = cJSON_GetArraySize(attributes_array);
-		for (size_t i = 0; i < array_size; ++i) {
+		const int array_size = cJSON_GetArraySize(attributes_array);
+		for (int i = 0; i < array_size; ++i) {
 			cJSON *array_item = NULL;
 			if ((array_item = cJSON_GetArrayItem(attributes_array, i)) == NULL) {
 				MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse attributes object", __FUNCTION__);
@@ -770,8 +770,8 @@ std::vector<ScapTransaction> parse_authorization(const std::string &response) {
 				return result;
 			}
 
-			const size_t sub_attributes_array_size = cJSON_GetArraySize(sub_attributes);
-			for (size_t k = 0; k < sub_attributes_array_size; ++k) {
+			const int sub_attributes_array_size = cJSON_GetArraySize(sub_attributes);
+			for (int k = 0; k < sub_attributes_array_size; ++k) {
 				cJSON *sub_attribute_json = NULL;
 				if ((sub_attribute_json = cJSON_GetArrayItem(sub_attributes, k)) == NULL) {
 					MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse sub_attribute's item with index %d", __FUNCTION__,
@@ -925,8 +925,8 @@ std::vector<std::string> parse_signatures(const std::string &response) {
 		return result;
 	}
 
-	const size_t array_size = cJSON_GetArraySize(signatures);
-	for (size_t i = 0; i < array_size; ++i) {
+	const int array_size = cJSON_GetArraySize(signatures);
+	for (int i = 0; i < array_size; ++i) {
 		cJSON *array_item = NULL;
 		if ((array_item = cJSON_GetArrayItem(signatures, i)) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to parse signature object", __FUNCTION__);
@@ -959,8 +959,8 @@ std::vector<std::string> get_failed_providers_ids(const std::string &response) {
 		return result;
 	}
 
-	const size_t array_size = cJSON_GetArraySize(citizenAttributes);
-	for (size_t i = 0; i < array_size; ++i) {
+	const int array_size = cJSON_GetArraySize(citizenAttributes);
+	for (int i = 0; i < array_size; ++i) {
 		cJSON *array_item = NULL;
 		if ((array_item = cJSON_GetArrayItem(citizenAttributes, i)) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to get array item", __FUNCTION__);
