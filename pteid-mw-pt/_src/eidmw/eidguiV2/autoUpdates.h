@@ -55,7 +55,7 @@ private:
 	void parseNews(const std::string &filedata);
 	std::vector<NewsEntry> chooseNews();
 	void chooseCertificates(cJSON *certs_json);
-	void chooseAppVersion(const std::string &distro, cJSON *dist_json);
+	void buildPackageURL(cJSON *dist_json);
 
 	std::string verifyOS(const std::string &param);
 

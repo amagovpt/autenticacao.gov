@@ -436,6 +436,13 @@ void AutoUpdates::verifyAppUpdates(const std::string &filedata) {
 	qDebug() << "C++ AUTO UPDATES: verifyAppUpdates";
 
 	std::string distrover = verifyOS("distro");
+
+	if (distrover == "unsupported") {
+		qDebug() << "C++ AUTO UPDATES: Your OS is not supported by Auto-updates";
+		m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::LinuxNotSupported);
+		return;
+	}
+
 	std::string archver = verifyOS("arch");
 
 	// installed version
@@ -568,7 +575,7 @@ void AutoUpdates::verifyAppUpdates(const std::string &filedata) {
 
 	qDebug() << release_notes;
 
-	chooseAppVersion(distrover, dist_json);
+	buildPackageURL(dist_json);
 }
 
 std::string AutoUpdates::verifyOS(const std::string &param) {
@@ -591,27 +598,17 @@ std::string AutoUpdates::verifyOS(const std::string &param) {
 #elif __linux__
 	distrostr = "kde";
 	distrostr += QSysInfo::WordSize == 64 ? "64" : "32";
+#else
+	distrostr = "unsupported"
 #endif
 	return distrostr;
 }
 
-void AutoUpdates::chooseAppVersion(const std::string &distro, cJSON *dist_json) {
+void AutoUpdates::buildPackageURL(cJSON *dist_json) {
 	qDebug() << "C++ AUTO UPDATES: chooseAppVersion";
 	
 	std::string downloadurl;
 
-#ifdef WIN32
-
-#elif __APPLE__
-
-#else
-
-	if (distro == "unsupported") {
-		qDebug() << "C++ AUTO UPDATES: Your Linux distribution is not supported by Auto-updates";
-		m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp, GAPI::LinuxNotSupported);
-		return;
-	}
-#endif
 	// Name of the msi/deb/rpm will be distro specific
 	cJSON *package_json = cJSON_GetObjectItem(dist_json, "packageUrl");
 	if (!cJSON_IsString(package_json)) {
