@@ -24,13 +24,23 @@
 /*
 	We are not interested in these warnings due to being an external library
 */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#ifdef WIN32
+	#pragma warning(push)
+	#pragma warning(disable: 4700)  
+	#pragma warning(disable: 4996)
+#else
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+	#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 #include <poppler-qt5.h>
 
-#pragma GCC diagnostic pop
+#ifdef WIN32
+	#pragma warning(pop)
+#else
+	#pragma GCC diagnostic pop
+#endif
 
 #include <QPrinter>
 #include <QPrinterInfo>
