@@ -27,7 +27,6 @@
 **************************************************************************** */
 #include "APLCardPteid.h"
 #include "CardPteid.h"
-#include "TLVBuffer.h"
 #include "APLCertif.h"
 #include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"

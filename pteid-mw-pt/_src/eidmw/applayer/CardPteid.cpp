@@ -25,7 +25,6 @@
 **************************************************************************** */
 
 #include "CardPteid.h"
-#include "TLVBuffer.h"
 #include "Util.h"
 #include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
@@ -146,8 +145,6 @@ bool APL_EidFile_Trace::MapFields() {
 	} else {
 		CByteArray pteidngtraceBuffer;
 		unsigned long ulLen = 0;
-		CTLVBuffer oTLVBuffer;
-		oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
 		CByteArray Validation;
 
 		// Card Validation
@@ -1795,9 +1792,6 @@ bool APL_EidFile_PersoData::MapFields() {
 
 	CByteArray pteidngPersoDataBuffer;
 	unsigned long ulLen = 0;
-
-	CTLVBuffer oTLVBuffer;
-	oTLVBuffer.ParseTLV(m_data.GetBytes(), m_data.Size());
 
 	// PersoData
 	pteidngPersoDataBuffer = m_data.GetBytes(PTEIDNG_FIELD_PERSODATA_POS_FILE, PTEIDNG_FIELD_PERSODATA_LEN_FILE);

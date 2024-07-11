@@ -35,9 +35,9 @@
 #include <libgen.h>
 #endif
 #include <vector>
+#include "ByteArray.h"
 #include <map>
 #include <time.h>
-#include "TLVBuffer.h"
 #include <openssl/x509.h>
 
 namespace eIDMW {
@@ -178,5 +178,4 @@ public:
 };
 
 } // namespace eIDMW
-
 #endif // __APL_MISCSUTIL_H__

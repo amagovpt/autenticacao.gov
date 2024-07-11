@@ -247,8 +247,6 @@
     <ClCompile Include="MyriadFontGlyphWidths.cpp" />
     <ClCompile Include="StringOps.cpp" />
     <ClCompile Include="Thread.cpp" />
-    <ClCompile Include="TLV.cpp" />
-    <ClCompile Include="TLVBuffer.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -270,8 +268,6 @@
     <ClInclude Include="StringOps.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadDefines.h" />
-    <ClInclude Include="TLV.h" />
-    <ClInclude Include="TLVBuffer.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>

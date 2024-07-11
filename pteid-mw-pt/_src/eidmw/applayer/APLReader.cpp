@@ -40,7 +40,6 @@
 #include "APLConfig.h"
 #include "ReadersInfo.h"
 #include "Util.h"
-#include "TLVBuffer.h"
 #include "CardPteidDef.h"
 #include "APLCard.h"
 #include "APLCardPteid.h"

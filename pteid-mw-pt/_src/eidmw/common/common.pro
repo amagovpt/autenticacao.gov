@@ -67,8 +67,6 @@ HEADERS += ByteArray.h \
            Mutex.h \
            MWException.h \
            Thread.h \
-           TLV.h \
-           TLVBuffer.h \
            Util.h \
            win_macros.h \
            prefix.h \
@@ -89,8 +87,6 @@ SOURCES += ByteArray.cpp \
            Mutex.cpp \
            MWException.cpp \
            Thread.cpp \
-           TLV.cpp \
-           TLVBuffer.cpp \
            Util.cpp \
            StringOps.cpp \
            MyriadFontGlyphWidths.cpp \
