@@ -707,25 +707,28 @@ bool SecurityContext::writeFile(char *fileID, CByteArray file_content, unsigned 
 CByteArray SecurityContext::readBinary(unsigned long bytesToRead, unsigned int fileSize) {
 
 	// The blocksize is 230 because of the overhead of secure messaging response APDUs
-	const double blockSize = 230.0;
+	const unsigned long blockSize = 230;
+	const double blockSize_double = 230.0;
 	unsigned long bytesRead = 0;
 
 	unsigned char read_binary[] = {0x0C, 0xB0, 0x00, 0x00, 0xE6};
-	double bytes_to_read = bytesToRead < fileSize ? bytesToRead : fileSize;
+	unsigned long bytes_to_read = bytesToRead < fileSize ? bytesToRead : fileSize;
 
 	CByteArray readBinaryAPDU(read_binary, sizeof(read_binary));
 	CByteArray fileContents;
 
-	int iterations = ceil(bytes_to_read / blockSize);
+	double bytes_to_read_double = bytes_to_read; 
 
-	for (int i = 0; i != iterations; i++) {
+	double iterations = ceil(bytes_to_read_double / blockSize_double);
+
+	for (double i = 0; i != iterations; i++) {
 		// Set the file offset in P1-P2
 		readBinaryAPDU.SetByte(0xFF & bytesRead >> 8, 2);
 		readBinaryAPDU.SetByte(0xFF & bytesRead, 3);
 
 		// Last iteration: we will read less than a complete block
 		if (i == iterations - 1) {
-			readBinaryAPDU.SetByte(bytes_to_read - bytesRead, 4);
+			readBinaryAPDU.SetByte(0xFF & (bytes_to_read - bytesRead), 4);
 		}
 
 		CByteArray secure_apdu = buildSecureAPDU(readBinaryAPDU);

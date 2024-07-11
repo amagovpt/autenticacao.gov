@@ -237,7 +237,7 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 		if (strCertificate.substr((found_end - 1), 1) != "\n") {
 			strCertificate.insert(found_end, "\n");
 		}
-		int pos_end = found_end + strlen(STR_END_CERTIFICATE) + 1;
+		size_t pos_end = found_end + strlen(STR_END_CERTIFICATE) + 1;
 
 		certificate = strCertificate.substr(found_init, pos_end - found_init);
 		certs.push_back(certificate);

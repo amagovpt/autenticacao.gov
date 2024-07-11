@@ -721,7 +721,7 @@ private:
 	void checkCCSignatureCert(void);
 	// void checkSignatureCertValidity(void);
 	void getInfoFromSignCert(void);
-	unsigned long findCardCertificate(QString issuedBy, QString issuedTo);
+	int findCardCertificate(QString issuedBy, QString issuedTo);
 	void doExportCardCertificate(QString issuedBy, QString issuedTo, QString outputPath);
 	bool useCustomSignature(void);
 	void stopAllEventCallbacks(void);
