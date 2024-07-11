@@ -595,7 +595,6 @@ void APL_Certifs::foundCertificate(const char *dir, const char *SubDir, const ch
 	std::string path = dir;
 	FILE *m_stream;
 	long int bufsize;
-	int result;
 	unsigned char *buf;
 	CByteArray *cert;
 
