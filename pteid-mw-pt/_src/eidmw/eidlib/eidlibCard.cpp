@@ -654,22 +654,6 @@ bool PTEID_EIDCard::isActive() {
 	return out;
 }
 
-/*
-bool PTEID_EIDCard::ChangeCapPin(const char *new_pin){
-	bool out = false;
-
-	BEGIN_TRY_CATCH
-
-	APL_EIDCard *pcard = static_cast<APL_EIDCard *>(m_impl);
-
-	out = pcard->ChangeCapPin(new_pin);
-
-	END_TRY_CATCH
-
-	return out;
-}
-*/
-
 void PTEID_EIDCard::doSODCheck(bool check) {
 
 	BEGIN_TRY_CATCH
@@ -1594,7 +1578,8 @@ PTEIDSDK_API long PTEID_CVC_ReadFile(const unsigned char *file, int filelen, uns
 	return PTEID_E_NOT_INITIALIZED;
 }
 
-// This is not implemented on purpose: this function is available here only for backwards compat
+/* The following 5 functions are not implemented on purpose, kept just for backwards compatibility */
+
 PTEIDSDK_API long PTEID_CVC_WriteFile(unsigned char *file, int filelen, unsigned long ulFileOffset,
 									  const unsigned char *in, unsigned long inlen, unsigned long ulMode) {
 
@@ -1604,14 +1589,7 @@ PTEIDSDK_API long PTEID_CVC_WriteFile(unsigned char *file, int filelen, unsigned
 PTEIDSDK_API long PTEID_CAP_ChangeCapPin(const char *csServer, const unsigned char *ucServerCaCert,
 										 unsigned long ulServerCaCertLen, tProxyInfo *proxyInfo, const char *pszOldPin,
 										 const char *pszNewPin, long *triesLeft) {
-#if 0
-	PTEID_EIDCard& card = readerContext->getEIDCard();
-	bool ret = card.ChangeCapPinCompLayer(pszOldPin, pszNewPin, (unsigned long int&)*triesLeft);
-
-	return ret ? 0 : -1;
-#else
 	return PTEID_OK;
-#endif
 }
 
 PTEIDSDK_API tCapPinChangeState PTEID_CAP_GetCapPinChangeProgress() { return CAP_INITIALISING; }
