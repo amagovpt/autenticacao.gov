@@ -19,6 +19,10 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+#include <exception>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
@@ -375,6 +379,16 @@ std::string CByteArray::ToString(bool bAddSpace, bool bOneLine, unsigned long ul
 		return csRet;
 	}
 }
+
+std::string CByteArray::hexToString() const {
+	std::string result;
+	for (size_t i = 0; i < m_ulSize; ++i) {
+		result += static_cast<char>(m_pucData[i]);
+	}
+
+	return result;
+}
+
 // copy supplied memory into new allocated memory
 //?? capacity is not in steps of 10, but takes new data-len
 void CByteArray::MakeArray(const unsigned char *pucData, // returns allocated memory

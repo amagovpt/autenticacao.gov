@@ -720,6 +720,52 @@ public:
 	 */
 	PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() = 0;
 };
+class ICAO_DG1 {
+public:
+	ICAO_DG1();
+
+	std::string documentCode() const;
+	std::string issuingOrg() const;
+	std::string serialNumber() const;
+	int serialNumberCheckDigit() const;
+	std::string optionalData() const;
+	std::string birthDay() const;
+	int birthDayCheckDigit() const;
+	char sex() const;
+	std::string expireDay() const;
+	int expireDayCheckDigit() const;
+	std::string nationality() const;
+	std::string optionalDataSecondLine() const;
+	int optionalDataSecondLineCheckDigit() const;
+	int compositeCheckDigit() const;
+	std::string primaryIdentifier() const;
+	std::string secondaryIdentifier() const;
+	bool isPassport() const;
+
+protected:
+private:
+	friend class ICAO_Card;
+	ICAO_DG1 &operator<<(const CByteArray &byteArray);
+	ICAO_DG1 &operator=(const ICAO_DG1 &card) = delete; /**< Copy not allowed - not implemented */
+
+private:
+	std::string m_documentCode; // can have at most two length
+	std::string m_issuingOrg;
+	std::string m_serialNumber;
+	int m_serialNumberCheckDigit = -1; // if -1 means it has optional data to complete the serial number
+	std::string m_optionalData;
+	std::string m_birthDay;
+	int m_birthDayCheckDigit = -1;
+	char m_sex;
+	std::string m_expireDay;
+	int m_expireDayCheckDigit = -1;
+	std::string m_nationality;
+	std::string m_optionalDataSecondLine;
+	int m_optionalDataSecondLineCheckDigit = -1; // td3 only
+	int m_compositeCheckDigit = -1;
+	std::string m_primaryIdentifier;
+	std::string m_secondaryIdentifier;
+};
 
 class ICAO_Card : public PTEID_Object {
 public:
@@ -748,6 +794,8 @@ public:
 													 PTEID_CardPaceSecretType secretType);
 
 	PTEIDSDK_API virtual PTEID_ByteArray readDatagroup(DataGroupID tag);
+
+	PTEIDSDK_API virtual ICAO_DG1 readDataGroup1();
 
 protected:
 	ICAO_Card(const SDK_Context *context, APL_ICAO *impl); /**< For internal use : Constructor */

@@ -86,6 +86,7 @@ public:
 						   unsigned long ulLen = 0xFFFFFFFF) const;
 	std::string ToString(bool bAddSpace = true, bool bOneLine = true, unsigned long ulOffset = 0,
 						 unsigned long ulLen = 0xFFFFFFFF) const;
+	std::string hexToString() const;
 
 private:
 	void MakeArray(const unsigned char *pucData, unsigned long ulSize, unsigned long ulCapacity = 0);
