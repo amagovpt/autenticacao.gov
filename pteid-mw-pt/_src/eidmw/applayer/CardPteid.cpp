@@ -1728,22 +1728,19 @@ bool APL_EidFile_Sod::MapFields() {
 	SODAttributes &attr = parser.getAttributes();
 
 	// Hashes are sorted differently based on card type
-	if(card_type == APL_CARDTYPE_PTEID_IAS5)
-	{
-		m_mrzHash.Append(attr.get(PTEID_SOD_TAG_MRZ));	
-		m_picHash.Append(attr.get(PTEID_SOD_TAG_PHOTO_V2));	
-		m_idHash.Append(attr.get(PTEID_SOD_TAG_ID_V2));	
+	if (card_type == APL_CARDTYPE_PTEID_IAS5) {
+		m_mrzHash.Append(attr.get(PTEID_SOD_TAG_MRZ));
+		m_picHash.Append(attr.get(PTEID_SOD_TAG_PHOTO_V2));
+		m_idHash.Append(attr.get(PTEID_SOD_TAG_ID_V2));
 		m_secOptHash.Append(attr.get(PTEID_SOD_TAG_SECURITY));
 		m_pkHash.Append(attr.get(PTEID_SOD_TAG_PK_AA));
-	
+
 		// Check if the card is contactless and perform active authentication
 		auto reader = m_card->getCalReader();
 		if (reader->isCardContactless()) {
 			performActiveAuthentication();
 		}
-	}
-	else
-	{
+	} else {
 		m_idHash.Append(attr.get(PTEID_SOD_TAG_ID));
 		m_addressHash.Append(attr.get(PTEID_SOD_TAG_ADDRESS));
 		m_picHash.Append(attr.get(PTEID_SOD_TAG_PHOTO));
@@ -1761,38 +1758,13 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 	APL_SmartCard *card = dynamic_cast<APL_SmartCard *>(m_card);
 	card->selectApplication({PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
 
-	bool failed = 0;
-	ECDSA_SIG* ec_sig;
-	EVP_PKEY_CTX *ctx;
-	EVP_MD_CTX *mdctx;
-	EVP_MD* evp_md;
-	EVP_PKEY *pkey;
-	unsigned char *der_signature = nullptr;
-	int der_signature_len;
-	BIGNUM *r, *s;
-	size_t sig_point_size;
-
-	// CByteArray security_file;
 	CByteArray secopt_file;
 	m_card->readFile(PTEID_FILE_SECURITY, secopt_file);
-	
+
 	// verify hash of public key with hash in SOD
 	if (!m_cryptoFwk->VerifyHashSha256(secopt_file, m_secOptHash)) {
 		MWLOG(LEV_ERROR, MOD_CAL, L"Security option hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
-	}
-
-	// read OID from security file
-	const unsigned char *OID_buff = secopt_file.GetBytes() + 17;
-	size_t OID_len = secopt_file.Size() - 17;
-	ASN1_OBJECT* oid = d2i_ASN1_OBJECT(nullptr, &OID_buff, OID_len);
-
-	// get digest by previously created NID
-	auto nid = OBJ_obj2nid(oid);
-	evp_md = (EVP_MD*)EVP_get_digestbynid(nid);
-	if (evp_md == nullptr) {
-		MWLOG(LEV_INFO, MOD_CAL, L"Failed to get digest by NID. Fallback to SHA256");
-		evp_md = (EVP_MD*)EVP_sha256();
 	}
 
 	// read public key DG15
@@ -1805,89 +1777,14 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
 	}
 
+	// read OID from security file
+	auto oid = secopt_file.GetBytes(17);
 	// skip the first two bytes of the file (6F78)
-	unsigned int size = pubkey_file.Size() - 2;
-	const unsigned char *pub_key_buff = pubkey_file.GetBytes() + 2;
+	auto pubkey = pubkey_file.GetBytes(2);
 
-	// construct active authentication command
-	unsigned char data_to_sign[8];
-	RAND_bytes(data_to_sign, 8);
-	size_t data_size = sizeof(data_to_sign);
-	unsigned char apdu[] = {0x00, 0x88, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-	memcpy(apdu + 5, data_to_sign, data_size);
-
-	// raw r,s point signature
-	auto signature = card->sendAPDU({apdu, sizeof(apdu)});
-	auto sw12 = signature.GetBytes(signature.Size() - 2);
-	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to perform active authentication");
-		failed = true;
-		goto cleanup;
-	}
-
-	// convert to DER signature object
-	sig_point_size = (signature.Size() - 2) / 2;
-	ec_sig = ECDSA_SIG_new();
-	r = BN_bin2bn(signature.GetBytes(), sig_point_size, nullptr);
-	s = BN_bin2bn(signature.GetBytes() + sig_point_size, sig_point_size, nullptr);
-	ECDSA_SIG_set0(ec_sig, r, s);
-	der_signature_len = i2d_ECDSA_SIG(ec_sig, &der_signature);
-
-	pkey = d2i_PUBKEY(nullptr, (const unsigned char**)&pub_key_buff, size);
-	if (pkey == nullptr) {
-    	MWLOG(LEV_ERROR, MOD_CAL, L"Failed to read public key from card");
-		failed = true;
-		goto cleanup;
-	}
-
-	// hash the `to_sign` data
-	unsigned char hash[EVP_MAX_MD_SIZE];
-	unsigned int hash_len;
-	mdctx = EVP_MD_CTX_new();
-	if (!mdctx || EVP_DigestInit_ex(mdctx, evp_md, nullptr) <= 0
-			   || EVP_DigestUpdate(mdctx, data_to_sign, data_size) <= 0
-			   || EVP_DigestFinal_ex(mdctx, hash, &hash_len) <= 0) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to hash verification data");
-		failed = true;
-		goto cleanup;
-	}
-
-	// Create and initialize the verification context based on the public key
-	ctx = EVP_PKEY_CTX_new(pkey, NULL);
-	if (!ctx || EVP_PKEY_verify_init(ctx) <= 0 || EVP_PKEY_CTX_set_signature_md(ctx, evp_md) <= 0) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to create verification context");
-		failed = true;
-		goto cleanup;
-	}
-
-	// Perform the verification
-	if (EVP_PKEY_verify(ctx, der_signature, der_signature_len, (unsigned char*)&hash[0], hash_len) != 1) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to verify active authentication signature!");
-		failed = true;
-		goto cleanup;
-	}
-
-cleanup:
-	if (pkey)
-		EVP_PKEY_free(pkey);
-	if (ec_sig)
-		ECDSA_SIG_free(ec_sig);
-	if (der_signature)
-		OPENSSL_free(der_signature);
-	if (ctx)
-		EVP_PKEY_CTX_free(ctx);
-	if (mdctx)
-		EVP_MD_CTX_free(mdctx);
-	if (evp_md)
-		EVP_MD_free(evp_md);
-	if (oid)
-		ASN1_OBJECT_free(oid);
-
-	// if should throw
-	if (failed) {
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
-	}
+	m_cryptoFwk->performActiveAuthentication(oid, pubkey);
 }
+
 const CByteArray &APL_EidFile_Sod::getMrzHash() {
 	if (ShowData())
 		return m_mrzHash;
