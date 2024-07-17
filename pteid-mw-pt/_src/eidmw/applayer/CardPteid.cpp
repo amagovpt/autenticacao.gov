@@ -47,6 +47,9 @@
 #include <iostream>
 #include <fstream>
 
+#include <cassert>
+#include <climits>
+
 namespace eIDMW {
 /*****************************************************************************************
 ---------------------------------------- APL_EidFile_TRACE -----------------------------------------
@@ -242,30 +245,54 @@ APL_EidFile_ID::APL_EidFile_ID(APL_EIDCard *card, const char *csPath) : APL_Card
 APL_EidFile_ID::~APL_EidFile_ID() {}
 
 void APL_EidFile_ID::PackIdData(CByteArray &cb) {
-	cb.Append((unsigned char *)m_IssuingEntity.c_str(), m_IssuingEntity.length());
-	cb.Append((unsigned char *)m_Country.c_str(), m_Country.length());
-	cb.Append((unsigned char *)m_DocumentType.c_str(), m_DocumentType.length());
-	cb.Append((unsigned char *)m_DocumentNumber.c_str(), m_DocumentNumber.length());
-	cb.Append((unsigned char *)m_ChipNumber.c_str(), m_ChipNumber.length());
-	cb.Append((unsigned char *)m_DocumentVersion.c_str(), m_DocumentVersion.length());
-	cb.Append((unsigned char *)m_ValidityBeginDate.c_str(), m_ValidityBeginDate.length());
-	cb.Append((unsigned char *)m_LocalofRequest.c_str(), m_LocalofRequest.length());
-	cb.Append((unsigned char *)m_ValidityEndDate.c_str(), m_ValidityEndDate.length());
-	cb.Append((unsigned char *)m_Surname.c_str(), m_Surname.length());
-	cb.Append((unsigned char *)m_GivenName.c_str(), m_GivenName.length());
-	cb.Append((unsigned char *)m_Gender.c_str(), m_Gender.length());
-	cb.Append((unsigned char *)m_Nationality.c_str(), m_Nationality.length());
-	cb.Append((unsigned char *)m_DateOfBirth.c_str(), m_DateOfBirth.length());
-	cb.Append((unsigned char *)m_Height.c_str(), m_Height.length());
-	cb.Append((unsigned char *)m_CivilianIdNumber.c_str(), m_CivilianIdNumber.length());
-	cb.Append((unsigned char *)m_SurnameMother.c_str(), m_SurnameMother.length());
-	cb.Append((unsigned char *)m_GivenNameMother.c_str(), m_GivenNameMother.length());
-	cb.Append((unsigned char *)m_SurnameFather.c_str(), m_SurnameFather.length());
-	cb.Append((unsigned char *)m_GivenNameFather.c_str(), m_GivenNameFather.length());
-	cb.Append((unsigned char *)m_AccidentalIndications.c_str(), m_AccidentalIndications.length());
-	cb.Append((unsigned char *)m_TaxNo.c_str(), m_TaxNo.length());
-	cb.Append((unsigned char *)m_SocialSecurityNo.c_str(), m_SocialSecurityNo.length());
-	cb.Append((unsigned char *)m_HealthNo.c_str(), m_HealthNo.length());
+	assert(m_IssuingEntity.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_IssuingEntity.c_str(), (unsigned long) m_IssuingEntity.length());
+	assert(m_Country.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_Country.c_str(), (unsigned long) m_Country.length());
+	assert(m_DocumentType.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_DocumentType.c_str(), (unsigned long) m_DocumentType.length());
+	assert(m_DocumentNumber.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_DocumentNumber.c_str(), (unsigned long) m_DocumentNumber.length());
+	assert(m_ChipNumber.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_ChipNumber.c_str(), (unsigned long) m_ChipNumber.length());
+	assert(m_DocumentVersion.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_DocumentVersion.c_str(), (unsigned long) m_DocumentVersion.length());
+	assert(m_ValidityBeginDate.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_ValidityBeginDate.c_str(),  (unsigned long) m_ValidityBeginDate.length());
+	assert(m_LocalofRequest.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_LocalofRequest.c_str(),  (unsigned long) m_LocalofRequest.length());
+	assert(m_ValidityEndDate.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_ValidityEndDate.c_str(),  (unsigned long) m_ValidityEndDate.length());
+	assert(m_Surname.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_Surname.c_str(),  (unsigned long) m_Surname.length());
+	assert(m_GivenName.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_GivenName.c_str(),  (unsigned long) m_GivenName.length());
+	assert(m_Gender.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_Gender.c_str(),  (unsigned long) m_Gender.length());
+	assert(m_Nationality.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_Nationality.c_str(),  (unsigned long) m_Nationality.length());
+	assert(m_DateOfBirth.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_DateOfBirth.c_str(),  (unsigned long) m_DateOfBirth.length());
+	assert(m_Height.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_Height.c_str(),  (unsigned long) m_Height.length());
+	assert(m_CivilianIdNumber.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_CivilianIdNumber.c_str(),  (unsigned long) m_CivilianIdNumber.length());
+	assert(m_SurnameMother.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_SurnameMother.c_str(),  (unsigned long) m_SurnameMother.length());
+	assert(m_GivenNameMother.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_GivenNameMother.c_str(),  (unsigned long) m_GivenNameMother.length());
+	assert(m_SurnameFather.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_SurnameFather.c_str(),  (unsigned long) m_SurnameFather.length());
+	assert(m_GivenNameFather.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_GivenNameFather.c_str(),  (unsigned long) m_GivenNameFather.length());
+	assert(m_AccidentalIndications.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_AccidentalIndications.c_str(),  (unsigned long) m_AccidentalIndications.length());
+	assert(m_TaxNo.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_TaxNo.c_str(),  (unsigned long) m_TaxNo.length());
+	assert(m_SocialSecurityNo.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_SocialSecurityNo.c_str(),  (unsigned long) m_SocialSecurityNo.length());
+	assert(m_HealthNo.length() <= ULLONG_MAX);
+	cb.Append((unsigned char *)m_HealthNo.c_str(),  (unsigned long) m_HealthNo.length());
 }
 
 void APL_EidFile_ID::PackPublicKeyData(CByteArray &cb) {
@@ -818,7 +845,8 @@ bool APL_EidFile_Photo::MapFields() {
 	// find 5F2E tag followed by 0x82.
 	// stop iterating 5 bytes before (0x5F 0x2E 0x82 XX XX)
 	for (size_t i = 0; i < m_data.Size() - 5; i++) {
-		if (m_data.GetByte(i) == 0x5F && m_data.GetByte(i + 1) == 0x2E && m_data.GetByte(i + 2) == 0x82) {
+		assert(i + 2 <= ULLONG_MAX);
+		if (m_data.GetByte((unsigned long) i) == 0x5F && m_data.GetByte((unsigned long) (i + 1)) == 0x2E && m_data.GetByte((unsigned long) (i + 2)) == 0x82) {
 			tag_offset = i;
 			break;
 		}
@@ -827,14 +855,15 @@ bool APL_EidFile_Photo::MapFields() {
 	if (tag_offset == 0 || tag_offset >= m_data.Size())
 		return false;
 
-	const auto len = der_get_length(m_data.GetBytes(tag_offset));
+	assert(tag_offset <= ULLONG_MAX);
+	const auto len = der_get_length(m_data.GetBytes((unsigned long) tag_offset));
 	if (len == 0)
 		return false;
 	// Skip the 3 data blocks defined in ISO/IEC 19794-5 spec
-	unsigned long photo_offset = tag_offset + 5 + PTEIDNG_FIELD_ID_LEN_FACIALRECHDR + PTEIDNG_FIELD_ID_LEN_FACIALINFO +
+	size_t photo_offset = tag_offset + 5 + PTEIDNG_FIELD_ID_LEN_FACIALRECHDR + PTEIDNG_FIELD_ID_LEN_FACIALINFO +
 								 PTEIDNG_FIELD_ID_LEN_IMAGEINFO;
-
-	m_PhotoRaw.Append(m_data.GetBytes(photo_offset));
+	assert(photo_offset <= ULLONG_MAX);
+	m_PhotoRaw.Append(m_data.GetBytes((unsigned long) photo_offset));
 
 	m_mappedFields = true;
 	return true;
@@ -1013,36 +1042,65 @@ APL_EidFile_Address::~APL_EidFile_Address() {}
 void APL_EidFile_Address::PackAddressData(CByteArray &cb, bool isNational) {
 
 	if (isNational) {
-		cb.Append((unsigned char *)m_CountryCode.c_str(), m_CountryCode.length());
-		cb.Append((unsigned char *)m_DistrictCode.c_str(), m_DistrictCode.length());
-		cb.Append((unsigned char *)m_DistrictDescription.c_str(), m_DistrictDescription.length());
-		cb.Append((unsigned char *)m_MunicipalityCode.c_str(), m_MunicipalityCode.length());
-		cb.Append((unsigned char *)m_MunicipalityDescription.c_str(), m_MunicipalityDescription.length());
-		cb.Append((unsigned char *)m_CivilParishCode.c_str(), m_CivilParishCode.length());
-		cb.Append((unsigned char *)m_CivilParishDescription.c_str(), m_CivilParishDescription.length());
-		cb.Append((unsigned char *)m_AbbrStreetType.c_str(), m_AbbrStreetType.length());
-		cb.Append((unsigned char *)m_StreetType.c_str(), m_StreetType.length());
-		cb.Append((unsigned char *)m_StreetName.c_str(), m_StreetName.length());
-		cb.Append((unsigned char *)m_AbbrBuildingType.c_str(), m_AbbrBuildingType.length());
-		cb.Append((unsigned char *)m_BuildingType.c_str(), m_BuildingType.length());
-		cb.Append((unsigned char *)m_DoorNo.c_str(), m_DoorNo.length());
-		cb.Append((unsigned char *)m_Floor.c_str(), m_Floor.length());
-		cb.Append((unsigned char *)m_Side.c_str(), m_Side.length());
-		cb.Append((unsigned char *)m_Place.c_str(), m_Place.length());
-		cb.Append((unsigned char *)m_Locality.c_str(), m_Locality.length());
-		cb.Append((unsigned char *)m_Zip4.c_str(), m_Zip4.length());
-		cb.Append((unsigned char *)m_Zip3.c_str(), m_Zip3.length());
-		cb.Append((unsigned char *)m_PostalLocality.c_str(), m_PostalLocality.length());
-		cb.Append((unsigned char *)m_Generated_Address_Code.c_str(), m_Generated_Address_Code.length());
+		assert(m_CountryCode.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_CountryCode.c_str(), (unsigned long) m_CountryCode.length());
+		assert(m_DistrictCode.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_DistrictCode.c_str(), (unsigned long) m_DistrictCode.length());
+		assert(m_DistrictDescription.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_DistrictDescription.c_str(), (unsigned long) m_DistrictDescription.length());
+		assert(m_MunicipalityCode.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_MunicipalityCode.c_str(), (unsigned long) m_MunicipalityCode.length());
+		assert(m_MunicipalityDescription.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_MunicipalityDescription.c_str(), (unsigned long) m_MunicipalityDescription.length());
+		assert(m_CivilParishCode.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_CivilParishCode.c_str(), (unsigned long) m_CivilParishCode.length());
+		assert(m_CivilParishDescription.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_CivilParishDescription.c_str(), (unsigned long) m_CivilParishDescription.length());
+		assert(m_AbbrStreetType.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_AbbrStreetType.c_str(), (unsigned long) m_AbbrStreetType.length());
+		assert(m_StreetType.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_StreetType.c_str(), (unsigned long) m_StreetType.length());
+		assert(m_StreetName.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_StreetName.c_str(), (unsigned long) m_StreetName.length());
+		assert(m_AbbrBuildingType.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_AbbrBuildingType.c_str(), (unsigned long) m_AbbrBuildingType.length());
+		assert(m_BuildingType.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_BuildingType.c_str(), (unsigned long) m_BuildingType.length());
+		assert(m_DoorNo.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_DoorNo.c_str(), (unsigned long) m_DoorNo.length());
+		assert(m_Floor.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Floor.c_str(), (unsigned long) m_Floor.length());
+		assert(m_Side.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Side.c_str(), (unsigned long) m_Side.length());
+		assert(m_Place.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Place.c_str(), (unsigned long) m_Place.length());
+		assert(m_Locality.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Locality.c_str(), (unsigned long) m_Locality.length());
+		assert(m_Zip4.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Zip4.c_str(), (unsigned long) m_Zip4.length());
+		assert(m_Zip3.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Zip3.c_str(), (unsigned long) m_Zip3.length());
+		assert(m_PostalLocality.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_PostalLocality.c_str(), (unsigned long) m_PostalLocality.length());
+		assert(m_Generated_Address_Code.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Generated_Address_Code.c_str(), (unsigned long) m_Generated_Address_Code.length());
 	} else {
-		cb.Append((unsigned char *)m_CountryCode.c_str(), m_CountryCode.length());
-		cb.Append((unsigned char *)m_Foreign_Country.c_str(), m_Foreign_Country.length());
-		cb.Append((unsigned char *)m_Foreign_Generic_Address.c_str(), m_Foreign_Generic_Address.length());
-		cb.Append((unsigned char *)m_Foreign_City.c_str(), m_Foreign_City.length());
-		cb.Append((unsigned char *)m_Foreign_Region.c_str(), m_Foreign_Region.length());
-		cb.Append((unsigned char *)m_Foreign_Locality.c_str(), m_Foreign_Locality.length());
-		cb.Append((unsigned char *)m_Foreign_Postal_Code.c_str(), m_Foreign_Postal_Code.length());
-		cb.Append((unsigned char *)m_Generated_Address_Code.c_str(), m_Generated_Address_Code.length());
+		assert(m_CountryCode.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_CountryCode.c_str(), (unsigned long) m_CountryCode.length());
+		assert(m_Foreign_Country.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Foreign_Country.c_str(), (unsigned long) m_Foreign_Country.length());
+		assert(m_Foreign_Generic_Address.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Foreign_Generic_Address.c_str(), (unsigned long) m_Foreign_Generic_Address.length());
+		assert(m_Foreign_City.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Foreign_City.c_str(), (unsigned long) m_Foreign_City.length());
+		assert(m_Foreign_Region.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Foreign_Region.c_str(), (unsigned long) m_Foreign_Region.length());
+		assert(m_Foreign_Locality.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Foreign_Locality.c_str(), (unsigned long) m_Foreign_Locality.length());
+		assert(m_Foreign_Postal_Code.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Foreign_Postal_Code.c_str(), (unsigned long) m_Foreign_Postal_Code.length());
+		assert(m_Generated_Address_Code.length() <= ULLONG_MAX);
+		cb.Append((unsigned char *)m_Generated_Address_Code.c_str(), (unsigned long) m_Generated_Address_Code.length());
 	}
 }
 
