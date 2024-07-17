@@ -728,7 +728,7 @@ bool APL_ICAO::performActiveAuthentication() {
 	// CByteArray security_file;
 	CByteArray secopt_file = reader->ReadFile(PTEID_FILE_SECURITY);
 	
-	// verify hash of public key with hash in SOD
+	// verify hash of security file with hash in SOD
 	if (!cryptFwk->VerifyHashSha256(secopt_file, m_SodAttributes->get(DG14))) {
 		MWLOG(LEV_ERROR, MOD_CAL, L"Security option hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);

@@ -1761,7 +1761,7 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 	CByteArray secopt_file;
 	m_card->readFile(PTEID_FILE_SECURITY, secopt_file);
 
-	// verify hash of public key with hash in SOD
+	// verify hash of security file with hash in SOD
 	if (!m_cryptoFwk->VerifyHashSha256(secopt_file, m_secOptHash)) {
 		MWLOG(LEV_ERROR, MOD_CAL, L"Security option hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
