@@ -23,6 +23,8 @@
 #include <string.h>
 #include <iostream>
 #include <exception>
+#include <cassert>
+
 
 using namespace std;
 
@@ -234,6 +236,12 @@ void CByteArray::Append(const unsigned char *pucData, unsigned long ulSize) {
 		memcpy(m_pucData + m_ulSize, pucData, ulSize);
 		m_ulSize += ulSize;
 	}
+}
+
+//SafeAppend
+void CByteArray::SafeAppend(const unsigned char *pucData, size_t size){
+	assert(size <= ULLONG_MAX);
+	Append(pucData, (unsigned long) size);
 }
 
 // void CByteArray::Append()

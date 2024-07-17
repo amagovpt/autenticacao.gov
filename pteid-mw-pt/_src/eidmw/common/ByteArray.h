@@ -55,6 +55,7 @@ public:
 	void Append(const CByteArray &oByteArray);
 	CByteArray &operator+=(const CByteArray &oByteArray);
 	void Append(const unsigned char *pucData, unsigned long ulSize);
+	void SafeAppend(const unsigned char *pucData, size_t size);
 	void Append(const std::string scData);
 	CByteArray &operator+=(const std::string scData);
 	void AppendString(const std::string scData);
