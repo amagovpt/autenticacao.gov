@@ -41,6 +41,7 @@
 #include "Log.h"
 #include "SODParser.h"
 
+#include <openssl/rand.h>
 #include <time.h>
 #include <sys/types.h>
 #include <openssl/err.h>
@@ -583,6 +584,7 @@ std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 
 		loadAvailableDataGroups();
+		performActiveAuthentication();
 
 		for (const auto &hash : m_SodAttributes->getHashes()) {
 			datagroups.emplace_back(static_cast<DataGroupID>(hash.first));
@@ -717,6 +719,140 @@ bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
 
 	auto cryptFwk = AppLayer.getCryptoFwk();
 	return cryptFwk->VerifyHashSha256(data, hashes.at(tag));
+}
+
+bool APL_ICAO::performActiveAuthentication() {
+	MWLOG(LEV_DEBUG, MOD_CAL, L"Performing Active Authentication");
+
+	auto reader = m_reader->getCalReader();
+	auto cryptFwk = AppLayer.getCryptoFwk();
+
+	bool failed = 0;
+	ECDSA_SIG* ec_sig;
+	EVP_PKEY_CTX *ctx;
+	EVP_MD_CTX *mdctx;
+	EVP_MD* evp_md;
+	EVP_PKEY *pkey;
+	unsigned char *der_signature = nullptr;
+	int der_signature_len;
+	BIGNUM *r, *s;
+	size_t sig_point_size;
+
+	// CByteArray security_file;
+	CByteArray secopt_file = reader->ReadFile(PTEID_FILE_SECURITY);
+	
+	// verify hash of public key with hash in SOD
+	if (!cryptFwk->VerifyHashSha256(secopt_file, m_SodAttributes->get(DG14))) {
+		MWLOG(LEV_ERROR, MOD_CAL, L"Security option hash does not match with SOD");
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
+	}
+
+	// read public key DG15
+	CByteArray pubkey_file = reader->ReadFile(PTEID_FILE_PUB_KEY_AA);
+
+	// verify hash of public key with hash in SOD
+	if (!cryptFwk->VerifyHashSha256(pubkey_file, m_SodAttributes->get(DG15))) {
+		MWLOG(LEV_ERROR, MOD_CAL, L"Public key hash does not match with SOD");
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
+	}
+
+	// read OID from security file
+	const unsigned char *OID_buff = secopt_file.GetBytes() + 73;
+	size_t OID_len = secopt_file.Size() - 73;
+	ASN1_OBJECT* oid = d2i_ASN1_OBJECT(nullptr, &OID_buff, OID_len);
+
+	// get digest by previously created NID
+	auto nid = OBJ_obj2nid(oid);
+	evp_md = (EVP_MD*)EVP_get_digestbynid(nid);
+	if (evp_md == nullptr) {
+		MWLOG(LEV_INFO, MOD_CAL, L"Failed to get digest by NID. Fallback to SHA256");
+		evp_md = (EVP_MD*)EVP_sha256();
+	}
+
+	// skip the first two bytes of the file (6F78)
+	unsigned int size = pubkey_file.Size() - 2;
+	const unsigned char *pub_key_buff = pubkey_file.GetBytes() + 2;
+
+	// construct active authentication command
+	unsigned char data_to_sign[8];
+	RAND_bytes(data_to_sign, 8);
+	size_t data_size = sizeof(data_to_sign);
+	unsigned char apdu[] = {0x00, 0x88, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+	memcpy(apdu + 5, data_to_sign, data_size);
+
+	// raw r,s point signature
+	auto signature = reader->SendAPDU({apdu, sizeof(apdu)});
+	auto sw12 = signature.GetBytes(signature.Size() - 2);
+	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
+		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to perform active authentication");
+		failed = true;
+		goto cleanup;
+	}
+
+	// convert to DER signature object
+	sig_point_size = (signature.Size() - 2) / 2;
+	ec_sig = ECDSA_SIG_new();
+	r = BN_bin2bn(signature.GetBytes(), sig_point_size, nullptr);
+	s = BN_bin2bn(signature.GetBytes() + sig_point_size, sig_point_size, nullptr);
+	ECDSA_SIG_set0(ec_sig, r, s);
+	der_signature_len = i2d_ECDSA_SIG(ec_sig, &der_signature);
+
+	pkey = d2i_PUBKEY(nullptr, (const unsigned char**)&pub_key_buff, size);
+	if (pkey == nullptr) {
+    	MWLOG(LEV_ERROR, MOD_CAL, L"Failed to read public key from card");
+		failed = true;
+		goto cleanup;
+	}
+
+	// hash the `to_sign` data
+	unsigned char hash[EVP_MAX_MD_SIZE];
+	unsigned int hash_len;
+	mdctx = EVP_MD_CTX_new();
+	if (!mdctx || EVP_DigestInit_ex(mdctx, evp_md, nullptr) <= 0
+			   || EVP_DigestUpdate(mdctx, data_to_sign, data_size) <= 0
+			   || EVP_DigestFinal_ex(mdctx, hash, &hash_len) <= 0) {
+		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to hash verification data");
+		failed = true;
+		goto cleanup;
+	}
+
+	// Create and initialize the verification context based on the public key
+	ctx = EVP_PKEY_CTX_new(pkey, NULL);
+	if (!ctx || EVP_PKEY_verify_init(ctx) <= 0 || EVP_PKEY_CTX_set_signature_md(ctx, evp_md) <= 0) {
+		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to create verification context");
+		failed = true;
+		goto cleanup;
+	}
+
+	// Perform the verification
+	if (EVP_PKEY_verify(ctx, der_signature, der_signature_len, (unsigned char*)&hash[0], hash_len) != 1) {
+		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to verify active authentication signature!");
+		failed = true;
+		goto cleanup;
+	}
+
+cleanup:
+	if (pkey)
+		EVP_PKEY_free(pkey);
+	if (ec_sig)
+		ECDSA_SIG_free(ec_sig);
+	if (der_signature)
+		OPENSSL_free(der_signature);
+	if (ctx)
+		EVP_PKEY_CTX_free(ctx);
+	if (mdctx)
+		EVP_MD_CTX_free(mdctx);
+	if (evp_md)
+		EVP_MD_free(evp_md);
+	if (oid)
+		ASN1_OBJECT_free(oid);
+
+	// if should throw
+	if (failed) {
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
+	}
+
+	return true;
 }
 
 } // namespace eIDMW

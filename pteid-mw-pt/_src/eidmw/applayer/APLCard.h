@@ -338,6 +338,7 @@ private:
 	CByteArray verifySodFileIntegrity(const CByteArray &data);
 	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray& data);
+	bool performActiveAuthentication();
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);
