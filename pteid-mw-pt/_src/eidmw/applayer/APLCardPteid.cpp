@@ -1303,8 +1303,6 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 
 	exception_code = validateRemoteAddressData(resp4.http_response.c_str(), CC2_PROTOCOL);
 
-cleanup:
-
 	breakSecureMessaging();
 
 	if (exception_code != 0) {
