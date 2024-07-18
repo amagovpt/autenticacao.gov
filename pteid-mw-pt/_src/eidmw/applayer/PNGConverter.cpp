@@ -86,8 +86,8 @@ static void scale_component_up(opj_image_comp_t *component, OPJ_UINT32 precision
 
 	len = static_cast<OPJ_SIZE_T>(component->w) * static_cast<OPJ_SIZE_T>(component->h);
 	if (component->sgnd) {
-		OPJ_INT64 newMax = static_cast<OPJ_INT64>(1U << (precision - 1));
-		OPJ_INT64 oldMax = static_cast<OPJ_INT64>(1U << (component->prec - 1));
+		OPJ_INT64 newMax = static_cast<OPJ_INT64>(1ULL << (precision - 1));
+		OPJ_INT64 oldMax = static_cast<OPJ_INT64>(1ULL << (component->prec - 1));
 		OPJ_INT32 *l_data = component->data;
 		for (i = 0; i < len; ++i) {
 			l_data[i] = static_cast<OPJ_INT32>((static_cast<OPJ_INT64>(l_data[i]) * newMax) / oldMax);
