@@ -48,6 +48,7 @@
 #include <cstring>
 #include <string>
 #include <sstream>
+#include <cassert>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -75,9 +76,10 @@ char *getCPtr(std::string inStr, int *outLen) {
 	c_str = (char *)malloc(inStr.length() + 1);
 	strcpy(c_str, inStr.c_str());
 
-	if (outLen != NULL)
-		*outLen = strlen(c_str);
-
+	if (outLen != NULL) {
+		assert(strlen(c_str) <= INT_MAX);
+		*outLen = (int) strlen(c_str);
+	}
 	return c_str;
 }
 
@@ -250,7 +252,9 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 
 char *memBIO_to_string(BIO *bio) {
 	char *str = NULL;
-	long alloc_size = BIO_number_written(bio) + 1;
+
+	assert(BIO_number_written(bio) + 1 <= INT_MAX);
+	int alloc_size = (int) (BIO_number_written(bio) + 1);
 
 	str = (char *)malloc(alloc_size);
 	if (NULL == str) {
@@ -312,7 +316,8 @@ X509 *PEM_to_X509(char *pem) {
 		return NULL;
 	}
 
-	bio = BIO_new_mem_buf(pem, strlen(pem));
+	assert(strlen(pem) <= INT_MAX);
+	bio = BIO_new_mem_buf(pem, (int) strlen(pem));
 	if (NULL == bio) {
 		return NULL;
 	}
@@ -412,7 +417,8 @@ long der_certificate_length(const CByteArray &der_certificate) {
 	}
 
 	// der_data - op is the amount of the TAG and length bytes (should be 4 for most certificates)
-	return (der_data - op) + len;
+	assert((((der_data - op) + len)) <= LONG_MAX);
+	return (long) ((der_data - op) + len);
 }
 
 char *certificate_subject_from_der(CByteArray &ba) {

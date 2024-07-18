@@ -528,7 +528,8 @@ bool CERTIFICATES::ImportCertificates(const char *readerName) {
 				  Card.certificateCount());
 
 		for (size_t CertIdx = 0; CertIdx < Card.certificateCount(); CertIdx++) {
-			PTEID_Certificate &cert = certificates.getCertFromCard(CertIdx);
+			assert(CertIdx <= ULONG_MAX);
+			PTEID_Certificate &cert = certificates.getCertFromCard((unsigned long) CertIdx);
 			const PTEID_ByteArray certData = cert.getCertData();
 
 			// ----------------------------------------------------

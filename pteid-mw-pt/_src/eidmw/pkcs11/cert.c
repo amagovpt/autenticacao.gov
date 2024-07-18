@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <cassert>
 
 #include "pteid_p11.h"
 #include "cert.h"
@@ -111,7 +112,8 @@ int get_rsa_key_info(const unsigned char *pcert, unsigned int lcert, T_RSA_KEY_I
 	BN_bn2bin(n, mod);
 
 	rsa_keyinfo->mod = mod;
-	rsa_keyinfo->l_mod = mod_len_bytes;
+	assert(mod_len_bytes <= UINT_MAX);
+	rsa_keyinfo->l_mod = (unsigned int) mod_len_bytes;
 
 cleanup:
 	BN_free(exponent);

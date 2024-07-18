@@ -13,6 +13,7 @@
 #include <time.h>
 #include <string>
 #include <cstring>
+#include <cassert>
 
 #ifndef _WIN32
 #include <cstdint>
@@ -64,8 +65,8 @@ std::string generateTOTP(std::string secretKey, unsigned int digits, unsigned in
 
 	unsigned int decoded_len = 0;
 	unsigned char *base64_buffer;
-
-	eIDMW::Base64Decode(secretKey.c_str(), secretKey.size(), base64_buffer, decoded_len);
+	assert(secretKey.size() <= UINT_MAX);
+	eIDMW::Base64Decode(secretKey.c_str(), (unsigned int) secretKey.size(), base64_buffer, decoded_len);
 
 	if (decoded_len < 20) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "TOTP Base64Decode error decoded_len = %d", decoded_len);
@@ -74,7 +75,8 @@ std::string generateTOTP(std::string secretKey, unsigned int digits, unsigned in
 
 	key_buffer = std::string((char *)base64_buffer, decoded_len);
 
-	key_len = key_buffer.size();
+	assert(key_buffer.size() <= INT_MAX);
+	key_len = (int) key_buffer.size();
 
 	/* Big-endian conversion */
 #ifdef _WIN32

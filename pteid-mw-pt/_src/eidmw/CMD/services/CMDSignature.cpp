@@ -432,7 +432,8 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 	} else {
 		if (isDBG) {
 			printf(" Sign String\n");
-			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
+			assert(m_docname_handle.size() <= UINT_MAX);
+			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(), (unsigned int) m_docname_handle.size());
 		}
 	}
 	MWLOG(LEV_DEBUG, MOD_CMD, L"Requesting CCMovelSign endpoint");
@@ -454,7 +455,8 @@ int CMDSignature::cli_getSignatures(std::string in_code, std::vector<CByteArray 
 
 	/* printData */
 	if (isDBG) {
-		printData((char *)"\nReceived code: ", (unsigned char *)in_code.c_str(), in_code.size());
+		assert(in_code.size() <= UINT_MAX);
+		printData((char *)"\nReceived code: ", (unsigned char *)in_code.c_str(), (unsigned int) in_code.size());
 	}
 
 	std::vector<CByteArray *> cbVector;
@@ -573,7 +575,8 @@ int CMDSignature::signClose(std::string in_code) {
 	} else {
 		if (isDBG) {
 			printf("Sign Close String\n");
-			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
+			assert(m_docname_handle.size() <= UINT_MAX);
+			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(), (unsigned int) m_docname_handle.size());
 		}
 
 		m_signature = CByteArray(signatures[0]->GetBytes(), signatures[0]->Size());

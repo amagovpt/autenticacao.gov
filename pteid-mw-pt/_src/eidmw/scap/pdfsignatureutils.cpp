@@ -126,8 +126,8 @@ bool get_citizen_signature_details(const QString &filepath, SignatureDetails &si
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s: Error opening file for reading", __FUNCTION__);
 		return false; // Error opening file
 	}
-
-	QByteArray needle = QByteArray::fromRawData(needleValues, strlen(needleValues));
+	assert(strlen(needleValues) <= INT_MAX);
+	QByteArray needle = QByteArray::fromRawData(needleValues, (int) strlen(needleValues));
 	QByteArray fileByteArray = file.readAll();
 	int pdfBinaryLen = fileByteArray.size();
 

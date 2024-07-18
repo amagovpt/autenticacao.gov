@@ -241,7 +241,7 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 			sendSmsText += L"\".";
 			sendSmsTextData.text = sendSmsText.c_str();
 			HWND hSendSmsText = PteidControls::CreateText(
-				1.5 * contentX, sendSmsBoxY + 0.77 * paddingY, contentWidth - buttonWidth - contentX,
+				(int) (1.5 * contentX), (int) (sendSmsBoxY + 0.77 * paddingY), contentWidth - buttonWidth - contentX,
 				buttonHeight + 2 * paddingY, m_hWnd, (HMENU)IDC_SEND_SMS_TEXT, m_hInstance, &sendSmsTextData);
 
 			sendSmsBtnData.text = GETSTRING_DLG(SendSms);

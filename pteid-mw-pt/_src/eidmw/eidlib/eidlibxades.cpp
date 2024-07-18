@@ -18,6 +18,7 @@
 #include "APLCard.h"
 #include "SigContainer.h"
 #include "ByteArray.h"
+#include <cassert>
 
 namespace eIDMW {
 
@@ -129,8 +130,8 @@ long PTEID_ASICContainer::countInputFiles() {
 			throw PTEID_Exception::THROWException(e);
 		}
 	}
-
-	return m_files.size();
+	assert(m_files.size() <= LONG_MAX);
+	return (long) m_files.size();
 }
 
 const char *PTEID_ASICContainer::getInputFile(long file_n) {

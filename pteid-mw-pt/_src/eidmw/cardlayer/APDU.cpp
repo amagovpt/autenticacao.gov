@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <sstream>
+#include <cassert>
 
 #define MAX_LC_LE_LENGTH 0xFFFF
 #define MAX_LC_LE_LENGTH_SHORT 255
@@ -43,7 +44,8 @@ eIDMW::CByteArray eIDMW::APDU::getLe(bool onlyLe) const {
 			}
 			result.Append(formatLe);
 		} else {
-			result.Append(m_le);
+			assert(m_le <= UCHAR_MAX);
+			result.Append((unsigned char) m_le);
 		}
 	}
 
@@ -62,7 +64,8 @@ eIDMW::CByteArray eIDMW::APDU::getLc(bool onlyLc) const {
 			else
 				result.Append(formatExtended(lc, 3));
 		} else {
-			result.Append(lc);
+			assert(lc <= UCHAR_MAX);
+			result.Append((unsigned char) lc);
 		}
 	}
 
@@ -110,7 +113,8 @@ eIDMW::CByteArray eIDMW::APDU::ToByteArray() const {
 		sizeOfAPDU += lc;
 	}
 	sizeOfAPDU += isExtended ? lc > 0 ? 2 : 3 : 1; // le size
-	CByteArray result(sizeOfAPDU);
+	assert(sizeOfAPDU <= ULONG_MAX);
+	CByteArray result((unsigned long) sizeOfAPDU);
 	result.Append(m_cls);
 	result.Append(m_ins);
 	result.Append(m_p1);
@@ -121,7 +125,8 @@ eIDMW::CByteArray eIDMW::APDU::ToByteArray() const {
 		if (isExtended) {
 			result.Append(formatExtended(lc, 3));
 		} else {
-			result.Append(lc);
+			assert(lc <= UCHAR_MAX);
+			result.Append((unsigned char) lc);
 		}
 	}
 	if (m_le >= 0) {
@@ -134,7 +139,8 @@ eIDMW::CByteArray eIDMW::APDU::ToByteArray() const {
 			}
 			result.Append(formatLe);
 		} else {
-			result.Append(m_le);
+			assert(m_le <= UCHAR_MAX);
+			result.Append((unsigned char) m_le);
 		}
 	}
 	return result;

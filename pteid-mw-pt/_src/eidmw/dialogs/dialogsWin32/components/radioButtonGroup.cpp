@@ -20,6 +20,7 @@
 
 #include "pteidControls.h"
 #include <tchar.h>
+#include <cassert>
 #include < strsafe.h>
 #include "Log.h"
 #include "../dlgUtil.h"
@@ -36,7 +37,8 @@ HWND PteidControls::CreateRadioButtonGroup(int x, int y, int nWidth, int nHeight
 	}
 
 	int contentHeight = nHeight - 2 * BORDER_PADDING_Y;
-	int buttonHeight = (int)contentHeight / data->items.size();
+	assert(data->items.size() <= INT_MAX);
+	int buttonHeight = (int) contentHeight / (int) data->items.size();
 
 	// CONTAINER
 	HWND hContainer = CreateWindowEx(WS_EX_CONTROLPARENT, WC_STATIC, L"", WS_CHILD | WS_VISIBLE | BS_GROUPBOX, x, y,
@@ -48,17 +50,18 @@ HWND PteidControls::CreateRadioButtonGroup(int x, int y, int nWidth, int nHeight
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_OWNERDRAW;
 		if (i == 0)
 			dwStyle |= WS_GROUP;
-
+		assert(BORDER_PADDING_Y + i * buttonHeight <= INT_MAX);
 		HWND hWndButton = CreateWindowW(WC_BUTTON, data->items[i], dwStyle,
 										BORDER_PADDING_X,					 // x
-										BORDER_PADDING_Y + i * buttonHeight, // y
+										(int) (BORDER_PADDING_Y + i * buttonHeight), // y
 										nWidth - 2 * BORDER_PADDING_X,		 // width
 										buttonHeight,						 // height
 										hContainer, (HMENU)i, hInstance, NULL);
 		SetWindowSubclass(hWndButton, RadioButtonGroup_Proc, 0, (DWORD_PTR)data);
 		SendMessage(hWndButton, WM_SETFONT, (WPARAM)StandardFont, 0);
 	}
-	HWND hSelectedWnd = GetDlgItem(hContainer, data->selectedIdx);
+	assert(data->selectedIdx <= INT_MAX);
+	HWND hSelectedWnd = GetDlgItem(hContainer, (int) data->selectedIdx);
 	SendMessage(hSelectedWnd, BM_CLICK, 0, 0);
 	data->hMainWnd = hContainer;
 

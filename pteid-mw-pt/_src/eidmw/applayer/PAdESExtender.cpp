@@ -24,6 +24,7 @@
 #include <openssl/pkcs7.h>
 #include <openssl/x509.h>
 #include <openssl/ocsp.h>
+#include <cassert>
 
 namespace eIDMW {
 PAdESExtender::PAdESExtender(PDFSignature *signedPdfDoc) {
@@ -142,7 +143,8 @@ unsigned long PAdESExtender::getCertUniqueId(const unsigned char *data, int data
 ValidationDataElement *PAdESExtender::addValidationElement(ValidationDataElement &elem) {
 
 	if (elem.getType() == ValidationDataElement::CERT) {
-		signed long uniqueCertId = getCertUniqueId(elem.getData(), elem.getSize());
+		assert(elem.getSize() <= INT_MAX);
+		signed long uniqueCertId = getCertUniqueId(elem.getData(), (int) elem.getSize());
 		if (m_certsInDoc.find(uniqueCertId) != m_certsInDoc.end()) {
 			return m_certsInDoc.at(uniqueCertId);
 		}
@@ -161,12 +163,14 @@ ValidationDataElement *PAdESExtender::addValidationElement(ValidationDataElement
 void PAdESExtender::removeValidationElement(ValidationDataElement *elem) {
 
 	if (elem->getType() == ValidationDataElement::CERT) {
-		signed long docCertId = getCertUniqueId(elem->getData(), elem->getSize());
+		assert(elem.getSize() <= INT_MAX);
+		signed long docCertId = getCertUniqueId(elem->getData(), (int) elem->getSize());
 		std::vector<ValidationDataElement *>::iterator it = m_validationData.begin();
 		while (it != m_validationData.end()) {
 			ValidationDataElement *newVde = *it;
 			if (newVde->getType() == ValidationDataElement::CERT) {
-				signed long newVdeId = getCertUniqueId(newVde->getData(), newVde->getSize());
+				assert(newVde->getSize() <= INT_MAX);
+				signed long newVdeId = getCertUniqueId(newVde->getData(), (int) newVde->getSize());
 				if (newVdeId == docCertId) {
 					it = m_validationData.erase(it);
 					continue;
@@ -323,7 +327,8 @@ bool PAdESExtender::addLT() {
 		bool ocsp_check_revocation = false;
 		bool foundIssuer = false;
 		ValidationDataElement *vd_elem = m_validationData[signer_cert_idx];
-		CByteArray signer_cert(vd_elem->getData(), vd_elem->getSize());
+		assert(vd_elem->getSize() <= ULONG_MAX);
+		CByteArray signer_cert(vd_elem->getData(), (unsigned long) vd_elem->getSize());
 		// Replaced full subject by "issuer - serial" for privacy reasons
 		// MWLOG(LEV_DEBUG, MOD_APL, "%s: adding revocation info for certificate: %s", __FUNCTION__,
 		// certificate_subject_from_der(signer_cert));
@@ -338,7 +343,8 @@ bool PAdESExtender::addLT() {
 
 			issuerLen = m_validationData[j]->getSize();
 			issuerCertDataByteArray.ClearContents();
-			issuerCertDataByteArray.Append(m_validationData[j]->getData(), issuerLen);
+			assert(issuerLen <= ULONG_MAX);
+			issuerCertDataByteArray.Append(m_validationData[j]->getData(), (unsigned long) issuerLen);
 
 			if (cryptoFwk->isIssuer(signer_cert, issuerCertDataByteArray)) {
 				foundIssuer = true;

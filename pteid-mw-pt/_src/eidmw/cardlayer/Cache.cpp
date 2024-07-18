@@ -39,6 +39,7 @@
 #include <openssl/conf.h>
 #include <openssl/err.h>
 #include <openssl/rand.h>
+#include <cassert>
 
 namespace eIDMW {
 #ifdef WIN32
@@ -223,7 +224,8 @@ CByteArray CCache::DiskGetFile(const std::string &csName) {
 		memcpy(iv, ciphertext, 16);
 
 		unsigned char plaintext[MAX_CACHE_SIZE] = {0};
-		unsigned int decryptLen = Decrypt(ciphertext + 16, cacheFileLen - 16, encryptionKey.GetBytes(), iv, plaintext);
+		assert(cacheFileLen - 16 <= INT_MAX);
+		unsigned int decryptLen = Decrypt(ciphertext + 16, (int) (cacheFileLen - 16), encryptionKey.GetBytes(), iv, plaintext);
 		if (decryptLen == 0)
 			return CByteArray();
 

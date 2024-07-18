@@ -35,8 +35,8 @@ void ScaleDimensions(int *width, int *height) {
 	if (height == NULL) {
 		height = &dummyDimension;
 	}
-	FLOAT fWidth = *width;
-	FLOAT fHeight = *height;
+	FLOAT fWidth = (FLOAT) *width;
+	FLOAT fHeight = (FLOAT) *height;
 
 	long configUseSystemScale = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GUITOOL_USESYSTEMSCALE);
 	if (configUseSystemScale != 0) {

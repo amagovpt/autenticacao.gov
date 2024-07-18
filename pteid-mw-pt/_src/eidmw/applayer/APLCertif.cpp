@@ -50,6 +50,7 @@
 #include "APLConfig.h"
 
 #include <sys/stat.h>
+#include <cassert>
 
 #ifdef WIN32
 #include <io.h>
@@ -161,7 +162,8 @@ void APL_Certifs::addToSODCAs(const CByteArray &cert_ba) {
 
 unsigned long APL_Certifs::countSODCAs() {
 	MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: countSODCAs returns %lu", m_sod_cas.size());
-	return m_sod_cas.size();
+	assert(m_sod_cas.size() <= ULONG_MAX);
+	return (unsigned long) m_sod_cas.size();
 }
 
 APL_Certif *APL_Certifs::getSODCA(int index) {

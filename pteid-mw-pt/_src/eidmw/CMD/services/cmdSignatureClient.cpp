@@ -21,6 +21,7 @@
 
 #include <codecvt>
 #include <locale>
+#include <cassert>
 
 namespace eIDMW {
 
@@ -422,7 +423,8 @@ DlgRet CMDSignatureClient::openAuthenticationDialogPIN(DlgCmdOperation operation
 		userNameWstr = utilStringWiden(userName);
 #endif
 		userNameW = userNameWstr.c_str();
-		userNameLen = userNameWstr.size();
+		assert(userNameWstr.size() <= ULONG_MAX);
+		userNameLen = (unsigned long) userNameWstr.size();
 	}
 
 	DlgRet ret = DlgAskInputCMD(operation, false, pinBuffer, pinBufferLength, mobileBuffer, mobileNumberLength,

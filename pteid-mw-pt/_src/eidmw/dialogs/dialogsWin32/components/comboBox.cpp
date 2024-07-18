@@ -20,6 +20,7 @@
 
 #include "pteidControls.h"
 #include <tchar.h>
+#include <cassert>
 #include < strsafe.h>
 #include "Log.h"
 #include "../dlgUtil.h"
@@ -133,8 +134,8 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
 	case WM_MEASUREITEM: {
 		// Set the height of the items
 		LPMEASUREITEMSTRUCT lpmis = (LPMEASUREITEMSTRUCT)lParam;
-
-		int itemWidth = data->maxWidth;
+		assert(data->maxWidth <= INT_MAX);
+		int itemWidth = (int) data->maxWidth;
 		if (itemWidth == 0) {
 			itemWidth = lpmis->itemWidth;
 			TEXTMETRIC tm;
@@ -143,7 +144,8 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
 			for (size_t i = 0; i < data->items.size(); i++) {
 				size_t itemLen = _tcsclen(data->items[i]);
 				if (tm.tmAveCharWidth * itemLen > itemWidth) {
-					itemWidth = tm.tmMaxCharWidth * itemLen;
+					assert(tm.tmMaxCharWidth * itemLen <= INT_MAX);
+					itemWidth = (int) (tm.tmMaxCharWidth * itemLen);
 				}
 			}
 			data->maxWidth = itemWidth;
@@ -204,8 +206,8 @@ LRESULT CALLBACK PteidControls::ComboBox_Proc(HWND hWnd, UINT uMsg, WPARAM wPara
 		ScaleDimensions(&containerPadding, NULL);
 		rect.bottom -= 2 * containerPadding;
 		rect.right -= 2 * containerPadding;
-
-		ComboBox_DrawItem(hWnd, hDC, &rect, data->selectedIdx, false, false, containerPadding,
+		assert(data->selectedIdx <= INT_MAX);
+		ComboBox_DrawItem(hWnd, hDC, &rect, (int) data->selectedIdx, false, false, containerPadding,
 						  data->use_smaller_triangle);
 
 		EndPaint(hWnd, &ps);

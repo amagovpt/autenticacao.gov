@@ -81,7 +81,8 @@ static std::string removeCheckDigit(const std::string &nic) {
 
 #ifdef _WIN32
 void secureSaveSecretKey(const std::string &config_name, const std::string &secretKey) {
-	DATA_BLOB dataIn = {secretKey.length(), (BYTE *)secretKey.data()};
+	assert(secretKey.length() <= ULONG_MAX);
+	DATA_BLOB dataIn = {(DWORD) secretKey.length(), (BYTE *)secretKey.data()};
 	DATA_BLOB dataOut = {0};
 	DWORD dwFlags = 0;
 	if (CryptProtectData(&dataIn, NULL, /* szDataDescription */
@@ -100,7 +101,8 @@ void secureSaveSecretKey(const std::string &config_name, const std::string &secr
 
 std::string secureGetSecretKey(QByteArray &secretKey_array) {
 	std::string plaintext_key;
-	DATA_BLOB dataIn = {secretKey_array.length(), (BYTE *)secretKey_array.data()};
+	assert(0 <= secretKey_array.length() <= ULONG_MAX);
+	DATA_BLOB dataIn = {(DWORD) secretKey_array.length(), (BYTE *)secretKey_array.data()};
 	DATA_BLOB dataOut = {0};
 	DWORD dwFlags = 0;
 	if (CryptUnprotectData(&dataIn, NULL, /* szDataDescription */
@@ -253,8 +255,8 @@ std::string ScapSettings::getSecretKey(const std::string &nic) {
 
 	PTEID_Config config(config_name.c_str(), L"general", L"");
 	std::string temp_secretKey = config.getString();
-
-	QByteArray temp_array(temp_secretKey.data(), temp_secretKey.length());
+	assert(temp_secretKey.length() <= INT_MAX);
+	QByteArray temp_array(temp_secretKey.data(), (int) temp_secretKey.length());
 	QByteArray secretKey_array = QByteArray::fromHex(temp_array);
 
 #ifdef _WIN32

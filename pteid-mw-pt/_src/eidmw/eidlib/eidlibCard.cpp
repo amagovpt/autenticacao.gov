@@ -45,6 +45,7 @@
 #include "dialogs.h"
 #include "Util.h"
 #include <sstream>
+#include <cassert>
 
 // UNIQUE INDEX FOR RETRIEVING OBJECT
 #define INCLUDE_OBJECT_DOCEID 1
@@ -1174,7 +1175,8 @@ PTEIDSDK_API long PTEID_GetPINs(PTEIDPins *Pins) {
 						(PTEID_MAX_PIN_LABEL_LEN > strlen(pin.getLabel()) ? strlen(pin.getLabel())
 																		  : PTEID_MAX_PIN_LABEL_LEN - 1));
 				Pins->pins[currentId].triesLeft = pin.getTriesLeft();
-				Pins->pins[currentId].id = pin.getPinRef();
+				assert(pin.getPinRef() <= UCHAR_MAX);
+				Pins->pins[currentId].id = (unsigned char) pin.getPinRef();
 				Pins->pins[currentId].shortUsage =
 					NULL; // martinho don't know where it is used, current MW returns NULL also
 				Pins->pins[currentId].longUsage =
@@ -1412,7 +1414,8 @@ PTEIDSDK_API long PTEID_GetCardAuthenticationKey(PTEID_RSAPublicKey *pCardAuthPu
 		pCardAuthPubKey->modulusLength = cardKey.getCardAuthKeyModulus().Size();
 		memcpy(pCardAuthPubKey->exponent, cardKey.getCardAuthKeyExponent().GetBytes(),
 			   cardKey.getCardAuthKeyExponent().Size());
-		pCardAuthPubKey->exponentLength = cardKey.getCardAuthKeyExponent().Size();
+		assert(cardKey.getCardAuthKeyExponent().Size() <= UCHAR_MAX);
+		pCardAuthPubKey->exponentLength = (unsigned char) cardKey.getCardAuthKeyExponent().Size();
 	}
 
 	return PTEID_OK;
@@ -1427,7 +1430,8 @@ PTEIDSDK_API long PTEID_GetCVCRoot(PTEID_RSAPublicKey *pCVCRootKey) {
 		pCVCRootKey->modulusLength = rootCAKey.getCardAuthKeyModulus().Size();
 		memcpy(pCVCRootKey->exponent, rootCAKey.getCardAuthKeyExponent().GetBytes(),
 			   rootCAKey.getCardAuthKeyExponent().Size());
-		pCVCRootKey->exponentLength = rootCAKey.getCardAuthKeyExponent().Size();
+		assert(rootCAKey.getCardAuthKeyExponent().Size() <= UCHAR_MAX);
+		pCVCRootKey->exponentLength = (unsigned char) rootCAKey.getCardAuthKeyExponent().Size();
 	}
 
 	return PTEID_OK;

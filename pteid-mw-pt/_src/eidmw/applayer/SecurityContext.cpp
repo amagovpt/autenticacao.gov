@@ -31,6 +31,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <cassert>
 
 namespace eIDMW {
 
@@ -97,7 +98,8 @@ void SecurityContext::computeInitialSSC() {
 
 	// Convert to 64-bit long from byte array in big-endian format
 	for (size_t i = 0; i < sizeof(uint64_t); i++) {
-		const uint8_t bit_shifts = (sizeof(uint64_t) - 1 - i) * 8;
+		assert(((sizeof(uint64_t) - 1 - i) * 8) <= UCHAR_MAX);
+		const uint8_t bit_shifts = (unsigned char) ((sizeof(uint64_t) - 1 - i) * 8);
 		initial_ssc |= (uint64_t)ba[i] << bit_shifts;
 	}
 

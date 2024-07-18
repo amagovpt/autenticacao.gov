@@ -54,7 +54,8 @@ void CCard::setSSO(bool value) {
 	if (!value) {
 		// Zero-out currently stored PINs
 		for (size_t i = 0; i < m_verifiedPINs.size(); i++) {
-			std::string &pin = m_verifiedPINs[i];
+			assert(i <= UINT_MAX);
+			std::string &pin = m_verifiedPINs[(unsigned int) i];
 			std::fill(pin.begin(), pin.end(), 0);
 		}
 	}

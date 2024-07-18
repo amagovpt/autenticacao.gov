@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <string>
+#include <cassert>
 #include "Util.h"
 #ifndef WIN32
 #include <QString>
@@ -278,7 +279,8 @@ void stripPrefixFromMobile(std::wstring &in_mobile, int *out_codeIdx, std::wstri
 			prefix.assign(countryCode, 0, found - 1);
 			std::size_t prefixIdx = in_mobile.find(prefix);
 			if (prefixIdx != std::wstring::npos) {
-				*out_codeIdx = i;
+				assert(i <= INT_MAX);
+				*out_codeIdx = (int) i;
 				out_strippedMobile->assign(in_mobile.substr(prefixIdx + prefix.size(), std::wstring::npos));
 				return;
 			}

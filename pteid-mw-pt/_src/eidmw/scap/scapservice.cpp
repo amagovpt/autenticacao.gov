@@ -380,8 +380,8 @@ std::string create_search_attributes_body(const CitizenInfo &citizen_info, const
 		for (const ScapProvider &provider : providers) {
 			providers_strings.push_back(provider.uriId.c_str());
 		}
-
-		if ((providers_json = cJSON_CreateStringArray(&providers_strings[0], providers.size())) == NULL) {
+		assert(providers.size() <= INT_MAX);
+		if ((providers_json = cJSON_CreateStringArray(&providers_strings[0], (int) providers.size())) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to create provider id array", __FUNCTION__);
 			goto clean_up;
 		}
@@ -849,8 +849,8 @@ std::string create_sign_hash_body(const std::string &processId, const std::strin
 	for (const std::string &hash : hashes) {
 		hashes_strings.push_back(hash.c_str());
 	}
-
-	if ((hashes_array = cJSON_CreateStringArray(&hashes_strings[0], hashes.size())) == NULL) {
+	assert(hashes.size() <= INT_MAX);
+	if ((hashes_array = cJSON_CreateStringArray(&hashes_strings[0], (int) hashes.size())) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to create hashes_strings array", __FUNCTION__);
 		goto clean_up;
 	}

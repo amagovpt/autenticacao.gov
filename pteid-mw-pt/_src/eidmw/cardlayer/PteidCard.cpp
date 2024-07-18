@@ -590,6 +590,7 @@ void CPteidCard::SetSecurityEnv(const tPrivKey &key, unsigned long paddingType, 
 		oDatagem.Append(ucAlgo);
 		oDatagem.Append(0x84);
 		oDatagem.Append(0x01);
+		assert(key.ulKeyRef <= UCHAR_MAX);
 		oDatagem.Append((unsigned char)key.ulKeyRef);
 		oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
 
@@ -613,6 +614,7 @@ void CPteidCard::SetSecurityEnv(const tPrivKey &key, unsigned long paddingType, 
 		oDatagem.Append(ucAlgo);
 		oDatagem.Append(0x84);
 		oDatagem.Append(0x01);
+		assert(key.ulKeyRef <= UCHAR_MAX);
 		oDatagem.Append((unsigned char)key.ulKeyRef);
 		oResp = SendAPDU(0x22, 0x41, 0xB6, oDatagem);
 	} else {
@@ -622,7 +624,8 @@ void CPteidCard::SetSecurityEnv(const tPrivKey &key, unsigned long paddingType, 
 		oDataias.Append(0x40);
 		oDataias.Append(0x84);
 		oDataias.Append(0x01);
-		oDataias.Append(key.ulKeyRef);
+		assert(key.ulKeyRef <= UCHAR_MAX);
+		oDataias.Append((unsigned char)key.ulKeyRef);
 		oDataias.Append(0x80);
 		oDataias.Append(0x01);
 		oDataias.Append(0x02);
@@ -691,7 +694,8 @@ CByteArray CPteidCard::SignInternal(const tPrivKey &key, unsigned long paddingTy
 	CByteArray oData1;
 
 	oData1.Append(0x90); // SHA-1 Hash as Input
-	oData1.Append(oData.Size());
+	assert(oData.Size() <= UCHAR_MAX);
+	oData1.Append((unsigned char)oData.Size());
 
 	oData1.Append(oData);
 
@@ -911,7 +915,8 @@ CByteArray CPteidCard::SelectByPath(const std::string &csPath, bool bReturnFileI
 	selectByPathAPDU.Append(0xA4);
 	selectByPathAPDU.Append(oPath.Size() > 2 || select_by_path_from_mf ? 0x08 : 0x02);
 	selectByPathAPDU.Append(bReturnFileInfo ? 0x00 : 0x0C);
-	selectByPathAPDU.Append(oPath.Size());
+	assert(oPath.Size() <= UCHAR_MAX);
+	selectByPathAPDU.Append((unsigned char)oPath.Size());
 	selectByPathAPDU.Append(oPath);
 	selectByPathAPDU.Append(0x00);
 

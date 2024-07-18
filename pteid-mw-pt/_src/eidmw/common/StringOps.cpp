@@ -179,12 +179,12 @@ FontParams calculateFontParams(bool small_signature_format, const std::string &r
 	// printf("Calculate FontParams w=%d h=%d\n", rect_width, rect_height);
 
 	for (unsigned int i = max_font_size; i >= min_font_size; --i) {
-		int countReason = 0;
-		int countEntities = 0;
-		int countAttributes = 0;
-		int countLocation = 0;
+		size_t countReason = 0;
+		size_t countEntities = 0;
+		size_t countAttributes = 0;
+		size_t countLocation = 0;
 		int linesFit = 0;
-		int linesCount = 0;
+		size_t linesCount = 0;
 		font_size = i;
 		line_height = font_size > 5 ? font_size + 1 : font_size;
 
@@ -204,7 +204,7 @@ FontParams calculateFontParams(bool small_signature_format, const std::string &r
 		std::vector<std::string> wrappedName;
 		double first_line_offset = 6 * font_size;
 		wrappedName = wrapString(name, rect_width, font_size, MYRIAD_BOLD, 5, first_line_offset);
-		int countName = wrappedName.size();
+		size_t countName = wrappedName.size();
 		/*for (std::string s: wrappedName){
 		  printf("**** wrappedName **** %s\n", s.c_str());
 		}*/

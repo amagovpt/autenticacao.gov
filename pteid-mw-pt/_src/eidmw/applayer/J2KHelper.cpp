@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <cassert>
 
 #include "J2KHelper.h"
 
@@ -198,7 +199,8 @@ bool validate(IMAGE_FORMAT image_format, PHOTO_STREAM *p_stream) {
 void write_callback(png_structp png_ptr, png_bytep data, png_size_t length) {
 	/* with libpng15 next line causes pointer deference error; use libpng12 */
 	struct PNG_MEM_ENCODE *s_pointer = static_cast<struct PNG_MEM_ENCODE *>(png_get_io_ptr(png_ptr));
-	unsigned long nsize = s_pointer->size + length;
+	assert(s_pointer->size + length <= ULONG_MAX);
+	unsigned long nsize = (unsigned long) (s_pointer->size + length);
 
 	/* allocate or grow buffer */
 	if (s_pointer->buffer) {
@@ -213,7 +215,7 @@ void write_callback(png_structp png_ptr, png_bytep data, png_size_t length) {
 
 	/* copy new bytes to end of buffer */
 	memcpy(s_pointer->buffer + s_pointer->size, data, length);
-	s_pointer->size += length;
+	s_pointer->size += (unsigned long) length;
 }
 
 void flush_callback(png_structp png_ptr) {

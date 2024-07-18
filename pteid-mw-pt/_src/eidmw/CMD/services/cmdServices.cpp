@@ -12,6 +12,7 @@
 // STD Library
 #include <iostream>
 #include <string>
+#include <cassert>
 
 #include "cmdServices.h"
 #include "cmdErrors.h"
@@ -1055,8 +1056,8 @@ int CMDServices::getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code, 
 		MWLOG_ERR("ValidateOtp failed");
 		return ret;
 	}
-
-	std::vector<std::string> certs = parsePEMCertSequence((char *)certificate.c_str(), certificate.size());
+	assert(certificate.size() <= INT_MAX);
+	std::vector<std::string> certs = parsePEMCertSequence((char *)certificate.c_str(), (int) certificate.size());
 
 	for (size_t i = 0; i != certs.size(); i++) {
 		CByteArray ba;

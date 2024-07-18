@@ -693,7 +693,7 @@ void APL_CryptoFwk::loadCertificatesToOcspStore(X509_STORE *store) {
 
 	if (m_card) {
 		APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
-		for (int i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
+		for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
 			add_certif_to_store(pcard->getCertificates()->getSODCA(i));
 		}
 	}
@@ -701,7 +701,7 @@ void APL_CryptoFwk::loadCertificatesToOcspStore(X509_STORE *store) {
 		//APL_Certifs instance without card, used for CMD certificates
 		APL_Certifs eidstore;
 		
-		for (int i = 0; i < eidstore.countAll(); i++) {
+		for (unsigned long i = 0; i < eidstore.countAll(); i++) {
 			add_certif_to_store(eidstore.getCert(i));
 		}
 	}
@@ -802,8 +802,8 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 		if (proxy_user_value != NULL && strlen(proxy_user_value) > 0) {
 			fprintf(stderr, "OCSP: Adding proxy auth header!\n");
 			std::string proxy_cleartext = std::string(proxy_user_value) + ":" + proxy_pwd.getString();
-
-			char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), proxy_cleartext.size());
+			assert(proxy_cleartext.size <= LONG_MAX);
+			char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), (long) proxy_cleartext.size());
 			std::string header_value = std::string("basic ") + auth_token;
 			OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", header_value.c_str());
 			free(auth_token);

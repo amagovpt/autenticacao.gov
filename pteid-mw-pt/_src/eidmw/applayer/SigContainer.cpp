@@ -399,7 +399,8 @@ void SigContainer::extract(const char *filename, const char *out_dir) {
 			throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 		}
 		ret = fwrite(buffer, sizeof(char), read, fp_out);
-		if (ret < read) {
+		// If read was lower than 0, then it would have failed in the previous if
+		if (ret < (zip_uint64_t) read) {
 			MWLOG(LEV_ERROR, MOD_APL, "%s: I/O error writing to extracted file. Detail: %s", __FUNCTION__,
 				  strerror(errno));
 			fclose(fp_out);

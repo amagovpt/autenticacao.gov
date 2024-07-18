@@ -66,8 +66,8 @@ PDFDoc *makePDFDoc(const char *utf8Filepath) {
 #ifdef WIN32
 	std::string utf8Filename(utf8Filepath);
 	std::wstring utf16Filename = utilStringWiden(generatePrefixedNativePath(utf8Filename));
-
-	return new PDFDoc((wchar_t *)utf16Filename.c_str(), utf16Filename.size());
+	assert(utf16Filename.size() <= INT_MAX);
+	return new PDFDoc((wchar_t *)utf16Filename.c_str(), (int) utf16Filename.size());
 #else
 	return new PDFDoc(new GooString(utf8Filepath));
 #endif

@@ -3,6 +3,7 @@
 #include "credentials.h"
 #include <iostream>
 #include <functional>
+#include <cassert>
 #include "Util.h"
 #include "cmdSignatureClient.h"
 #include "eidErrors.h"
@@ -48,8 +49,9 @@ int CMDCertificates::ImportCertificatesClose(std::string otp) {
 		return res;
 
 	for (auto cert : m_certificates) {
+		assert(cert->length() <= ULONG_MAX);
 		pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (BYTE *)cert->c_str(),
-													cert->length());
+													(DWORD) cert->length());
 		if (!pCertContext) {
 			MWLOG_ERR("Error creating certificate context: %x", GetLastError());
 			return ERR_INV_CERTIFICATE;
@@ -268,7 +270,8 @@ bool CMDCertificates::SetCertificateFriendlyName(PCCERT_CONTEXT pCertContext, st
 
 	CRYPT_DATA_BLOB tpMobileNumber = {0, 0};
 	tpMobileNumber.pbData = (BYTE *)mobileNumberW.c_str();
-	tpMobileNumber.cbData = (mobileNumberW.size() + 1) * sizeof(wchar_t);
+	assert(((mobileNumberW.size() + 1) * sizeof(wchar_t)) <= ULONG_MAX);
+	tpMobileNumber.cbData = (DWORD) ((mobileNumberW.size() + 1) * sizeof(wchar_t));
 
 	if (!CertSetCertificateContextProperty(pCertContext, CERT_FIRST_USER_PROP_ID, CERT_STORE_NO_CRYPT_RELEASE_FLAG,
 										   &tpMobileNumber)) {

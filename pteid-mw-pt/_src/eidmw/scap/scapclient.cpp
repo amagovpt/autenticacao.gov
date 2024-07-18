@@ -88,6 +88,7 @@ static void save_secret_key(const std::string &secret_key, const std::string &ni
 }
 
 static std::vector<CByteArray> parse_cert_chain(const std::string &cert_chain) {
+	assert(cert_chain.size() <= INT_MAX);
 	if (cert_chain.empty()) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "PEM Certificate chain is empty and will not be parsed!!");
 		return {};
@@ -490,7 +491,8 @@ static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device, 
 static CByteArray decode_base64(const std::string &encoded) {
 	unsigned int decoded_len = 0;
 	unsigned char *decoded_buffer;
-	Base64Decode(encoded.c_str(), encoded.size(), decoded_buffer, decoded_len);
+	assert(encoded.size <= UINT_MAX);
+	Base64Decode(encoded.c_str(), (unsigned int) encoded.size(), decoded_buffer, decoded_len);
 
 	CByteArray decoded(decoded_buffer, decoded_len);
 	free(decoded_buffer);

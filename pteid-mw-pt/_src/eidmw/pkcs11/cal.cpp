@@ -985,7 +985,8 @@ int cal_read_object(CK_SLOT_ID hSlot, P11_OBJECT *pObject) {
 				return CKR_DEVICE_ERROR;
 
 			ec_point.Append(0x4);
-			ec_point.Append(len);
+			assert(len <= UCHAR_MAX);
+			ec_point.Append((unsigned char) len);
 			ec_point.Append(point, len);
 		}
 

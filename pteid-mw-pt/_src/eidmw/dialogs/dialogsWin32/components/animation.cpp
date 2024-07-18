@@ -33,8 +33,7 @@ void PteidControls::Paint_Circle_Animation(HWND hWnd, HDC hdc, int circle_x, int
 	graphics.FillRectangle(&white_brush, circle_x, circle_y, outer_circle_diameter, outer_circle_diameter);
 
 	graphics.FillEllipse(&cc_lightblue_brush, circle_x, circle_y, outer_circle_diameter, outer_circle_diameter);
-
-	graphics.FillPie(&cc_blue_brush, circle_x, circle_y, outer_circle_diameter, outer_circle_diameter, angle, 45.0f);
+	graphics.FillPie(&cc_blue_brush, circle_x, circle_y, outer_circle_diameter, outer_circle_diameter, (float) angle, 45.0f);
 	// Smaller ellipse to paint white over the inner part of the circle slice
 	graphics.FillEllipse(&white_brush, circle_x + 15, circle_y + 15, inner_circle_diameter, inner_circle_diameter);
 }

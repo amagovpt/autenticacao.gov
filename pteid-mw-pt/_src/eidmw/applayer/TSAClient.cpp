@@ -49,7 +49,7 @@ CByteArray TSAClient::received_data = CByteArray();
 
 size_t TSAClient::curl_write_data(char *ptr, size_t size, size_t nmemb, void *stream) {
 	size_t realsize = size * nmemb;
-	received_data.Append((const unsigned char *)ptr, realsize);
+	received_data.SafeAppend((const unsigned char *)ptr, realsize);
 
 	return realsize;
 }
