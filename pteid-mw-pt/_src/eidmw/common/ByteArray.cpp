@@ -240,7 +240,7 @@ void CByteArray::Append(const unsigned char *pucData, unsigned long ulSize) {
 
 //SafeAppend
 void CByteArray::SafeAppend(const unsigned char *pucData, size_t size){
-	assert(size <= ULLONG_MAX);
+	assert(size <= ULONG_MAX);
 	Append(pucData, (unsigned long) size);
 }
 

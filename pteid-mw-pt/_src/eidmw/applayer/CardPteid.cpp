@@ -821,7 +821,7 @@ bool APL_EidFile_Photo::MapFields() {
 	// find 5F2E tag followed by 0x82.
 	// stop iterating 5 bytes before (0x5F 0x2E 0x82 XX XX)
 	for (size_t i = 0; i < m_data.Size() - 5; i++) {
-		assert(i + 2 <= ULLONG_MAX);
+		assert(i + 2 <= ULONG_MAX);
 		if (m_data.GetByte((unsigned long) i) == 0x5F && m_data.GetByte((unsigned long) (i + 1)) == 0x2E && m_data.GetByte((unsigned long) (i + 2)) == 0x82) {
 			tag_offset = i;
 			break;
@@ -831,14 +831,14 @@ bool APL_EidFile_Photo::MapFields() {
 	if (tag_offset == 0 || tag_offset >= m_data.Size())
 		return false;
 
-	assert(tag_offset <= ULLONG_MAX);
+	assert(tag_offset <= ULONG_MAX);
 	const auto len = der_get_length(m_data.GetBytes((unsigned long) tag_offset));
 	if (len == 0)
 		return false;
 	// Skip the 3 data blocks defined in ISO/IEC 19794-5 spec
 	size_t photo_offset = tag_offset + 5 + PTEIDNG_FIELD_ID_LEN_FACIALRECHDR + PTEIDNG_FIELD_ID_LEN_FACIALINFO +
 								 PTEIDNG_FIELD_ID_LEN_IMAGEINFO;
-	assert(photo_offset <= ULLONG_MAX);
+	assert(photo_offset <= ULONG_MAX);
 	m_PhotoRaw.Append(m_data.GetBytes((unsigned long) photo_offset));
 
 	m_mappedFields = true;

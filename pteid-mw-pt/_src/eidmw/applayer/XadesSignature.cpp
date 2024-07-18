@@ -527,9 +527,9 @@ static int hashNode(DOMDocument *doc, XMLByte *hash_buf, const char *ns, const c
 	}
 
 	std::string c14n = canonicalNode(node, new_dom);
-
 	// TODO: Should be configurable
-	SHA256_Wrapper((unsigned char *)c14n.c_str(), c14n.size(), hash_buf);
+	assert(c14n.size() <= ULONG_MAX);
+	SHA256_Wrapper((unsigned char *)c14n.c_str(), (unsigned long) c14n.size(), hash_buf);
 
 	new_dom->release();
 
@@ -703,7 +703,8 @@ static bool appendTimestamp(DOMDocument *dom, DOMNode *parent, const char *tag_n
 		EVP_DigestFinal_ex(digest_state, signature_hash, &md_len);
 	} else {
 		// TODO: Should be configurable
-		SHA256_Wrapper((unsigned char *)to_timestamp.c_str(), to_timestamp.size(), signature_hash);
+		assert(to_timestamp.size() <= ULONG_MAX);
+		SHA256_Wrapper((unsigned char *)to_timestamp.c_str(), (unsigned long) to_timestamp.size(), signature_hash);
 	}
 
 	tsa.timestamp_data(signature_hash, SHA256_LEN);
@@ -1029,7 +1030,8 @@ void XadesSignature::signASiC(const char *path) {
 	}
 
 	initXMLUtils();
-	CByteArray &sigXml = sign(&paths[0], paths.size(), container);
+	assert(paths.size() <= UINT_MAX);
+	CByteArray &sigXml = sign(&paths[0], (unsigned int) paths.size(), container);
 	terminateXMLUtils();
 
 	const char *uniqueFileName = NULL;

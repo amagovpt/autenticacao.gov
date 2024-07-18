@@ -64,7 +64,7 @@ public:
 	}
 
 	CByteArray arrayFromBufMem(BUF_MEM *mem) {
-		assert(mem->length <= ULLONG_MAX);
+		assert(mem->length <= ULONG_MAX);
 		return CByteArray((unsigned char *)mem->data, (unsigned long) mem->length); 
 	}
 
@@ -162,7 +162,7 @@ public:
 			BUF_MEM *memTlvLe = bufMemFromByteArray(TlvLe);
 
 			BUF_MEM *paddedTlvLe = EAC_add_iso_pad(m_ctx, memTlvLe);
-			assert(paddedTlvLe->length <= ULLONG_MAX);
+			assert(paddedTlvLe->length <= ULONG_MAX);
 			inputForMac.Append((unsigned char *)paddedTlvLe->data, (unsigned long) paddedTlvLe->length);
 			BUF_MEM *inputMac = bufMemFromByteArray(inputForMac);
 
@@ -423,7 +423,7 @@ public:
 		token = PACE_STEP3D_compute_authentication_token(m_ctx, cardPubKey);
 
 		verifyToken.Append(finalAuth, sizeof(finalAuth));
-		assert(token->length <= ULLONG_MAX);
+		assert(token->length <= ULONG_MAX);
 		verifyToken.Append(reinterpret_cast<unsigned char *>(token->data), (unsigned long) token->length);
 		verifyToken.Append(0x00);
 
