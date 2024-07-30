@@ -579,6 +579,12 @@ const std::vector<int> APL_ICAO::EXPECTED_TAGS = {
 	DG1, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16,
 };
 
+APL_ICAO::~APL_ICAO() {
+	if (csca_store) {
+		X509_STORE_free(csca_store);
+	}
+}
+
 std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	std::vector<DataGroupID> datagroups;
 	{
@@ -675,8 +681,11 @@ void APL_ICAO::loadAvailableDataGroups() {
 }
 
 CByteArray APL_ICAO::verifySodFileIntegrity(const CByteArray &data) {
-	CByteArray contents;
+	if (!csca_store) {
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_VERIFY_SOD_SIGN);
+	}
 
+	CByteArray contents;
 	PKCS7 *p7 = nullptr;
 	char *error_msg = nullptr;
 	bool sod_verified = false;
@@ -816,13 +825,12 @@ ASN1_SEQUENCE(CscaMasterList) = {ASN1_SIMPLE(CscaMasterList, version, ASN1_INTEG
 	int errLine;
 	errCode = ERR_get_error_all(&errFile, &errLine, &errFunction, NULL, NULL);
 	errString = ERR_error_string(errCode, NULL);
-	fprintf(stderr, "Decoding error for %s! Detail: %s generated in function %s at %s line %d\n", context, errString,
-			errFunction, errFile, errLine);
+	MWLOG(LEV_ERROR, MOD_CAL, L"Error decoding %s! Detail: %s", context, errString);
 }
 
 X509_STORE *process_certificates(CscaMasterList *cml) {
 	if (cml == NULL || cml->certList == NULL) {
-		fprintf(stderr, "Invalid CscaMasterList or certList is empty.\n");
+		MWLOG(LEV_ERROR, MOD_CAL, L"Invalid CscaMasterList or certList is empty.\n");
 		return nullptr;
 	}
 
@@ -833,24 +841,11 @@ X509_STORE *process_certificates(CscaMasterList *cml) {
 	for (int i = 0; i < num_certs; i++) {
 		X509 *cert = sk_X509_value(cml->certList, i);
 		if (cert == NULL) {
-			fprintf(stderr, "Failed to retrieve certificate at index %d\n", i);
+			MWLOG(LEV_ERROR, MOD_CAL, L"Failed to retrieve certificate at index %d\n", i);
 			continue;
 		}
 
 		X509_STORE_add_cert(store, cert);
-
-		// Print certificate subject name
-		char *subj = X509_NAME_oneline(X509_get_subject_name(cert), NULL, 0);
-		if (subj) {
-			printf("Certificate %d Subject: %s\n", i, subj);
-
-			const ASN1_TIME *notafter = X509_get_notAfter(cert);
-			printf("Certificate NotAfter: ");
-			ASN1_TIME_print(bio_stdout, notafter);
-			puts("\n");
-
-			OPENSSL_free(subj); // Free the memory allocated by X509_NAME_oneline
-		}
 	}
 	BIO_free(bio_stdout);
 
@@ -858,6 +853,10 @@ X509_STORE *process_certificates(CscaMasterList *cml) {
 }
 
 void APL_ICAO::loadMasterList(const char *filePath) {
+	if (csca_store) {
+		X509_STORE_free(csca_store);
+	}
+
 	unsigned char *der_buffer = NULL;
 	size_t der_len = read_binary_file(filePath, &der_buffer);
 
@@ -879,7 +878,7 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 
 		ASN1_OBJECT *expected_oid = OBJ_nid2obj(masterlist_nid);
 		if (OBJ_cmp(expected_oid, content_type) != 0) {
-			fprintf(stderr, "ERROR: unexpected contentType OID in CMS structure!\n");
+			MWLOG(LEV_ERROR, MOD_CAL, L"ERROR: unexpected contentType OID in CMS structure!\n");
 		}
 
 		int ret = CMS_verify(cms, NULL, NULL, NULL, bio_out, flags);
@@ -887,7 +886,7 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 			const unsigned char *p_data;
 			long size = BIO_get_mem_data(bio_out, &p_data);
 
-			fprintf(stderr, "DBG: MasterList content: %ld bytes\n", size);
+			MWLOG(LEV_INFO, MOD_CAL, L"DBG: MasterList content: %ld bytes\n", size);
 
 			CscaMasterList *ml = d2i_CscaMasterList(NULL, &p_data, size);
 			if (ml) {
@@ -896,7 +895,7 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 				printOpenSSLError("CscaMasterList");
 			}
 		} else {
-			fprintf(stderr, "Failed to verify CMS SignedData structure!\n");
+			MWLOG(LEV_ERROR, MOD_CAL, L"Failed to verify CMS SignedData structure!\n");
 			printOpenSSLError("");
 		}
 	}

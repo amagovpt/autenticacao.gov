@@ -81,6 +81,11 @@ APL_ReaderContext::~APL_ReaderContext() {
 		delete m_card;
 		m_card = NULL;
 	}
+
+	if (m_icao) {
+		delete m_icao;
+		m_icao = NULL;
+	}
 }
 
 const char *APL_ReaderContext::getName() {

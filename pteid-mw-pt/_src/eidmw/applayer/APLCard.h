@@ -340,6 +340,8 @@ class APL_ICAO {
 public:
 	enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
 
+	~APL_ICAO();
+
 	EIDMW_APL_API virtual void initPaceAuthentication(const char *secret, size_t length,
 													  APL_PACEAuthenticationType secretType);
 	EIDMW_APL_API virtual std::vector<DataGroupID> getAvailableDatagroups();
@@ -365,7 +367,7 @@ private:
 	bool verifySOD(DataGroupID tag, const CByteArray& data);
 	bool performActiveAuthentication();
 
-	X509_STORE *csca_store;
+	X509_STORE *csca_store = nullptr;
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);
