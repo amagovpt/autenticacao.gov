@@ -1,6 +1,5 @@
 #include "IcaoDg2.h"
 
-#include "PhotoPteid.h"
 #include <ByteArray.h>
 
 #include <Util.h>
@@ -91,8 +90,6 @@ ASN1_SEQUENCE(BIT_HEADER) = {ASN1_IMP_EX(BIT_HEADER, version, ASN1_OCTET_STRING,
 unsigned short readTwoBytes(const unsigned char *data) { return (data[0] << 8) | data[1]; }
 
 IcaoDg2::IcaoDg2(const CByteArray &arrayDg2) {
-	const unsigned char *arrayDg2Ptr = arrayDg2.GetBytes();
-	long pLength = 0;
 	DG2 *decoded = decodeDg2(arrayDg2);
 	if (!decoded->bit_group->number_of_instances || decoded->bit_group->number_of_instances->length == 0) {
 		m_numberOfBiometrics = 0;
@@ -163,12 +160,12 @@ const CByteArray &BiometricHeaderTemplate::formatOwner() const { return m_format
 const CByteArray &BiometricHeaderTemplate::formatType() const { return m_formatType; }
 
 FaceInfo::FaceInfo(const unsigned char *biometricData) {
-	m_encodingBytes = readTwoBytes(biometricData);
-	biometricData = (biometricData + 5); // 2 encoding 3 size of total bytes
+	m_encodingBytes = 0x5F2E;
 	if (biometricData[0] == FAC_CODE[0] && biometricData[1] == FAC_CODE[1] && biometricData[2] == FAC_CODE[2]) {
 		biometricData = (biometricData + 4); // skip fac code and first 00 byte 3 + 1
 
 		m_version = std::string((const char *)biometricData, 4); // version is 4 bytes
+
 		biometricData += 4;
 		m_sizeOfRecord =
 			(biometricData[0] << 24) | (biometricData[1] << 16) | (biometricData[2] << 8) | biometricData[3]; // 4 bytes
@@ -177,9 +174,11 @@ FaceInfo::FaceInfo(const unsigned char *biometricData) {
 		m_numberOfFacialImages = readTwoBytes(biometricData); // 2 bytes
 		biometricData += 2;
 		for (unsigned int i = 0; i < m_numberOfFacialImages; ++i) {
-			std::unique_ptr<FaceInfoData> data = std::make_unique<FaceInfoData>();
+			std::shared_ptr<FaceInfoData> data = std::make_unique<FaceInfoData>();
 			data->m_facialRecordDataLength = (biometricData[0] << 24) | (biometricData[1] << 16) |
 											 (biometricData[2] << 8) | biometricData[3]; // 4 bytes
+			m_faceInfoData.push_back(data);
+
 			biometricData += 4;
 
 			data->m_numberOfFeaturePoints = readTwoBytes(biometricData); // 2 bytes
@@ -243,7 +242,6 @@ FaceInfo::FaceInfo(const unsigned char *biometricData) {
 			size_t sizePhotoRaw = data->m_facialRecordDataLength - 20 - (8 * data->m_numberOfFeaturePoints) - 12;
 			data->m_photoRawData = CByteArray(biometricData, sizePhotoRaw);
 
-			m_faceInfoData.push_back(std::move(data));
 			biometricData += sizePhotoRaw;
 		}
 	}
@@ -293,13 +291,9 @@ unsigned short FeaturePoint::y_coord() const { return m_y_coord; }
 
 unsigned short FeaturePoint::reserved() const { return m_reserved; }
 
-long FaceInfoData::facialRecordDataLength() const {
-	return m_facialRecordDataLength;
-}
+long FaceInfoData::facialRecordDataLength() const { return m_facialRecordDataLength; }
 
-unsigned short FaceInfoData::numberOfFeaturePoints() const {
-	return m_numberOfFeaturePoints;
-}
+unsigned short FaceInfoData::numberOfFeaturePoints() const { return m_numberOfFeaturePoints; }
 
 unsigned char FaceInfoData::gender() const { return m_gender; }
 

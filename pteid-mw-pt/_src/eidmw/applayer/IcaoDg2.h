@@ -101,7 +101,7 @@ private: // jpeg2000 5f 2e jpeg 7f 2e
 	unsigned short m_encodingBytes;
 	long m_sizeOfRecord;
 	long m_numberOfFacialImages;
-	std::vector<std::unique_ptr<FaceInfoData>> m_faceInfoData;
+	std::vector<std::shared_ptr<FaceInfoData>> m_faceInfoData;
 };
 typedef struct BIT_HEADER_st BIT_HEADER;
 
@@ -142,8 +142,6 @@ private:
 	std::unique_ptr<BiometricHeaderTemplate> m_biometricTemplate;
 	std::unique_ptr<FaceInfo> m_faceInfo;
 };
-
-class PhotoPteid;
 
 class IcaoDg2 {
 public:
