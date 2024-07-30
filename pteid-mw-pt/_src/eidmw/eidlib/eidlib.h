@@ -896,6 +896,8 @@ public:
 	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
 	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();
 
+	PTEIDSDK_API virtual void loadMasterList(const char *filePath);
+
 protected:
 	ICAO_Card(const SDK_Context *context, APL_ICAO *impl); /**< For internal use : Constructor */
 

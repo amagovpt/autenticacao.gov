@@ -27,6 +27,13 @@
 #ifndef __SCCARDUTIL_H__
 #define __SCCARDUTIL_H__
 
+#include <openssl/x509.h>
+#include <openssl/asn1t.h>
+#include <openssl/asn1.h>
+#include <openssl/err.h>
+#include <openssl/cms.h>
+#include <openssl/bio.h>
+
 #include "APLPublicKey.h"
 #include "APLReader.h"
 #include "ByteArray.h"
@@ -316,6 +323,16 @@ protected:
 	std::string *m_appletVersion;
 };
 
+typedef struct CscaMasterList_st {
+	ASN1_INTEGER version;
+	STACK_OF(X509) * certList;
+} CscaMasterList;
+
+typedef struct CscaMasterList_st {
+	ASN1_INTEGER version;
+	STACK_OF(X509) * certList;
+} CscaMasterList;
+
 class IcaoDg1;
 class IcaoDg2;
 class PhotoPteid;
@@ -329,8 +346,8 @@ public:
 	EIDMW_APL_API virtual CByteArray readDatagroup(DataGroupID tag);
 	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
 	EIDMW_APL_API virtual IcaoDg2 *readDataGroup2();
-	// TODO:
-	// pass in master certificates list
+	EIDMW_APL_API virtual void loadMasterList(const char *filePath);
+
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
 	std::unique_ptr<SODAttributes> m_SodAttributes;
@@ -347,6 +364,8 @@ private:
 	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray& data);
 	bool performActiveAuthentication();
+
+	X509_STORE *csca_store;
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);

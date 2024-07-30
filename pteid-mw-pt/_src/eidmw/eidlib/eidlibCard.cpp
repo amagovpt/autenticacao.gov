@@ -1033,6 +1033,13 @@ PTEID_ICAO_DG2 *ICAO_Card::readDataGroup2() {
 	return dg2;
 }
 
+void ICAO_Card::loadMasterList(const char *filePath) {
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	icao->loadMasterList(filePath);
+	END_TRY_CATCH
+}
+
 /*****************************************************************************************
 ----------------------------- PTEID_XmlUserRequestedInfo ---------------------------------
 *****************************************************************************************/

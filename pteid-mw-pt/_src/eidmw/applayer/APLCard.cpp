@@ -665,8 +665,8 @@ void APL_ICAO::loadAvailableDataGroups() {
 
 	CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH);
 
-	CByteArray sod = oData.GetBytes(65);
-	// CByteArray sod = verifySodFileIntegrity(oData);
+	// CByteArray sod = oData.GetBytes(65);
+	CByteArray sod = verifySodFileIntegrity(oData);
 
 	SODParser parser;
 	parser.ParseSodEncapsulatedContent(sod, EXPECTED_TAGS);
@@ -697,24 +697,20 @@ CByteArray APL_ICAO::verifySodFileIntegrity(const CByteArray &data) {
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_INVALID_PKCS7);
 	}
 
-	X509_STORE *store = X509_STORE_new();
-
-	// TODO: load all root certificates here
-
 	BIO *out = BIO_new(BIO_s_mem());
-	sod_verified = PKCS7_verify(p7, nullptr, store, nullptr, out, 0) == 1;
-	if (sod_verified) {
-		unsigned char *p;
-		size_t size = BIO_get_mem_data(out, &p);
-		contents.Append(p, size);
-	} else {
+	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
+
+	unsigned char *p;
+	size_t size = BIO_get_mem_data(out, &p);
+	contents.Append(p, size);
+
+	if (!sod_verified) {
 		error_msg = Openssl_errors_to_string();
 		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Error validating SOD signature. OpenSSL errors:\n%s",
 			  error_msg != nullptr ? error_msg : "N/A");
 		free(error_msg);
 	}
 
-	X509_STORE_free(store);
 	BIO_free_all(out);
 	PKCS7_free(p7);
 
@@ -737,6 +733,40 @@ bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
 
 	auto cryptFwk = AppLayer.getCryptoFwk();
 	return cryptFwk->VerifyHashSha256(data, hashes.at(tag));
+}
+
+size_t read_binary_file(const char *filename, unsigned char **outBuffer) {
+	FILE *file = fopen(filename, "rb");
+	if (file == NULL) {
+		perror("Failed to open file");
+		return -1;
+	}
+
+	// Seek to the end of the file to determine the file size
+	fseek(file, 0, SEEK_END);
+	size_t fileSize = ftell(file);
+	rewind(file); // Go back to the start of the file
+
+	// Allocate memory for the entire file
+	*outBuffer = (unsigned char *)malloc(fileSize);
+	if (*outBuffer == NULL) {
+		fprintf(stderr, "Memory allocation failed\n");
+		fclose(file);
+		return -1;
+	}
+
+	// Read the file into the buffer
+	size_t bytesRead = fread(*outBuffer, 1, fileSize, file);
+	if (bytesRead != fileSize) {
+		fprintf(stderr, "Error reading file\n");
+		free(*outBuffer);
+		fclose(file);
+		return -1;
+	}
+
+	// Close the file
+	fclose(file);
+	return fileSize;
 }
 
 bool APL_ICAO::performActiveAuthentication() {
@@ -771,6 +801,105 @@ bool APL_ICAO::performActiveAuthentication() {
 	cryptFwk->performActiveAuthentication(oid, pubkey);
 
 	return true;
+}
+
+ASN1_SEQUENCE(CscaMasterList) = {ASN1_SIMPLE(CscaMasterList, version, ASN1_INTEGER),
+								 ASN1_SET_OF(CscaMasterList, certList, X509)} ASN1_SEQUENCE_END(CscaMasterList)
+
+	IMPLEMENT_ASN1_FUNCTIONS(CscaMasterList)
+
+		void printOpenSSLError(const char *context) {
+	unsigned long errCode;
+	const char *errString;
+	const char *errFile;
+	const char *errFunction;
+	int errLine;
+	errCode = ERR_get_error_all(&errFile, &errLine, &errFunction, NULL, NULL);
+	errString = ERR_error_string(errCode, NULL);
+	fprintf(stderr, "Decoding error for %s! Detail: %s generated in function %s at %s line %d\n", context, errString,
+			errFunction, errFile, errLine);
+}
+
+X509_STORE *process_certificates(CscaMasterList *cml) {
+	if (cml == NULL || cml->certList == NULL) {
+		fprintf(stderr, "Invalid CscaMasterList or certList is empty.\n");
+		return nullptr;
+	}
+
+	X509_STORE *store = X509_STORE_new();
+
+	int num_certs = sk_X509_num(cml->certList);
+	BIO *bio_stdout = BIO_new_fp(stdout, BIO_NOCLOSE);
+	for (int i = 0; i < num_certs; i++) {
+		X509 *cert = sk_X509_value(cml->certList, i);
+		if (cert == NULL) {
+			fprintf(stderr, "Failed to retrieve certificate at index %d\n", i);
+			continue;
+		}
+
+		X509_STORE_add_cert(store, cert);
+
+		// Print certificate subject name
+		char *subj = X509_NAME_oneline(X509_get_subject_name(cert), NULL, 0);
+		if (subj) {
+			printf("Certificate %d Subject: %s\n", i, subj);
+
+			const ASN1_TIME *notafter = X509_get_notAfter(cert);
+			printf("Certificate NotAfter: ");
+			ASN1_TIME_print(bio_stdout, notafter);
+			puts("\n");
+
+			OPENSSL_free(subj); // Free the memory allocated by X509_NAME_oneline
+		}
+	}
+	BIO_free(bio_stdout);
+
+	return store;
+}
+
+void APL_ICAO::loadMasterList(const char *filePath) {
+	unsigned char *der_buffer = NULL;
+	size_t der_len = read_binary_file(filePath, &der_buffer);
+
+	const unsigned char *p = der_buffer;
+	CMS_ContentInfo *cms = d2i_CMS_ContentInfo(NULL, &p, der_len);
+
+	static const char *masterListSN = "cscaMasterList";
+	static const char *masterListLN = "idIcaoCscaMasterList";
+	int masterlist_nid = OBJ_create("2.23.136.1.1.2", masterListSN, masterListLN);
+
+	if (cms == NULL) {
+		printOpenSSLError("CMS_ContentInfo");
+	} else {
+
+		BIO *bio_out = BIO_new(BIO_s_mem());
+		unsigned int flags = CMS_NO_SIGNER_CERT_VERIFY;
+
+		const ASN1_OBJECT *content_type = CMS_get0_eContentType(cms);
+
+		ASN1_OBJECT *expected_oid = OBJ_nid2obj(masterlist_nid);
+		if (OBJ_cmp(expected_oid, content_type) != 0) {
+			fprintf(stderr, "ERROR: unexpected contentType OID in CMS structure!\n");
+		}
+
+		int ret = CMS_verify(cms, NULL, NULL, NULL, bio_out, flags);
+		if (ret == 1) {
+			const unsigned char *p_data;
+			long size = BIO_get_mem_data(bio_out, &p_data);
+
+			fprintf(stderr, "DBG: MasterList content: %ld bytes\n", size);
+
+			CscaMasterList *ml = d2i_CscaMasterList(NULL, &p_data, size);
+			if (ml) {
+				csca_store = process_certificates(ml);
+			} else {
+				printOpenSSLError("CscaMasterList");
+			}
+		} else {
+			fprintf(stderr, "Failed to verify CMS SignedData structure!\n");
+			printOpenSSLError("");
+		}
+	}
 }
 
 } // namespace eIDMW
