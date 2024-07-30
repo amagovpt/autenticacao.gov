@@ -42,6 +42,7 @@
 #include "SigContainer.h"
 #include "XadesSignature.h"
 #include "cryptoFwkPteid.h"
+#include "Util.h"
 
 #include <openssl/rand.h>
 #include <time.h>
@@ -671,8 +672,8 @@ void APL_ICAO::loadAvailableDataGroups() {
 
 	CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH);
 
-	// CByteArray sod = oData.GetBytes(65);
-	CByteArray sod = verifySodFileIntegrity(oData);
+	CByteArray sod = oData.GetBytes(65);
+	//CByteArray sod = verifySodFileIntegrity(oData);
 
 	SODParser parser;
 	parser.ParseSodEncapsulatedContent(sod, EXPECTED_TAGS);
@@ -709,11 +710,11 @@ CByteArray APL_ICAO::verifySodFileIntegrity(const CByteArray &data) {
 	BIO *out = BIO_new(BIO_s_mem());
 	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
 
-	unsigned char *p;
-	size_t size = BIO_get_mem_data(out, &p);
-	contents.Append(p, size);
-
-	if (!sod_verified) {
+	if (sod_verified) {
+		unsigned char *p;
+		size_t size = BIO_get_mem_data(out, &p);
+		contents.Append(p, size);
+	} else {
 		error_msg = Openssl_errors_to_string();
 		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Error validating SOD signature. OpenSSL errors:\n%s",
 			  error_msg != nullptr ? error_msg : "N/A");
@@ -742,40 +743,6 @@ bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
 
 	auto cryptFwk = AppLayer.getCryptoFwk();
 	return cryptFwk->VerifyHashSha256(data, hashes.at(tag));
-}
-
-size_t read_binary_file(const char *filename, unsigned char **outBuffer) {
-	FILE *file = fopen(filename, "rb");
-	if (file == NULL) {
-		perror("Failed to open file");
-		return -1;
-	}
-
-	// Seek to the end of the file to determine the file size
-	fseek(file, 0, SEEK_END);
-	size_t fileSize = ftell(file);
-	rewind(file); // Go back to the start of the file
-
-	// Allocate memory for the entire file
-	*outBuffer = (unsigned char *)malloc(fileSize);
-	if (*outBuffer == NULL) {
-		fprintf(stderr, "Memory allocation failed\n");
-		fclose(file);
-		return -1;
-	}
-
-	// Read the file into the buffer
-	size_t bytesRead = fread(*outBuffer, 1, fileSize, file);
-	if (bytesRead != fileSize) {
-		fprintf(stderr, "Error reading file\n");
-		free(*outBuffer);
-		fclose(file);
-		return -1;
-	}
-
-	// Close the file
-	fclose(file);
-	return fileSize;
 }
 
 bool APL_ICAO::performActiveAuthentication() {
@@ -813,11 +780,11 @@ bool APL_ICAO::performActiveAuthentication() {
 }
 
 ASN1_SEQUENCE(CscaMasterList) = {ASN1_SIMPLE(CscaMasterList, version, ASN1_INTEGER),
-								 ASN1_SET_OF(CscaMasterList, certList, X509)} ASN1_SEQUENCE_END(CscaMasterList)
+								 ASN1_SET_OF(CscaMasterList, certList, X509)};
+ASN1_SEQUENCE_END(CscaMasterList);
+IMPLEMENT_ASN1_FUNCTIONS(CscaMasterList);
 
-	IMPLEMENT_ASN1_FUNCTIONS(CscaMasterList)
-
-		void printOpenSSLError(const char *context) {
+void printOpenSSLError(const char *context) {
 	unsigned long errCode;
 	const char *errString;
 	const char *errFile;
@@ -828,10 +795,10 @@ ASN1_SEQUENCE(CscaMasterList) = {ASN1_SIMPLE(CscaMasterList, version, ASN1_INTEG
 	MWLOG(LEV_ERROR, MOD_CAL, L"Error decoding %s! Detail: %s", context, errString);
 }
 
-X509_STORE *process_certificates(CscaMasterList *cml) {
+void APL_ICAO::initMasterListStore(CscaMasterList *cml) {
 	if (cml == NULL || cml->certList == NULL) {
 		MWLOG(LEV_ERROR, MOD_CAL, L"Invalid CscaMasterList or certList is empty.\n");
-		return nullptr;
+		return;
 	}
 
 	X509_STORE *store = X509_STORE_new();
@@ -849,7 +816,7 @@ X509_STORE *process_certificates(CscaMasterList *cml) {
 	}
 	BIO_free(bio_stdout);
 
-	return store;
+	csca_store = store;
 }
 
 void APL_ICAO::loadMasterList(const char *filePath) {
@@ -886,19 +853,26 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 			const unsigned char *p_data;
 			long size = BIO_get_mem_data(bio_out, &p_data);
 
-			MWLOG(LEV_INFO, MOD_CAL, L"DBG: MasterList content: %ld bytes\n", size);
+			MWLOG(LEV_INFO, MOD_CAL, L"MasterList content: %ld bytes\n", size);
 
 			CscaMasterList *ml = d2i_CscaMasterList(NULL, &p_data, size);
 			if (ml) {
-				csca_store = process_certificates(ml);
+				initMasterListStore(ml);
 			} else {
 				printOpenSSLError("CscaMasterList");
 			}
+
+			CscaMasterList_free(ml);
 		} else {
 			MWLOG(LEV_ERROR, MOD_CAL, L"Failed to verify CMS SignedData structure!\n");
 			printOpenSSLError("");
 		}
+
+		BIO_free(bio_out);
 	}
+
+	free(der_buffer);
+	CMS_ContentInfo_free(cms);
 }
 
 } // namespace eIDMW

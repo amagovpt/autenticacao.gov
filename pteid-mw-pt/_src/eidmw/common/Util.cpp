@@ -545,4 +545,38 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr) {
 	return r;
 }
 
+size_t read_binary_file(const char *filename, unsigned char **outBuffer) {
+	FILE *file = fopen(filename, "rb");
+	if (file == NULL) {
+		perror("Failed to open file");
+		return -1;
+	}
+
+	// Seek to the end of the file to determine the file size
+	fseek(file, 0, SEEK_END);
+	size_t fileSize = ftell(file);
+	rewind(file); // Go back to the start of the file
+
+	// Allocate memory for the entire file
+	*outBuffer = (unsigned char *)malloc(fileSize);
+	if (*outBuffer == NULL) {
+		fprintf(stderr, "Memory allocation failed\n");
+		fclose(file);
+		return -1;
+	}
+
+	// Read the file into the buffer
+	size_t bytesRead = fread(*outBuffer, 1, fileSize, file);
+	if (bytesRead != fileSize) {
+		fprintf(stderr, "Error reading file\n");
+		free(*outBuffer);
+		fclose(file);
+		return -1;
+	}
+
+	// Close the file
+	fclose(file);
+	return fileSize;
+}
+
 #endif

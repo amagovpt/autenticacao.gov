@@ -328,11 +328,6 @@ typedef struct CscaMasterList_st {
 	STACK_OF(X509) * certList;
 } CscaMasterList;
 
-typedef struct CscaMasterList_st {
-	ASN1_INTEGER version;
-	STACK_OF(X509) * certList;
-} CscaMasterList;
-
 class IcaoDg1;
 class IcaoDg2;
 class PhotoPteid;
@@ -366,6 +361,7 @@ private:
 	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray& data);
 	bool performActiveAuthentication();
+	void initMasterListStore(CscaMasterList *cml);
 
 	X509_STORE *csca_store = nullptr;
 
@@ -374,15 +370,6 @@ protected:
 
 	friend APL_ICAO *APL_ReaderContext::getICAOCard();
 };
-
-// represents a datagroup. usefull to do stuff like active authentication and sod
-// TODO: move somewhere else
-// class APL_DataGroup : public APL_CardFile {
-// 	virtual tCardFileStatus VerifyFile() override;
-// 	virtual void doSODCheck(bool check) override;
-// 	virtual bool MapFields() override;
-// 	virtual void EmptyFields() override;
-// };
 
 } // namespace eIDMW
 
