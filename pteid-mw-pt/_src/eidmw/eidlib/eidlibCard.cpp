@@ -27,23 +27,25 @@
 **************************************************************************** */
 #include "eidlib.h"
 
-#include "eidlibException.h"
 #include "InternalUtil.h"
 #include "MWException.h"
 #include "eidErrors.h"
+#include "eidlibException.h"
 
 #include "APLCard.h"
 #include "APLCardPteid.h"
-#include "APLCrypto.h"
 #include "APLCertif.h"
-#include "PhotoPteid.h"
+#include "APLCrypto.h"
 #include "ByteArray.h"
 #include "CardPteid.h"
-#include "SSLConnection.h"
+#include "IcaoDg1.h"
+#include "IcaoDg2.h"
 #include "PDFSignature.h"
+#include "PhotoPteid.h"
+#include "SSLConnection.h"
 #include "SecurityContext.h"
-#include "dialogs.h"
 #include "Util.h"
+#include "dialogs.h"
 #include <sstream>
 #include <cassert>
 
@@ -58,17 +60,6 @@
 #define INCLUDE_OBJECT_ADDRESS 11
 
 #define BCD_DATE_LEN 4
-
-#define MRZ_DOC_CODE_SIZE 2
-#define MRZ_SERIAL_NUMBER_SIZE 9
-#define MRZ_DATE_SIZE 6
-#define MRZ_ISSUER_ORG_SIZE 3
-#define MRZ_NATIONALITY_SIZE 3
-#define MRZ_TD1_LINE_SIZE 30
-#define MRZ_TD1_FIRST_LINE_OPTIONAL_DATA_SIZE 15
-#define MRZ_TD1_SECOND_LINE_OPTIONAL_DATA_SIZE 11
-#define MRZ_TD3_NAME_FIRST_LINE_SIZE 39
-#define MRZ_TD3_OPTIONAL_DATA_SIZE 14
 
 // Global variable used by the compatibility functions defined in eidlibcompat.h
 eIDMW::PTEID_ReaderContext *readerContext = NULL;
@@ -816,151 +807,230 @@ PTEID_ByteArray ICAO_Card::readDatagroup(ICAO_Card::DataGroupID tag) {
 	return out;
 }
 
-ICAO_DG1::ICAO_DG1() {}
+PTEID_ICAO_DG1::PTEID_ICAO_DG1(const IcaoDg1 &dg1) : m_impl(dg1) {}
 
-void cleanUpString(std::string &str) { str.erase(std::remove(str.begin(), str.end(), '<'), str.end()); }
+std::string PTEID_ICAO_DG1::documentCode() const { return m_impl.documentCode(); }
 
-int getCheckDigits(const CByteArray &byteArray, unsigned int &offset) {
-	int checkDigit = byteArray.GetByte(offset) - '0';
-	offset++;
-	return checkDigit;
+std::string PTEID_ICAO_DG1::issuingOrg() const { return m_impl.issuingOrg(); }
+
+std::string PTEID_ICAO_DG1::serialNumber() const { return m_impl.serialNumber(); }
+
+int PTEID_ICAO_DG1::serialNumberCheckDigit() const { return m_impl.serialNumberCheckDigit(); }
+
+std::string PTEID_ICAO_DG1::optionalData() const { return m_impl.optionalData(); }
+
+std::string PTEID_ICAO_DG1::birthDay() const { return m_impl.birthDay(); }
+
+int PTEID_ICAO_DG1::birthDayCheckDigit() const { return m_impl.birthDayCheckDigit(); }
+
+char PTEID_ICAO_DG1::sex() const { return m_impl.sex(); }
+
+std::string PTEID_ICAO_DG1::expireDay() const { return m_impl.expireDay(); }
+
+int PTEID_ICAO_DG1::expireDayCheckDigit() const { return m_impl.expireDayCheckDigit(); }
+
+std::string PTEID_ICAO_DG1::nationality() const { return m_impl.nationality(); }
+
+std::string PTEID_ICAO_DG1::optionalDataSecondLine() const { return m_impl.optionalDataSecondLine(); }
+
+int PTEID_ICAO_DG1::optionalDataSecondLineCheckDigit() const { return m_impl.optionalDataSecondLineCheckDigit(); }
+
+int PTEID_ICAO_DG1::compositeCheckDigit() const { return m_impl.compositeCheckDigit(); }
+
+std::string PTEID_ICAO_DG1::primaryIdentifier() const { return m_impl.primaryIdentifier(); }
+
+std::string PTEID_ICAO_DG1::secondaryIdentifier() const { return m_impl.secondaryIdentifier(); }
+
+bool PTEID_ICAO_DG1::isPassport() const { return m_impl.documentCode().front() == 'P'; }
+
+unsigned char PTEID_FeaturePoint::type() const { return m_impl.type(); }
+
+unsigned char PTEID_FeaturePoint::featurePoint() const { return m_impl.featurePoint(); }
+
+unsigned char PTEID_FeaturePoint::majorCode() const { return m_impl.majorCode(); }
+
+unsigned char PTEID_FeaturePoint::minorCode() const { return m_impl.minorCode(); }
+
+unsigned short PTEID_FeaturePoint::x_coord() const { return m_impl.x_coord(); }
+
+unsigned short PTEID_FeaturePoint::y_coord() const { return m_impl.y_coord(); }
+
+unsigned short PTEID_FeaturePoint::reserved() const { return m_impl.reserved(); }
+
+PTEID_FeaturePoint::PTEID_FeaturePoint(FeaturePoint &featurePoint) : m_impl(featurePoint) {}
+
+long PTEID_FaceInfoData::facialRecordDataLength() const { return m_impl.facialRecordDataLength(); }
+
+unsigned short PTEID_FaceInfoData::numberOfFeaturePoints() const { return m_impl.numberOfFeaturePoints(); }
+
+unsigned char PTEID_FaceInfoData::gender() const { return m_impl.gender(); }
+
+PTEID_Gender PTEID_FaceInfoData::genderDecode() const { return static_cast<PTEID_Gender>(m_impl.genderDecode()); }
+
+unsigned char PTEID_FaceInfoData::eyeColor() const { return m_impl.eyeColor(); }
+
+PTEID_EyeColor PTEID_FaceInfoData::eyeColorDecode() const {
+	return static_cast<PTEID_EyeColor>(m_impl.eyeColorDecode());
 }
 
-std::string getDocumentInfo(const CByteArray &byteArray, unsigned int &offset, unsigned int sizeOfInfo) {
-	std::string information = byteArray.GetBytes(offset, sizeOfInfo).hexToString();
-	offset += sizeOfInfo;
-	cleanUpString(information);
-	return information;
+unsigned char PTEID_FaceInfoData::hairColour() const { return m_impl.hairColour(); }
+
+PTEID_HairColour PTEID_FaceInfoData::hairColourDecode() const {
+	return static_cast<PTEID_HairColour>(m_impl.hairColourDecode());
 }
 
-void trim(std::string &str) {
-	str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](unsigned char ch) { return !std::isspace(ch); }));
-	str.erase(std::find_if(str.rbegin(), str.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(),
-			  str.end());
+long PTEID_FaceInfoData::featureMask() const { return m_impl.featureMask(); }
+
+long PTEID_FaceInfoData::expression() const { return m_impl.expression(); }
+
+long PTEID_FaceInfoData::poseAngle() const { return m_impl.poseAngle(); }
+
+long PTEID_FaceInfoData::poseAngleUncertainty() const { return m_impl.poseAngleUncertainty(); }
+
+std::vector<PTEID_FeaturePoint *> PTEID_FaceInfoData::featurePoints() const { return m_featurePoints; }
+
+unsigned char PTEID_FaceInfoData::faceImgType() const { return m_impl.faceImgType(); }
+
+PTEID_FaceImageType PTEID_FaceInfoData::faceImgTypeDecode() const {
+	return static_cast<PTEID_FaceImageType>(m_impl.faceImgTypeDecode());
 }
 
-void getNameIdentifiers(const std::string &line, std::string &primaryIdentifier, std::string &secondaryIdentifier) {
-	size_t dividerIdentifiers = line.find("<<");
-	if (dividerIdentifiers != std::string::npos) {
-		primaryIdentifier = line.substr(0, dividerIdentifiers);
-		std::replace(primaryIdentifier.begin(), primaryIdentifier.end(), '<', ' ');
-		trim(primaryIdentifier);
-		secondaryIdentifier = line.substr(dividerIdentifiers + 2);
-		std::replace(secondaryIdentifier.begin(), secondaryIdentifier.end(), '<', ' ');
-		trim(secondaryIdentifier);
-	} else {
-		primaryIdentifier = line;
-		trim(primaryIdentifier);
+unsigned char PTEID_FaceInfoData::imgDataType() const { return m_impl.imgDataType(); }
+
+PTEID_ImageDataType PTEID_FaceInfoData::imgDataTypeDecode() const {
+	return static_cast<PTEID_ImageDataType>(m_impl.imgDataTypeDecode());
+}
+
+unsigned short PTEID_FaceInfoData::imgWidth() const { return m_impl.imgWidth(); }
+
+unsigned short PTEID_FaceInfoData::imgHeight() const { return m_impl.imgHeight(); }
+
+unsigned char PTEID_FaceInfoData::colourSpace() const { return m_impl.colourSpace(); }
+
+PTEID_ImageColourSpace PTEID_FaceInfoData::colourSpaceDecode() const {
+	return static_cast<PTEID_ImageColourSpace>(m_impl.colourSpaceDecode());
+}
+
+unsigned char PTEID_FaceInfoData::sourceType() const { return m_impl.sourceType(); }
+
+PTEID_SourceType PTEID_FaceInfoData::sourceTypeDecode() const {
+	return static_cast<PTEID_SourceType>(m_impl.sourceTypeDecode());
+}
+
+unsigned short PTEID_FaceInfoData::deviceType() const { return m_impl.deviceType(); }
+
+unsigned short PTEID_FaceInfoData::quality() const { return m_impl.quality(); }
+
+PTEID_ByteArray PTEID_FaceInfoData::photoRawData() const { return PTEID_ByteArray(m_context, m_impl.photoRawData()); }
+
+PTEID_FaceInfoData::PTEID_FaceInfoData(const SDK_Context *context, FaceInfoData &data)
+	: PTEID_Object(context, NULL), m_impl(data) {
+	for (auto &fp : m_impl.featurePoints()) {
+		m_featurePoints.push_back(new PTEID_FeaturePoint(*fp));
 	}
 }
 
-std::string ICAO_DG1::documentCode() const { return m_documentCode; }
-
-std::string ICAO_DG1::issuingOrg() const { return m_issuingOrg; }
-
-std::string ICAO_DG1::serialNumber() const { return m_serialNumber; }
-
-int ICAO_DG1::serialNumberCheckDigit() const { return m_serialNumberCheckDigit; }
-
-std::string ICAO_DG1::optionalData() const { return m_optionalData; }
-
-std::string ICAO_DG1::birthDay() const { return m_birthDay; }
-
-int ICAO_DG1::birthDayCheckDigit() const { return m_birthDayCheckDigit; }
-
-char ICAO_DG1::sex() const { return m_sex; }
-
-std::string ICAO_DG1::expireDay() const { return m_expireDay; }
-
-int ICAO_DG1::expireDayCheckDigit() const { return m_expireDayCheckDigit; }
-
-std::string ICAO_DG1::nationality() const { return m_nationality; }
-
-std::string ICAO_DG1::optionalDataSecondLine() const { return m_optionalDataSecondLine; }
-
-int ICAO_DG1::optionalDataSecondLineCheckDigit() const { return m_optionalDataSecondLineCheckDigit; }
-
-int ICAO_DG1::compositeCheckDigit() const { return m_compositeCheckDigit; }
-
-std::string ICAO_DG1::primaryIdentifier() const { return m_primaryIdentifier; }
-
-std::string ICAO_DG1::secondaryIdentifier() const { return m_secondaryIdentifier; }
-
-bool ICAO_DG1::isPassport() const { return m_documentCode.front() == 'P'; }
-
-ICAO_DG1 &ICAO_DG1::operator<<(const CByteArray &byteArray) {
-	unsigned int offsetCounter = 0;
-	bool isPassport = false;
-	m_documentCode = getDocumentInfo(byteArray, offsetCounter, MRZ_DOC_CODE_SIZE);
-	isPassport = m_documentCode.front() == 'P';
-
-	m_issuingOrg = getDocumentInfo(byteArray, offsetCounter, MRZ_ISSUER_ORG_SIZE);
-
-	if (isPassport) {
-		std::string nameElement = byteArray.GetBytes(offsetCounter, MRZ_TD1_LINE_SIZE).hexToString();
-		offsetCounter += MRZ_TD3_NAME_FIRST_LINE_SIZE;
-		getNameIdentifiers(nameElement, m_primaryIdentifier, m_secondaryIdentifier);
-		m_serialNumber = getDocumentInfo(byteArray, offsetCounter, MRZ_SERIAL_NUMBER_SIZE);
-		m_serialNumberCheckDigit = getCheckDigits(byteArray, offsetCounter);
-		m_nationality = getDocumentInfo(byteArray, offsetCounter, MRZ_NATIONALITY_SIZE);
-		m_birthDay = getDocumentInfo(byteArray, offsetCounter, MRZ_DATE_SIZE);
-		m_birthDayCheckDigit = getCheckDigits(byteArray, offsetCounter);
-		m_sex = static_cast<char>(byteArray.GetByte(offsetCounter));
-		offsetCounter++;
-		m_expireDay = getDocumentInfo(byteArray, offsetCounter, MRZ_DATE_SIZE);
-		m_expireDayCheckDigit = getCheckDigits(byteArray, offsetCounter);
-		m_optionalDataSecondLine = byteArray.GetBytes(offsetCounter, MRZ_TD3_OPTIONAL_DATA_SIZE).hexToString();
-		offsetCounter += MRZ_TD3_OPTIONAL_DATA_SIZE;
-		std::replace(m_optionalDataSecondLine.begin(), m_optionalDataSecondLine.end(), '<', ' ');
-		trim(m_optionalDataSecondLine);
-		m_optionalDataSecondLineCheckDigit = getCheckDigits(byteArray, offsetCounter);
-		m_compositeCheckDigit = getCheckDigits(byteArray, offsetCounter);
-
-	} else {
-		m_serialNumber = getDocumentInfo(byteArray, offsetCounter, MRZ_SERIAL_NUMBER_SIZE);
-
-		if (byteArray.GetByte(offsetCounter) != '<') {
-			m_serialNumberCheckDigit = getCheckDigits(byteArray, offsetCounter);
-		} else {
-			m_serialNumberCheckDigit = -1;
-			offsetCounter++;
-		}
-
-		m_optionalData = getDocumentInfo(byteArray,
-						 offsetCounter,
-						 MRZ_TD1_FIRST_LINE_OPTIONAL_DATA_SIZE);
-
-		m_birthDay = getDocumentInfo(byteArray, offsetCounter, MRZ_DATE_SIZE);
-		m_birthDayCheckDigit = getCheckDigits(byteArray, offsetCounter);
-
-		m_sex = static_cast<char>(byteArray.GetByte(offsetCounter));
-		offsetCounter++;
-
-		m_expireDay = getDocumentInfo(byteArray, offsetCounter, MRZ_DATE_SIZE);
-		m_expireDayCheckDigit = getCheckDigits(byteArray, offsetCounter);
-		m_nationality = getDocumentInfo(byteArray, offsetCounter, MRZ_NATIONALITY_SIZE);
-		m_optionalDataSecondLine = getDocumentInfo(byteArray,
-							   offsetCounter,
-							   MRZ_TD1_SECOND_LINE_OPTIONAL_DATA_SIZE);
-
-		m_compositeCheckDigit = getCheckDigits(byteArray, offsetCounter);
-
-		std::string lastLine = byteArray.GetBytes(offsetCounter, MRZ_TD1_LINE_SIZE).hexToString();
-		getNameIdentifiers(lastLine, m_primaryIdentifier, m_secondaryIdentifier);
+PTEID_FaceInfoData::~PTEID_FaceInfoData() {
+	for (auto *instance : m_featurePoints) {
+		delete instance;
 	}
-
-	return *this;
 }
 
-ICAO_DG1 ICAO_Card::readDataGroup1() {
-	ICAO_DG1 dg1;
+std::string PTEID_FaceInfo::version() const { return m_impl.version(); }
+
+unsigned short PTEID_FaceInfo::encodingBytes() const { return m_impl.encodingBytes(); }
+
+long PTEID_FaceInfo::sizeOfRecord() const { return m_impl.sizeOfRecord(); }
+
+long PTEID_FaceInfo::numberOfFacialImages() const { return m_impl.numberOfFacialImages(); }
+
+std::vector<PTEID_FaceInfoData *> PTEID_FaceInfo::faceInfoData() const { return m_faceInfoDataVec; }
+
+PTEID_FaceInfo::PTEID_FaceInfo(const SDK_Context *context, FaceInfo &face) : PTEID_Object(context, NULL), m_impl(face) {
+	for (auto &instance : m_impl.faceInfoData()) {
+		m_faceInfoDataVec.push_back(new PTEID_FaceInfoData(context, *instance));
+	}
+}
+
+PTEID_FaceInfo::~PTEID_FaceInfo() {
+	for (auto *instance : m_faceInfoDataVec) {
+		delete instance;
+	}
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::icaoHeaderVersion() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->icaoHeaderVersion());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::type() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->type());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::subType() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->subType());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::creationDateAndtime() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->creationDateAndtime());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::validPeriod() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->validPeriod());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::creatorOfBiometricRefData() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->creatorOfBiometricRefData());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::formatOwner() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->formatOwner());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::formatType() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->formatType());
+}
+
+PTEID_FaceInfo *PTEID_BiometricInfomation::faceInfo() const { return m_faceInfo; }
+
+PTEID_BiometricInfomation::~PTEID_BiometricInfomation() { delete m_faceInfo; }
+
+PTEID_BiometricInfomation::PTEID_BiometricInfomation(const SDK_Context *context, BiometricInformation &bioInfo)
+	: PTEID_Object(context, NULL), m_impl(bioInfo), m_faceInfo(new PTEID_FaceInfo(context, *bioInfo.faceInfo())) {}
+
+PTEID_ICAO_DG2::PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2)
+	: PTEID_Object(context, NULL), m_impl(dg2) {
+	for (auto &instance : m_impl.biometricInstances()) {
+		m_biometricInstances.push_back(new PTEID_BiometricInfomation(m_context, *instance));
+	}
+}
+
+unsigned int PTEID_ICAO_DG2::numberOfBiometrics() const { return m_impl.numberOfBiometrics(); }
+
+std::vector<PTEID_BiometricInfomation *> PTEID_ICAO_DG2::biometricInstances() { return m_biometricInstances; }
+
+PTEID_ICAO_DG2::~PTEID_ICAO_DG2() {
+	for (auto *instance : m_biometricInstances) {
+		delete instance;
+	}
+}
+
+PTEID_ICAO_DG1 *ICAO_Card::readDataGroup1() {
+	PTEID_ICAO_DG1 *dg1;
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
-	CByteArray result = icao->readDatagroup(APL_ICAO::DG1);
-
-	dg1 << result.GetBytes(5, result.Size() - 5);
+	dg1 = new PTEID_ICAO_DG1(*icao->readDataGroup1());
 	END_TRY_CATCH
 	return dg1;
+}
+
+PTEID_ICAO_DG2 *ICAO_Card::readDataGroup2() {
+	PTEID_ICAO_DG2 *dg2;
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	IcaoDg2 *dg2Impl = icao->readDataGroup2();
+	dg2 = new PTEID_ICAO_DG2(m_context, *dg2Impl);
+	END_TRY_CATCH
+	return dg2;
 }
 
 /*****************************************************************************************

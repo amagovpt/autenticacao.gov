@@ -27,15 +27,16 @@
 #ifndef __SCCARDUTIL_H__
 #define __SCCARDUTIL_H__
 
+#include "APLPublicKey.h"
+#include "APLReader.h"
+#include "ByteArray.h"
+#include "Export.h"
+#include "P15Objects.h"
+#include "PhotoPteid.h"
+#include "SODParser.h"
+#include <memory>
 #include <string>
 #include <unordered_map>
-#include <memory>
-#include "Export.h"
-#include "ByteArray.h"
-#include "P15Objects.h"
-#include "APLReader.h"
-#include "APLPublicKey.h"
-#include "SODParser.h"
 
 #define BEGIN_CAL_OPERATION(obj)                                                                                       \
 	obj->CalLock();                                                                                                    \
@@ -315,6 +316,9 @@ protected:
 	std::string *m_appletVersion;
 };
 
+class IcaoDg1;
+class IcaoDg2;
+class PhotoPteid;
 class APL_ICAO {
 public:
 	enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
@@ -323,11 +327,15 @@ public:
 													  APL_PACEAuthenticationType secretType);
 	EIDMW_APL_API virtual std::vector<DataGroupID> getAvailableDatagroups();
 	EIDMW_APL_API virtual CByteArray readDatagroup(DataGroupID tag);
+	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
+	EIDMW_APL_API virtual IcaoDg2 *readDataGroup2();
 	// TODO:
 	// pass in master certificates list
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
 	std::unique_ptr<SODAttributes> m_SodAttributes;
+	std::unique_ptr<IcaoDg1> m_mrzDg1;
+	std::unique_ptr<IcaoDg2> m_faceDg2;
 
 	static constexpr unsigned char MRTD_APPLICATION[] = {0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
 	static constexpr const char *SOD_PATH = "011D";

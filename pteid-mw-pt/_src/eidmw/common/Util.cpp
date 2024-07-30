@@ -117,9 +117,9 @@ std::u32string stringWidenUTF32(std::string utf8_str) {
 }
 #endif
 
-const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag) {
+const unsigned char *findASN1Object(const unsigned char **array, long &size, long tag, const int &maxLength) {
 	const unsigned char *old_data = NULL;
-	const unsigned char *desc_data = array.GetBytes();
+	const unsigned char *desc_data = *array;
 	int xclass = 0;
 	int ans1Tag = 0;
 	int returnValue = 0;
@@ -129,12 +129,18 @@ const unsigned char *findASN1Object(const CByteArray &array, long &size, long ta
 		if (old_data == desc_data)
 			return NULL;
 		old_data = desc_data; // test this
-		long returnValue = ASN1_get_object(&desc_data, &size, &ans1Tag, &xclass, array.Size());
+		long returnValue = ASN1_get_object(&desc_data, &size, &ans1Tag, &xclass, maxLength);
 		int constructed = returnValue == V_ASN1_CONSTRUCTED ? 1 : 0;
 		genTag = xclass | (constructed & 0b1) << 5 | ans1Tag;
 	}
 
 	return desc_data;
+}
+
+const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag) {
+	const unsigned char *desc_data = array.GetBytes();
+
+	return findASN1Object(&desc_data, size, tag, array.Size());
 }
 
 std::string utilStringNarrow(const std::wstring &in) {

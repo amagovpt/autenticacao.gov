@@ -60,6 +60,9 @@ EIDMW_CMN_API bool StartsWithCI(const char *csData, const char *csSearch);
  */
 EIDMW_CMN_API const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag);
 
+EIDMW_CMN_API const unsigned char *findASN1Object(const unsigned char **array, long &size, long tag,
+												  const int &maxLength);
+
 /**
  * Returns true is csSearch is present in csData.
  */

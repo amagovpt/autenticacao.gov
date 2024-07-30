@@ -25,21 +25,23 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-#include "APLReader.h"
 #include "APLCard.h"
-#include "APLCrypto.h"
 #include "APLCertif.h"
 #include "APLConfig.h"
+#include "APLCrypto.h"
+#include "APLReader.h"
 #include "CardFile.h"
 #include "CardLayer.h"
-#include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
-#include "XadesSignature.h"
-#include "SigContainer.h"
-#include "PDFSignature.h"
-#include "MiscUtil.h"
+#include "IcaoDg1.h"
+#include "IcaoDg2.h"
 #include "Log.h"
+#include "MiscUtil.h"
+#include "PDFSignature.h"
 #include "SODParser.h"
+#include "SigContainer.h"
+#include "XadesSignature.h"
+#include "cryptoFwkPteid.h"
 
 #include <openssl/rand.h>
 #include <time.h>
@@ -636,6 +638,24 @@ CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
 	}
 
 	return out;
+}
+
+IcaoDg1 *APL_ICAO::readDataGroup1() {
+	if (m_mrzDg1.get() != nullptr)
+		return m_mrzDg1.get();
+
+	CByteArray arrayDg1 = readDatagroup(DG1);
+	m_mrzDg1.reset(new IcaoDg1(arrayDg1.GetBytes(5, arrayDg1.Size() - 5)));
+	return m_mrzDg1.get();
+}
+
+IcaoDg2 *APL_ICAO::readDataGroup2() {
+	if (m_faceDg2.get() != nullptr)
+		return m_faceDg2.get();
+
+	CByteArray arrayDg2 = readDatagroup(DG2);
+	m_faceDg2.reset(new IcaoDg2(arrayDg2));
+	return m_faceDg2.get();
 }
 
 void APL_ICAO::loadAvailableDataGroups() {

@@ -720,51 +720,149 @@ public:
 	 */
 	PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() = 0;
 };
-class ICAO_DG1 {
+class IcaoDg1;
+class PTEID_ICAO_DG1 {
 public:
-	ICAO_DG1();
+	PTEIDSDK_API PTEID_ICAO_DG1(const IcaoDg1 &dg1);
 
-	std::string documentCode() const;
-	std::string issuingOrg() const;
-	std::string serialNumber() const;
-	int serialNumberCheckDigit() const;
-	std::string optionalData() const;
-	std::string birthDay() const;
-	int birthDayCheckDigit() const;
-	char sex() const;
-	std::string expireDay() const;
-	int expireDayCheckDigit() const;
-	std::string nationality() const;
-	std::string optionalDataSecondLine() const;
-	int optionalDataSecondLineCheckDigit() const;
-	int compositeCheckDigit() const;
-	std::string primaryIdentifier() const;
-	std::string secondaryIdentifier() const;
-	bool isPassport() const;
+	PTEIDSDK_API std::string documentCode() const;
+	PTEIDSDK_API std::string issuingOrg() const;
+	PTEIDSDK_API std::string serialNumber() const;
+	PTEIDSDK_API int serialNumberCheckDigit() const;
+	PTEIDSDK_API std::string optionalData() const;
+	PTEIDSDK_API std::string birthDay() const;
+	PTEIDSDK_API int birthDayCheckDigit() const;
+	PTEIDSDK_API char sex() const;
+	PTEIDSDK_API std::string expireDay() const;
+	PTEIDSDK_API int expireDayCheckDigit() const;
+	PTEIDSDK_API std::string nationality() const;
+	PTEIDSDK_API std::string optionalDataSecondLine() const;
+	PTEIDSDK_API int optionalDataSecondLineCheckDigit() const;
+	PTEIDSDK_API int compositeCheckDigit() const;
+	PTEIDSDK_API std::string primaryIdentifier() const;
+	PTEIDSDK_API std::string secondaryIdentifier() const;
+	PTEIDSDK_API bool isPassport() const;
 
-protected:
 private:
+	const IcaoDg1 &m_impl;
 	friend class ICAO_Card;
-	ICAO_DG1 &operator<<(const CByteArray &byteArray);
-	ICAO_DG1 &operator=(const ICAO_DG1 &card) = delete; /**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG1(const PTEID_ICAO_DG1 &);						/**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG1 &operator=(const PTEID_ICAO_DG1 &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class IcaoDg2;
+class BiometricInformation;
+class FaceInfo;
+class FaceInfoData;
+class FeaturePoint;
+class PTEID_FeaturePoint {
+public:
+	PTEIDSDK_API unsigned char type() const;
+	PTEIDSDK_API unsigned char featurePoint() const;
+	PTEIDSDK_API unsigned char majorCode() const;
+	PTEIDSDK_API unsigned char minorCode() const;
+	PTEIDSDK_API unsigned short x_coord() const;
+	PTEIDSDK_API unsigned short y_coord() const;
+	PTEIDSDK_API unsigned short reserved() const;
 
 private:
-	std::string m_documentCode; // can have at most two length
-	std::string m_issuingOrg;
-	std::string m_serialNumber;
-	int m_serialNumberCheckDigit = -1; // if -1 means it has optional data to complete the serial number
-	std::string m_optionalData;
-	std::string m_birthDay;
-	int m_birthDayCheckDigit = -1;
-	char m_sex;
-	std::string m_expireDay;
-	int m_expireDayCheckDigit = -1;
-	std::string m_nationality;
-	std::string m_optionalDataSecondLine;
-	int m_optionalDataSecondLineCheckDigit = -1; // td3 only
-	int m_compositeCheckDigit = -1;
-	std::string m_primaryIdentifier;
-	std::string m_secondaryIdentifier;
+	friend class PTEID_FaceInfoData;
+	PTEID_FeaturePoint(FeaturePoint &featurePoint);
+	PTEID_FeaturePoint &operator=(const PTEID_FeaturePoint &) = delete; /**< Copy not allowed - not implemented */
+	FeaturePoint &m_impl;
+};
+
+class PTEID_FaceInfoData : public PTEID_Object {
+public:
+	PTEIDSDK_API long facialRecordDataLength() const;
+	PTEIDSDK_API unsigned short numberOfFeaturePoints() const;
+	PTEIDSDK_API unsigned char gender() const;
+	PTEIDSDK_API PTEID_Gender genderDecode() const;
+	PTEIDSDK_API unsigned char eyeColor() const;
+	PTEIDSDK_API PTEID_EyeColor eyeColorDecode() const;
+	PTEIDSDK_API unsigned char hairColour() const;
+	PTEIDSDK_API PTEID_HairColour hairColourDecode() const;
+	PTEIDSDK_API long featureMask() const;
+	PTEIDSDK_API long expression() const;
+	PTEIDSDK_API long poseAngle() const;
+	PTEIDSDK_API long poseAngleUncertainty() const;
+	PTEIDSDK_API std::vector<PTEID_FeaturePoint *> featurePoints() const;
+	PTEIDSDK_API unsigned char faceImgType() const;
+	PTEIDSDK_API PTEID_FaceImageType faceImgTypeDecode() const;
+	PTEIDSDK_API unsigned char imgDataType() const;
+	PTEIDSDK_API PTEID_ImageDataType imgDataTypeDecode() const;
+	PTEIDSDK_API unsigned short imgWidth() const;
+	PTEIDSDK_API unsigned short imgHeight() const;
+	PTEIDSDK_API unsigned char colourSpace() const;
+	PTEIDSDK_API PTEID_ImageColourSpace colourSpaceDecode() const;
+	PTEIDSDK_API unsigned char sourceType() const;
+	PTEIDSDK_API PTEID_SourceType sourceTypeDecode() const;
+	PTEIDSDK_API unsigned short deviceType() const;
+	PTEIDSDK_API unsigned short quality() const;
+	PTEIDSDK_API PTEID_ByteArray photoRawData() const;
+
+private:
+	friend class PTEID_FaceInfo;
+	PTEID_FaceInfoData(const SDK_Context *context, FaceInfoData &data);
+	~PTEID_FaceInfoData();
+	PTEID_FaceInfoData &operator=(const PTEID_FaceInfoData &) = delete; /**< Copy not allowed - not implemented */
+	FaceInfoData &m_impl;
+	std::vector<PTEID_FeaturePoint *> m_featurePoints;
+};
+
+class PTEID_FaceInfo : public PTEID_Object {
+public:
+	PTEIDSDK_API std::string version() const;
+	PTEIDSDK_API unsigned short encodingBytes() const;
+	PTEIDSDK_API long sizeOfRecord() const;
+	PTEIDSDK_API long numberOfFacialImages() const;
+	PTEIDSDK_API std::vector<PTEID_FaceInfoData *> faceInfoData() const;
+
+private:
+	friend class PTEID_ICAO_DG2;
+	friend class PTEID_BiometricInfomation;
+	PTEID_FaceInfo(const SDK_Context *context, FaceInfo &face);
+	~PTEID_FaceInfo();
+	PTEID_FaceInfo &operator=(const PTEID_FaceInfo &) = delete; /**< Copy not allowed - not implemented */
+	FaceInfo &m_impl;
+	std::vector<PTEID_FaceInfoData *> m_faceInfoDataVec;
+};
+
+class PTEID_BiometricInfomation : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray icaoHeaderVersion() const;
+	PTEIDSDK_API PTEID_ByteArray type() const;
+	PTEIDSDK_API PTEID_ByteArray subType() const;
+	PTEIDSDK_API PTEID_ByteArray creationDateAndtime() const;
+	PTEIDSDK_API PTEID_ByteArray validPeriod() const;
+	PTEIDSDK_API PTEID_ByteArray creatorOfBiometricRefData() const;
+	PTEIDSDK_API PTEID_ByteArray formatOwner() const;
+	PTEIDSDK_API PTEID_ByteArray formatType() const;
+	PTEIDSDK_API PTEID_FaceInfo *faceInfo() const;
+
+private:
+	friend class PTEID_ICAO_DG2;
+	PTEID_BiometricInfomation(const SDK_Context *context, BiometricInformation &bioInfo);
+	~PTEID_BiometricInfomation();
+	PTEID_FaceInfo *m_faceInfo;
+	PTEID_BiometricInfomation &
+	operator=(const PTEID_BiometricInfomation &) = delete; /**< Copy not allowed - not implemented */
+	BiometricInformation &m_impl;
+};
+
+class PTEID_ICAO_DG2 : public PTEID_Object {
+public:
+	PTEIDSDK_API unsigned int numberOfBiometrics() const;
+	PTEIDSDK_API std::vector<PTEID_BiometricInfomation *> biometricInstances();
+	~PTEID_ICAO_DG2();
+
+private:
+	const IcaoDg2 &m_impl;
+	std::vector<PTEID_BiometricInfomation *> m_biometricInstances; // delete this on destructor
+	friend class ICAO_Card;
+	PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2);
+	PTEID_ICAO_DG2(const PTEID_ICAO_DG2 &);						/**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG2 &operator=(const PTEID_ICAO_DG2 &) = delete; /**< Copy not allowed - not implemented */
 };
 
 class ICAO_Card : public PTEID_Object {
@@ -795,7 +893,8 @@ public:
 
 	PTEIDSDK_API virtual PTEID_ByteArray readDatagroup(DataGroupID tag);
 
-	PTEIDSDK_API virtual ICAO_DG1 readDataGroup1();
+	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
+	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();
 
 protected:
 	ICAO_Card(const SDK_Context *context, APL_ICAO *impl); /**< For internal use : Constructor */

@@ -85,6 +85,9 @@ HEADERS += \
 	APLCCXmlDoc.h \
 	CardFile.h \
 	CertStatusCache.h \
+	IcaoDg1.h \
+	IcaoDg2.h \
+	IcaoDg2Defines.h \
 	cryptoFramework.h \
 	MiscUtil.h \
 	XercesUtils.h \
@@ -118,6 +121,8 @@ SOURCES += \
 	CardFile.cpp	        \
 	CardPteid.cpp        \
 	CertStatusCache.cpp  \
+	IcaoDg1.cpp \
+	IcaoDg2.cpp \
 	cryptoFramework.cpp  \
 	cryptoFwkPteid.cpp   \
 	APLCard.cpp          \ 
