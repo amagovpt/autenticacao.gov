@@ -860,10 +860,11 @@ bool APL_EidFile_ID_V2::LoadPhotoFile() {
 		m_EidFile_Photo = new APL_EidFile_Photo(pcard);
 	}
 
-	const auto status = m_EidFile_Photo->getStatus(false) == CARDFILESTATUS_OK;
-	// Early return. Could not load photo file
-	if (status == false)
-		return false;
+	;
+	// Could not load or parse photo file
+	if (m_EidFile_Photo->getStatus(false) != CARDFILESTATUS_OK) {
+		throw CMWEXCEPTION(EIDMW_ERR_CARD);
+	}
 
 	m_photo = new PhotoPteid(m_EidFile_Photo->getPhotoRaw());
 
