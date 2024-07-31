@@ -33,9 +33,8 @@
 namespace eIDMW {
 
 /******************************************************************************/ /**
-																				  * Class to access the config
-																				  *parameters
-																				  *********************************************************************************/
+  * Class to access the config parameters
+  *********************************************************************************/
 class APL_Config {
 public:
 	enum tLookupBehaviour { NORMAL = 0, USER_ONLY, SYSTEM_ONLY };

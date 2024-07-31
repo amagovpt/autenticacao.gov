@@ -39,76 +39,75 @@ class APL_Card;
 class APL_CryptoFwk;
 
 /******************************************************************************/ /**
-																				  * Base class that represent one file
-																				  *on a card
-																				  *********************************************************************************/
+  * Base class that represent one file on a card
+  *********************************************************************************/
 class APL_CardFile {
 public:
 	/**
-	 * Constructor
-	 *
-	 * - card and path are kept in private member
-	 * - status is set to CARDFILESTATUS_UNREAD
-	 * - if csPath is NULL, data is filled with file
-	 *
-	 * @param card is a pointer to the card containing the file
-	 * @param csPath is the path of the file to be read
-	 * @param file : The content of the file to put in m_data
-	 */
+	  * Constructor 
+	  *
+	  * - card and path are kept in private member
+	  * - status is set to CARDFILESTATUS_UNREAD
+	  * - if csPath is NULL, data is filled with file
+	  *
+	  * @param card is a pointer to the card containing the file 
+	  * @param csPath is the path of the file to be read
+	  * @param file : The content of the file to put in m_data 
+	  */
 	APL_CardFile(APL_Card *card, const char *csPath, const CByteArray *file = NULL,
 				 const CByteArray &appId = {PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID)});
 
 	/**
-	 * Destructor
-	 */
+	  * Destructor 
+	  */
 	virtual ~APL_CardFile();
 
 	/**
-	 * Return the status of the file
-	 * @param bForceRead if true, the file is read before returning the status
-	 */
+	  * Return the status of the file
+	  * @param bForceRead if true, the file is read before returning the status 
+	  */
 	virtual tCardFileStatus getStatus(bool bForceRead = false);
 
 	/**
-	 * Return the content of the file
-	 */
+	  * Return the content of the file
+	  */
 	virtual const CByteArray &getData();
 
 protected:
 	/**
-	 * ReadFile ask the card object to read the file
-	 *   then VerifyFile
-	 *   and if file is ok, MapFields is call
-	 */
+	  * ReadFile ask the card object to read the file
+	  *   then VerifyFile
+	  *   and if file is ok, MapFields is call
+	  */
 	virtual tCardFileStatus LoadData(bool bForceReload = false);
 
 	/**
-	 * Put the content of the file in m_data
-	 */
+	  * Put the content of the file in m_data
+	  */
 	virtual void ReadFile();
 
 	/**
-	 * Must return CARDFILESTATUS_OK if the validation is ok
-	 */
+	  * Must return CARDFILESTATUS_OK if the validation is ok 
+	  */
 	virtual tCardFileStatus VerifyFile() = 0;
 
 	virtual void doSODCheck(bool check) = 0;
 
 	/**
-	 * Return true if data can be showned
-	 */
+	  * Return true if data can be showned 
+	  */
 	virtual bool ShowData();
 
 	/**
-	 * Map the field with the content of the file
-	 * (Fields are implemented in derived class)
-	 * Must return true if map is ok
-	 */
+	  * Map the field with the content of the file
+	  * (Fields are implemented in derived class)
+	  * Must return true if map is ok
+	  */
 	virtual bool MapFields() = 0;
 
 	/**
-	 * Empty all fields
-	 */
+	  * Empty all fields
+	  */
 	virtual void EmptyFields() = 0;
 
 	APL_Card *m_card;		  /**< Pointer to card object, needed in constructor, use to read the file */
@@ -133,30 +132,29 @@ private:
 
 class APL_SmartCard;
 /******************************************************************************/ /**
-																				  * Class for one certificate file
-																				  *
-																				  * The file may comes from a card or
-																				  *from a CByteArray
-																				  *********************************************************************************/
+  * Class for one certificate file
+  *
+  * The file may comes from a card or from a CByteArray
+  *********************************************************************************/
 class APL_CardFile_Certificate : public APL_CardFile {
 public:
 	/**
-	 * Constructor
-	 * @param card is a pointer to the card containing the file
-	 * @param csPath is the path of the file to be read
-	 * @param file : The content of the file to put in m_data
-	 */
+	  * Constructor 
+	  * @param card is a pointer to the card containing the file 
+	  * @param csPath is the path of the file to be read
+	  * @param file : The content of the file to put in m_data 
+	  */
 	APL_CardFile_Certificate(APL_SmartCard *card, const char *csPath, const CByteArray *file = NULL,
 							 const CByteArray &appId = {PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID)});
 
 	/**
-	 * Destructor
-	 */
+	  * Destructor 
+	  */
 	virtual ~APL_CardFile_Certificate();
 
 	/**
-	 * Calculate if necessary and return the UniqueId of the certificate
-	 */
+	  * Calculate if necessary and return the UniqueId of the certificate 
+	  */
 	unsigned long getUniqueId();
 
 private:
@@ -173,21 +171,21 @@ private:
 };
 
 /******************************************************************************/ /**
-																				  * Class for one pseudo info file
-																				  *
-																				  * The file comes from a APL_SmartCard
-																				  *********************************************************************************/
+  * Class for one pseudo info file
+  *
+  * The file comes from a APL_SmartCard
+  *********************************************************************************/
 class APL_CardFile_Info : public APL_CardFile {
 public:
 	/**
-	 * Constructor
-	 * @param card is a pointer to the card containing the file
-	 */
+	  * Constructor 
+	  * @param card is a pointer to the card containing the file 
+	  */
 	APL_CardFile_Info(APL_SmartCard *card);
 
 	/**
-	 * Destructor
-	 */
+	  * Destructor 
+	  */
 	virtual ~APL_CardFile_Info();
 
 	const char *getSerialNumber();			 /**< Return the Serial number of the card */
@@ -205,8 +203,8 @@ public:
 
 protected:
 	/**
-	 * Put the content of the file in m_data
-	 */
+	  * Put the content of the file in m_data
+	  */
 	virtual void ReadFile();
 
 private:

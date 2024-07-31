@@ -37,54 +37,52 @@ namespace eIDMW {
 
 class APL_Pin;
 /******************************************************************************/ /**
-																				  * Class defining all the Pin on a
-																				  *smart card
-																				  *
-																				  * To get a APL_Pins object, we have to
-																				  *ask it from the APL_SmartCard
-																				  *********************************************************************************/
+  * Class defining all the Pin on a smart card
+  *
+  * To get a APL_Pins object, we have to ask it from the APL_SmartCard 
+  *********************************************************************************/
 class APL_Pins {
 public:
 	/**
-	 * Destructor
-	 *
-	 * Destroy all the certificate hold in m_certifsAll
-	 */
+	  * Destructor
+	  *
+	  * Destroy all the certificate hold in m_certifsAll
+	  */
 	EIDMW_APL_API virtual ~APL_Pins();
 
 	EIDMW_APL_API virtual bool isAllowed(); /**< The document is allowed*/
 
 	/**
-	 * Return the number of P15 pins on the card
-	 */
+	  * Return the number of P15 pins on the card
+	  */
 	EIDMW_APL_API unsigned long count(bool bFromCard = true);
 
 	/**
-	 * Return the pin with the number ulIndex from the card
-	 *
-	 * If the APL_Pin object does not yet exist,
-	 * it is create and add to the map m_pins
-	 */
+	  * Return the pin with the number ulIndex from the card
+	  *
+	  * If the APL_Pin object does not yet exist, 
+	  * it is create and add to the map m_pins
+	  */
 	EIDMW_APL_API APL_Pin *getPinByNumber(unsigned long ulIndex);
 
 	/**
-	 * Return the pin with the pin reference from the card
-	 *
-	 * If the pin is not found an exception is thrown
-	 */
+	  * Return the pin with the pin reference from the card
+	  *
+	  * If the pin is not found an exception is thrown
+	  */
 	EIDMW_APL_API APL_Pin *getPinByPinRef(unsigned long pinRef);
 
 	/**
-	 * Add pin in the map for internal use (No need to export)
-	 */
+	  * Add pin in the map for internal use (No need to export)
+	  */
 	APL_Pin *addPin(unsigned long ulIndex);
 
 protected:
 	/**
-	 * Constructor
-	 *
-	 * @param card is the smart card from which the pins come
-	 */
+	  * Constructor
+	  *
+	  * @param card is the smart card from which the pins come
+	  */
 	APL_Pins(APL_SmartCard *card);
 
 private:
@@ -94,10 +92,10 @@ private:
 	APL_SmartCard *m_card; /**< The smart card from which the pins come */
 
 	/**
-	 * Hold the APL_Pin pointers to the pins on the card
-	 *
-	 * The index is the P15 index
-	 */
+	  * Hold the APL_Pin pointers to the pins on the card
+	  *
+	  * The index is the P15 index
+	  */
 	std::map<unsigned long, APL_Pin *> m_pins;
 	CMutex m_Mutex; /**< Mutex */
 
@@ -105,28 +103,26 @@ private:
 };
 
 /******************************************************************************/ /**
-																				  * Class defining one Pin on a smart
-																				  *card
-																				  *
-																				  * To get APL_Pin object, we have to
-																				  *ask it from APL_Pins
-																				  *********************************************************************************/
+  * Class defining one Pin on a smart card
+  *
+  * To get APL_Pin object, we have to ask it from APL_Pins 
+  *********************************************************************************/
 class APL_Pin {
 public:
 	/**
-	 * Destructor
-	 */
+	  * Destructor
+	  */
 	EIDMW_APL_API virtual ~APL_Pin();
 
 	EIDMW_APL_API virtual bool isAllowed(); /**< The document is allowed*/
 
 	/**
-	 * Return the remaining tries for giving the good pin
-	 *
-	 *
-	 * @return -1 if not supported
-	 * @return the number of remaining tries in the other case
-	 */
+	  * Return the remaining tries for giving the good pin
+	  *
+	  *
+	  * @return -1 if not supported
+	  * @return the number of remaining tries in the other case
+	  */
 	EIDMW_APL_API long getTriesLeft();
 	EIDMW_APL_API bool isVerified();
 	EIDMW_APL_API unsigned long getIndex(); /**< Return m_ulIndex */
@@ -138,28 +134,28 @@ public:
 	EIDMW_APL_API const char *getLabel();	/**< Return P15 Label */
 
 	/**
-	 * Call the CAL for verifying the pin
-	 *
-	 * @param csPin is the pin code to verify (if csPin is empty, the CAL will ask for the pin)
-	 * @param ulRemaining return the remaining tries (only if verifying failed)
-	 *
-	 * @return true if success and false if failed
-	 */
+	  * Call the CAL for verifying the pin
+	  *
+	  * @param csPin is the pin code to verify (if csPin is empty, the CAL will ask for the pin)
+	  * @param ulRemaining return the remaining tries (only if verifying failed)
+	  *
+	  * @return true if success and false if failed
+	  */
 	EIDMW_APL_API bool verifyPin(const char *csPin, unsigned long &ulRemaining, bool bShowDlg = true,
 								 void *wndGeometry = 0);
 
 	/**
-	 * Call the CAL for changing the pin
-	 *
-	 * if csPin1 or csPin2 are empty, the CAL will ask for the pins
-	 *
-	 * @param csPin1 is the old pin code
-	 * @param csPin2 is the new pin code
-	 * @param ulRemaining return the remaining tries (only when operation failed)
-	 * @param PinName is the Pin Name
-	 *
-	 * @return true if success and false if failed
-	 */
+	  * Call the CAL for changing the pin
+	  *
+	  * if csPin1 or csPin2 are empty, the CAL will ask for the pins
+	  *
+	  * @param csPin1 is the old pin code
+	  * @param csPin2 is the new pin code
+	  * @param ulRemaining return the remaining tries (only when operation failed)
+	  * @param PinName is the Pin Name
+	  *
+	  * @return true if success and false if failed
+	  */
 	EIDMW_APL_API bool changePin(const char *csPin1, const char *csPin2, unsigned long &ulRemaining,
 								 const char *PinName, bool bShowDlg = true, void *wndGeometry = 0);
 	EIDMW_APL_API bool unlockPin(const char *pszPuk, const char *pszNewPin, unsigned long &triesLeft,
@@ -167,11 +163,11 @@ public:
 
 protected:
 	/**
-	 * Constructor
-	 *
-	 * @param card is the smart card from which the pin comes
-	 * @param ulIndex is the P15 index of the pin
-	 */
+	  * Constructor
+	  *
+	  * @param card is the smart card from which the pin comes
+	  * @param ulIndex is the P15 index of the pin
+	  */
 	APL_Pin(APL_SmartCard *card, unsigned long ulIndex);
 
 private:

@@ -82,14 +82,13 @@ class APL_ReaderContext;
 class APL_Pin;
 class APL_XMLDoc;
 /******************************************************************************/ /**
-																				  * Abstract base class for all type of
-																				  *card
-																				  *********************************************************************************/
+  * Abstract base class for all type of card
+  *********************************************************************************/
 class APL_Card {
 public:
 	/**
-	 * Pur virtual destructor
-	 */
+	  * Pur virtual destructor
+	  */
 	EIDMW_APL_API virtual ~APL_Card() = 0;
 
 	/**
@@ -131,20 +130,20 @@ public:
 							  const char *outfile_path);
 
 	/**
-	 * Read a file on the card
-	 *
-	 * @param csPath is the path of the file to be read
-	 * @param bytearray will contain the content of the file
-	 */
+	  * Read a file on the card
+	  *
+	  * @param csPath is the path of the file to be read
+	  * @param bytearray will contain the content of the file
+	  */
 	EIDMW_APL_API virtual unsigned long readFile(const char *csPath, CByteArray &oData, unsigned long ulOffset = 0,
 												 unsigned long ulMaxLength = 0);
 
 	/**
-	 * Write a file to the card
-	 *
-	 * @param csPath is the path of the file to be written
-	 * @param oData will contain the content of the file
-	 */
+	  * Write a file to the card
+	  *
+	  * @param csPath is the path of the file to be written
+	  * @param oData will contain the content of the file
+	  */
 	EIDMW_APL_API virtual bool writeFile(const char *csPath, const CByteArray &oData, unsigned long ulOffset = 0);
 
 	EIDMW_APL_API void initPaceAuthentication(const char *secret, size_t secretLen,
@@ -154,17 +153,17 @@ public:
 	void CalUnlock(); /**< Unlock the reader */
 
 	/**
-	 * Give access to the CAL
-	 * NOT FOR EXPORT
-	 */
+	  * Give access to the CAL
+	  * NOT FOR EXPORT
+	  */
 	CReader *getCalReader() const;
 
 protected:
 	/**
-	 * Constructor
-	 *
-	 * @param reader is the reader from the card layer (CAL) in which the card is plugged
-	 */
+	  * Constructor
+	  *
+	  * @param reader is the reader from the card layer (CAL) in which the card is plugged
+	  */
 	APL_Card(APL_ReaderContext *reader);
 
 	void SignIndividual(const char **, unsigned int, const char *, bool, bool);
@@ -186,73 +185,72 @@ class APL_Certif;
 class APL_Certifs;
 class APL_CardFile_Info;
 /******************************************************************************/ /**
-																				  * Abstract base class for smart card
-																				  *(like eid card)
-																				  *********************************************************************************/
+  * Abstract base class for smart card (like eid card)
+  *********************************************************************************/
 class APL_SmartCard : public APL_Card {
 public:
 	/**
-	 * Pur virtual destructor
-	 */
+	  * Pur virtual destructor
+	  */
 	EIDMW_APL_API virtual ~APL_SmartCard() = 0;
 
 	/**
-	 * Tell the card to select an application on the card
-	 */
+	  * Tell the card to select an application on the card
+	  */
 	EIDMW_APL_API void selectApplication(const CByteArray &applicationId) const;
 
 	EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray &cmd, APL_Pin *pin = NULL, const char *csPinCode = "");
 
 	/**
-	 * Read a file on the card
-	 *
-	 * @param csPath is the path of the file to be read
-	 * @param bytearray will contain the content of the file
-	 */
+	  * Read a file on the card
+	  *
+	  * @param csPath is the path of the file to be read
+	  * @param bytearray will contain the content of the file
+	  */
 	EIDMW_APL_API virtual unsigned long readFile(const char *csPath, CByteArray &oData, unsigned long ulOffset = 0,
 												 unsigned long ulMaxLength = 0);
 
 	/**
-	 * Read a file on the card
-	 *
-	 * @param fileID : is the name/path of the file
-	 * @param in : will return the content of the file
-	 * @param pin : is the pin to verify before reading (if null the code will be asked)
-	 * @param csPinCode : is the pin code (if empty the code will be asked)
-	 */
+	  * Read a file on the card
+	  *
+	  * @param fileID : is the name/path of the file
+	  * @param in : will return the content of the file
+	  * @param pin : is the pin to verify before reading (if null the code will be asked)
+	  * @param csPinCode : is the pin code (if empty the code will be asked)
+	  */
 	EIDMW_APL_API virtual unsigned long readFile(const char *fileID, CByteArray &in, APL_Pin *pin = NULL,
 												 const char *csPinCode = "");
 
 	/**
-	 * Write a file to the card
-	 *
-	 * @param fileID : is the name/path of the file
-	 * @param out : the content of the file
-	 * @param pin : is the pin to verify before writing (if null the code will be asked)
-	 * @param csPinCode : is the pin code (if empty the code will be asked)
-	 * @param ulOffset: is the offset of the data to be written to the file
-	 */
+	  * Write a file to the card
+	  *
+	  * @param fileID : is the name/path of the file
+	  * @param out : the content of the file
+	  * @param pin : is the pin to verify before writing (if null the code will be asked)
+	  * @param csPinCode : is the pin code (if empty the code will be asked)
+	  * @param ulOffset: is the offset of the data to be written to the file
+	  */
 	EIDMW_APL_API virtual bool writeFile(const char *fileID, const CByteArray &out, APL_Pin *pin = NULL,
 										 const char *csPinCode = "", unsigned long ulOffset = 0);
 
 	/**
-	 * Return the number of pin on the card
-	 */
+	  * Return the number of pin on the card
+	  */
 	EIDMW_APL_API virtual unsigned long pinCount();
 
 	/**
-	 * Return an object to access all the pins on the card
-	 */
+	  * Return an object to access all the pins on the card
+	  */
 	EIDMW_APL_API virtual APL_Pins *getPins();
 
 	/**
-	 * Return structure containing the PKCS15 object from the CAL
-	 */
+	  * Return structure containing the PKCS15 object from the CAL
+	  */
 	EIDMW_APL_API virtual tPin getPin(unsigned long ulIndex);
 
 	/**
-	 * Return pinStatus from the CAL
-	 */
+	  * Return pinStatus from the CAL
+	  */
 	EIDMW_APL_API virtual unsigned long pinStatus(const tPin &Pin);
 
 	EIDMW_APL_API bool isPinVerified(const tPin &Pin);
@@ -262,24 +260,24 @@ public:
 	EIDMW_APL_API virtual APLPublicKey *getRootCAPubKey() = 0;
 
 	/**
-	 * Execute a pin command from the CAL
-	 */
+	  * Execute a pin command from the CAL
+	  */
 	EIDMW_APL_API virtual bool pinCmd(tPinOperation operation, const tPin &Pin, const char *csPin1, const char *csPin2,
 									  unsigned long &ulRemaining, bool bShowDlg = true, void *wndGeometry = 0);
 
 	/**
-	 * Return the number of certificate on the card
-	 */
+	  * Return the number of certificate on the card
+	  */
 	EIDMW_APL_API virtual unsigned long certificateCount();
 
 	/**
-	 * Return an object to access all the certificates on the card
-	 */
+	  * Return an object to access all the certificates on the card
+	  */
 	EIDMW_APL_API virtual APL_Certifs *getCertificates();
 
 	/**
-	 * Return structure containing the PKCS15 object from the CAL
-	 */
+	  * Return structure containing the PKCS15 object from the CAL
+	  */
 	EIDMW_APL_API virtual tCert getP15Cert(unsigned long ulIndex);
 
 	APL_CardFile_Info *getFileInfo(); /**< Return a pointer to the pseudo file info */
@@ -289,10 +287,10 @@ public:
 
 protected:
 	/**
-	 * Constructor
-	 *
-	 * @param reader is the reader from the card layer (CAL) in which the card is plugged
-	 */
+	  * Constructor
+	  *
+	  * @param reader is the reader from the card layer (CAL) in which the card is plugged
+	  */
 	APL_SmartCard(APL_ReaderContext *reader);
 
 	APL_Pins *m_pins;	  /**< Pointer to the collection of pins */
