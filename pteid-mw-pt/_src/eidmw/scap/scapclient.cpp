@@ -206,7 +206,7 @@ std::pair<std::string, std::string> format_scap_seal_strings(const std::vector<S
 
 		if (provider.type == "ENTERPRISE") {
 			provider_names.insert("SCAP");
-			certified_attributes += " de " + provider.name + "\nVATPT-" + provider.nipc;
+			certified_attributes += " de " + provider.name + "\n(VAT PT-" + provider.nipc + ")";
 		} else {
 			provider_names.insert(provider.name);
 		}
@@ -239,7 +239,7 @@ static std::string format_reason_field_string(const ScapTransaction &transaction
 
 	std::string reason = "Entidade: " + transaction.provider_name + ". ";
 	if (!provider_nipc.empty()) {
-		reason += "VATPT-" + provider_nipc + ".";
+		reason += "(VAT PT-" + provider_nipc + ").";
 	}
 
 	reason += " Na qualidade de: ";

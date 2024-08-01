@@ -77,6 +77,15 @@ PageDefinitionsSignSettingsForm {
                               propertyTextFieldTimeStamp.text = ""
                           }
     }
+
+    propertyCheckboxSCAP{
+        onCheckedChanged: {
+            if (controler.getSCAPOptions() != 0){
+                controler.setSCAPOptions(propertyCheckboxSCAP.checked + 1)
+            }
+        }
+    }
+
     propertyCheckboxCMDRegRemember{
         onCheckedChanged: controler.setAskToRegisterCmdCertValue(!propertyCheckboxCMDRegRemember.checked)
     }
@@ -110,6 +119,7 @@ PageDefinitionsSignSettingsForm {
             propertyRectAddRootCACert.visible = false
             propertyRectAppCertificates.visible = false
             propertyRectAppTimeStamp.anchors.top = propertyRectAppCertificates.top
+            propertyRectAppSCAP.anchors.top = propertyRectAppTimeStamp.bottom
         }
 
         if (controler.getTimeStampHostValue().length > 0
@@ -118,6 +128,12 @@ PageDefinitionsSignSettingsForm {
             propertyTextFieldTimeStamp.text = controler.getTimeStampHostValue()
         }else{
             propertyCheckboxTimeStamp.checked = false
+        }
+
+        if (controler.getSCAPOptions() === 2){
+            propertyCheckboxSCAP.checked = true
+        }else{
+            propertyCheckboxSCAP.checked = false
         }
 
         if (Qt.platform.os === "windows") {

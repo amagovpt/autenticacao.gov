@@ -89,6 +89,7 @@ PageServicesSignForm {
 
             propertyBusyIndicator.running = false
             propertyListViewEntities.currentIndex = 0
+                                      mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             entityAttributesModel.count > 0
                     ? propertyListViewEntities.forceActiveFocus()
                     : propertyTextAttributesMsg.forceActiveFocus()
@@ -1002,86 +1003,26 @@ PageServicesSignForm {
     propertyButtonSignWithCC {
         onClicked: {
             console.log("Sign with CC")
-            gapi.startCCSignatureCertCheck();
+            console.log(controler.getSCAPOptions())
+            if(controler.getSCAPOptions() == 0 && propertySwitchAddAttributes.checked){
+                scapoptions_dialog.onConclude = gapi.startCCSignatureCertCheck;
+                scapoptions_dialog.open();
+            }
+            else{
+                gapi.startCCSignatureCertCheck();
+            }
         }
     }
 
     propertyButtonSignCMD {
         onClicked: {
             console.log("Sign with CMD")
-            dialogSignCMD.enableConnections()
-
-            if (!gapi.checkCMDSupport()) {
-                const titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
-                const bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                return
+            if(controler.getSCAPOptions() == 0 && propertySwitchAddAttributes.checked){
+                scapoptions_dialog.onConclude = cmdWork;
+                scapoptions_dialog.open();
             }
-
-            if (fileCount > Constants.MAX_CMD_DOCS) {
-                const titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
-                const bodyPopup = qsTranslate("Popup Card","STR_SIGN_CMD_ERROR")
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                return
-            }
-
-            if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && number_of_attributes_selected() == 0) {
-                //SCAP switch checked but no attributes selected
-                const titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-                const bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
-                mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                return;
-            }
-
-            var shortcutOutput = get_shortcut_output() // passed through CLI
-
-            const prefix = (Qt.platform.os === "windows" ? "file:///" : "file://")
-
-            if (propertyListViewFiles.count == 1) {
-                if (shortcutOutput) {
-                    var inputFile = propertyListViewFiles.model.get(0).fileUrl
-                    inputFile = inputFile.substring(inputFile.lastIndexOf('/'), inputFile.length - 1)
-                    shortcutOutput = prefix + shortcutOutput + Functions.replaceFileSuffix(inputFile, "_signed.pdf")
-                    propertyFileDialogCMDOutput.file = shortcutOutput
-                    propertyFileDialogCMDOutput.accepted()
-                    gapi.setShortcutOutput("")
-                    return
-                }
-
-                const outputFile = propertyListViewFiles.model.get(0).fileUrl
-                const newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
-                if (contains_package_asic()) {
-                    //no need to get output file in this case; we are adding a signature to an existing ASiC
-                    sign_CMD()
-                } else {
-                    propertyFileDialogCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
-                    propertyFileDialogCMDOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
-                    propertyFileDialogCMDOutput.open()
-                }
-            } else {
-                if (propertyRadioButtonPADES.checked) {
-                    if(shortcutOutput) {
-                        propertyFileDialogBatchCMDOutput.folder = shortcutOutput
-                        propertyFileDialogBatchCMDOutput.accepted()
-                        return
-                    }
-                    propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
-                    propertyFileDialogBatchCMDOutput.open()
-                } else {
-                    if (contains_package_asic()) {
-                        const titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
-                        const bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
-                        mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
-                    } else {
-                        var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
-                        if (outputFolderPath.lastIndexOf('/') >= 0)
-                            outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
-
-                        propertyFileDialogCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
-                        propertyFileDialogCMDOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
-                        propertyFileDialogCMDOutput.open()
-                    }
-                }
+            else{
+                cmdWork();
             }
         }
     }
@@ -1785,6 +1726,155 @@ PageServicesSignForm {
         }
     }
 
+    Dialog {
+        id: scapoptions_dialog
+        width: 400
+        height: 200
+        visible: false
+        font.family: lato.name
+        modal: true
+        closePolicy: Popup.CloseOnEscape
+
+        property var onConclude: function() {}
+
+        // Center dialog in the main view
+        x: - mainMenuView.width - subMenuView.width + mainView.width * 0.5 - scapoptions_dialog.width * 0.5
+        y: parent.height * 0.5 - scapoptions_dialog.height * 0.5
+
+        property alias propertySCAPOPtionsDialogTitle: titleTextSCAPOptions
+
+        header: Label {
+            id: titleTextSCAPOptions
+            text: qsTranslate("PageServicesSign","STR_SCAP_OPTIONS")
+            elide: Label.ElideRight
+            padding: 24
+            bottomPadding: 0
+            font.bold: rectPopUpSCAPOptions.activeFocus
+            font.pixelSize: Constants.SIZE_TEXT_MAIN_MENU
+            color: Constants.COLOR_MAIN_BLUE
+        }
+        Item {
+            id: rectPopUpSCAP
+            width: parent.width
+            height: parent.height
+
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS")
+                             + titleTextError.text + text_sign_error.text + text_sign_generic_error
+            KeyNavigation.tab: closeButtonError.visible ? closeButtonError : (buttonCancelAttr.visible ? buttonCancelAttr : buttonLoadAttr)
+            KeyNavigation.right: closeButtonError.visible ? closeButtonError : (buttonCancelAttr.visible ? buttonCancelAttr : buttonLoadAttr)
+            KeyNavigation.down: closeButtonError.visible ? closeButtonError : (buttonCancelAttr.visible ? buttonCancelAttr : buttonLoadAttr)
+            KeyNavigation.backtab: buttonLoadAttr.visible ? buttonLoadAttr : (buttonCancelAttr.visible ? buttonCancelAttr : closeButtonError)
+            KeyNavigation.up: buttonLoadAttr.visible ? buttonLoadAttr : (buttonCancelAttr.visible ? buttonCancelAttr : closeButtonError)
+            Item{                
+                Column{
+                    spacing: 10
+                    Text {
+                        id: text_SCAP
+                        text: qsTranslate("PageServicesSign","STR_SCAP_OPTIONS_TEXT")
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        width: rectPopUpError.width
+                        wrapMode: Text.Wrap
+                        elide: Text.ElideRight
+                    }
+                    Text {
+                        id: text_SCAP2
+                        text: qsTranslate("PageServicesSign","STR_SCAP_OPTIONS_TEXT2")
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        width: rectPopUpError.width
+                        wrapMode: Text.Wrap
+                        elide: Text.ElideRight
+                    }
+                }
+            }
+        }
+        Item {
+            width: scapoptions_dialog.availableWidth
+            height: Constants.HEIGHT_BOTTOM_COMPONENT
+            anchors.bottom: parent.bottom
+            Item {
+                width: parent.width
+                height: Constants.HEIGHT_BOTTOM_COMPONENT
+                anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    id: closeButtonSCAPOptions
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text: qsTranslate("PageServicesSign","STR_SCAP_OPTIONS_YES")
+                    visible: true
+                    anchors.left: parent.left
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        scapoptions_dialog.close()
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                        controler.setSCAPOptions(2);
+                        scapoptions_dialog.onConclude();
+                        //gapi.startCCSignatureCertCheck();
+                    }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: buttonLoadSCAPOptions.visible ? buttonLoadSCAPOptions : rectPopUpSCAPOptions
+                    KeyNavigation.right: buttonLoadSCAPOptions.visible ? buttonLoadSCAPOptions : rectPopUpSCAPOptions
+                    KeyNavigation.down: buttonLoadSCAPOptions.visible ? buttonLoadSCAPOptions : rectPopUpSCAPOptions
+                    KeyNavigation.backtab: rectPopUpSCAPOptions
+                    KeyNavigation.up: rectPopUpSCAPOptions
+                    highlighted: activeFocus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
+                }
+                Button {
+                    id: buttonLoadSCAPOptions
+                    width: Constants.WIDTH_BUTTON
+                    height: Constants.HEIGHT_BOTTOM_COMPONENT
+                    text:  qsTranslate("PageServicesSign","STR_SCAP_OPTIONS_NO")
+                    visible: true
+                    anchors.right: parent.right
+                    font.pixelSize: Constants.SIZE_TEXT_FIELD
+                    font.family: lato.name
+                    font.capitalization: Font.MixedCase
+                    onClicked: {
+                        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+                        scapoptions_dialog.close()
+                        controler.setSCAPOptions(1);
+                        scapoptions_dialog.onConclude();
+                        //gapi.startCCSignatureCertCheck();
+                    }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: text
+                    KeyNavigation.tab: rectPopUpSCAPOptions
+                    KeyNavigation.down: rectPopUpSCAPOptions
+                    KeyNavigation.right: rectPopUpSCAPOptions
+                    KeyNavigation.backtab: (closeButtonSCAPOptions.visible ? closeButtonSCAPOptions : rectPopUpSCAPOptions)
+                    KeyNavigation.up: (closeButtonSCAPOptions.visible ? closeButtonSCAPOptions : rectPopUpSCAPOptions)
+                    highlighted: activeFocus
+                    Keys.onEnterPressed: clicked()
+                    Keys.onReturnPressed: clicked()
+                }
+            }
+        }
+
+        onOpened: {
+            rectPopUpSCAPOptions.forceActiveFocus()
+        }
+
+        onClosed: {
+            //reset title and visible buttons when closing dialog
+            titleTextSCAPOptions.text = qsTranslate("PageServicesSign","STR_SIGN_FAIL")
+            closeButtonSCAPOptions.visible = true
+            buttonLoadSCAPOptions.visible = true
+            scapoptions_dialog.onConclude = {}
+
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            mainFormID.propertyPageLoader.forceActiveFocus()
+        }
+    }
+
     function update_current_loaded_file() {
         propertyPDFPreview.propertyBackground.cache = false
         propertyPDFPreview.propertyBackground.source = "image://pdfpreview_imageprovider/"
@@ -2479,5 +2569,82 @@ PageServicesSignForm {
         propertyBusyIndicator.running = false
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         propertyOutputSignedFile = ""
+    }
+
+    function cmdWork() {
+        dialogSignCMD.enableConnections()
+
+        if (!gapi.checkCMDSupport()) {
+            const titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            const bodyPopup = qsTranslate("Popup Card","STR_POPUP_NO_CMD_SUPPORT")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            return
+        }
+
+        if (fileCount > Constants.MAX_CMD_DOCS) {
+            const titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            const bodyPopup = qsTranslate("Popup Card","STR_SIGN_CMD_ERROR")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            return
+        }
+
+        if (propertyRadioButtonPADES.checked && propertySwitchAddAttributes.checked && number_of_attributes_selected() == 0) {
+            //SCAP switch checked but no attributes selected
+            const titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
+            const bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRIBUTES_NOT_SELECT")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+            return;
+        }
+
+        var shortcutOutput = get_shortcut_output() // passed through CLI
+
+        const prefix = (Qt.platform.os === "windows" ? "file:///" : "file://")
+
+        if (propertyListViewFiles.count == 1) {
+            if (shortcutOutput) {
+                var inputFile = propertyListViewFiles.model.get(0).fileUrl
+                inputFile = inputFile.substring(inputFile.lastIndexOf('/'), inputFile.length - 1)
+                shortcutOutput = prefix + shortcutOutput + Functions.replaceFileSuffix(inputFile, "_signed.pdf")
+                propertyFileDialogCMDOutput.file = shortcutOutput
+                propertyFileDialogCMDOutput.accepted()
+                gapi.setShortcutOutput("")
+                return
+            }
+
+            const outputFile = propertyListViewFiles.model.get(0).fileUrl
+            const newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
+            if (contains_package_asic()) {
+                //no need to get output file in this case; we are adding a signature to an existing ASiC
+                sign_CMD()
+            } else {
+                propertyFileDialogCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+                propertyFileDialogCMDOutput.currentFile = prefix + Functions.replaceFileSuffix(outputFile, newSuffix)
+                propertyFileDialogCMDOutput.open()
+            }
+        } else {
+            if (propertyRadioButtonPADES.checked) {
+                if(shortcutOutput) {
+                    propertyFileDialogBatchCMDOutput.folder = shortcutOutput
+                    propertyFileDialogBatchCMDOutput.accepted()
+                    return
+                }
+                propertyFileDialogBatchCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT_FOLDER")
+                propertyFileDialogBatchCMDOutput.open()
+            } else {
+                if (contains_package_asic()) {
+                    const titlePopup = qsTranslate("PageServicesSign","STR_FILE_ASIC_TITLE")
+                    const bodyPopup = qsTranslate("PageServicesSign","STR_FILE_ASIC")
+                    mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
+                } else {
+                    var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
+                    if (outputFolderPath.lastIndexOf('/') >= 0)
+                        outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
+
+                    propertyFileDialogCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
+                    propertyFileDialogCMDOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
+                    propertyFileDialogCMDOutput.open()
+                }
+            }
+        }
     }
 }

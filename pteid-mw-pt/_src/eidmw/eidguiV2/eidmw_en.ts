@@ -992,6 +992,14 @@
         <translation>URL?</translation>
     </message>
     <message>
+        <source>STR_SCAP_TITLE</source>
+        <translation>SCAP service options</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OP</source>
+        <translation>Save last selected attribute(s)</translation>
+    </message>
+    <message>
         <source>STR_CMD_CERT_TITLE</source>
         <translation>Chave Móvel Digital</translation>
     </message>
@@ -1807,6 +1815,26 @@
         <translation>PDF signature failed</translation>
     </message>
     <message>
+        <source>STR_SCAP_OPTIONS</source>
+        <translation>Professional Attributes</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_TEXT</source>
+        <translation>Do you wish to save the selected attributes for future signatures?</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_TEXT2</source>
+        <translation>In the future, you can change this decision in Signature settings.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_YES</source>
+        <translation>Yes</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_NO</source>
+        <translation>No</translation>
+    </message>
+    <message>
         <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG</source>
         <translation>Unsupported or encrypted PDF file. The PDF signature does not support encrypted PDF files.</translation>
     </message>
@@ -2352,11 +2380,11 @@
     </message>
     <message>
         <source>STR_POPUP_CAN</source>
-        <translation>Card access number</translation>
+        <translation type="vanished">Card access number</translation>
     </message>
     <message>
         <source>STR_POPUP_CAN_LABEL</source>
-        <translation>CAN: </translation>
+        <translation type="vanished">CAN: </translation>
     </message>
     <message>
         <source>STR_POPUP_CAN_OK</source>

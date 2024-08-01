@@ -26,6 +26,8 @@ Item {
     property alias propertyRectAppTimeStamp: rectAppTimeStamp
     property alias propertyCheckboxTimeStamp: checkboxTimeStamp
     property alias propertyTextFieldTimeStamp: textFieldTimeStamp
+    property alias propertyRectAppSCAP: rectAppSCAP
+    property alias propertyCheckboxSCAP: checkboxSCAP
     property alias propertyCheckboxDisable: checkboxDisable
     property alias propertyRectOffice: rectOffice
     property alias propertyRectLoadCMDCerts: rectLoadCMDCerts
@@ -793,6 +795,92 @@ Item {
                     }
                 }
             }
+            Item {
+                     id: rectAppSCAP
+                     width: parent.width
+                     height: dateAppSCAP.height + rectAppSCAPCheckBox.height
+                             + 3*Constants.SIZE_TEXT_V_SPACE
+                     anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
+                     anchors.top: rectAddRootCACert.bottom
+                     anchors.topMargin: Constants.SIZE_ROW_V_SPACE_DEFINITIONS_APP
+
+                     Text {
+                         id: dateAppSCAP
+                         x: Constants.SIZE_TEXT_FIELD_H_SPACE
+                         font.pixelSize: activeFocus
+                                         ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                         : Constants.SIZE_TEXT_LABEL
+                         font.family: lato.name
+                         font.bold: activeFocus
+                         color: Constants.COLOR_TEXT_LABEL
+                         height: Constants.SIZE_TEXT_LABEL
+                         text: qsTranslate("PageDefinitionsApp",
+                                           "STR_SCAP_TITLE")
+                         Accessible.role: Accessible.StaticText
+                         Accessible.name: text
+                         Keys.onPressed: {
+                             handleKeyPressed(event.key, dateAppSCAP)
+                         }
+                         KeyNavigation.tab: checkboxRemove
+                         KeyNavigation.down: checkboxRemove
+                         KeyNavigation.right: checkboxRemove
+                         KeyNavigation.backtab: checkboxRemove
+                         KeyNavigation.up: checkboxRemove
+                     }
+                     DropShadow {
+                         anchors.fill: rectAppSCAPCheckBox
+                         horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
+                         verticalOffset: Constants.FORM_SHADOW_V_OFFSET
+                         radius: Constants.FORM_SHADOW_RADIUS
+                         samples: Constants.FORM_SHADOW_SAMPLES
+                         color: Constants.COLOR_FORM_SHADOW
+                         source: rectAppSCAPCheckBox
+                         spread: Constants.FORM_SHADOW_SPREAD
+                         opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
+                     }
+                     RectangularGlow {
+                         anchors.fill: rectAppSCAPCheckBox
+                         glowRadius: Constants.FORM_GLOW_RADIUS
+                         spread: Constants.FORM_GLOW_SPREAD
+                         color: Constants.COLOR_FORM_GLOW
+                         cornerRadius: Constants.FORM_GLOW_CORNER_RADIUS
+                         opacity: Constants.FORM_GLOW_OPACITY_FORM_EFFECT
+                     }
+                     Rectangle {
+                         id: rectAppSCAPCheckBox
+                         width: parent.width
+                         color: "white"
+                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                         height: checkboxSCAP.height + Constants.SIZE_ROW_V_SPACE + Constants.SIZE_TEXT_V_SPACE
+                         anchors.top: dateAppSCAP.bottom
+
+                         CheckBox {
+                             id: checkboxSCAP
+                             text: qsTranslate("PageDefinitionsApp",
+                                               "STR_SCAP_OP")
+                             height: 25
+                             font.family: lato.name
+                             font.pixelSize: Constants.SIZE_TEXT_FIELD
+                             font.capitalization: Font.MixedCase
+                             font.bold: activeFocus
+                             anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
+                             checked: false
+                             Accessible.role: Accessible.CheckBox
+                             Accessible.name: text
+                             Keys.onPressed: {
+                                 handleKeyPressed(event.key, checkboxSCAP)
+                             }
+                             KeyNavigation.tab: (rectOffice.visible ? textOfficeTitle: dateAppSCAP)
+                             KeyNavigation.down: (rectOffice.visible ? textOfficeTitle: dateAppSCAP)
+                             KeyNavigation.right: (rectOffice.visible ? textOfficeTitle: dateAppSCAP)
+                             KeyNavigation.backtab: checkboxSCAP
+                             KeyNavigation.up: checkboxSCAP
+                             Keys.onEnterPressed: toggleSwitch(checkboxSCAP)
+                             Keys.onReturnPressed: toggleSwitch(checkboxSCAP)
+                         }
+                     }
+                 }
+
         }
     }
 }

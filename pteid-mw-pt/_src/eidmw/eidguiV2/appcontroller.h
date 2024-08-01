@@ -105,6 +105,9 @@ public slots:
 
 	QString getTimeStampHostValue(void);
 	void setTimeStampHostValue(const QString &timeStamp_host);
+	
+	int getSCAPOptions(void);
+	void setSCAPOptions(int iSCAPOptions);
 
 	bool getProxySystemValue(void);
 	void setProxySystemValue(bool bProxySystem);

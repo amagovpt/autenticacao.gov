@@ -60,7 +60,7 @@ public:
 		  m_bNotShowStartUpHelp(false), m_bAskToRegisterCmdCert(false), m_bAskToSetCache(false),
 		  m_bAskToSetTelemetry(false), m_bShowSignatureOptions(false), m_bShowSignatureHelp(false),
 		  m_bAutoCardReading(false), m_bAutoStartup(false), m_bRegCert(false), m_bRemoveCert(false), m_strExePath(""),
-		  m_test_mode(false), m_iSignSealOptions(0) {
+		  m_test_mode(false), m_iSignSealOptions(0), m_bSCAPOptions(0) {
 		//----------------------------------------------------------
 		// Check always what is set in the registry
 		//----------------------------------------------------------
@@ -319,6 +319,15 @@ public:
 			}
 		}
 		//---------------------------------------------------------
+		// Check SCAP Options settings
+		//---------------------------------------------------------
+		{
+			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SCAPOPTIONS);
+			long scap_options = config.getLong();
+			setSCAPOptions(scap_options);
+			//m_bSCAPOptions = scap_options;
+		}
+		//---------------------------------------------------------
 		// Check timestamp settings
 		//---------------------------------------------------------
 		{
@@ -326,7 +335,6 @@ public:
 			QString timeStamp_url = config.getString();
 			m_time_stamp_host = timeStamp_url;
 		}
-
 		//---------------------------------------------------------
 		// Check proxy settings
 		//---------------------------------------------------------
@@ -582,6 +590,14 @@ public:
 		config.setString(timeStamp_host.toUtf8());
 	}
 
+	long getSCAPOptions(void) { return m_bSCAPOptions; }
+
+	void setSCAPOptions(int bSCAPOptions){
+		m_bSCAPOptions = bSCAPOptions;
+		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GUITOOL_SCAPOPTIONS);
+		config.setLong(m_bSCAPOptions);
+	}
+
 	void setExePath(const QString &strExePath) { m_strExePath = strExePath; }
 
 	const QString &getExePath(void) { return m_strExePath; }
@@ -764,6 +780,7 @@ private:
 	QString m_strExePath;		  //!< path to the executable
 	bool m_test_mode;
 	int m_iSignSealOptions;
+	long m_bSCAPOptions;
 
 	QString m_GUIVersion; //!! Full version of the GUI
 };

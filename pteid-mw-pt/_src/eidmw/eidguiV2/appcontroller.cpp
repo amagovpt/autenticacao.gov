@@ -324,6 +324,9 @@ QString AppController::getTimeStampHostValue(void) { return m_Settings.getTimeSt
 void AppController::setTimeStampHostValue(const QString &timeStamp_host) {
 	m_Settings.setTimeStampHost(timeStamp_host);
 }
+void AppController::setSCAPOptions(int bSCAPOptions){m_Settings.setSCAPOptions(bSCAPOptions);}
+int AppController::getSCAPOptions(void) { return m_Settings.getSCAPOptions(); }
+
 bool AppController::getProxySystemValue(void) { return m_Settings.getProxySystem(); }
 void AppController::setProxySystemValue(bool bProxySystem) { m_Settings.setProxySystem(bProxySystem); }
 QString AppController::getProxyHostValue(void) { return m_Settings.getProxyHost(); }
@@ -853,23 +856,29 @@ void AppController::getSignatureOptions() {
 	bool scap = cJSON_IsTrue(scap_obj);
 
 	QStringList attribute_ids;
-	cJSON *attributes = NULL;
-	if ((attributes = cJSON_GetObjectItem(json, "attributes")) == NULL) {
-		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse attributes array", __FUNCTION__);
-	} else {
-		const size_t array_size = cJSON_GetArraySize(attributes);
-		for (size_t i = 0; i < array_size; ++i) {
-			cJSON *array_item = NULL;
-			if ((array_item = cJSON_GetArrayItem(attributes, i)) == NULL) {
-				PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse attributes item", __FUNCTION__);
-			}
+    cJSON *attributes = NULL;
+    // Verifies if the option is turned on
+    eIDMW::PTEID_Config scapOptions(eIDMW::PTEID_PARAM_GUITOOL_SCAPOPTIONS);
+    long scapOptionsEnabled = scapOptions.getLong();
+	// 2 means that the option is enabled
+    if (scapOptionsEnabled == 2){
+        if ((attributes = cJSON_GetObjectItem(json, "attributes")) == NULL) {
+            PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse attributes array", __FUNCTION__);
+        } else {
+            const size_t array_size = cJSON_GetArraySize(attributes);
+            for (size_t i = 0; i < array_size; ++i) {
+                cJSON *array_item = NULL;
+                if ((array_item = cJSON_GetArrayItem(attributes, i)) == NULL) {
+                    PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse attributes item", __FUNCTION__);
+                }
 
-			char *id = cJSON_GetStringValue(array_item);
-			if (id) {
-				attribute_ids.push_back(id);
-			}
-		}
-	}
+                char *id = cJSON_GetStringValue(array_item);
+                if (id) {
+                    attribute_ids.push_back(id);
+                }
+            }
+        }
+    }
 
 	QVariantList options;
 	options.append({pades, timestamp, lta, prof_name, visible, reduced, reason, location, seal_width, seal_height, scap,

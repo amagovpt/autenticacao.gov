@@ -990,6 +990,14 @@
         <translation>URL?</translation>
     </message>
     <message>
+        <source>STR_SCAP_TITLE</source>
+        <translation>Opções de Assinatura com Atributos Profissional</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OP</source>
+        <translation>Guardar último(s) atributo(s) selecionado(s)</translation>
+    </message>
+    <message>
         <source>STR_CMD_CERT_TITLE</source>
         <translation>Chave Móvel Digital</translation>
     </message>
@@ -1805,6 +1813,26 @@
         <translation>Falha na assinatura de PDF</translation>
     </message>
     <message>
+        <source>STR_SCAP_OPTIONS</source>
+        <translation>Atributos Profissionais</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_TEXT</source>
+        <translation>Deseja guardar o(s) atributo(s) selecionado(s) para futuras assinaturas?</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_TEXT2</source>
+        <translation>Futuramente, pode alterar esta decisão nas Configurações de Assinatura.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_YES</source>
+        <translation>Sim</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_NO</source>
+        <translation>Não</translation>
+    </message>
+    <message>
         <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG</source>
         <translation>Ficheiro PDF não suportado ou encriptado. A assinatura PDF não suporta ficheiros PDF encriptados.</translation>
     </message>
@@ -2359,11 +2387,11 @@ Este número de 6 digitos está impresso no seu cartão no canto inferior direit
     </message>
     <message>
         <source>STR_POPUP_CAN</source>
-        <translation>Código de acesso ao cartão</translation>
+        <translation type="vanished">Código de acesso ao cartão</translation>
     </message>
     <message>
         <source>STR_POPUP_CAN_LABEL</source>
-        <translation>CAN: </translation>
+        <translation type="vanished">CAN: </translation>
     </message>
     <message>
         <source>STR_POPUP_CAN_OK</source>
