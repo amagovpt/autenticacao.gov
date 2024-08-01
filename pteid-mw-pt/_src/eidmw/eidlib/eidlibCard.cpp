@@ -761,14 +761,14 @@ ICAO_Card::ICAO_Card(const SDK_Context *context, APL_ICAO *impl) : PTEID_Object(
 	std::cout << "Called ICAO_Card constructor\n";
 }
 
-std::vector<ICAO_Card::DataGroupID> ICAO_Card::getAvailableDatagroups() {
-	std::vector<DataGroupID> availableDatagroups;
+std::vector<PTEID_DataGroupID> ICAO_Card::getAvailableDatagroups() {
+	std::vector<PTEID_DataGroupID> availableDatagroups;
 
 	BEGIN_TRY_CATCH
 	auto icao = static_cast<APL_ICAO *>(m_impl);
 	auto datagroups = icao->getAvailableDatagroups();
 	for (const auto &dg : datagroups) {
-		availableDatagroups.emplace_back(static_cast<DataGroupID>(dg));
+		availableDatagroups.emplace_back(static_cast<PTEID_DataGroupID>(dg));
 	}
 
 	END_TRY_CATCH
@@ -794,7 +794,7 @@ void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_
 	END_TRY_CATCH
 }
 
-PTEID_ByteArray ICAO_Card::readDatagroup(ICAO_Card::DataGroupID tag) {
+PTEID_ByteArray ICAO_Card::readDatagroup(PTEID_DataGroupID tag) {
 	std::cout << "Called ICAO_Card::readDatagroup\n";
 	PTEID_ByteArray out;
 
@@ -809,37 +809,37 @@ PTEID_ByteArray ICAO_Card::readDatagroup(ICAO_Card::DataGroupID tag) {
 
 PTEID_ICAO_DG1::PTEID_ICAO_DG1(const IcaoDg1 &dg1) : m_impl(dg1) {}
 
-std::string PTEID_ICAO_DG1::documentCode() const { return m_impl.documentCode(); }
+const char *PTEID_ICAO_DG1::documentCode() const { return m_impl.documentCode().c_str(); }
 
-std::string PTEID_ICAO_DG1::issuingOrg() const { return m_impl.issuingOrg(); }
+const char *PTEID_ICAO_DG1::issuingOrg() const { return m_impl.issuingOrg().c_str(); }
 
-std::string PTEID_ICAO_DG1::serialNumber() const { return m_impl.serialNumber(); }
+const char *PTEID_ICAO_DG1::serialNumber() const { return m_impl.serialNumber().c_str(); }
 
 int PTEID_ICAO_DG1::serialNumberCheckDigit() const { return m_impl.serialNumberCheckDigit(); }
 
-std::string PTEID_ICAO_DG1::optionalData() const { return m_impl.optionalData(); }
+const char *PTEID_ICAO_DG1::optionalData() const { return m_impl.optionalData().c_str(); }
 
-std::string PTEID_ICAO_DG1::birthDay() const { return m_impl.birthDay(); }
+const char *PTEID_ICAO_DG1::birthDay() const { return m_impl.birthDay().c_str(); }
 
 int PTEID_ICAO_DG1::birthDayCheckDigit() const { return m_impl.birthDayCheckDigit(); }
 
 char PTEID_ICAO_DG1::sex() const { return m_impl.sex(); }
 
-std::string PTEID_ICAO_DG1::expireDay() const { return m_impl.expireDay(); }
+const char *PTEID_ICAO_DG1::expireDay() const { return m_impl.expireDay().c_str(); }
 
 int PTEID_ICAO_DG1::expireDayCheckDigit() const { return m_impl.expireDayCheckDigit(); }
 
-std::string PTEID_ICAO_DG1::nationality() const { return m_impl.nationality(); }
+const char *PTEID_ICAO_DG1::nationality() const { return m_impl.nationality().c_str(); }
 
-std::string PTEID_ICAO_DG1::optionalDataSecondLine() const { return m_impl.optionalDataSecondLine(); }
+const char *PTEID_ICAO_DG1::optionalDataSecondLine() const { return m_impl.optionalDataSecondLine().c_str(); }
 
 int PTEID_ICAO_DG1::optionalDataSecondLineCheckDigit() const { return m_impl.optionalDataSecondLineCheckDigit(); }
 
 int PTEID_ICAO_DG1::compositeCheckDigit() const { return m_impl.compositeCheckDigit(); }
 
-std::string PTEID_ICAO_DG1::primaryIdentifier() const { return m_impl.primaryIdentifier(); }
+const char *PTEID_ICAO_DG1::primaryIdentifier() const { return m_impl.primaryIdentifier().c_str(); }
 
-std::string PTEID_ICAO_DG1::secondaryIdentifier() const { return m_impl.secondaryIdentifier(); }
+const char *PTEID_ICAO_DG1::secondaryIdentifier() const { return m_impl.secondaryIdentifier().c_str(); }
 
 bool PTEID_ICAO_DG1::isPassport() const { return m_impl.documentCode().front() == 'P'; }
 
@@ -936,7 +936,7 @@ PTEID_FaceInfoData::~PTEID_FaceInfoData() {
 	}
 }
 
-std::string PTEID_FaceInfo::version() const { return m_impl.version(); }
+const char *PTEID_FaceInfo::version() const { return m_impl.version().c_str(); }
 
 unsigned short PTEID_FaceInfo::encodingBytes() const { return m_impl.encodingBytes(); }
 

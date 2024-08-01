@@ -90,7 +90,7 @@ class FaceInfo {
 public:
 	FaceInfo(const unsigned char *biometricData);
 
-	EIDMW_APL_API std::string version() const;
+	EIDMW_APL_API const std::string &version() const;
 	EIDMW_APL_API unsigned short encodingBytes() const;
 	EIDMW_APL_API long sizeOfRecord() const;
 	EIDMW_APL_API long numberOfFacialImages() const;

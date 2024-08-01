@@ -75,6 +75,8 @@
 
 %include "../applayer/CardPteidAddr.h"		//This file contains only define... It doesn't need any typemap
 
+%include "std_vector.i"
+
 #ifdef SWIGCSHARP	/********************** C# SPECIFICS *************************/
 
 %typemap(csbase) 	eIDMW::PTEID_Exception "System.ApplicationException";
@@ -614,6 +616,13 @@ void * SWIGSTDCALL downcastSigningDevice(void *ptr, int type)
 %ignore eIDMW::PTEID_Config::DeleteKeysByPrefix();
 
 #elif SWIGJAVA	/********************** JAVA SPECIFICS ***********************/
+
+namespace std {
+   %template(VectorBio) vector<eIDMW::PTEID_BiometricInfomation*>;
+   %template(VectorFaceInfo) vector<eIDMW::PTEID_FaceInfoData*>;
+   %template(VectorFtPt) vector<eIDMW::PTEID_FeaturePoint*>;
+   %template(VectorDataGroupID) vector<eIDMW::PTEID_DataGroupID>;
+};
 
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////
 %typemap(jni)          const unsigned char* "jbyteArray"

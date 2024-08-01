@@ -247,7 +247,7 @@ FaceInfo::FaceInfo(const unsigned char *biometricData) {
 	}
 }
 
-std::string FaceInfo::version() const { return m_version; }
+const std::string &FaceInfo::version() const { return m_version; }
 
 unsigned short FaceInfo::encodingBytes() const { return m_encodingBytes; }
 

@@ -725,22 +725,22 @@ class PTEID_ICAO_DG1 {
 public:
 	PTEIDSDK_API PTEID_ICAO_DG1(const IcaoDg1 &dg1);
 
-	PTEIDSDK_API std::string documentCode() const;
-	PTEIDSDK_API std::string issuingOrg() const;
-	PTEIDSDK_API std::string serialNumber() const;
+	PTEIDSDK_API const char *documentCode() const;
+	PTEIDSDK_API const char *issuingOrg() const;
+	PTEIDSDK_API const char *serialNumber() const;
 	PTEIDSDK_API int serialNumberCheckDigit() const;
-	PTEIDSDK_API std::string optionalData() const;
-	PTEIDSDK_API std::string birthDay() const;
+	PTEIDSDK_API const char *optionalData() const;
+	PTEIDSDK_API const char *birthDay() const;
 	PTEIDSDK_API int birthDayCheckDigit() const;
 	PTEIDSDK_API char sex() const;
-	PTEIDSDK_API std::string expireDay() const;
+	PTEIDSDK_API const char *expireDay() const;
 	PTEIDSDK_API int expireDayCheckDigit() const;
-	PTEIDSDK_API std::string nationality() const;
-	PTEIDSDK_API std::string optionalDataSecondLine() const;
+	PTEIDSDK_API const char *nationality() const;
+	PTEIDSDK_API const char *optionalDataSecondLine() const;
 	PTEIDSDK_API int optionalDataSecondLineCheckDigit() const;
 	PTEIDSDK_API int compositeCheckDigit() const;
-	PTEIDSDK_API std::string primaryIdentifier() const;
-	PTEIDSDK_API std::string secondaryIdentifier() const;
+	PTEIDSDK_API const char *primaryIdentifier() const;
+	PTEIDSDK_API const char *secondaryIdentifier() const;
 	PTEIDSDK_API bool isPassport() const;
 
 private:
@@ -812,7 +812,7 @@ private:
 
 class PTEID_FaceInfo : public PTEID_Object {
 public:
-	PTEIDSDK_API std::string version() const;
+	PTEIDSDK_API const char *version() const;
 	PTEIDSDK_API unsigned short encodingBytes() const;
 	PTEIDSDK_API long sizeOfRecord() const;
 	PTEIDSDK_API long numberOfFacialImages() const;
@@ -867,31 +867,13 @@ private:
 
 class ICAO_Card : public PTEID_Object {
 public:
-	enum class DataGroupID {
-		DG1 = 0x01,
-		DG2,
-		DG3,
-		DG4,
-		DG5,
-		DG6,
-		DG7,
-		DG8,
-		DG9,
-		DG10,
-		DG11,
-		DG12,
-		DG13,
-		DG14,
-		DG15,
-		DG16
-	};
 
-	PTEIDSDK_API virtual std::vector<DataGroupID> getAvailableDatagroups();
+	PTEIDSDK_API virtual std::vector<PTEID_DataGroupID> getAvailableDatagroups();
 
 	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length,
 													 PTEID_CardPaceSecretType secretType);
 
-	PTEIDSDK_API virtual PTEID_ByteArray readDatagroup(DataGroupID tag);
+	PTEIDSDK_API virtual PTEID_ByteArray readDatagroup(PTEID_DataGroupID tag);
 
 	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
 	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();
