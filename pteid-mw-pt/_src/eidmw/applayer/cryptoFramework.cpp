@@ -1293,8 +1293,12 @@ X509_CRL *APL_CryptoFwk::updateCRL(const CByteArray &crl, const CByteArray &delt
 	return CRL;
 }
 
-void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CByteArray &pubkey) {
+void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CByteArray &pubkey, APL_SmartCard* card) {
 	MWLOG(LEV_DEBUG, MOD_CAL, L"Performing Active Authentication");
+
+	if (card == nullptr) {
+		card = m_card;
+	}
 
 	bool failed = 0;
 	ECDSA_SIG *ec_sig;
@@ -1327,7 +1331,7 @@ void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CBy
 	memcpy(apdu + 5, data_to_sign, data_size);
 
 	// raw r,s point signature
-	auto signature = m_card->sendAPDU({apdu, sizeof(apdu)});
+	auto signature = card->sendAPDU({apdu, sizeof(apdu)});
 	auto sw12 = signature.GetBytes(signature.Size() - 2);
 	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
 		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to perform active authentication");

@@ -565,7 +565,7 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex) {
 }
 
 // ICAO
-APL_ICAO::APL_ICAO(APL_ReaderContext *reader) : m_reader(reader) {}
+APL_ICAO::APL_ICAO(APL_ReaderContext *reader) : APL_SmartCard(reader), m_reader(reader) {}
 
 const std::unordered_map<APL_ICAO::DataGroupID, std::string> APL_ICAO::DATAGROUP_PATHS = {
 	{APL_ICAO::DataGroupID::DG1, "0101"},  {APL_ICAO::DataGroupID::DG2, "0102"},  {APL_ICAO::DataGroupID::DG3, "0103"},
@@ -774,7 +774,7 @@ bool APL_ICAO::performActiveAuthentication() {
 	// skip the first two bytes of the file (6F78)
 	CByteArray pubkey = pubkey_file.GetBytes(2);
 
-	cryptFwk->performActiveAuthentication(oid, pubkey);
+	cryptFwk->performActiveAuthentication(oid, pubkey, this);
 
 	return true;
 }
@@ -818,6 +818,23 @@ void APL_ICAO::initMasterListStore(CscaMasterList *cml) {
 
 	csca_store = store;
 }
+
+const CByteArray &APL_ICAO::getRawData(APL_RawDataType type) {
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
+APLPublicKey *APL_ICAO::getRootCAPubKey() {
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
+const char *APL_ICAO::getTokenSerialNumber() {
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
+const char *APL_ICAO::getTokenLabel() {
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+}
+
 
 void APL_ICAO::loadMasterList(const char *filePath) {
 	if (csca_store) {

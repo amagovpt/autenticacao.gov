@@ -323,7 +323,7 @@ public:
 
 	void setActiveCard(APL_SmartCard *card) { m_card = card; }
 
-	void performActiveAuthentication(const CByteArray &oid, const CByteArray &pubkey);
+	void performActiveAuthentication(const CByteArray &oid, const CByteArray &pubkey, APL_SmartCard* card = nullptr);
 
 protected:
 	/**

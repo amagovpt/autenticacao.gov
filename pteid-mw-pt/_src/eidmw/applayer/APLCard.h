@@ -331,7 +331,7 @@ typedef struct CscaMasterList_st {
 class IcaoDg1;
 class IcaoDg2;
 class PhotoPteid;
-class APL_ICAO {
+class APL_ICAO : public APL_SmartCard {
 public:
 	enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
 
@@ -344,6 +344,12 @@ public:
 	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
 	EIDMW_APL_API virtual IcaoDg2 *readDataGroup2();
 	EIDMW_APL_API virtual void loadMasterList(const char *filePath);
+
+	virtual const CByteArray &getRawData(APL_RawDataType type) override;
+	virtual APLPublicKey *getRootCAPubKey() override;
+	virtual const char *getTokenSerialNumber() override;
+	virtual const char *getTokenLabel() override;
+
 
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
