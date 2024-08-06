@@ -326,11 +326,15 @@ public:
 		EAC_init();
 		m_ctx = EAC_CTX_new();
 
+		// Select MF to cancel out any previous application selection due to EF.CardAccess read permissions
+		long fileReturn = 0;
+		CByteArray selectMf(SELECT_MF, sizeof(SELECT_MF));
+		m_context->m_oPCSC.Transmit(hCard, selectMf, &fileReturn, param_structure);
+
 		CByteArray oCmd(8);
 		oCmd.Append(SELECT_ADF, sizeof(SELECT_ADF));
 		const unsigned char SIZE_AND_EF_ACCESS[] = {0x02, 0x01, 0x01C, 0x00};
 		oCmd.Append(SIZE_AND_EF_ACCESS, sizeof(SIZE_AND_EF_ACCESS));
-		long fileReturn = 0;
 		CByteArray oReadBinary = m_context->m_oPCSC.Transmit(hCard, oCmd, &fileReturn, param_structure);
 		const unsigned char READ_BINARY[] = {0x00, 0xB0, 0x9C, 0x00, 0x00};
 		CByteArray readBinary(READ_BINARY, sizeof(READ_BINARY));
