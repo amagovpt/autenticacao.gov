@@ -61,7 +61,6 @@ APL_CardType ConvertCardType(tCardType cardType);
 APL_ReaderContext::APL_ReaderContext(const char *readerName) {
 	m_calreader = &AppLayer.getCardLayer()->getReader(readerName);
 	m_card = NULL;
-	m_icao = NULL;
 	m_cardid = 0;
 
 	m_cal_lock = false;
@@ -80,11 +79,6 @@ APL_ReaderContext::~APL_ReaderContext() {
 	if (m_card) {
 		delete m_card;
 		m_card = NULL;
-	}
-
-	if (m_icao) {
-		delete m_icao;
-		m_icao = NULL;
 	}
 }
 
@@ -163,7 +157,8 @@ APL_CardType APL_ReaderContext::getPhysicalCardType() {
 	switch (calCardType) {
 	case CARD_PTEID_IAS07:
 	case CARD_PTEID_IAS101:
-	case CARD_PTEID_IAS5: {
+	case CARD_PTEID_IAS5:
+	case CARD_ICAO: {
 
 		ret = ConvertCardType(calCardType);
 
@@ -225,7 +220,11 @@ bool APL_ReaderContext::connectCard() {
 	case APL_CARDTYPE_PTEID_IAS07:
 	case APL_CARDTYPE_PTEID_IAS101:
 	case APL_CARDTYPE_PTEID_IAS5:
-		return true; // New connection
+		m_card = new APL_EIDCard(this, cardType);
+		break;
+	case APL_CARDTYPE_ICAO:
+		m_card = new APL_ICAO(this);
+		break;
 	default:
 		return false;
 	}
@@ -241,13 +240,24 @@ APL_Card *APL_ReaderContext::getCard() {
 bool APL_ReaderContext::isCardContactless() const { return m_card->getCalReader()->isCardContactless(); }
 
 APL_ICAO *APL_ReaderContext::getICAOCard() {
-	if (m_icao) {
-		return m_icao;
+	connectCard();
+
+	if (m_card == NULL) {
+		return NULL;
 	}
 
-	m_icao = new APL_ICAO(this);
+	if (m_card->getType() == APL_CARDTYPE_ICAO) {
+		return dynamic_cast<APL_ICAO *>(m_card);
+	} else if (m_card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+		if (!m_icao) {
+			m_icao.reset();
+			m_icao = std::unique_ptr<APL_ICAO>(new APL_ICAO(this));
+		}
 
-	return m_icao;
+		return m_icao.get();
+	}
+
+	return NULL;
 }
 
 APL_EIDCard *APL_ReaderContext::getEIDCard() {
@@ -688,6 +698,8 @@ APL_CardType ConvertCardType(tCardType cardType) {
 		return APL_CARDTYPE_PTEID_IAS101;
 	case CARD_PTEID_IAS5:
 		return APL_CARDTYPE_PTEID_IAS5;
+	case CARD_ICAO:
+		return APL_CARDTYPE_ICAO;
 	default:
 		return APL_CARDTYPE_UNKNOWN;
 	}

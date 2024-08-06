@@ -344,6 +344,7 @@ public:
 	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
 	EIDMW_APL_API virtual IcaoDg2 *readDataGroup2();
 	EIDMW_APL_API virtual void loadMasterList(const char *filePath);
+	EIDMW_APL_API virtual APL_CardType getType() const override;
 
 	virtual const CByteArray &getRawData(APL_RawDataType type) override;
 	virtual APLPublicKey *getRootCAPubKey() override;
@@ -375,6 +376,7 @@ protected:
 	APL_ICAO(APL_ReaderContext *reader);
 
 	friend APL_ICAO *APL_ReaderContext::getICAOCard();
+	friend bool APL_ReaderContext::connectCard();
 };
 
 } // namespace eIDMW

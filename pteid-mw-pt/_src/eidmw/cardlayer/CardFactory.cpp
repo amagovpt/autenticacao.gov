@@ -29,6 +29,7 @@
  *
  */
 #include "CardFactory.h"
+#include "IcaoCard.h"
 #include "UnknownCard.h"
 #include "Log.h"
 #include "Cache.h"
@@ -198,6 +199,13 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 			}
 
 			CCache::LimitDiskCacheFiles(10);
+
+			if (poCard == nullptr) {
+				bool icaoStatus = selectAppId(ICAO_APPLET_MRTD, sizeof(ICAO_APPLET_MRTD));
+				if (icaoStatus) {
+					poCard = new CIcaoCard(hCard, poContext, poPinpad, param_structure);
+				}
+			}
 
 			// If no other CCard subclass could be found
 			if (poCard == NULL) {

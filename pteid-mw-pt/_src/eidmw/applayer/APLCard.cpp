@@ -615,6 +615,7 @@ void APL_ICAO::initPaceAuthentication(const char *secret, size_t length, APL_PAC
 
 	BEGIN_CAL_OPERATION(m_reader)
 	m_reader->getCalReader()->initPaceAuthentication(secret, length, paceSecretType);
+	m_reader->getCalReader()->ResetApplication();
 	END_CAL_OPERATION(m_reader)
 }
 
@@ -835,6 +836,7 @@ const char *APL_ICAO::getTokenLabel() {
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 }
 
+APL_CardType APL_ICAO::getType() const { return APL_CARDTYPE_ICAO; };
 
 void APL_ICAO::loadMasterList(const char *filePath) {
 	if (csca_store) {

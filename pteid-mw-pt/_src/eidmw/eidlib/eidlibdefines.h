@@ -50,7 +50,8 @@ enum PTEID_CardType {
 	PTEID_CARDTYPE_UNKNOWN = 0, /**< Unknown card */
 	PTEID_CARDTYPE_IAS07,		/*   IAS v0.7 or compatible until IAS v4    */
 	PTEID_CARDTYPE_IAS101,		/*   IAS 1.01 cards (legacy)  */
-	PTEID_CARDTYPE_IAS5			/*   IAS v5 cards (CC 2)     */
+	PTEID_CARDTYPE_IAS5,		/*   IAS v5 cards (CC 2)     */
+	ICAO_CARDTYPE_MRTD
 };
 
 enum PTEID_CardContactInterface {

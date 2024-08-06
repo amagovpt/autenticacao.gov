@@ -105,6 +105,7 @@ public:
 	void Unlock();
 
 	void SelectApplication(const CByteArray &oAID);
+	void ResetApplication();
 
 	bool isCardContactless() const;
 

@@ -264,8 +264,9 @@ bool CReader::Connect() {
 
 	m_poCard = CardConnect(m_csReader, m_poContext, NULL, m_isContactless);
 	if (m_poCard != NULL) {
-		if (m_isContactless)
+		if (m_isContactless || m_poCard->GetType() == tCardType::CARD_ICAO) {
 			m_poCard->createPace();
+		}
 
 		m_oPKCS15.SetCard(m_poCard);
 		m_oPinpad->Init(m_poCard->m_hCard);
@@ -407,6 +408,13 @@ void CReader::SelectApplication(const CByteArray &oAID) {
 		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
 	return m_poCard->SelectApplication(oAID);
+}
+
+void CReader::ResetApplication() {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->ResetApplication();
 }
 
 bool CReader::isCardContactless() const { return m_isContactless; }

@@ -33,6 +33,7 @@
 #include "Mutex.h"
 #include "ByteArray.h"
 #include "CardLayerConst.h"
+#include <memory>
 
 namespace eIDMW {
 
@@ -42,7 +43,8 @@ enum APL_CardType {
 	APL_CARDTYPE_UNKNOWN = 0,
 	APL_CARDTYPE_PTEID_IAS07,
 	APL_CARDTYPE_PTEID_IAS101,
-	APL_CARDTYPE_PTEID_IAS5
+	APL_CARDTYPE_PTEID_IAS5,
+	APL_CARDTYPE_ICAO
 };
 
 struct APL_RawData_Eid {
@@ -403,7 +405,7 @@ private:
 	CMutex m_newcardmutex;
 
 	APL_Card *m_card;	  /**< Pointer to the card in the reader */
-	APL_ICAO *m_icao;
+	std::unique_ptr<APL_ICAO> m_icao;
 	CReader *m_calreader; /**< Pointer to the reader object in the cardlayer */
 	tCardStatus m_status; /**< Hold the status of the reader */
 

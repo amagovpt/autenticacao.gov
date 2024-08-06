@@ -63,6 +63,7 @@ HEADERS += \
            PKCS15.h \
            PKCS15Parser.h \
            PkiCard.h \
+           IcaoCard.h \
            Reader.h \
            ReadersInfo.h \
            ThreadPool.h \
@@ -88,6 +89,7 @@ SOURCES += \
            PKCS15.cpp \
            PKCS15Parser.cpp \
            PkiCard.cpp \
+           IcaoCard.cpp \
            Reader.cpp \
            ReadersInfo.cpp \
            ThreadPool.cpp \

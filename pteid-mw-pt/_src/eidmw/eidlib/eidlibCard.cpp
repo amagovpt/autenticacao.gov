@@ -758,7 +758,6 @@ const char *PTEID_EIDCard::readPersonalNotes() {
 --------------------------------------- ICAO_Card ----------------------------------------
 *****************************************************************************************/
 ICAO_Card::ICAO_Card(const SDK_Context *context, APL_ICAO *impl) : PTEID_Object(context, impl) {
-	std::cout << "Called ICAO_Card constructor\n";
 }
 
 std::vector<PTEID_DataGroupID> ICAO_Card::getAvailableDatagroups() {
@@ -777,8 +776,6 @@ std::vector<PTEID_DataGroupID> ICAO_Card::getAvailableDatagroups() {
 }
 
 void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType) {
-	std::cout << "Called ICAO_Card::initPaceAuthentication\n";
-
 	APL_PACEAuthenticationType type = APL_PACE_UNSUPPORTED;
 	if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN)
 		type = APL_PACEAuthenticationType::APL_PACE_CAN;
@@ -795,7 +792,6 @@ void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_
 }
 
 PTEID_ByteArray ICAO_Card::readDatagroup(PTEID_DataGroupID tag) {
-	std::cout << "Called ICAO_Card::readDatagroup\n";
 	PTEID_ByteArray out;
 
 	BEGIN_TRY_CATCH
