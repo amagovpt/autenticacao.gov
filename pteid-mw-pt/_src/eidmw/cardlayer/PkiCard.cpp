@@ -33,6 +33,7 @@
 #include "pinpad2.h"
 
 #include <algorithm>
+#include <openssl/asn1.h>
 
 namespace eIDMW {
 
@@ -51,19 +52,28 @@ bool CPkiCard::SelectApplet() {
 	return false;
 }
 
-void CPkiCard::SelectApplication(const CByteArray &oAID) {
-	CAutoLock autolock(this);
+void CPkiCard::ResetApplication() { m_lastSelectedApplication.ClearContents(); }
 
-	if (memcmp(oAID.GetBytes(), m_lastSelectedApplication.GetBytes(), sizeof(oAID.Size())) == 0) {
+void CPkiCard::SelectApplication(const CByteArray &oAID) {
+
+	if (m_lastSelectedApplication.Size() > 0 && oAID.Size() > 0 &&
+		memcmp(oAID.GetBytes(), m_lastSelectedApplication.GetBytes(), oAID.Size()) == 0) {
 		return;
 	}
-	// Select File command to select the Application by AID
-	CByteArray oResp = SendAPDU(0xA4, 0x04, 0x0C, oAID);
 
-	getSW12(oResp, 0x9000);
+	long lRetVal = 0;
+	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+	CByteArray oCmd(sizeof(oAID) + 5);
+	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
+	oCmd.Append((unsigned char)oAID.Size());
+	oCmd.Append(oAID.GetBytes(), oAID.Size());
 
-	// If select application was a success, update the state
-	m_lastSelectedApplication = oAID;
+	CByteArray oResp = SendAPDU(oCmd);
+
+	if (getSW12(oResp) == 0x9000) {
+		// If select application was a success, update the state
+		m_lastSelectedApplication = oAID;
+	}
 }
 
 CByteArray CPkiCard::ReadUncachedFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen) {
@@ -470,6 +480,71 @@ CByteArray CPkiCard::GetRandom(unsigned long ulLen) {
 	return oRandom;
 }
 
+/* Extract file length value from smartcard FCI data:
+   There are two possible tags for file size attribute in FCI data
+   0x81 for eid applet and 0x80 for national data applet */
+int extractEFSize(CByteArray &fci_data) {
+	const unsigned char *desc_data = fci_data.GetBytes() + 2;
+	// const unsigned char *old_data = desc_data;
+	int xclass = 0;
+	int asn1Tag = 0;
+	long genTag = 0, size = 0;
+
+	long ret = ASN1_get_object(&desc_data, &size, &asn1Tag, &xclass, fci_data.Size() - 2);
+	int constructed = ret == V_ASN1_CONSTRUCTED ? 1 : 0;
+	genTag = xclass | (constructed & 0b1) << 5 | asn1Tag;
+	if (genTag == 0x81 && size == 2) { // eID app
+		return (*desc_data << 8) | *(desc_data + 1);
+	} else if (genTag == 0x80 && size == 3) { // National data app
+		return (*desc_data << 16) | (*(desc_data + 1) << 8) | *(desc_data + 2);
+	} else {
+		MWLOG(LEV_ERROR, MOD_CAL, "%s: Malformed FCI data, tag found at offset 2: %2x", __FUNCTION__,
+			  fci_data.GetByte(2));
+		return 0;
+	}
+}
+
+tFileInfo CPkiCard::SelectFile(const std::string &csPath, const unsigned char *oAID, bool bReturnFileInfo) {
+	auto ulPathLen = static_cast<unsigned long>(csPath.size());
+	tFileInfo info;
+	info.lFileLen = info.lReadPINRef = info.lWritePINRef = 0;
+	// path must not contain any incomplete directory or file id
+	if (ulPathLen % 4 != 0 || ulPathLen == 0)
+		throw CMWEXCEPTION(EIDMW_ERR_BAD_PATH);
+
+	// each byte is 2 characters
+	ulPathLen /= 2;
+	CByteArray responseSelection;
+	CAutoLock autolock(this);
+	{
+		// Try to select from current application
+		responseSelection = SelectByPath(csPath, bReturnFileInfo);
+
+		auto ulSW12 = getSW12(responseSelection);
+		if ((ulSW12 >> 0x8) & 0x6A) // Select File any error
+		{
+			// If failed, try to select the respective application
+			SelectApplication({oAID, sizeof(oAID)});
+
+			// Select by path again
+			responseSelection = SelectByPath(csPath, bReturnFileInfo);
+
+			// Should be expecting 0x9000 (success)
+			getSW12(responseSelection, 0x9000);
+		}
+		// TODO: return lReadPINRef and lWritePINRef, from security attributes tag 0x8C
+		if (bReturnFileInfo) {
+			CByteArray fci_data = responseSelection.GetBytes(0, responseSelection.GetByte(1));
+			char *fci_data_hex = bin2AsciiHex(responseSelection.GetBytes(), responseSelection.Size());
+			MWLOG(LEV_DEBUG, MOD_CAL, "%s: FCI data: %s", __FUNCTION__, fci_data_hex);
+
+			info.lFileLen = extractEFSize(fci_data);
+		}
+	}
+
+	return info;
+}
+
 tFileInfo CPkiCard::SelectFile(const std::string &csPath, bool bReturnFileInfo) {
 	CByteArray oResp;
 	tFileInfo xFileInfo = {0};
@@ -508,6 +583,48 @@ tFileInfo CPkiCard::SelectFile(const std::string &csPath, bool bReturnFileInfo) 
 	}
 
 	return xFileInfo;
+}
+
+CByteArray CPkiCard::SelectByPath(const std::string &csPath, bool bReturnFileInfo) {
+	//
+	// Old version of CC
+	// Only accepts path length of 2-4 bytes (1 file from root directory OR 1 DF and 1 file from DF)
+	// Example 1: apdu 00 A4 08 04 02 2f 00 		- selects file 2f00 from root directory 3f00
+	// Example 2: apdu 00 A4 08 04 04 5f 00 ef 12 	- selects file ef12 from DF 5f00 from root directory 3f00
+	// Note: DF MUST NOT BE ROOT DIRECTORY (3f 00). Operations like (apdu 00 A4 08 04 04 3f 00 2f 00) will return 0x6A
+	// Operation not supported
+	//
+	std::string csPathCopy = csPath;
+	bool select_by_path_from_mf = false;
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: csPath: %s", __FUNCTION__, csPath.c_str());
+	if (csPath.find("3F00") != std::string::npos || csPath.find("3f00") != std::string::npos) {
+		csPathCopy.erase(0, 4);
+		select_by_path_from_mf = true;
+	}
+
+	unsigned long ulPathLen = (unsigned long)csPathCopy.size() / 2;
+	CByteArray oPath(ulPathLen);
+	for (unsigned long ulOffset = 0; ulOffset < ulPathLen; ulOffset += 2) {
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset));
+		oPath.Append(Hex2Byte(csPathCopy, ulOffset + 1));
+	}
+
+	//
+	// Send APDU and validate response
+	//
+	CByteArray selectByPathAPDU(6);
+	selectByPathAPDU.Append(m_ucCLA);
+	selectByPathAPDU.Append(0xA4);
+	selectByPathAPDU.Append(oPath.Size() > 2 || select_by_path_from_mf ? 0x08 : 0x02);
+	selectByPathAPDU.Append(bReturnFileInfo ? 0x00 : 0x0C);
+	selectByPathAPDU.Append(oPath.Size());
+	selectByPathAPDU.Append(oPath);
+	selectByPathAPDU.Append(0x00);
+
+	auto oResp = SendAPDU(selectByPathAPDU);
+	getSW12(oResp, 0x9000);
+
+	return oResp;
 }
 
 CByteArray CPkiCard::ReadBinary(unsigned long ulOffset, unsigned long ulLen) {
