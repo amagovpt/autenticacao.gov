@@ -1,12 +1,14 @@
 #include "IcaoDg2.h"
 
-#include <ByteArray.h>
+#include "ByteArray.h"
+#include "Util.h"
+#include "Log.h"
 
-#include <Util.h>
+#include <vector>
+#include <cstddef>
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 
-#include <vector>
 
 const unsigned char FAC_CODE[] = {0x46, 0x41, 0x43};
 
@@ -54,15 +56,16 @@ ASN1_SEQUENCE(BIT_HEADER) = {ASN1_IMP_EX(BIT_HEADER, version, ASN1_OCTET_STRING,
 							 ASN1_IMP_EX(BIT_HEADER, validity_period, ASN1_OCTET_STRING, 0x5, ASN1_TFLG_OPTIONAL),
 							 ASN1_IMP_EX(BIT_HEADER, creator, ASN1_OCTET_STRING, 0x6, ASN1_TFLG_OPTIONAL),
 							 ASN1_IMP(BIT_HEADER, format_owner, ASN1_OCTET_STRING, 0x7),
-							 ASN1_IMP(BIT_HEADER, format_type, ASN1_OCTET_STRING, 0x8)} ASN1_SEQUENCE_END(BIT_HEADER)
-	IMPLEMENT_ASN1_FUNCTIONS(BIT_HEADER)
+							 ASN1_IMP(BIT_HEADER, format_type, ASN1_OCTET_STRING, 0x8)} ASN1_SEQUENCE_END(BIT_HEADER);
+	
+	IMPLEMENT_ASN1_FUNCTIONS(BIT_HEADER);
 
 	/* Biometric Information Template */
 	ASN1_SEQUENCE(BIT) = {ASN1_IMP_EX(BIT, bit_header, BIT_HEADER, 0x1, 0),
 						  ASN1_EX_TYPE(ASN1_TFLG_IMPTAG | ASN1_TFLG_APPLICATION, 0x2E, BIT, bit_content,
-									   ASN1_OCTET_STRING)} ASN1_SEQUENCE_END(BIT)
+									   ASN1_OCTET_STRING)} ASN1_SEQUENCE_END(BIT);
 
-		IMPLEMENT_ASN1_FUNCTIONS(BIT)
+	IMPLEMENT_ASN1_FUNCTIONS(BIT);
 
 	/* Biometric Information Template group */
 
@@ -73,10 +76,10 @@ ASN1_SEQUENCE(BIT_HEADER) = {ASN1_IMP_EX(BIT_HEADER, version, ASN1_OCTET_STRING,
 } ASN1_SEQUENCE_END(BIT_GROUP) IMPLEMENT_ASN1_FUNCTIONS(BIT_GROUP)
 
 		ASN1_SEQUENCE(DG2) = {ASN1_EX_TYPE(ASN1_TFLG_IMPTAG | ASN1_TFLG_APPLICATION, 0x61, DG2, bit_group,
-										   BIT_GROUP)} ASN1_SEQUENCE_END(DG2)
+										   BIT_GROUP)} ASN1_SEQUENCE_END(DG2);
 
-								 IMPLEMENT_ASN1_FUNCTIONS(DG2) DG2
-							 * decodeDg2(const CByteArray &biometricData) {
+	IMPLEMENT_ASN1_FUNCTIONS(DG2);
+DG2 * decodeDg2(const CByteArray &biometricData) {
 	if (biometricData.Size() == 0)
 		return NULL;
 
@@ -91,6 +94,11 @@ unsigned short readTwoBytes(const unsigned char *data) { return (data[0] << 8) |
 
 IcaoDg2::IcaoDg2(const CByteArray &arrayDg2) {
 	DG2 *decoded = decodeDg2(arrayDg2);
+	if (decoded == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "ICAO DG2: failed to decode main structure!");
+		return;
+	}
+
 	if (!decoded->bit_group->number_of_instances || decoded->bit_group->number_of_instances->length == 0) {
 		m_numberOfBiometrics = 0;
 	} else {
@@ -113,7 +121,7 @@ std::vector<BiometricInformation *> IcaoDg2::biometricInstances() const {
 }
 
 eIDMW::BiometricInformation::BiometricInformation(const BIT &biometricData) {
-	m_faceInfo.reset(new FaceInfo(biometricData.bit_content->data));
+	m_faceInfo.reset(new FaceInfo(biometricData.bit_content->data, ASN1_STRING_length(biometricData.bit_content)));
 	m_biometricTemplate.reset(new BiometricHeaderTemplate(*biometricData.bit_header));
 }
 
@@ -159,10 +167,17 @@ const CByteArray &BiometricHeaderTemplate::formatOwner() const { return m_format
 
 const CByteArray &BiometricHeaderTemplate::formatType() const { return m_formatType; }
 
-FaceInfo::FaceInfo(const unsigned char *biometricData) {
+FaceInfo::FaceInfo(const unsigned char *biometricData, int biometricDataLen) {
 	m_encodingBytes = 0x5F2E;
+	const int FACEIMAGE_DATA_MIN_LEN = 46;
+	//Save the original pointer value
+	const unsigned char * startOfBiometricData = biometricData;
+	if (biometricDataLen < FACEIMAGE_DATA_MIN_LEN) {
+		MWLOG(LEV_WARN, MOD_APL, "Biometric Data too short for ISO XXX-5 face image record!");
+		return;
+	}
 	if (biometricData[0] == FAC_CODE[0] && biometricData[1] == FAC_CODE[1] && biometricData[2] == FAC_CODE[2]) {
-		biometricData = (biometricData + 4); // skip fac code and first 00 byte 3 + 1
+		biometricData = (biometricData + 4); // skip FAC code and first 00 byte 3 + 1
 
 		m_version = std::string((const char *)biometricData, 4); // version is 4 bytes
 
@@ -239,8 +254,16 @@ FaceInfo::FaceInfo(const unsigned char *biometricData) {
 			data->m_quality = readTwoBytes(biometricData);
 			biometricData += 2;
 
+			ptrdiff_t offset = biometricData - startOfBiometricData;
+			
 			size_t sizePhotoRaw = data->m_facialRecordDataLength - 20 - (8 * data->m_numberOfFeaturePoints) - 12;
+			if (offset + sizePhotoRaw > biometricDataLen) {
+				MWLOG(LEV_WARN, MOD_APL, "Image data inconsistent with Facial Record Header!");
+				sizePhotoRaw = biometricDataLen - offset;
+			}
+			
 			data->m_photoRawData = CByteArray(biometricData, sizePhotoRaw);
+			//checkImageDataType(data->m_photoRawData, data->m_imgDataType);
 
 			biometricData += sizePhotoRaw;
 		}

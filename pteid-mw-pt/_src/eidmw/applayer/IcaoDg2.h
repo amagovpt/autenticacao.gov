@@ -2,8 +2,8 @@
 #define ICAODG2_H
 
 #include "IcaoDg2Defines.h"
-#include <ByteArray.h>
-#include <Export.h>
+#include "ByteArray.h"
+#include "Export.h"
 
 #include <memory>
 #include <vector>
@@ -88,7 +88,7 @@ private:
 
 class FaceInfo {
 public:
-	FaceInfo(const unsigned char *biometricData);
+	FaceInfo(const unsigned char *biometricData, int biometricDataLen);
 
 	EIDMW_APL_API const std::string &version() const;
 	EIDMW_APL_API unsigned short encodingBytes() const;
@@ -96,13 +96,16 @@ public:
 	EIDMW_APL_API long numberOfFacialImages() const;
 	EIDMW_APL_API std::vector<FaceInfoData *> faceInfoData() const;
 
-private: // jpeg2000 5f 2e jpeg 7f 2e
+private:
 	std::string m_version;
 	unsigned short m_encodingBytes;
 	long m_sizeOfRecord;
 	long m_numberOfFacialImages;
 	std::vector<std::shared_ptr<FaceInfoData>> m_faceInfoData;
+	//TODO: check the image format magic numbers
+	//void checkImageDataType(CByteArray &photo_data, unsigned char imgDataType);
 };
+
 typedef struct BIT_HEADER_st BIT_HEADER;
 
 class BiometricHeaderTemplate {
