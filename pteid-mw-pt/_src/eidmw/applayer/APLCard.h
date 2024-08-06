@@ -336,9 +336,7 @@ public:
 	enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
 
 	~APL_ICAO();
-
-	EIDMW_APL_API virtual void initPaceAuthentication(const char *secret, size_t length,
-													  APL_PACEAuthenticationType secretType);
+	
 	EIDMW_APL_API virtual std::vector<DataGroupID> getAvailableDatagroups();
 	EIDMW_APL_API virtual CByteArray readDatagroup(DataGroupID tag);
 	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
@@ -350,7 +348,6 @@ public:
 	virtual APLPublicKey *getRootCAPubKey() override;
 	virtual const char *getTokenSerialNumber() override;
 	virtual const char *getTokenLabel() override;
-
 
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */

@@ -127,6 +127,7 @@ void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_
 
 	BEGIN_CAL_OPERATION(m_reader)
 	m_reader->getCalReader()->initPaceAuthentication(secret, secretLen, paceSecretType);
+	m_reader->getCalReader()->ResetApplication();
 	END_CAL_OPERATION(m_reader)
 }
 
@@ -589,7 +590,7 @@ APL_ICAO::~APL_ICAO() {
 std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	std::vector<DataGroupID> datagroups;
 	{
-		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
+		selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 
 		loadAvailableDataGroups();
 		performActiveAuthentication();
@@ -600,23 +601,6 @@ std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	}
 
 	return datagroups;
-}
-
-void APL_ICAO::initPaceAuthentication(const char *secret, size_t length, APL_PACEAuthenticationType secretType) {
-	PaceSecretType paceSecretType = PaceSecretType::PACECAN;
-
-	if (secretType == APL_PACEAuthenticationType::APL_PACE_CAN)
-		paceSecretType = PaceSecretType::PACECAN;
-	else if (secretType == APL_PACEAuthenticationType::APL_PACE_MRZ) {
-		paceSecretType = PaceSecretType::PACEMRZ;
-	} else {
-		// not supported types
-	}
-
-	BEGIN_CAL_OPERATION(m_reader)
-	m_reader->getCalReader()->initPaceAuthentication(secret, length, paceSecretType);
-	m_reader->getCalReader()->ResetApplication();
-	END_CAL_OPERATION(m_reader)
 }
 
 CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
