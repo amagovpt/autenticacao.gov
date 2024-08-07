@@ -726,19 +726,14 @@ public:
 	PTEIDSDK_API PTEID_ICAO_DG1(const IcaoDg1 &dg1);
 
 	PTEIDSDK_API const char *documentCode() const;
-	PTEIDSDK_API const char *issuingOrg() const;
-	PTEIDSDK_API const char *serialNumber() const;
-	PTEIDSDK_API int serialNumberCheckDigit() const;
-	PTEIDSDK_API const char *optionalData() const;
-	PTEIDSDK_API const char *birthDay() const;
-	PTEIDSDK_API int birthDayCheckDigit() const;
+	PTEIDSDK_API const char *issuingState() const;
+	PTEIDSDK_API const char *documentNumber() const;
+	PTEIDSDK_API const char *optionalDataLine1() const;
+	PTEIDSDK_API const char *dateOfBirth() const;
 	PTEIDSDK_API char sex() const;
-	PTEIDSDK_API const char *expireDay() const;
-	PTEIDSDK_API int expireDayCheckDigit() const;
+	PTEIDSDK_API const char *dateOfExpiry() const;
 	PTEIDSDK_API const char *nationality() const;
-	PTEIDSDK_API const char *optionalDataSecondLine() const;
-	PTEIDSDK_API int optionalDataSecondLineCheckDigit() const;
-	PTEIDSDK_API int compositeCheckDigit() const;
+	PTEIDSDK_API const char *optionalDataLine2() const;
 	PTEIDSDK_API const char *primaryIdentifier() const;
 	PTEIDSDK_API const char *secondaryIdentifier() const;
 	PTEIDSDK_API bool isPassport() const;

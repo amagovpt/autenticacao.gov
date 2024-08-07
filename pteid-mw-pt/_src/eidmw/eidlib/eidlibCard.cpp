@@ -807,31 +807,21 @@ PTEID_ICAO_DG1::PTEID_ICAO_DG1(const IcaoDg1 &dg1) : m_impl(dg1) {}
 
 const char *PTEID_ICAO_DG1::documentCode() const { return m_impl.documentCode().c_str(); }
 
-const char *PTEID_ICAO_DG1::issuingOrg() const { return m_impl.issuingOrg().c_str(); }
+const char *PTEID_ICAO_DG1::issuingState() const { return m_impl.issuingOrg().c_str(); }
 
-const char *PTEID_ICAO_DG1::serialNumber() const { return m_impl.serialNumber().c_str(); }
+const char *PTEID_ICAO_DG1::documentNumber() const { return m_impl.serialNumber().c_str(); }
 
-int PTEID_ICAO_DG1::serialNumberCheckDigit() const { return m_impl.serialNumberCheckDigit(); }
+const char *PTEID_ICAO_DG1::optionalDataLine1() const { return m_impl.optionalData().c_str(); }
 
-const char *PTEID_ICAO_DG1::optionalData() const { return m_impl.optionalData().c_str(); }
-
-const char *PTEID_ICAO_DG1::birthDay() const { return m_impl.birthDay().c_str(); }
-
-int PTEID_ICAO_DG1::birthDayCheckDigit() const { return m_impl.birthDayCheckDigit(); }
+const char *PTEID_ICAO_DG1::dateOfBirth() const { return m_impl.birthDay().c_str(); }
 
 char PTEID_ICAO_DG1::sex() const { return m_impl.sex(); }
 
-const char *PTEID_ICAO_DG1::expireDay() const { return m_impl.expireDay().c_str(); }
-
-int PTEID_ICAO_DG1::expireDayCheckDigit() const { return m_impl.expireDayCheckDigit(); }
+const char *PTEID_ICAO_DG1::dateOfExpiry() const { return m_impl.expireDay().c_str(); }
 
 const char *PTEID_ICAO_DG1::nationality() const { return m_impl.nationality().c_str(); }
 
-const char *PTEID_ICAO_DG1::optionalDataSecondLine() const { return m_impl.optionalDataSecondLine().c_str(); }
-
-int PTEID_ICAO_DG1::optionalDataSecondLineCheckDigit() const { return m_impl.optionalDataSecondLineCheckDigit(); }
-
-int PTEID_ICAO_DG1::compositeCheckDigit() const { return m_impl.compositeCheckDigit(); }
+const char *PTEID_ICAO_DG1::optionalDataLine2() const { return m_impl.optionalDataSecondLine().c_str(); }
 
 const char *PTEID_ICAO_DG1::primaryIdentifier() const { return m_impl.primaryIdentifier().c_str(); }
 
