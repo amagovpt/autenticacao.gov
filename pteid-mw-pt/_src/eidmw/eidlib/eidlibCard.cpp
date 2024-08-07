@@ -791,7 +791,7 @@ void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_
 	END_TRY_CATCH
 }
 
-PTEID_ByteArray ICAO_Card::readDatagroup(PTEID_DataGroupID tag) {
+PTEID_ByteArray ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
 	PTEID_ByteArray out;
 
 	BEGIN_TRY_CATCH

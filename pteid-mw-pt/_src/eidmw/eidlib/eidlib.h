@@ -870,14 +870,20 @@ public:
 
 	PTEIDSDK_API virtual std::vector<PTEID_DataGroupID> getAvailableDatagroups();
 
-	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length,
-													 PTEID_CardPaceSecretType secretType);
+	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType);
 
-	PTEIDSDK_API virtual PTEID_ByteArray readDatagroup(PTEID_DataGroupID tag);
+	/**
+	 * Read raw data from datagroup specified in @tag parameter
+	 */
+	PTEIDSDK_API virtual PTEID_ByteArray readDatagroupRaw(PTEID_DataGroupID tag);
 
 	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
 	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();
 
+	/**
+	 * Load a certificate MasterList containing CSCA certificates. These are needed for certificate validation during Passive Authentication
+	   This method needs to be called before readDataGroupRaw() or any other readDataGroup* method
+	 */
 	PTEIDSDK_API virtual void loadMasterList(const char *filePath);
 
 protected:
