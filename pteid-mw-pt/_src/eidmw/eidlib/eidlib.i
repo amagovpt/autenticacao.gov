@@ -1329,6 +1329,7 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 %javaexception("PTEID_Exception") readDatagroupRaw    JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readDataGroup1      JAVA_CODE_THROW
 %javaexception("PTEID_Exception") readDataGroup2      JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getAvailableDatagroups  JAVA_CODE_THROW
 
 ///////////////////////////////////////// SetEventCallback /////////////////////////////////////////////
 %typemap(ctype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long"
