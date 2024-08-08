@@ -697,11 +697,11 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 	BIO *out = BIO_new(BIO_s_mem());
 	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
 
-	// failed to verifiy SOD, we still need the contents
+	// failed to verify SOD but we still need the contents
 	if (!sod_verified) {
 		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
 
-		// get signer for debug purposes
+		// Get signer for debug purposes
 		STACK_OF(X509) *signers = PKCS7_get0_signers(p7, nullptr, 0);
 		if (sk_X509_num(signers) > 0) {
 			X509 *signer = sk_X509_value(signers, 0);
@@ -709,7 +709,7 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 			PEM_write_bio_X509(bio, signer);
 			BUF_MEM *buf;
 			BIO_get_mem_ptr(bio, &buf);
-			std::cout << std::string(buf->data, buf->length) << std::endl;
+			std::cerr << "Document signing certificate:" << '\n' << std::string(buf->data, buf->length) << std::endl;
 			BIO_free(bio);
 		}
 
@@ -752,7 +752,7 @@ bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
 }
 
 bool APL_ICAO::performActiveAuthentication() {
-	MWLOG(LEV_DEBUG, MOD_CAL, L"Performing Active Authentication");
+	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
 
 	auto reader = m_reader->getCalReader();
 	auto cryptFwk = AppLayer.getCryptoFwk();
@@ -760,9 +760,13 @@ bool APL_ICAO::performActiveAuthentication() {
 	// CByteArray security_file;
 	CByteArray secopt_file = reader->ReadFile(PTEID_FILE_SECURITY);
 	
+	char * dg14_str = byteArrayToHexString(secopt_file.GetBytes(), secopt_file.Size());
+	MWLOG(LEV_DEBUG, MOD_APL, "DG14 file: %s", dg14_str);
+	free(dg14_str);
+	
 	// verify hash of security file with hash in SOD
 	if (!cryptFwk->VerifyHashSha256(secopt_file, m_SodAttributes->get(DG14))) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Security option hash does not match with SOD");
+		MWLOG(LEV_ERROR, MOD_APL, "Security option hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
 	}
 
@@ -771,7 +775,7 @@ bool APL_ICAO::performActiveAuthentication() {
 
 	// verify hash of public key with hash in SOD
 	if (!cryptFwk->VerifyHashSha256(pubkey_file, m_SodAttributes->get(DG15))) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Public key hash does not match with SOD");
+		MWLOG(LEV_ERROR, MOD_APL, "Public key hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
 	}
 
@@ -798,12 +802,12 @@ void printOpenSSLError(const char *context) {
 	int errLine;
 	errCode = ERR_get_error_all(&errFile, &errLine, &errFunction, NULL, NULL);
 	errString = ERR_error_string(errCode, NULL);
-	MWLOG(LEV_ERROR, MOD_CAL, L"Error decoding %s! Detail: %s", context, errString);
+	MWLOG(LEV_ERROR, MOD_APL, L"Error decoding %s! Detail: %s", context, errString);
 }
 
 void APL_ICAO::initMasterListStore(CscaMasterList *cml) {
 	if (cml == NULL || cml->certList == NULL) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Invalid CscaMasterList or certList is empty.\n");
+		MWLOG(LEV_ERROR, MOD_APL, L"Invalid CscaMasterList or certList is empty.\n");
 		return;
 	}
 
@@ -814,7 +818,7 @@ void APL_ICAO::initMasterListStore(CscaMasterList *cml) {
 	for (int i = 0; i < num_certs; i++) {
 		X509 *cert = sk_X509_value(cml->certList, i);
 		if (cert == NULL) {
-			MWLOG(LEV_ERROR, MOD_CAL, L"Failed to retrieve certificate at index %d\n", i);
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to retrieve certificate at index %d\n", i);
 			continue;
 		}
 
@@ -869,7 +873,7 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 
 		ASN1_OBJECT *expected_oid = OBJ_nid2obj(masterlist_nid);
 		if (OBJ_cmp(expected_oid, content_type) != 0) {
-			MWLOG(LEV_ERROR, MOD_CAL, L"ERROR: unexpected contentType OID in CMS structure!\n");
+			MWLOG(LEV_ERROR, MOD_APL, "ERROR: unexpected contentType OID in CMS structure!\n");
 		}
 
 		int ret = CMS_verify(cms, NULL, NULL, NULL, bio_out, flags);
@@ -877,7 +881,7 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 			const unsigned char *p_data;
 			long size = BIO_get_mem_data(bio_out, &p_data);
 
-			MWLOG(LEV_INFO, MOD_CAL, L"MasterList content: %ld bytes\n", size);
+			MWLOG(LEV_INFO, MOD_APL, "MasterList content: %ld bytes\n", size);
 
 			CscaMasterList *ml = d2i_CscaMasterList(NULL, &p_data, size);
 			if (ml) {
@@ -888,7 +892,7 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 
 			CscaMasterList_free(ml);
 		} else {
-			MWLOG(LEV_ERROR, MOD_CAL, L"Failed to verify CMS SignedData structure!\n");
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify CMS SignedData structure!\n");
 			printOpenSSLError("");
 		}
 

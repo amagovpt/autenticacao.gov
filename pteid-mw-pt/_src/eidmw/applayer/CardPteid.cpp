@@ -1753,7 +1753,7 @@ bool APL_EidFile_Sod::MapFields() {
 }
 
 void APL_EidFile_Sod::performActiveAuthentication() {
-	MWLOG(LEV_DEBUG, MOD_CAL, L"Performing Active Authentication");
+	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
 
 	APL_SmartCard *card = dynamic_cast<APL_SmartCard *>(m_card);
 	card->selectApplication({PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
@@ -1763,7 +1763,7 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 
 	// verify hash of security file with hash in SOD
 	if (!m_cryptoFwk->VerifyHashSha256(secopt_file, m_secOptHash)) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Security option hash does not match with SOD");
+		MWLOG(LEV_ERROR, MOD_APL, L"Security option hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
 	}
 
@@ -1773,7 +1773,7 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 
 	// verify hash of public key with hash in SOD
 	if (!m_cryptoFwk->VerifyHashSha256(pubkey_file, m_pkHash)) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Public key hash does not match with SOD");
+		MWLOG(LEV_ERROR, MOD_APL, L"Public key hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
 	}
 

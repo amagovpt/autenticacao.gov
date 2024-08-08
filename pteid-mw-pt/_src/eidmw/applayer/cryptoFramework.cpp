@@ -1294,7 +1294,7 @@ X509_CRL *APL_CryptoFwk::updateCRL(const CByteArray &crl, const CByteArray &delt
 }
 
 void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CByteArray &pubkey, APL_SmartCard* card) {
-	MWLOG(LEV_DEBUG, MOD_CAL, L"Performing Active Authentication");
+	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
 
 	if (card == nullptr) {
 		card = m_card;
@@ -1319,7 +1319,7 @@ void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CBy
 	auto nid = OBJ_obj2nid(oid_obj);
 	evp_md = (EVP_MD *)EVP_get_digestbynid(nid);
 	if (evp_md == nullptr) {
-		MWLOG(LEV_INFO, MOD_CAL, L"Failed to get digest by NID. Fallback to SHA256");
+		MWLOG(LEV_INFO, MOD_APL, L"Failed to get digest by NID. Fallback to SHA256");
 		evp_md = (EVP_MD *)EVP_sha256();
 	}
 
@@ -1334,7 +1334,7 @@ void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CBy
 	auto signature = card->sendAPDU({apdu, sizeof(apdu)});
 	auto sw12 = signature.GetBytes(signature.Size() - 2);
 	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to perform active authentication");
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to perform active authentication");
 		failed = true;
 		goto cleanup;
 	}
@@ -1349,7 +1349,7 @@ void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CBy
 
 	pkey = d2i_PUBKEY(nullptr, (const unsigned char **)&pubkey_buff, pubkey.Size());
 	if (pkey == nullptr) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to read public key from card");
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to read public key from card");
 		failed = true;
 		goto cleanup;
 	}
@@ -1360,7 +1360,7 @@ void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CBy
 	mdctx = EVP_MD_CTX_new();
 	if (!mdctx || EVP_DigestInit_ex(mdctx, evp_md, nullptr) <= 0 ||
 		EVP_DigestUpdate(mdctx, data_to_sign, data_size) <= 0 || EVP_DigestFinal_ex(mdctx, hash, &hash_len) <= 0) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to hash verification data");
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to hash verification data");
 		failed = true;
 		goto cleanup;
 	}
@@ -1368,14 +1368,14 @@ void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CBy
 	// Create and initialize the verification context based on the public key
 	ctx = EVP_PKEY_CTX_new(pkey, NULL);
 	if (!ctx || EVP_PKEY_verify_init(ctx) <= 0 || EVP_PKEY_CTX_set_signature_md(ctx, evp_md) <= 0) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to create verification context");
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to create verification context");
 		failed = true;
 		goto cleanup;
 	}
 
 	// Perform the verification
 	if (EVP_PKEY_verify(ctx, der_signature, der_signature_len, (unsigned char *)&hash[0], hash_len) != 1) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"Failed to verify active authentication signature!");
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to verify active authentication signature!");
 		failed = true;
 		goto cleanup;
 	}
