@@ -699,7 +699,7 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 
 	// failed to verifiy SOD, we still need the contents
 	if (!sod_verified) {
-		PKCS7_verify(p7, nullptr, csca_store, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
+		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
 
 		// get signer for debug purposes
 		STACK_OF(X509) *signers = PKCS7_get0_signers(p7, nullptr, 0);
