@@ -360,8 +360,7 @@ private:
 	static const std::unordered_map<APL_ICAO::DataGroupID, std::string> DATAGROUP_PATHS;
 	static const std::vector<int> EXPECTED_TAGS;
 
-	// returns the contents of the SOD after verification
-	CByteArray verifySodFileIntegrity(const CByteArray &data);
+	bool verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod);
 	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray& data);
 	bool performActiveAuthentication();

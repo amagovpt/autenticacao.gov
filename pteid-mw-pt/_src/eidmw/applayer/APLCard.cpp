@@ -657,8 +657,11 @@ void APL_ICAO::loadAvailableDataGroups() {
 
 	CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH);
 
-	CByteArray sod = oData.GetBytes(65);
-	//CByteArray sod = verifySodFileIntegrity(oData);
+	CByteArray sod;
+	bool sod_verified = verifySodFileIntegrity(oData, sod);
+	if (!sod_verified) {
+		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to verify SOD validity");
+	}
 
 	SODParser parser;
 	parser.ParseSodEncapsulatedContent(sod, EXPECTED_TAGS);
@@ -666,12 +669,11 @@ void APL_ICAO::loadAvailableDataGroups() {
 	m_SodAttributes = std::make_unique<SODAttributes>(parser.getAttributes());
 }
 
-CByteArray APL_ICAO::verifySodFileIntegrity(const CByteArray &data) {
+bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod) {
 	if (!csca_store) {
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_VERIFY_SOD_SIGN);
 	}
 
-	CByteArray contents;
 	PKCS7 *p7 = nullptr;
 	char *error_msg = nullptr;
 	bool sod_verified = false;
@@ -686,7 +688,7 @@ CByteArray APL_ICAO::verifySodFileIntegrity(const CByteArray &data) {
 	p7 = d2i_PKCS7(nullptr, &temp, length);
 	if (!p7) {
 		error_msg = Openssl_errors_to_string();
-		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed t o devoce SOD PKCS7 object! Openssl errors:\n%s",
+		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to decode SOD PKCS7 object! Openssl errors:\n%s",
 			  error_msg != nullptr ? error_msg : "N/A");
 		free(error_msg);
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_INVALID_PKCS7);
@@ -695,11 +697,28 @@ CByteArray APL_ICAO::verifySodFileIntegrity(const CByteArray &data) {
 	BIO *out = BIO_new(BIO_s_mem());
 	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
 
-	if (sod_verified) {
-		unsigned char *p;
-		size_t size = BIO_get_mem_data(out, &p);
-		contents.Append(p, size);
-	} else {
+	// failed to verifiy SOD, we still need the contents
+	if (!sod_verified) {
+		PKCS7_verify(p7, nullptr, csca_store, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
+
+		// get signer for debug purposes
+		STACK_OF(X509) *signers = PKCS7_get0_signers(p7, nullptr, 0);
+		if (sk_X509_num(signers) > 0) {
+			X509 *signer = sk_X509_value(signers, 0);
+			BIO *bio = BIO_new(BIO_s_mem());
+			PEM_write_bio_X509(bio, signer);
+			BUF_MEM *buf;
+			BIO_get_mem_ptr(bio, &buf);
+			std::cout << std::string(buf->data, buf->length) << std::endl;
+			BIO_free(bio);
+		}
+	}
+
+	unsigned char *p;
+	size_t size = BIO_get_mem_data(out, &p);
+	out_sod.Append(p, size);
+
+	if (!sod_verified) {
 		error_msg = Openssl_errors_to_string();
 		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Error validating SOD signature. OpenSSL errors:\n%s",
 			  error_msg != nullptr ? error_msg : "N/A");
@@ -709,11 +728,7 @@ CByteArray APL_ICAO::verifySodFileIntegrity(const CByteArray &data) {
 	BIO_free_all(out);
 	PKCS7_free(p7);
 
-	if (!sod_verified) {
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_VERIFY_SOD_SIGN);
-	}
-
-	return contents;
+	return sod_verified;
 }
 
 bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
