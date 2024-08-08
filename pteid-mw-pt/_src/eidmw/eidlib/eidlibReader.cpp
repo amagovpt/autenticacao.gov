@@ -555,7 +555,14 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 		context.cardid = m_cardid;
 		context.mutex = m_context->mutex;
 
-		out = new ICAO_Card(&context, pAplIcao);
+		switch (pimpl->getCardType()) {
+		case APL_CARDTYPE_PTEID_IAS5:
+		case APL_CARDTYPE_ICAO:
+			out = new ICAO_Card(&context, pAplIcao);
+			break;
+		default:
+			throw PTEID_ExCardTypeUnknown();
+		}
 
 		m_objects[INCLUDE_OBJECT_ICAO] = out;
 	}
