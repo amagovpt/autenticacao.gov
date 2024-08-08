@@ -712,6 +712,12 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 			std::cout << std::string(buf->data, buf->length) << std::endl;
 			BIO_free(bio);
 		}
+
+		for (size_t i = 0; i < sk_X509_num(signers); i++) {
+			X509 *signer = sk_X509_value(signers, i);
+			X509_free(signer);
+		}
+		sk_X509_free(signers);
 	}
 
 	unsigned char *p;
