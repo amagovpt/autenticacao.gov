@@ -239,7 +239,7 @@ static std::string format_reason_field_string(const ScapTransaction &transaction
 
 	std::string reason = "Entidade: " + transaction.provider_name + ". ";
 	if (!provider_nipc.empty()) {
-		reason += "(VAT PT-" + provider_nipc + ").";
+		reason += "VATPT-" + provider_nipc + ".";
 	}
 
 	reason += " Na qualidade de: ";
