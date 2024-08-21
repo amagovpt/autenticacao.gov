@@ -86,6 +86,7 @@ HEADERS += \
 	CardFile.h \
 	CertStatusCache.h \
 	IcaoDg1.h \
+	IcaoDg11.h \
 	IcaoDg2.h \
 	IcaoDg2Defines.h \
 	cryptoFramework.h \
@@ -122,6 +123,7 @@ SOURCES += \
 	CardPteid.cpp        \
 	CertStatusCache.cpp  \
 	IcaoDg1.cpp \
+	IcaoDg11.cpp \
 	IcaoDg2.cpp \
 	cryptoFramework.cpp  \
 	cryptoFwkPteid.cpp   \

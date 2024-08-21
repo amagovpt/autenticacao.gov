@@ -723,7 +723,7 @@ public:
 class IcaoDg1;
 class PTEID_ICAO_DG1 {
 public:
-	PTEIDSDK_API PTEID_ICAO_DG1(const IcaoDg1 &dg1);
+	PTEIDSDK_API ~PTEID_ICAO_DG1();
 
 	PTEIDSDK_API const char *documentCode() const;
 	PTEIDSDK_API const char *issuingState() const;
@@ -741,6 +741,7 @@ public:
 private:
 	const IcaoDg1 &m_impl;
 	friend class ICAO_Card;
+	PTEID_ICAO_DG1(const IcaoDg1 &dg1);
 	PTEID_ICAO_DG1(const PTEID_ICAO_DG1 &);						/**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG1 &operator=(const PTEID_ICAO_DG1 &) = delete; /**< Copy not allowed - not implemented */
 };
@@ -849,7 +850,7 @@ class PTEID_ICAO_DG2 : public PTEID_Object {
 public:
 	PTEIDSDK_API unsigned int numberOfBiometrics() const;
 	PTEIDSDK_API std::vector<PTEID_BiometricInfomation *> biometricInstances();
-	~PTEID_ICAO_DG2();
+	PTEIDSDK_API ~PTEID_ICAO_DG2();
 
 private:
 	const IcaoDg2 &m_impl;
@@ -858,6 +859,34 @@ private:
 	PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2);
 	PTEID_ICAO_DG2(const PTEID_ICAO_DG2 &);						/**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG2 &operator=(const PTEID_ICAO_DG2 &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class IcaoDg11;
+class PTEID_ICAO_DG11 : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray listOfTags() const;
+	PTEIDSDK_API const char *fullName() const;
+	PTEIDSDK_API const char *personalName() const;
+	PTEIDSDK_API const char *fullDateOfBirth() const;
+	PTEIDSDK_API const char *placeOfBirth() const;
+	PTEIDSDK_API const char *permanentAddress() const;
+	PTEIDSDK_API const char *telephone() const;
+	PTEIDSDK_API const char *profession() const;
+	PTEIDSDK_API const char *title() const;
+	PTEIDSDK_API const char *personalSummary() const;
+	PTEIDSDK_API const char *proofOfCitizenship() const;
+	PTEIDSDK_API const char *otherValidTDNumbers() const;
+	PTEIDSDK_API const char *custodyInformation() const;
+	PTEIDSDK_API int numberOfOtherNames() const;
+	PTEIDSDK_API const char *otherNames() const;
+	PTEIDSDK_API virtual ~PTEID_ICAO_DG11();
+
+private:
+	const IcaoDg11 &m_impl;
+	friend class ICAO_Card;
+	PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11);
+	PTEID_ICAO_DG11(const PTEID_ICAO_DG11 &);					  /**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG11 &operator=(const PTEID_ICAO_DG11 &) = delete; /**< Copy not allowed - not implemented */
 };
 
 class ICAO_Card : public PTEID_Object {
@@ -874,6 +903,7 @@ public:
 
 	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
 	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();
+	PTEIDSDK_API virtual PTEID_ICAO_DG11 *readDataGroup11();
 
 	/**
 	 * Load a certificate MasterList containing CSCA certificates. These are needed for certificate validation during Passive Authentication

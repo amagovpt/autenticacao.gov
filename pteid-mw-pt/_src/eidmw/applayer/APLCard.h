@@ -330,6 +330,7 @@ typedef struct CscaMasterList_st {
 
 class IcaoDg1;
 class IcaoDg2;
+class IcaoDg11;
 class PhotoPteid;
 class APL_ICAO : public APL_SmartCard {
 public:
@@ -341,6 +342,8 @@ public:
 	EIDMW_APL_API virtual CByteArray readDatagroup(DataGroupID tag);
 	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
 	EIDMW_APL_API virtual IcaoDg2 *readDataGroup2();
+	EIDMW_APL_API virtual IcaoDg11 *readDataGroup11();
+
 	EIDMW_APL_API virtual void loadMasterList(const char *filePath);
 	EIDMW_APL_API virtual APL_CardType getType() const override;
 
@@ -354,6 +357,7 @@ private:
 	std::unique_ptr<SODAttributes> m_SodAttributes;
 	std::unique_ptr<IcaoDg1> m_mrzDg1;
 	std::unique_ptr<IcaoDg2> m_faceDg2;
+	std::unique_ptr<IcaoDg11> m_infoDg11;
 
 	static constexpr unsigned char MRTD_APPLICATION[] = {0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
 	static constexpr const char *SOD_PATH = "011D";

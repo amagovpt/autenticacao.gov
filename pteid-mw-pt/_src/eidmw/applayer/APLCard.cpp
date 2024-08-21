@@ -34,6 +34,7 @@
 #include "CardLayer.h"
 #include "CardPteidDef.h"
 #include "IcaoDg1.h"
+#include "IcaoDg11.h"
 #include "IcaoDg2.h"
 #include "Log.h"
 #include "MiscUtil.h"
@@ -648,6 +649,15 @@ IcaoDg2 *APL_ICAO::readDataGroup2() {
 	CByteArray arrayDg2 = readDatagroup(DG2);
 	m_faceDg2.reset(new IcaoDg2(arrayDg2));
 	return m_faceDg2.get();
+}
+
+IcaoDg11 *APL_ICAO::readDataGroup11() {
+	if (m_infoDg11.get() != nullptr)
+		return m_infoDg11.get();
+
+	CByteArray arrayDg11 = readDatagroup(DG11);
+	m_infoDg11.reset(new IcaoDg11(arrayDg11));
+	return m_infoDg11.get();
 }
 
 void APL_ICAO::loadAvailableDataGroups() {
