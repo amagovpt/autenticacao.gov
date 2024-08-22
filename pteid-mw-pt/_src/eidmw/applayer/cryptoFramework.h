@@ -325,6 +325,11 @@ public:
 
 	void performActiveAuthentication(const CByteArray &oid, const CByteArray &pubkey, APL_SmartCard* card = nullptr);
 
+	/**
+	 * Verify if the data has the correct hash
+	 */
+	bool VerifyHash(const CByteArray &data, const CByteArray &hash, const EVP_MD *algorithm);
+
 protected:
 	/**
 	  * Constructor - used within "instance"
@@ -340,11 +345,6 @@ protected:
 	  * Convert digest algorithm
 	  */
 	const EVP_MD *ConvertAlgorithm(FWK_HashAlgo algo);
-
-	/**
-	  * Verify if the data has the correct hash
-	  */
-	bool VerifyHash(const CByteArray &data, const CByteArray &hash, const EVP_MD *algorithm);
 
 	/**
 	  * Get the hash of the data

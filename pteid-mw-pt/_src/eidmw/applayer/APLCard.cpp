@@ -752,13 +752,7 @@ bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
 		loadAvailableDataGroups();
 	}
 
-	auto &hashes = m_SodAttributes->getHashes();
-	if (hashes.find(tag) == hashes.end()) {
-		return false;
-	}
-
-	auto cryptFwk = AppLayer.getCryptoFwk();
-	return cryptFwk->VerifyHashSha256(data, hashes.at(tag));
+	return m_SodAttributes->validateHash(tag, data);
 }
 
 bool APL_ICAO::performActiveAuthentication() {

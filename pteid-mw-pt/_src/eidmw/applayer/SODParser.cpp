@@ -17,7 +17,9 @@
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 
+#include "APLReader.h"
 #include "SODParser.h"
+#include "cryptoFwkPteid.h"
 #include "eidErrors.h"
 #include "Log.h"
 #include "MWException.h"
@@ -72,12 +74,9 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 	} else {
 		attr = new SODAttributes();
 
-		X509_ALGOR *algorithm_sha256 = X509_ALGOR_new();
-		X509_ALGOR_set_md(algorithm_sha256, EVP_sha256());
-		if (X509_ALGOR_cmp(decoded_obj->hashAlgorithm, algorithm_sha256) != 0) {
-			MWLOG(LEV_ERROR, MOD_APL, "Unexpected digest algorithm in LDSSecurityObject!");
-			throw CMWEXCEPTION(EIDMW_SOD_UNEXPECTED_ALGO_OID);
-		}
+		auto hash_algorithm = decoded_obj->hashAlgorithm;
+		auto hash_md = EVP_get_digestbyobj(hash_algorithm->algorithm);
+		attr->setHashFunction(hash_md);
 
 		int num_hashes = sk_DataGroupHash_num(decoded_obj->datagroupHashValues);
 
@@ -93,7 +92,6 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 				MWLOG(LEV_INFO, MOD_APL, "SODParser: unexpected datagroup tag: %d", read_tag);
 			}
 		}
-		X509_ALGOR_free(algorithm_sha256);
 	}
 	
 }
@@ -101,6 +99,17 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 SODAttributes &SODParser::getAttributes() { return *attr; }
 
 void SODAttributes::add(unsigned short tag, CByteArray value) { m_hashes[tag] = value; }
+
+void SODAttributes::setHashFunction(const EVP_MD *hash_md) { this->hash_md = hash_md; }
+
+bool SODAttributes::validateHash(unsigned short tag, const CByteArray &data) {
+	if (m_hashes.find(tag) == m_hashes.end()) {
+		return false;
+	}
+
+	auto cryptFwk = AppLayer.getCryptoFwk();
+	return cryptFwk->VerifyHash(data, m_hashes.at(tag), hash_md);
+}
 
 const CByteArray &SODAttributes::get(unsigned short tag) { return m_hashes.at(tag); }
 
