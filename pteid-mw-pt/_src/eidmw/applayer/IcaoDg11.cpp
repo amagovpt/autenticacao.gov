@@ -22,7 +22,7 @@ struct DG11_st {
 	ASN1_STRING *list_of_tags_present;
 	OTHER_NAMES *other_names;
 	ASN1_STRING *full_name;
-	ASN1_STRING *personal_name;
+	ASN1_STRING *personal_number;
 	ASN1_STRING *full_date_of_birth;
 	ASN1_STRING *place_of_birth;
 	ASN1_STRING *permanent_address;
@@ -48,7 +48,7 @@ ASN1_SEQUENCE(DG11) = {
 	ASN1_EX_TYPE(ASN1_TFLG_APPLICATION | ASN1_TFLG_IMPTAG, 0x1C, DG11, list_of_tags_present, ASN1_UTF8STRING),
 
 	ASN1_EX_TYPE(ASN1_TFLG_APPLICATION | ASN1_TFLG_IMPTAG | ASN1_TFLG_OPTIONAL, 0x0E, DG11, full_name, ASN1_UTF8STRING),
-	ASN1_EX_TYPE(ASN1_TFLG_APPLICATION | ASN1_TFLG_IMPTAG | ASN1_TFLG_OPTIONAL, 0x10, DG11, personal_name,
+	ASN1_EX_TYPE(ASN1_TFLG_APPLICATION | ASN1_TFLG_IMPTAG | ASN1_TFLG_OPTIONAL, 0x10, DG11, personal_number,
 				 ASN1_UTF8STRING),
 	ASN1_EX_TYPE(ASN1_TFLG_APPLICATION | ASN1_TFLG_IMPTAG | ASN1_TFLG_OPTIONAL, 0x2B, DG11, full_date_of_birth,
 				 ASN1_UTF8STRING),
@@ -112,7 +112,7 @@ IcaoDg11::IcaoDg11(const CByteArray &information) {
 	}
 	m_numberOfOtherNames = -1;
 	copyToString(m_fullName, processedDg11->full_name, true);
-	copyToString(m_personalName, processedDg11->personal_name, true);
+	copyToString(m_personalNumber, processedDg11->personal_number, true);
 	copyToString(m_fullDateOfBirth, processedDg11->full_date_of_birth);
 	copyToString(m_placeOfBirth, processedDg11->place_of_birth, true);
 	copyToString(m_permanentAddress, processedDg11->permanent_address, true);
@@ -120,7 +120,7 @@ IcaoDg11::IcaoDg11(const CByteArray &information) {
 	copyToString(m_profession, processedDg11->profession, true);
 	copyToString(m_title, processedDg11->title, true);
 	copyToString(m_personalSummary, processedDg11->personal_summary, true);
-	copyToString(m_proofOfCitizenship, processedDg11->proof_of_citizenship, true);
+	copyToString(m_proofOfCitizenship, processedDg11->proof_of_citizenship);
 	copyToString(m_otherValidTDNumbers, processedDg11->other_valid_td_numbers, true);
 	copyToString(m_custodyInformation, processedDg11->custody_information, true);
 	if (processedDg11->other_names && processedDg11->other_names->number_of_other_names &&
@@ -138,7 +138,7 @@ const CByteArray &IcaoDg11::listOfTags() const { return m_listOfTags; }
 
 const std::string &IcaoDg11::fullName() const { return m_fullName; }
 
-const std::string &IcaoDg11::personalName() const { return m_personalName; }
+const std::string &IcaoDg11::personalNumber() const { return m_personalNumber; }
 
 const std::string &IcaoDg11::fullDateOfBirth() const { return m_fullDateOfBirth; }
 

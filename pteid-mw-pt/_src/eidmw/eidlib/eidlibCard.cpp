@@ -995,7 +995,10 @@ PTEID_ByteArray PTEID_ICAO_DG11::listOfTags() const { return PTEID_ByteArray(m_c
 
 const char *PTEID_ICAO_DG11::fullName() const { return m_impl.fullName().c_str(); }
 
-const char *PTEID_ICAO_DG11::personalName() const { return m_impl.personalName().c_str(); }
+const char *PTEID_ICAO_DG11::personalNumber() const
+{
+  return m_impl.personalNumber().c_str();
+}
 
 const char *PTEID_ICAO_DG11::fullDateOfBirth() const { return m_impl.fullDateOfBirth().c_str(); }
 

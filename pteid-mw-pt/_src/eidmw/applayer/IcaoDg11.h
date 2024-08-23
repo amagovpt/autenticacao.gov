@@ -11,7 +11,7 @@ public:
 
 	EIDMW_APL_API const CByteArray &listOfTags() const;
 	EIDMW_APL_API const std::string &fullName() const;
-	EIDMW_APL_API const std::string &personalName() const;
+	EIDMW_APL_API const std::string &personalNumber() const;
 	EIDMW_APL_API const std::string &fullDateOfBirth() const;
 	EIDMW_APL_API const std::string &placeOfBirth() const;
 	EIDMW_APL_API const std::string &permanentAddress() const;
@@ -28,7 +28,7 @@ public:
 private:
 	CByteArray m_listOfTags;
 	std::string m_fullName;
-	std::string m_personalName;
+	std::string m_personalNumber;
 	std::string m_fullDateOfBirth;
 	std::string m_placeOfBirth;
 	std::string m_permanentAddress;

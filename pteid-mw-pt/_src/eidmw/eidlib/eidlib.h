@@ -866,7 +866,7 @@ class PTEID_ICAO_DG11 : public PTEID_Object {
 public:
 	PTEIDSDK_API PTEID_ByteArray listOfTags() const;
 	PTEIDSDK_API const char *fullName() const;
-	PTEIDSDK_API const char *personalName() const;
+	PTEIDSDK_API const char *personalNumber() const;
 	PTEIDSDK_API const char *fullDateOfBirth() const;
 	PTEIDSDK_API const char *placeOfBirth() const;
 	PTEIDSDK_API const char *permanentAddress() const;
