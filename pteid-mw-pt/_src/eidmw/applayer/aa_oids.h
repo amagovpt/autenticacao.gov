@@ -3,6 +3,8 @@
 namespace eIDMW
 {
 
+static const char *SECURITY_OPTION_ALGORITHM_OID = "2.23.136.1.1.5";
+
 // Security Options algorithms used in Active Authentication feature
 const static unsigned int BSI_OID_LEN = 12;
 

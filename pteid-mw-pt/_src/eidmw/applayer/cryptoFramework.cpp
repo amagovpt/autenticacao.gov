@@ -1293,7 +1293,7 @@ X509_CRL *APL_CryptoFwk::updateCRL(const CByteArray &crl, const CByteArray &delt
 	return CRL;
 }
 
-void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CByteArray &pubkey, APL_SmartCard* card) {
+void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CByteArray &pubkey, APL_SmartCard *card) {
 	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
 
 	if (card == nullptr) {
@@ -1311,12 +1311,10 @@ void APL_CryptoFwk::performActiveAuthentication(const CByteArray &oid, const CBy
 	BIGNUM *r, *s;
 	size_t sig_point_size;
 
-	const unsigned char *oid_buff = oid.GetBytes();
 	const unsigned char* pubkey_buff = pubkey.GetBytes();
 
 	// get digest by previously created NID
-	ASN1_OBJECT *oid_obj = d2i_ASN1_OBJECT(nullptr, &oid_buff, oid.Size());
-	auto nid = OBJ_obj2nid(oid_obj);
+	auto nid = OBJ_obj2nid(oid);
 	evp_md = (EVP_MD *)EVP_get_digestbynid(nid);
 	if (evp_md == nullptr) {
 		MWLOG(LEV_INFO, MOD_APL, L"Failed to get digest by NID. Fallback to SHA256");
@@ -1393,8 +1391,6 @@ cleanup:
 		EVP_MD_CTX_free(mdctx);
 	if (evp_md)
 		EVP_MD_free(evp_md);
-	if (oid_obj)
-		ASN1_OBJECT_free(oid_obj);
 
 	// if should throw
 	if (failed) {

@@ -26,7 +26,10 @@
 
 #include "CardPteid.h"
 #include <Reader.h>
+#include "IcaoDg14.h"
+#include "TLVBuffer.h"
 #include "Util.h"
+#include "aa_oids.h"
 #include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
 #include "CardFile.h"
@@ -1778,11 +1781,17 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 	}
 
 	// read OID from security file
-	auto oid = secopt_file.GetBytes(17);
+	auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
+	if (obj == nullptr) {
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to find active authentication algorithm OID in security options file!");
+		MWLOG(LEV_ERROR, MOD_APL, L"DG14: %s", secopt_file.ToString(false, false).c_str());
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
+	}
+
 	// skip the first two bytes of the file (6F78)
 	auto pubkey = pubkey_file.GetBytes(2);
 
-	m_cryptoFwk->performActiveAuthentication(oid, pubkey);
+	m_cryptoFwk->performActiveAuthentication(obj, pubkey);
 }
 
 const CByteArray &APL_EidFile_Sod::getMrzHash() {

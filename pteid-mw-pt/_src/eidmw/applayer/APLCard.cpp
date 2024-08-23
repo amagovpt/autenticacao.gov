@@ -36,12 +36,14 @@
 #include "IcaoDg1.h"
 #include "IcaoDg11.h"
 #include "IcaoDg2.h"
+#include "IcaoDg14.h"
 #include "Log.h"
 #include "MiscUtil.h"
 #include "PDFSignature.h"
 #include "SODParser.h"
 #include "SigContainer.h"
 #include "XadesSignature.h"
+#include "aa_oids.h"
 #include "cryptoFwkPteid.h"
 #include "Util.h"
 
@@ -784,11 +786,17 @@ bool APL_ICAO::performActiveAuthentication() {
 	}
 
 	// read OID from security file
-	CByteArray oid = secopt_file.GetBytes(73);	// TODO: smarter approach
+	auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
+	if (obj == nullptr) {
+		MWLOG(LEV_ERROR, MOD_APL, L"Failed to find active authentication algorithm OID in security options file!");
+		MWLOG(LEV_ERROR, MOD_APL, L"DG14: %s", secopt_file.ToString(false, false).c_str());
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
+	}
+
 	// skip the first two bytes of the file (6F78)
 	CByteArray pubkey = pubkey_file.GetBytes(2);
 
-	cryptFwk->performActiveAuthentication(oid, pubkey, this);
+	cryptFwk->performActiveAuthentication(obj, pubkey, this);
 
 	return true;
 }

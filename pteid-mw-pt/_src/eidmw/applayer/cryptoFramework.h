@@ -323,7 +323,7 @@ public:
 
 	void setActiveCard(APL_SmartCard *card) { m_card = card; }
 
-	void performActiveAuthentication(const CByteArray &oid, const CByteArray &pubkey, APL_SmartCard* card = nullptr);
+	void performActiveAuthentication(const ASN1_OBJECT *oid, const CByteArray &pubkey, APL_SmartCard *card = nullptr);
 
 	/**
 	 * Verify if the data has the correct hash

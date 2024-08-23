@@ -125,6 +125,7 @@ SOURCES += \
 	IcaoDg1.cpp \
 	IcaoDg11.cpp \
 	IcaoDg2.cpp \
+	IcaoDg14.cpp \
 	cryptoFramework.cpp  \
 	cryptoFwkPteid.cpp   \
 	APLCard.cpp          \ 
