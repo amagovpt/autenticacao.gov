@@ -1,5 +1,7 @@
 #include "IcaoDg11.h"
 
+#include "Log.h"
+
 #include <ByteArray.h>
 
 #include <openssl/asn1.h>
@@ -76,16 +78,26 @@ ASN1_SEQUENCE(DG11) = {
 IMPLEMENT_ASN1_FUNCTIONS(DG11);
 DG11 *decodeDg11(const CByteArray &biometricData) {
 	CByteArray process(biometricData);
+	if (biometricData.Size() == 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Empty data array on Data group 11!", __FUNCTION__);
+		return NULL;
+	}
 	long size;
 
 	unsigned char *asn1_data = process.GetBytes();
+
+	if (asn1_data[0] != 0x6B) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Top-level tag is wrong in DG11: %2x!", __FUNCTION__, asn1_data[0]);
+		return NULL;
+	}
 	asn1_data[0] = 0x30;
 
 	DG11 *processDG11 = d2i_DG11(NULL, (const unsigned char **)&asn1_data, process.Size());
 	if (!processDG11) {
 		long error = ERR_get_error();
 		char *errorRead = ERR_error_string(error, NULL);
-		printf("Error processing DG11 errorCode:%lu error: %s\n", error, errorRead);
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Error decoding Data group 11, openssl error string: %s errorCode: %lu!",
+			  __FUNCTION__, errorRead, error);
 	}
 	return processDG11;
 }
@@ -132,6 +144,7 @@ IcaoDg11::IcaoDg11(const CByteArray &information) {
 		processedDg11->other_names->other_names->length) {
 		copyToString(m_otherNames, processedDg11->other_names->other_names, true);
 	}
+	DG11_free(processedDg11);
 }
 
 const CByteArray &IcaoDg11::listOfTags() const { return m_listOfTags; }

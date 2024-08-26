@@ -106,6 +106,8 @@ IcaoDg2::IcaoDg2(const CByteArray &arrayDg2) {
 	}
 	m_biometricInstances.push_back(
 		std::make_unique<BiometricInformation>(*decoded->bit_group->biometric_info_template)); // add to vector
+
+	DG2_free(decoded);
 }
 
 IcaoDg2::~IcaoDg2() {}
