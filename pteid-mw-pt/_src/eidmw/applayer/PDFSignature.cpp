@@ -341,12 +341,16 @@ void PDFSignature::parseCitizenDataFromCert(CByteArray &certData) {
 }
 
 int PDFSignature::getPageCount() {
+	if (m_doc->getErrorCode() == errEncrypted) {
+		MWLOG(LEV_WARN, MOD_APL, "%s - Encrypted PDF needs user password: unsupported at the moment", __FUNCTION__);
+		return -2;
+	}
 	if (!m_doc->isOk()) {
-		fprintf(stderr, "getPageCount(): Probably broken PDF...\n");
+		MWLOG(LEV_WARN, MOD_APL, "%s - Failed to parse PDF! Error code: %d", __FUNCTION__, m_doc->getErrorCode());
 		return -1;
 	}
 	if (m_doc->isEncrypted()) {
-		fprintf(stderr, "getPageCount(): Encrypted PDFs are unsupported at the moment\n");
+		MWLOG(LEV_WARN, MOD_APL, "%s - Protected PDF: unsupported at the moment", __FUNCTION__);
 		return -2;
 	}
 	if (m_doc->containsXfaForm()) {
