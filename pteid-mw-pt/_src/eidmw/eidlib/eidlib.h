@@ -723,7 +723,6 @@ public:
 class IcaoDg1;
 class PTEID_ICAO_DG1 {
 public:
-	PTEIDSDK_API ~PTEID_ICAO_DG1();
 
 	PTEIDSDK_API const char *documentCode() const;
 	PTEIDSDK_API const char *issuingState() const;
@@ -737,6 +736,7 @@ public:
 	PTEIDSDK_API const char *primaryIdentifier() const;
 	PTEIDSDK_API const char *secondaryIdentifier() const;
 	PTEIDSDK_API bool isPassport() const;
+	PTEIDSDK_API ~PTEID_ICAO_DG1();
 
 private:
 	const IcaoDg1 &m_impl;

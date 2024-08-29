@@ -830,6 +830,8 @@ const char *PTEID_ICAO_DG1::secondaryIdentifier() const { return m_impl.secondar
 
 bool PTEID_ICAO_DG1::isPassport() const { return m_impl.documentCode().front() == 'P'; }
 
+PTEID_ICAO_DG1::~PTEID_ICAO_DG1() {}
+
 unsigned char PTEID_FeaturePoint::type() const { return m_impl.type(); }
 
 unsigned char PTEID_FeaturePoint::featurePoint() const { return m_impl.featurePoint(); }
