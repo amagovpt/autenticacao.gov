@@ -749,7 +749,7 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 	return sod_verified;
 }
 
-bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
+bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray &data) {
 	if (!m_SodAttributes) {
 		loadAvailableDataGroups();
 	}
@@ -757,46 +757,76 @@ bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray& data) {
 	return m_SodAttributes->validateHash(tag, data);
 }
 
+CByteArray extractPublicKeyFromDG15(CByteArray &dg15_data) {
+	CByteArray pubkey_data;
+	long len = 0;
+	int tag = 0, xclass = 0;
+	const unsigned char *der_p = dg15_data.GetBytes();
+	int ret = ASN1_get_object(&der_p, &len, &tag, &xclass, dg15_data.Size());
+	if (ret & 0x80) {
+		MWLOG(LEV_ERROR, MOD_APL, "DG15 ASN.1 failed to decode! Error code: %08x", ERR_get_error());
+	} else if (tag != 15 && xclass != V_ASN1_APPLICATION) {
+		MWLOG(LEV_ERROR, MOD_APL,
+			  "Malformed DG15: expected tag 0x6F (APPLICATION 15)! Found ASN.1 tag with class: %d and tag number: %d",
+			  xclass, tag);
+	} else {
+		pubkey_data.Append(der_p, len);
+	}
+	return pubkey_data;
+}
+
 bool APL_ICAO::performActiveAuthentication() {
 	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
 
 	auto reader = m_reader->getCalReader();
 	auto cryptFwk = AppLayer.getCryptoFwk();
-	
+
 	// CByteArray security_file;
 	CByteArray secopt_file = reader->ReadFile(PTEID_FILE_SECURITY);
-	
-	char * dg14_str = byteArrayToHexString(secopt_file.GetBytes(), secopt_file.Size());
+
+	char *dg14_str = byteArrayToHexString(secopt_file.GetBytes(), secopt_file.Size());
 	MWLOG(LEV_DEBUG, MOD_APL, "DG14 file: %s", dg14_str);
 	free(dg14_str);
-	
+
 	// verify hash of security file with hash in SOD
 	if (!cryptFwk->VerifyHashSha256(secopt_file, m_SodAttributes->get(DG14))) {
 		MWLOG(LEV_ERROR, MOD_APL, "Security option hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
 	}
 
-	// read public key DG15
-	CByteArray pubkey_file = reader->ReadFile(PTEID_FILE_PUB_KEY_AA);
+	try {
+		// read public key DG15
+		CByteArray pubkey_file = reader->ReadFile(PTEID_FILE_PUB_KEY_AA);
 
-	// verify hash of public key with hash in SOD
-	if (!cryptFwk->VerifyHashSha256(pubkey_file, m_SodAttributes->get(DG15))) {
-		MWLOG(LEV_ERROR, MOD_APL, "Public key hash does not match with SOD");
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
+		// verify hash of public key with hash in SOD
+		if (!cryptFwk->VerifyHashSha256(pubkey_file, m_SodAttributes->get(DG15))) {
+			MWLOG(LEV_ERROR, MOD_APL, "Public key hash does not match with SOD");
+			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
+		}
+
+		// read OID from security file
+		auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
+		if (obj == nullptr) {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to find active authentication algorithm OID in security options file!");
+			MWLOG(LEV_ERROR, MOD_APL, "DG14: %s", secopt_file.ToString(false, false).c_str());
+			throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
+		}
+
+		// Check the first tag of DG15 file (6F)
+		CByteArray pubkey = extractPublicKeyFromDG15(pubkey_file);
+
+		cryptFwk->performActiveAuthentication(obj, pubkey, this);
+	} catch (CMWException &e) {
+		if (e.GetError() == EIDMW_ERR_FILE_NOT_FOUND) {
+			MWLOG(LEV_WARN, MOD_APL, "DG15 not found! Active Authentication not available for this document.");
+			return true;
+		} else {
+			MWLOG(LEV_WARN, MOD_APL,
+				  "Error reading DG15! Active Authentication failed. Error code %08x thrown at %s:%ld", e.GetError(),
+				  e.GetFile().c_str(), e.GetLine());
+			return false;
+		}
 	}
-
-	// read OID from security file
-	auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
-	if (obj == nullptr) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to find active authentication algorithm OID in security options file!");
-		MWLOG(LEV_ERROR, MOD_APL, L"DG14: %s", secopt_file.ToString(false, false).c_str());
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
-	}
-
-	// skip the first two bytes of the file (6F78)
-	CByteArray pubkey = pubkey_file.GetBytes(2);
-
-	cryptFwk->performActiveAuthentication(obj, pubkey, this);
 
 	return true;
 }
@@ -841,21 +871,13 @@ void APL_ICAO::initMasterListStore(CscaMasterList *cml) {
 	csca_store = store;
 }
 
-const CByteArray &APL_ICAO::getRawData(APL_RawDataType type) {
-	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
+const CByteArray &APL_ICAO::getRawData(APL_RawDataType type) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
-APLPublicKey *APL_ICAO::getRootCAPubKey() {
-	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
+APLPublicKey *APL_ICAO::getRootCAPubKey() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
-const char *APL_ICAO::getTokenSerialNumber() {
-	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
+const char *APL_ICAO::getTokenSerialNumber() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
-const char *APL_ICAO::getTokenLabel() {
-	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
-}
+const char *APL_ICAO::getTokenLabel() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
 APL_CardType APL_ICAO::getType() const { return APL_CARDTYPE_ICAO; };
 
