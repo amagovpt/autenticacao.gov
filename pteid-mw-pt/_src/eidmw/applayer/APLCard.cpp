@@ -35,25 +35,28 @@
 #include "CardPteidDef.h"
 #include "IcaoDg1.h"
 #include "IcaoDg11.h"
-#include "IcaoDg2.h"
 #include "IcaoDg14.h"
+#include "IcaoDg2.h"
+#include "IcaoDg3.h"
 #include "Log.h"
 #include "MiscUtil.h"
 #include "PDFSignature.h"
 #include "SODParser.h"
 #include "SigContainer.h"
+#include "Util.h"
 #include "XadesSignature.h"
 #include "aa_oids.h"
 #include "cryptoFwkPteid.h"
-#include "Util.h"
 
 #include <openssl/rand.h>
 #include <time.h>
 #include <sys/types.h>
 #include <openssl/err.h>
 
-namespace eIDMW {
+#include <fstream>
+#include <sstream>
 
+namespace eIDMW {
 #define CHALLENGE_LEN 20
 
 /*****************************************************************************************
@@ -651,6 +654,31 @@ IcaoDg2 *APL_ICAO::readDataGroup2() {
 	CByteArray arrayDg2 = readDatagroup(DG2);
 	m_faceDg2.reset(new IcaoDg2(arrayDg2));
 	return m_faceDg2.get();
+}
+
+IcaoDg3 *APL_ICAO::readDataGroup3() {
+	if (m_fingersDg3.get() != nullptr)
+		return m_fingersDg3.get();
+
+	//CByteArray arrayDg3 = readDatagroup(DG3);
+
+	std::ifstream infile;
+	infile.open("/home/rui/Downloads/CNI-fingerprints.bin");
+	std::stringstream buffer;
+	buffer << infile.rdbuf(); // Read the file content into the stringstream
+	std::string content;
+	content = buffer.str();
+	CByteArray contentArray;
+	contentArray.Append(0x63);
+	contentArray.Append(0x82);
+	contentArray.Append(0x46);
+	contentArray.Append(0x29);
+	contentArray.Append((const unsigned char *) content.c_str(), content.size());
+	printf("print debug this contentArray: %lu str: %s\n",
+	       contentArray.Size(),
+	       contentArray.ToString().c_str());
+	m_fingersDg3.reset(new IcaoDg3(contentArray));
+	return m_fingersDg3.get();
 }
 
 IcaoDg11 *APL_ICAO::readDataGroup11() {

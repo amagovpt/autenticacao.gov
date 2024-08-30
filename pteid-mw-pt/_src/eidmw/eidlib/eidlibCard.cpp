@@ -993,6 +993,9 @@ PTEID_ICAO_DG2::PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2)
 	}
 }
 
+PTEID_ICAO_DG3::PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3)
+	: PTEID_Object(context, NULL), m_impl(dg3) {}
+
 PTEID_ByteArray PTEID_ICAO_DG11::listOfTags() const { return PTEID_ByteArray(m_context, m_impl.listOfTags()); }
 
 const char *PTEID_ICAO_DG11::fullName() const { return m_impl.fullName().c_str(); }
@@ -1028,6 +1031,8 @@ const char *PTEID_ICAO_DG11::otherNames() const { return m_impl.otherNames().c_s
 
 PTEID_ICAO_DG11::~PTEID_ICAO_DG11() {}
 
+PTEID_ICAO_DG3::~PTEID_ICAO_DG3() {}
+
 PTEID_ICAO_DG11::PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11)
 	: PTEID_Object(context, NULL), m_impl(dg11) {}
 
@@ -1058,6 +1063,16 @@ PTEID_ICAO_DG2 *ICAO_Card::readDataGroup2() {
 	dg2 = new PTEID_ICAO_DG2(m_context, *dg2Impl);
 	END_TRY_CATCH
 	return dg2;
+}
+
+PTEID_ICAO_DG3 *ICAO_Card::readDataGroup3() {
+	PTEID_ICAO_DG3 *dg3;
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	IcaoDg3 *impl = icao->readDataGroup3();
+	dg3 = new PTEID_ICAO_DG3(m_context, *impl);
+	END_TRY_CATCH
+	return dg3;
 }
 
 PTEID_ICAO_DG11 *ICAO_Card::readDataGroup11() {

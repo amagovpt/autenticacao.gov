@@ -860,6 +860,17 @@ private:
 	PTEID_ICAO_DG2(const PTEID_ICAO_DG2 &);						/**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG2 &operator=(const PTEID_ICAO_DG2 &) = delete; /**< Copy not allowed - not implemented */
 };
+class IcaoDg3;
+class PTEID_ICAO_DG3 : public PTEID_Object {
+	PTEIDSDK_API ~PTEID_ICAO_DG3();
+
+private:
+	const IcaoDg3 &m_impl;
+	friend class ICAO_Card;
+	PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3);
+	PTEID_ICAO_DG3(const PTEID_ICAO_DG3 &);						/**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG3 &operator=(const PTEID_ICAO_DG3 &) = delete; /**< Copy not allowed - not implemented */
+};
 
 class IcaoDg11;
 class PTEID_ICAO_DG11 : public PTEID_Object {
@@ -903,6 +914,8 @@ public:
 
 	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
 	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();
+	PTEIDSDK_API virtual PTEID_ICAO_DG3 *readDataGroup3();
+
 	PTEIDSDK_API virtual PTEID_ICAO_DG11 *readDataGroup11();
 
 	/**

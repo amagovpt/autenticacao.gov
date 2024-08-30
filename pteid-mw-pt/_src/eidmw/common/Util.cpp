@@ -137,6 +137,8 @@ const unsigned char *findASN1Object(const unsigned char **array, long &size, lon
 	return desc_data;
 }
 
+unsigned short readTwoBytes(const unsigned char *data) { return (data[0] << 8) | data[1]; }
+
 const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag) {
 	const unsigned char *desc_data = array.GetBytes();
 

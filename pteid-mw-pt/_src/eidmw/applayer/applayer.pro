@@ -89,6 +89,7 @@ HEADERS += \
 	IcaoDg11.h \
 	IcaoDg2.h \
 	IcaoDg2Defines.h \
+	IcaoDg3.h \
 	cryptoFramework.h \
 	MiscUtil.h \
 	XercesUtils.h \
@@ -126,6 +127,7 @@ SOURCES += \
 	IcaoDg11.cpp \
 	IcaoDg2.cpp \
 	IcaoDg14.cpp \
+	IcaoDg3.cpp \
 	cryptoFramework.cpp  \
 	cryptoFwkPteid.cpp   \
 	APLCard.cpp          \ 

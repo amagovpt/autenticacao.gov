@@ -63,6 +63,8 @@ EIDMW_CMN_API const unsigned char *findASN1Object(const CByteArray &array, long 
 EIDMW_CMN_API const unsigned char *findASN1Object(const unsigned char **array, long &size, long tag,
 												  const int &maxLength);
 
+EIDMW_CMN_API unsigned short readTwoBytes(const unsigned char *data);
+
 /**
  * Returns true is csSearch is present in csData.
  */
