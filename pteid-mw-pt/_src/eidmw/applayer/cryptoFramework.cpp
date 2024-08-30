@@ -1306,8 +1306,9 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	EVP_MD_CTX *mdctx;
 	EVP_MD *evp_md;
 	EVP_PKEY *pkey;
+	unsigned char *signature_bytes = nullptr;
 	unsigned char *der_signature = nullptr;
-	int der_signature_len;
+	int signature_len;
 	BIGNUM *r, *s;
 	size_t sig_point_size;
 
@@ -1317,7 +1318,7 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	auto nid = OBJ_obj2nid(oid);
 	evp_md = (EVP_MD *)EVP_get_digestbynid(nid);
 	if (evp_md == nullptr) {
-		MWLOG(LEV_INFO, MOD_APL, L"Failed to get digest by NID. Fallback to SHA256");
+		MWLOG(LEV_INFO, MOD_APL, "Failed to get digest by NID. Fallback to SHA256");
 		evp_md = (EVP_MD *)EVP_sha256();
 	}
 
@@ -1337,19 +1338,28 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 		goto cleanup;
 	}
 
-	// convert to DER signature object
-	sig_point_size = (signature.Size() - 2) / 2;
-	ec_sig = ECDSA_SIG_new();
-	r = BN_bin2bn(signature.GetBytes(), sig_point_size, nullptr);
-	s = BN_bin2bn(signature.GetBytes() + sig_point_size, sig_point_size, nullptr);
-	ECDSA_SIG_set0(ec_sig, r, s);
-	der_signature_len = i2d_ECDSA_SIG(ec_sig, &der_signature);
-
 	pkey = d2i_PUBKEY(nullptr, (const unsigned char **)&pubkey_buff, pubkey.Size());
 	if (pkey == nullptr) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to read public key from card");
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to read public key from card");
 		failed = true;
 		goto cleanup;
+	}
+	//We need to convert signature to DER format if AA public key is of type EC
+	if (EVP_PKEY_get_base_id(pkey) == EVP_PKEY_EC) {
+		// convert to DER signature object
+		sig_point_size = (signature.Size() - 2) / 2;
+		ec_sig = ECDSA_SIG_new();
+		r = BN_bin2bn(signature.GetBytes(), sig_point_size, nullptr);
+		s = BN_bin2bn(signature.GetBytes() + sig_point_size, sig_point_size, nullptr);
+		ECDSA_SIG_set0(ec_sig, r, s);
+		signature_len = i2d_ECDSA_SIG(ec_sig, &der_signature);
+		signature_bytes = der_signature;
+		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type ECDSA and size: %d", signature_len);
+	}
+	else {
+		signature_len = signature.Size() - 2;
+		signature_bytes = signature.GetBytes();
+		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type RSA and size: %d", signature_len);
 	}
 
 	// hash the `to_sign` data
@@ -1372,7 +1382,7 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	}
 
 	// Perform the verification
-	if (EVP_PKEY_verify(ctx, der_signature, der_signature_len, (unsigned char *)&hash[0], hash_len) != 1) {
+	if (EVP_PKEY_verify(ctx, signature_bytes, signature_len, (unsigned char *)&hash[0], hash_len) != 1) {
 		MWLOG(LEV_ERROR, MOD_APL, L"Failed to verify active authentication signature!");
 		failed = true;
 		goto cleanup;
