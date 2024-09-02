@@ -41,6 +41,7 @@
 #include "IcaoDg1.h"
 #include "IcaoDg11.h"
 #include "IcaoDg2.h"
+#include "IcaoDg3.h"
 #include "PDFSignature.h"
 #include "PhotoPteid.h"
 #include "SSLConnection.h"
@@ -993,8 +994,115 @@ PTEID_ICAO_DG2::PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2)
 	}
 }
 
+PTEID_ByteArray PTEID_BiometricInfomationDg3::icaoHeaderVersion() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->icaoHeaderVersion());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::type() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->type());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::subType() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->subType());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::creationDateAndtime() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->creationDateAndtime());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::validPeriod() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->validPeriod());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::creatorOfBiometricRefData() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->creatorOfBiometricRefData());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::formatOwner() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->formatOwner());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::formatType() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->formatType());
+}
+
+const char *PTEID_BiometricInfomationDg3::specVersion() const { return m_impl.specVersion().c_str(); }
+
+unsigned long long PTEID_BiometricInfomationDg3::recordLength() const { return m_impl.recordLength(); }
+
+unsigned short PTEID_BiometricInfomationDg3::scannerId() const { return m_impl.scannerId(); }
+
+unsigned short PTEID_BiometricInfomationDg3::imageAcquisitionLevel() const { return m_impl.imageAcquisitionLevel(); }
+
+unsigned char PTEID_BiometricInfomationDg3::numFingersOrPalmImages() const { return m_impl.numFingersOrPalmImages(); }
+
+unsigned char PTEID_BiometricInfomationDg3::scaleUnits() const { return m_impl.scaleUnits(); }
+
+unsigned short PTEID_BiometricInfomationDg3::xScanResolution() const { return m_impl.xScanResolution(); }
+
+unsigned short PTEID_BiometricInfomationDg3::yScanResolution() const { return m_impl.yScanResolution(); }
+
+unsigned short PTEID_BiometricInfomationDg3::xImageResolution() const { return m_impl.xImageResolution(); }
+
+unsigned short PTEID_BiometricInfomationDg3::yImageResolution() const { return m_impl.yImageResolution(); }
+
+unsigned char PTEID_BiometricInfomationDg3::pixelDepth() const { return m_impl.pixelDepth(); }
+
+unsigned char PTEID_BiometricInfomationDg3::imageCompressionAlgorithm() const {
+	return m_impl.imageCompressionAlgorithm();
+}
+
+unsigned short PTEID_BiometricInfomationDg3::reserved() const { return m_impl.reserved(); }
+
+PTEID_BiometricInfomationDg3::PTEID_BiometricInfomationDg3(const SDK_Context *context, const BiometricInfoDG3 &bioInfo)
+	: PTEID_Object(context, NULL), m_impl(bioInfo) {}
+
+PTEID_BiometricInfomationDg3::~PTEID_BiometricInfomationDg3() {
+	for (auto *instance : m_bioFingerImageVec) {
+		delete instance;
+	}
+}
+
 PTEID_ICAO_DG3::PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3)
-	: PTEID_Object(context, NULL), m_impl(dg3) {}
+	: PTEID_Object(context, NULL), m_impl(dg3) {
+	for (const auto &instance : dg3.biometricInstanceVec()) {
+		m_biometricInformation.push_back(new PTEID_BiometricInfomationDg3(context, *instance.get()));
+	}
+}
+
+unsigned int PTEID_BiometricInfoFingerImage::length() const { return m_impl.length(); }
+
+unsigned char PTEID_BiometricInfoFingerImage::fingerPalmPosition() const { return m_impl.fingerPalmPosition(); }
+
+unsigned char PTEID_BiometricInfoFingerImage::countOfViews() const { return m_impl.countOfViews(); }
+
+unsigned char PTEID_BiometricInfoFingerImage::viewMumber() const { return m_impl.viewMumber(); }
+
+unsigned char PTEID_BiometricInfoFingerImage::quality() const { return m_impl.quality(); }
+
+unsigned char PTEID_BiometricInfoFingerImage::impressionType() const { return m_impl.impressionType(); }
+
+unsigned short PTEID_BiometricInfoFingerImage::horizontalLineLength() const { return m_impl.horizontalLineLength(); }
+
+unsigned short PTEID_BiometricInfoFingerImage::verticalLineLength() const { return m_impl.verticalLineLength(); }
+
+unsigned char PTEID_BiometricInfoFingerImage::reserved() const { return m_impl.reserved(); }
+
+PTEID_ByteArray PTEID_BiometricInfoFingerImage::imageData() const {
+	return PTEID_ByteArray(m_context, m_impl.imageData());
+}
+
+PTEID_BiometricInfoFingerImage::PTEID_BiometricInfoFingerImage(const SDK_Context *context,
+															   const BiometricInfoImage &bioInfo)
+	: PTEID_Object(context, NULL), m_impl(bioInfo)
+
+{}
+
+unsigned int PTEID_ICAO_DG3::numberOfbiometrics() const { return m_impl.numberOfbiometrics(); }
+
+std::vector<PTEID_BiometricInfomationDg3 *> PTEID_ICAO_DG3::biometricInformation() const {
+	return m_biometricInformation;
+}
 
 PTEID_ByteArray PTEID_ICAO_DG11::listOfTags() const { return PTEID_ByteArray(m_context, m_impl.listOfTags()); }
 
@@ -1031,7 +1139,11 @@ const char *PTEID_ICAO_DG11::otherNames() const { return m_impl.otherNames().c_s
 
 PTEID_ICAO_DG11::~PTEID_ICAO_DG11() {}
 
-PTEID_ICAO_DG3::~PTEID_ICAO_DG3() {}
+PTEID_ICAO_DG3::~PTEID_ICAO_DG3() {
+	for (auto *instance : m_biometricInformation) {
+		delete instance;
+	}
+}
 
 PTEID_ICAO_DG11::PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11)
 	: PTEID_Object(context, NULL), m_impl(dg11) {}

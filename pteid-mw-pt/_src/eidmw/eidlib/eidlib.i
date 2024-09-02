@@ -622,6 +622,9 @@ namespace std {
    %template(VectorFaceInfo) vector<eIDMW::PTEID_FaceInfoData*>;
    %template(VectorFtPt) vector<eIDMW::PTEID_FeaturePoint*>;
    %template(VectorDataGroupID) vector<eIDMW::PTEID_DataGroupID>;
+
+   %template(VectorBiometricInfoFingerImage) vector<eIDMW::PTEID_BiometricInfoFingerImage*>;
+   %template(VectorBiometricInformationDG3) vector<eIDMW::PTEID_BiometricInfomationDg3*>;
 };
 
 ///////////////////////////////////////// ByteArray /////////////////////////////////////////////

@@ -1,10 +1,12 @@
 #include "IcaoDg3.h"
 
+#include "Log.h"
 #include <Util.h>
 
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 
+#include <sstream>
 #include <vector>
 
 namespace eIDMW {
@@ -52,9 +54,7 @@ ASN1_SEQUENCE(BIT_HEADERDG3) = {
 	ASN1_IMP_EX(BIT_HEADERDG3, validity_period, ASN1_OCTET_STRING, 0x5, ASN1_TFLG_OPTIONAL),
 	ASN1_IMP_EX(BIT_HEADERDG3, creator, ASN1_OCTET_STRING, 0x6, ASN1_TFLG_OPTIONAL),
 	ASN1_IMP(BIT_HEADERDG3, format_owner, ASN1_OCTET_STRING, 0x7),
-	ASN1_IMP(BIT_HEADERDG3, format_type, ASN1_OCTET_STRING, 0x8)
-
-} ASN1_SEQUENCE_END(BIT_HEADERDG3);
+	ASN1_IMP(BIT_HEADERDG3, format_type, ASN1_OCTET_STRING, 0x8)} ASN1_SEQUENCE_END(BIT_HEADERDG3);
 
 IMPLEMENT_ASN1_FUNCTIONS(BIT_HEADERDG3);
 
@@ -64,6 +64,58 @@ ASN1_SEQUENCE(BITDG3) = {ASN1_IMP_EX(BITDG3, bit_header, BIT_HEADERDG3, 0x1, 0),
 									  ASN1_OCTET_STRING)} ASN1_SEQUENCE_END(BITDG3);
 
 IMPLEMENT_ASN1_FUNCTIONS(BITDG3);
+
+BiometricHeaderTemplate *BiometricInfoDG3::biometricTemplate() const { return m_biometricTemplate.get(); }
+
+const std::string &BiometricInfoDG3::specVersion() const { return m_specVersion; }
+
+unsigned long long BiometricInfoDG3::recordLength() const { return m_recordLength; }
+
+unsigned short BiometricInfoDG3::scannerId() const { return m_scannerId; }
+
+unsigned short BiometricInfoDG3::imageAcquisitionLevel() const { return m_imageAcquisitionLevel; }
+
+unsigned char BiometricInfoDG3::numFingersOrPalmImages() const { return m_numFingersOrPalmImages; }
+
+unsigned char BiometricInfoDG3::scaleUnits() const { return m_scaleUnits; }
+
+unsigned short BiometricInfoDG3::xScanResolution() const { return m_xScanResolution; }
+
+unsigned short BiometricInfoDG3::yScanResolution() const { return m_yScanResolution; }
+
+unsigned short BiometricInfoDG3::xImageResolution() const { return m_xImageResolution; }
+
+unsigned short BiometricInfoDG3::yImageResolution() const { return m_yImageResolution; }
+
+unsigned char BiometricInfoDG3::pixelDepth() const { return m_pixelDepth; }
+
+unsigned char BiometricInfoDG3::imageCompressionAlgorithm() const { return m_imageCompressionAlgorithm; }
+
+unsigned short BiometricInfoDG3::reserved() const { return m_reserved; }
+
+const std::vector<std::shared_ptr<BiometricInfoImage>> &BiometricInfoDG3::fingerImageVec() const {
+	return m_fingerImageVec;
+}
+
+unsigned int BiometricInfoImage::length() const { return m_length; }
+
+unsigned char BiometricInfoImage::fingerPalmPosition() const { return m_fingerPalmPosition; }
+
+unsigned char BiometricInfoImage::countOfViews() const { return m_countOfViews; }
+
+unsigned char BiometricInfoImage::viewMumber() const { return m_viewMumber; }
+
+unsigned char BiometricInfoImage::quality() const { return m_quality; }
+
+unsigned char BiometricInfoImage::impressionType() const { return m_impressionType; }
+
+unsigned short BiometricInfoImage::horizontalLineLength() const { return m_horizontalLineLength; }
+
+unsigned short BiometricInfoImage::verticalLineLength() const { return m_verticalLineLength; }
+
+unsigned char BiometricInfoImage::reserved() const { return m_reserved; }
+
+const CByteArray &BiometricInfoImage::imageData() const { return m_imageData; }
 
 BiometricInfoDG3::BiometricInfoDG3(const BITDG3 &bio) {
 	BIT_HEADER header;
@@ -80,11 +132,11 @@ BiometricInfoDG3::BiometricInfoDG3(const BITDG3 &bio) {
 	const unsigned char *fingerData = bio.bit_content->data;
 
 	if (fingerData[0] != FIR[0] || fingerData[1] != FIR[1] || fingerData[2] != FIR[2]) {
-		printf("It's not reading FIR! %02x %02x %02x\n", fingerData[0], fingerData[1], fingerData[2]);
+		MWLOG(LEV_ERROR, MOD_APL, "It's not reading FIR! %02x %02x %02x\n", fingerData[0], fingerData[1],
+			  fingerData[2]);
 		return;
 	}
 	fingerData += 4;
-	printf("It is reading FIR!!\n");
 	m_specVersion = std::string((const char *)fingerData, 4); // version is 4 bytes
 	fingerData += 4;
 	m_recordLength = readTwoBytes(fingerData);
@@ -92,7 +144,6 @@ BiometricInfoDG3::BiometricInfoDG3(const BITDG3 &bio) {
 	m_recordLength = m_recordLength << 32;
 	m_recordLength += (fingerData[0] << 24) | (fingerData[1] << 16) | (fingerData[2] << 8) | (fingerData[3]);
 	fingerData += 4;
-	// identifier owner and type is here on ANSI
 
 	m_scannerId = readTwoBytes(fingerData);
 	m_scannerId = m_scannerId & 0x0FFF;
@@ -122,7 +173,6 @@ BiometricInfoDG3::BiometricInfoDG3(const BITDG3 &bio) {
 	fingerData++;
 	m_reserved = readTwoBytes(fingerData);
 	fingerData += 2;
-	printf("print debug this numberfingerorpalm: %d sizeRecording: %llu\n", m_numFingersOrPalmImages, m_recordLength);
 	for (int i = 0; i < m_numFingersOrPalmImages; i++) {
 		std::shared_ptr<BiometricInfoImage> fingerImage = std::make_shared<BiometricInfoImage>();
 		fingerImage->m_length = (fingerData[0] << 24) | (fingerData[1] << 16) | (fingerData[2] << 8) | (fingerData[3]);
@@ -155,8 +205,8 @@ BiometricInfoDG3::BiometricInfoDG3(const BITDG3 &bio) {
 		unsigned int imageLength = fingerImage->m_length - 14;
 		fingerImage->m_imageData = CByteArray(fingerData, imageLength);
 		fingerData += imageLength;
+
 		m_fingerImageVec.push_back(fingerImage);
-		printf("print debug this number length of finger: %d\n", fingerImage->m_length);
 	}
 }
 
@@ -177,25 +227,20 @@ const unsigned char *getContent(const unsigned char *data, int classRequested, i
 	return desc_data;
 }
 
-CByteArray getSizeExtended(long size) // improve this!!!
-{
+CByteArray getSizeExtended(long size) {
 	CByteArray sizeExtended;
 	sizeExtended.Append(0x82);
-
-	unsigned int counter = 0;
-	unsigned char tucLong[sizeof(unsigned long)];
-	for (int i = sizeof(unsigned long) - 1; i >= 0; --i) {
-		tucLong[i] = static_cast<unsigned char>(size % 256);
-		size /= 256;
-		if (tucLong[i] == 0)
-			break;
-		counter++;
+	std::stringstream hexStringStream;
+	hexStringStream << std::hex << size;
+	std::string hexString = hexStringStream.str();
+	std::string formattedHex = hexString;
+	if (hexString.length() % 2 != 0) {
+		formattedHex = "0" + hexString;
 	}
-
-	for (int i = sizeof(unsigned long) - counter; i < sizeof(unsigned long); ++i) {
-		sizeExtended.Append(tucLong[i]);
+	for (unsigned int i = 0; i < formattedHex.size(); i += 2) {
+		unsigned char byte = static_cast<unsigned char>(std::stoul(formattedHex.substr(i, 2), nullptr, 16));
+		sizeExtended.Append(byte);
 	}
-	printf("print debug this sizeExtended: %s\n", sizeExtended.ToString().c_str());
 	return sizeExtended;
 }
 
@@ -207,28 +252,38 @@ eIDMW::IcaoDg3::IcaoDg3(const CByteArray &biometricData) {
 
 	const unsigned char *numberOfInstancesData = findASN1Object(&biometricDataGroup, size, 0x02, size);
 	if (numberOfInstancesData && size == 1) {
-		m_numberOfInstances = numberOfInstancesData[0];
+		m_numberOfbiometrics = numberOfInstancesData[0];
 	}
 
 	const unsigned char *biometricTemplate = biometricDataGroup;
-	for (unsigned int i = 0; i < m_numberOfInstances; ++i) {
+	for (unsigned int i = 0; i < m_numberOfbiometrics; ++i) {
 		biometricTemplate = getContent(biometricTemplate, 0x40, 0x00, V_ASN1_CONSTRUCTED, size, biometricData.Size());
 
 		CByteArray biometricTemplateArray;
 		biometricTemplateArray.Append(0x30);
-		biometricTemplateArray.Append(getSizeExtended(size));
+		if (size > 255)
+			biometricTemplateArray.Append(getSizeExtended(size));
+		else
+			biometricTemplateArray.Append(size);
 		biometricTemplateArray.Append(biometricTemplate, size);
 		const unsigned char *biometricTemplateArrayData = biometricTemplateArray.GetBytes();
 		BITDG3 *bitDG3 =
 			d2i_BITDG3(NULL, (const unsigned char **)&biometricTemplateArrayData, biometricTemplateArray.Size());
 		if (bitDG3) {
 			std::unique_ptr<BiometricInfoDG3> data = std::make_unique<BiometricInfoDG3>(*bitDG3);
-			m_vector.push_back(std::move(data));
-		} else { // error!!!!
+			m_biometricInstanceVec.push_back(std::move(data));
+		} else {
+			MWLOG(LEV_ERROR, MOD_APL, "ICAO DG3: failed to decode bit Data group 3!");
 		}
 
 		biometricTemplate += size - 1;
 	}
+}
+
+unsigned int IcaoDg3::numberOfbiometrics() const { return m_numberOfbiometrics; }
+
+const std::vector<std::unique_ptr<BiometricInfoDG3>> &IcaoDg3::biometricInstanceVec() const {
+	return m_biometricInstanceVec;
 }
 
 } // namespace eIDMW

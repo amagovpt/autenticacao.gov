@@ -674,9 +674,6 @@ IcaoDg3 *APL_ICAO::readDataGroup3() {
 	contentArray.Append(0x46);
 	contentArray.Append(0x29);
 	contentArray.Append((const unsigned char *) content.c_str(), content.size());
-	printf("print debug this contentArray: %lu str: %s\n",
-	       contentArray.Size(),
-	       contentArray.ToString().c_str());
 	m_fingersDg3.reset(new IcaoDg3(contentArray));
 	return m_fingersDg3.get();
 }

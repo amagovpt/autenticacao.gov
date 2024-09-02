@@ -861,8 +861,69 @@ private:
 	PTEID_ICAO_DG2 &operator=(const PTEID_ICAO_DG2 &) = delete; /**< Copy not allowed - not implemented */
 };
 class IcaoDg3;
+class BiometricInfoImage;
+class PTEID_BiometricInfoFingerImage : public PTEID_Object {
+public:
+	PTEIDSDK_API unsigned int length() const;
+	PTEIDSDK_API unsigned char fingerPalmPosition() const;
+	PTEIDSDK_API unsigned char countOfViews() const;
+	PTEIDSDK_API unsigned char viewMumber() const;
+	PTEIDSDK_API unsigned char quality() const;
+	PTEIDSDK_API unsigned char impressionType() const;
+	PTEIDSDK_API unsigned short horizontalLineLength() const;
+	PTEIDSDK_API unsigned short verticalLineLength() const;
+	PTEIDSDK_API unsigned char reserved() const;
+	PTEIDSDK_API PTEID_ByteArray imageData() const;
+
+private:
+	friend class PTEID_BiometricInfomationDg3;
+	const BiometricInfoImage &m_impl;
+	PTEID_BiometricInfoFingerImage(const SDK_Context *context, const BiometricInfoImage &bioInfo);
+	PTEID_BiometricInfoFingerImage(const PTEID_BiometricInfoFingerImage &);
+	PTEID_BiometricInfoFingerImage &operator=(const PTEID_BiometricInfoFingerImage &) = delete;
+};
+
+class BiometricInfoDG3;
+class PTEID_BiometricInfomationDg3 : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray icaoHeaderVersion() const;
+	PTEIDSDK_API PTEID_ByteArray type() const;
+	PTEIDSDK_API PTEID_ByteArray subType() const;
+	PTEIDSDK_API PTEID_ByteArray creationDateAndtime() const;
+	PTEIDSDK_API PTEID_ByteArray validPeriod() const;
+	PTEIDSDK_API PTEID_ByteArray creatorOfBiometricRefData() const;
+	PTEIDSDK_API PTEID_ByteArray formatOwner() const;
+	PTEIDSDK_API PTEID_ByteArray formatType() const;
+
+	PTEIDSDK_API const char *specVersion() const;
+	PTEIDSDK_API unsigned long long recordLength() const;
+	PTEIDSDK_API unsigned short scannerId() const;
+	PTEIDSDK_API unsigned short imageAcquisitionLevel() const;
+	PTEIDSDK_API unsigned char numFingersOrPalmImages() const;
+	PTEIDSDK_API unsigned char scaleUnits() const;
+	PTEIDSDK_API unsigned short xScanResolution() const;
+	PTEIDSDK_API unsigned short yScanResolution() const;
+	PTEIDSDK_API unsigned short xImageResolution() const;
+	PTEIDSDK_API unsigned short yImageResolution() const;
+	PTEIDSDK_API unsigned char pixelDepth() const;
+	PTEIDSDK_API unsigned char imageCompressionAlgorithm() const;
+	PTEIDSDK_API unsigned short reserved() const;
+
+private:
+	const BiometricInfoDG3 &m_impl;
+	friend class PTEID_ICAO_DG3;
+	PTEID_BiometricInfomationDg3(const SDK_Context *context, const BiometricInfoDG3 &bioInfo);
+	PTEID_BiometricInfomationDg3(const PTEID_BiometricInfomationDg3 &);
+	~PTEID_BiometricInfomationDg3();
+	PTEID_BiometricInfomationDg3 &operator=(const PTEID_BiometricInfomationDg3 &) = delete;
+	std::vector<PTEID_BiometricInfoFingerImage *> m_bioFingerImageVec;
+};
+
 class PTEID_ICAO_DG3 : public PTEID_Object {
+public:
 	PTEIDSDK_API ~PTEID_ICAO_DG3();
+	PTEIDSDK_API unsigned int numberOfbiometrics() const;
+	PTEIDSDK_API std::vector<PTEID_BiometricInfomationDg3 *> biometricInformation() const;
 
 private:
 	const IcaoDg3 &m_impl;
@@ -870,6 +931,7 @@ private:
 	PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3);
 	PTEID_ICAO_DG3(const PTEID_ICAO_DG3 &);						/**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG3 &operator=(const PTEID_ICAO_DG3 &) = delete; /**< Copy not allowed - not implemented */
+	std::vector<PTEID_BiometricInfomationDg3 *> m_biometricInformation;
 };
 
 class IcaoDg11;
