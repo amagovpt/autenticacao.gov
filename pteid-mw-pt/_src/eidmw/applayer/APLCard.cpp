@@ -660,21 +660,8 @@ IcaoDg3 *APL_ICAO::readDataGroup3() {
 	if (m_fingersDg3.get() != nullptr)
 		return m_fingersDg3.get();
 
-	//CByteArray arrayDg3 = readDatagroup(DG3);
-
-	std::ifstream infile;
-	infile.open("/home/rui/Downloads/CNI-fingerprints.bin");
-	std::stringstream buffer;
-	buffer << infile.rdbuf(); // Read the file content into the stringstream
-	std::string content;
-	content = buffer.str();
-	CByteArray contentArray;
-	contentArray.Append(0x63);
-	contentArray.Append(0x82);
-	contentArray.Append(0x46);
-	contentArray.Append(0x29);
-	contentArray.Append((const unsigned char *) content.c_str(), content.size());
-	m_fingersDg3.reset(new IcaoDg3(contentArray));
+	CByteArray arrayDg3 = readDatagroup(DG3);
+	m_fingersDg3.reset(new IcaoDg3(arrayDg3));
 	return m_fingersDg3.get();
 }
 
