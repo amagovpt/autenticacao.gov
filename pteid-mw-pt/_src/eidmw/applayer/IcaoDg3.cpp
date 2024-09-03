@@ -11,6 +11,8 @@
 
 namespace eIDMW {
 
+#define FINGER_IMAGE_HEADER_LENGTH 14
+
 const unsigned char FIR[] = {0x46, 0x49, 0x52};
 
 struct BIT_HEADER_st {
@@ -202,7 +204,7 @@ BiometricInfoDG3::BiometricInfoDG3(const BITDG3 &bio) {
 		fingerImage->m_reserved = *fingerData;
 		fingerData++;
 
-		unsigned int imageLength = fingerImage->m_length - 14;
+		unsigned int imageLength = fingerImage->m_length - FINGER_IMAGE_HEADER_LENGTH;
 		fingerImage->m_imageData = CByteArray(fingerData, imageLength);
 		fingerData += imageLength;
 

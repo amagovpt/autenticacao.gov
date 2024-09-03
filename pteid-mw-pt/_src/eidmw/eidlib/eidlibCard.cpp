@@ -1034,9 +1034,9 @@ unsigned short PTEID_BiometricInfomationDg3::scannerId() const { return m_impl.s
 
 unsigned short PTEID_BiometricInfomationDg3::imageAcquisitionLevel() const { return m_impl.imageAcquisitionLevel(); }
 
-unsigned char PTEID_BiometricInfomationDg3::numFingersOrPalmImages() const { return m_impl.numFingersOrPalmImages(); }
+unsigned int PTEID_BiometricInfomationDg3::numFingersOrPalmImages() const { return m_impl.numFingersOrPalmImages(); }
 
-unsigned char PTEID_BiometricInfomationDg3::scaleUnits() const { return m_impl.scaleUnits(); }
+unsigned int PTEID_BiometricInfomationDg3::scaleUnits() const { return m_impl.scaleUnits(); }
 
 unsigned short PTEID_BiometricInfomationDg3::xScanResolution() const { return m_impl.xScanResolution(); }
 
@@ -1046,9 +1046,9 @@ unsigned short PTEID_BiometricInfomationDg3::xImageResolution() const { return m
 
 unsigned short PTEID_BiometricInfomationDg3::yImageResolution() const { return m_impl.yImageResolution(); }
 
-unsigned char PTEID_BiometricInfomationDg3::pixelDepth() const { return m_impl.pixelDepth(); }
+unsigned int PTEID_BiometricInfomationDg3::pixelDepth() const { return m_impl.pixelDepth(); }
 
-unsigned char PTEID_BiometricInfomationDg3::imageCompressionAlgorithm() const {
+unsigned int PTEID_BiometricInfomationDg3::imageCompressionAlgorithm() const {
 	return m_impl.imageCompressionAlgorithm();
 }
 
@@ -1072,15 +1072,15 @@ PTEID_ICAO_DG3::PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3)
 
 unsigned int PTEID_BiometricInfoFingerImage::length() const { return m_impl.length(); }
 
-unsigned char PTEID_BiometricInfoFingerImage::fingerPalmPosition() const { return m_impl.fingerPalmPosition(); }
+unsigned int PTEID_BiometricInfoFingerImage::fingerPalmPosition() const { return m_impl.fingerPalmPosition(); }
 
-unsigned char PTEID_BiometricInfoFingerImage::countOfViews() const { return m_impl.countOfViews(); }
+unsigned int PTEID_BiometricInfoFingerImage::countOfViews() const { return m_impl.countOfViews(); }
 
-unsigned char PTEID_BiometricInfoFingerImage::viewMumber() const { return m_impl.viewMumber(); }
+unsigned int PTEID_BiometricInfoFingerImage::viewMumber() const { return m_impl.viewMumber(); }
 
-unsigned char PTEID_BiometricInfoFingerImage::quality() const { return m_impl.quality(); }
+unsigned int PTEID_BiometricInfoFingerImage::quality() const { return m_impl.quality(); }
 
-unsigned char PTEID_BiometricInfoFingerImage::impressionType() const { return m_impl.impressionType(); }
+unsigned int PTEID_BiometricInfoFingerImage::impressionType() const { return m_impl.impressionType(); }
 
 unsigned short PTEID_BiometricInfoFingerImage::horizontalLineLength() const { return m_impl.horizontalLineLength(); }
 

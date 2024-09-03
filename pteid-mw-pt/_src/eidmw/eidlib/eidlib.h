@@ -865,11 +865,11 @@ class BiometricInfoImage;
 class PTEID_BiometricInfoFingerImage : public PTEID_Object {
 public:
 	PTEIDSDK_API unsigned int length() const;
-	PTEIDSDK_API unsigned char fingerPalmPosition() const;
-	PTEIDSDK_API unsigned char countOfViews() const;
-	PTEIDSDK_API unsigned char viewMumber() const;
-	PTEIDSDK_API unsigned char quality() const;
-	PTEIDSDK_API unsigned char impressionType() const;
+	PTEIDSDK_API unsigned int fingerPalmPosition() const;
+	PTEIDSDK_API unsigned int countOfViews() const;
+	PTEIDSDK_API unsigned int viewMumber() const;
+	PTEIDSDK_API unsigned int quality() const;
+	PTEIDSDK_API unsigned int impressionType() const;
 	PTEIDSDK_API unsigned short horizontalLineLength() const;
 	PTEIDSDK_API unsigned short verticalLineLength() const;
 	PTEIDSDK_API unsigned char reserved() const;
@@ -899,14 +899,14 @@ public:
 	PTEIDSDK_API unsigned long long recordLength() const;
 	PTEIDSDK_API unsigned short scannerId() const;
 	PTEIDSDK_API unsigned short imageAcquisitionLevel() const;
-	PTEIDSDK_API unsigned char numFingersOrPalmImages() const;
-	PTEIDSDK_API unsigned char scaleUnits() const;
+	PTEIDSDK_API unsigned int numFingersOrPalmImages() const;
+	PTEIDSDK_API unsigned int scaleUnits() const;
 	PTEIDSDK_API unsigned short xScanResolution() const;
 	PTEIDSDK_API unsigned short yScanResolution() const;
 	PTEIDSDK_API unsigned short xImageResolution() const;
 	PTEIDSDK_API unsigned short yImageResolution() const;
-	PTEIDSDK_API unsigned char pixelDepth() const;
-	PTEIDSDK_API unsigned char imageCompressionAlgorithm() const;
+	PTEIDSDK_API unsigned int pixelDepth() const;
+	PTEIDSDK_API unsigned int imageCompressionAlgorithm() const;
 	PTEIDSDK_API unsigned short reserved() const;
 
 private:
