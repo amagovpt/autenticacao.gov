@@ -1293,6 +1293,110 @@ X509_CRL *APL_CryptoFwk::updateCRL(const CByteArray &crl, const CByteArray &delt
 	return CRL;
 }
 
+/* Active Authentication: RSA signature verification
+   This signature uses the unusual ISO-9796 padding algorithm
+ */
+void AA_RsaSignatureVerify(CByteArray &ifd_random, CByteArray &signature, EVP_PKEY *pubkey) {
+
+	size_t rec_len = signature.Size();
+	const EVP_MD *digest_type = nullptr;
+	CByteArray dataToHash;
+	int error_code = 0, padding_bytes = 0;
+	unsigned int hash_len = 0;
+	EVP_MD_CTX *mdctx = nullptr;
+	MWLOG(LEV_DEBUG, MOD_APL, "Verifying ISO-9796 RSA signature of size: %ld", signature.Size());
+	unsigned char *recovered_hash = nullptr;
+	unsigned char *recovered_out = (unsigned char *)OPENSSL_malloc(rec_len);
+	memset(recovered_out, 0, rec_len);
+
+	EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new(pubkey, NULL);
+
+	EVP_PKEY_verify_recover_init(ctx);
+	EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_NO_PADDING);
+
+	if (EVP_PKEY_verify_recover(ctx, recovered_out, &rec_len, signature.GetBytes(), signature.Size()) <= 0) {
+		unsigned long osslError = ERR_get_error();
+		MWLOG(LEV_WARN, MOD_APL, "Failed to verify RSA signature! openssl error: %s",
+			  ERR_error_string(osslError, NULL));
+
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+		goto cleanup;
+	}
+
+	if (recovered_out[0] != 0x6A) {
+		MWLOG(LEV_WARN, MOD_APL, "Unrecognized header field in RSA ISO-9796 signature: %02X", recovered_out[0]);
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+		goto cleanup;
+	}
+	/* Match the digest algorithm used in trailer bytes */
+	if (recovered_out[rec_len - 1] == 0xCC) {
+		switch (recovered_out[rec_len - 2]) {
+		case 0x34:
+			padding_bytes = rec_len - 35;
+			digest_type = EVP_sha256();
+			break;
+		case 0x36:
+			digest_type = EVP_sha384();
+			padding_bytes = rec_len - 51;
+			break;
+		case 0x35:
+			padding_bytes = rec_len - 67;
+			digest_type = EVP_sha512();
+			break;
+		case 0x38:
+			padding_bytes = rec_len - 31;
+			digest_type = EVP_sha224();
+			break;
+		default:
+			MWLOG(LEV_WARN, MOD_APL, "Unrecognized trailer field in RSA ISO-9796 signature!: %02X CC",
+				  recovered_out[rec_len - 2]);
+			error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+			goto cleanup;
+		}
+	} else if (recovered_out[rec_len - 1] == 0xBC) {
+		digest_type = EVP_sha1();
+		padding_bytes = rec_len - 22;
+	} else {
+		MWLOG(LEV_WARN, MOD_APL, "Unrecognized trailer field in RSA ISO-9796 signature!");
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+		goto cleanup;
+	}
+
+	// Hashed data is [ICC_Random + IFD_random]
+	// Skip the one-byte 0x6A header
+	dataToHash.Append(recovered_out + 1, padding_bytes);
+	dataToHash.Append(ifd_random);
+
+	unsigned char hash[EVP_MAX_MD_SIZE];
+
+	mdctx = EVP_MD_CTX_new();
+	if (!mdctx || EVP_DigestInit_ex(mdctx, digest_type, nullptr) <= 0 ||
+		EVP_DigestUpdate(mdctx, dataToHash.GetBytes(), dataToHash.Size()) <= 0 ||
+		EVP_DigestFinal_ex(mdctx, hash, &hash_len) <= 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to hash verification data!");
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+		goto cleanup;
+	}
+
+	recovered_hash = recovered_out + padding_bytes + 1;
+	if (memcmp(recovered_hash, hash, hash_len) != 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to verify AA signature using RSA key!");
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+	} else {
+		MWLOG(LEV_DEBUG, MOD_APL, "AA signature with RSA key verified successfully!");
+	}
+
+cleanup:
+	if (recovered_out)
+		OPENSSL_free(recovered_out);
+	if (ctx)
+		EVP_PKEY_CTX_free(ctx);
+
+	if (error_code != 0) {
+		throw CMWEXCEPTION(error_code);
+	}
+}
+
 void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CByteArray &pubkey, APL_SmartCard *card) {
 	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
 
@@ -1301,22 +1405,22 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	}
 
 	bool failed = 0;
-	ECDSA_SIG *ec_sig;
-	EVP_PKEY_CTX *ctx;
-	EVP_MD_CTX *mdctx;
-	EVP_MD *evp_md;
-	EVP_PKEY *pkey;
+	ECDSA_SIG *ec_sig = nullptr;
+	EVP_PKEY_CTX *ctx = nullptr;
+	EVP_MD_CTX *mdctx = nullptr;
+	
+	EVP_PKEY *pkey = nullptr;
 	unsigned char *signature_bytes = nullptr;
 	unsigned char *der_signature = nullptr;
-	int signature_len;
+	int signature_len = 0;
 	BIGNUM *r, *s;
 	size_t sig_point_size;
 
-	const unsigned char* pubkey_buff = pubkey.GetBytes();
+	const unsigned char *pubkey_buff = pubkey.GetBytes();
 
 	// get digest by previously created NID
 	auto nid = OBJ_obj2nid(oid);
-	evp_md = (EVP_MD *)EVP_get_digestbynid(nid);
+	EVP_MD *evp_md = (EVP_MD *)EVP_get_digestbynid(nid);
 	if (evp_md == nullptr) {
 		MWLOG(LEV_INFO, MOD_APL, "Failed to get digest by NID. Fallback to SHA256");
 		evp_md = (EVP_MD *)EVP_sha256();
@@ -1327,24 +1431,29 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	RAND_bytes(data_to_sign, 8);
 	size_t data_size = sizeof(data_to_sign);
 	unsigned char apdu[] = {0x00, 0x88, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+	/* TODO: Extended length APDU is needed for some sizes of RSA keys  */
+	/* unsigned char apdu[] = {0x00, 0x88, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+							0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};  */
 	memcpy(apdu + 5, data_to_sign, data_size);
 
 	// raw r,s point signature
 	auto signature = card->sendAPDU({apdu, sizeof(apdu)});
 	auto sw12 = signature.GetBytes(signature.Size() - 2);
 	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to perform active authentication");
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to perform active authentication");
 		failed = true;
 		goto cleanup;
 	}
 
 	pkey = d2i_PUBKEY(nullptr, (const unsigned char **)&pubkey_buff, pubkey.Size());
 	if (pkey == nullptr) {
-		MWLOG(LEV_ERROR, MOD_APL, "Failed to read public key from card");
+		char *dg15_str = byteArrayToHexString(pubkey_buff, pubkey.Size());
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to parse AA public key from card! Content found: %s", dg15_str);
+		free(dg15_str);
 		failed = true;
 		goto cleanup;
 	}
-	//We need to convert signature to DER format if AA public key is of type EC
+	// We need to convert signature to DER format if AA public key is of type EC
 	if (EVP_PKEY_get_base_id(pkey) == EVP_PKEY_EC) {
 		// convert to DER signature object
 		sig_point_size = (signature.Size() - 2) / 2;
@@ -1354,38 +1463,40 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 		ECDSA_SIG_set0(ec_sig, r, s);
 		signature_len = i2d_ECDSA_SIG(ec_sig, &der_signature);
 		signature_bytes = der_signature;
-		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type ECDSA and size: %d", signature_len);
-	}
-	else {
-		signature_len = signature.Size() - 2;
-		signature_bytes = signature.GetBytes();
-		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type RSA and size: %d", signature_len);
-	}
+		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type ECDSA and size: %d",
+			  signature_len);
 
-	// hash the `to_sign` data
-	unsigned char hash[EVP_MAX_MD_SIZE];
-	unsigned int hash_len;
-	mdctx = EVP_MD_CTX_new();
-	if (!mdctx || EVP_DigestInit_ex(mdctx, evp_md, nullptr) <= 0 ||
-		EVP_DigestUpdate(mdctx, data_to_sign, data_size) <= 0 || EVP_DigestFinal_ex(mdctx, hash, &hash_len) <= 0) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to hash verification data");
-		failed = true;
-		goto cleanup;
-	}
+		// hash the `to_sign` data
+		unsigned char hash[EVP_MAX_MD_SIZE];
+		unsigned int hash_len;
+		mdctx = EVP_MD_CTX_new();
+		if (!mdctx || EVP_DigestInit_ex(mdctx, evp_md, nullptr) <= 0 ||
+			EVP_DigestUpdate(mdctx, data_to_sign, data_size) <= 0 || EVP_DigestFinal_ex(mdctx, hash, &hash_len) <= 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to hash verification data");
+			failed = true;
+			goto cleanup;
+		}
 
-	// Create and initialize the verification context based on the public key
-	ctx = EVP_PKEY_CTX_new(pkey, NULL);
-	if (!ctx || EVP_PKEY_verify_init(ctx) <= 0 || EVP_PKEY_CTX_set_signature_md(ctx, evp_md) <= 0) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to create verification context");
-		failed = true;
-		goto cleanup;
-	}
+		// Create and initialize the verification context based on the public key
+		ctx = EVP_PKEY_CTX_new(pkey, NULL);
+		if (!ctx || EVP_PKEY_verify_init(ctx) <= 0 || EVP_PKEY_CTX_set_signature_md(ctx, evp_md) <= 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to create verification context");
+			failed = true;
+			goto cleanup;
+		}
 
-	// Perform the verification
-	if (EVP_PKEY_verify(ctx, signature_bytes, signature_len, (unsigned char *)&hash[0], hash_len) != 1) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to verify active authentication signature!");
-		failed = true;
-		goto cleanup;
+		// Perform the verification
+		if (EVP_PKEY_verify(ctx, signature_bytes, signature_len, (unsigned char *)&hash[0], hash_len) != 1) {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify active authentication signature!");
+			failed = true;
+			goto cleanup;
+		}
+	} else {  /* RSA signature */
+		signature.Chop(2);
+		CByteArray ifd_random(data_to_sign, sizeof(data_to_sign));
+		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type RSA and size: %d", signature.Size());
+
+		AA_RsaSignatureVerify(ifd_random, signature, pkey);
 	}
 
 cleanup:
