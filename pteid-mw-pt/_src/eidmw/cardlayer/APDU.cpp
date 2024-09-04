@@ -10,14 +10,14 @@
 #define MAX_LC_LE_LENGTH_SHORT_PACE 223
 
 eIDMW::APDU::APDU() {
-	m_cls = m_ins = m_p1 = m_p2 = 0x00;
+	m_cla = m_ins = m_p1 = m_p2 = 0x00;
 	m_le = -1;
 	m_isExtended = m_forceExtended = false;
 }
 
 eIDMW::APDU::~APDU() {}
 
-unsigned char &eIDMW::APDU::cls() { return m_cls; }
+unsigned char &eIDMW::APDU::cla() { return m_cla; }
 
 unsigned char &eIDMW::APDU::ins() { return m_ins; }
 
@@ -25,7 +25,7 @@ unsigned char &eIDMW::APDU::p1() { return m_p1; }
 
 unsigned char &eIDMW::APDU::p2() { return m_p2; }
 
-unsigned char eIDMW::APDU::cls() const { return m_cls; }
+unsigned char eIDMW::APDU::cla() const { return m_cla; }
 
 unsigned char eIDMW::APDU::ins() const { return m_ins; }
 
@@ -117,7 +117,7 @@ eIDMW::CByteArray eIDMW::APDU::ToByteArray(bool usingPace) const {
 	sizeOfAPDU += isExtended ? lc > 0 ? 2 : 3 : 1; // le size
 	assert(sizeOfAPDU <= ULONG_MAX);
 	CByteArray result((unsigned long) sizeOfAPDU);
-	result.Append(m_cls);
+	result.Append(m_cla);
 	result.Append(m_ins);
 	result.Append(m_p1);
 	result.Append(m_p2);
@@ -150,7 +150,7 @@ eIDMW::CByteArray eIDMW::APDU::ToByteArray(bool usingPace) const {
 
 eIDMW::CByteArray eIDMW::APDU::getHeader() const {
 	CByteArray header(4);
-	header.Append(m_cls);
+	header.Append(m_cla);
 	header.Append(m_ins);
 	header.Append(m_p1);
 	header.Append(m_p2);

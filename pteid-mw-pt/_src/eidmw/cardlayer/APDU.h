@@ -10,13 +10,13 @@ class EIDMW_CAL_API APDU {
 public:
 	APDU();
 	~APDU();
-	unsigned char &cls();
+	unsigned char &cla();
 	unsigned char &ins();
 	unsigned char &p1();
 	unsigned char &p2();
 	bool &forceExtended();
 
-	unsigned char cls() const;
+	unsigned char cla() const;
 	unsigned char ins() const;
 	unsigned char p1() const;
 	unsigned char p2() const;
@@ -37,7 +37,7 @@ private:
 	eIDMW::CByteArray formatExtended(size_t lengthData, size_t byteSize) const;
 
 private:
-	unsigned char m_cls;
+	unsigned char m_cla;
 	unsigned char m_ins;
 	unsigned char m_p1, m_p2;
 	CByteArray m_data; // size of data is lc

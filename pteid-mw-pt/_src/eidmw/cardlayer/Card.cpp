@@ -315,7 +315,7 @@ CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE
 
 CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal,
 										 const void *param_structure) {
-	bool isAlreadySM = apdu.cls() & 0x0C || cleartext_next;
+	bool isAlreadySM = apdu.cla() & 0x0C || cleartext_next;
 	CByteArray result;
 	if (isAlreadySM && m_pace.get()) {
 		MWLOG(LEV_DEBUG, MOD_CAL, "This message is already secure and will not use PACE module! Message: %s",

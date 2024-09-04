@@ -515,7 +515,7 @@ public:
 		CByteArray encryptedInput;
 		size_t lcg = 0;
 
-		command_header.SetByte(apdu.cls() | controlByte, 0);
+		command_header.SetByte(apdu.cla() | controlByte, 0);
 		BUF_MEM *memCommandHeader = bufMemFromByteArray(command_header);
 		BUF_MEM *memPaddedCommandHeader = EAC_add_iso_pad(m_ctx, memCommandHeader);
 		CByteArray paddedCommandHeader = arrayFromBufMem(memPaddedCommandHeader);
