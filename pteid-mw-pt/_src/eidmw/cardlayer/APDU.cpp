@@ -2,12 +2,12 @@
 
 #include <limits.h>
 
-#include <iomanip>
 #include <sstream>
 #include <cassert>
 
 #define MAX_LC_LE_LENGTH 0xFFFF
 #define MAX_LC_LE_LENGTH_SHORT 255
+#define MAX_LC_LE_LENGTH_SHORT_PACE 223
 
 eIDMW::APDU::APDU() {
 	m_cls = m_ins = m_p1 = m_p2 = 0x00;
@@ -106,10 +106,10 @@ bool eIDMW::APDU::canBeShort() const { return !m_isExtended; }
 
 bool eIDMW::APDU::isExtended() const { return m_isExtended || m_forceExtended; }
 
-eIDMW::CByteArray eIDMW::APDU::ToByteArray() const {
+eIDMW::CByteArray eIDMW::APDU::ToByteArray(bool usingPace) const {
 	size_t sizeOfAPDU = 2;
 	size_t lc = m_data.Size();
-	bool isExtended = m_isExtended || m_forceExtended;
+	bool isExtended = m_isExtended || m_forceExtended || usingPace ? (lc > MAX_LC_LE_LENGTH_SHORT_PACE) : false;
 	if (lc > 0) {
 		sizeOfAPDU += isExtended ? 3 : 1; // lc size
 		sizeOfAPDU += lc;

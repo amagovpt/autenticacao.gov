@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 namespace eIDMW {
-class APDU {
+class EIDMW_CAL_API APDU {
 public:
 	APDU();
 	~APDU();
@@ -30,7 +30,7 @@ public:
 	bool canBeShort() const;
 	bool isExtended() const;
 
-	CByteArray ToByteArray() const;
+	CByteArray ToByteArray(bool usingPace = false) const;
 	CByteArray getHeader() const;
 
 private:
