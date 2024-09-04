@@ -123,13 +123,13 @@ eIDMW::CByteArray eIDMW::APDU::ToByteArray() const {
 	result.Append(m_p2);
 
 	if (lc > 0) {
-		result.Append(m_data);
 		if (isExtended) {
 			result.Append(formatExtended(lc, 3));
 		} else {
 			assert(lc <= UCHAR_MAX);
 			result.Append((unsigned char) lc);
 		}
+		result.Append(m_data);
 	}
 	if (m_le >= 0) {
 		if (isExtended) {

@@ -43,6 +43,7 @@
 #include <memory>
 
 namespace eIDMW {
+class APDU;
 class EIDMW_CAL_API CCard {
 public:
 	CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
@@ -112,6 +113,7 @@ public:
 	 * if you know it's case 1 then preferably set bDataIsReturned to false */
 	virtual CByteArray SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2, const CByteArray &oData);
 	virtual CByteArray SendAPDU(const CByteArray &oCmdAPDU);
+	virtual CByteArray SendAPDU(const APDU &apdu);
 
 	virtual void InitEncryptionKey() = 0;
 	virtual void ReadSerialNumber() = 0;
@@ -165,6 +167,7 @@ private:
 	CCard &operator=(const CCard &oCard);
 	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal,
 									  const void *param_structure);
+	CByteArray handleSendAPDUSecurity(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
 };
 
 class CAutoLock {
