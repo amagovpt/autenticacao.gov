@@ -32,6 +32,7 @@
 // cardlayer headers
 #include "Reader.h"
 #include "Card.h"
+#include "APDU.h"
 #include "ReaderDeviceInfo.h"
 
 #include "CardFactory.h"
@@ -570,6 +571,13 @@ CByteArray CReader::GetRandom(unsigned long ulLen) {
 }
 
 CByteArray CReader::SendAPDU(const CByteArray &oCmdAPDU) {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->SendAPDU(oCmdAPDU);
+}
+
+CByteArray CReader::SendAPDU(const APDU &oCmdAPDU) {
 	if (m_poCard == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 
