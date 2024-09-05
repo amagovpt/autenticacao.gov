@@ -279,6 +279,8 @@ eIDMW::IcaoDg3::IcaoDg3(const CByteArray &biometricData) {
 		}
 
 		biometricTemplate += size - 1;
+		if (bitDG3)
+			BITDG3_free(bitDG3);
 	}
 }
 

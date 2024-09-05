@@ -643,6 +643,8 @@ IcaoDg1 *APL_ICAO::readDataGroup1() {
 		return m_mrzDg1.get();
 
 	CByteArray arrayDg1 = readDatagroup(DG1);
+	if (arrayDg1.Size() == 0)
+		return NULL;
 	m_mrzDg1.reset(new IcaoDg1(arrayDg1.GetBytes(5, arrayDg1.Size() - 5)));
 	return m_mrzDg1.get();
 }
@@ -652,6 +654,8 @@ IcaoDg2 *APL_ICAO::readDataGroup2() {
 		return m_faceDg2.get();
 
 	CByteArray arrayDg2 = readDatagroup(DG2);
+	if (arrayDg2.Size() == 0)
+		return NULL;
 	m_faceDg2.reset(new IcaoDg2(arrayDg2));
 	return m_faceDg2.get();
 }
@@ -661,6 +665,8 @@ IcaoDg3 *APL_ICAO::readDataGroup3() {
 		return m_fingersDg3.get();
 
 	CByteArray arrayDg3 = readDatagroup(DG3);
+	if (arrayDg3.Size() == 0)
+		return NULL;
 	m_fingersDg3.reset(new IcaoDg3(arrayDg3));
 	return m_fingersDg3.get();
 }
@@ -670,6 +676,9 @@ IcaoDg11 *APL_ICAO::readDataGroup11() {
 		return m_infoDg11.get();
 
 	CByteArray arrayDg11 = readDatagroup(DG11);
+	if (arrayDg11.Size() == 0)
+		return NULL;
+
 	m_infoDg11.reset(new IcaoDg11(arrayDg11));
 	return m_infoDg11.get();
 }

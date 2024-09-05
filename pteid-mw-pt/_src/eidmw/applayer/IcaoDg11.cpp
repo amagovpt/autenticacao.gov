@@ -119,6 +119,9 @@ void copyToString(std::string &placeToCopy, ASN1_STRING *copy, bool cleanString 
 
 IcaoDg11::IcaoDg11(const CByteArray &information) {
 	DG11 *processedDg11 = decodeDg11(information);
+	if (processedDg11 == NULL) {
+		return;
+	}
 	if (processedDg11->list_of_tags_present && processedDg11->list_of_tags_present->length > 0) {
 		m_listOfTags.Append(processedDg11->list_of_tags_present->data, processedDg11->list_of_tags_present->length);
 	}
