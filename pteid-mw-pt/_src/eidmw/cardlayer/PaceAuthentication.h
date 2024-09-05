@@ -8,7 +8,7 @@
 
 namespace eIDMW {
 class PaceAuthenticationImpl;
-class PaceAuthentication {
+class EIDMW_CAL_API PaceAuthentication {
 public:
 	PaceAuthentication(CContext *poContext);
 	~PaceAuthentication();

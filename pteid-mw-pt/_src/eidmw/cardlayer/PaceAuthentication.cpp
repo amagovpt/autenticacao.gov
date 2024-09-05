@@ -348,16 +348,14 @@ public:
 		s_type secretType = (s_type)m_secretType;
 		PACE_SEC *pace_secret = PACE_SEC_new(m_secret, m_secretLen, secretType);
 
-		unsigned char setPace[] = {0x00, 0x22, 0xC1, 0xA4, 0x0F, 0x80, 0x0A,
-					   0x04, 0x00, 0x7F, 0x00, 0x07, 0x02, 0x02,
-					   0x04, 0x02, 0x04, 0x83, 0x01, 0x02};
+		unsigned char setPace[] = {0x00, 0x22, 0xC1, 0xA4, 0x0F, 0x80, 0x0A, 0x04, 0x00, 0x7F,
+								   0x00, 0x07, 0x02, 0x02, 0x04, 0x02, 0x04, 0x83, 0x01, 0x02};
 
 		if (m_secretType == PaceSecretType::PACEMRZ) {
-		  setPace[sizeof(setPace) - 1] = 0x01;
+			setPace[sizeof(setPace) - 1] = 0x01;
 		}
 
-		const unsigned char finalAuth[]
-		    = {0x00, 0x86, 0x00, 0x00, 0x0C, 0x7C, 0x0A, 0x85, 0x08};
+		const unsigned char finalAuth[] = {0x00, 0x86, 0x00, 0x00, 0x0C, 0x7C, 0x0A, 0x85, 0x08};
 		CByteArray setPaceAuth;
 		CByteArray sendMapData;
 		CByteArray responseMappingData;
@@ -534,7 +532,7 @@ public:
 			}
 		}
 		CByteArray paddedCryptogram;
-		int lc_final = 0;
+		unsigned int lc_final = 0;
 		if (apdu.dataExists()) {
 			BUF_MEM *memInputData = bufMemFromByteArray(apdu.data());
 			BUF_MEM *paddedMemInputData = EAC_add_iso_pad(m_ctx, memInputData);
@@ -574,11 +572,15 @@ public:
 		}
 		lc_final += TlvLe.Size();
 		encryptedAPDU.Append(command_header);
-		if (apdu.isExtended() && !apdu.dataExists() && apdu.getLe().Size() > 0) {
-			encryptedAPDU.Append(0x00);
+		if (apdu.isExtended()) {
 			encryptedAPDU.Append(0x00);
 		}
-		encryptedAPDU.Append(lc_final);
+		if (lc_final > 255 || apdu.isExtended()) {
+			encryptedAPDU.Append(APDU::formatExtended(lc_final, 2));
+		} else {
+			encryptedAPDU.Append(lc_final);
+		}
+
 		if (lcg > 0) {
 			encryptedAPDU.Append(isInsOdd ? TcgOdd : Tcg);
 			assert(lcg <= UCHAR_MAX);
@@ -595,9 +597,8 @@ public:
 		assert(mac.Size() <= UCHAR_MAX);
 		encryptedAPDU.Append((unsigned char) mac.Size()); // Lcc
 		encryptedAPDU.Append(mac);
-		encryptedAPDU.Append(0x00);
-		if (apdu.isExtended())
-			encryptedAPDU.Append(0x00);
+
+		encryptedAPDU.Append(le);
 
 		EAC_increment_ssc(m_ctx);
 

@@ -33,8 +33,7 @@ public:
 	CByteArray ToByteArray(bool usingPace = false) const;
 	CByteArray getHeader() const;
 
-private:
-	eIDMW::CByteArray formatExtended(size_t lengthData, size_t byteSize) const;
+    static CByteArray formatExtended(size_t lengthData, size_t byteSize);
 
 private:
 	unsigned char m_cla;

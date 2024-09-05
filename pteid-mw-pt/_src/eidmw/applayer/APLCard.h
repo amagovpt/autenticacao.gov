@@ -87,6 +87,7 @@ enum APL_PACEAuthenticationType {
 	APL_PACE_UNSUPPORTED,
 };
 
+class APDU;
 class CReader;
 class PDFSignature;
 class APL_CryptoFwk;
@@ -112,6 +113,8 @@ public:
 	 * Return rawdata from the card
 	 */
 	EIDMW_APL_API virtual const CByteArray &getRawData(APL_RawDataType type) = 0;
+
+	EIDMW_APL_API virtual CByteArray sendAPDU(const APDU &apdu);
 
 	EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray &cmd);
 
@@ -192,6 +195,7 @@ private:
 	friend bool APL_ReaderContext::connectCard(); /**< This method must access protected constructor */
 };
 
+class APDU;
 class APL_Pins;
 class APL_Certif;
 class APL_Certifs;
@@ -210,6 +214,8 @@ public:
 	  * Tell the card to select an application on the card
 	  */
 	EIDMW_APL_API void selectApplication(const CByteArray &applicationId) const;
+
+	EIDMW_APL_API virtual CByteArray sendAPDU(const APDU &apdu, APL_Pin *pin = NULL, const char *csPinCode = "");
 
 	EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray &cmd, APL_Pin *pin = NULL, const char *csPinCode = "");
 

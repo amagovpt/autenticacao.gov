@@ -77,6 +77,16 @@ CReader *APL_Card::getCalReader() const { return m_reader->getCalReader(); }
 
 APL_CardType APL_Card::getType() const { return APL_CARDTYPE_UNKNOWN; }
 
+CByteArray APL_Card::sendAPDU(const APDU &apdu) {
+	CByteArray out;
+
+	BEGIN_CAL_OPERATION(m_reader)
+	out = m_reader->getCalReader()->SendAPDU(apdu);
+	END_CAL_OPERATION(m_reader)
+
+	return out;
+}
+
 void APL_Card::CalLock() { return m_reader->CalLock(); }
 
 void APL_Card::CalUnlock() { return m_reader->CalUnlock(); }
@@ -409,6 +419,14 @@ void APL_SmartCard::selectApplication(const CByteArray &applicationId) const {
 	BEGIN_CAL_OPERATION(m_reader)
 	m_reader->getCalReader()->SelectApplication(applicationId);
 	END_CAL_OPERATION(m_reader)
+}
+
+CByteArray APL_SmartCard::sendAPDU(const APDU &apdu, APL_Pin *pin, const char *csPinCode) {
+	unsigned long lRemaining = 0;
+	if (pin)
+		if (csPinCode != NULL)
+			pin->verifyPin(csPinCode, lRemaining);
+	return APL_Card::sendAPDU(apdu);
 }
 
 CByteArray APL_SmartCard::sendAPDU(const CByteArray &cmd, APL_Pin *pin, const char *csPinCode) {

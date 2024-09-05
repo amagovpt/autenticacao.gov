@@ -26,6 +26,7 @@
 **************************************************************************** */
 #include "cryptoFramework.h"
 
+#include "APDU.h"
 #include "MWException.h"
 #include "eidErrors.h"
 #include "Util.h"
@@ -55,6 +56,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+
+#define MAX_LCLENGTH_PACE 223
 
 #define CRL_MEMORY_CACHE_SIZE 10
 
@@ -1415,6 +1418,12 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	int signature_len = 0;
 	BIGNUM *r, *s;
 	size_t sig_point_size;
+	APDU apduFormat;
+	CByteArray data;
+	size_t data_size;
+	CByteArray signature;
+	CByteArray sw12;
+	int signature_size = -1;
 
 	const unsigned char *pubkey_buff = pubkey.GetBytes();
 
@@ -1426,25 +1435,6 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 		evp_md = (EVP_MD *)EVP_sha256();
 	}
 
-	// construct active authentication command
-	unsigned char data_to_sign[8];
-	RAND_bytes(data_to_sign, 8);
-	size_t data_size = sizeof(data_to_sign);
-	unsigned char apdu[] = {0x00, 0x88, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-	/* TODO: Extended length APDU is needed for some sizes of RSA keys  */
-	/* unsigned char apdu[] = {0x00, 0x88, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
-							0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};  */
-	memcpy(apdu + 5, data_to_sign, data_size);
-
-	// raw r,s point signature
-	auto signature = card->sendAPDU({apdu, sizeof(apdu)});
-	auto sw12 = signature.GetBytes(signature.Size() - 2);
-	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
-		MWLOG(LEV_ERROR, MOD_APL, "Failed to perform active authentication");
-		failed = true;
-		goto cleanup;
-	}
-
 	pkey = d2i_PUBKEY(nullptr, (const unsigned char **)&pubkey_buff, pubkey.Size());
 	if (pkey == nullptr) {
 		char *dg15_str = byteArrayToHexString(pubkey_buff, pubkey.Size());
@@ -1453,6 +1443,30 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 		failed = true;
 		goto cleanup;
 	}
+
+	signature_size = EVP_PKEY_get_size(pkey);
+
+	// construct active authentication command
+	unsigned char data_to_sign[8];
+	RAND_bytes(data_to_sign, 8);
+	data_size = sizeof(data_to_sign);
+
+	data.Append(data_to_sign, data_size);
+
+	apduFormat.ins() = 0x88;
+	apduFormat.setData(data);
+	apduFormat.setLe(0x00);
+	apduFormat.forceExtended() = signature_size >= MAX_LCLENGTH_PACE;
+
+	// raw r,s point signature
+	signature = card->sendAPDU(apduFormat);
+	sw12 = signature.GetBytes(signature.Size() - 2);
+	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to perform active authentication");
+		failed = true;
+		goto cleanup;
+	}
+
 	// We need to convert signature to DER format if AA public key is of type EC
 	if (EVP_PKEY_get_base_id(pkey) == EVP_PKEY_EC) {
 		// convert to DER signature object

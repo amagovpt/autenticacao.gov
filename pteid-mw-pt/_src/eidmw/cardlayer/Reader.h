@@ -30,6 +30,7 @@
 
 namespace eIDMW {
 
+class APDU;
 class CCardLayer;
 class CCard;
 struct ReaderDeviceInfo;
@@ -155,6 +156,8 @@ public:
 	CByteArray Sign(const tPrivKey &key, unsigned long paddingType, const CByteArray &oData);
 
 	CByteArray GetRandom(unsigned long ulLen);
+
+    CByteArray SendAPDU(const APDU &apdu);
 
 	CByteArray SendAPDU(const CByteArray &oCmdAPDU);
 

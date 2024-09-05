@@ -36,21 +36,20 @@ unsigned char eIDMW::APDU::p2() const { return m_p2; }
 eIDMW::CByteArray eIDMW::APDU::getLe(bool onlyLe) const {
 	bool isExtended = m_isExtended || m_forceExtended;
 	CByteArray result;
-	if (m_le >= 0) {
-		if (isExtended) {
-			CByteArray formatLe;
-			if (m_data.Size() > 0 || onlyLe) {
-				formatLe = formatExtended(m_le, 2);
-			} else {
-				formatLe = formatExtended(m_le, 3);
-			}
-			result.Append(formatLe);
-		} else {
-			assert(m_le <= UCHAR_MAX);
-			result.Append((unsigned char) m_le);
-		}
-	}
+	if (m_le < 0)
+		return result;
 
+	if (isExtended) {
+		CByteArray formatLe;
+		if (m_data.Size() > 0 || onlyLe) {
+			formatLe = formatExtended(m_le, 2);
+		} else {
+			formatLe = formatExtended(m_le, 3);
+		}
+		result.Append(formatLe);
+	} else {
+		result.Append(m_le);
+	}
 	return result;
 }
 
@@ -58,18 +57,18 @@ eIDMW::CByteArray eIDMW::APDU::getLc(bool onlyLc) const {
 	CByteArray result;
 	bool isExtended = m_isExtended || m_forceExtended;
 	size_t lc = m_data.Size();
-	if (lc > 0) {
-		result.Append(m_data);
-		if (isExtended) {
-			if (onlyLc)
-				result.Append(formatExtended(lc, 2));
-			else
-				result.Append(formatExtended(lc, 3));
+	if (lc <= 0)
+		return result;
+
+	result.Append(m_data);
+	if (isExtended) {
+		if (onlyLc)
+			result.Append(formatExtended(lc, 2));
+		else
+			result.Append(formatExtended(lc, 3));
 		} else {
-			assert(lc <= UCHAR_MAX);
-			result.Append((unsigned char) lc);
+			result.Append(lc);
 		}
-	}
 
 	return result;
 }
@@ -158,7 +157,7 @@ eIDMW::CByteArray eIDMW::APDU::getHeader() const {
 	return header;
 }
 
-eIDMW::CByteArray eIDMW::APDU::formatExtended(size_t lengthData, size_t byteSize) const // bytesize needed
+eIDMW::CByteArray eIDMW::APDU::formatExtended(size_t lengthData, size_t byteSize) // bytesize needed
 {
 	std::stringstream stream;
 	stream << std::hex << lengthData;
