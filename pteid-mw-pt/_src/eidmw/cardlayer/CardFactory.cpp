@@ -181,7 +181,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 					return false;
 				unsigned long select_sw12 = 256 * oResp.GetByte(ulRespLen - 2) + oResp.GetByte(ulRespLen - 1);
 				//We only need to test for application presence
-				return (select_sw12 != 0x6A82);
+				return (select_sw12 == 0x9000 || select_sw12 == 0x6982);
 			};
 
 			if (!isContactLess) {
