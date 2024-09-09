@@ -69,8 +69,11 @@ cp $EIDLIB_DIR/../common/eidErrors.h system-libs/include
 recreate_dir $LIB_BUNDLE_DIR
 copy_external_dylibs $LIB_BUNDLE_DIR
 cp -af $LIB_DIR/*.dylib $LIB_BUNDLE_DIR
+mkdir -p $LIB_BUNDLE_DIR/pteidlib_dotnet8/arm64
+mkdir -p $LIB_BUNDLE_DIR/pteidlib_dotnet8/x64
 cp -af ../../eidlibdotnetsdk/pteidlib_dotnet8+.dylib $LIB_BUNDLE_DIR
-cp -af ../../eidlibdotnetsdk/bin/Release/net8.0/osx-x64/pteidlib_dotnet8+.dll $LIB_BUNDLE_DIR
+cp -af ../../eidlibdotnetsdk/bin/Release/net8.0/osx-x64/pteidlib_dotnet8+.dll $LIB_BUNDLE_DIR/pteidlib_dotnet8/x64/
+cp -af ../../eidlibdotnetsdk/bin/Release/net8.0/osx-arm64/pteidlib_dotnet8+.dll $LIB_BUNDLE_DIR/pteidlib_dotnet8/arm64/
 recreate_dir $LIB_BUNDLE_DIR/pteid_jni/
 cp -af $JAR_DIR/pteidlibj.jar $LIB_BUNDLE_DIR/pteid_jni/
 cd system-libs

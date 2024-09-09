@@ -31,6 +31,7 @@ change_dylib_dep libpteidlib.2.0.0.dylib  "libCMDServices.1.dylib libpteidcommon
 change_dylib_dep libCMDServices.1.0.0.dylib  "libssl.3.dylib libcrypto.3.dylib libpteidcommon.2.dylib libpteidlib.2.dylib libpteidapplayer.2.dylib libpteiddialogsQT.2.dylib" 
 change_dylib_dep libpteidpkcs11.2.0.0.dylib  "libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib" 
 change_dylib_dep libpteidlibj.2.0.0.dylib  "libCMDServices.1.dylib libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib libpteidapplayer.2.dylib"
+change_dylib_dep pteidlib_dotnet8+.dylib   "libCMDServices.1.dylib libpteidcommon.2.dylib libpteiddialogsQT.2.dylib libpteidcardlayer.2.dylib libpteidapplayer.2.dylib"
 change_dylib_dep libpteidapplayer.2.0.0.dylib "libcurl.4.dylib libpteidcommon.2.dylib libpteidcardlayer.2.dylib \
                 libzip.5.dylib libxml-security-c.20.dylib libpng16.16.dylib libopenjp2.7.dylib libxerces-c-3.2.dylib libcrypto.3.dylib libssl.3.dylib"
 
