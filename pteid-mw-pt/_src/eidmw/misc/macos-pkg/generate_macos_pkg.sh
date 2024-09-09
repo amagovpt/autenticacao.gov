@@ -114,6 +114,8 @@ cp -af $MISC_DIR/web/AutenticacaoGov_failed.html $HTML_BUNDLE_DIR
 
 #Copy CryptoTokenKit extension
 cp -r ${CTK_BUNDLE_DIR}/PteidToken.appex ${EIDGUI_BUNDLE_DIR}/../PlugIns/
+#Use specific Unicode normalization to please pkgbuild: the target filename contains different encoding of PT characters ç and ã
+mv ${PKG_DIR}/apps/Autenticação.gov.app ${PKG_DIR}/apps/$(printf "Autenticac\xcc\xa7a\xcc\x83o.gov.app")
 
 cd $PKG_DIR
 
