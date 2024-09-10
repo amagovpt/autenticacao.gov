@@ -849,34 +849,30 @@ int PDFSignature::signClose(CByteArray signature) {
 
 void PDFSignature::save() {
 	PDFWriteMode pdfWriteMode = writeForceIncremental;
-	// Create and save pdf to temp file to allow overwrite of original file
+	// Create and save PDF to temp file to allow overwrite of original file
 	std::string utf8_outname(m_outputName->getCString());
 #ifdef WIN32
-	TCHAR tmpPathBuffer[MAX_PATH];
-	DWORD lengthCopied = GetTempPath(MAX_PATH, tmpPathBuffer);
+	wchar_t tmpPathBuffer[MAX_PATH];
+	DWORD lengthCopied = GetTempPathW(MAX_PATH, tmpPathBuffer);
 	if (lengthCopied > MAX_PATH) {
-		MWLOG(LEV_ERROR, MOD_APL, "signClose: tmpPath does not fit in buffer");
+		MWLOG(LEV_ERROR, MOD_APL, "%s: tmpPath does not fit in buffer", __FUNCTION__);
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 	}
 	if (lengthCopied == 0) {
-		MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred getting tmpPath: %d", GetLastError());
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Error occurred getting tmpPath: %d", __FUNCTION__, GetLastError());
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 	}
-	TCHAR tmpFilename[MAX_PATH];
-	if (!GetTempFileName(tmpPathBuffer, TEXT("tmp"), 0, tmpFilename)) {
-		MWLOG(LEV_ERROR, MOD_APL, "signClose: Error occurred GetTempFileName: %d", GetLastError());
+	wchar_t tmpFilename[MAX_PATH];
+	if (!GetTempFileNameW(tmpPathBuffer, TEXT("tmp"), 0, tmpFilename)) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Error occurred GetTempFileName: %d", __FUNCTION__, GetLastError());
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 	}
-#ifdef UNICODE
-	std::string utf8FilenameTmp = utilStringNarrow(tmpFilename);
-#else
-	std::string utf8FilenameTmp = tmpFilename;
-#endif
-	std::wstring utf16FilenameTmp = utilStringWiden(utf8FilenameTmp);
-	int tmp_ret = m_doc->saveAs((wchar_t *)utf16FilenameTmp.c_str(), pdfWriteMode);
+
+	int tmp_ret = m_doc->saveAs(tmpFilename, pdfWriteMode);
 	std::string native_path = generatePrefixedNativePath(utf8_outname);
-	BOOL copyfile_ok = CopyFileW(utf16FilenameTmp.c_str(), utilStringWiden(native_path).c_str(), FALSE);
+	BOOL copyfile_ok = CopyFileW(tmpFilename, utilStringWiden(native_path).c_str(), FALSE);
 	int final_ret = copyfile_ok ? errNone : errOpenFile;
+	DeleteFileW(tmpFilename);
 #else
 	char tmpFilename[L_tmpnam];
 	if (!tmpnam(tmpFilename)) {
@@ -890,10 +886,10 @@ void PDFSignature::save() {
 	int final_ret = tmpDoc->saveAs(m_outputName);
 	delete tmpDoc;
 	tmpDoc = NULL;
+	std::remove(utf8FilenameTmp.c_str());
 #endif
 
-	std::remove(utf8FilenameTmp.c_str());
-
+	
 	delete m_doc;
 	m_doc = makePDFDoc(utf8_outname.c_str());
 	auto handleError = [](int errorCode) {
