@@ -316,6 +316,32 @@ public:
 		return decryptedResponse;
 	}
 
+	CByteArray buildSetPaceAPDU(int protocol_nid) {
+		unsigned char setPace[] = {0x00, 0x22, 0xC1, 0xA4, 0x0F, 0x80 };
+		CByteArray apdu_cmd(setPace, sizeof(setPace));
+		unsigned char *protocol_oid_der = NULL;
+		int protocol_oid_len = 0;
+
+		// Which PACE algorithm should we use ?
+		ASN1_OBJECT * pace_algo = OBJ_nid2obj(protocol_nid);
+		protocol_oid_len = i2d_ASN1_OBJECT(pace_algo, &protocol_oid_der);
+
+		if (protocol_oid_len > 0 && protocol_oid_len < 256) {
+			unsigned char data_len = protocol_oid_len - 2;
+			apdu_cmd.Append(data_len);
+			apdu_cmd.Append(protocol_oid_der + 2, data_len);
+		}
+		else {
+			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to set PACE algorithm from protocol_nid: %d!", __FUNCTION__, protocol_nid);
+		}
+
+		apdu_cmd.Append(0x83);   //Pace password parameter
+		apdu_cmd.Append(0x01);
+		apdu_cmd.Append(m_secretType == PaceSecretType::PACEMRZ ? 0x01: 0x02); 
+
+		return apdu_cmd;
+	}
+
 	void initAuthentication(SCARDHANDLE &hCard, const void *param_structure) {
 
 		std::lock_guard<std::mutex> guard(m_mutex);
@@ -343,28 +369,27 @@ public:
 		if (!m_ctx || !EAC_CTX_init_ef_cardaccess(readBinEFAccess.GetBytes(), readBinEFAccess.Size(), m_ctx) ||
 			!m_ctx->pace_ctx) {
 			MWLOG(LEV_ERROR, MOD_CAL, "Couldn't process EF.CardAccess");
+			throw CMWEXCEPTION(EIDMW_PACE_ERR_UNKNOWN);
+		}
+
+		PACE_CTX *pace_context = m_ctx->pace_ctx;
+		if (pace_context == NULL) {
+			MWLOG(LEV_ERROR, MOD_CAL, "PACE context not initialized!");
+			throw CMWEXCEPTION(EIDMW_PACE_ERR_UNKNOWN);
 		}
 
 		s_type secretType = (s_type)m_secretType;
 		PACE_SEC *pace_secret = PACE_SEC_new(m_secret, m_secretLen, secretType);
 
-		unsigned char setPace[] = {0x00, 0x22, 0xC1, 0xA4, 0x0F, 0x80, 0x0A, 0x04, 0x00, 0x7F,
-								   0x00, 0x07, 0x02, 0x02, 0x04, 0x02, 0x04, 0x83, 0x01, 0x02};
-
-		if (m_secretType == PaceSecretType::PACEMRZ) {
-			setPace[sizeof(setPace) - 1] = 0x01;
-		}
 
 		const unsigned char finalAuth[] = {0x00, 0x86, 0x00, 0x00, 0x0C, 0x7C, 0x0A, 0x85, 0x08};
-		CByteArray setPaceAuth;
+		CByteArray setPaceAuth = buildSetPaceAPDU(pace_context->protocol);
 		CByteArray sendMapData;
 		CByteArray responseMappingData;
 		CByteArray sendEphePubKey;
 		CByteArray responseEphePubKey;
 		CByteArray verifyToken;
 		CByteArray responseverifyToken;
-
-		setPaceAuth.Append(setPace, sizeof(setPace));
 
 		CByteArray cardNonceResponse = m_context->m_oPCSC.Transmit(hCard, setPaceAuth, &fileReturn, param_structure);
 
