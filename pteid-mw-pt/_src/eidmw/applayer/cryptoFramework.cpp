@@ -1418,7 +1418,7 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	int signature_len = 0;
 	BIGNUM *r, *s;
 	size_t sig_point_size;
-	APDU apduFormat;
+	APDU internal_auth_apdu;
 	CByteArray data;
 	size_t data_size;
 	CByteArray signature;
@@ -1453,13 +1453,13 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 
 	data.Append(data_to_sign, data_size);
 
-	apduFormat.ins() = 0x88;
-	apduFormat.setData(data);
-	apduFormat.setLe(0x00);
-	apduFormat.forceExtended() = signature_size >= MAX_LCLENGTH_PACE;
+	internal_auth_apdu.ins() = 0x88;
+	internal_auth_apdu.setData(data);
+	internal_auth_apdu.setLe(0x00);
+	internal_auth_apdu.forceExtended() = signature_size >= MAX_LCLENGTH_PACE;
 
 	// raw r,s point signature
-	signature = card->sendAPDU(apduFormat);
+	signature = card->sendAPDU(internal_auth_apdu);
 	sw12 = signature.GetBytes(signature.Size() - 2);
 	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
 		MWLOG(LEV_ERROR, MOD_APL, "Failed to perform active authentication");
