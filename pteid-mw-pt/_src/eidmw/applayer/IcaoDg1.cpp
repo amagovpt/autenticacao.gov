@@ -62,7 +62,7 @@ IcaoDg1::IcaoDg1(const CByteArray &byteArray) {
 	m_issuingOrg = getDocumentInfo(byteArray, offsetCounter, MRZ_ISSUER_ORG_SIZE);
 
 	if (isPassport) {
-		std::string nameElement = byteArray.GetBytes(offsetCounter, MRZ_TD1_LINE_SIZE).hexToString();
+		std::string nameElement = byteArray.GetBytes(offsetCounter, MRZ_TD3_NAME_FIRST_LINE_SIZE).hexToString();
 		offsetCounter += MRZ_TD3_NAME_FIRST_LINE_SIZE;
 		getNameIdentifiers(nameElement, m_primaryIdentifier, m_secondaryIdentifier);
 		m_serialNumber = getDocumentInfo(byteArray, offsetCounter, MRZ_SERIAL_NUMBER_SIZE);
