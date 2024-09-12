@@ -846,10 +846,11 @@ bool APL_ICAO::performActiveAuthentication() {
 		// read OID from security file
 		auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
 		if (obj == nullptr) {
-			MWLOG(LEV_ERROR, MOD_APL, "Failed to find active authentication algorithm OID in security options file!");
-			MWLOG(LEV_ERROR, MOD_APL, "DG14: %s", secopt_file.ToString(false, false).c_str());
-			throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
+			MWLOG(LEV_WARN, MOD_APL, "Didn't find active authentication algorithm OID in security options file. This means we should try AA with RSA!");
 		}
+
+		char *dg15_str = byteArrayToHexString(pubkey_file.GetBytes(), pubkey_file.Size());
+		MWLOG(LEV_DEBUG, MOD_APL, "DG15 file (card pubkey): %s", dg15_str);
 
 		// Check the first tag of DG15 file (6F)
 		CByteArray pubkey = extractPublicKeyFromDG15(pubkey_file);
