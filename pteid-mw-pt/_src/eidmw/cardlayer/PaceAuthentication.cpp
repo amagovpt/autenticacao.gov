@@ -381,6 +381,10 @@ public:
 		s_type secretType = (s_type)m_secretType;
 		PACE_SEC *pace_secret = PACE_SEC_new(m_secret, m_secretLen, secretType);
 
+		if (!pace_secret) {
+			MWLOG(LEV_ERROR, MOD_CAL, "Invalid secret provided for PACE authentication!");
+			throw CMWEXCEPTION(EIDMW_PACE_ERR_UNKNOWN);
+		}
 
 		const unsigned char finalAuth[] = {0x00, 0x86, 0x00, 0x00, 0x0C, 0x7C, 0x0A, 0x85, 0x08};
 		CByteArray setPaceAuth = buildSetPaceAPDU(pace_context->protocol);

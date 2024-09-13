@@ -362,7 +362,10 @@ const char *PTEID_Exception::GetMessage() {
 			error_message = "Online Address: unexpected error! " + debughelp_msg;
 			break;
 		case EIDMW_PACE_ERR_BAD_TOKEN:
-			error_message = "The CAN introduced is incorrect.";
+			error_message = "PACE secret introduced is incorrect (CAN or MRZ)";
+			break;
+		case EIDMW_PACE_ERR_UNKNOWN:
+			error_message = "PACE authentication generic error";
 			break;
 		default:
 			error_message = "Unmapped error: " + std::to_string(m_lError);
