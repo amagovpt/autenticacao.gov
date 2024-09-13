@@ -746,6 +746,13 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 	}
 
 	BIO *out = BIO_new(BIO_s_mem());
+	/* Some document signing certificates may have wrong values in Extended Key Usage field which generates a "purpose" validation error 
+	   Set the cert verify parameters to have unrestricted purpose X509_PURPOSE_ANY 
+	*/
+	X509_VERIFY_PARAM *verify_params = X509_STORE_get0_param(csca_store);
+    X509_VERIFY_PARAM_set_purpose(verify_params, X509_PURPOSE_ANY);
+    X509_STORE_set1_param(csca_store, verify_params);
+
 	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
 
 	// failed to verify SOD but we still need the contents
