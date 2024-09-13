@@ -1245,14 +1245,6 @@ int cal_update_token(CK_SLOT_ID hSlot) {
 		CReader &oReader = oCardLayer->getReader(reader);
 		status = cal_map_status(oReader.Status(true));
 
-		if (oReader.isCardContactless()) {
-			const std::string can = get_cached_can();
-			if (can.empty())
-				return CKR_GENERAL_ERROR;
-
-			oReader.initPaceAuthentication(can.c_str(), can.size(), PaceSecretType::PACECAN);
-		}
-
 		if (status != P11_CARD_STILL_PRESENT) {
 			// clean objects
 			for (i = 1; i <= pSlot->nobjects; i++) {
@@ -1265,6 +1257,16 @@ int cal_update_token(CK_SLOT_ID hSlot) {
 
 			// if Present, other => init objects
 			if ((status == P11_CARD_OTHER) || (status == P11_CARD_INSERTED)) {
+
+				// initialize pace if contactless card
+				if (oReader.isCardContactless()) {
+					const std::string can = get_cached_can();
+					if (can.empty())
+						return CKR_GENERAL_ERROR;
+
+					oReader.initPaceAuthentication(can.c_str(), can.size(), PaceSecretType::PACECAN);
+				}
+
 				//(re)initialize objects
 				ret = cal_init_objects(pSlot);
 				if (ret) {
