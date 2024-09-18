@@ -991,7 +991,7 @@
     </message>
     <message>
         <source>STR_SCAP_TITLE</source>
-        <translation>Opções de Assinatura com Atributos Profissional</translation>
+        <translation>Opções de Assinatura com Atributos Profissionais</translation>
     </message>
     <message>
         <source>STR_SCAP_OP</source>
