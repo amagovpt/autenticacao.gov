@@ -585,6 +585,9 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
     for (int i = lastField; i >= 0; i--) 
     {
         fields.arrayGet(i, &f);
+		if (!f.isDict()) {
+			continue;
+		}
 
         f.dictLookup("Type", &type);
         f.dictLookup("FT", &obj1);
@@ -593,9 +596,13 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
         if (strcmp(type.getName(), "Annot") == 0
             && strcmp(obj1.getName(), "Sig") == 0)
         {
-            indexes.insert(lastField-i);
 
             f.dictLookup("V", &sig_dict);
+			if (!sig_dict.isDict()) {
+				continue;
+			}
+			indexes.insert(lastField - i);
+
             sig_dict.dictLookup("Type", &type);
             sig_dict.dictLookup("SubFilter", &obj1);
             if (type.isName() && obj1.isName()) {
@@ -603,7 +610,7 @@ std::unordered_set<int> PDFDoc::getSignaturesIndexesUntilLastTimestamp()
                   && strcmp(obj1.getName(), "ETSI.RFC3161") == 0) {
                   break;
               }
-			      }
+			}
         }
     }
 
@@ -626,6 +633,10 @@ int PDFDoc::getSignatureContents(unsigned char **contents, int sigIdx)
 		return 0;
 	}
 	fields.arrayGet(lastField-sigIdx, &f);
+	if (!f.isDict()) {
+		error(errInternal, -1, "Signature field of index %d is invalid!", sigIdx);
+		return 0;
+	}
 
 	f.dictLookup("Type", &type);
 	f.dictLookup("FT", &obj1);
