@@ -1820,7 +1820,7 @@
     </message>
     <message>
         <source>STR_SCAP_OPTIONS</source>
-        <translation>Professional Attributes</translation>
+        <translation>Signature with Professional Attributes</translation>
     </message>
     <message>
         <source>STR_SCAP_OPTIONS_TEXT</source>

@@ -1818,7 +1818,7 @@
     </message>
     <message>
         <source>STR_SCAP_OPTIONS</source>
-        <translation>Atributos Profissionais</translation>
+        <translation>Assinatura com atributos profissionais</translation>
     </message>
     <message>
         <source>STR_SCAP_OPTIONS_TEXT</source>
