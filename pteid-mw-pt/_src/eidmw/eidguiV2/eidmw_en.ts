@@ -77,8 +77,8 @@
     </message>
     <message>
         <source>STR_PROXY_WARNING</source>
-        <translation>If using a company network, make sure there is no traffic filtering. For more information, refer to the following section of 
-                     &lt;a href=&apos;https://github.com/amagovpt/docs.autenticacao.gov/blob/main/user_manual.md#erro-na-comunicação-em-assinatura-com-chave-móvel-digital&apos;&gt;User Manual&lt;/a&gt;.                    
+        <translation>If using a company network, make sure there is no traffic filtering. For more information, refer to the following section of
+                     &lt;a href=&apos;https://github.com/amagovpt/docs.autenticacao.gov/blob/main/user_manual.md#erro-na-comunicação-em-assinatura-com-chave-móvel-digital&apos;&gt;User Manual&lt;/a&gt;.
         </translation>
     </message>
     <message>
@@ -997,7 +997,7 @@
     </message>
     <message>
         <source>STR_SCAP_OP</source>
-        <translation>Save last selected attribute(s)</translation>
+        <translation>Save the selected attributes in each signature</translation>
     </message>
     <message>
         <source>STR_CMD_CERT_TITLE</source>
@@ -1820,11 +1820,19 @@
     </message>
     <message>
         <source>STR_SCAP_OPTIONS_TEXT</source>
-        <translation>Do you wish to save the selected attributes for future signatures?</translation>
+        <translation>You can choose if you want to save the selected attributes.</translation>
     </message>
     <message>
         <source>STR_SCAP_OPTIONS_TEXT2</source>
-        <translation>In the future, you can change this decision in Signature settings.</translation>
+        <translation>These attributes will be pre-selected the next time you sign a document. Each time you sign, your selected attributes will be saved.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_TEXT3</source>
+        <translation>You'll be able to disable this option in "Signatures Configuration".</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_TEXT4</source>
+        <translation>Do you want to save the selected attributes?</translation>
     </message>
     <message>
         <source>STR_SCAP_OPTIONS_YES</source>

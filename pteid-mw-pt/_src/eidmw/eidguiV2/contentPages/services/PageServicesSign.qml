@@ -1728,8 +1728,8 @@ PageServicesSignForm {
 
     Dialog {
         id: scapoptions_dialog
-        width: 400
-        height: 200
+        width: 500
+        height: 250
         visible: false
         font.family: lato.name
         modal: true
@@ -1768,6 +1768,7 @@ PageServicesSignForm {
             KeyNavigation.up: buttonLoadAttr.visible ? buttonLoadAttr : (buttonCancelAttr.visible ? buttonCancelAttr : closeButtonError)
             Item{                
                 Column{
+                    anchors.fill: parent
                     spacing: 10
                     Text {
                         id: text_SCAP
@@ -1775,7 +1776,7 @@ PageServicesSignForm {
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_LABEL
-                        width: rectPopUpError.width
+                        width: rectPopUpSCAP.width
                         wrapMode: Text.Wrap
                         elide: Text.ElideRight
                     }
@@ -1785,7 +1786,27 @@ PageServicesSignForm {
                         font.pixelSize: Constants.SIZE_TEXT_LABEL
                         font.family: lato.name
                         color: Constants.COLOR_TEXT_LABEL
-                        width: rectPopUpError.width
+                        width: rectPopUpSCAP.width
+                        wrapMode: Text.Wrap
+                        elide: Text.ElideRight
+                    }
+                    Text {
+                        id: text_SCAP3
+                        text: qsTranslate("PageServicesSign","STR_SCAP_OPTIONS_TEXT3")
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        width: rectPopUpSCAP.width
+                        wrapMode: Text.Wrap
+                        elide: Text.ElideRight
+                    }
+                    Text {
+                        id: text_SCAP4
+                        text: qsTranslate("PageServicesSign","STR_SCAP_OPTIONS_TEXT4")
+                        font.pixelSize: Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        color: Constants.COLOR_TEXT_LABEL
+                        width: rectPopUpSCAP.width
                         wrapMode: Text.Wrap
                         elide: Text.ElideRight
                     }

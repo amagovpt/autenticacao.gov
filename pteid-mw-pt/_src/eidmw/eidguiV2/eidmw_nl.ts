@@ -71,7 +71,7 @@
     </message>
     <message>
         <source>STR_PROXY_WARNING</source>
-        <translation>Caso esteja numa rede empresarial, assegure-se que não há filtragem do tráfego. Para mais informações, consulte a secção referente do 
+        <translation>Caso esteja numa rede empresarial, assegure-se que não há filtragem do tráfego. Para mais informações, consulte a secção referente do
                      &lt;a href=&quot;https://github.com/amagovpt/docs.autenticacao.gov/blob/main/user_manual.md#erro-na-comunicação-em-assinatura-com-chave-móvel-digital&quot;&gt;Manual de Utilização&lt;/a&gt;.
         </translation>
     </message>
@@ -995,7 +995,7 @@
     </message>
     <message>
         <source>STR_SCAP_OP</source>
-        <translation>Guardar último(s) atributo(s) selecionado(s)</translation>
+        <translation>Guardar os atributos selecionados em cada assinatura</translation>
     </message>
     <message>
         <source>STR_CMD_CERT_TITLE</source>
@@ -1818,11 +1818,19 @@
     </message>
     <message>
         <source>STR_SCAP_OPTIONS_TEXT</source>
-        <translation>Deseja guardar o(s) atributo(s) selecionado(s) para futuras assinaturas?</translation>
+        <translation>Pode escolher guardar os atributos que selecionou.</translation>
     </message>
     <message>
         <source>STR_SCAP_OPTIONS_TEXT2</source>
-        <translation>Futuramente, pode alterar esta decisão nas Configurações de Assinatura.</translation>
+        <translation>Esses atributos vão aparecer pré-selecionados na próxima assinatura. De cada vez que assinar, os atributos profissionais que selecionar ficarão guardados.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_TEXT3</source>
+        <translation>Pode remover esta opção no menu “Configuração de assinaturas”.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_OPTIONS_TEXT4</source>
+        <translation>Deseja guardar os atributos que selecionou?</translation>
     </message>
     <message>
         <source>STR_SCAP_OPTIONS_YES</source>
