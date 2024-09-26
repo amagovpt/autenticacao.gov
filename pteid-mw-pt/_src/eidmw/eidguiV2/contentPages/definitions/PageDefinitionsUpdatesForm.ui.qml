@@ -135,7 +135,7 @@ Item {
                             propertyLinkUrl: 'https://www.autenticacao.gov.pt/web/guest/cc-aplicacao'
                             propertyText.text: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
                                 + "<a href='" + textDescription.propertyLinkUrl + "'>"
-                                + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK") + "</a>."
+                                + qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT_LINK2") + "</a>."
                             propertyAccessibleText: qsTranslate("PageDefinitionsUpdates", "STR_UPDATE_TEXT")
 
                             propertyText.font.bold: activeFocus || textDescription.activeFocus

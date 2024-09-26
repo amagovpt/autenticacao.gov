@@ -1065,7 +1065,7 @@
     </message>
     <message>
         <source>STR_MORE_INFO</source>
-        <translation>For more information click </translation>
+        <translation>Find out more.</translation>
     </message>
     <message>
         <source>STR_ACCEL_MODE</source>
@@ -1435,7 +1435,7 @@
     </message>
     <message>
         <source>STR_UPDATE_AVAILABLE</source>
-        <translation>A new update is available. Press &lt;b&gt;Install&lt;/b&gt; to perform the update or, to check the available versions, click </translation>
+        <translation>A new update is available. Press &lt;b&gt;Install&lt;/b&gt; to perform the update or check the </translation>
     </message>
     <message>
         <source>STR_UPDATE_STARTING_DOWNLOAD</source>
@@ -1443,7 +1443,7 @@
     </message>
     <message>
         <source>STR_UPDATE_TEXT</source>
-        <translation>Press the button to check for available updates or, to check the available versions, click </translation>
+        <translation>Press the button to check for available updates or check the </translation>
     </message>
     <message>
         <source>STR_UPDATE_BUTTON</source>
@@ -1484,11 +1484,15 @@
     </message>
     <message>
         <source>STR_UPDATE_SUPPORTED_SYSTEMS</source>
-        <translation>To check the supported operating systems click </translation>
+        <translation>Check the </translation>
     </message>
     <message>
         <source>STR_UPDATE_TEXT_LINK</source>
-        <translation>here</translation>
+        <translation>supported operating systems</translation>
+    </message>
+    <message>
+        <source>STR_UPDATE_TEXT_LINK2</source>
+        <translation>available versions</translation>
     </message>
     <message>
         <source>STR_UPDATE_TRANSFER_DONE</source>

@@ -151,9 +151,8 @@ Item {
                         x: Constants.SIZE_TEXT_FIELD_H_SPACE
                         width: parent.width
                         propertyText.text: qsTranslate("PageDefinitionsApp", "STR_REGISTER_CERTIFICATES")
-                            + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") 
-                            + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'>" 
-                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                            + " " + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'>"
+                            + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")  + "</a>"
                         propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'
                         propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_REGISTER_CERTIFICATES") + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " " + qsTranslate("PageDefinitionsApp", "STR_HERE") 
                         propertyText.font.capitalization: Font.MixedCase
@@ -287,11 +286,10 @@ Item {
                         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                         x: Constants.SIZE_TEXT_FIELD_H_SPACE
                         width: parent.width
-                        propertyText.text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") 
-                            + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'>" 
-                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                        propertyText.text: "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'>"
+                            + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")  + "</a>"
                         propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#configura%C3%A7%C3%A3o-de-assinaturas'
-                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " " + qsTranslate("PageDefinitionsApp", "STR_HERE") 
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyText.font.bold: activeFocus
@@ -546,11 +544,10 @@ Item {
                         anchors.top: rectLoadCMDCertsText.bottom
                         x: Constants.SIZE_TEXT_FIELD_H_SPACE
                         width: parent.width
-                        propertyText.text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") 
-                            + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#assinatura-digital-com-chave-m%C3%B3vel-digital'>" 
-                            + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                        propertyText.text: "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#assinatura-digital-com-chave-m%C3%B3vel-digital'>"
+                            + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + "</a>"
                         propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#assinatura-digital-com-chave-m%C3%B3vel-digital'
-                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " " + qsTranslate("PageDefinitionsApp", "STR_HERE") 
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyText.font.bold: activeFocus
@@ -715,11 +712,10 @@ Item {
                             anchors.top: textRootCACertDesc.bottom
                             anchors.topMargin: Constants.SIZE_ROW_V_SPACE
                             width: parent.width
-                            propertyText.text: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") 
-                                + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-com-a-nova-cadeia-de-confian%C3%A7a'>" 
-                                + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
+                            propertyText.text: "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-com-a-nova-cadeia-de-confian%C3%A7a'>"
+                                + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + "</a>"
                             propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-com-a-nova-cadeia-de-confian%C3%A7a'
-                            propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " " + qsTranslate("PageDefinitionsApp", "STR_HERE") 
+                            propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
                             propertyText.font.capitalization: Font.MixedCase
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             propertyText.font.bold: activeFocus

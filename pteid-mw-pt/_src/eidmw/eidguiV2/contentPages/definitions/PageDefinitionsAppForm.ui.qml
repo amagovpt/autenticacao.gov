@@ -1049,14 +1049,12 @@ Item {
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
-                                            + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#obtenção-do-relatório-para-análise-através-do-menu-configurações'>"
-                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
+                        propertyText.text:  "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#obtenção-do-relatório-para-análise-através-do-menu-configurações'>"
+                                            + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
                         propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#obtenção-do-relatório-para-análise-através-do-menu-configurações'
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
-                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
                         propertyText.font.bold: activeFocus
                         KeyNavigation.tab: dateAppGraphics
                         KeyNavigation.down: dateAppGraphics
@@ -1160,14 +1158,12 @@ Item {
                         anchors.top: graphicsTextField.bottom
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         width: parent.width
-                        propertyText.text:  qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
-                                            + "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'>"
-                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
+                        propertyText.text: "<a href='https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'>"
+                                            + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
                         propertyLinkUrl: 'https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-gráficos-na-aplicação'
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
-                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO") + " "
-                                            + qsTranslate("PageDefinitionsApp", "STR_HERE")
+                        propertyAccessibleText: qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
                         propertyText.font.bold: activeFocus
                         KeyNavigation.tab: textGraphicsRendering
                         KeyNavigation.down: textGraphicsRendering
