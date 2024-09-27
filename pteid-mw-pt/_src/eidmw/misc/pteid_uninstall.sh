@@ -30,7 +30,6 @@ rm -f /usr/local/lib/libzip.5.3.dylib
 rm -f /usr/local/lib/libzip.5.dylib
 rm -f /usr/local/lib/libcurl.4.dylib
 rm -f /usr/local/lib/pteidlib_dotnet8+.dylib
-rm -f /usr/local/lib/pteidlib_dotnet8+.dll
 
 #SDK header files
 rm -f /usr/local/include/eidlib.h
@@ -38,8 +37,11 @@ rm -f /usr/local/include/eidErrors.h
 rm -f /usr/local/include/eidlibException.h
 rm -f /usr/local/include/eidlibcompat.h
 rm -f /usr/local/include/eidlibdefines.h
-
+# Java SDK
 rm -rf /usr/local/lib/pteid_jni/
+
+#Dotnet 8 SDK
+rm -rf /usr/local/lib/pteidlib_dotnet8/
 
 #pteid dialogs utility
 rm -rf /usr/local/bin/pteiddialogsQTsrv.app/
