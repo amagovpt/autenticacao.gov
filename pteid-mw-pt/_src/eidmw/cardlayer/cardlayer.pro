@@ -72,7 +72,8 @@ HEADERS += \
            GempcPinpad.h \
            ACR83Pinpad.h \
            PteidCard.h \
-           CardReaderInfo.h
+           CardReaderInfo.h \
+           FciData.h
 
 SOURCES += \
            APDU.cpp \
@@ -96,5 +97,6 @@ SOURCES += \
            GempcPinpad.cpp \
            ACR83Pinpad.cpp \
            PteidCard.cpp \
-           UnknownCard.cpp
+           UnknownCard.cpp \
+           FciData.cpp
 

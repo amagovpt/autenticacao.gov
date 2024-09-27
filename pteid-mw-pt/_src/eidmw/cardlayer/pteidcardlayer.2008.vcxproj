@@ -239,6 +239,7 @@
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="UnknownCard.cpp" />
     <ClCompile Include="Win32ReaderInfo.cpp" />
+    <ClCompile Include="FciData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h" />
@@ -268,6 +269,7 @@
     <ClInclude Include="ReaderDeviceInfo.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="UnknownCard.h" />
+    <ClInclude Include="FciData.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\pteidcommon.2008.vcxproj">

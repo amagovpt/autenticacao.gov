@@ -31,6 +31,7 @@
 #include "Log.h"
 #include "Thread.h"
 #include "pinpad2.h"
+#include "FciData.h"
 
 #include <algorithm>
 #include <openssl/asn1.h>
@@ -480,29 +481,6 @@ CByteArray CPkiCard::GetRandom(unsigned long ulLen) {
 	return oRandom;
 }
 
-/* Extract file length value from smartcard FCI data:
-   There are two possible tags for file size attribute in FCI data
-   0x81 for eid applet and 0x80 for national data applet */
-int extractEFSize(CByteArray &fci_data) {
-	const unsigned char *desc_data = fci_data.GetBytes() + 2;
-	// const unsigned char *old_data = desc_data;
-	int xclass = 0;
-	int asn1Tag = 0;
-	long genTag = 0, size = 0;
-
-	long ret = ASN1_get_object(&desc_data, &size, &asn1Tag, &xclass, fci_data.Size() - 2);
-	int constructed = ret == V_ASN1_CONSTRUCTED ? 1 : 0;
-	genTag = xclass | (constructed & 0b1) << 5 | asn1Tag;
-	if (genTag == 0x81 && size == 2) { // eID app
-		return (*desc_data << 8) | *(desc_data + 1);
-	} else if (genTag == 0x80 && size == 3) { // National data app
-		return (*desc_data << 16) | (*(desc_data + 1) << 8) | *(desc_data + 2);
-	} else {
-		MWLOG(LEV_ERROR, MOD_CAL, "%s: Malformed FCI data, tag found at offset 2: %2x", __FUNCTION__,
-			  fci_data.GetByte(2));
-		return 0;
-	}
-}
 
 tFileInfo CPkiCard::SelectFile(const std::string &csPath, const unsigned char *oAID, bool bReturnFileInfo) {
 	auto ulPathLen = static_cast<unsigned long>(csPath.size());
