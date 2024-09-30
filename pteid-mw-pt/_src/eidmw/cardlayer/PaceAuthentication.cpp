@@ -227,7 +227,6 @@ public:
 			long sizeData;
 			int xclass = 0;
 			int ans1Tag = 0;
-			int stepsToskip = 0;
 
 			ASN1_get_object(&descData, &sizeData, &ans1Tag, &xclass, encryptedAPDU.Size());
 			const char *result = strstr(reinterpret_cast<const char *>(encryptedAPDU.GetBytes()),
@@ -400,8 +399,6 @@ public:
 		CByteArray encryptedNonce;
 		const unsigned char authEncrypt[] = {0x10, 0x86, 0x00, 0x00};
 		const unsigned char authType[] = {0x02, 0x7C, 0x00, 0x00};
-		const unsigned char enc[] = {0x60, 0x46, 0x32, 0xFF, 0x00, 0x00, 0x04, 0x80,
-									 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 		encryptedNonce.Append(authEncrypt, sizeof(authEncrypt));
 		encryptedNonce.Append(authType, sizeof(authType));
 
