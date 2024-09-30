@@ -341,6 +341,14 @@ public:
 		return apdu_cmd;
 	}
 
+	void logSelectedPACEProtocol() {
+		int protocol_nid = m_ctx->pace_ctx->protocol;
+		auto protocol_obj = OBJ_nid2obj(protocol_nid);
+		char protocol_name[100] = {0};
+        OBJ_obj2txt(protocol_name, sizeof(protocol_name), protocol_obj, 0);
+		MWLOG(LEV_DEBUG, MOD_CAL, "Selected PACE algorithm name: %s NID: %d", protocol_name, protocol_nid);
+	}
+
 	void initAuthentication(SCARDHANDLE &hCard, const void *param_structure) {
 
 		std::lock_guard<std::mutex> guard(m_mutex);
@@ -360,16 +368,26 @@ public:
 		oCmd.Append(SELECT_ADF, sizeof(SELECT_ADF));
 		const unsigned char SIZE_AND_EF_ACCESS[] = {0x02, 0x01, 0x01C, 0x00};
 		oCmd.Append(SIZE_AND_EF_ACCESS, sizeof(SIZE_AND_EF_ACCESS));
-		CByteArray oReadBinary = m_context->m_oPCSC.Transmit(hCard, oCmd, &fileReturn, param_structure);
+		m_context->m_oPCSC.Transmit(hCard, oCmd, &fileReturn, param_structure);
 		const unsigned char READ_BINARY[] = {0x00, 0xB0, 0x9C, 0x00, 0x00};
 		CByteArray readBinary(READ_BINARY, sizeof(READ_BINARY));
 		CByteArray readBinEFAccess = m_context->m_oPCSC.Transmit(hCard, readBinary, &fileReturn, param_structure);
+		//Discard SW12 from received data
 		readBinEFAccess.Chop(2);
+
 		if (!m_ctx || !EAC_CTX_init_ef_cardaccess(readBinEFAccess.GetBytes(), readBinEFAccess.Size(), m_ctx) ||
 			!m_ctx->pace_ctx) {
 			MWLOG(LEV_ERROR, MOD_CAL, "Couldn't process EF.CardAccess");
 			throw CMWEXCEPTION(EIDMW_PACE_ERR_UNKNOWN);
 		}
+
+		if (m_ctx->pace_ctx == NULL) {
+			std::string cardAccess_hexdump = readBinEFAccess.ToString(true, false);
+			MWLOG(LEV_ERROR, MOD_CAL, "EAC_CTX_init_ef_cardaccess failed to initialize PACE_CTX. CardAccess supplied: %s", cardAccess_hexdump.c_str());
+			throw CMWEXCEPTION(EIDMW_PACE_ERR_UNKNOWN);
+		}
+
+		logSelectedPACEProtocol();
 
 		PACE_CTX *pace_context = m_ctx->pace_ctx;
 		if (pace_context == NULL) {
@@ -682,6 +700,7 @@ private:
 	CContext *m_context;
 	EAC_CTX *m_ctx;
 	std::mutex m_mutex;
+
 };
 
 PaceAuthentication::PaceAuthentication(CContext *poContext)
