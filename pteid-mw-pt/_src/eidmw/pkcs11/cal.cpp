@@ -164,6 +164,7 @@ CK_RV cal_get_token_info(CK_SLOT_ID hSlot, CK_TOKEN_INFO_PTR pInfo) {
 	int status;
 	long lRet = 0;
 	P11_SLOT *pSlot = NULL;
+	bool needs_pace = false;
 
 	pInfo->flags = 0;
 
@@ -184,22 +185,36 @@ CK_RV cal_get_token_info(CK_SLOT_ID hSlot, CK_TOKEN_INFO_PTR pInfo) {
 	try {
 		CReader &oReader = oCardLayer->getReader(reader);
 
+		auto card_type = oReader.GetCardType();
+
 		// Detect not recognized cards and fail early
-		if (oReader.GetCardType() == CARD_UNKNOWN) {
+		if (card_type == CARD_UNKNOWN) {
 			return CKR_TOKEN_NOT_RECOGNIZED;
 		}
-		// Take the last 16 hex chars of the serialnr.
-		// For PTeID cards, the serial nr. is 32 hex chars long,
-		// and the first one are the same for all cards
-		std::string oSerialNr = oReader.GetSerialNr();
-		size_t serialNrLen = oSerialNr.size();
-		size_t snoffset = serialNrLen > 16 ? serialNrLen - 16 : 0;
-		size_t snlen = serialNrLen - snoffset > 16 ? 16 : serialNrLen - snoffset;
+
+		if (card_type == eIDMW::CARD_PTEID_IAS5 && oReader.isCardContactless()) {
+			needs_pace = true;
+		}
 
 		// All the strings in TOKEN_INFO struct are space-padded AND without NULL terminator
 		// so we need a specialized strcpy to generate them
-		strcpy_n(pInfo->serialNumber, oSerialNr.c_str() + snoffset, snlen, ' ');
-		strcpy_n(pInfo->label, oReader.GetCardLabel().c_str(), 32, ' ');
+
+		if (needs_pace) {
+			strcpy_n(pInfo->label, "CITIZEN CARD", 32, ' ');
+			std::string oSerialNr = "UNKNOWN";
+			strcpy_n(pInfo->serialNumber, oSerialNr.c_str(), oSerialNr.size(), ' ');
+		} else {
+			strcpy_n(pInfo->label, oReader.GetCardLabel().c_str(), 32, ' ');
+
+			// Take the last 16 hex chars of the serialnr.
+			// For PTeID cards, the serial nr. is 32 hex chars long,
+			// and the first one are the same for all cards
+			std::string oSerialNr = oReader.GetSerialNr();
+			size_t serialNrLen = oSerialNr.size();
+			size_t snoffset = serialNrLen > 16 ? serialNrLen - 16 : 0;
+			size_t snlen = serialNrLen - snoffset > 16 ? 16 : serialNrLen - snoffset;
+			strcpy_n(pInfo->serialNumber, oSerialNr.c_str() + snoffset, snlen, ' ');
+		}
 	} catch (CMWException e) {
 		return (cal_translate_error(WHERE, e.GetError()));
 	} catch (...) {
@@ -225,13 +240,15 @@ CK_RV cal_get_token_info(CK_SLOT_ID hSlot, CK_TOKEN_INFO_PTR pInfo) {
 	pInfo->firmwareVersion.minor = 0;
 
 	pInfo->ulMaxPinLen = 8;
-	pInfo->ulMinPinLen = 4;
+	pInfo->ulMinPinLen = 6;
 	strcpy_s((char *)pInfo->utcTime, sizeof(pInfo->utcTime), "20080101000000");
 
-	pInfo->flags |= CKF_PROTECTED_AUTHENTICATION_PATH | CKF_TOKEN_INITIALIZED |
-					CKF_USER_PIN_INITIALIZED; // check for pin change capabilitypInfo->flags |= /*CKF_LOGIN_REQUIRED |
-											  // CKF_USER_PIN_INITIALIZED |*/; //CAL does logon, so no
-											  // CKF_LOGIN_REQUIRED nor CKF_USER_PIN_INITIALIZED
+	pInfo->flags |= CKF_TOKEN_INITIALIZED;
+	if (needs_pace) {
+		pInfo->flags |= CKF_LOGIN_REQUIRED;
+	} else {
+		pInfo->flags |= CKF_USER_PIN_INITIALIZED;
+	}
 
 cleanup:
 
@@ -705,6 +722,29 @@ int cal_init_objects(P11_SLOT *pSlot) {
 cleanup:
 
 	return (ret);
+}
+#undef WHERE
+
+#define WHERE "cal_pace"
+int cal_pace(CK_SLOT_ID hSlot, size_t l_can, CK_CHAR_PTR can) {
+	auto pSlot = p11_get_slot(hSlot);
+	if (pSlot == NULL) {
+		log_trace(WHERE, "E: Invalid slot (%d)", hSlot);
+		return (CKR_SLOT_ID_INVALID);
+	}
+
+	try {
+		CReader &oReader = oCardLayer->getReader(pSlot->name);
+
+		oReader.initPaceAuthentication((const char *)can, l_can, PaceSecretType::PACECAN);
+	} catch (CMWException e) {
+		return (cal_translate_error(WHERE, e.GetError()));
+	} catch (...) {
+		log_trace(WHERE, "E: unknown exception thrown");
+		return (CKR_FUNCTION_FAILED);
+	}
+
+	return CKR_OK;
 }
 #undef WHERE
 
@@ -1218,13 +1258,6 @@ int cal_validate_session(P11_SESSION *pSession) {
 }
 #undef WHERE
 
-std::string get_cached_can() {
-	const struct CConfig::Param_Str test = {L"can_cache", L"can", L""};
-	auto can = CConfig::GetString(test);
-
-	return {can.begin(), can.end()};
-}
-
 #define WHERE "cal_update_token()"
 int cal_update_token(CK_SLOT_ID hSlot) {
 	long lRet;
@@ -1257,16 +1290,6 @@ int cal_update_token(CK_SLOT_ID hSlot) {
 
 			// if Present, other => init objects
 			if ((status == P11_CARD_OTHER) || (status == P11_CARD_INSERTED)) {
-
-				// initialize pace if contactless card
-				if (oReader.isCardContactless()) {
-					const std::string can = get_cached_can();
-					if (can.empty())
-						return CKR_GENERAL_ERROR;
-
-					oReader.initPaceAuthentication(can.c_str(), can.size(), PaceSecretType::PACECAN);
-				}
-
 				//(re)initialize objects
 				ret = cal_init_objects(pSlot);
 				if (ret) {

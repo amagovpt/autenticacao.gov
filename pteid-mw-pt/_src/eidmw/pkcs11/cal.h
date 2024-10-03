@@ -108,6 +108,7 @@ int cal_sign(CK_SLOT_ID hSlot, P11_SIGN_DATA *pSignData, unsigned char *in, unsi
 int cal_validate_session(P11_SESSION *pSession);
 int cal_update_token(CK_SLOT_ID hSlot);
 int cal_wait_for_slot_event(int block, int *cardevent, int *ph);
+int cal_pace(CK_SLOT_ID hSlot, size_t l_pin, CK_CHAR_PTR can);
 
 #ifdef __cplusplus
 }

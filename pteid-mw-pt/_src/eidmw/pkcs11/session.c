@@ -368,10 +368,7 @@ CK_RV C_Login(CK_SESSION_HANDLE hSession, /* the session's handle */
 		goto cleanup;
 	}
 
-	ret = cal_logon(pSession->hslot, ulPinLen, pPin, 0);
-	if (ret == CKR_OK) {
-		pSlot->login_type = userType;
-	}
+	ret = cal_pace(pSession->hslot, ulPinLen, pPin);
 cleanup:
 	p11_unlock();
 	log_trace(WHERE, "I: leave, ret = %i", ret);
