@@ -574,7 +574,7 @@ DWORD CardGetPinInfo(PCARD_DATA pCardData, PBYTE pbData, DWORD cbData, PDWORD pd
 	if (dwFlags == ROLE_DIGSIG)
 		pinInfo.PinPurpose = AuthenticationPin;
 	if (dwFlags == ROLE_NONREP)
-		pinInfo.PinPurpose = NonRepudiationPin;
+		pinInfo.PinPurpose = DigitalSignaturePin;
 	/**********************************************
 	 *  Pin cache policy
 	 **********************************************/
