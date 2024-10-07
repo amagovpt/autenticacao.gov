@@ -1533,6 +1533,106 @@ cleanup:
 	}
 }
 
+void printOpenSSLError(const char *context) {
+	unsigned long errCode;
+	const char *errString;
+	const char *errFile;
+	const char *errFunction;
+	int errLine;
+	errCode = ERR_get_error_all(&errFile, &errLine, &errFunction, NULL, NULL);
+	errString = ERR_error_string(errCode, NULL);
+	MWLOG(LEV_ERROR, MOD_APL, L"Error decoding %s! Detail: %s", context, errString);
+}
+
+ASN1_SEQUENCE(CscaMasterList) = {ASN1_SIMPLE(CscaMasterList, version, ASN1_INTEGER),
+								 ASN1_SET_OF(CscaMasterList, certList, X509)};
+ASN1_SEQUENCE_END(CscaMasterList);
+IMPLEMENT_ASN1_FUNCTIONS(CscaMasterList);
+
+void APL_CryptoFwk::loadMasterList(const char *filePath) {
+	if (m_MasterListPath.compare(filePath) == 0) {
+		return;
+	} else if (m_MasterListCertificate != nullptr) {
+		X509_STORE_free(m_MasterListCertificate);
+	}
+
+	unsigned char *der_buffer = NULL;
+	size_t der_len = read_binary_file(filePath, &der_buffer);
+
+	const unsigned char *p = der_buffer;
+	CMS_ContentInfo *cms = d2i_CMS_ContentInfo(NULL, &p, der_len);
+
+	static const char *masterListSN = "cscaMasterList";
+	static const char *masterListLN = "idIcaoCscaMasterList";
+	int masterlist_nid = OBJ_create("2.23.136.1.1.2", masterListSN, masterListLN);
+
+	if (cms == NULL) {
+		printOpenSSLError("CMS_ContentInfo");
+	} else {
+
+		BIO *bio_out = BIO_new(BIO_s_mem());
+		unsigned int flags = CMS_NO_SIGNER_CERT_VERIFY;
+
+		const ASN1_OBJECT *content_type = CMS_get0_eContentType(cms);
+
+		ASN1_OBJECT *expected_oid = OBJ_nid2obj(masterlist_nid);
+		if (OBJ_cmp(expected_oid, content_type) != 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "ERROR: unexpected contentType OID in CMS structure!\n");
+		}
+
+		int ret = CMS_verify(cms, NULL, NULL, NULL, bio_out, flags);
+		if (ret == 1) {
+			const unsigned char *p_data;
+			long size = BIO_get_mem_data(bio_out, &p_data);
+
+			MWLOG(LEV_INFO, MOD_APL, "MasterList content: %ld bytes\n", size);
+
+			CscaMasterList *ml = d2i_CscaMasterList(NULL, &p_data, size);
+			if (ml) {
+				initMasterListStore(ml);
+			} else {
+				printOpenSSLError("CscaMasterList");
+			}
+
+			CscaMasterList_free(ml);
+		} else {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify CMS SignedData structure!\n");
+			printOpenSSLError("");
+		}
+
+		BIO_free(bio_out);
+	}
+
+	free(der_buffer);
+	CMS_ContentInfo_free(cms);
+}
+
+X509_STORE *APL_CryptoFwk::getMasterListStore() { return m_MasterListCertificate; }
+
+void APL_CryptoFwk::initMasterListStore(CscaMasterList *cml) {
+	if (cml == NULL || cml->certList == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, L"Invalid CscaMasterList or certList is empty.\n");
+		return;
+	}
+
+	X509_STORE *store = X509_STORE_new();
+
+	int num_certs = sk_X509_num(cml->certList);
+	BIO *bio_stdout = BIO_new_fp(stdout, BIO_NOCLOSE);
+	for (int i = 0; i < num_certs; i++) {
+		X509 *cert = sk_X509_value(cml->certList, i);
+		if (cert == NULL) {
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to retrieve certificate at index %d\n", i);
+			continue;
+		}
+
+		X509_STORE_add_cert(store, cert);
+	}
+	BIO_free(bio_stdout);
+
+	m_MasterListCertificate = store;
+}
+
 bool APL_CryptoFwk::GetOCSPCert(const CByteArray &ocspResponse, CByteArray &outCert) {
 	bool noCheckExtension = false;
 	const unsigned char *p = ocspResponse.GetBytes();

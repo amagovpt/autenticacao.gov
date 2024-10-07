@@ -329,11 +329,6 @@ protected:
 	std::string *m_appletVersion;
 };
 
-typedef struct CscaMasterList_st {
-	ASN1_INTEGER version;
-	STACK_OF(X509) * certList;
-} CscaMasterList;
-
 class IcaoDg1;
 class IcaoDg2;
 class IcaoDg3;
@@ -377,9 +372,6 @@ private:
 	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray& data);
 	bool performActiveAuthentication();
-	void initMasterListStore(CscaMasterList *cml);
-
-	X509_STORE *csca_store = nullptr;
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);

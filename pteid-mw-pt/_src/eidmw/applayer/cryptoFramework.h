@@ -93,6 +93,11 @@ struct tOcspCertID {
 	const CByteArray *serialNumber;
 };
 
+typedef struct CscaMasterList_st {
+	ASN1_INTEGER version;
+	STACK_OF(X509) * certList;
+} CscaMasterList;
+
 class CrlMemoryCache;
 
 void loadWindowsRootCertificates(X509_STORE *store);
@@ -325,6 +330,10 @@ public:
 
 	void performActiveAuthentication(const ASN1_OBJECT *oid, const CByteArray &pubkey, APL_SmartCard *card = nullptr);
 
+	void loadMasterList(const char *filePath);
+
+	X509_STORE *getMasterListStore();
+
 	/**
 	 * Verify if the data has the correct hash
 	 */
@@ -442,7 +451,12 @@ protected:
 	  */
 	bool isCrlIssuer(X509_CRL *pX509_Crl, X509 *pX509_issuer);
 
+	void initMasterListStore(CscaMasterList *cml);
+
 	APL_SmartCard *m_card = NULL;
+
+	std::string m_MasterListPath = "";
+	X509_STORE *m_MasterListCertificate = nullptr;
 
 	std::string m_proxy_host; /**< proxy host */
 	std::string m_proxy_port; /**< proxy port */
