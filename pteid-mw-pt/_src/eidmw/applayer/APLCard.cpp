@@ -832,7 +832,7 @@ bool APL_ICAO::performActiveAuthentication() {
 	free(dg14_str);
 
 	// verify hash of security file with hash in SOD
-	if (!cryptFwk->VerifyHashSha256(secopt_file, m_SodAttributes->get(DG14))) {
+	if (!verifySOD(DG14, secopt_file)) {
 		MWLOG(LEV_ERROR, MOD_APL, "Security option hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
 	}
@@ -842,7 +842,7 @@ bool APL_ICAO::performActiveAuthentication() {
 		CByteArray pubkey_file = reader->ReadFile(PTEID_FILE_PUB_KEY_AA);
 
 		// verify hash of public key with hash in SOD
-		if (!cryptFwk->VerifyHashSha256(pubkey_file, m_SodAttributes->get(DG15))) {
+		if (!verifySOD(DG15, pubkey_file)) {
 			MWLOG(LEV_ERROR, MOD_APL, "Public key hash does not match with SOD");
 			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
 		}
