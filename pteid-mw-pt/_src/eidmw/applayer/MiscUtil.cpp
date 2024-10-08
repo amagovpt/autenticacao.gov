@@ -814,16 +814,27 @@ void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::s
 	std::vector<std::pair<std::string, int>> filenames_counter;
 	std::vector<std::string> unique_filenames;
 
+	// If the folder isn't empty
+	if (std::string(folder).size() != 0) {
+		// Add files in current folder
+		for (const auto &entry : std::filesystem::directory_iterator(folder)) {
+			std::string current_path = entry.path().string();
+			char *basename = Basename((char *)current_path.c_str());
+			filenames_counter.push_back(std::make_pair(basename, 0));
+		}
+	}
+
 	for (int i = 0; i < filenames.size(); i++) {
 
 		std::string basename = std::string(Basename((char *)(filenames[i]->c_str())));
 		std::string clean_filename = CPathUtil::remove_ext_from_basename(basename.c_str());
 		std::string extension = std::string(basename.c_str()).erase(0, clean_filename.length());
+		std::string final_name = clean_filename + suffix + extension;
 
 		int equal_filename_count = 0;
 		for (unsigned int j = 0; j < filenames_counter.size(); j++) {
 			std::string current_file_name = filenames_counter.at(j).first;
-			if (basename.compare(current_file_name) == 0) {
+			if (final_name.compare(current_file_name) == 0) {
 				// filenames_counter contains clean_filename
 				equal_filename_count = ++filenames_counter.at(j).second;
 				break;
@@ -832,7 +843,7 @@ void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::s
 
 		if (equal_filename_count == 0) {
 			// clean_filename is not part of the vector, make sure it's added to it
-			filenames_counter.push_back(std::make_pair(basename, equal_filename_count));
+			filenames_counter.push_back(std::make_pair(final_name, equal_filename_count));
 		}
 
 		std::string final_path = "";
@@ -841,7 +852,32 @@ void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::s
 
 		final_path += clean_filename;
 		if (equal_filename_count > 0) {
+			while (true) {
+				// Variable that stores if a match for the new name has been found
+				bool found = false;
+				// This is the file_name that will be tested
+				std::string tested_file_name =
+					clean_filename + "_" + std::to_string(equal_filename_count) + suffix + extension;
+				// For each file in the unique_filenames vector
+				for (unsigned int i = 0; i < filenames_counter.size(); i++) {
+					std::string current_file_name = filenames_counter.at(i).first;
+					//  Sees if the current_file_name matches the test file
+					if (tested_file_name.compare(current_file_name) == 0) {
+						// If it does, it increments the equal_filename:count
+						equal_filename_count = ++filenames_counter.at(i).second;
+						// Sets found to true, since a match has been found
+						found = true;
+						// Breaks and will test with the next name
+						break;
+					}
+				}
+				// If a match hasn't been found then the name can be used.
+				if (!found)
+					break;
+			}
 			final_path += "_" + std::to_string(equal_filename_count);
+			std::string added_pair = clean_filename + "_" + std::to_string(equal_filename_count) + suffix + extension;
+			filenames_counter.push_back(std::make_pair(added_pair, 0));
 		}
 		final_path += suffix + extension;
 

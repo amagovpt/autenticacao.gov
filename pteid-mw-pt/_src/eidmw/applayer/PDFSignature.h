@@ -16,6 +16,7 @@
 #include "Export.h"
 #include <vector>
 #include <utility>
+#include <filesystem>
 
 #include "ByteArray.h"
 #include "APLCard.h"

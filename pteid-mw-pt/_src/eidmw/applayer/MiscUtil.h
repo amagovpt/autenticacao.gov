@@ -39,6 +39,7 @@
 #include <time.h>
 #include "TLVBuffer.h"
 #include <openssl/x509.h>
+#include <filesystem>
 
 namespace eIDMW {
 
