@@ -629,7 +629,7 @@ CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
 	m_reader->CalLock();
 	try {
 		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
-		out = m_reader->getCalReader()->ReadFile(DATAGROUP_PATHS.at(tag));
+		out = readFile(DATAGROUP_PATHS.at(tag));
 	} catch (CMWException &e) {
 		m_reader->CalUnlock();
 		if (e.GetError() == EIDMW_ERR_INCOMPATIBLE_READER)
@@ -702,7 +702,7 @@ void APL_ICAO::loadAvailableDataGroups() {
 	if (m_SodAttributes)
 		return;
 
-	CByteArray oData = m_reader->getCalReader()->ReadFile(SOD_PATH);
+	CByteArray oData = readFile(SOD_PATH);
 
 	CByteArray sod;
 	bool sod_verified = verifySodFileIntegrity(oData, sod);
@@ -792,6 +792,16 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 	return sod_verified;
 }
 
+CByteArray APL_ICAO::readFile(const std::string &csPath) const {
+	auto out = m_reader->getCalReader()->ReadFile(csPath);
+
+	// remove padding
+	auto length = der_certificate_length(out);
+	out.Chop(out.Size() - length);
+
+	return out;
+}
+
 bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray &data) {
 	if (!m_SodAttributes) {
 		loadAvailableDataGroups();
@@ -821,11 +831,10 @@ CByteArray extractPublicKeyFromDG15(CByteArray &dg15_data) {
 bool APL_ICAO::performActiveAuthentication() {
 	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
 
-	auto reader = m_reader->getCalReader();
 	auto cryptFwk = AppLayer.getCryptoFwk();
 
 	// CByteArray security_file;
-	CByteArray secopt_file = reader->ReadFile(PTEID_FILE_SECURITY);
+	CByteArray secopt_file = readFile(PTEID_FILE_SECURITY);
 
 	char *dg14_str = byteArrayToHexString(secopt_file.GetBytes(), secopt_file.Size());
 	MWLOG(LEV_DEBUG, MOD_APL, "DG14 file: %s", dg14_str);
@@ -839,7 +848,7 @@ bool APL_ICAO::performActiveAuthentication() {
 
 	try {
 		// read public key DG15
-		CByteArray pubkey_file = reader->ReadFile(PTEID_FILE_PUB_KEY_AA);
+		CByteArray pubkey_file = readFile(PTEID_FILE_PUB_KEY_AA);
 
 		// verify hash of public key with hash in SOD
 		if (!verifySOD(DG15, pubkey_file)) {
