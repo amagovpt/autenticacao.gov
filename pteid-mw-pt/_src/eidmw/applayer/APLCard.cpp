@@ -716,7 +716,16 @@ void APL_ICAO::loadAvailableDataGroups() {
 	m_SodAttributes = std::make_unique<SODAttributes>(parser.getAttributes());
 }
 
+void logFullSODFile(const CByteArray &sod_data) {
+	char * sod_hex = byteArrayToHexString(sod_data.GetBytes(), sod_data.Size());
+	MWLOG(LEV_DEBUG, MOD_APL, "EF.SOD: %s", sod_hex);
+	free(sod_hex);
+
+}
+
 bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod) {
+
+	logFullSODFile(data);
 	auto csca_store = AppLayer.getCryptoFwk()->getMasterListStore();
 	if (!csca_store) {
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_VERIFY_SOD_SIGN);
