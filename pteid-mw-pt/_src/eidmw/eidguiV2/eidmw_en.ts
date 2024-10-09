@@ -1065,7 +1065,7 @@
     </message>
     <message>
         <source>STR_MORE_INFO</source>
-        <translation>Find out more.</translation>
+        <translation>Find out more </translation>
     </message>
     <message>
         <source>STR_ACCEL_MODE</source>
@@ -1847,8 +1847,12 @@
         <translation>No</translation>
     </message>
     <message>
-        <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG</source>
-        <translation>Unsupported or encrypted PDF file. The PDF signature does not support encrypted PDF files.</translation>
+        <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG1</source>
+        <translation>The file “</translation>
+    </message>
+    <message>
+        <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG2</source>
+        <translation>” is an unsupported or encrypted PDF file. The PDF signature does not support encrypted PDF files.</translation>
     </message>
     <message>
         <source>STR_FILE_UPLOAD_FAIL</source>
@@ -1905,8 +1909,12 @@
         <translation>Error</translation>
     </message>
     <message>
-        <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG</source>
-        <translation>Verify that the file is not corrupted and check the type of signature selected.</translation>
+        <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG1</source>
+        <translation>Verify that the file “</translation>
+    </message>
+    <message>
+        <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG2</source>
+        <translation>” is not corrupted and check the type of signature selected.</translation>
     </message>
     <message>
         <source>STR_CMD_POPUP_CANCEL</source>
@@ -2142,8 +2150,12 @@
         <translation>Could not open the destination folder for signed files. Check that the destination folder still exists. </translation>
     </message>
     <message>
-        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
-        <translation>PDF Files with XFA forms can be signed using Adobe Acrobat.</translation>
+        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG1</source>
+        <translation>The file “</translation>
+    </message>
+    <message>
+        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG2</source>
+        <translation>” is a PDF file with XFA forms. PDF Files with XFA forms can be signed using Adobe Acrobat.</translation>
     </message>
     <message>
         <source>STR_EXPIRED_SIGN_CERT</source>

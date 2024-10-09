@@ -1269,26 +1269,41 @@ PageServicesSignForm {
                         update_indicators(pageCount)
                         update_current_loaded_file()
                     } else {
+                        var removed_file_url = Functions.fileBaseName(filesModel.get(filesModel.count-1).fileUrl)
                         remove_file_from_list(filesModel.count-1)
 
                         const titlePopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR")
                         const link = "https://amagovpt.github.io/docs.autenticacao.gov/user_manual.html#problemas-com-ficheiros-pdf-não-suportados"
 
                         var bodyPopup = ""
-                        if (pageCount === Constants.UNSUPPORTED_PDF_ERROR) {
-                            console.log("Error loading pdf file")
-                            bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_ADVANCED_PDF_ERROR_MSG")
-                        }
-                        else if (pageCount === Constants.ENCRYPTED_PDF_ERROR) {
-                            console.log("Error loading pdf encrypted file")
-                            bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG")
+                        if (pageCount === Constants.XFA_FORM_PDF_ERROR) {
+                            console.log("Error loading pdf with XFA forms")
+                            bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_XFA_FORM_PDF_ERROR_MSG1")
+                                + removed_file_url
+                                + qsTranslate("PageServicesSign","STR_LOAD_XFA_FORM_PDF_ERROR_MSG2")
+                                + "<br>"
+                                + "<p></p>"
                                 + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
                                 + "<a href=" + link + ">"
                                 + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
                         }
-                        else if (pageCount === Constants.XFA_FORM_PDF_ERROR) {
-                            console.log("Error loading pdf with XFA forms")
-                            bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_XFA_FORM_PDF_ERROR_MSG")
+                        else if (pageCount === Constants.UNSUPPORTED_PDF_ERROR) {
+                            console.log("Error loading pdf file")
+                            bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_ADVANCED_PDF_ERROR_MSG1")
+                                    + removed_file_url
+                                    + qsTranslate("PageServicesSign","STR_LOAD_ADVANCED_PDF_ERROR_MSG2")
+                                    + "<br>"
+                        }
+                        else if (pageCount === Constants.ENCRYPTED_PDF_ERROR) {
+                            console.log("Error loading pdf encrypted file")
+                            bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG1")
+                                + removed_file_url
+                                + qsTranslate("PageServicesSign","STR_LOAD_ENCRYPTED_PDF_ERROR_MSG2")
+                                + "<br>"
+                                + "<p></p>"
+                                + " " + qsTranslate("PageDefinitionsApp", "STR_MORE_INFO")
+                                + "<a href=" + link + ">"
+                                + qsTranslate("PageDefinitionsApp", "STR_HERE") + "</a>."
                         } else {
                             console.log("Generic Error loading pdf file")
                             bodyPopup = qsTranslate("PageServicesSign","STR_LOAD_PDF_ERROR_MSG")

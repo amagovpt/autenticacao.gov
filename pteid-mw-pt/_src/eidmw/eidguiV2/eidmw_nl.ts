@@ -1063,7 +1063,7 @@
     </message>
     <message>
         <source>STR_MORE_INFO</source>
-        <translation>Saiba mais informações.</translation>
+        <translation>Saiba mais informações </translation>
     </message>
     <message>
         <source>STR_ACCEL_MODE</source>
@@ -1845,8 +1845,12 @@
         <translation>Não</translation>
     </message>
     <message>
-        <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG</source>
-        <translation>Ficheiro PDF não suportado ou encriptado. A assinatura PDF não suporta ficheiros PDF encriptados.</translation>
+        <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG1</source>
+        <translation>O ficheiro: “</translation>
+    </message>
+    <message>
+        <source>STR_LOAD_ENCRYPTED_PDF_ERROR_MSG2</source>
+        <translation>” não é suportado ou está encriptado. A assinatura PDF não suporta ficheiros PDF encriptados.</translation>
     </message>
     <message>
         <source>STR_FILE_UPLOAD_FAIL</source>
@@ -1903,8 +1907,12 @@
         <translation>Erro</translation>
     </message>
     <message>
-        <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG</source>
-        <translation>Verifique que o ficheiro não está corrompido e verifique o tipo de assinatura seleccionado.</translation>
+        <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG1</source>
+        <translation>Verifique que o ficheiro “</translation>
+    </message>
+    <message>
+        <source>STR_LOAD_ADVANCED_PDF_ERROR_MSG2</source>
+        <translation>” não está corrompido e verifique o tipo de assinatura seleccionado.</translation>
     </message>
     <message>
         <source>STR_CMD_POPUP_CANCEL</source>
@@ -2140,8 +2148,12 @@
         <translation>Não foi possivel abrir a pasta de destino dos ficheiros assinados. Verifique se a pasta de destino ainda existe.</translation>
     </message>
     <message>
-        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG</source>
-        <translation>Ficheiros PDF com formulários XFA podem ser assinados com o Adobe Acrobat.</translation>
+        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG1</source>
+        <translation>O ficheiro “</translation>
+    </message>
+    <message>
+        <source>STR_LOAD_XFA_FORM_PDF_ERROR_MSG2</source>
+        <translation>” é um ficheiro PDF com formulários XFA. Ficheiros PDF com formulários XFA podem ser assinados com o Adobe Acrobat.</translation>
     </message>
     <message>
         <source>STR_EXPIRED_SIGN_CERT</source>
