@@ -83,6 +83,9 @@ PageDefinitionsSignSettingsForm {
             if (controler.getSCAPOptions() != 0){
                 controler.setSCAPOptions(propertyCheckboxSCAP.checked + 1)
             }
+            else{
+                controler.setSCAPOptions(2)
+            }
         }
     }
 
