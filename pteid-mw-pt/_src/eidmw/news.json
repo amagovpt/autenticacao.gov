@@ -47,6 +47,14 @@
          "last_day":"2021-12-31",
          "text":"Versões da aplicação Autenticação.gov anteriores à versão 3.1.2 devem ser atualizadas devido à revogação de certificados, nomeadamente para conseguir assinar com Chave Móvel Digital e Atributos Profissionais.<br><br>No atual contexto, é recomendado que os cidadãos utilizem os canais digitais para acesso a serviços públicos.<br><br>Vários documentos, entre os quais o Cartão de Cidadão, cujo prazo expirou depois de 24 de fevereiro de 2020, continuam válidos até 31 de dezembro de 2021.",
          "link":"https://eportugal.gov.pt/covid-19"
+      },
+      {
+         "id":"7",
+         "title":"Aviso de indisponibilidade",
+         "first_day":"2024-10-11",
+         "last_day":"2024-10-18",
+         "text":"Os serviços Assinatura CMD, Assinatura e carregamento de atributos com SCAP e a consulta de Morada estão a ser recuperados de forma progressiva em consequência do ataque informático de 10 de outubro.<br><br>Lamentamos o incómodo causado e agradecemos a compreensão.",
+         "link":""
       }
    ]
 }
