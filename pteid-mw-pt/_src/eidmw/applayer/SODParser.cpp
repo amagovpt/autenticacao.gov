@@ -8,16 +8,13 @@
 ****************************************************************************-*/
 
 /*
- * EF.SOD Parser
+ * EF.SOD Parser - specification is found on ICAO Doc 9303 - part 10
  */
-
 #include <algorithm>
-
 #include <openssl/x509.h>
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 
-#include "APLReader.h"
 #include "SODParser.h"
 #include "cryptoFwkPteid.h"
 #include "eidErrors.h"
@@ -25,7 +22,7 @@
 #include "MWException.h"
 
 extern "C" {
-/* ASN.1 structures and decoder functions for EF.SOD according to ICAO doc 9303 part 10, see appendix D */
+/* ASN.1 structures and decoder functions for EF.SOD according to ICAO Doc 9303 part 10, see section 4.6.2 and appendix D */
 
 typedef struct {
 	ASN1_INTEGER *datagroupNumber;
@@ -33,9 +30,15 @@ typedef struct {
 } DataGroupHash;
 
 typedef struct {
+	ASN1_OCTET_STRING *ldsVersion;
+	ASN1_OCTET_STRING *unicodeVersion;
+} LDSVersionInfo;
+
+typedef struct {
 	ASN1_INTEGER *version;
 	X509_ALGOR *hashAlgorithm; // AlgorithmIdentifier is defined as X509_ALGOR in OpenSSL
 	STACK_OF(DataGroupHash) * datagroupHashValues;
+	LDSVersionInfo *versionInfo;
 } LDSSecurityObject;
 
 DEFINE_STACK_OF(DataGroupHash)
@@ -46,13 +49,21 @@ ASN1_SEQUENCE(DataGroupHash) = {
 
 IMPLEMENT_ASN1_FUNCTIONS(DataGroupHash)
 
+ASN1_SEQUENCE(LDSVersionInfo) = {
+	ASN1_SIMPLE(LDSVersionInfo, ldsVersion, ASN1_PRINTABLESTRING),
+	ASN1_SIMPLE(LDSVersionInfo, unicodeVersion, ASN1_PRINTABLESTRING)
+} ASN1_SEQUENCE_END (LDSVersionInfo)
+
 ASN1_SEQUENCE(LDSSecurityObject) = {
 	ASN1_SIMPLE(LDSSecurityObject, version, ASN1_INTEGER),
 	ASN1_SIMPLE(LDSSecurityObject, hashAlgorithm, X509_ALGOR),
-	ASN1_SEQUENCE_OF(LDSSecurityObject, datagroupHashValues, DataGroupHash)
+	ASN1_SEQUENCE_OF(LDSSecurityObject, datagroupHashValues, DataGroupHash),
+	/* Optional element introduced in EF.SOD V1, PT eid documents use EF.SOD V0 */
+	ASN1_OPT(LDSSecurityObject, versionInfo, LDSVersionInfo)
 } ASN1_SEQUENCE_END(LDSSecurityObject)
 
 IMPLEMENT_ASN1_FUNCTIONS(LDSSecurityObject)
+
 }
 
 namespace eIDMW {
@@ -74,6 +85,7 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 	} else {
 		attr = new SODAttributes();
 
+		MWLOG(LEV_DEBUG, MOD_APL, "EF.SOD structure version: %d", ASN1_INTEGER_get(decoded_obj->version));
 		auto hash_algorithm = decoded_obj->hashAlgorithm;
 		auto hash_md = EVP_get_digestbyobj(hash_algorithm->algorithm);
 		attr->setHashFunction(hash_md);
