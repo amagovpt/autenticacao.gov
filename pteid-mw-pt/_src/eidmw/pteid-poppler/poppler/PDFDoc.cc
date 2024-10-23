@@ -703,45 +703,6 @@ Object *PDFDoc::getByteRange()
 	return NULL;
 }
 
-#if defined(_DEBUG) && !defined(_WIN32)
-char *read_random_bytes(int n)
-{
-	char * buf = (char *)malloc(n+1);
-	int fd = open("/dev/urandom", O_RDONLY);
-	read(fd, buf, n);
-	close(fd);
-	//Replace by readable char
-	for (unsigned int i=0; i!= n; i++)
-	    buf[i] = (buf[i] % 26) + 0x61;
-	
-	buf[n] = '\0';
-	return buf;
-}
-
-
-void dump_to_file(unsigned char * buf, unsigned int len)
-{
-	char * home = getenv("HOME"); 
-
-	char *path = (char *)calloc(200, 1);
-	strncat(path, home, 199);
-	strcat(path, "/data_to_be_signed_");
-	strcat(path, read_random_bytes(10));
-	strcat(path, ".bin");
-	fprintf(stderr, "DEBUG: storing file to %s\n", path);
-
-	FILE* out_fp = fopen(path, "wb");
-
-	size_t bytes_wrote = fwrite(buf, 1, len, out_fp);
-
-	if (bytes_wrote != len)
-		fprintf(stderr, "Error dumping file\n");
-
-	fclose(out_fp);
-
-}
-#endif
-
 
 /* Workaround for linearized documents */
 
