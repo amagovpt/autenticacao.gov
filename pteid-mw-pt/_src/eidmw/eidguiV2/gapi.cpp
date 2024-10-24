@@ -806,8 +806,8 @@ void GAPI::doStartPACEICAOAuthentication(QString pace_can) {
 
 	PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
 	PTEID_CardType CardType = readerContext.getCardType();
-	if (CardType == ICAO_CARDTYPE_MRTD){
-		
+    // Both ICAO cards and CC2 support this
+	if (CardType == ICAO_CARDTYPE_MRTD || CardType == PTEID_CARDTYPE_IAS5){
 		card = &readerContext.getICAOCard();
 		card->loadMasterList(std::getenv("MASTER_LIST_PATH"));
 	}

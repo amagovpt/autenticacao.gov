@@ -148,7 +148,7 @@ PageCardICAOForm {
         onSignalContactlessCANNeeded: {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
-            paceDialogLoader.item.isICAOCAN = isICAO
+            paceDialogLoader.item.isICAOCAN = true
         }
 
         onSignalSaveCardPhotoFinished: {
