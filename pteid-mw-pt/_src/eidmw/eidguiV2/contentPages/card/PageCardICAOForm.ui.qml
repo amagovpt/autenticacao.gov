@@ -88,8 +88,8 @@ Item {
                 KeyNavigation.tab: surNameTextTextForm
                 KeyNavigation.down: surNameTextTextForm
                 KeyNavigation.right: surNameTextTextForm
-                KeyNavigation.backtab: rectNotes
-                KeyNavigation.up: rectNotes
+                KeyNavigation.backtab: rectCountry
+                KeyNavigation.up: rectCountry
             }
             Item {
                 id: surNameTextTextForm
@@ -426,9 +426,9 @@ Item {
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxCountry.accessibleText
-            KeyNavigation.tab: rectParentsFather
-            KeyNavigation.down: rectParentsFather
-            KeyNavigation.right: rectParentsFather
+            KeyNavigation.tab: rectDocumentNum
+            KeyNavigation.down: rectDocumentNum
+            KeyNavigation.right: rectDocumentNum
             KeyNavigation.backtab: rectExpiryDate
             KeyNavigation.up: rectExpiryDate
         }

@@ -3097,9 +3097,9 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	cardData[IssuingState] = QString::fromUtf8(dg->issuingState());
 	cardData[DocumentNumber] =  QString::fromUtf8(dg->documentNumber());
 	cardData[OptionalDataLine1] = QString::fromUtf8(dg->optionalDataLine1());
-	cardData[DateOfBirth] = QString::fromUtf8(dg->dateOfBirth());
+	cardData[DateOfBirth] = convertDate(QString::fromUtf8(dg->dateOfBirth()));
 	cardData[Gender] = QString(QChar(dg->sex()));
-	cardData[DateOfExpiry] = QString::fromUtf8(dg->dateOfExpiry());
+	cardData[DateOfExpiry] = convertDate(QString::fromUtf8(dg->dateOfExpiry()));
 	cardData[Nat] = QString::fromUtf8(dg->nationality());
 	cardData[OptionalDataLine2] = QString::fromUtf8(dg->optionalDataLine2());
 	cardData[PrimaryIdentifier] = QString::fromUtf8(dg->primaryIdentifier());
@@ -3111,6 +3111,18 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 
 	// All data loaded: we can emit the signal to QML
 	setDataCardICAO(cardData);
+}
+
+QString GAPI::convertDate(const QString& date) {
+    if (date.length() != 6) {
+        return "Invalid date format";
+    }
+
+    QString year = date.mid(0, 2);  // YY
+    QString month = date.mid(2, 2); // MM
+    QString day = date.mid(4, 2);   // DD
+
+    return QString("%1-%2-%3").arg(day, month, year);
 }
 
 void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {

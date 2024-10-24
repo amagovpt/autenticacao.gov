@@ -458,6 +458,7 @@ public slots:
 	void startCCSignatureCertCheck();
 	void startSavingCardPhoto(QString outputFile);
 	int getStringByteLength(const QString &text);
+	QString convertDate(const QString& date);
 	void finishLoadingCardData(PTEID_EIDCard *card);
 	void finishLoadingICAOCardData(ICAO_Card *card);
 	void finishLoadingSignCertData(PTEID_EIDCard *card);
