@@ -916,13 +916,13 @@ tCardFileStatus APL_EidFile_ID_V2::VerifyFile() {
 		const auto mrz_data = m_EidFile_MRZ->getData();
 
 		if (!m_cryptoFwk->VerifyHashSha256(mrz_data, file_sod->getMrzHash())) {
-			MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY: %s",
+			MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_MRZ: %s",
 				  file_sod->getMrzHash().ToString(true, false).c_str());
 			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ);
 		}
 
 		if (!m_cryptoFwk->VerifyHashSha256(id_data, file_sod->getIdHash())) {
-			MWLOG(LEV_DEBUG, MOD_APL, "EIDMW_SOD_ERR_HASH_NO_MATCH_ID: %s",
+			MWLOG(LEV_DEBUG, MOD_APL, "SOD_ERR_HASH_NO_MATCH_ID: %s",
 				  file_sod->getIdHash().ToString(true, false).c_str());
 			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ID);
 		}
