@@ -403,6 +403,11 @@
         <translation>Country</translation>
     </message>
     <message>
+        <source>STR_COUNTRY_OF_EMISSION</source>
+        <oldsource>Country of emission</oldsource>
+        <translation>Country of emission</translation>
+    </message>
+    <message>
         <source>STR_STREET_NAME</source>
         <oldsource>Ab. street type</oldsource>
         <translation>Street Name</translation>
@@ -569,6 +574,10 @@
     <message>
         <source>STR_MENU_OTHER_DATA</source>
         <translation>Other data</translation>
+    </message>
+    <message>
+        <source>STR_MENU_ICAO</source>
+        <translation>Travel data</translation>
     </message>
     <message>
         <source>STR_MENU_ADDRESS</source>

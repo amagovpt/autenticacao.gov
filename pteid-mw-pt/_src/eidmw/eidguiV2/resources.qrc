@@ -12,6 +12,8 @@
         <file>contentPages/card/PageCardAdressForm.ui.qml</file>
         <file>contentPages/card/PageCardNotes.qml</file>
         <file>contentPages/card/PageCardNotesForm.ui.qml</file>
+        <file>contentPages/card/PageCardICAO.qml</file>
+        <file>contentPages/card/PageCardICAOForm.ui.qml</file>
         <file>PageLoader.qml</file>
         <file>MainMenuModel.qml</file>
         <file>SubMenuModel.qml</file>

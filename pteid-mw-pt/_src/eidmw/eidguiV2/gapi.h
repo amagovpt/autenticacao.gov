@@ -227,6 +227,7 @@ class GAPI : public QObject {
 #define TIMERREADERLIST 5000
 	Q_OBJECT
 	Q_PROPERTY(QMap<IDInfoKey, QString> m_data NOTIFY signalCardDataChanged)
+	Q_PROPERTY(QMap<ICAOInfoKey, QString> m_icaoData NOTIFY signalICAODataChanged)
 	Q_PROPERTY(QMap<AddressInfoKey, QString> m_addressData NOTIFY signalAddressLoaded)
 	Q_PROPERTY(QString persoData MEMBER m_persoData NOTIFY signalPersoDataLoaded)
 
@@ -255,6 +256,21 @@ public:
 		Father,
 		Mother,
 		AccidentalIndications
+	};
+
+	enum ICAOInfoKey {
+		DocumentCode,
+		IssuingState,
+		DocumentNumber,
+		OptionalDataLine1,
+		DateOfBirth,
+		Gender,
+		DateOfExpiry,
+		Nat,
+		OptionalDataLine2,
+		PrimaryIdentifier,
+		SecondaryIdentifier,
+		IsPassport,
 	};
 
 	enum AddressInfoKey {
@@ -318,7 +334,7 @@ public:
 
 	enum PrintMessage { NoPrinterAvailable };
 
-	enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
+	enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED, ET_CARD_ICAO};
 
 	enum AutoUpdateMessage {
 		GenericError,
@@ -382,6 +398,7 @@ public:
 	Q_ENUMS(RemoteAddressError)
 	Q_ENUMS(eCustomEventType)
 	Q_ENUMS(IDInfoKey)
+	Q_ENUMS(ICAOInfoKey)
 	Q_ENUMS(AddressInfoKey)
 	Q_ENUMS(UI_LANGUAGE)
 	Q_ENUMS(SignMessage)
@@ -436,11 +453,13 @@ public slots:
 	bool isAddressLoaded() { return m_addressLoaded; }
 	void updateTranslatedStrings() { m_qml_engine->retranslate(); }
 	void startCardReading();
+	void startCardICAOReading();
 	void startGettingInfoFromSignCert();
 	void startCCSignatureCertCheck();
 	void startSavingCardPhoto(QString outputFile);
 	int getStringByteLength(const QString &text);
 	void finishLoadingCardData(PTEID_EIDCard *card);
+	void finishLoadingICAOCardData(ICAO_Card *card);
 	void finishLoadingSignCertData(PTEID_EIDCard *card);
 	void startReadingPersoNotes();
 	void startWritingPersoNotes(const QString &text);
@@ -523,6 +542,7 @@ public slots:
 	void changeAddressPin(QString currentPin, QString newPin);
 
 	void startPACEAuthentication(QString pace_can, CardOperation op);
+	void startPACEICAOAuthentication(QString pace_can);
 
 	void performPACEWithCache(PTEID_EIDCard *card, CardOperation op);
 	void resetContactlessState() {
@@ -546,6 +566,8 @@ public slots:
 
 	QString getCardActivation();
 	QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
+	QString getDataICAOValue(GAPI::ICAOInfoKey key);
+
 	QString getAddressField(GAPI::AddressInfoKey key);
 
 	void setEventCallbacks(void);
@@ -608,6 +630,7 @@ signals:
 	void signalReaderContext();
 	void signalSetReaderComboIndex(long selected_reader);
 	void signalCardDataChanged();
+	void signalICAODataChanged();
 	void signalSignCertDataChanged(QString ownerName, QString NIC);
 	void signalSignCertExpired();
 	void signalSignCertSuspended();
@@ -692,7 +715,9 @@ private:
 	bool LoadTranslationFile(QString NewLanguage);
 	void emitErrorSignal(const char *callerfunction, long errorCode, int index = -1);
 	void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
+	void setDataCardICAO(QMap<ICAOInfoKey, QString>  m_icaoData);
 	void connectToCard();
+	void connectToICAOCard();
 	void getSCAPEntities();
 	void getSCAPCompanyAttributes(bool OAuth);
 
@@ -743,9 +768,11 @@ private:
 	void handleRemoteAddressErrors(long errorCode);
 	// The 2nd function pointer param points to the function to be called after PACE auth is finished
 	void doStartPACEAuthentication(QString pace_can, CardOperation op);
+	void doStartPACEICAOAuthentication(QString pace_can);
 
 	// Data Card Identify map
 	QMap<GAPI::IDInfoKey, QString> m_data;
+	QMap<GAPI::ICAOInfoKey, QString>  m_icaoData;
 	QMap<GAPI::AddressInfoKey, QString> m_addressData;
 	// Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
 	PhotoImageProvider *image_provider;

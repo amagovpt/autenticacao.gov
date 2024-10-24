@@ -40,6 +40,11 @@ ListModel {
                 name: QT_TR_NOOP("STR_MENU_PRINT")
                 expand: false
                 url: "contentPages/card/PageCardPrint.qml"
+            },
+            ListElement {
+                name: QT_TR_NOOP("STR_MENU_ICAO")
+                expand: false
+                url: "contentPages/card/PageCardICAO.qml"
             }
         ]
     }
@@ -51,6 +56,7 @@ ListModel {
                 name: QT_TR_NOOP("STR_MENU_SIGN")
                 expand: false
                 url: "contentPages/services/PageServicesSign.qml"
+                shown : true
             }
         ]
     }
@@ -62,11 +68,13 @@ ListModel {
                 name: QT_TR_NOOP("STR_MENU_CERTIFICATES")
                 expand: false
                 url: "contentPages/security/PageSecurityCertificateState.qml"
+                shown : true
             },
             ListElement {
                 name: QT_TR_NOOP("STR_MENU_PIN_CODES")
                 expand: false
                 url: "contentPages/security/PageSecurityPinCodes.qml"
+                shown : true
             }
         ]
     }

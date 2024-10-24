@@ -401,6 +401,11 @@
         <translation>País</translation>
     </message>
     <message>
+        <source>STR_COUNTRY_OF_EMISSION</source>
+        <oldsource>Country of emission</oldsource>
+        <translation>País emissor</translation>
+    </message>
+    <message>
         <source>STR_STREET_NAME</source>
         <oldsource>Ab. street type</oldsource>
         <translation>Nome da Via</translation>
@@ -571,6 +576,10 @@
     <message>
         <source>STR_MENU_ADDRESS</source>
         <translation>Morada</translation>
+    </message>
+    <message>
+        <source>STR_MENU_ICAO</source>
+        <translation>Dados de Viagem</translation>
     </message>
     <message>
         <source>STR_MENU_NOTES</source>
