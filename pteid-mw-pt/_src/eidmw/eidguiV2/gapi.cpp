@@ -3247,16 +3247,9 @@ void GAPI::connectToICAOCard() {
 	PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
 	PTEID_CardType CardType = readerContext.getCardType();
 	if (CardType == ICAO_CARDTYPE_MRTD){
-		card = &readerContext.getICAOCard();
-	}
-	if (card == NULL)
-		return;
-	if (m_pace_auth_state == PaceAuthenticated) {
-		finishLoadingICAOCardData(card);
-	} else {
 		emit signalContactlessCANNeeded();
-		return;
 	}
+	return;
 }
 
 //****************************************************
