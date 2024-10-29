@@ -1095,6 +1095,8 @@ unsigned short PTEID_FaceInfoData::quality() const { return m_impl.quality(); }
 
 PTEID_ByteArray PTEID_FaceInfoData::photoRawData() const { return PTEID_ByteArray(m_context, m_impl.photoRawData()); }
 
+PTEID_ByteArray PTEID_FaceInfoData::photoRawDataPNG() const { return PTEID_ByteArray(m_context, m_impl.photoRawDataPNG()); }
+
 PTEID_FaceInfoData::PTEID_FaceInfoData(const SDK_Context *context, FaceInfoData &data)
 	: PTEID_Object(context, NULL), m_impl(data) {
 	for (auto &fp : m_impl.featurePoints()) {

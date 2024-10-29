@@ -60,6 +60,7 @@ public:
 	EIDMW_APL_API unsigned short deviceType() const;
 	EIDMW_APL_API unsigned short quality() const;
 	EIDMW_APL_API const CByteArray &photoRawData() const;
+	EIDMW_APL_API const CByteArray &photoRawDataPNG();
 
 private:
 	friend class FaceInfo;
@@ -84,6 +85,7 @@ private:
 	unsigned short m_deviceType;
 	unsigned short m_quality;
 	CByteArray m_photoRawData;
+	CByteArray m_photoRawDataPNG;
 };
 
 class FaceInfo {

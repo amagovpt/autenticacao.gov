@@ -3,6 +3,7 @@
 #include "ByteArray.h"
 #include "Util.h"
 #include "Log.h"
+#include "J2KHelper.h"
 
 #include <vector>
 #include <cstddef>
@@ -387,4 +388,15 @@ unsigned short FaceInfoData::deviceType() const { return m_deviceType; }
 unsigned short FaceInfoData::quality() const { return m_quality; }
 
 const CByteArray &FaceInfoData::photoRawData() const { return m_photoRawData; }
+
+const CByteArray &FaceInfoData::photoRawDataPNG() {
+	unsigned char *mem_buffer = nullptr;
+	unsigned long size_in_bytes = 0;
+	convert_to_png(m_photoRawData.GetBytes(), m_photoRawData.Size(), &mem_buffer, &size_in_bytes);
+	m_photoRawDataPNG = CByteArray(const_cast<unsigned char *>(mem_buffer), static_cast<unsigned long>(size_in_bytes));
+	if (mem_buffer) {
+		free(mem_buffer);
+	}
+	return m_photoRawDataPNG;
+}
 } // namespace eIDMW

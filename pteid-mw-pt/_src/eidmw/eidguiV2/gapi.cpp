@@ -3109,6 +3109,30 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	// Load the photo from PTEID_ICAO_DG2	
 	PTEID_ICAO_DG2* dg2 = card->readDataGroup2();
 
+	if (!dg2->biometricInstances().empty()) {
+		std::vector<PTEID_BiometricInfomation*> biometric_instances = dg2->biometricInstances();
+		PTEID_BiometricInfomation* instance = biometric_instances.at(0);
+		PTEID_FaceInfo* faceInfo = instance->faceInfo();
+		PTEID_FaceInfoData* faceInfoData = faceInfo->faceInfoData().at(0);
+		unsigned short image_data_type = faceInfoData->imgDataType();
+		qDebug() << image_data_type;
+		QPixmap image_photo;
+		if (image_data_type == 1) {
+			// JPEG2000, which needs to be converted to PNG
+			PTEID_ByteArray photoRawData = faceInfoData->photoRawDataPNG();
+			qDebug() << "GOT THE PNG";
+			image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "PNG");
+			qDebug() << "LOADED THE PNG";
+		}
+        else if (image_data_type == 0) {
+			// JPG
+			PTEID_ByteArray photoRawData = faceInfoData->photoRawData();
+			image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "JPG");
+		}
+		// Updates image provider
+		image_provider->setPixmap(image_photo);
+     }
+
 	// All data loaded: we can emit the signal to QML
 	setDataCardICAO(cardData);
 }
@@ -3222,8 +3246,11 @@ void GAPI::connectToCard() {
 	END_TRY_CATCH
 }
 
+// This function doesn't use the cache, since ICAO only cards don't have cache
 void GAPI::connectToICAOCard() {
 	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToICAOCard");
+
+	BEGIN_TRY_CATCH
 	ICAO_Card* card = NULL;
 	unsigned long ReaderCount = ReaderSet.readerCount();
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance Card Reader count =  %ld", ReaderCount);
@@ -3246,9 +3273,11 @@ void GAPI::connectToICAOCard() {
 
 	PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
 	PTEID_CardType CardType = readerContext.getCardType();
+	// If the card is ICAO then it will send the singal to get the CAN
 	if (CardType == ICAO_CARDTYPE_MRTD){
 		emit signalContactlessCANNeeded();
 	}
+	END_TRY_CATCH
 	return;
 }
 

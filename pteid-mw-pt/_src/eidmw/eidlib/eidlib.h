@@ -933,6 +933,7 @@ public:
 	PTEIDSDK_API unsigned short deviceType() const;
 	PTEIDSDK_API unsigned short quality() const;
 	PTEIDSDK_API PTEID_ByteArray photoRawData() const;
+	PTEIDSDK_API PTEID_ByteArray photoRawDataPNG() const;
 
 private:
 	friend class PTEID_FaceInfo;
