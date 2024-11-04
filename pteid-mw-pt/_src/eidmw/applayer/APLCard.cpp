@@ -612,8 +612,10 @@ std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	{
 		selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 
-		loadAvailableDataGroups();
 		performActiveAuthentication();
+		performChipAuthentication();
+
+		loadAvailableDataGroups();
 
 		for (const auto &hash : m_SodAttributes->getHashes()) {
 			datagroups.emplace_back(static_cast<DataGroupID>(hash.first));
@@ -717,10 +719,9 @@ void APL_ICAO::loadAvailableDataGroups() {
 }
 
 void logFullSODFile(const CByteArray &sod_data) {
-	char * sod_hex = byteArrayToHexString(sod_data.GetBytes(), sod_data.Size());
+	char *sod_hex = byteArrayToHexString(sod_data.GetBytes(), sod_data.Size());
 	MWLOG(LEV_DEBUG, MOD_APL, "EF.SOD: %s", sod_hex);
 	free(sod_hex);
-
 }
 
 bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod) {
@@ -752,12 +753,12 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 	}
 
 	BIO *out = BIO_new(BIO_s_mem());
-	/* Some document signing certificates may have wrong values in Extended Key Usage field which generates a "purpose" validation error 
-	   Set the cert verify parameters to have unrestricted purpose X509_PURPOSE_ANY 
+	/* Some document signing certificates may have wrong values in Extended Key Usage field which generates a "purpose"
+	   validation error. Set the cert verify parameters to have unrestricted purpose X509_PURPOSE_ANY
 	*/
 	X509_VERIFY_PARAM *verify_params = X509_STORE_get0_param(csca_store);
-    X509_VERIFY_PARAM_set_purpose(verify_params, X509_PURPOSE_ANY);
-    X509_STORE_set1_param(csca_store, verify_params);
+	X509_VERIFY_PARAM_set_purpose(verify_params, X509_PURPOSE_ANY);
+	X509_STORE_set1_param(csca_store, verify_params);
 
 	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
 
@@ -868,7 +869,9 @@ bool APL_ICAO::performActiveAuthentication() {
 		// read OID from security file
 		auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
 		if (obj == nullptr) {
-			MWLOG(LEV_WARN, MOD_APL, "Didn't find active authentication algorithm OID in security options file. This means we should try AA with RSA!");
+			MWLOG(LEV_WARN, MOD_APL,
+				  "Didn't find active authentication algorithm OID in security options file. This means we should try "
+				  "AA with RSA!");
 		}
 
 		char *dg15_str = byteArrayToHexString(pubkey_file.GetBytes(), pubkey_file.Size());
@@ -889,6 +892,14 @@ bool APL_ICAO::performActiveAuthentication() {
 			return false;
 		}
 	}
+
+	return true;
+}
+
+bool APL_ICAO::performChipAuthentication() {
+	auto dg14 = readFile(DATAGROUP_PATHS.at(DG14));
+	auto pkey = getChipAuthenticationKey(dg14);
+	getCalReader()->initChipAuthentication(pkey);
 
 	return true;
 }

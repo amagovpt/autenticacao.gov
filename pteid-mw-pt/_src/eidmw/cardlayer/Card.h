@@ -41,6 +41,7 @@
 #include "PaceAuthentication.h"
 
 #include <memory>
+#include <openssl/types.h>
 
 namespace eIDMW {
 class APDU;
@@ -123,6 +124,7 @@ public:
 	void createPace();
 
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
+	void initChipAuthentication(EVP_PKEY *pkey);
 
 	const void *getProtocolStructure();
 	const void setNextAPDUClearText() { cleartext_next = true; }

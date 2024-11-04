@@ -339,7 +339,7 @@ public:
 	enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
 
 	~APL_ICAO();
-	
+
 	EIDMW_APL_API virtual std::vector<DataGroupID> getAvailableDatagroups();
 	EIDMW_APL_API virtual CByteArray readDatagroup(DataGroupID tag);
 	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
@@ -371,8 +371,9 @@ private:
 	bool verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod);
 	CByteArray readFile(const std::string &csPath) const;
 	void loadAvailableDataGroups();
-	bool verifySOD(DataGroupID tag, const CByteArray& data);
+	bool verifySOD(DataGroupID tag, const CByteArray &data);
 	bool performActiveAuthentication();
+	bool performChipAuthentication();
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);

@@ -28,6 +28,8 @@
 #include "Pinpad.h"
 #include "Hash.h"
 
+#include <openssl/types.h>
+
 namespace eIDMW {
 
 class APDU;
@@ -111,6 +113,7 @@ public:
 	bool isCardContactless() const;
 
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
+	void initChipAuthentication(EVP_PKEY *pkey);
 
 	/* Read the file indicated by 'csPath'.
 	 * This path can be absolute, relative or empty
@@ -157,7 +160,7 @@ public:
 
 	CByteArray GetRandom(unsigned long ulLen);
 
-    CByteArray SendAPDU(const APDU &apdu);
+	CByteArray SendAPDU(const APDU &apdu);
 
 	CByteArray SendAPDU(const CByteArray &oCmdAPDU);
 

@@ -36,6 +36,7 @@
 #include "ReaderDeviceInfo.h"
 
 #include "CardFactory.h"
+#include <openssl/types.h>
 
 namespace eIDMW {
 
@@ -423,6 +424,8 @@ bool CReader::isCardContactless() const { return m_isContactless; }
 void CReader::initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType) {
 	m_poCard->initPaceAuthentication(secret, secretLen, secretType);
 }
+
+void CReader::initChipAuthentication(EVP_PKEY *pkey) { m_poCard->initChipAuthentication(pkey); }
 
 CByteArray CReader::ReadFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen,
 							 bool bDoNotCache) {

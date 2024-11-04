@@ -11,6 +11,9 @@
 #include "Log.h"
 
 #include <mutex>
+#include <openssl/ec.h>
+#include <openssl/evp.h>
+#include <openssl/types.h>
 
 #include <cassert>
 #include <climits>
@@ -316,27 +319,27 @@ public:
 	}
 
 	CByteArray buildSetPaceAPDU(int protocol_nid) {
-		unsigned char setPace[] = {0x00, 0x22, 0xC1, 0xA4, 0x0F, 0x80 };
+		unsigned char setPace[] = {0x00, 0x22, 0xC1, 0xA4, 0x0F, 0x80};
 		CByteArray apdu_cmd(setPace, sizeof(setPace));
 		unsigned char *protocol_oid_der = NULL;
 		int protocol_oid_len = 0;
 
 		// Which PACE algorithm should we use ?
-		ASN1_OBJECT * pace_algo = OBJ_nid2obj(protocol_nid);
+		ASN1_OBJECT *pace_algo = OBJ_nid2obj(protocol_nid);
 		protocol_oid_len = i2d_ASN1_OBJECT(pace_algo, &protocol_oid_der);
 
 		if (protocol_oid_len > 0 && protocol_oid_len < 256) {
 			unsigned char data_len = protocol_oid_len - 2;
 			apdu_cmd.Append(data_len);
 			apdu_cmd.Append(protocol_oid_der + 2, data_len);
-		}
-		else {
-			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to set PACE algorithm from protocol_nid: %d!", __FUNCTION__, protocol_nid);
+		} else {
+			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to set PACE algorithm from protocol_nid: %d!", __FUNCTION__,
+				  protocol_nid);
 		}
 
-		apdu_cmd.Append(0x83);   //Pace password parameter
+		apdu_cmd.Append(0x83); // Pace password parameter
 		apdu_cmd.Append(0x01);
-		apdu_cmd.Append(m_secretType == PaceSecretType::PACEMRZ ? 0x01: 0x02); 
+		apdu_cmd.Append(m_secretType == PaceSecretType::PACEMRZ ? 0x01 : 0x02);
 
 		return apdu_cmd;
 	}
@@ -345,7 +348,7 @@ public:
 		int protocol_nid = m_ctx->pace_ctx->protocol;
 		auto protocol_obj = OBJ_nid2obj(protocol_nid);
 		char protocol_name[100] = {0};
-        OBJ_obj2txt(protocol_name, sizeof(protocol_name), protocol_obj, 0);
+		OBJ_obj2txt(protocol_name, sizeof(protocol_name), protocol_obj, 0);
 		MWLOG(LEV_DEBUG, MOD_CAL, "Selected PACE algorithm name: %s NID: %d", protocol_name, protocol_nid);
 	}
 
@@ -372,7 +375,7 @@ public:
 		const unsigned char READ_BINARY[] = {0x00, 0xB0, 0x9C, 0x00, 0x00};
 		CByteArray readBinary(READ_BINARY, sizeof(READ_BINARY));
 		CByteArray readBinEFAccess = m_context->m_oPCSC.Transmit(hCard, readBinary, &fileReturn, param_structure);
-		//Discard SW12 from received data
+		// Discard SW12 from received data
 		readBinEFAccess.Chop(2);
 
 		if (!m_ctx || !EAC_CTX_init_ef_cardaccess(readBinEFAccess.GetBytes(), readBinEFAccess.Size(), m_ctx) ||
@@ -383,7 +386,9 @@ public:
 
 		if (m_ctx->pace_ctx == NULL) {
 			std::string cardAccess_hexdump = readBinEFAccess.ToString(true, false);
-			MWLOG(LEV_ERROR, MOD_CAL, "EAC_CTX_init_ef_cardaccess failed to initialize PACE_CTX. CardAccess supplied: %s", cardAccess_hexdump.c_str());
+			MWLOG(LEV_ERROR, MOD_CAL,
+				  "EAC_CTX_init_ef_cardaccess failed to initialize PACE_CTX. CardAccess supplied: %s",
+				  cardAccess_hexdump.c_str());
 			throw CMWEXCEPTION(EIDMW_PACE_ERR_UNKNOWN);
 		}
 
@@ -684,6 +689,319 @@ public:
 		return decriptedArray;
 	}
 
+	BUF_MEM *computeSharedSecret(EVP_PKEY *eph_pkey, EVP_PKEY *chip_pkey) {
+		BUF_MEM *shared_secret = NULL;
+		EC_KEY *ecdh = NULL;
+		EC_KEY *chip_ec = NULL;
+		const EC_GROUP *group = NULL;
+		const EC_POINT *chip_pub_point = NULL;
+
+		ecdh = EVP_PKEY_get1_EC_KEY(eph_pkey);
+		if (!ecdh) {
+			return NULL;
+		}
+
+		group = EC_KEY_get0_group(ecdh);
+		if (!group) {
+			goto err;
+		}
+
+		chip_ec = EVP_PKEY_get1_EC_KEY(chip_pkey);
+		if (!chip_ec) {
+			goto err;
+		}
+		chip_pub_point = EC_KEY_get0_public_key(chip_ec);
+
+		shared_secret = BUF_MEM_new();
+		shared_secret->length = ECDSA_size(ecdh);
+		shared_secret->data = (char *)OPENSSL_malloc(shared_secret->length);
+		shared_secret->max = shared_secret->length;
+
+		// K = KA(SKPCD, PKPICC, DPICC)
+		shared_secret->length =
+			ECDH_compute_key(shared_secret->data, shared_secret->length, chip_pub_point, ecdh, NULL);
+		if (shared_secret->length <= 0) {
+			goto err;
+		}
+
+		EC_KEY_free(ecdh);
+		EC_KEY_free(chip_ec);
+		return shared_secret;
+
+	err:
+		if (shared_secret)
+			BUF_MEM_free(shared_secret);
+		if (ecdh)
+			EC_KEY_free(ecdh);
+		if (chip_ec)
+			EC_KEY_free(chip_ec);
+		return NULL;
+	}
+
+	int deriveSessionKeys(const unsigned char *shared_secret, size_t secret_len, size_t key_length,
+							unsigned char *ks_enc, unsigned char *ks_mac) {
+		EVP_MD_CTX *mdctx = NULL;
+		const EVP_MD *md = NULL;
+		int ret = 0;
+		unsigned int digest_len;
+
+		unsigned char *concat_buffer = NULL;
+
+		concat_buffer = (unsigned char *)malloc(secret_len + 4);
+		if (concat_buffer == NULL) {
+			goto cleanup;
+		}
+
+		mdctx = EVP_MD_CTX_new();
+		if (mdctx == NULL) {
+			goto cleanup;
+		}
+		md = EVP_sha256();
+
+		memcpy(concat_buffer, shared_secret, secret_len);
+		concat_buffer[secret_len] = 0x00;
+		concat_buffer[secret_len + 1] = 0x00;
+		concat_buffer[secret_len + 2] = 0x00;
+		concat_buffer[secret_len + 3] = 0x01;
+
+		if (!EVP_DigestInit_ex(mdctx, md, NULL) || !EVP_DigestUpdate(mdctx, concat_buffer, secret_len + 4) ||
+			!EVP_DigestFinal_ex(mdctx, ks_enc, &digest_len)) {
+			goto cleanup;
+		}
+
+		concat_buffer[secret_len + 3] = 0x02;
+
+		if (!EVP_DigestInit_ex(mdctx, md, NULL) || !EVP_DigestUpdate(mdctx, concat_buffer, secret_len + 4) ||
+			!EVP_DigestFinal_ex(mdctx, ks_mac, &digest_len)) {
+			goto cleanup;
+		}
+
+		ret = 1;
+
+	cleanup:
+		if (concat_buffer) {
+			OPENSSL_cleanse(concat_buffer, secret_len + 4); /* Secure zeroing */
+			free(concat_buffer);
+		}
+		EVP_MD_CTX_free(mdctx);
+		return ret;
+	}
+
+	void initChipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey) {
+		long ret_value = 0;
+		// TODO: error handle
+
+		// 1. Set security environment for chip authentication
+		{
+			unsigned char data[] = {0x80, 0x0A,
+									// TODO: OID from dg14 (hardcoded for now)
+									0x04, 0x00, 0x7F, 0x00, 0x07, 0x02, 0x02, 0x03, 0x02, 0x04};
+			CByteArray apdu_mse;
+			apdu_mse.Append(0x00);
+			apdu_mse.Append(0x22);
+			apdu_mse.Append(0x41);
+			apdu_mse.Append(0xA4);
+			apdu_mse.Append(sizeof(data));
+			apdu_mse.Append({data, sizeof(data)});
+			auto res = sendAPDU(apdu_mse, hCard, ret_value, param_structure);
+			auto valid = res.GetByte(0) != 0x90 || res.GetByte(1) != 0x00;
+			assert(valid && "MSE SET Failed!");
+		}
+
+		// 2. Generate ephemeral key-pair
+		int key_type = EVP_PKEY_base_id(pkey);
+		int key_size = EVP_PKEY_bits(pkey);
+		auto ec_key = EVP_PKEY_get0_EC_KEY(pkey);
+		assert(ec_key && "Could not retreive ec key from dg14 pkey");
+
+		auto eph_key = EC_KEY_new_by_curve_name(EC_GROUP_get_curve_name(EC_KEY_get0_group(ec_key)));
+		assert(eph_key && "Failed to generate ephemeral key");
+		assert(!EC_KEY_generate_key(eph_key) && "Failed to generate ephemeral key s2");
+
+		auto eph_pkey = EVP_PKEY_new();
+		assert(eph_pkey && "Could not generate public key");
+		assert(EVP_PKEY_assign_EC_KEY(eph_pkey, eph_key) && "Failed to assign ephemeral key");
+		eph_key = nullptr;
+
+		// 3. Send public key to card
+		{
+			// Convert ephemeral public key to octet string
+			unsigned char *eph_pubkey_buf = NULL;
+			size_t eph_pubkey_len = 0;
+			eph_pubkey_len =
+				EC_KEY_key2buf(EVP_PKEY_get0_EC_KEY(eph_pkey), POINT_CONVERSION_UNCOMPRESSED, &eph_pubkey_buf, NULL);
+
+			// Encoded ephemeral public key
+			CByteArray eepk;
+			eepk.Append(0x80);
+			eepk.Append(eph_pubkey_len);
+			eepk.Append({eph_pubkey_buf, eph_pubkey_len});
+
+			CByteArray data;
+			data.Append(0x7C);
+			data.Append(eepk.Size());
+			data.Append(eepk);
+
+			CByteArray apdu_gen_auth;
+			apdu_gen_auth.Append(0x00);
+			apdu_gen_auth.Append(0x86);
+			apdu_gen_auth.Append(0x00);
+			apdu_gen_auth.Append(0x00);
+			apdu_gen_auth.Append(data.Size());
+			apdu_gen_auth.Append(data);
+			apdu_gen_auth.Append(0x00);
+
+			CByteArray dyn;
+			dyn.Append(0x80);
+			dyn.Append(eph_pubkey_len);
+			dyn.Append({eph_pubkey_buf, eph_pubkey_len});
+
+			CByteArray input;
+			input.Append(0x7C);
+			input.Append(dyn.Size());
+			input.Append(dyn);
+
+			CByteArray apdu_kat;
+			apdu_kat.Append(0x00);
+			apdu_kat.Append(0x86);
+			apdu_kat.Append(0x00);
+			apdu_kat.Append(0x00);
+			apdu_kat.Append(input.Size());
+			apdu_kat.Append(input);
+			apdu_kat.Append(0x00);
+
+			auto res = sendAPDU(apdu_kat, hCard, ret_value, param_structure);
+			assert(res.Equals({"7C009000", true}) && "Failed General Authentication step");
+		}
+
+		// 4. Compute shared secret
+		auto shared_secret = computeSharedSecret(eph_pkey, pkey);
+		assert(shared_secret->length != 0 && "Failed to generate shared secret");
+
+		// 5. Derive session keys (enc & mac)
+		unsigned char ks_enc[32]; // TODO: size?
+		unsigned char ks_mac[32];
+		assert(deriveSessionKeys((unsigned char *)shared_secret->data, shared_secret->length, sizeof(ks_enc), ks_enc,
+								   ks_mac) &&
+			   "Session keys derivation failed");
+
+		// 6. Use keys for secure messaging
+		swapKeysForChipAuthentication(eph_pkey, shared_secret, ks_enc, sizeof(ks_enc), ks_mac, sizeof(ks_mac));
+	}
+
+	void swapKeysForChipAuthentication(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, unsigned char *k_enc,
+									   size_t k_enc_len, unsigned char *k_mac, size_t k_mac_len) {
+		if (!m_ctx)
+			return;
+
+		// Clear existing encryption context first
+		if (m_ctx->pace_ctx) {
+			if (m_ctx->pace_ctx->ka_ctx) {
+				KA_CTX *ka = m_ctx->pace_ctx->ka_ctx;
+				if (ka->shared_secret) {
+					BUF_MEM_clear_free(ka->shared_secret);
+					ka->shared_secret = NULL;
+				}
+				if (ka->k_enc) {
+					BUF_MEM_clear_free(ka->k_enc);
+					ka->k_enc = NULL;
+				}
+				if (ka->k_mac) {
+					BUF_MEM_clear_free(ka->k_mac);
+					ka->k_mac = NULL;
+				}
+			}
+		}
+
+		// Initialize CA context if it doesn't exist
+		if (!m_ctx->ca_ctx) {
+			int protocol = NID_id_CA_ECDH_AES_CBC_CMAC_256;
+			if (!EAC_CTX_init_ca(m_ctx, protocol, 0)) {
+				MWLOG(LEV_ERROR, MOD_CAL, "Failed to initialize CA context");
+				return;
+			}
+		}
+
+		// Set up the key agreement context
+		if (!m_ctx->ca_ctx || !m_ctx->ca_ctx->ka_ctx) {
+			MWLOG(LEV_ERROR, MOD_CAL, "CA context or KA context is NULL");
+			return;
+		}
+		KA_CTX *ka = m_ctx->ca_ctx->ka_ctx;
+
+		// Clear any existing values in ka
+		if (ka->shared_secret) {
+			BUF_MEM_clear_free(ka->shared_secret);
+			ka->shared_secret = NULL;
+		}
+		if (ka->k_enc) {
+			BUF_MEM_clear_free(ka->k_enc);
+			ka->k_enc = NULL;
+		}
+		if (ka->k_mac) {
+			BUF_MEM_clear_free(ka->k_mac);
+			ka->k_mac = NULL;
+		}
+		if (ka->key) {
+			EVP_PKEY_free(ka->key);
+			ka->key = NULL;
+		}
+
+		// Store the shared secret and keys
+		ka->shared_secret = BUF_MEM_new();
+		if (!ka->shared_secret)
+			goto err;
+		BUF_MEM_grow(ka->shared_secret, shared_secret->length);
+		memcpy(ka->shared_secret->data, shared_secret->data, shared_secret->length);
+		ka->shared_secret->length = shared_secret->length;
+
+		ka->k_enc = BUF_MEM_new();
+		if (!ka->k_enc)
+			goto err;
+		BUF_MEM_grow(ka->k_enc, k_enc_len);
+		memcpy(ka->k_enc->data, k_enc, k_enc_len);
+		ka->k_enc->length = k_enc_len;
+
+		ka->k_mac = BUF_MEM_new();
+		if (!ka->k_mac)
+			goto err;
+		BUF_MEM_grow(ka->k_mac, k_mac_len);
+		memcpy(ka->k_mac->data, k_mac, k_mac_len);
+		ka->k_mac->length = k_mac_len;
+
+		// Increment reference count of eph_pkey before assigning
+		if (eph_pkey)
+			EVP_PKEY_up_ref(eph_pkey);
+		ka->key = eph_pkey;
+
+		// Switch to CA secure messaging
+		ka->enc_keylen = k_enc_len;
+		ka->mac_keylen = k_mac_len;
+		ka->cipher = EVP_aes_256_cbc();
+		ka->md = EVP_sha256();
+		if (!EAC_CTX_set_encryption_ctx(m_ctx, EAC_ID_CA)) {
+			goto err;
+		}
+
+		return;
+
+	err:
+		if (ka) {
+			if (ka->shared_secret)
+				BUF_MEM_clear_free(ka->shared_secret);
+			if (ka->k_enc)
+				BUF_MEM_clear_free(ka->k_enc);
+			if (ka->k_mac)
+				BUF_MEM_clear_free(ka->k_mac);
+			if (ka->key)
+				EVP_PKEY_free(ka->key);
+			ka->shared_secret = NULL;
+			ka->k_enc = NULL;
+			ka->k_mac = NULL;
+			ka->key = NULL;
+		}
+	}
+
 	~PaceAuthenticationImpl() {
 		free(m_secret);
 		if (m_ctx) {
@@ -700,7 +1018,6 @@ private:
 	CContext *m_context;
 	EAC_CTX *m_ctx;
 	std::mutex m_mutex;
-
 };
 
 PaceAuthentication::PaceAuthentication(CContext *poContext)
@@ -711,6 +1028,10 @@ PaceAuthentication::~PaceAuthentication() {}
 void PaceAuthentication::initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure) {
 	m_impl->initAuthentication(hCard, param_structure);
 	initialized = true;
+}
+
+void PaceAuthentication::chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey) {
+	m_impl->initChipAuthentication(hCard, param_structure, pkey);
 }
 
 bool PaceAuthentication::isInitialized() { return initialized; }

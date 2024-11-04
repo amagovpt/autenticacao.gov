@@ -28,6 +28,7 @@
 #include <limits.h>
 
 #include "PaceAuthentication.h"
+#include <openssl/types.h>
 #include <openssl/x509.h>
 
 namespace eIDMW {
@@ -408,6 +409,12 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
 		m_pace->initPaceAuthentication(m_hCard, m_comm_protocol);
 		// Missing steps in Contactless card construction
 		InitEncryptionKey();
+	}
+}
+
+void CCard::initChipAuthentication(EVP_PKEY *pkey) {
+	if (m_pace.get()) {
+		m_pace->chipAuthentication(m_hCard, m_comm_protocol, pkey);
 	}
 }
 
