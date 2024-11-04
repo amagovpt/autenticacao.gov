@@ -809,7 +809,14 @@ void GAPI::doStartPACEICAOAuthentication(QString pace_can) {
     // Both ICAO cards and CC2 support this
 	if (CardType == ICAO_CARDTYPE_MRTD || CardType == PTEID_CARDTYPE_IAS5){
 		card = &readerContext.getICAOCard();
-		card->loadMasterList(std::getenv("MASTER_LIST_PATH"));
+		if (card == NULL){
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "NULL CARD");
+			return;
+		}
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Will load MasterList");
+		//card->loadMasterList(std::getenv("MASTER_LIST_PATH"));
+		card->loadMasterList("/home/nromeu96/Documents/GitHub/tools/ICAO-ReadDGs/DE_ML_2024-08-21-08-21-38.ml");
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Loaded MasterList");
 	}
 
 	if (card == NULL)
@@ -839,6 +846,12 @@ void GAPI::doStartPACEICAOAuthentication(QString pace_can) {
 	}
 
 	m_pace_auth_state = PaceAuthenticated;
+
+	// Cache correct CAN value
+	if (m_Settings.getEnablePteidCANCache() && CardType == PTEID_CARDTYPE_IAS5) {
+		saveCAN(can_str.c_str());
+	}
+
 	finishLoadingICAOCardData(card);
 	END_TRY_CATCH
 }
@@ -1374,22 +1387,22 @@ QString GAPI::getCardActivation() {
 }
 
 QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) {
-	if (id != "photo.png") {
+	if (p.count(id) == 0){
 		qDebug() << "PhotoImageProvider: wrong id requested - " << id;
 		return QPixmap();
 	}
 
 	if (!requestedSize.isValid()) {
-		if (requestedSize.height() > p.height() || requestedSize.width() > p.width()) {
+		if (requestedSize.height() > p[id].height() || requestedSize.width() > p[id].width()) {
 			qDebug() << "PhotoImageProvider: Invalid requestedSize - " << requestedSize;
 			return QPixmap();
 		}
 	}
 
-	size->setWidth(p.width());
-	size->setHeight(p.height());
+	size->setWidth(p[id].width());
+	size->setHeight(p[id].height());
 
-	return p;
+	return p[id];
 }
 
 void GAPI::startPrintPDF(QString outputFile, bool isBasicInfo, bool isAdditionalInfo, bool isAddress, bool isNotes,
@@ -3093,6 +3106,9 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 
 	QMap<ICAOInfoKey, QString> cardData;
 
+	qDebug() << QString::fromUtf8(dg->primaryIdentifier());
+	qDebug() << QString::fromUtf8(dg->secondaryIdentifier());
+
 	cardData[DocumentCode] = QString::fromUtf8(dg->documentCode());
 	cardData[IssuingState] = QString::fromUtf8(dg->issuingState());
 	cardData[DocumentNumber] =  QString::fromUtf8(dg->documentNumber());
@@ -3130,8 +3146,8 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 			image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "JPG");
 		}
 		// Updates image provider
-		image_provider->setPixmap(image_photo);
-     }
+		image_provider->setPixmap("photoICAO.png", image_photo);
+    }
 
 	// All data loaded: we can emit the signal to QML
 	setDataCardICAO(cardData);
@@ -3187,7 +3203,7 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
 	QPixmap image_photo;
 	image_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
 
-	image_provider->setPixmap(image_photo);
+	image_provider->setPixmap("photo.png",image_photo);
 
 	// All data loaded: we can emit the signal to QML
 	setDataCardIdentify(cardData);
@@ -3228,6 +3244,28 @@ void GAPI::performPACEWithCache(PTEID_EIDCard *card, CardOperation op) {
 	}
 }
 
+void GAPI::performPACEICAOWithCache(){
+	if (!m_Settings.getEnablePteidCANCache()) {
+		emit signalContactlessCANNeeded();
+		return;
+	}
+	const int CAN_LENGTH = 6;
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Reading cached CAN on ICAO");
+
+	std::string cached_can = getCANFromCache();
+	if (cached_can.size() == CAN_LENGTH) {
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "CAN SIZE IS CORRECT");
+		QString pace_can = QString::fromStdString(cached_can);
+		Concurrent::run(this, &GAPI::doStartPACEICAOAuthentication, pace_can);
+	} else {
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "CAN SIZE IS INCORRECT");
+		if (cached_can.size() > 0) {
+			deleteCAN();
+		}
+		emit signalContactlessCANNeeded();
+	}
+}
+
 void GAPI::connectToCard() {
 
 	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToCard");
@@ -3242,7 +3280,6 @@ void GAPI::connectToCard() {
 	} else {
 		performPACEWithCache(card, CardOperation::IdentityData);
 	}
-
 	END_TRY_CATCH
 }
 
@@ -3275,7 +3312,24 @@ void GAPI::connectToICAOCard() {
 	PTEID_CardType CardType = readerContext.getCardType();
 	// If the card is ICAO then it will send the singal to get the CAN
 	if (CardType == ICAO_CARDTYPE_MRTD){
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Got ICAO Card");
 		emit signalContactlessCANNeeded();
+	}
+	else if(CardType ==  PTEID_CARDTYPE_IAS5){
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "CC2");
+		if (m_pace_auth_state == PaceAuthenticated) {
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Will directly load the data");
+			card = &readerContext.getICAOCard();
+			card->loadMasterList("/home/nromeu96/Documents/GitHub/tools/ICAO-ReadDGs/DE_ML_2024-08-21-08-21-38.ml");
+			finishLoadingICAOCardData(card);
+		}
+		else {
+			PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Will perform CAN with Cache");
+			performPACEICAOWithCache();
+		}
+	}
+	else{
+		emit signalIncompatibleCard(); 
 	}
 	END_TRY_CATCH
 	return;
@@ -3344,13 +3398,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 			//------------------------------------
 			// send an event to the main app to show the popup message
 			//------------------------------------
-			PTEID_CardType cardType = readerContext.getCardType();
-			if (cardType == ICAO_CARDTYPE_MRTD){
-				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_ICAO);
-			}
-			else{
-				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
-			}
+			pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
 			pCallBackData->getMainWnd()->setAddressLoaded(false);
 			pCallBackData->getMainWnd()->resetReaderSelected();
 
@@ -3358,6 +3406,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 			// register certificates when needed
 			//------------------------------------
 			if (pCallBackData->getMainWnd()->m_Settings.getRegCert()) {
+				PTEID_CardType cardType = readerContext.getCardType();
 				switch (cardType) {
 				case PTEID_CARDTYPE_IAS101:
 				case PTEID_CARDTYPE_IAS07:

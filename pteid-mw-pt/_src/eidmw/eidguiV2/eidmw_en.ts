@@ -2322,6 +2322,14 @@
         <translation>Citizen card inserted</translation>
     </message>
     <message>
+        <source>STR_POPUP_CARD_ICAO</source>
+        <translation>ICAO document inserted</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CARD_INCOMPATIBLE_ICAO</source>
+        <translation>The inserted document is not an ICAO document.</translation>
+    </message>
+    <message>
         <source>STR_POPUP_CARD_READ_UNKNOWN</source>
         <translation>Application error! Please reinstall the application</translation>
     </message>

@@ -20,7 +20,6 @@ import "../../scripts/Functions.js" as Functions
 import eidguiV2 1.0
 
 PageCardICAOForm {
-    property bool isICAO : false
     property string outputFile : ""
 
     Keys.onPressed: {
@@ -56,7 +55,7 @@ PageCardICAOForm {
             propertyTextBoxCountry.propertyDateField.text = gapi.getDataICAOValue(GAPI.IssuingState)
             propertyPhoto.source = ""
             propertyPhoto.cache = false
-            propertyPhoto.source = "image://myimageprovider/photo.png"
+            propertyPhoto.source = "image://myimageprovider/photoICAO.png"
             propertySavePhotoButton.enabled = true
             propertyBusyIndicator.running = false
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
@@ -64,7 +63,7 @@ PageCardICAOForm {
                         propertyGivenNameTextForm.forceActiveFocus()
         }
         onSignalCardAccessError: {
-            console.log("Card Identify Page onSignalCardAccessError")
+            console.log("Card ICAO Page onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
             if (error_code == GAPI.NoReaderFound) {
@@ -104,6 +103,24 @@ PageCardICAOForm {
             propertyBusyIndicator.running = false
             propertySavePhotoButton.enabled = false
         }
+        onSignalIncompatibleCard: {
+            console.log("Card ICAO Page onSignalCardAccessError")
+            var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
+            var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_INCOMPATIBLE_ICAO")
+            mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
+            propertyTextBoxName.propertyDateField.text = ""
+            propertyTextBoxSurName.propertyDateField.text = ""
+            propertyTextBoxSex.propertyDateField.text = ""
+            propertyTextBoxNacionality.propertyDateField.text = ""
+            propertyTextBoxDateOfBirth.propertyDateField.text = ""
+            propertyTextBoxDocumentNum.propertyDateField.text = ""
+            propertyTextBoxExpirydate.propertyDateField.text = ""
+            propertyTextBoxCountry.propertyDateField.text = ""
+            propertyPhoto.source = ""
+            propertyPhoto.cache = false
+            propertyBusyIndicator.running = false
+            propertySavePhotoButton.enabled = false
+        }
         onSignalCardChanged: {
             console.log("Card Identify Page onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
@@ -123,19 +140,11 @@ PageCardICAOForm {
                 propertyPhoto.source = ""
                 propertyPhoto.cache = false
                 propertySavePhotoButton.enabled = false
-                isICAO = false
-            }
-            else if (error_code == GAPI.ET_CARD_ICAO){
-                bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
-                propertyBusyIndicator.running = true
-                isICAO = true
-                gapi.startCardICAOReading()
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
                 propertyBusyIndicator.running = true
-                isICAO = false
-                gapi.startCardReading()
+                gapi.startCardICAOReading()
             }
             else{
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
@@ -166,6 +175,7 @@ PageCardICAOForm {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
+                paceDialogLoader.item.isICAOCAN = true
             }
         }
     }
@@ -370,9 +380,10 @@ PageCardICAOForm {
         mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
     }
 
+    // Here is what is called after changing pages
     Component.onCompleted: {
-        console.log("Page Card Identify mainWindow Completed")
+        console.log("Page Card ICAO mainWindow Completed")
         propertyBusyIndicator.running = true
-        gapi.startCardReading()
+        gapi.startCardICAOReading()
     }
 }

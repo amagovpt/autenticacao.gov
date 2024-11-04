@@ -2320,6 +2320,14 @@
         <translation>Cartão de Cidadão inserido</translation>
     </message>
     <message>
+        <source>STR_POPUP_CARD_ICAO</source>
+        <translation>Documento ICAO inserido</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CARD_INCOMPATIBLE_ICAO</source>
+        <translation>O documento inserido não é um documento ICAO.</translation>
+    </message>
+    <message>
         <source>STR_POPUP_CARD_READ_UNKNOWN</source>
         <translation>Erro da aplicação! Por favor reinstale a aplicação</translation>
     </message>

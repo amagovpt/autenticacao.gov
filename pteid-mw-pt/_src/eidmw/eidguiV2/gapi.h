@@ -112,10 +112,10 @@ public:
 	PhotoImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap) {}
 
 	QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
-	void setPixmap(QPixmap &pixmap) { p = pixmap; }
+	void setPixmap(const QString &id, QPixmap &pixmap) { p[id] = pixmap; }
 
 private:
-	QPixmap p;
+	std::map<QString, QPixmap> p;
 };
 
 struct PrintParams {
@@ -546,6 +546,8 @@ public slots:
 	void startPACEICAOAuthentication(QString pace_can);
 
 	void performPACEWithCache(PTEID_EIDCard *card, CardOperation op);
+	void performPACEICAOWithCache();
+
 	void resetContactlessState() {
 		m_pace_auth_state = PaceDefault;
 		m_is_contactless = false;
@@ -636,6 +638,8 @@ signals:
 	void signalSignCertExpired();
 	void signalSignCertSuspended();
 	void signalSignCertRevoked();
+	//void signalIncompatibleCard(const int card_type);
+	void signalIncompatibleCard();
 	void signalAddressLoaded(bool m_foreign);
 	void signalCardAccessError(int error_code);
 	void signalRemoteAddressError(int error_code);
