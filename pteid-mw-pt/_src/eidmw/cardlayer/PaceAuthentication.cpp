@@ -804,7 +804,7 @@ public:
 			apdu_mse.Append(sizeof(data));
 			apdu_mse.Append({data, sizeof(data)});
 			auto res = sendAPDU(apdu_mse, hCard, ret_value, param_structure);
-			auto valid = res.GetByte(0) != 0x90 || res.GetByte(1) != 0x00;
+			auto valid = res.GetByte(0) == 0x90 && res.GetByte(1) == 0x00;
 			assert(valid && "MSE SET Failed!");
 		}
 
@@ -816,7 +816,7 @@ public:
 
 		auto eph_key = EC_KEY_new_by_curve_name(EC_GROUP_get_curve_name(EC_KEY_get0_group(ec_key)));
 		assert(eph_key && "Failed to generate ephemeral key");
-		assert(!EC_KEY_generate_key(eph_key) && "Failed to generate ephemeral key s2");
+		assert(EC_KEY_generate_key(eph_key) && "Failed to generate ephemeral key s2");
 
 		auto eph_pkey = EVP_PKEY_new();
 		assert(eph_pkey && "Could not generate public key");
