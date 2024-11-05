@@ -257,18 +257,32 @@ FaceInfo::FaceInfo(const unsigned char *biometricData, int biometricDataLen) {
 			biometricData += 2;
 
 			ptrdiff_t offset = biometricData - startOfBiometricData;
-			
+
 			size_t sizePhotoRaw = data->m_facialRecordDataLength - 20 - (8 * data->m_numberOfFeaturePoints) - 12;
 			if (offset + sizePhotoRaw > biometricDataLen) {
 				MWLOG(LEV_WARN, MOD_APL, "Image data inconsistent with Facial Record Header!");
 				sizePhotoRaw = biometricDataLen - offset;
 			}
-			
+
 			data->m_photoRawData = CByteArray(biometricData, sizePhotoRaw);
-			//checkImageDataType(data->m_photoRawData, data->m_imgDataType);
+			bool img_datatype_check = checkImageDataType(data->m_photoRawData, data->m_imgDataType);
+			MWLOG(LEV_INFO, MOD_APL, "DG2 image %d data type check: %s", i, img_datatype_check ? "OK" : "NOT_OK");
 
 			biometricData += sizePhotoRaw;
 		}
+	}
+}
+
+bool FaceInfo::checkImageDataType(CByteArray &photo_data, unsigned char imgDataType) {
+	if (imgDataType == static_cast<unsigned char>(ImageDataType::TYPE_JPEG)) {
+		const unsigned char jpeg_magic[] = {0xFF, 0xD8, 0xFF};
+		return memcmp(photo_data.GetBytes(), jpeg_magic, sizeof(jpeg_magic)) == 0;
+	} else if (imgDataType == static_cast<unsigned char>(ImageDataType::TYPE_JPEG2000)) {
+		const unsigned char jpeg_2000_magic[] = {0x00, 0x00, 0x00, 0x0C, 0x6A, 0x50, 0x20, 0x20};
+		return memcmp(photo_data.GetBytes(), jpeg_2000_magic, sizeof(jpeg_2000_magic)) == 0;
+	} else {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Unknown value for imgDataType: %02X", __FUNCTION__, imgDataType);
+		return false;
 	}
 }
 

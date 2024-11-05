@@ -102,8 +102,8 @@ private:
 	long m_sizeOfRecord;
 	long m_numberOfFacialImages;
 	std::vector<std::shared_ptr<FaceInfoData>> m_faceInfoData;
-	//TODO: check the image format magic numbers
-	//void checkImageDataType(CByteArray &photo_data, unsigned char imgDataType);
+	//Check the image format magic numbers against the declared image data type
+	bool checkImageDataType(CByteArray &photo_data, unsigned char imgDataType);
 };
 
 typedef struct BIT_HEADER_st BIT_HEADER;
