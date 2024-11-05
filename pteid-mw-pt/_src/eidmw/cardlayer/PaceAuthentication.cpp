@@ -812,7 +812,7 @@ public:
 		int key_type = EVP_PKEY_base_id(pkey);
 		int key_size = EVP_PKEY_bits(pkey);
 		auto ec_key = EVP_PKEY_get0_EC_KEY(pkey);
-		assert(ec_key && "Could not retreive ec key from dg14 pkey");
+		assert(ec_key && "Could not retrieve EC key from dg14 pkey");
 
 		auto eph_key = EC_KEY_new_by_curve_name(EC_GROUP_get_curve_name(EC_KEY_get0_group(ec_key)));
 		assert(eph_key && "Failed to generate ephemeral key");
