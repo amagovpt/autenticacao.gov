@@ -78,7 +78,7 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 	auto security_infos = decodeDg14Data(dg14_file);
 
 	ASN1_OBJECT *oid_ret = nullptr;
-	CByteArray oid = {CHIP_AUTHENTICATION_PUBEY_OID};
+	CByteArray oid = {CHIP_AUTHENTICATION_PUBKEY_OID};
 
 	size_t security_infos_n = sk_SecurityInfo_num(security_infos->infos);
 	for (size_t i = 0; i < security_infos_n; i++) {
