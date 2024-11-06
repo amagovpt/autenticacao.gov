@@ -696,10 +696,11 @@ public:
 		const EVP_MD *kdf_md; // MD used for key derivation
 		size_t key_size;
 		int nid;
+		const EVP_CIPHER *cipher;
 	};
 
 	ECDHParams getECDHParamsFromOid(const ASN1_OBJECT *oid) {
-		ECDHParams params = {EVP_sha1(), 16}; // Default values
+		ECDHParams params = {EVP_sha1(), 16};
 
 		int nid = OBJ_obj2nid(oid);
 		params.nid = nid;
@@ -707,15 +708,19 @@ public:
 		if (nid == NID_id_CA_ECDH_3DES_CBC_CBC || nid == NID_id_CA_DH_3DES_CBC_CBC) {
 			params.kdf_md = EVP_sha1();
 			params.key_size = 16;
+			params.cipher = EVP_des_ede_cbc();
 		} else if (nid == NID_id_CA_ECDH_AES_CBC_CMAC_128 || nid == NID_id_CA_DH_AES_CBC_CMAC_128) {
 			params.kdf_md = EVP_sha1();
 			params.key_size = 16;
+			params.cipher = EVP_aes_128_cbc();
 		} else if (nid == NID_id_CA_ECDH_AES_CBC_CMAC_192 || nid == NID_id_CA_DH_AES_CBC_CMAC_192) {
 			params.kdf_md = EVP_sha256();
 			params.key_size = 24;
+			params.cipher = EVP_aes_192_cbc();
 		} else if (nid == NID_id_CA_ECDH_AES_CBC_CMAC_256 || nid == NID_id_CA_DH_AES_CBC_CMAC_256) {
 			params.kdf_md = EVP_sha256();
-			params.key_size = 32; // AES-256 = 32 bytes
+			params.key_size = 32;
+			params.cipher = EVP_aes_256_cbc();
 		} else {
 			MWLOG(LEV_ERROR, MOD_APL, "%s: Unknown protocol NID %d", __FUNCTION__, nid);
 		}
@@ -1013,8 +1018,8 @@ public:
 
 		// Switch to CA secure messaging
 		ka->enc_keylen = ka->mac_keylen = params.key_size;
-		ka->cipher = EVP_aes_256_cbc();
-		ka->md = EVP_sha256();
+		ka->cipher = params.cipher;
+		ka->md = params.kdf_md;
 		if (!EAC_CTX_set_encryption_ctx(m_ctx, EAC_ID_CA)) {
 			goto err;
 		}
