@@ -412,9 +412,9 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
 	}
 }
 
-void CCard::initChipAuthentication(EVP_PKEY *pkey) {
+void CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	if (m_pace.get()) {
-		m_pace->chipAuthentication(m_hCard, m_comm_protocol, pkey);
+		m_pace->chipAuthentication(m_hCard, m_comm_protocol, pkey, oid);
 	}
 }
 

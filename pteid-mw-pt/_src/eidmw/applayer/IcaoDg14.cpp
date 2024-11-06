@@ -102,4 +102,43 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 	return nullptr;
 }
 
+ASN1_OBJECT *getChipAuthenticationOid(const CByteArray &dg14_file) {
+	const unsigned char *CA_OIDS[] = {
+		ID_CA_DH_3DES_CBC_CBC,		  ID_CA_DH_AES_CBC_CMAC_128,	ID_CA_DH_AES_CBC_CMAC_192,
+		ID_CA_DH_AES_CBC_CMAC_256,	  ID_CA_ECHD_3DES_CBC_CBC,		ID_CA_ECHD_3DES_CBC_CMAC_128,
+		ID_CA_ECHD_3DES_CBC_CMAC_192, ID_CA_ECHD_3DES_CBC_CMAC_256,
+	};
+
+	auto security_infos = decodeDg14Data(dg14_file);
+	if (!security_infos) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to decode DG14 Security Options structure!", __FUNCTION__);
+		return NULL;
+	}
+
+	ASN1_OBJECT *found_oid = nullptr;
+
+	size_t security_infos_n = sk_SecurityInfo_num(security_infos->infos);
+	for (size_t i = 0; i < security_infos_n; i++) {
+		auto info = sk_SecurityInfo_value(security_infos->infos, i);
+
+		char obj_buff[255];
+		OBJ_obj2txt(obj_buff, sizeof(obj_buff), info->protocol, 1);
+
+		// Check if this OID matches any in our list
+		for (const auto &valid_oid : CA_OIDS) {
+			if (strcmp(obj_buff, (const char *)valid_oid) == 0) {
+				found_oid = OBJ_dup(info->protocol);
+				break;
+			}
+		}
+
+		if (found_oid) {
+			break;
+		}
+	}
+
+	SecurityInfos_free(security_infos);
+	return found_oid;
+}
+
 } // namespace eIDMW

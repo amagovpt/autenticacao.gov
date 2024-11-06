@@ -899,7 +899,8 @@ bool APL_ICAO::performActiveAuthentication() {
 bool APL_ICAO::performChipAuthentication() {
 	auto dg14 = readFile(DATAGROUP_PATHS.at(DG14));
 	auto pkey = getChipAuthenticationKey(dg14);
-	getCalReader()->initChipAuthentication(pkey);
+	auto oid = getChipAuthenticationOid(dg14);
+	getCalReader()->initChipAuthentication(pkey, oid);
 
 	return true;
 }

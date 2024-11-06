@@ -425,7 +425,7 @@ void CReader::initPaceAuthentication(const char *secret, size_t secretLen, PaceS
 	m_poCard->initPaceAuthentication(secret, secretLen, secretType);
 }
 
-void CReader::initChipAuthentication(EVP_PKEY *pkey) { m_poCard->initChipAuthentication(pkey); }
+void CReader::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) { m_poCard->initChipAuthentication(pkey, oid); }
 
 CByteArray CReader::ReadFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen,
 							 bool bDoNotCache) {

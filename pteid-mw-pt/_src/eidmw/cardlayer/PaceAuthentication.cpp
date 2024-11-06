@@ -14,6 +14,8 @@
 #include <openssl/ec.h>
 #include <openssl/evp.h>
 #include <openssl/types.h>
+#include <openssl/asn1.h>
+#include <openssl/objects.h>
 
 #include <cassert>
 #include <climits>
@@ -739,7 +741,7 @@ public:
 	}
 
 	int deriveSessionKeys(const unsigned char *shared_secret, size_t secret_len, size_t key_length,
-							unsigned char *ks_enc, unsigned char *ks_mac) {
+						  unsigned char *ks_enc, unsigned char *ks_mac) {
 		EVP_MD_CTX *mdctx = NULL;
 		const EVP_MD *md = NULL;
 		int ret = 0;
@@ -787,22 +789,25 @@ public:
 		return ret;
 	}
 
-	void initChipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey) {
+	void initChipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 		long ret_value = 0;
 		// TODO: error handle
 
 		// 1. Set security environment for chip authentication
 		{
-			unsigned char data[] = {0x80, 0x0A,
-									// TODO: OID from dg14 (hardcoded for now)
-									0x04, 0x00, 0x7F, 0x00, 0x07, 0x02, 0x02, 0x03, 0x02, 0x04};
+			unsigned char der_oid[20];
+			unsigned char *p = der_oid;
+			unsigned int der_len = i2d_ASN1_OBJECT(oid, &p);
+
 			CByteArray apdu_mse;
 			apdu_mse.Append(0x00);
 			apdu_mse.Append(0x22);
 			apdu_mse.Append(0x41);
 			apdu_mse.Append(0xA4);
-			apdu_mse.Append(sizeof(data));
-			apdu_mse.Append({data, sizeof(data)});
+			apdu_mse.Append(2 + der_len);
+			apdu_mse.Append(0x80);
+			apdu_mse.Append(0x0A);
+			apdu_mse.Append({der_oid + 2, der_len - 2});
 			auto res = sendAPDU(apdu_mse, hCard, ret_value, param_structure);
 			auto valid = res.GetByte(0) == 0x90 && res.GetByte(1) == 0x00;
 			assert(valid && "MSE SET Failed!");
@@ -882,7 +887,7 @@ public:
 		unsigned char ks_enc[32]; // TODO: size?
 		unsigned char ks_mac[32];
 		assert(deriveSessionKeys((unsigned char *)shared_secret->data, shared_secret->length, sizeof(ks_enc), ks_enc,
-								   ks_mac) &&
+								 ks_mac) &&
 			   "Session keys derivation failed");
 
 		// 6. Use keys for secure messaging
@@ -1030,8 +1035,9 @@ void PaceAuthentication::initPaceAuthentication(SCARDHANDLE &hCard, const void *
 	initialized = true;
 }
 
-void PaceAuthentication::chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey) {
-	m_impl->initChipAuthentication(hCard, param_structure, pkey);
+void PaceAuthentication::chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey,
+											ASN1_OBJECT *oid) {
+	m_impl->initChipAuthentication(hCard, param_structure, pkey, oid);
 }
 
 bool PaceAuthentication::isInitialized() { return initialized; }

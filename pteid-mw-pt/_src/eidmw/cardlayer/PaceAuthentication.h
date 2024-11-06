@@ -15,7 +15,7 @@ public:
 	~PaceAuthentication();
 
 	void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
-	void chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey);
+	void chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey, ASN1_OBJECT *oid);
 	bool isInitialized();
 
 	CByteArray sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);

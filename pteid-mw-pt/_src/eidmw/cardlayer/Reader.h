@@ -113,7 +113,7 @@ public:
 	bool isCardContactless() const;
 
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
-	void initChipAuthentication(EVP_PKEY *pkey);
+	void initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid);
 
 	/* Read the file indicated by 'csPath'.
 	 * This path can be absolute, relative or empty
