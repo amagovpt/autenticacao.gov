@@ -7,6 +7,7 @@
 
 #include "eac/eac.h"
 #include "eac/pace.h"
+#include "eac/objects.h"
 
 #include "Log.h"
 
@@ -694,29 +695,29 @@ public:
 	struct ECDHParams {
 		const EVP_MD *kdf_md; // MD used for key derivation
 		size_t key_size;
+		int nid;
 	};
 
 	ECDHParams getECDHParamsFromOid(const ASN1_OBJECT *oid) {
-		char obj_buff[255];
-		int len = OBJ_obj2txt(obj_buff, sizeof(obj_buff), oid, 1);
+		ECDHParams params = {EVP_sha1(), 16}; // Default values
 
-		ECDHParams params = {EVP_sha1(), 16};
+		int nid = OBJ_obj2nid(oid);
+		params.nid = nid;
 
-		if (memcmp(obj_buff, ID_CA_ECDH_3DES_CBC_CBC, len) == 0 || memcmp(obj_buff, ID_CA_DH_3DES_CBC_CBC, len) == 0) {
+		if (nid == NID_id_CA_ECDH_3DES_CBC_CBC || nid == NID_id_CA_DH_3DES_CBC_CBC) {
 			params.kdf_md = EVP_sha1();
 			params.key_size = 16;
-		} else if (memcmp(obj_buff, ID_CA_ECDH_AES_CBC_CMAC_128, len) == 0 ||
-				   memcmp(obj_buff, ID_CA_DH_AES_CBC_CMAC_128, len) == 0) {
+		} else if (nid == NID_id_CA_ECDH_AES_CBC_CMAC_128 || nid == NID_id_CA_DH_AES_CBC_CMAC_128) {
 			params.kdf_md = EVP_sha1();
 			params.key_size = 16;
-		} else if (memcmp(obj_buff, ID_CA_ECDH_AES_CBC_CMAC_192, len) == 0 ||
-				   memcmp(obj_buff, ID_CA_DH_AES_CBC_CMAC_192, len) == 0) {
+		} else if (nid == NID_id_CA_ECDH_AES_CBC_CMAC_192 || nid == NID_id_CA_DH_AES_CBC_CMAC_192) {
 			params.kdf_md = EVP_sha256();
 			params.key_size = 24;
-		} else if (memcmp(obj_buff, ID_CA_ECDH_AES_CBC_CMAC_256, len) == 0 ||
-				   memcmp(obj_buff, ID_CA_DH_AES_CBC_CMAC_256, len) == 0) {
+		} else if (nid == NID_id_CA_ECDH_AES_CBC_CMAC_256 || nid == NID_id_CA_DH_AES_CBC_CMAC_256) {
 			params.kdf_md = EVP_sha256();
-			params.key_size = 32;
+			params.key_size = 32; // AES-256 = 32 bytes
+		} else {
+			MWLOG(LEV_ERROR, MOD_APL, "%s: Unknown protocol NID %d", __FUNCTION__, nid);
 		}
 
 		return params;
@@ -923,11 +924,11 @@ public:
 			   "Session keys derivation failed");
 
 		// 6. Use keys for secure messaging
-		swapKeysForChipAuthentication(eph_pkey, shared_secret, ks_enc, params.key_size, ks_mac, params.key_size);
+		swapKeysForChipAuthentication(eph_pkey, shared_secret, ks_enc, ks_mac, params);
 	}
 
 	void swapKeysForChipAuthentication(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, unsigned char *k_enc,
-									   size_t k_enc_len, unsigned char *k_mac, size_t k_mac_len) {
+									   unsigned char *k_mac, const ECDHParams &params) {
 		if (!m_ctx)
 			return;
 
@@ -952,8 +953,7 @@ public:
 
 		// Initialize CA context if it doesn't exist
 		if (!m_ctx->ca_ctx) {
-			int protocol = NID_id_CA_ECDH_AES_CBC_CMAC_256;
-			if (!EAC_CTX_init_ca(m_ctx, protocol, 0)) {
+			if (!EAC_CTX_init_ca(m_ctx, params.nid, 0)) {
 				MWLOG(LEV_ERROR, MOD_CAL, "Failed to initialize CA context");
 				return;
 			}
@@ -995,16 +995,16 @@ public:
 		ka->k_enc = BUF_MEM_new();
 		if (!ka->k_enc)
 			goto err;
-		BUF_MEM_grow(ka->k_enc, k_enc_len);
-		memcpy(ka->k_enc->data, k_enc, k_enc_len);
-		ka->k_enc->length = k_enc_len;
+		BUF_MEM_grow(ka->k_enc, params.key_size);
+		memcpy(ka->k_enc->data, k_enc, params.key_size);
+		ka->k_enc->length = params.key_size;
 
 		ka->k_mac = BUF_MEM_new();
 		if (!ka->k_mac)
 			goto err;
-		BUF_MEM_grow(ka->k_mac, k_mac_len);
-		memcpy(ka->k_mac->data, k_mac, k_mac_len);
-		ka->k_mac->length = k_mac_len;
+		BUF_MEM_grow(ka->k_mac, params.key_size);
+		memcpy(ka->k_mac->data, k_mac, params.key_size);
+		ka->k_mac->length = params.key_size;
 
 		// Increment reference count of eph_pkey before assigning
 		if (eph_pkey)
@@ -1012,8 +1012,7 @@ public:
 		ka->key = eph_pkey;
 
 		// Switch to CA secure messaging
-		ka->enc_keylen = k_enc_len;
-		ka->mac_keylen = k_mac_len;
+		ka->enc_keylen = ka->mac_keylen = params.key_size;
 		ka->cipher = EVP_aes_256_cbc();
 		ka->md = EVP_sha256();
 		if (!EAC_CTX_set_encryption_ctx(m_ctx, EAC_ID_CA)) {

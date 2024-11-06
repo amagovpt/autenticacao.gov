@@ -28,14 +28,4 @@ static const unsigned char bsiSha512OID[] = {0x06, 0x0A, 0x04, 0x00, 0x7F, 0x00,
 static const char *bsiSha512SN = "sha512";
 static const char *bsiSha512LN = "bsiEcdsaWithSHA512";
 
-// Possible OIDs for Chip Authentication
-static const unsigned char ID_CA_DH_3DES_CBC_CBC[] = "0.4.0.127.0.7.2.2.3.1.1";
-static const unsigned char ID_CA_DH_AES_CBC_CMAC_128[] = "0.4.0.127.0.7.2.2.3.1.2";
-static const unsigned char ID_CA_DH_AES_CBC_CMAC_192[] = "0.4.0.127.0.7.2.2.3.1.3";
-static const unsigned char ID_CA_DH_AES_CBC_CMAC_256[] = "0.4.0.127.0.7.2.2.3.1.4";
-static const unsigned char ID_CA_ECDH_3DES_CBC_CBC[] = "0.4.0.127.0.7.2.2.3.2.1";
-static const unsigned char ID_CA_ECDH_AES_CBC_CMAC_128[] = "0.4.0.127.0.7.2.2.3.2.2";
-static const unsigned char ID_CA_ECDH_AES_CBC_CMAC_192[] = "0.4.0.127.0.7.2.2.3.2.3";
-static const unsigned char ID_CA_ECDH_AES_CBC_CMAC_256[] = "0.4.0.127.0.7.2.2.3.2.4";
-
 } // namespace eIDMW
