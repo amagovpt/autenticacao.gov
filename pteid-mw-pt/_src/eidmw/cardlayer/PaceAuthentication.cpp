@@ -691,6 +691,37 @@ public:
 		return decriptedArray;
 	}
 
+	struct ECDHParams {
+		const EVP_MD *kdf_md; // MD used for key derivation
+		size_t key_size;
+	};
+
+	ECDHParams getECDHParamsFromOid(const ASN1_OBJECT *oid) {
+		char obj_buff[255];
+		int len = OBJ_obj2txt(obj_buff, sizeof(obj_buff), oid, 1);
+
+		ECDHParams params = {EVP_sha1(), 16};
+
+		if (memcmp(obj_buff, ID_CA_ECDH_3DES_CBC_CBC, len) == 0 || memcmp(obj_buff, ID_CA_DH_3DES_CBC_CBC, len) == 0) {
+			params.kdf_md = EVP_sha1();
+			params.key_size = 16;
+		} else if (memcmp(obj_buff, ID_CA_ECDH_AES_CBC_CMAC_128, len) == 0 ||
+				   memcmp(obj_buff, ID_CA_DH_AES_CBC_CMAC_128, len) == 0) {
+			params.kdf_md = EVP_sha1();
+			params.key_size = 16;
+		} else if (memcmp(obj_buff, ID_CA_ECDH_AES_CBC_CMAC_192, len) == 0 ||
+				   memcmp(obj_buff, ID_CA_DH_AES_CBC_CMAC_192, len) == 0) {
+			params.kdf_md = EVP_sha256();
+			params.key_size = 24;
+		} else if (memcmp(obj_buff, ID_CA_ECDH_AES_CBC_CMAC_256, len) == 0 ||
+				   memcmp(obj_buff, ID_CA_DH_AES_CBC_CMAC_256, len) == 0) {
+			params.kdf_md = EVP_sha256();
+			params.key_size = 32;
+		}
+
+		return params;
+	}
+
 	BUF_MEM *computeSharedSecret(EVP_PKEY *eph_pkey, EVP_PKEY *chip_pkey) {
 		BUF_MEM *shared_secret = NULL;
 		EC_KEY *ecdh = NULL;
@@ -740,10 +771,9 @@ public:
 		return NULL;
 	}
 
-	int deriveSessionKeys(const unsigned char *shared_secret, size_t secret_len, size_t key_length,
+	int deriveSessionKeys(const unsigned char *shared_secret, size_t secret_len, const EVP_MD *md, size_t key_length,
 						  unsigned char *ks_enc, unsigned char *ks_mac) {
 		EVP_MD_CTX *mdctx = NULL;
-		const EVP_MD *md = NULL;
 		int ret = 0;
 		unsigned int digest_len;
 
@@ -758,7 +788,6 @@ public:
 		if (mdctx == NULL) {
 			goto cleanup;
 		}
-		md = EVP_sha256();
 
 		memcpy(concat_buffer, shared_secret, secret_len);
 		concat_buffer[secret_len] = 0x00;
@@ -798,6 +827,7 @@ public:
 			unsigned char der_oid[20];
 			unsigned char *p = der_oid;
 			unsigned int der_len = i2d_ASN1_OBJECT(oid, &p);
+			CByteArray oid_data = CByteArray(der_oid + 2, der_len - 2);
 
 			CByteArray apdu_mse;
 			apdu_mse.Append(0x00);
@@ -807,7 +837,7 @@ public:
 			apdu_mse.Append(2 + der_len);
 			apdu_mse.Append(0x80);
 			apdu_mse.Append(0x0A);
-			apdu_mse.Append({der_oid + 2, der_len - 2});
+			apdu_mse.Append(oid_data);
 			auto res = sendAPDU(apdu_mse, hCard, ret_value, param_structure);
 			auto valid = res.GetByte(0) == 0x90 && res.GetByte(1) == 0x00;
 			assert(valid && "MSE SET Failed!");
@@ -883,15 +913,17 @@ public:
 		auto shared_secret = computeSharedSecret(eph_pkey, pkey);
 		assert(shared_secret->length != 0 && "Failed to generate shared secret");
 
+		ECDHParams params = getECDHParamsFromOid(oid);
+
 		// 5. Derive session keys (enc & mac)
-		unsigned char ks_enc[32]; // TODO: size?
+		unsigned char ks_enc[32]; // Max size possible
 		unsigned char ks_mac[32];
-		assert(deriveSessionKeys((unsigned char *)shared_secret->data, shared_secret->length, sizeof(ks_enc), ks_enc,
-								 ks_mac) &&
+		assert(deriveSessionKeys((unsigned char *)shared_secret->data, shared_secret->length, params.kdf_md,
+								 params.key_size, ks_enc, ks_mac) &&
 			   "Session keys derivation failed");
 
 		// 6. Use keys for secure messaging
-		swapKeysForChipAuthentication(eph_pkey, shared_secret, ks_enc, sizeof(ks_enc), ks_mac, sizeof(ks_mac));
+		swapKeysForChipAuthentication(eph_pkey, shared_secret, ks_enc, params.key_size, ks_mac, params.key_size);
 	}
 
 	void swapKeysForChipAuthentication(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, unsigned char *k_enc,
