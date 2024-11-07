@@ -32,17 +32,22 @@
 
 using namespace eIDMW;
 
-const char *signDescription = "Open Signature submenu.";
+const char *signDescription =
+	"Open Signature submenu with preset fields. PDF file argument list is mandatory.\n   --tsa\n    Enable timestamp "
+	"option\n   -d,--destino=STRING\n    Set destination folder for signatures\n"
+	"   -m,--motivo=STRING\n    Set the signature reason field\n   -l,--localidade=STRING\n    Set the signature "
+	"location field\n";
 
 int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settings) {
 
 	QString modeDescription("Mode of the application. Possible values are:\n ");
 	modeDescription.append("\"\" (empty): default mode\n");
-	modeDescription.append("\"sign\": ").append(signDescription);
+	modeDescription.append("sign [OPTIONS] PDF_FILE...: ").append(signDescription);
 	parser->addPositionalArgument("mode", modeDescription);
 
-	const QCommandLineOption helpOption = parser->addHelpOption();
+	const QCommandLineOption helpOption(QStringList() << "h" << "help", "Displays help on commandline options");
 	const QCommandLineOption versionOption = parser->addVersionOption();
+	parser->addOption(helpOption);
 
 	// Graphics rendering options
 	const QCommandLineOption softwareModeOption(QStringList() << "s" << "software",
@@ -58,7 +63,7 @@ int parseCommandlineAppArguments(QCommandLineParser *parser, GUISettings *settin
 #endif
 	const QCommandLineOption testModeOption(
 		QStringList() << "t" << "test",
-		"Enable test mode. It accepts only test cards and uses Address Change test server");
+		"Enable test mode. It accepts only test cards and uses address reading test server");
 	parser->addOption(testModeOption);
 
 	parser->parse(QCoreApplication::arguments());
@@ -264,6 +269,10 @@ int main(int argc, char *argv[]) {
 
 	FILE *errFile = handleSTDErr();
 	SingleApplication app(argc, argv);
+	app.setOrganizationName("Portuguese State");
+	// Needs to be defined before commandline arguments are processed for --version
+	app.setApplicationVersion(settings.getGuiVersion() + " - " + REVISION_NUM_STRING + " [ " + REVISION_HASH_STRING +
+							  " ]");
 
 	qInstallMessageHandler(customMessageHandler);
 
@@ -274,10 +283,6 @@ int main(int argc, char *argv[]) {
 	if (retValue == SUCCESS_EXIT_CODE) {
 
 		PTEID_InitSDK();
-
-		app.setOrganizationName("Portuguese State");
-		app.setApplicationVersion(settings.getGuiVersion() + " - " + REVISION_NUM_STRING + " [ " +
-								  REVISION_HASH_STRING + " ]");
 
 		// Set app icon
 		app.setWindowIcon(QIcon(":/appicon.ico"));
