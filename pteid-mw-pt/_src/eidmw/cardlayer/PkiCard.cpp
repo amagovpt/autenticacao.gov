@@ -63,7 +63,7 @@ void CPkiCard::SelectApplication(const CByteArray &oAID) {
 	}
 
 	long lRetVal = 0;
-	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
 	CByteArray oCmd(sizeof(oAID) + 5);
 	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
 	oCmd.Append((unsigned char)oAID.Size());

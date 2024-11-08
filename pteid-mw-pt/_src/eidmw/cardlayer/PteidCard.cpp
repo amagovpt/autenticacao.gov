@@ -55,7 +55,7 @@ unsigned long ulVersion;
 static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const void *protocol_struct,
 								  std::unique_ptr<PaceAuthentication> &paceAuthentication) {
 	long lRetVal = 0;
-	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
 	CByteArray oCmd(sizeof(PTEID_1_APPLET_AID) + 5);
 	oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
 	oCmd.Append((unsigned char)sizeof(PTEID_1_APPLET_AID));

@@ -73,7 +73,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 
 		const auto selectAppId = [&](const unsigned char *oAID, unsigned long size) -> bool {
 			long lRetVal = 0;
-			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
 			CByteArray oCmd(12);
 			oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
 			oCmd.Append((unsigned char)size);
@@ -168,7 +168,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 
 			const auto selectAppId = [&](const unsigned char *oAID, unsigned long size) -> bool {
 				long lRetVal = 0;
-				unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+				unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
 				CByteArray select_command(12);
 				select_command.Append(tucSelectApp, sizeof(tucSelectApp));
 				select_command.Append((unsigned char)size);
