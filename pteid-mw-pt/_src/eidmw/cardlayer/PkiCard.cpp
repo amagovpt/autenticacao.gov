@@ -74,6 +74,8 @@ void CPkiCard::SelectApplication(const CByteArray &oAID) {
 	if (getSW12(oResp) == 0x9000) {
 		// If select application was a success, update the state
 		m_lastSelectedApplication = oAID;
+	} else {
+		throw CMWEXCEPTION(EIDMW_ERR_FILE_NOT_FOUND);
 	}
 }
 

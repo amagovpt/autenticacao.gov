@@ -249,6 +249,14 @@ APL_ICAO *APL_ReaderContext::getICAOCard() {
 	if (m_card->getType() == APL_CARDTYPE_ICAO) {
 		return dynamic_cast<APL_ICAO *>(m_card);
 	} else if (m_card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+
+		// Confirm presence of ICAO application
+		try {
+			m_calreader->SelectApplication({ICAO_APPLET_MRTD, sizeof(ICAO_APPLET_MRTD)});
+		} catch (...) {
+			return NULL;
+		}
+
 		if (!m_icao) {
 			m_icao.reset();
 			m_icao = std::unique_ptr<APL_ICAO>(new APL_ICAO(this));
