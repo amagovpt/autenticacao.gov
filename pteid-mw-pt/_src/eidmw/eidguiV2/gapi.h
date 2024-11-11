@@ -390,7 +390,8 @@ public:
 		DoAddress,
 		GetAuthPin,
 		GetSignPin,
-		GetAddressPin
+		GetAddressPin,
+		ICAOData,
 	};
 
 	Q_ENUMS(ScapPdfSignResult)
@@ -445,6 +446,8 @@ public slots:
 
 	// Slots to Gui request values
 	QVariantList getRetReaderList(void);
+	bool hasOnlyICAO();
+	bool hasICAO();
 	int getReaderIndex(void);
 	void setReaderByUser(unsigned long setReaderIndex);
 	void resetReaderSelected(void) { selectedReaderIndex = -1; }
@@ -543,11 +546,8 @@ public slots:
 	void changeAddressPin(QString currentPin, QString newPin);
 
 	void startPACEAuthentication(QString pace_can, CardOperation op);
-	void startPACEICAOAuthentication(QString pace_can);
 
 	void performPACEWithCache(PTEID_EIDCard *card, CardOperation op);
-	void performPACEICAOWithCache();
-
 	void resetContactlessState() {
 		m_pace_auth_state = PaceDefault;
 		m_is_contactless = false;
@@ -638,8 +638,6 @@ signals:
 	void signalSignCertExpired();
 	void signalSignCertSuspended();
 	void signalSignCertRevoked();
-	//void signalIncompatibleCard(const int card_type);
-	void signalIncompatibleCard();
 	void signalAddressLoaded(bool m_foreign);
 	void signalCardAccessError(int error_code);
 	void signalRemoteAddressError(int error_code);
@@ -773,7 +771,6 @@ private:
 	void handleRemoteAddressErrors(long errorCode);
 	// The 2nd function pointer param points to the function to be called after PACE auth is finished
 	void doStartPACEAuthentication(QString pace_can, CardOperation op);
-	void doStartPACEICAOAuthentication(QString pace_can);
 
 	// Data Card Identify map
 	QMap<GAPI::IDInfoKey, QString> m_data;

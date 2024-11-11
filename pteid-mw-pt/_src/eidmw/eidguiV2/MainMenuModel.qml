@@ -14,6 +14,7 @@ import QtQuick 2.6
 ListModel {
     ListElement {
         name: QT_TR_NOOP("STR_MENU_SIGN_CARD")
+        isCard: true
         expand: false
         subdata:[
             ListElement {
@@ -44,6 +45,7 @@ ListModel {
             ListElement {
                 name: QT_TR_NOOP("STR_MENU_ICAO")
                 expand: false
+                isIcao: true
                 url: "contentPages/card/PageCardICAO.qml"
             }
         ]

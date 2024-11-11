@@ -183,6 +183,11 @@ Load language error. Please reinstall the application"
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             readerContext.open()
         }
+        onSignalCardChanged: {
+            if(mainFormID.propertyMainMenuListView.model.get(mainFormID.propertyMainMenuListView.currentIndex).isCard &&
+                    mainFormID.propertyMainMenuListView.model.count > 0)
+                mainMenuPressed(mainFormID.propertyMainMenuListView.currentIndex)
+        }
     }
 
     Dialog {
@@ -1606,6 +1611,15 @@ Load language error. Please reinstall the application"
         }else{
             // Load a new sub menu
             for(var i = 0; i < mainFormID.propertyMainMenuListView.model.get(index).subdata.count; ++i) {
+                var hasIcao = gapi.hasICAO();
+                var hasOnlyIcao = gapi.hasOnlyICAO()
+                if(mainFormID.propertyMainMenuListView.model.get(index).isCard &&
+                        (mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).isIcao && !hasIcao) ||
+                        (hasIcao && hasOnlyIcao && !mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).isIcao))
+                {
+                    continue
+                }
+
                 /*console.log("Sub Menu indice " + i + " - "
                             + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name + " - "
                             + mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand + " - "
@@ -1614,14 +1628,15 @@ Load language error. Please reinstall the application"
                 .append({
                             "subName": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).name,
                             "expand": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).expand,
-                            "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url
+                            "url": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).url,
+                            "isIcao": mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).isIcao,
                         })
             }
 
             // Open the content page of the first item of the new sub menu
             mainFormID.propertyPageLoader.propertyForceFocus = false
             mainFormID.propertyPageLoader.source =
-                    mainFormID.propertyMainMenuListView.model.get(index).subdata.get(0).url
+                    mainFormID.propertySubMenuListView.model.get(0).url
             mainFormID.propertySubMenuListView.currentIndex = 0
             /* Setting the state should be done after setting the source: changing the state causes the PDFPreview to call
                another (unnecessary) requestPixmap if the signature pages are loaded. */

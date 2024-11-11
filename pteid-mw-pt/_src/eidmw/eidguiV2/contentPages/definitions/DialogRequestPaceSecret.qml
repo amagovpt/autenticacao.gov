@@ -167,7 +167,7 @@ Dialog {
                     Keys.onReturnPressed: okButton.clicked()
                     onClicked: {
                         textFieldCAN.forceActiveFocus()
-                        startPaceFunction(isICAOCAN)
+                        startPaceFunction()
                     }
 
                     contentItem: Text {
@@ -179,7 +179,7 @@ Dialog {
                     }
                 }
                 onApplied: {
-                    startPaceFunction(isICAOCAN)
+                    startPaceFunction()
                 }
                 onRejected: {
                     mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -193,14 +193,7 @@ Dialog {
             }
             textFieldCAN.enabled = false
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
-            if (ICAO === true) {
-                console.log("Will do PACE for ICAO")
-                gapi.startPACEICAOAuthentication(textFieldCAN.text)
-            }
-            else{
-                console.log("Will do PACE for Non-ICAO")
-                gapi.startPACEAuthentication(textFieldCAN.text, afterPaceAction)
-            }
+            gapi.startPACEAuthentication(textFieldCAN.text, afterPaceAction)
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
     }

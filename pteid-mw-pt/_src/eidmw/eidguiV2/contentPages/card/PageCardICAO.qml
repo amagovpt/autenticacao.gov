@@ -157,7 +157,6 @@ PageCardICAOForm {
         onSignalContactlessCANNeeded: {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
-            paceDialogLoader.item.isICAOCAN = true
         }
 
         onSignalSaveCardPhotoFinished: {
@@ -175,7 +174,6 @@ PageCardICAOForm {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
-                paceDialogLoader.item.isICAOCAN = true
             }
         }
     }
@@ -193,7 +191,7 @@ PageCardICAOForm {
         anchors.verticalCenter: parent.verticalCenter
         source: "../definitions/DialogRequestPaceSecret.qml"
         onLoaded: {
-            paceDialogLoader.item.afterPaceAction = GAPI.IdentityData
+            paceDialogLoader.item.afterPaceAction = GAPI.ICAOData
             paceDialogLoader.item.open()
         }
     }
