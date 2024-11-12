@@ -780,15 +780,52 @@ void GAPI::startPACEAuthentication(QString pace_can, CardOperation op) {
 void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 
 	PTEID_EIDCard *card = NULL;
+	ICAO_Card *cardIcao = NULL;
 	BEGIN_TRY_CATCH
 
 	getCardInstance(card);
-	if (card == NULL)
-		return;
+	if (card == NULL) {
+		if (CardOperation::ICAOData) {
+			try {
+				unsigned long ReaderCount = ReaderSet.readerCount();
+				PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance Card Reader count =  %ld", ReaderCount);
+				unsigned long ReaderIdx = 0;
+				unsigned long tempReaderIndex = 0;
+				ReaderCount = ReaderSet.readerCount();
+				if (ReaderCount == 0) {
+					return;
+				}
+
+				for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+					PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+					if (readerContext.isCardPresent()) {
+						tempReaderIndex = ReaderIdx;
+						break;
+					}
+				}
+
+				PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+				PTEID_CardType cardType = readerContext.getCardType();
+				if (cardType != ICAO_CARDTYPE_MRTD)
+					return;
+
+				cardIcao = &readerContext.getICAOCard();
+
+			} catch (PTEID_Exception err) {
+				qDebug() << "Error while trying to create ICAO Card object! error: " << err.GetError()
+						 << "message: " << err.GetMessage();
+			}
+		}
+	}
 
 	std::string can_str = pace_can.toStdString();
 	try {
-		card->initPaceAuthentication(can_str.c_str(), can_str.size(), PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+		if (card)
+			card->initPaceAuthentication(can_str.c_str(), can_str.size(),
+										 PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+		else if (cardIcao)
+			cardIcao->initPaceAuthentication(can_str.c_str(), can_str.size(),
+											 PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN); // or mrz
 		emit signalPaceSuccess();
 	} catch (PTEID_PACE_ERROR &e) {
 		PaceError err;
@@ -3014,26 +3051,26 @@ QVariantList GAPI::getRetReaderList() {
 }
 
 bool GAPI::hasOnlyICAO() {
-	unsigned long ReaderCount = ReaderSet.readerCount();
+	unsigned long ReaderCount = 0;
 	unsigned long ReaderIdx = 0;
 	unsigned long tempReaderIndex = 0;
 	PTEID_CardType cardType = PTEID_CARDTYPE_UNKNOWN;
-
-	if (ReaderCount == 0) {
-		return false;
-	}
-
-	for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
-		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
-		if (readerContext.isCardPresent()) {
-			tempReaderIndex = ReaderIdx;
-			break;
-		}
-	}
-
-	PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
-
 	try {
+		ReaderCount = ReaderSet.readerCount();
+		if (ReaderCount == 0) {
+			return false;
+		}
+
+		for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+			PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+			if (readerContext.isCardPresent()) {
+				tempReaderIndex = ReaderIdx;
+				break;
+			}
+		}
+
+		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+
 		cardType = readerContext.getCardType();
 	} catch (PTEID_Exception err) {
 		qDebug() << "Not able to get card type!" << "error" << err.GetError() << "message" << err.GetMessage();
@@ -3052,25 +3089,25 @@ int GAPI::getReaderIndex(void) {
 
 bool GAPI::hasICAO() {
 	ICAO_Card *card = NULL;
-	unsigned long ReaderCount = ReaderSet.readerCount();
+	unsigned long ReaderCount = 0;
 	unsigned long ReaderIdx = 0;
 	unsigned long tempReaderIndex = 0;
-
-	if (ReaderCount == 0) {
-		return false;
-	}
-
-	for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
-		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
-		if (readerContext.isCardPresent()) {
-			tempReaderIndex = ReaderIdx;
-			break;
-		}
-	}
-
-	PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
-
 	try {
+		ReaderCount = ReaderSet.readerCount();
+		if (ReaderCount == 0) {
+			return false;
+		}
+
+		for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+			PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+			if (readerContext.isCardPresent()) {
+				tempReaderIndex = ReaderIdx;
+				break;
+			}
+		}
+
+		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+
 		auto &cardContext = readerContext.getCard();
 
 		if (cardContext.getType() != PTEID_CARDTYPE_UNKNOWN &&
@@ -3081,8 +3118,8 @@ bool GAPI::hasICAO() {
 		if (cardType == ICAO_CARDTYPE_MRTD || cardType == PTEID_CARDTYPE_IAS5) {
 			card = &readerContext.getICAOCard();
 		}
-	} catch (PTEID_ExNoCardPresent err) {
-		qDebug() << "Card is not present!";
+	} catch (PTEID_Exception err) {
+		qDebug() << "Expection error: " << err.GetError() << "message: " << err.GetMessage();
 	}
 
 	return card != NULL;
