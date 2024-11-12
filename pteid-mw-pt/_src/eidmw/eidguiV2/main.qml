@@ -183,7 +183,11 @@ Load language error. Please reinstall the application"
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             readerContext.open()
         }
-        onSignalCardChanged: {
+        onSignalCardAccessError: updateCardSubMenus()
+
+        onSignalCardChanged: updateCardSubMenus()
+
+        function updateCardSubMenus() {
             if(mainFormID.propertyMainMenuListView.model.get(mainFormID.propertyMainMenuListView.currentIndex).isCard &&
                     mainFormID.propertyMainMenuListView.model.count > 0)
                 mainMenuPressed(mainFormID.propertyMainMenuListView.currentIndex)
