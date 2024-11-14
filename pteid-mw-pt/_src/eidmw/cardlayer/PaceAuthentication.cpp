@@ -969,8 +969,6 @@ public:
 		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication: Success", __FUNCTION__);
 
 	err:
-		if (eph_key)
-			EC_KEY_free(eph_key);
 		if (pkey)
 			EVP_PKEY_free(pkey);
 		if (eph_pubkey_buf)
