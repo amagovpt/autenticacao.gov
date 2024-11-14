@@ -192,6 +192,7 @@ bool APL_ReaderContext::connectCard() {
 	// If there is no card, we delete the pointer and we quit
 	if (m_status == CARD_NOT_PRESENT || m_status == CARD_REMOVED) {
 		if (m_card) {
+			m_icao.reset(nullptr);
 			delete m_card;
 			m_card = NULL;
 		}
@@ -201,6 +202,7 @@ bool APL_ReaderContext::connectCard() {
 	if (m_card) {
 		// If there is a card and change, we delete the pointer
 		if (m_status == CARD_INSERTED || m_status == CARD_OTHER) {
+			m_icao.reset(nullptr);
 			delete m_card;
 			m_card = NULL;
 		} else // If there is a card and no change, we quit

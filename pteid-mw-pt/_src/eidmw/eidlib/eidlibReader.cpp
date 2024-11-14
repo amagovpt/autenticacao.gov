@@ -550,7 +550,6 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 		throw PTEID_ExCardTypeUnknown();
 	}
 
-	out = dynamic_cast<ICAO_Card *>(getObject(INCLUDE_OBJECT_ICAO));
 	if (!out) {
 
 		switch (pimpl->getCardType()) {
@@ -561,8 +560,6 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 		default:
 			throw PTEID_ExCardTypeUnknown();
 		}
-
-		m_objects[INCLUDE_OBJECT_ICAO] = out;
 	}
 
 	END_TRY_CATCH

@@ -3158,8 +3158,8 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 
 	// Load the photo from PTEID_ICAO_DG2	
 	PTEID_ICAO_DG2* dg2 = card->readDataGroup2();
-
 	if (!dg2->biometricInstances().empty()) {
+		qDebug() << "Trying to process data group 2";
 		std::vector<PTEID_BiometricInfomation*> biometric_instances = dg2->biometricInstances();
 		PTEID_BiometricInfomation* instance = biometric_instances.at(0);
 		PTEID_FaceInfo* faceInfo = instance->faceInfo();
@@ -3170,9 +3170,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 		if (image_data_type == 1) {
 			// JPEG2000, which needs to be converted to PNG
 			PTEID_ByteArray photoRawData = faceInfoData->photoRawDataPNG();
-			qDebug() << "GOT THE PNG";
 			image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "PNG");
-			qDebug() << "LOADED THE PNG";
 		}
         else if (image_data_type == 0) {
 			// JPG
@@ -3302,7 +3300,6 @@ void GAPI::connectToICAOCard() {
 	unsigned long ReaderCount = ReaderSet.readerCount();
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance Card Reader count =  %ld", ReaderCount);
 	unsigned long ReaderIdx = 0;
-	long CardIdx = 0;
 	unsigned long tempReaderIndex = 0;
 
 	if (ReaderCount == 0) {
@@ -3312,7 +3309,6 @@ void GAPI::connectToICAOCard() {
 	for(ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
 		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
 		if (readerContext.isCardPresent()) {
-			CardIdx++;
 			tempReaderIndex = ReaderIdx;
 			break;
 		}
