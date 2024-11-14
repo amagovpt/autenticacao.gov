@@ -344,6 +344,9 @@ public:
 		apdu_cmd.Append(0x01);
 		apdu_cmd.Append(m_secretType == PaceSecretType::PACEMRZ ? 0x01 : 0x02);
 
+		ASN1_OBJECT_free(pace_algo);
+		free(protocol_oid_der);
+
 		return apdu_cmd;
 	}
 
