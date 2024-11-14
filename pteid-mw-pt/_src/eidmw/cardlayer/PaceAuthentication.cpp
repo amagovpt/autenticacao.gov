@@ -692,15 +692,15 @@ public:
 		return decriptedArray;
 	}
 
-	struct ECDHParams {
+	struct CAParams {
 		const EVP_MD *kdf_md; // MD used for key derivation
 		size_t key_size;
 		int nid;
 		const EVP_CIPHER *cipher;
 	};
 
-	ECDHParams getECDHParamsFromOid(const ASN1_OBJECT *oid) {
-		ECDHParams params = {EVP_sha1(), 16};
+	CAParams getCAParams(const ASN1_OBJECT *oid) {
+		CAParams params = {EVP_sha1(), 16};
 
 		int nid = OBJ_obj2nid(oid);
 		params.nid = nid;
@@ -777,10 +777,10 @@ public:
 		return NULL;
 	}
 
-	int deriveSessionKeys(const unsigned char *shared_secret, size_t secret_len, const EVP_MD *md, size_t key_length,
-						  unsigned char *ks_enc, unsigned char *ks_mac) {
+	bool deriveSessionKeys(const unsigned char *shared_secret, size_t secret_len, const EVP_MD *md, size_t key_length,
+						   unsigned char *ks_enc, unsigned char *ks_mac) {
 		EVP_MD_CTX *mdctx = NULL;
-		int ret = 0;
+		bool ret = false;
 		unsigned int digest_len;
 
 		unsigned char *concat_buffer = NULL;
@@ -813,7 +813,7 @@ public:
 			goto cleanup;
 		}
 
-		ret = 1;
+		ret = true;
 
 	cleanup:
 		if (concat_buffer) {
@@ -826,7 +826,21 @@ public:
 
 	void initChipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 		long ret_value = 0;
-		// TODO: error handle
+
+		// Step 2 Variables
+		int key_type = 0;
+		int key_size = 0;
+		EC_KEY *ec_key = nullptr;
+		EC_KEY *eph_key = nullptr;
+		EVP_PKEY *eph_pkey = nullptr;
+
+		// Step 3 Variables
+		unsigned char *eph_pubkey_buf = NULL;
+
+		// Step 4 Variables
+		BUF_MEM *shared_secret = nullptr;
+		CAParams params = getCAParams(oid);
+		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication OID: %s ", __FUNCTION__, OBJ_nid2sn(params.nid));
 
 		// 1. Set security environment for chip authentication
 		{
@@ -845,29 +859,41 @@ public:
 			apdu_mse.Append(0x0A);
 			apdu_mse.Append(oid_data);
 			auto res = sendAPDU(apdu_mse, hCard, ret_value, param_structure);
-			auto valid = res.GetByte(0) == 0x90 && res.GetByte(1) == 0x00;
-			assert(valid && "MSE SET Failed!");
+			if (res.GetByte(0) != 0x90 || res.GetByte(1) != 0x00) {
+				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed MSE-SET apdu 0x%x", __FUNCTION__, res.GetBytes());
+				goto err;
+			}
+			MWLOG(LEV_DEBUG, MOD_CAL, "%s: MSE-SET: Success", __FUNCTION__);
 		}
 
 		// 2. Generate ephemeral key-pair
-		int key_type = EVP_PKEY_base_id(pkey);
-		int key_size = EVP_PKEY_bits(pkey);
-		auto ec_key = EVP_PKEY_get0_EC_KEY(pkey);
-		assert(ec_key && "Could not retrieve EC key from dg14 pkey");
+		{
+			key_type = EVP_PKEY_base_id(pkey);
+			key_size = EVP_PKEY_bits(pkey);
+			ec_key = (EC_KEY *)EVP_PKEY_get0_EC_KEY(pkey);
+			if (!ec_key) {
+				MWLOG(LEV_ERROR, MOD_CAL, "%s: Could not retrieve EC key from dg14 pkey", __FUNCTION__);
+				goto err;
+			}
 
-		auto eph_key = EC_KEY_new_by_curve_name(EC_GROUP_get_curve_name(EC_KEY_get0_group(ec_key)));
-		assert(eph_key && "Failed to generate ephemeral key");
-		assert(EC_KEY_generate_key(eph_key) && "Failed to generate ephemeral key s2");
+			eph_key = EC_KEY_new_by_curve_name(EC_GROUP_get_curve_name(EC_KEY_get0_group(ec_key)));
+			if (!eph_key || !EC_KEY_generate_key(eph_key)) {
+				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to generate ephemeral keys", __FUNCTION__);
+				goto err;
+			}
 
-		auto eph_pkey = EVP_PKEY_new();
-		assert(eph_pkey && "Could not generate public key");
-		assert(EVP_PKEY_assign_EC_KEY(eph_pkey, eph_key) && "Failed to assign ephemeral key");
-		eph_key = nullptr;
+			eph_pkey = EVP_PKEY_new();
+			if (!eph_pkey || !EVP_PKEY_assign_EC_KEY(eph_pkey, eph_key)) {
+				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to assign ephemeral key", __FUNCTION__);
+				goto err;
+			}
+
+			MWLOG(LEV_DEBUG, MOD_CAL, "%s: Ephemeral key-pair generation: Success", __FUNCTION__);
+		}
 
 		// 3. Send public key to card
 		{
 			// Convert ephemeral public key to octet string
-			unsigned char *eph_pubkey_buf = NULL;
 			size_t eph_pubkey_len = 0;
 			eph_pubkey_len =
 				EC_KEY_key2buf(EVP_PKEY_get0_EC_KEY(eph_pkey), POINT_CONVERSION_UNCOMPRESSED, &eph_pubkey_buf, NULL);
@@ -912,32 +938,51 @@ public:
 			apdu_kat.Append(0x00);
 
 			auto res = sendAPDU(apdu_kat, hCard, ret_value, param_structure);
-			assert(res.Equals({"7C009000", true}) && "Failed General Authentication step");
-			free(eph_pubkey_buf);
+			if (!res.Equals({"7C009000", true})) {
+				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed General Authentication step", __FUNCTION__);
+				goto err;
+			}
+
+			MWLOG(LEV_DEBUG, MOD_CAL, "%s: General Authentication step: Success", __FUNCTION__);
 		}
 
 		// 4. Compute shared secret
-		auto shared_secret = computeSharedSecret(eph_pkey, pkey);
-		assert(shared_secret->length != 0 && "Failed to generate shared secret");
-		EVP_PKEY_free(pkey);
-
-		ECDHParams params = getECDHParamsFromOid(oid);
+		shared_secret = computeSharedSecret(eph_pkey, pkey);
+		if (!shared_secret || shared_secret->length <= 0) {
+			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to generate shared secret", __FUNCTION__);
+			goto err;
+		}
+		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Shared Secret step: Success", __FUNCTION__);
 
 		// 5. Derive session keys (enc & mac)
 		unsigned char ks_enc[32]; // Max size possible
 		unsigned char ks_mac[32];
-		assert(deriveSessionKeys((unsigned char *)shared_secret->data, shared_secret->length, params.kdf_md,
-								 params.key_size, ks_enc, ks_mac) &&
-			   "Session keys derivation failed");
+		if (!deriveSessionKeys((unsigned char *)shared_secret->data, shared_secret->length, params.kdf_md,
+							   params.key_size, ks_enc, ks_mac)) {
+			MWLOG(LEV_ERROR, MOD_CAL, "%s: Session keys derivation failed", __FUNCTION__);
+			goto err;
+		}
+		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Session Keys derivation step: Success", __FUNCTION__);
 
 		// 6. Use keys for secure messaging
 		swapKeysForChipAuthentication(eph_pkey, shared_secret, ks_enc, ks_mac, params);
+		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication: Success", __FUNCTION__);
+
+	err:
+		if (eph_key)
+			EC_KEY_free(eph_key);
+		if (pkey)
+			EVP_PKEY_free(pkey);
+		if (eph_pubkey_buf)
+			free(eph_pubkey_buf);
 	}
 
 	void swapKeysForChipAuthentication(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, unsigned char *k_enc,
-									   unsigned char *k_mac, const ECDHParams &params) {
-		if (!m_ctx)
+									   unsigned char *k_mac, const CAParams &params) {
+		if (!m_ctx) {
+			MWLOG(LEV_ERROR, MOD_CAL, "%s: Tried to swap keys for CA without a current context", __FUNCTION__);
 			return;
+		}
 
 		// Clear existing encryption context first
 		if (m_ctx->pace_ctx) {
@@ -961,14 +1006,14 @@ public:
 		// Initialize CA context if it doesn't exist
 		if (!m_ctx->ca_ctx) {
 			if (!EAC_CTX_init_ca(m_ctx, params.nid, 0)) {
-				MWLOG(LEV_ERROR, MOD_CAL, "Failed to initialize CA context");
+				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to initialize CA context", __FUNCTION__);
 				return;
 			}
 		}
 
 		// Set up the key agreement context
 		if (!m_ctx->ca_ctx || !m_ctx->ca_ctx->ka_ctx) {
-			MWLOG(LEV_ERROR, MOD_CAL, "CA context or KA context is NULL");
+			MWLOG(LEV_ERROR, MOD_CAL, "%s: CA context or KA context is NULL", __FUNCTION__);
 			return;
 		}
 		KA_CTX *ka = m_ctx->ca_ctx->ka_ctx;
@@ -1030,7 +1075,7 @@ public:
 				BUF_MEM_clear_free(ka->k_mac);
 			if (ka->key) {
 			}
-				EVP_PKEY_free(ka->key);
+			EVP_PKEY_free(ka->key);
 			ka->shared_secret = NULL;
 			ka->k_enc = NULL;
 			ka->k_mac = NULL;
