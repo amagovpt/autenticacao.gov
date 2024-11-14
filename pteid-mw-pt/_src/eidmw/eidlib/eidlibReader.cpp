@@ -546,6 +546,9 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 
 	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
 	APL_ICAO *pAplIcao = pimpl->getICAOCard();
+	if (!pAplIcao) {
+		throw PTEID_ExCardTypeUnknown();
+	}
 
 	out = dynamic_cast<ICAO_Card *>(getObject(INCLUDE_OBJECT_ICAO));
 	if (!out) {
