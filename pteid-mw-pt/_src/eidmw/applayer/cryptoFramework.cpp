@@ -198,6 +198,10 @@ APL_CryptoFwk::APL_CryptoFwk() {
 APL_CryptoFwk::~APL_CryptoFwk(void) {
 	if (m_CrlMemoryCache)
 		delete m_CrlMemoryCache;
+
+	if (m_MasterListCertificate) {
+		X509_STORE_free(m_MasterListCertificate);
+	}
 }
 
 bool d2i_X509_Wrapper(X509 **pX509, const unsigned char *pucContent, int iContentSize) {

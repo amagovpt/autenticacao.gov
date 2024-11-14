@@ -913,11 +913,13 @@ public:
 
 			auto res = sendAPDU(apdu_kat, hCard, ret_value, param_structure);
 			assert(res.Equals({"7C009000", true}) && "Failed General Authentication step");
+			free(eph_pubkey_buf);
 		}
 
 		// 4. Compute shared secret
 		auto shared_secret = computeSharedSecret(eph_pkey, pkey);
 		assert(shared_secret->length != 0 && "Failed to generate shared secret");
+		EVP_PKEY_free(pkey);
 
 		ECDHParams params = getECDHParamsFromOid(oid);
 
@@ -990,11 +992,7 @@ public:
 		}
 
 		// Store the shared secret and keys
-		ka->shared_secret = BUF_MEM_new();
-		if (!ka->shared_secret)
-			goto err;
-		BUF_MEM_grow(ka->shared_secret, shared_secret->length);
-		memcpy(ka->shared_secret->data, shared_secret->data, shared_secret->length);
+		ka->shared_secret = shared_secret;
 		ka->shared_secret->length = shared_secret->length;
 
 		ka->k_enc = BUF_MEM_new();
@@ -1010,10 +1008,6 @@ public:
 		BUF_MEM_grow(ka->k_mac, params.key_size);
 		memcpy(ka->k_mac->data, k_mac, params.key_size);
 		ka->k_mac->length = params.key_size;
-
-		// Increment reference count of eph_pkey before assigning
-		if (eph_pkey)
-			EVP_PKEY_up_ref(eph_pkey);
 		ka->key = eph_pkey;
 
 		// Switch to CA secure messaging
@@ -1034,7 +1028,8 @@ public:
 				BUF_MEM_clear_free(ka->k_enc);
 			if (ka->k_mac)
 				BUF_MEM_clear_free(ka->k_mac);
-			if (ka->key)
+			if (ka->key) {
+			}
 				EVP_PKEY_free(ka->key);
 			ka->shared_secret = NULL;
 			ka->k_enc = NULL;

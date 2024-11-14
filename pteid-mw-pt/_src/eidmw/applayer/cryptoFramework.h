@@ -114,9 +114,9 @@ EIDMW_APL_API unsigned int SHA256_Wrapper(unsigned char *data, unsigned long dat
 class APL_CryptoFwk {
 public:
 	/**
-	  * Destructor
-	  */
-	virtual ~APL_CryptoFwk(void) = 0;
+	 * Destructor
+	 */
+	virtual ~APL_CryptoFwk(void);
 
 	/**
 	  * Verify if the cert is the correct Pteid root

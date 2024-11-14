@@ -517,6 +517,7 @@ tFileInfo CPkiCard::SelectFile(const std::string &csPath, const unsigned char *o
 			CByteArray fci_data = responseSelection.GetBytes(0, responseSelection.GetByte(1));
 			char *fci_data_hex = bin2AsciiHex(responseSelection.GetBytes(), responseSelection.Size());
 			MWLOG(LEV_DEBUG, MOD_CAL, "%s: FCI data: %s", __FUNCTION__, fci_data_hex);
+			delete[] fci_data_hex;
 
 			info.lFileLen = extractEFSize(fci_data);
 		}

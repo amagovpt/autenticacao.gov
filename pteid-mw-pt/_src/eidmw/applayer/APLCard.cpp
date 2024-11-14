@@ -876,6 +876,7 @@ bool APL_ICAO::performActiveAuthentication() {
 
 		char *dg15_str = byteArrayToHexString(pubkey_file.GetBytes(), pubkey_file.Size());
 		MWLOG(LEV_DEBUG, MOD_APL, "DG15 file (card pubkey): %s", dg15_str);
+		free(dg15_str);
 
 		// Check the first tag of DG15 file (6F)
 		CByteArray pubkey = extractPublicKeyFromDG15(pubkey_file);

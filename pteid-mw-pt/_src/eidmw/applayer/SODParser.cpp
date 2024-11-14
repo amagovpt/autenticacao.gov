@@ -105,7 +105,8 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 			}
 		}
 	}
-	
+
+	LDSSecurityObject_free(decoded_obj);
 }
 
 SODAttributes &SODParser::getAttributes() { return *attr; }

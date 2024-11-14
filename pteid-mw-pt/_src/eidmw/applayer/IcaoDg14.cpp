@@ -76,6 +76,8 @@ ASN1_OBJECT *getSecurityOptionOidByOid(const CByteArray &dg14_file, const CByteA
 }
 
 EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
+	EVP_PKEY *pkey = nullptr;
+
 	auto security_infos = decodeDg14Data(dg14_file);
 
 	ASN1_OBJECT *oid_ret = nullptr;
@@ -94,13 +96,13 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 			if (info->requiredData->type == V_ASN1_SEQUENCE) {
 				size_t len = ASN1_STRING_length(info->requiredData->value.sequence);
 				const unsigned char *p = ASN1_STRING_get0_data(info->requiredData->value.sequence);
-				return d2i_PUBKEY(NULL, &p, len);
+				pkey = d2i_PUBKEY(NULL, &p, len);
 			}
 		}
 	}
 
 	SecurityInfos_free(security_infos);
-	return nullptr;
+	return pkey;
 }
 
 ASN1_OBJECT *getChipAuthenticationOid(const CByteArray &dg14_file) {
