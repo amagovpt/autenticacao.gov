@@ -3088,10 +3088,10 @@ int GAPI::getReaderIndex(void) {
 }
 
 bool GAPI::hasICAO() {
-	ICAO_Card *card = NULL;
 	unsigned long ReaderCount = 0;
 	unsigned long ReaderIdx = 0;
 	unsigned long tempReaderIndex = 0;
+	bool hasIcao = false;
 	try {
 		ReaderCount = ReaderSet.readerCount();
 		if (ReaderCount == 0) {
@@ -3107,22 +3107,13 @@ bool GAPI::hasICAO() {
 		}
 
 		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
-
-		auto &cardContext = readerContext.getCard();
-
-		if (cardContext.getType() != PTEID_CARDTYPE_UNKNOWN &&
-			readerContext.getCardContactInterface() != PTEID_CardContactInterface::PTEID_CARD_CONTACTLESS)
-			return false;
-
-		PTEID_CardType cardType = readerContext.getCardType();
-		if (cardType == ICAO_CARDTYPE_MRTD || cardType == PTEID_CARDTYPE_IAS5) {
-			card = &readerContext.getICAOCard();
-		}
+		auto &icaoCard = readerContext.getICAOCard();
+		hasIcao = true;
 	} catch (PTEID_Exception err) {
 		qDebug() << "Expection error: " << err.GetError() << "message: " << err.GetMessage();
 	}
 
-	return card != NULL;
+	return hasIcao;
 }
 
 void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
