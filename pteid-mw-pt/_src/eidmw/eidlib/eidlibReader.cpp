@@ -453,6 +453,7 @@ bool PTEID_ReaderSet::flushCache() {
 PTEID_ReaderContext::PTEID_ReaderContext(const SDK_Context *context, APL_ReaderContext *impl)
 	: PTEID_Object(context, impl) {
 	m_cardid = 0;
+	m_cardIcaoId = 0;
 
 	m_context->mutex = new CMutex;
 }
@@ -550,6 +551,13 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 		throw PTEID_ExCardTypeUnknown();
 	}
 
+	out = dynamic_cast<ICAO_Card *>(getObject(INCLUDE_OBJECT_ICAO));
+
+	if (pimpl->isCardChanged(m_cardIcaoId) && out) {
+		backupObject(INCLUDE_OBJECT_ICAO);
+		out = NULL;
+	}
+
 	if (!out) {
 
 		switch (pimpl->getCardType()) {
@@ -560,6 +568,9 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 		default:
 			throw PTEID_ExCardTypeUnknown();
 		}
+
+		if (out)
+			m_objects[INCLUDE_OBJECT_ICAO] = out;
 	}
 
 	END_TRY_CATCH

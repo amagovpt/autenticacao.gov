@@ -523,6 +523,7 @@ private:
 	PTEID_ReaderContext(const SDK_Context *context, APL_ReaderContext *impl); /**< For internal use : Constructor */
 
 	unsigned long m_cardid;
+	unsigned long m_cardIcaoId;
 	// CMutex *m_mutex;
 
 	friend PTEID_ReaderContext &PTEID_ReaderSet::getReader(
