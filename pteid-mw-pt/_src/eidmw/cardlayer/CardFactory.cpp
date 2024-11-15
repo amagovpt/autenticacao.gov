@@ -213,6 +213,9 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 				bool icaoStatus = selectAppId(ICAO_APPLET_MRTD, sizeof(ICAO_APPLET_MRTD));
 				if (icaoStatus) {
 					poCard = new CIcaoCard(hCard, poContext, poPinpad, param_structure);
+
+					// All ICAO cards are contactless
+					isContactLess = true;
 				}
 			}
 
