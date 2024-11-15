@@ -1618,8 +1618,8 @@ Load language error. Please reinstall the application"
                 var hasIcao = gapi.hasICAO();
                 var hasOnlyIcao = gapi.hasOnlyICAO()
                 if(mainFormID.propertyMainMenuListView.model.get(index).isCard &&
-                        (mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).isIcao && !hasIcao) ||
-                        (hasIcao && hasOnlyIcao && !mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).isIcao))
+                        ((mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).isIcao && !hasIcao) ||
+                        (hasIcao && hasOnlyIcao && !mainFormID.propertyMainMenuListView.model.get(index).subdata.get(i).isIcao)))
                 {
                     continue
                 }
