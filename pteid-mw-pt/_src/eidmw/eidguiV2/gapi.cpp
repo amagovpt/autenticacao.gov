@@ -682,7 +682,7 @@ void GAPI::getTriesLeftAuthPin() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
 	} else {
-		performPACEWithCache(card, CardOperation::GetAuthPin);
+		performPACEWithCache(CardOperation::GetAuthPin);
 	}
 }
 unsigned int GAPI::doGetTriesLeftAuthPin() {
@@ -745,7 +745,7 @@ void GAPI::getTriesLeftSignPin() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doGetTriesLeftSignPin);
 	} else {
-		performPACEWithCache(card, CardOperation::GetAuthPin);
+		performPACEWithCache(CardOperation::GetAuthPin);
 	}
 }
 unsigned int GAPI::doGetTriesLeftSignPin() {
@@ -890,7 +890,7 @@ void GAPI::verifyAddressPin(QString pin_value, bool forceVerify) {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value, forceVerify);
 	} else {
-		performPACEWithCache(card, CardOperation::DoAddress);
+		performPACEWithCache(CardOperation::DoAddress);
 	}
 }
 
@@ -933,7 +933,7 @@ void GAPI::getTriesLeftAddressPin() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
 	} else {
-		performPACEWithCache(card, CardOperation::GetAuthPin);
+		performPACEWithCache(CardOperation::GetAuthPin);
 	}
 }
 unsigned int GAPI::doGetTriesLeftAddressPin() {
@@ -3245,8 +3245,7 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
 	}
 }
 
-void GAPI::performPACEWithCache(PTEID_EIDCard *card, CardOperation op) {
-	Q_UNUSED(card);
+void GAPI::performPACEWithCache(CardOperation op) {
 	if (!m_Settings.getEnablePteidCANCache()) {
 		emit signalContactlessCANNeeded();
 		return;
@@ -3279,7 +3278,7 @@ void GAPI::connectToCard() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		finishLoadingCardData(card);
 	} else {
-		performPACEWithCache(card, CardOperation::IdentityData);
+		performPACEWithCache(CardOperation::IdentityData);
 	}
 
 	END_TRY_CATCH
@@ -3315,11 +3314,10 @@ void GAPI::connectToICAOCard() {
 		return;
 
 	card->loadMasterList(std::getenv("MASTER_LIST_PATH"));
-
 	if (m_pace_auth_state == PaceAuthenticated) {
 		finishLoadingICAOCardData(card);
 	} else {
-		emit signalContactlessCANNeeded();
+		performPACEWithCache(ICAOData);
 		return;
 	}
 }
@@ -3682,7 +3680,7 @@ void GAPI::startfillCertificateList(void) {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::fillCertificateList);
 	} else {
-		performPACEWithCache(card, CardOperation::ReadCertDetails);
+		performPACEWithCache(CardOperation::ReadCertDetails);
 	}
 }
 
@@ -3763,7 +3761,7 @@ void GAPI::validateCertificates() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doValidateCertificates);
 	} else {
-		performPACEWithCache(card, CardOperation::ValidateCertificate);
+		performPACEWithCache(CardOperation::ValidateCertificate);
 	}
 }
 
@@ -3841,7 +3839,7 @@ void GAPI::getInfoFromSignCert(void) {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		finishLoadingSignCertData(card);
 	} else {
-		performPACEWithCache(card, CardOperation::SignCertificateData);
+		performPACEWithCache(CardOperation::SignCertificateData);
 	}
 
 	END_TRY_CATCH

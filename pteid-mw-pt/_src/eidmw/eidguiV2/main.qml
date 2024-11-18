@@ -144,6 +144,7 @@ Load language error. Please reinstall the application"
     }
 
     Connections {
+        id: connectionsGAPI
         target: gapi
         onSignalGenericError: {
             console.log("Signal onSignalGenericError")
@@ -183,14 +184,51 @@ Load language error. Please reinstall the application"
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             readerContext.open()
         }
-        onSignalCardAccessError: updateCardSubMenus()
+        onSignalCardAccessError: updateAvailableMenus()
 
-        onSignalCardChanged: updateCardSubMenus()
+        onSignalCardChanged: updateAvailableMenus()
 
-        function updateCardSubMenus() {
+        function updateAvailableMenus() {
+            var hasOnlyIcao = gapi.hasOnlyICAO()
+            var foundSecurity = false
+
+            if(mainFormID.propertyMainMenuListView.currentIndex !== -1 &&
+                    mainFormID.propertyMainMenuListView.model.get(mainFormID.propertyMainMenuListView.currentIndex).isSecurity && hasOnlyIcao) {
+                mainMenuPressed(0)
+            }
+
+            for(var i = 0; i < mainFormID.propertyMainMenuListView.model.count; ++i)
+            {
+                if(mainFormID.propertyMainMenuListView.model.get(i).isSecurity)
+                {
+                    foundSecurity = true
+                    if(hasOnlyIcao) {
+                        mainFormID.propertyMainMenuListView.model.remove(i, 1)
+                        break
+                    }
+                }
+            }
+            if(!foundSecurity && !hasOnlyIcao) {
+                mainFormID.propertyMainMenuListView.model.append({
+                            "name": QT_TR_NOOP("STR_MENU_SECURITY"),
+                            "expand": false,
+                            "isSecurity": true,
+                            "subdata": [{"name": QT_TR_NOOP("STR_MENU_CERTIFICATES"),
+                                         "expand": false,
+                                         "shown": true,
+                                         "url": "contentPages/security/PageSecurityCertificateState.qml"},
+                                        {"name": QT_TR_NOOP("STR_MENU_PIN_CODES"),
+                                         "expand": false,
+                                         "shown": true,
+                                         "url": "contentPages/security/PageSecurityPinCodes.qml"}]
+                        })
+            }
+
             if(mainFormID.propertyMainMenuListView.model.get(mainFormID.propertyMainMenuListView.currentIndex).isCard &&
                     mainFormID.propertyMainMenuListView.model.count > 0)
+            {
                 mainMenuPressed(mainFormID.propertyMainMenuListView.currentIndex)
+            }
         }
     }
 
@@ -1592,6 +1630,7 @@ Load language error. Please reinstall the application"
             gapi.disableTelemetry()
 
         gapi.updateTelemetry(GAPI.Startup)
+        connectionsGAPI.updateAvailableMenus()
     }
 
     function mainMenuPressed(index){

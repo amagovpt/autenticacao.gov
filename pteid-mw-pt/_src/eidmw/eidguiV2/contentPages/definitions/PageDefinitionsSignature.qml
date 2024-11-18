@@ -52,6 +52,7 @@ PageDefinitionsSignatureForm {
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
             var returnSubMenuWhenClosed = false
+            var hasOnlyIcao = gapi.hasOnlyICAO()
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 returnSubMenuWhenClosed = true;
@@ -59,8 +60,9 @@ PageDefinitionsSignatureForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
-                propertyBusyIndicator.running = true
-                gapi.startGettingInfoFromSignCert()
+                propertyBusyIndicator.running = !hasOnlyIcao
+                if (!hasOnlyIcao)
+                    gapi.startGettingInfoFromSignCert()
             }
             else{
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ_UNKNOWN")
@@ -212,8 +214,11 @@ PageDefinitionsSignatureForm {
     Component.onCompleted: {
 
         console.log("Page Definitions Signature mainWindowCompleted")
-        propertyBusyIndicator.running = true
-        gapi.startGettingInfoFromSignCert()
+        var hasOnlyIcao = gapi.hasOnlyICAO()
+        propertyBusyIndicator.running = !hasOnlyIcao
+        if (!hasOnlyIcao)
+            gapi.startGettingInfoFromSignCert()
+
         propertySigDateText.text = propertySigDateTextCustom.text =
                 qsTranslate("PageServicesSign", "STR_SIGN_DATE") + ": " + getDate()
         clearFields()

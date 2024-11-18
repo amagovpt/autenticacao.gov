@@ -65,6 +65,7 @@ ListModel {
     ListElement {
         name: QT_TR_NOOP("STR_MENU_SECURITY")
         expand: false
+        isSecurity: true
         subdata:[
             ListElement {
                 name: QT_TR_NOOP("STR_MENU_CERTIFICATES")

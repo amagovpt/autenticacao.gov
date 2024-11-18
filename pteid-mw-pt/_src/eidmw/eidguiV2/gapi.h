@@ -547,7 +547,7 @@ public slots:
 
 	void startPACEAuthentication(QString pace_can, CardOperation op);
 
-	void performPACEWithCache(PTEID_EIDCard *card, CardOperation op);
+	void performPACEWithCache(CardOperation op);
 	void resetContactlessState() {
 		m_pace_auth_state = PaceDefault;
 		m_is_contactless = false;
