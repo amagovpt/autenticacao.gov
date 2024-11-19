@@ -176,6 +176,7 @@
         <File Source="..\..\certs\BaltimoreCyberTrustRoot.der" />
         <File Source="..\..\certs\GlobalChambersignRoot-2008.der" />
         <File Source="..\..\certs\cacerts.pem" />
+        <File Source="..\..\certs\IcaoMasterList.ml" />
       </Component>
 
       <Component Id="CertCC004" Guid="{08EF0B6A-2989-429F-846C-EED6F241D192}">

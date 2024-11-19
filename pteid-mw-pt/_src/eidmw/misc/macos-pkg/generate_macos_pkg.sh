@@ -108,6 +108,7 @@ rmdir_if_exists $CERTS_BUNDLE_DIR
 mkdir -p $CERTS_BUNDLE_DIR/certs
 cp -af $MISC_DIR/certs/*.der $CERTS_BUNDLE_DIR/certs
 cp -af $MISC_DIR/certs/cacerts.pem $CERTS_BUNDLE_DIR/certs
+cp -af $MISC_DIR/certs/IcaoMasterList.ml $CERTS_BUNDLE_DIR/certs
 mkdir -p $HTML_BUNDLE_DIR
 cp -af $MISC_DIR/web/AutenticacaoGov.html $HTML_BUNDLE_DIR
 cp -af $MISC_DIR/web/AutenticacaoGov_failed.html $HTML_BUNDLE_DIR

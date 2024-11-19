@@ -3312,8 +3312,9 @@ void GAPI::connectToICAOCard() {
 	}
 	if (card == NULL)
 		return;
-
-	card->loadMasterList(std::getenv("MASTER_LIST_PATH"));
+	std::string masterListFile =
+		utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/IcaoMasterList.ml";
+	card->loadMasterList(masterListFile.c_str());
 	if (m_pace_auth_state == PaceAuthenticated) {
 		finishLoadingICAOCardData(card);
 	} else {
