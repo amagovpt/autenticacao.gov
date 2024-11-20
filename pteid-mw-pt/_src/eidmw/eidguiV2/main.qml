@@ -191,7 +191,7 @@ Load language error. Please reinstall the application"
         function updateAvailableMenus() {
             var hasOnlyIcao = gapi.hasOnlyICAO()
             var foundSecurity = false
-
+            mainFormID.propertyLogoContent.source = hasOnlyIcao ? "images/EPassport_logo.svg" : "images/logo_autenticacao_gov100.png"
             if(mainFormID.propertyMainMenuListView.currentIndex !== -1 &&
                     mainFormID.propertyMainMenuListView.model.get(mainFormID.propertyMainMenuListView.currentIndex).isSecurity && hasOnlyIcao) {
                 mainMenuPressed(0)

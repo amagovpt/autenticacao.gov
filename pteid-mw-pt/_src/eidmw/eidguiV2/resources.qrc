@@ -116,5 +116,6 @@
         <file>images/icons-resize-disabled.png</file>
         <file>images/CAN_image.png</file>
         <file>contentPages/definitions/DialogRequestPaceSecret.qml</file>
+        <file>images/EPassport_logo.svg</file>
     </qresource>
 </RCC>
