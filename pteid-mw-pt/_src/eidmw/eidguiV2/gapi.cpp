@@ -3136,7 +3136,13 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 
 	cardData[DocumentCode] = QString::fromUtf8(dg->documentCode());
 	cardData[IssuingState] = QString::fromUtf8(dg->issuingState());
-	cardData[DocumentNumber] =  QString::fromUtf8(dg->documentNumber());
+	QString optionalData;
+	if (dg->serialNumberCheckDigit() == -1) {
+		optionalData = dg->optionalDataLine1();
+	}
+
+	cardData[DocumentNumber] =
+		QString::fromUtf8(dg->documentNumber()) + (optionalData.size() > 0 ? " " + optionalData : "");
 	cardData[OptionalDataLine1] = QString::fromUtf8(dg->optionalDataLine1());
 	cardData[DateOfBirth] = convertDate(QString::fromUtf8(dg->dateOfBirth()));
 	cardData[Gender] = QString(QChar(dg->sex()));

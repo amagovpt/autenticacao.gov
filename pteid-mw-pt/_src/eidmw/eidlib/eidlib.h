@@ -864,6 +864,7 @@ public:
 	PTEIDSDK_API const char *documentCode() const;
 	PTEIDSDK_API const char *issuingState() const;
 	PTEIDSDK_API const char *documentNumber() const;
+	PTEIDSDK_API int serialNumberCheckDigit() const;
 	PTEIDSDK_API const char *optionalDataLine1() const;
 	PTEIDSDK_API const char *dateOfBirth() const;
 	PTEIDSDK_API char sex() const;

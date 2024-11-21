@@ -91,6 +91,9 @@ IcaoDg1::IcaoDg1(const CByteArray &byteArray) {
 		}
 
 		m_optionalData = getDocumentInfo(byteArray, offsetCounter, MRZ_TD1_FIRST_LINE_OPTIONAL_DATA_SIZE);
+		if (m_serialNumberCheckDigit == -1) {
+			m_optionalData.pop_back();
+		}
 
 		m_birthDay = getDocumentInfo(byteArray, offsetCounter, MRZ_DATE_SIZE);
 		m_birthDayCheckDigit = getCheckDigits(byteArray, offsetCounter);

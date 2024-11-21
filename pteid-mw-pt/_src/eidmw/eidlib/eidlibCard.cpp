@@ -995,6 +995,8 @@ const char *PTEID_ICAO_DG1::issuingState() const { return m_impl.issuingOrg().c_
 
 const char *PTEID_ICAO_DG1::documentNumber() const { return m_impl.serialNumber().c_str(); }
 
+int PTEID_ICAO_DG1::serialNumberCheckDigit() const { return m_impl.serialNumberCheckDigit(); }
+
 const char *PTEID_ICAO_DG1::optionalDataLine1() const { return m_impl.optionalData().c_str(); }
 
 const char *PTEID_ICAO_DG1::dateOfBirth() const { return m_impl.birthDay().c_str(); }
