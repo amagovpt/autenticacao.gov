@@ -122,7 +122,7 @@ Rectangle {
                 Accessible.role: Accessible.Button
                 Accessible.name: qsTranslate("main","STR_IMAGE_LOGO_ACCESSIBLE_NAME")
                 focus: true
-                source: gapi.hasOnlyICAO() ? "images/EPassport_logo.svg" : "images/logo_autenticacao_gov100.png"
+                source: "images/logo_autenticacao_gov100.png"
 
                 MouseArea {
                     id: mouseAreaImageLogo

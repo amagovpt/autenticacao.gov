@@ -5,14 +5,33 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg1"
-   sodipodi:docname="EPassport_logo_white.svg"
+   sodipodi:docname="EPassport_logo.svg"
    inkscape:version="1.4 (1:1.4+202410161351+e7c3feb100)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs1" />
+     id="defs1">
+    <linearGradient
+       id="swatch1"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#3c5dbc;stop-opacity:1;"
+         offset="0"
+         id="stop1" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#swatch1"
+       id="linearGradient1"
+       x1="-111.5625"
+       y1="148.5"
+       x2="321.5625"
+       y2="148.5"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
   <sodipodi:namedview
      id="namedview1"
      pagecolor="#ffffff"
@@ -22,9 +41,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="7.8853624"
-     inkscape:cx="60.238195"
-     inkscape:cy="43.308092"
+     inkscape:zoom="10.991453"
+     inkscape:cx="58.5"
+     inkscape:cy="35.982504"
      inkscape:window-width="1854"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -35,5 +54,5 @@
      d="M-111.5625 24.75V136.125H23.539306A82.5 82.5 0 0 1 105 66 82.5 82.5 0 0 1 186.5 136.125H321.5625V24.75ZM105 90.75A57.75 57.75 0 0 0 47.25 148.5 57.75 57.75 0 0 0 105 206.25 57.75 57.75 0 0 0 162.75 148.5 57.75 57.75 0 0 0 105 90.75Zm-216.5625 70.125V272.25h433.125V160.875H186.46068A82.5 82.5 0 0 1 105 231 82.5 82.5 0 0 1 23.5 160.875Z"
      stroke-width="81.90428162"
      id="path1"
-     style="fill:#ffffff;fill-opacity:1" />
+     style="fill:url(#linearGradient1);fill-opacity:1" />
 </svg>
