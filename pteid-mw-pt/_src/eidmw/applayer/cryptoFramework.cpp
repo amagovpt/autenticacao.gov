@@ -44,11 +44,14 @@
 #include <wincrypt.h>
 #endif
 
+#include <openssl/cms.h>
 #include <openssl/evp.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 #include <openssl/err.h>
 #include <openssl/ocsp.h>
+#include <openssl/asn1.h>
+#include <openssl/asn1t.h>
 
 #include "xercesc/util/Base64.hpp"
 #include "xercesc/util/XMLString.hpp"

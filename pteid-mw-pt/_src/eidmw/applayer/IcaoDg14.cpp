@@ -2,10 +2,23 @@
 
 #include "Log.h"
 #include "aa_oids.h"
+
+#if defined(__WINCRYPT_H__)
+#undef X509_NAME
+#undef X509_EXTENSIONS
+#undef X509_CERT_PAIR
+#undef PKCS7_ISSUER_AND_SERIAL
+#undef PKCS7_SIGNER_INFO
+#undef OCSP_REQUEST
+#undef OCSP_RESPONSE
+#endif
+
 #include <eac/objects.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/x509.h>
+#include <openssl/asn1.h>
+#include <openssl/asn1t.h>
 
 namespace eIDMW {
 

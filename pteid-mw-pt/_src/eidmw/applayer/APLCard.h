@@ -31,7 +31,6 @@
 #include <openssl/asn1t.h>
 #include <openssl/asn1.h>
 #include <openssl/err.h>
-#include <openssl/cms.h>
 #include <openssl/bio.h>
 
 #include "APLPublicKey.h"

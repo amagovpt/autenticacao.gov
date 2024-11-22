@@ -31,6 +31,7 @@
 #include <string>
 #include <vector>
 #include "Mutex.h"
+#include "APLCard.h"
 
 #include "Export.h"
 
@@ -44,12 +45,12 @@
 #undef OCSP_REQUEST
 #undef OCSP_RESPONSE
 #endif
-#include "APLCard.h"
 
 #include <openssl/evp.h>
 #include <openssl/ocsp.h>
 #include <openssl/ssl.h>
 #include <openssl/bio.h>
+#include <openssl/asn1t.h>
 
 namespace eIDMW {
 

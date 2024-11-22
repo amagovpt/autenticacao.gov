@@ -812,8 +812,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 				cardIcao = &readerContext.getICAOCard();
 
 			} catch (PTEID_Exception err) {
-				qDebug() << "Error while trying to create ICAO Card object! error: " << err.GetError()
-						 << "message: " << err.GetMessage();
+				qDebug() << "Error while trying to create ICAO Card object! error: " << err.GetError();
 			}
 		}
 	}
@@ -3073,7 +3072,7 @@ bool GAPI::hasOnlyICAO() {
 
 		cardType = readerContext.getCardType();
 	} catch (PTEID_Exception err) {
-		qDebug() << "Not able to get card type!" << "error" << err.GetError() << "message" << err.GetMessage();
+		qDebug() << "Not able to get card type!" << "error" << err.GetError();
 	}
 	return cardType == ICAO_CARDTYPE_MRTD;
 }
@@ -3110,7 +3109,7 @@ bool GAPI::hasICAO() {
 		auto &icaoCard = readerContext.getICAOCard();
 		hasIcao = true;
 	} catch (PTEID_Exception err) {
-		qDebug() << "Expection error: " << err.GetError() << "message: " << err.GetMessage();
+		qDebug() << "Expection error: " << err.GetError();
 	}
 
 	return hasIcao;

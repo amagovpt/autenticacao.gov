@@ -20,6 +20,10 @@
 #include "ByteArray.h"
 #include "APLCard.h"
 #include "PAdESExtender.h"
+
+#if defined(__WINCRYPT_H__)
+#undef PKCS7_SIGNER_INFO
+#endif
 #include <openssl/pkcs7.h>
 
 #define SEAL_DEFAULT_HEIGHT 90
