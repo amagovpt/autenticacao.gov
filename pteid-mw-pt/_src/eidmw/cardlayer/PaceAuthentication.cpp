@@ -910,7 +910,7 @@ public:
 			CByteArray eepk;
 			eepk.Append(0x80);
 			eepk.Append(eph_pubkey_len);
-			eepk.Append({eph_pubkey_buf, eph_pubkey_len});
+			eepk.Append(CByteArray(eph_pubkey_buf, eph_pubkey_len));
 
 			CByteArray data;
 			data.Append(0x7C);
@@ -929,7 +929,7 @@ public:
 			CByteArray dyn;
 			dyn.Append(0x80);
 			dyn.Append(eph_pubkey_len);
-			dyn.Append({eph_pubkey_buf, eph_pubkey_len});
+			dyn.Append(CByteArray(eph_pubkey_buf, eph_pubkey_len));
 
 			CByteArray input;
 			input.Append(0x7C);

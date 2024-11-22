@@ -81,6 +81,9 @@
     <ClCompile Include="APDU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FciData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h">
@@ -159,6 +162,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PteidCard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FciData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -547,7 +547,9 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr) {
 	return r;
 }
 
-size_t read_binary_file(const char *filename, unsigned char **outBuffer) {
+#endif
+
+EIDMW_CMN_API size_t read_binary_file(const char *filename, unsigned char **outBuffer) {
 	FILE *file = fopen(filename, "rb");
 	if (file == NULL) {
 		perror("Failed to open file");
@@ -581,4 +583,3 @@ size_t read_binary_file(const char *filename, unsigned char **outBuffer) {
 	return fileSize;
 }
 
-#endif

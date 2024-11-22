@@ -3,6 +3,7 @@
 #include <ByteArray.h>
 
 #include <algorithm>
+#include <cctype>
 
 #define MRZ_DOC_CODE_SIZE 2
 #define MRZ_SERIAL_NUMBER_SIZE 9
