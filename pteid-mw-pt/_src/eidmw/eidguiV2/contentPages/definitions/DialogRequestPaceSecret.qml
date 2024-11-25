@@ -14,6 +14,8 @@ Dialog {
         x: - mainMenuView.width - subMenuView.width
            + mainView.width * 0.5 - dialogCAN.width * 0.5
         y: parent.height * 0.5 - dialogCAN.height * 0.5
+        closePolicy: Popup.CloseOnEscape
+        modal: true
         onOpened: {
             textFieldCAN.forceActiveFocus()
         }
@@ -89,7 +91,7 @@ Dialog {
                         width: parent.width
                         font.italic: textFieldCAN.text === "" ? true: false
                         placeholderText: ""
-                        echoMode : TextInput.Password
+                        echoMode : TextInput.Normal
                         background:null
                         validator: RegExpValidator { regExp: /[0-9]+/ }
                         maximumLength: 6
@@ -118,6 +120,11 @@ Dialog {
                     visible: false
                 }
             }
+        }
+
+        onClosed: {
+            mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+            propertyBusyIndicator.running = false
         }
 
         footer: DialogButtonBox {
