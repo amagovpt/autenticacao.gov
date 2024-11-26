@@ -271,12 +271,20 @@
         <translation>Data de Nascimento</translation>
     </message>
     <message>
+        <source>STR_DATE_OF_BIRTH_DOCUMENTED</source>
+        <translation>Data de Nascimento (DD-MM-AA)</translation>
+    </message>
+    <message>
         <source>STR_DOCUMENT_NUMBER</source>
         <translation>Número de Documento</translation>
     </message>
     <message>
         <source>STR_VALIDITY_DATE</source>
         <translation>Data de Validade</translation>
+    </message>
+    <message>
+        <source>STR_VALIDITY_DATE_DOCUMENTED</source>
+        <translation>Data de Validade (DD-MM-AA)</translation>
     </message>
     <message>
         <source>STR_AFFILIATION</source>

@@ -331,7 +331,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxDateOfBirth
-                propertyDateText.text: qsTranslate("GAPI", "STR_DATE_OF_BIRTH")
+                propertyDateText.text: qsTranslate("GAPI", "STR_DATE_OF_BIRTH_DOCUMENTED")
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxDateOfBirth.accessibleText
@@ -375,7 +375,7 @@ Item {
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxExpirydate
-                propertyDateText.text: qsTranslate("GAPI", "STR_VALIDITY_DATE")
+                propertyDateText.text: qsTranslate("GAPI", "STR_VALIDITY_DATE_DOCUMENTED")
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxExpirydate.accessibleText
