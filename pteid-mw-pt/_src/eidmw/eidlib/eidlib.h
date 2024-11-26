@@ -964,6 +964,7 @@ private:
 
 struct EIDMW_PipelineReport;
 struct EIDMW_ActiveAuthenticationReport;
+struct EIDMW_ChipAuthenticationReport;
 
 class PTEID_ActiveAuthenticationReport : public PTEID_Object {
 public:
@@ -990,9 +991,28 @@ private:
 	operator=(const PTEID_ActiveAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
 };
 
+class PTEID_ChipAuthenticationReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetPublicKey() const;
+	PTEIDSDK_API const char *GetOID() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const std::string GetStatusMessage() const;
+
+private:
+	const EIDMW_ChipAuthenticationReport &m_impl;
+	friend class ICAO_Card;
+	friend class PTEID_CardReport;
+
+	PTEID_ChipAuthenticationReport(const SDK_Context *context, const EIDMW_ChipAuthenticationReport &report);
+	PTEID_ChipAuthenticationReport &
+	operator=(const PTEID_ChipAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
 class PTEID_CardReport : public PTEID_Object {
 public:
 	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const;
+	PTEIDSDK_API PTEID_ChipAuthenticationReport *GetChipAuthenticationReport() const;
 
 private:
 	const EIDMW_PipelineReport &m_impl;

@@ -790,6 +790,30 @@ const std::string PTEID_ActiveAuthenticationReport::GetStatusMessage() const {
 	return s;
 }
 
+/*****************************************************************************************
+---------------------------- PTEID_ChipAuthenticationReport ------------------------------
+*****************************************************************************************/
+
+PTEID_ChipAuthenticationReport::PTEID_ChipAuthenticationReport(const SDK_Context *context,
+															   const EIDMW_ChipAuthenticationReport &report)
+	: PTEID_Object(context, NULL), m_impl(report) {}
+
+PTEID_ByteArray PTEID_ChipAuthenticationReport::GetPublicKey() const {
+	return PTEID_ByteArray(m_context, m_impl.pubKey);
+}
+
+const char *PTEID_ChipAuthenticationReport::GetOID() const { return m_impl.oid.c_str(); }
+
+long PTEID_ChipAuthenticationReport::GetStatus() const { return m_impl.error_code; }
+
+const std::string PTEID_ChipAuthenticationReport::GetStatusMessage() const {
+	std::string s = PTEID_Exception(m_impl.error_code).GetMessage();
+	return s;
+}
+
+/*****************************************************************************************
+------------------------------------ PTEID_CardReport ------------------------------------
+*****************************************************************************************/
 PTEID_CardReport::PTEID_CardReport(const SDK_Context *context, const EIDMW_PipelineReport &reports)
 	: PTEID_Object(context, NULL), m_impl(reports) {}
 
@@ -798,6 +822,16 @@ PTEID_ActiveAuthenticationReport *PTEID_CardReport::GetActiveAuthenticationRepor
 	BEGIN_TRY_CATCH
 
 	report = new PTEID_ActiveAuthenticationReport(m_context, m_impl.getActiveAuthenticationReport());
+
+	END_TRY_CATCH
+	return report;
+}
+
+PTEID_ChipAuthenticationReport *PTEID_CardReport::GetChipAuthenticationReport() const {
+	PTEID_ChipAuthenticationReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_ChipAuthenticationReport(m_context, m_impl.getChipAuthenticationReport());
 
 	END_TRY_CATCH
 	return report;

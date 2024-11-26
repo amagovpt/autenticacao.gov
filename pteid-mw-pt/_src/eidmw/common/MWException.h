@@ -101,7 +101,7 @@ struct EIDMW_CMN_API EIDMW_ActiveAuthenticationReport : public EIDMW_Report {
 	std::string oid; // Active Authentication algorithm OID
 };
 
-struct EIDMW_ChipAuthenticationReport : public EIDMW_Report {
+struct EIDMW_CMN_API EIDMW_ChipAuthenticationReport : public EIDMW_Report {
 	CByteArray pubKey; // Public Key for Chip Authentication
 	std::string oid;   // Chip Authentication algorithm OID
 };
@@ -128,7 +128,7 @@ public:
 		m_chipAuthenticationReport = report;
 	}
 
-	const EIDMW_ChipAuthenticationReport getChipAuthenticationReport() const { return m_chipAuthenticationReport; }
+	const EIDMW_ChipAuthenticationReport &getChipAuthenticationReport() const { return m_chipAuthenticationReport; }
 
 	bool HasFailed() { return m_hasFailed; }
 
