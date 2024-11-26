@@ -231,6 +231,14 @@
         <translation>Apelido(s)</translation>
     </message>
     <message>
+        <source>STR_FULL_NAME_MRZ_EXTRACT</source>
+        <translation>Nome completo extraído do MRZ</translation>
+    </message>
+    <message>
+        <source>STR_FULL_NAME</source>
+        <translation>Nome Completo</translation>
+    </message>
+    <message>
         <source>STR_PHOTO</source>
         <translation>Fotografia do Cidadão</translation>
     </message>

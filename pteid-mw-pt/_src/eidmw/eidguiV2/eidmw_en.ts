@@ -233,6 +233,14 @@
         <translation>Surname(s)</translation>
     </message>
     <message>
+        <source>STR_FULL_NAME_MRZ_EXTRACT</source>
+        <translation>Full name extracted from MRZ</translation>
+    </message>
+    <message>
+        <source>STR_FULL_NAME</source>
+        <translation>Full name</translation>
+    </message>
+    <message>
         <source>STR_PHOTO</source>
         <translation>Citizen Photo</translation>
     </message>

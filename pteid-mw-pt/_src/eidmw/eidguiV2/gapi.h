@@ -270,6 +270,7 @@ public:
 		OptionalDataLine2,
 		FullName,
 		IsPassport,
+		IsNameFromMRZ,
 	};
 
 	enum AddressInfoKey {

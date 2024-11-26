@@ -1677,6 +1677,9 @@ Load language error. Please reinstall the application"
 
             // Open the content page of the first item of the new sub menu
             mainFormID.propertyPageLoader.propertyForceFocus = false
+            if(mainFormID.propertySubMenuListView.model.count === 1)
+                mainFormID.propertyPageLoader.propertyForceFocus = true
+
             mainFormID.propertyPageLoader.source =
                     mainFormID.propertySubMenuListView.model.get(0).url
             mainFormID.propertySubMenuListView.currentIndex = 0

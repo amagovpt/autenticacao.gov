@@ -37,6 +37,7 @@ Item {
     property alias propertyPngButton: pngButton
     property alias propertyJpegButton: jpegButton
     property alias propertyCancelExport: cancelExport
+    property bool propertyIsFullNameMrz: false
 
     Item {
         id: rowTop
@@ -79,7 +80,7 @@ Item {
                 anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm {
                     id: textBoxSurName
-                    propertyDateText.text: qsTranslate("GAPI", "Full name")
+                    propertyDateText.text: propertyIsFullNameMrz ? qsTranslate("GAPI", "STR_FULL_NAME_MRZ_EXTRACT") : qsTranslate("GAPI", "STR_FULL_NAME")
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }

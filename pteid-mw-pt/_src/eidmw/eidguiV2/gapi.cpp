@@ -3152,6 +3152,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	cardData[OptionalDataLine2] = QString::fromUtf8(dg->optionalDataLine2());
 	cardData[FullName] =
 		QString::fromUtf8(dg->secondaryIdentifier()) + " " + QString::fromUtf8(dg->primaryIdentifier());
+	cardData[IsNameFromMRZ] = "True";
 	cardData[IsPassport] = QString::fromStdString(dg->isPassport() ? "True" : "False");
 
 	// Load the photo from PTEID_ICAO_DG2	
@@ -3186,6 +3187,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 			PTEID_ICAO_DG11 *dg11 = card->readDataGroup11();
 			if (dg11 != NULL) {
 				cardData[FullName] = dg11->fullName();
+				cardData[IsNameFromMRZ] = "False";
 			}
 		} catch (PTEID_Exception &err) {
 			qDebug() << "Error while trying to read data group 11! error code: " << err.GetError();

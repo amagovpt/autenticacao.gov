@@ -44,9 +44,9 @@ PageCardICAOForm {
         onSignalICAODataChanged: {
             console.log("Data Card ICAO --> Data Changed")
             //console.trace();
+            propertyIsFullNameMrz = gapi.getDataICAOValue(GAPI.IsNameFromMRZ) === "True" ? true : false
             propertyTextBoxSurName.propertyDateField.text = gapi.getDataICAOValue(GAPI.FullName)
             propertyTextBoxSex.propertyDateField.text = gapi.getDataICAOValue(GAPI.Gender)
-
             propertyTextBoxNacionality.propertyDateField.text = gapi.getDataICAOValue(GAPI.Nat)
             propertyTextBoxDateOfBirth.propertyDateField.text = gapi.getDataICAOValue(GAPI.DateOfBirth)
             propertyTextBoxDocumentNum.propertyDateField.text = gapi.getDataICAOValue(GAPI.DocumentNumber)
@@ -91,6 +91,7 @@ PageCardICAOForm {
 
             propertyTextBoxSurName.propertyDateField.text = ""
             propertyTextBoxSex.propertyDateField.text = ""
+            propertyIsFullNameMrz = false
             propertyTextBoxNacionality.propertyDateField.text = ""
             propertyTextBoxDateOfBirth.propertyDateField.text = ""
             propertyTextBoxDocumentNum.propertyDateField.text = ""
@@ -107,6 +108,7 @@ PageCardICAOForm {
             var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_INCOMPATIBLE_ICAO")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             propertyTextBoxSurName.propertyDateField.text = ""
+            propertyIsFullNameMrz = false
             propertyTextBoxSex.propertyDateField.text = ""
             propertyTextBoxNacionality.propertyDateField.text = ""
             propertyTextBoxDateOfBirth.propertyDateField.text = ""
@@ -127,6 +129,7 @@ PageCardICAOForm {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 returnSubMenuWhenClosed = true
                 propertyTextBoxSurName.propertyDateField.text = ""
+                propertyIsFullNameMrz = false
                 propertyTextBoxSex.propertyDateField.text = ""
                 propertyTextBoxNacionality.propertyDateField.text = ""
                 propertyTextBoxDateOfBirth.propertyDateField.text = ""
