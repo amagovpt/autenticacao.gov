@@ -58,6 +58,8 @@
 
 #include <curl/curl.h>
 
+#include <algorithm>
+
 using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR 1000
@@ -3148,8 +3150,8 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	cardData[DateOfExpiry] = convertDate(QString::fromUtf8(dg->dateOfExpiry()));
 	cardData[Nat] = QString::fromUtf8(dg->nationality());
 	cardData[OptionalDataLine2] = QString::fromUtf8(dg->optionalDataLine2());
-	cardData[PrimaryIdentifier] = QString::fromUtf8(dg->primaryIdentifier());
-	cardData[SecondaryIdentifier] = QString::fromUtf8(dg->secondaryIdentifier());
+	cardData[FullName] =
+		QString::fromUtf8(dg->secondaryIdentifier()) + " " + QString::fromUtf8(dg->primaryIdentifier());
 	cardData[IsPassport] = QString::fromStdString(dg->isPassport() ? "True" : "False");
 
 	// Load the photo from PTEID_ICAO_DG2	
@@ -3177,7 +3179,19 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 		image_provider->setPixmap("photoICAO.png", image_photo);
     }
 
-	// All data loaded: we can emit the signal to QML
+	auto availableDgs = card->getAvailableDatagroups();
+	auto it = std::find(availableDgs.begin(), availableDgs.end(), PTEID_DATA_GROUP_ID_DG11);
+	if (it != availableDgs.end()) {
+		try {
+			PTEID_ICAO_DG11 *dg11 = card->readDataGroup11();
+			if (dg11 != NULL) {
+				cardData[FullName] = dg11->fullName();
+			}
+		} catch (PTEID_Exception &err) {
+			qDebug() << "Error while trying to read data group 11! error code: " << err.GetError();
+		}
+	}
+
 	setDataCardICAO(cardData);
 }
 

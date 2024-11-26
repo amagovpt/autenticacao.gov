@@ -44,8 +44,7 @@ PageCardICAOForm {
         onSignalICAODataChanged: {
             console.log("Data Card ICAO --> Data Changed")
             //console.trace();
-            propertyTextBoxName.propertyDateField.text = gapi.getDataICAOValue(GAPI.SecondaryIdentifier)
-            propertyTextBoxSurName.propertyDateField.text = gapi.getDataICAOValue(GAPI.PrimaryIdentifier)
+            propertyTextBoxSurName.propertyDateField.text = gapi.getDataICAOValue(GAPI.FullName)
             propertyTextBoxSex.propertyDateField.text = gapi.getDataICAOValue(GAPI.Gender)
 
             propertyTextBoxNacionality.propertyDateField.text = gapi.getDataICAOValue(GAPI.Nat)
@@ -60,7 +59,7 @@ PageCardICAOForm {
             propertyBusyIndicator.running = false
             mainFormID.propertyPageLoader.propertyGeneralPopUp.close()
             if(mainFormID.propertyPageLoader.propertyForceFocus)
-                        propertyGivenNameTextForm.forceActiveFocus()
+                                    propertyTextBoxSurName.forceActiveFocus()
         }
         onSignalCardAccessError: {
             console.log("Card ICAO Page onSignalCardAccessError")
@@ -90,7 +89,6 @@ PageCardICAOForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
 
-            propertyTextBoxName.propertyDateField.text = ""
             propertyTextBoxSurName.propertyDateField.text = ""
             propertyTextBoxSex.propertyDateField.text = ""
             propertyTextBoxNacionality.propertyDateField.text = ""
@@ -108,7 +106,6 @@ PageCardICAOForm {
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_INCOMPATIBLE_ICAO")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
-            propertyTextBoxName.propertyDateField.text = ""
             propertyTextBoxSurName.propertyDateField.text = ""
             propertyTextBoxSex.propertyDateField.text = ""
             propertyTextBoxNacionality.propertyDateField.text = ""
@@ -129,7 +126,6 @@ PageCardICAOForm {
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_REMOVED")
                 returnSubMenuWhenClosed = true
-                propertyTextBoxName.propertyDateField.text = ""
                 propertyTextBoxSurName.propertyDateField.text = ""
                 propertyTextBoxSex.propertyDateField.text = ""
                 propertyTextBoxNacionality.propertyDateField.text = ""

@@ -22,8 +22,6 @@ Item {
 
     property alias propertyBusyIndicator: busyIndication
 
-    property alias propertyTextBoxName: textBoxName
-    property alias propertyGivenNameTextForm: givenNameTextForm
     property alias propertyTextBoxSurName: textBoxSurName
     property alias propertyTextBoxSex: textBoxSex
     property alias propertyTextBoxNacionality: textBoxNacionality
@@ -73,35 +71,15 @@ Item {
             height: parent.height
 
             Item {
-                id: givenNameTextForm
-                width: parent.width
-                height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE
-                        + 2 * Constants.SIZE_TEXT_FIELD
-                Components.LabelTextBoxForm {
-                    id: textBoxName
-                    propertyDateText.text: qsTranslate("GAPI", "STR_GIVEN_NAME")
-                    propertyRectField.height: parent.height
-                    propertyDateField.wrapMode: Text.WordWrap
-                }
-                Accessible.role: Accessible.Column
-                Accessible.name: textBoxName.accessibleText
-                KeyNavigation.tab: surNameTextTextForm
-                KeyNavigation.down: surNameTextTextForm
-                KeyNavigation.right: surNameTextTextForm
-                KeyNavigation.backtab: rectCountry
-                KeyNavigation.up: rectCountry
-            }
-            Item {
                 id: surNameTextTextForm
                 width: parent.width
-                height: rectNamePhotoLeft.height - givenNameTextForm.height - 2
+                height: rectNamePhotoLeft.height - 2
                         * Constants.SIZE_ROW_V_SPACE - Constants.SIZE_TEXT_LABEL
                         - Constants.SIZE_TEXT_V_SPACE
-                anchors.top: givenNameTextForm.bottom
                 anchors.topMargin: 2 * Constants.SIZE_ROW_V_SPACE
                 Components.LabelTextBoxForm {
                     id: textBoxSurName
-                    propertyDateText.text: qsTranslate("GAPI", "STR_SURNAME")
+                    propertyDateText.text: qsTranslate("GAPI", "Full name")
                     propertyRectField.height: parent.height
                     propertyDateField.wrapMode: Text.WordWrap
                 }
@@ -110,8 +88,8 @@ Item {
                 KeyNavigation.tab: photoImage
                 KeyNavigation.down: photoImage
                 KeyNavigation.right: photoImage
-                KeyNavigation.backtab: givenNameTextForm
-                KeyNavigation.up: givenNameTextForm
+                KeyNavigation.backtab: rectCountry
+                KeyNavigation.up: rectCountry
             }
         }
 
@@ -320,9 +298,9 @@ Item {
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxSex.accessibleText
-            KeyNavigation.tab: rectSex
-            KeyNavigation.down: rectSex
-            KeyNavigation.right: rectSex
+            KeyNavigation.tab: rectNacionality
+            KeyNavigation.down: rectNacionality
+            KeyNavigation.right: rectNacionality
             KeyNavigation.backtab: savePhotoButton
             KeyNavigation.up: savePhotoButton
         }
@@ -426,9 +404,9 @@ Item {
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxCountry.accessibleText
-            KeyNavigation.tab: rectDocumentNum
-            KeyNavigation.down: rectDocumentNum
-            KeyNavigation.right: rectDocumentNum
+            KeyNavigation.tab: surNameTextTextForm
+            KeyNavigation.down: surNameTextTextForm
+            KeyNavigation.right: surNameTextTextForm
             KeyNavigation.backtab: rectExpiryDate
             KeyNavigation.up: rectExpiryDate
         }

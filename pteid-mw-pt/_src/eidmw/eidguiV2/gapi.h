@@ -268,8 +268,7 @@ public:
 		DateOfExpiry,
 		Nat,
 		OptionalDataLine2,
-		PrimaryIdentifier,
-		SecondaryIdentifier,
+		FullName,
 		IsPassport,
 	};
 
