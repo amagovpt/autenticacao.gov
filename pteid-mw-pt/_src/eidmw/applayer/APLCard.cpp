@@ -612,8 +612,15 @@ std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	{
 		selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 
-		performActiveAuthentication();
-		performChipAuthentication();
+		if (!m_SodAttributes) {
+			loadAvailableDataGroups();
+		}
+
+		auto aa_report = performActiveAuthentication();
+		m_reports.setActiveAuthenticationReport(aa_report);
+
+		auto ca_report = performChipAuthentication();
+		m_reports.setChipAuthenticationReport(ca_report);
 
 		loadAvailableDataGroups();
 
@@ -834,32 +841,50 @@ CByteArray extractPublicKeyFromDG15(CByteArray &dg15_data) {
 	return pubkey_data;
 }
 
-bool APL_ICAO::performActiveAuthentication() {
+EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
+	EIDMW_ActiveAuthenticationReport report;
+
 	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
 
 	auto cryptFwk = AppLayer.getCryptoFwk();
 
 	// CByteArray security_file;
 	CByteArray secopt_file = readFile(PTEID_FILE_SECURITY);
+	report.dg14.Append(secopt_file);
 
 	char *dg14_str = byteArrayToHexString(secopt_file.GetBytes(), secopt_file.Size());
 	MWLOG(LEV_DEBUG, MOD_APL, "DG14 file: %s", dg14_str);
 	free(dg14_str);
 
+	// Store hashes
+	report.storedHashDg14 = m_SodAttributes->get(DG14);
+	cryptFwk->GetHash(secopt_file, m_SodAttributes->getHashFunction(), &report.hashDg14);
+
 	// verify hash of security file with hash in SOD
 	if (!verifySOD(DG14, secopt_file)) {
 		MWLOG(LEV_ERROR, MOD_APL, "Security option hash does not match with SOD");
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
+
+		report.error_code = EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY;
+		report.type = EIDMW_ReportType::Error;
+		return report;
 	}
 
 	try {
 		// read public key DG15
 		CByteArray pubkey_file = readFile(PTEID_FILE_PUB_KEY_AA);
+		report.dg15 = pubkey_file;
+
+		// Store hashes
+		report.storedHashDg15 = m_SodAttributes->get(DG15);
+		cryptFwk->GetHash(pubkey_file, m_SodAttributes->getHashFunction(), &report.hashDg15);
 
 		// verify hash of public key with hash in SOD
 		if (!verifySOD(DG15, pubkey_file)) {
 			MWLOG(LEV_ERROR, MOD_APL, "Public key hash does not match with SOD");
-			throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
+
+			report.error_code = EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY;
+			report.type = EIDMW_ReportType::Error;
+			return report;
 		}
 
 		// read OID from security file
@@ -869,6 +894,7 @@ bool APL_ICAO::performActiveAuthentication() {
 				  "Didn't find active authentication algorithm OID in security options file. This means we should try "
 				  "AA with RSA!");
 		}
+		report.oid = OBJ_nid2sn(OBJ_obj2nid(obj));
 
 		char *dg15_str = byteArrayToHexString(pubkey_file.GetBytes(), pubkey_file.Size());
 		MWLOG(LEV_DEBUG, MOD_APL, "DG15 file (card pubkey): %s", dg15_str);
@@ -879,27 +905,44 @@ bool APL_ICAO::performActiveAuthentication() {
 
 		cryptFwk->performActiveAuthentication(obj, pubkey, this);
 	} catch (CMWException &e) {
+		report.error_code = e.GetError();
+		report.type = EIDMW_ReportType::Error;
+
 		if (e.GetError() == EIDMW_ERR_FILE_NOT_FOUND) {
 			MWLOG(LEV_WARN, MOD_APL, "DG15 not found! Active Authentication not available for this document.");
-			return true;
+			return report;
 		} else {
 			MWLOG(LEV_WARN, MOD_APL,
 				  "Error reading DG15! Active Authentication failed. Error code %08x thrown at %s:%ld", e.GetError(),
 				  e.GetFile().c_str(), e.GetLine());
-			return false;
+			return report;
 		}
 	}
 
-	return true;
+	return report;
 }
 
-bool APL_ICAO::performChipAuthentication() {
-	auto dg14 = readFile(DATAGROUP_PATHS.at(DG14));
-	auto pkey = getChipAuthenticationKey(dg14);
-	auto oid = getChipAuthenticationOid(dg14);
-	getCalReader()->initChipAuthentication(pkey, oid);
+EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
+	EIDMW_ChipAuthenticationReport report;
 
-	return true;
+	// Chip authentication is performed after Active Authentication.
+	// No need to re-verify dg14 hashes as it was already performed during the previous AA step
+	auto dg14 = readFile(DATAGROUP_PATHS.at(DG14));
+
+	auto pkey = getChipAuthenticationKey(dg14);
+	unsigned char *buffer = nullptr;
+	int len = i2d_PublicKey(pkey, &buffer);
+	report.pubKey = CByteArray(buffer, len);
+
+	auto oid = getChipAuthenticationOid(dg14);
+	report.oid = OBJ_nid2sn(OBJ_obj2nid(oid));
+
+	auto status = getCalReader()->initChipAuthentication(pkey, oid);
+	if (!status) {
+		report.type = EIDMW_ReportType::Error;
+	}
+
+	return report;
 }
 
 const CByteArray &APL_ICAO::getRawData(APL_RawDataType type) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }

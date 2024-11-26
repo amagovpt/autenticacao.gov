@@ -962,10 +962,53 @@ private:
 	PTEID_ICAO_DG11 &operator=(const PTEID_ICAO_DG11 &) = delete; /**< Copy not allowed - not implemented */
 };
 
+struct EIDMW_PipelineReport;
+struct EIDMW_ActiveAuthenticationReport;
+
+class PTEID_ActiveAuthenticationReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetDG14() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG14StoredHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG14ComputedHash() const;
+
+	PTEIDSDK_API PTEID_ByteArray GetDG15() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG15StoredHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG15ComputedHash() const;
+
+	PTEIDSDK_API const char *GetOID() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const std::string GetStatusMessage() const;
+
+private:
+	const EIDMW_ActiveAuthenticationReport &m_impl;
+	friend class ICAO_Card;
+	friend class PTEID_CardReport;
+
+	PTEID_ActiveAuthenticationReport(const SDK_Context *context, const EIDMW_ActiveAuthenticationReport &report);
+	PTEID_ActiveAuthenticationReport &
+	operator=(const PTEID_ActiveAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class PTEID_CardReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const;
+
+private:
+	const EIDMW_PipelineReport &m_impl;
+	friend class ICAO_Card;
+
+	PTEID_CardReport(const SDK_Context *context, const EIDMW_PipelineReport &reports);
+	PTEID_CardReport(const PTEID_CardReport &) = delete;			/**< Copy not allowed - not implemented */
+	PTEID_CardReport &operator=(const PTEID_CardReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
 class ICAO_Card : public PTEID_Object {
 public:
 
 	PTEIDSDK_API virtual std::vector<PTEID_DataGroupID> getAvailableDatagroups();
+
+	PTEIDSDK_API virtual PTEID_CardReport *GetCardReport() const;
 
 	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType);
 

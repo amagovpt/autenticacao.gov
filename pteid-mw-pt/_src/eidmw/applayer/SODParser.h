@@ -39,6 +39,7 @@ class SODAttributes {
 public:
 	void add(unsigned short tag, CByteArray value);
 	void setHashFunction(const EVP_MD *hash_md);
+	const EVP_MD *getHashFunction();
 	bool validateHash(unsigned short tag, const CByteArray &data);
 	const CByteArray &get(unsigned short tag);
 	const std::unordered_map<unsigned short, CByteArray> &getHashes();

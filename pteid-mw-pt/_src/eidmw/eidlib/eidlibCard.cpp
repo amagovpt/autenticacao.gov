@@ -25,6 +25,7 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+#include "MiscUtil.h"
 #include "eidlib.h"
 
 #include "InternalUtil.h"
@@ -756,6 +757,52 @@ const char *PTEID_EIDCard::readPersonalNotes() {
 	return out;
 }
 
+PTEID_ActiveAuthenticationReport::PTEID_ActiveAuthenticationReport(const SDK_Context *context,
+																   const EIDMW_ActiveAuthenticationReport &report)
+	: PTEID_Object(context, NULL), m_impl(report) {}
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG14() const { return PTEID_ByteArray(m_context, m_impl.dg14); }
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG14ComputedHash() const {
+	return PTEID_ByteArray(m_context, m_impl.hashDg14);
+}
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG14StoredHash() const {
+	return PTEID_ByteArray(m_context, m_impl.storedHashDg14);
+}
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG15() const { return PTEID_ByteArray(m_context, m_impl.dg15); }
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG15ComputedHash() const {
+	return PTEID_ByteArray(m_context, m_impl.hashDg15);
+}
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG15StoredHash() const {
+	return PTEID_ByteArray(m_context, m_impl.storedHashDg15);
+}
+
+const char *PTEID_ActiveAuthenticationReport::GetOID() const { return m_impl.oid.c_str(); }
+
+long PTEID_ActiveAuthenticationReport::GetStatus() const { return m_impl.error_code; }
+
+const std::string PTEID_ActiveAuthenticationReport::GetStatusMessage() const {
+	std::string s = PTEID_Exception(m_impl.error_code).GetMessage();
+	return s;
+}
+
+PTEID_CardReport::PTEID_CardReport(const SDK_Context *context, const EIDMW_PipelineReport &reports)
+	: PTEID_Object(context, NULL), m_impl(reports) {}
+
+PTEID_ActiveAuthenticationReport *PTEID_CardReport::GetActiveAuthenticationReport() const {
+	PTEID_ActiveAuthenticationReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_ActiveAuthenticationReport(m_context, m_impl.getActiveAuthenticationReport());
+
+	END_TRY_CATCH
+	return report;
+}
+
 /*****************************************************************************************
 --------------------------------------- ICAO_Card ----------------------------------------
 *****************************************************************************************/
@@ -775,6 +822,11 @@ std::vector<PTEID_DataGroupID> ICAO_Card::getAvailableDatagroups() {
 	END_TRY_CATCH
 
 	return availableDatagroups;
+}
+
+PTEID_CardReport *ICAO_Card::GetCardReport() const {
+	auto icao = static_cast<APL_ICAO *>(m_impl);
+	return new PTEID_CardReport(m_context, icao->m_reports);
 }
 
 void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType) {

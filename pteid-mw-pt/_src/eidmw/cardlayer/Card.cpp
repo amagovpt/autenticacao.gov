@@ -412,10 +412,13 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
 	}
 }
 
-void CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
+bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	if (m_pace.get()) {
-		m_pace->chipAuthentication(m_hCard, m_comm_protocol, pkey, oid);
+		return m_pace->chipAuthentication(m_hCard, m_comm_protocol, pkey, oid);
 	}
+
+	MWLOG(LEV_ERROR, MOD_CAL, L"Tried performing Chip Authentication without initialized pace");
+	return false;
 }
 
 const void *CCard::getProtocolStructure() { return m_comm_protocol; }

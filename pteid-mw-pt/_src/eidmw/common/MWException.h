@@ -24,6 +24,7 @@
 #define MWEXCEPTION_H
 
 #include "Export.h"
+#include "ByteArray.h"
 
 #include <exception>
 #include <iostream>
@@ -80,6 +81,62 @@ inline const char *basename_for_logging(const char *path) {
 #else
 #define CMWEXCEPTION(i) CMWException(i, __FILE__, __LINE__)
 #endif
+
+enum class EIDMW_CMN_API EIDMW_ReportType { Success, Error };
+
+struct EIDMW_CMN_API EIDMW_Report {
+	unsigned int error_code = 0;
+	EIDMW_ReportType type = EIDMW_ReportType::Success;
+};
+
+struct EIDMW_CMN_API EIDMW_ActiveAuthenticationReport : public EIDMW_Report {
+	CByteArray dg14;		   // Security Options file
+	CByteArray storedHashDg14; // Security Options file hash from SOD
+	CByteArray hashDg14;	   // Hash of current Security Options file
+
+	CByteArray dg15;		   // DG15 (Public Key)
+	CByteArray storedHashDg15; // DG15 file hash from SOD
+	CByteArray hashDg15;	   // Hash of current DG15
+
+	std::string oid; // Active Authentication algorithm OID
+};
+
+struct EIDMW_ChipAuthenticationReport : public EIDMW_Report {
+	CByteArray pubKey; // Public Key for Chip Authentication
+	std::string oid;   // Chip Authentication algorithm OID
+};
+
+class EIDMW_CMN_API EIDMW_PipelineReport {
+public:
+	void setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report) {
+		if (report.type == EIDMW_ReportType::Error) {
+			m_hasFailed = true;
+		}
+
+		m_activeAuthenticationReport = report;
+	}
+
+	const EIDMW_ActiveAuthenticationReport &getActiveAuthenticationReport() const {
+		return m_activeAuthenticationReport;
+	}
+
+	void setChipAuthenticationReport(const EIDMW_ChipAuthenticationReport &report) {
+		if (report.type == EIDMW_ReportType::Error) {
+			m_hasFailed = true;
+		}
+
+		m_chipAuthenticationReport = report;
+	}
+
+	const EIDMW_ChipAuthenticationReport getChipAuthenticationReport() const { return m_chipAuthenticationReport; }
+
+	bool HasFailed() { return m_hasFailed; }
+
+private:
+	bool m_hasFailed = false;
+	EIDMW_ActiveAuthenticationReport m_activeAuthenticationReport;
+	EIDMW_ChipAuthenticationReport m_chipAuthenticationReport;
+};
 
 } // namespace eIDMW
 #endif

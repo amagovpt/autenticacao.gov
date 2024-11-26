@@ -115,6 +115,8 @@ void SODAttributes::add(unsigned short tag, CByteArray value) { m_hashes[tag] = 
 
 void SODAttributes::setHashFunction(const EVP_MD *hash_md) { this->hash_md = hash_md; }
 
+const EVP_MD *SODAttributes::getHashFunction() { return hash_md; }
+
 bool SODAttributes::validateHash(unsigned short tag, const CByteArray &data) {
 	if (m_hashes.find(tag) == m_hashes.end()) {
 		return false;

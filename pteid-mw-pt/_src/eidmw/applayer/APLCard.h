@@ -355,6 +355,8 @@ public:
 	virtual const char *getTokenSerialNumber() override;
 	virtual const char *getTokenLabel() override;
 
+	EIDMW_PipelineReport m_reports;
+
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
 	std::unique_ptr<SODAttributes> m_SodAttributes;
@@ -372,8 +374,8 @@ private:
 	CByteArray readFile(const std::string &csPath) const;
 	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray &data);
-	bool performActiveAuthentication();
-	bool performChipAuthentication();
+	EIDMW_ActiveAuthenticationReport performActiveAuthentication();
+	EIDMW_ChipAuthenticationReport performChipAuthentication();
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);

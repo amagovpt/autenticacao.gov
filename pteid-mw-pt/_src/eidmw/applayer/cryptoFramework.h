@@ -339,6 +339,11 @@ public:
 	 */
 	bool VerifyHash(const CByteArray &data, const CByteArray &hash, const EVP_MD *algorithm);
 
+	/**
+	 * Get the hash of the data
+	 */
+	bool GetHash(const CByteArray &data, const EVP_MD *algorithm, CByteArray *hash);
+
 protected:
 	/**
 	  * Constructor - used within "instance"
@@ -354,11 +359,6 @@ protected:
 	  * Convert digest algorithm
 	  */
 	const EVP_MD *ConvertAlgorithm(FWK_HashAlgo algo);
-
-	/**
-	  * Get the hash of the data
-	  */
-	bool GetHash(const CByteArray &data, const EVP_MD *algorithm, CByteArray *hash);
 
 	/**
 	  * Verify if the certificate is signed by the issuer

@@ -827,7 +827,8 @@ public:
 		return ret;
 	}
 
-	void initChipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey, ASN1_OBJECT *oid) {
+	bool initChipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey, ASN1_OBJECT *oid) {
+		bool status = true;
 		long ret_value = 0;
 
 		// Step 2 Variables
@@ -864,7 +865,8 @@ public:
 			auto res = sendAPDU(apdu_mse, hCard, ret_value, param_structure);
 			if (res.GetByte(0) != 0x90 || res.GetByte(1) != 0x00) {
 				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed MSE-SET apdu 0x%x", __FUNCTION__, res.GetBytes());
-				goto err;
+				status = false;
+				goto cleanup;
 			}
 			MWLOG(LEV_DEBUG, MOD_CAL, "%s: MSE-SET: Success", __FUNCTION__);
 		}
@@ -876,19 +878,22 @@ public:
 			ec_key = (EC_KEY *)EVP_PKEY_get0_EC_KEY(pkey);
 			if (!ec_key) {
 				MWLOG(LEV_ERROR, MOD_CAL, "%s: Could not retrieve EC key from dg14 pkey", __FUNCTION__);
-				goto err;
+				status = false;
+				goto cleanup;
 			}
 
 			eph_key = EC_KEY_new_by_curve_name(EC_GROUP_get_curve_name(EC_KEY_get0_group(ec_key)));
 			if (!eph_key || !EC_KEY_generate_key(eph_key)) {
 				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to generate ephemeral keys", __FUNCTION__);
-				goto err;
+				status = false;
+				goto cleanup;
 			}
 
 			eph_pkey = EVP_PKEY_new();
 			if (!eph_pkey || !EVP_PKEY_assign_EC_KEY(eph_pkey, eph_key)) {
 				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to assign ephemeral key", __FUNCTION__);
-				goto err;
+				status = false;
+				goto cleanup;
 			}
 
 			MWLOG(LEV_DEBUG, MOD_CAL, "%s: Ephemeral key-pair generation: Success", __FUNCTION__);
@@ -943,7 +948,8 @@ public:
 			auto res = sendAPDU(apdu_kat, hCard, ret_value, param_structure);
 			if (!res.Equals({"7C009000", true})) {
 				MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed General Authentication step", __FUNCTION__);
-				goto err;
+				status = false;
+				goto cleanup;
 			}
 
 			MWLOG(LEV_DEBUG, MOD_CAL, "%s: General Authentication step: Success", __FUNCTION__);
@@ -953,7 +959,8 @@ public:
 		shared_secret = computeSharedSecret(eph_pkey, pkey);
 		if (!shared_secret || shared_secret->length <= 0) {
 			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to generate shared secret", __FUNCTION__);
-			goto err;
+			status = false;
+			goto cleanup;
 		}
 		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Shared Secret step: Success", __FUNCTION__);
 
@@ -963,7 +970,8 @@ public:
 		if (!deriveSessionKeys((unsigned char *)shared_secret->data, shared_secret->length, params.kdf_md,
 							   params.key_size, ks_enc, ks_mac)) {
 			MWLOG(LEV_ERROR, MOD_CAL, "%s: Session keys derivation failed", __FUNCTION__);
-			goto err;
+			status = false;
+			goto cleanup;
 		}
 		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Session Keys derivation step: Success", __FUNCTION__);
 
@@ -971,11 +979,13 @@ public:
 		swapKeysForChipAuthentication(eph_pkey, shared_secret, ks_enc, ks_mac, params);
 		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication: Success", __FUNCTION__);
 
-	err:
+	cleanup:
 		if (pkey)
 			EVP_PKEY_free(pkey);
 		if (eph_pubkey_buf)
 			free(eph_pubkey_buf);
+
+		return status;
 	}
 
 	void swapKeysForChipAuthentication(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, unsigned char *k_enc,
@@ -1112,9 +1122,9 @@ void PaceAuthentication::initPaceAuthentication(SCARDHANDLE &hCard, const void *
 	initialized = true;
 }
 
-void PaceAuthentication::chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey,
+bool PaceAuthentication::chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey,
 											ASN1_OBJECT *oid) {
-	m_impl->initChipAuthentication(hCard, param_structure, pkey, oid);
+	return m_impl->initChipAuthentication(hCard, param_structure, pkey, oid);
 }
 
 bool PaceAuthentication::isInitialized() { return initialized; }
