@@ -3185,7 +3185,8 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	if (it != availableDgs.end()) {
 		try {
 			PTEID_ICAO_DG11 *dg11 = card->readDataGroup11();
-			if (dg11 != NULL) {
+			//All the DG11 tags are optional so we need to check for presence of fullname
+			if (dg11 != NULL && strlen(dg11->fullName()) > 0) {
 				cardData[FullName] = dg11->fullName();
 				cardData[IsNameFromMRZ] = "False";
 			}
