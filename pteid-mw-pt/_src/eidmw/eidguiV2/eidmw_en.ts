@@ -419,9 +419,8 @@
         <translation>Country</translation>
     </message>
     <message>
-        <source>STR_COUNTRY_OF_EMISSION</source>
-        <oldsource>Country of emission</oldsource>
-        <translation>Country of emission</translation>
+        <source>STR_ISSUER_COUNTRY</source>
+        <translation>Issuer Country</translation>
     </message>
     <message>
         <source>STR_STREET_NAME</source>

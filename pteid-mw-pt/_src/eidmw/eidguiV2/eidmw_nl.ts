@@ -417,8 +417,7 @@
         <translation>País</translation>
     </message>
     <message>
-        <source>STR_COUNTRY_OF_EMISSION</source>
-        <oldsource>Country of emission</oldsource>
+        <source>STR_ISSUER_COUNTRY</source>
         <translation>País emissor</translation>
     </message>
     <message>

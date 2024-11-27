@@ -401,7 +401,7 @@ Item {
             height: parent.height
             Components.LabelTextBoxForm {
                 id: textBoxCountry
-                propertyDateText.text: qsTranslate("GAPI", "STR_COUNTRY_OF_EMISSION")
+                propertyDateText.text: qsTranslate("GAPI", "STR_ISSUER_COUNTRY")
             }
             Accessible.role: Accessible.Column
             Accessible.name: textBoxCountry.accessibleText
