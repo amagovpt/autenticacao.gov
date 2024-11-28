@@ -117,6 +117,37 @@ void copyToString(std::string &placeToCopy, ASN1_STRING *copy, bool cleanString 
 	}
 }
 
+void trimSpaces(std::string &str) {
+	str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+	str.erase(std::find_if(str.rbegin(), str.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(),
+			  str.end());
+}
+
+void getNameIdentifiers(ASN1_STRING *asn1String, std::string &fullname) {
+	CByteArray arrayHelper;
+	std::string primaryIdentifier;
+	std::string secondaryIdentifier;
+	arrayHelper.Append(asn1String->data, asn1String->length);
+	std::string line = arrayHelper.hexToString();
+	size_t dividerIdentifiers = line.find("<<");
+	if (dividerIdentifiers != std::string::npos) {
+		primaryIdentifier = line.substr(0, dividerIdentifiers);
+		std::replace(primaryIdentifier.begin(), primaryIdentifier.end(), '<', ' ');
+		trimSpaces(primaryIdentifier);
+		secondaryIdentifier = line.substr(dividerIdentifiers + 2);
+		std::replace(secondaryIdentifier.begin(), secondaryIdentifier.end(), '<', ' ');
+		trimSpaces(secondaryIdentifier);
+	} else {
+		primaryIdentifier = line;
+		trimSpaces(primaryIdentifier);
+	}
+
+	fullname = secondaryIdentifier;
+	if (primaryIdentifier.size() > 0) {
+		fullname += " " + primaryIdentifier;
+	}
+}
+
 IcaoDg11::IcaoDg11(const CByteArray &information) {
 	DG11 *processedDg11 = decodeDg11(information);
 	if (processedDg11 == NULL) {
@@ -126,7 +157,7 @@ IcaoDg11::IcaoDg11(const CByteArray &information) {
 		m_listOfTags.Append(processedDg11->list_of_tags_present->data, processedDg11->list_of_tags_present->length);
 	}
 	m_numberOfOtherNames = -1;
-	copyToString(m_fullName, processedDg11->full_name, true);
+	getNameIdentifiers(processedDg11->full_name, m_fullName);
 	copyToString(m_personalNumber, processedDg11->personal_number, true);
 	copyToString(m_fullDateOfBirth, processedDg11->full_date_of_birth);
 	copyToString(m_placeOfBirth, processedDg11->place_of_birth, true);
