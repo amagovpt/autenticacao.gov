@@ -118,24 +118,7 @@ const unsigned long FULL_FILE = 0xFFFFFFFF; // used in CReader::ReadFile()
 
 const unsigned long PIN_STATUS_UNKNOWN = 0xFFFFFFFE; // used in CReader::PinStatus()
 
-/* used in CReader::Ctrl() */
 
-const long CTRL_PTEID = 1000;
-
-/** Returns the signed card data (28 + 128 bytes). No input data is needed.
- *  Not for V1 cards! */
-const long CTRL_PTEID_GETSIGNEDCARDDATA = CTRL_PTEID + 1;
-
-/** Returns the signed PIN status (1 + 128 bytes).
- * Not for V1 cards!
- * The input data should consist of 1 byte: the pin reference. */
-const long CTRL_PTEID_GETSIGNEDPINSTATUS = CTRL_PTEID + 2;
-
-/** Does an Internal Authenticate command, the signed challenge (128 bytes) is returned.
- *  The input data should be 21 bytes:
- *    - the key reference (1 byte)
- *    - the challenge to be signed (20 bytes) */
-const long CTRL_PTEID_INTERNAL_AUTH = CTRL_PTEID + 3;
 } // namespace eIDMW
 
 #endif
