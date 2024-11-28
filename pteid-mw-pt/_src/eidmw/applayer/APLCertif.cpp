@@ -265,6 +265,11 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type, 
 		CAutoMutex autoMutex(&m_Mutex); // We lock for unly one instanciation
 
 		APL_Certif *cert = NULL;
+		auto certsIt = m_certifs.find(ulUniqueId);
+		if (certsIt != m_certifs.end() &&
+			(certsIt->second->isFromCard())) { // return existing cert if this cert is already loaded from card
+			return certsIt->second;
+		}
 		cert = new APL_Certif(this, certIn, type, bHidden);
 		m_certifs[ulUniqueId] = cert;
 
