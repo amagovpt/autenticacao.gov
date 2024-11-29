@@ -857,6 +857,7 @@ PageDefinitionsSCAPForm {
         mainFormID.propertyMainMenuBottomListView.currentIndex = -1
         mainFormID.propertySubMenuListView.currentIndex = -1
         mainFormID.propertyPageLoader.source = "../../" + Constants.SIGNATURE_PAGE_URL
+        mainFormID.propertyPageLoader.item.propertySwitchAddAttributes.checked = true
     }
 
     function isAnyEntitySelected() {
