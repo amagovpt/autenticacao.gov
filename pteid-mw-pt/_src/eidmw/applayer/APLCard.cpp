@@ -773,8 +773,6 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 
 	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
 
-	sod_verified = false;
-
 	// failed to verify SOD but we still need the contents
 	if (!sod_verified) {
 		report.type = EIDMW_ReportType::Error;
@@ -955,7 +953,7 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 	return report;
 }
 
-const EIDMW_PipelineReport &APL_ICAO::getCardReport() { return m_reports; }
+const EIDMW_DocumentReport &APL_ICAO::getDocumentReport() { return m_reports; }
 
 const CByteArray &APL_ICAO::getRawData(APL_RawDataType type) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 

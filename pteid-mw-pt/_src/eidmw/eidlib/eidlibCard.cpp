@@ -822,12 +822,12 @@ long PTEID_SodReport::GetStatus() const { return m_impl.error_code; }
 const std::string PTEID_SodReport::GetStatusMessage() const { return PTEID_Exception(m_impl.error_code).GetMessage(); }
 
 /*****************************************************************************************
--------------------------------------- PTEID_CardReport ----------------------------------
+------------------------------------ PTEID_DocumentReport --------------------------------
 *****************************************************************************************/
-PTEID_CardReport::PTEID_CardReport(const SDK_Context *context, const EIDMW_PipelineReport &reports)
+PTEID_DocumentReport::PTEID_DocumentReport(const SDK_Context *context, const EIDMW_DocumentReport &reports)
 	: PTEID_Object(context, NULL), m_impl(reports) {}
 
-PTEID_ActiveAuthenticationReport *PTEID_CardReport::GetActiveAuthenticationReport() const {
+PTEID_ActiveAuthenticationReport *PTEID_DocumentReport::GetActiveAuthenticationReport() const {
 	PTEID_ActiveAuthenticationReport *report;
 	BEGIN_TRY_CATCH
 
@@ -837,7 +837,7 @@ PTEID_ActiveAuthenticationReport *PTEID_CardReport::GetActiveAuthenticationRepor
 	return report;
 }
 
-PTEID_ChipAuthenticationReport *PTEID_CardReport::GetChipAuthenticationReport() const {
+PTEID_ChipAuthenticationReport *PTEID_DocumentReport::GetChipAuthenticationReport() const {
 	PTEID_ChipAuthenticationReport *report;
 	BEGIN_TRY_CATCH
 
@@ -847,7 +847,7 @@ PTEID_ChipAuthenticationReport *PTEID_CardReport::GetChipAuthenticationReport() 
 	return report;
 }
 
-PTEID_SodReport *PTEID_CardReport::GetSodReport() const {
+PTEID_SodReport *PTEID_DocumentReport::GetSodReport() const {
 	PTEID_SodReport *report;
 	BEGIN_TRY_CATCH
 
@@ -877,9 +877,9 @@ std::vector<PTEID_DataGroupID> ICAO_Card::getAvailableDatagroups() {
 	return availableDatagroups;
 }
 
-PTEID_CardReport *ICAO_Card::GetCardReport() const {
+PTEID_DocumentReport *ICAO_Card::GetDocumentReport() const {
 	auto icao = static_cast<APL_ICAO *>(m_impl);
-	return new PTEID_CardReport(m_context, icao->getCardReport());
+	return new PTEID_DocumentReport(m_context, icao->getDocumentReport());
 }
 
 void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType) {

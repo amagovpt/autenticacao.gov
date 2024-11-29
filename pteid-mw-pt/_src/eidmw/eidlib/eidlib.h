@@ -961,7 +961,7 @@ private:
 	PTEID_ICAO_DG11 &operator=(const PTEID_ICAO_DG11 &) = delete; /**< Copy not allowed - not implemented */
 };
 
-struct EIDMW_PipelineReport;
+struct EIDMW_DocumentReport;
 struct EIDMW_ActiveAuthenticationReport;
 struct EIDMW_ChipAuthenticationReport;
 struct EIDMW_SodReport;
@@ -984,7 +984,7 @@ public:
 private:
 	const EIDMW_ActiveAuthenticationReport &m_impl;
 	friend class ICAO_Card;
-	friend class PTEID_CardReport;
+	friend class PTEID_DocumentReport;
 
 	PTEID_ActiveAuthenticationReport(const SDK_Context *context, const EIDMW_ActiveAuthenticationReport &report);
 	PTEID_ActiveAuthenticationReport &
@@ -1002,7 +1002,7 @@ public:
 private:
 	const EIDMW_ChipAuthenticationReport &m_impl;
 	friend class ICAO_Card;
-	friend class PTEID_CardReport;
+	friend class PTEID_DocumentReport;
 
 	PTEID_ChipAuthenticationReport(const SDK_Context *context, const EIDMW_ChipAuthenticationReport &report);
 	PTEID_ChipAuthenticationReport &
@@ -1019,32 +1019,32 @@ public:
 private:
 	const EIDMW_SodReport &m_impl;
 	friend class ICAO_Card;
-	friend class PTEID_CardReport;
+	friend class PTEID_DocumentReport;
 
 	PTEID_SodReport(const SDK_Context *context, const EIDMW_SodReport &report);
 	PTEID_SodReport &operator=(const PTEID_SodReport &) = delete;
 };
 
-class PTEID_CardReport : public PTEID_Object {
+class PTEID_DocumentReport : public PTEID_Object {
 public:
 	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const;
 	PTEIDSDK_API PTEID_ChipAuthenticationReport *GetChipAuthenticationReport() const;
 	PTEIDSDK_API PTEID_SodReport *GetSodReport() const;
 
 private:
-	const EIDMW_PipelineReport &m_impl;
+	const EIDMW_DocumentReport &m_impl;
 	friend class ICAO_Card;
 
-	PTEID_CardReport(const SDK_Context *context, const EIDMW_PipelineReport &reports);
-	PTEID_CardReport(const PTEID_CardReport &) = delete;			/**< Copy not allowed - not implemented */
-	PTEID_CardReport &operator=(const PTEID_CardReport &) = delete; /**< Copy not allowed - not implemented */
+	PTEID_DocumentReport(const SDK_Context *context, const EIDMW_DocumentReport &reports);
+	PTEID_DocumentReport(const PTEID_DocumentReport &) = delete;			/**< Copy not allowed - not implemented */
+	PTEID_DocumentReport &operator=(const PTEID_DocumentReport &) = delete; /**< Copy not allowed - not implemented */
 };
 
 class ICAO_Card : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual std::vector<PTEID_DataGroupID> getAvailableDatagroups();
 
-	PTEIDSDK_API virtual PTEID_CardReport *GetCardReport() const;
+	PTEIDSDK_API virtual PTEID_DocumentReport *GetDocumentReport() const;
 
 	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length,
 													 PTEID_CardPaceSecretType secretType);

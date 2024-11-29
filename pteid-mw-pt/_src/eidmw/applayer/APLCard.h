@@ -363,7 +363,7 @@ struct EIDMW_SodReport : public EIDMW_Report {
 	CByteArray signer;
 };
 
-class EIDMW_CMN_API EIDMW_PipelineReport {
+class EIDMW_CMN_API EIDMW_DocumentReport {
 public:
 	void setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report) {
 		if (report.type == EIDMW_ReportType::Error) {
@@ -425,7 +425,7 @@ public:
 	virtual const char *getTokenSerialNumber() override;
 	virtual const char *getTokenLabel() override;
 
-	EIDMW_APL_API virtual const EIDMW_PipelineReport &getCardReport();
+	EIDMW_APL_API virtual const EIDMW_DocumentReport &getDocumentReport();
 
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
@@ -434,7 +434,7 @@ private:
 	std::unique_ptr<IcaoDg2> m_faceDg2;
 	std::unique_ptr<IcaoDg3> m_fingersDg3;
 	std::unique_ptr<IcaoDg11> m_infoDg11;
-	EIDMW_PipelineReport m_reports;
+	EIDMW_DocumentReport m_reports;
 
 	static constexpr unsigned char MRTD_APPLICATION[] = {0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
 	static constexpr const char *SOD_PATH = "011D";
