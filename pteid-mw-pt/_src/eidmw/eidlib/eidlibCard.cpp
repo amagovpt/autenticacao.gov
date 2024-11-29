@@ -786,8 +786,7 @@ const char *PTEID_ActiveAuthenticationReport::GetOID() const { return m_impl.oid
 long PTEID_ActiveAuthenticationReport::GetStatus() const { return m_impl.error_code; }
 
 const std::string PTEID_ActiveAuthenticationReport::GetStatusMessage() const {
-	std::string s = PTEID_Exception(m_impl.error_code).GetMessage();
-	return s;
+	return PTEID_Exception(m_impl.error_code).GetMessage();
 }
 
 /*****************************************************************************************
@@ -807,12 +806,23 @@ const char *PTEID_ChipAuthenticationReport::GetOID() const { return m_impl.oid.c
 long PTEID_ChipAuthenticationReport::GetStatus() const { return m_impl.error_code; }
 
 const std::string PTEID_ChipAuthenticationReport::GetStatusMessage() const {
-	std::string s = PTEID_Exception(m_impl.error_code).GetMessage();
-	return s;
+	return PTEID_Exception(m_impl.error_code).GetMessage();
 }
 
 /*****************************************************************************************
------------------------------------- PTEID_CardReport ------------------------------------
+-------------------------------------- PTEID_SodReport -----------------------------------
+*****************************************************************************************/
+PTEID_SodReport::PTEID_SodReport(const SDK_Context *context, const EIDMW_SodReport &report)
+	: PTEID_Object(context, NULL), m_impl(report) {}
+
+PTEID_ByteArray PTEID_SodReport::GetSigner() const { return PTEID_ByteArray(m_context, m_impl.signer); }
+
+long PTEID_SodReport::GetStatus() const { return m_impl.error_code; }
+
+const std::string PTEID_SodReport::GetStatusMessage() const { return PTEID_Exception(m_impl.error_code).GetMessage(); }
+
+/*****************************************************************************************
+-------------------------------------- PTEID_CardReport ----------------------------------
 *****************************************************************************************/
 PTEID_CardReport::PTEID_CardReport(const SDK_Context *context, const EIDMW_PipelineReport &reports)
 	: PTEID_Object(context, NULL), m_impl(reports) {}
@@ -837,11 +847,20 @@ PTEID_ChipAuthenticationReport *PTEID_CardReport::GetChipAuthenticationReport() 
 	return report;
 }
 
+PTEID_SodReport *PTEID_CardReport::GetSodReport() const {
+	PTEID_SodReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_SodReport(m_context, m_impl.getSodReport());
+
+	END_TRY_CATCH
+	return report;
+}
+
 /*****************************************************************************************
 --------------------------------------- ICAO_Card ----------------------------------------
 *****************************************************************************************/
-ICAO_Card::ICAO_Card(const SDK_Context *context, APL_ICAO *impl) : PTEID_Object(context, impl) {
-}
+ICAO_Card::ICAO_Card(const SDK_Context *context, APL_ICAO *impl) : PTEID_Object(context, impl) {}
 
 std::vector<PTEID_DataGroupID> ICAO_Card::getAvailableDatagroups() {
 	std::vector<PTEID_DataGroupID> availableDatagroups;
@@ -860,7 +879,7 @@ std::vector<PTEID_DataGroupID> ICAO_Card::getAvailableDatagroups() {
 
 PTEID_CardReport *ICAO_Card::GetCardReport() const {
 	auto icao = static_cast<APL_ICAO *>(m_impl);
-	return new PTEID_CardReport(m_context, icao->m_reports);
+	return new PTEID_CardReport(m_context, icao->getCardReport());
 }
 
 void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType) {
@@ -884,7 +903,7 @@ PTEID_ByteArray ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
 
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
-	CByteArray result = icao->readDatagroup(static_cast<APL_ICAO::DataGroupID>(tag));
+	CByteArray result = icao->readDatagroup(static_cast<DataGroupID>(tag));
 	out.Append(result.GetBytes(), result.Size());
 	END_TRY_CATCH
 
@@ -1194,10 +1213,7 @@ PTEID_ByteArray PTEID_ICAO_DG11::listOfTags() const { return PTEID_ByteArray(m_c
 
 const char *PTEID_ICAO_DG11::fullName() const { return m_impl.fullName().c_str(); }
 
-const char *PTEID_ICAO_DG11::personalNumber() const
-{
-  return m_impl.personalNumber().c_str();
-}
+const char *PTEID_ICAO_DG11::personalNumber() const { return m_impl.personalNumber().c_str(); }
 
 const char *PTEID_ICAO_DG11::fullDateOfBirth() const { return m_impl.fullDateOfBirth().c_str(); }
 

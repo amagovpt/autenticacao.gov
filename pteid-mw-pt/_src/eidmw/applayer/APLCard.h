@@ -334,10 +334,80 @@ class IcaoDg2;
 class IcaoDg3;
 class IcaoDg11;
 class PhotoPteid;
+enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
+enum class EIDMW_CMN_API EIDMW_ReportType { Success, Error };
+
+struct EIDMW_Report {
+	unsigned int error_code = 0;
+	EIDMW_ReportType type = EIDMW_ReportType::Success;
+};
+
+struct EIDMW_ActiveAuthenticationReport : public EIDMW_Report {
+	CByteArray dg14;		   // Security Options file
+	CByteArray storedHashDg14; // Security Options file hash from SOD
+	CByteArray hashDg14;	   // Hash of current Security Options file
+
+	CByteArray dg15;		   // DG15 (Public Key)
+	CByteArray storedHashDg15; // DG15 file hash from SOD
+	CByteArray hashDg15;	   // Hash of current DG15
+
+	std::string oid; // Active Authentication algorithm OID
+};
+
+struct EIDMW_ChipAuthenticationReport : public EIDMW_Report {
+	CByteArray pubKey; // Public Key for Chip Authentication
+	std::string oid;   // Chip Authentication algorithm OID
+};
+
+struct EIDMW_SodReport : public EIDMW_Report {
+	CByteArray signer;
+};
+
+class EIDMW_CMN_API EIDMW_PipelineReport {
+public:
+	void setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report) {
+		if (report.type == EIDMW_ReportType::Error) {
+			m_hasFailed = true;
+		}
+
+		m_activeAuthenticationReport = report;
+	}
+
+	const EIDMW_ActiveAuthenticationReport &getActiveAuthenticationReport() const {
+		return m_activeAuthenticationReport;
+	}
+
+	void setChipAuthenticationReport(const EIDMW_ChipAuthenticationReport &report) {
+		if (report.type == EIDMW_ReportType::Error) {
+			m_hasFailed = true;
+		}
+
+		m_chipAuthenticationReport = report;
+	}
+
+	const EIDMW_ChipAuthenticationReport &getChipAuthenticationReport() const { return m_chipAuthenticationReport; }
+
+	void setSodReport(const EIDMW_SodReport &report) {
+		if (report.type == EIDMW_ReportType::Error) {
+			m_hasFailed = true;
+		}
+
+		m_sodReport = report;
+	}
+
+	const EIDMW_SodReport &getSodReport() const { return m_sodReport; }
+
+	bool HasFailed() { return m_hasFailed; }
+
+private:
+	bool m_hasFailed = false;
+	EIDMW_ActiveAuthenticationReport m_activeAuthenticationReport;
+	EIDMW_ChipAuthenticationReport m_chipAuthenticationReport;
+	EIDMW_SodReport m_sodReport;
+};
+
 class APL_ICAO : public APL_SmartCard {
 public:
-	enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
-
 	~APL_ICAO();
 
 	EIDMW_APL_API virtual std::vector<DataGroupID> getAvailableDatagroups();
@@ -355,7 +425,7 @@ public:
 	virtual const char *getTokenSerialNumber() override;
 	virtual const char *getTokenLabel() override;
 
-	EIDMW_PipelineReport m_reports;
+	EIDMW_APL_API virtual const EIDMW_PipelineReport &getCardReport();
 
 private:
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
@@ -364,13 +434,14 @@ private:
 	std::unique_ptr<IcaoDg2> m_faceDg2;
 	std::unique_ptr<IcaoDg3> m_fingersDg3;
 	std::unique_ptr<IcaoDg11> m_infoDg11;
+	EIDMW_PipelineReport m_reports;
 
 	static constexpr unsigned char MRTD_APPLICATION[] = {0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
 	static constexpr const char *SOD_PATH = "011D";
-	static const std::unordered_map<APL_ICAO::DataGroupID, std::string> DATAGROUP_PATHS;
+	static const std::unordered_map<DataGroupID, std::string> DATAGROUP_PATHS;
 	static const std::vector<int> EXPECTED_TAGS;
 
-	bool verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod);
+	EIDMW_SodReport verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod);
 	CByteArray readFile(const std::string &csPath) const;
 	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray &data);

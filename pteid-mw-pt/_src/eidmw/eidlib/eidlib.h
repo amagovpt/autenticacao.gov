@@ -723,7 +723,6 @@ public:
 class IcaoDg1;
 class PTEID_ICAO_DG1 {
 public:
-
 	PTEIDSDK_API const char *documentCode() const;
 	PTEIDSDK_API const char *issuingState() const;
 	PTEIDSDK_API const char *documentNumber() const;
@@ -965,6 +964,7 @@ private:
 struct EIDMW_PipelineReport;
 struct EIDMW_ActiveAuthenticationReport;
 struct EIDMW_ChipAuthenticationReport;
+struct EIDMW_SodReport;
 
 class PTEID_ActiveAuthenticationReport : public PTEID_Object {
 public:
@@ -1009,10 +1009,27 @@ private:
 	operator=(const PTEID_ChipAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
 };
 
+class PTEID_SodReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetSigner() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const std::string GetStatusMessage() const;
+
+private:
+	const EIDMW_SodReport &m_impl;
+	friend class ICAO_Card;
+	friend class PTEID_CardReport;
+
+	PTEID_SodReport(const SDK_Context *context, const EIDMW_SodReport &report);
+	PTEID_SodReport &operator=(const PTEID_SodReport &) = delete;
+};
+
 class PTEID_CardReport : public PTEID_Object {
 public:
 	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const;
 	PTEIDSDK_API PTEID_ChipAuthenticationReport *GetChipAuthenticationReport() const;
+	PTEIDSDK_API PTEID_SodReport *GetSodReport() const;
 
 private:
 	const EIDMW_PipelineReport &m_impl;
@@ -1025,12 +1042,12 @@ private:
 
 class ICAO_Card : public PTEID_Object {
 public:
-
 	PTEIDSDK_API virtual std::vector<PTEID_DataGroupID> getAvailableDatagroups();
 
 	PTEIDSDK_API virtual PTEID_CardReport *GetCardReport() const;
 
-	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType);
+	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length,
+													 PTEID_CardPaceSecretType secretType);
 
 	/**
 	 * Read raw data from datagroup specified in @tag parameter
@@ -1044,8 +1061,8 @@ public:
 	PTEIDSDK_API virtual PTEID_ICAO_DG11 *readDataGroup11();
 
 	/**
-	 * Load a certificate MasterList containing CSCA certificates. These are needed for certificate validation during Passive Authentication
-	   This method needs to be called before readDataGroupRaw() or any other readDataGroup* method
+	 * Load a certificate MasterList containing CSCA certificates. These are needed for certificate validation during
+	 Passive Authentication This method needs to be called before readDataGroupRaw() or any other readDataGroup* method
 	 */
 	PTEIDSDK_API virtual void loadMasterList(const char *filePath);
 

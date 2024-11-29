@@ -592,13 +592,11 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex) {
 // ICAO
 APL_ICAO::APL_ICAO(APL_ReaderContext *reader) : APL_SmartCard(reader), m_reader(reader) {}
 
-const std::unordered_map<APL_ICAO::DataGroupID, std::string> APL_ICAO::DATAGROUP_PATHS = {
-	{APL_ICAO::DataGroupID::DG1, "0101"},  {APL_ICAO::DataGroupID::DG2, "0102"},  {APL_ICAO::DataGroupID::DG3, "0103"},
-	{APL_ICAO::DataGroupID::DG4, "0104"},  {APL_ICAO::DataGroupID::DG5, "0105"},  {APL_ICAO::DataGroupID::DG6, "0106"},
-	{APL_ICAO::DataGroupID::DG7, "0107"},  {APL_ICAO::DataGroupID::DG8, "0108"},  {APL_ICAO::DataGroupID::DG9, "0109"},
-	{APL_ICAO::DataGroupID::DG10, "010A"}, {APL_ICAO::DataGroupID::DG11, "010B"}, {APL_ICAO::DataGroupID::DG12, "010C"},
-	{APL_ICAO::DataGroupID::DG13, "010D"}, {APL_ICAO::DataGroupID::DG14, "010E"}, {APL_ICAO::DataGroupID::DG15, "010F"},
-	{APL_ICAO::DataGroupID::DG16, "0110"},
+const std::unordered_map<DataGroupID, std::string> APL_ICAO::DATAGROUP_PATHS = {
+	{DataGroupID::DG1, "0101"},	 {DataGroupID::DG2, "0102"},  {DataGroupID::DG3, "0103"},  {DataGroupID::DG4, "0104"},
+	{DataGroupID::DG5, "0105"},	 {DataGroupID::DG6, "0106"},  {DataGroupID::DG7, "0107"},  {DataGroupID::DG8, "0108"},
+	{DataGroupID::DG9, "0109"},	 {DataGroupID::DG10, "010A"}, {DataGroupID::DG11, "010B"}, {DataGroupID::DG12, "010C"},
+	{DataGroupID::DG13, "010D"}, {DataGroupID::DG14, "010E"}, {DataGroupID::DG15, "010F"}, {DataGroupID::DG16, "0110"},
 };
 
 const std::vector<int> APL_ICAO::EXPECTED_TAGS = {
@@ -607,7 +605,7 @@ const std::vector<int> APL_ICAO::EXPECTED_TAGS = {
 
 APL_ICAO::~APL_ICAO() {}
 
-std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
+std::vector<DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	std::vector<DataGroupID> datagroups;
 	{
 		selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
@@ -632,7 +630,7 @@ std::vector<APL_ICAO::DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	return datagroups;
 }
 
-CByteArray APL_ICAO::readDatagroup(APL_ICAO::DataGroupID tag) {
+CByteArray APL_ICAO::readDatagroup(DataGroupID tag) {
 	CByteArray out;
 
 	m_reader->CalLock();
@@ -714,8 +712,9 @@ void APL_ICAO::loadAvailableDataGroups() {
 	CByteArray oData = readFile(SOD_PATH);
 
 	CByteArray sod;
-	bool sod_verified = verifySodFileIntegrity(oData, sod);
-	if (!sod_verified) {
+	auto report = verifySodFileIntegrity(oData, sod);
+	m_reports.setSodReport(report);
+	if (report.type == EIDMW_ReportType::Error) {
 		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to verify SOD validity");
 	}
 
@@ -731,12 +730,15 @@ void logFullSODFile(const CByteArray &sod_data) {
 	free(sod_hex);
 }
 
-bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod) {
+EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod) {
+	EIDMW_SodReport report;
 
 	logFullSODFile(data);
 	auto csca_store = AppLayer.getCryptoFwk()->getMasterListStore();
 	if (!csca_store) {
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_VERIFY_SOD_SIGN);
+		report.type = EIDMW_ReportType::Error;
+		report.error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
+		return report;
 	}
 
 	PKCS7 *p7 = nullptr;
@@ -756,7 +758,9 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to decode SOD PKCS7 object! Openssl errors:\n%s",
 			  error_msg != nullptr ? error_msg : "N/A");
 		free(error_msg);
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_INVALID_PKCS7);
+		report.type = EIDMW_ReportType::Error;
+		report.error_code = EIDMW_SOD_ERR_INVALID_PKCS7;
+		return report;
 	}
 
 	BIO *out = BIO_new(BIO_s_mem());
@@ -769,8 +773,13 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 
 	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
 
+	sod_verified = false;
+
 	// failed to verify SOD but we still need the contents
 	if (!sod_verified) {
+		report.type = EIDMW_ReportType::Error;
+		report.error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
+
 		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
 
 		// Get signer for debug purposes
@@ -782,6 +791,7 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 			BUF_MEM *buf;
 			BIO_get_mem_ptr(bio, &buf);
 			std::cerr << "Document signing certificate:" << '\n' << std::string(buf->data, buf->length) << std::endl;
+			report.signer = CByteArray(buf->data, buf->length);
 			BIO_free(bio);
 		}
 
@@ -802,7 +812,7 @@ bool APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_so
 	BIO_free_all(out);
 	PKCS7_free(p7);
 
-	return sod_verified;
+	return report;
 }
 
 CByteArray APL_ICAO::readFile(const std::string &csPath) const {
@@ -944,6 +954,8 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 
 	return report;
 }
+
+const EIDMW_PipelineReport &APL_ICAO::getCardReport() { return m_reports; }
 
 const CByteArray &APL_ICAO::getRawData(APL_RawDataType type) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
