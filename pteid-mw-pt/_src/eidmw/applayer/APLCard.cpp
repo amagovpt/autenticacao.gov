@@ -605,22 +605,25 @@ const std::vector<int> APL_ICAO::EXPECTED_TAGS = {
 
 APL_ICAO::~APL_ICAO() {}
 
+void APL_ICAO::initializeCard() {
+	m_ready = true;
+
+	selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
+	loadAvailableDataGroups();
+
+	auto aa_report = performActiveAuthentication();
+	m_reports.setActiveAuthenticationReport(aa_report);
+
+	auto ca_report = performChipAuthentication();
+	m_reports.setChipAuthenticationReport(ca_report);
+}
+
 std::vector<DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	std::vector<DataGroupID> datagroups;
 	{
-		selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
-
-		if (!m_SodAttributes) {
-			loadAvailableDataGroups();
+		if (!m_ready) {
+			initializeCard();
 		}
-
-		auto aa_report = performActiveAuthentication();
-		m_reports.setActiveAuthenticationReport(aa_report);
-
-		auto ca_report = performChipAuthentication();
-		m_reports.setChipAuthenticationReport(ca_report);
-
-		loadAvailableDataGroups();
 
 		for (const auto &hash : m_SodAttributes->getHashes()) {
 			datagroups.emplace_back(static_cast<DataGroupID>(hash.first));
@@ -824,8 +827,8 @@ CByteArray APL_ICAO::readFile(const std::string &csPath) const {
 }
 
 bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray &data) {
-	if (!m_SodAttributes) {
-		loadAvailableDataGroups();
+	if (!m_ready) {
+		initializeCard();
 	}
 
 	return m_SodAttributes->validateHash(tag, data);
@@ -953,7 +956,13 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 	return report;
 }
 
-const EIDMW_DocumentReport &APL_ICAO::getDocumentReport() { return m_reports; }
+const EIDMW_DocumentReport &APL_ICAO::getDocumentReport() {
+	if (!m_ready) {
+		initializeCard();
+	}
+
+	return m_reports;
+}
 
 const CByteArray &APL_ICAO::getRawData(APL_RawDataType type) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 

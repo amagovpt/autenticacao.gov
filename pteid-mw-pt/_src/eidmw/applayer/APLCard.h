@@ -428,6 +428,9 @@ public:
 	EIDMW_APL_API virtual const EIDMW_DocumentReport &getDocumentReport();
 
 private:
+	void initializeCard();
+	bool m_ready = false;
+
 	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
 	std::unique_ptr<SODAttributes> m_SodAttributes;
 	std::unique_ptr<IcaoDg1> m_mrzDg1;
