@@ -13,6 +13,7 @@ import QtQuick.Controls 2.1
 import Qt.labs.platform 1.0
 import QtGraphicalEffects 1.0
 import eidguiV2 1.0
+import QtQuick.Layouts 1.12
 
 import "../../scripts/Constants.js" as Constants
 import "../../components" as Components
@@ -283,122 +284,118 @@ Item {
     }
 
     Item {
-        id: rowSex
-        width: parent.width
-        height: Constants.HEIGHT_TEXT_BOX
+        id: rowLayout
         anchors.top: rowNamePhoto.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
-        Item {
-            id: rectSex
-            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE) * 0.20
-            height: parent.height
-            Components.LabelTextBoxForm {
-                id: textBoxSex
-                propertyDateText.text: qsTranslate("GAPI", "STR_GENDER")
-            }
-            Accessible.role: Accessible.Column
-            Accessible.name: textBoxSex.accessibleText
-            KeyNavigation.tab: rectNacionality
-            KeyNavigation.down: rectNacionality
-            KeyNavigation.right: rectNacionality
-            KeyNavigation.backtab: savePhotoButton
-            KeyNavigation.up: savePhotoButton
-        }
-        Item {
-            id: rectNacionality
-            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.25
-            height: parent.height
-            anchors.left: rectSex.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.LabelTextBoxForm {
-                id: textBoxNacionality
-                propertyDateText.text: qsTranslate("GAPI", "STR_NATIONALITY")
-            }
-            Accessible.role: Accessible.Column
-            Accessible.name: textBoxNacionality.accessibleText
-            KeyNavigation.tab: rectDateOfBirth
-            KeyNavigation.down: rectDateOfBirth
-            KeyNavigation.right: rectDateOfBirth
-            KeyNavigation.backtab: rectSex
-            KeyNavigation.up: rectSex
-        }
-        Item {
-            id: rectDateOfBirth
-            width: (parent.width - 3 * Constants.SIZE_ROW_H_SPACE ) * 0.35
-            height: parent.height
-            anchors.left: rectNacionality.right
-            anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.LabelTextBoxForm {
-                id: textBoxDateOfBirth
-                propertyDateText.text: qsTranslate("GAPI", "STR_DATE_OF_BIRTH_DOCUMENTED")
-            }
-            Accessible.role: Accessible.Column
-            Accessible.name: textBoxDateOfBirth.accessibleText
-            KeyNavigation.tab: rectDocumentNum
-            KeyNavigation.down: rectDocumentNum
-            KeyNavigation.right: rectDocumentNum
-            KeyNavigation.backtab: rectNacionality
-            KeyNavigation.up: rectNacionality
-        }
-    }
-
-    Item {
-        id: rowDocumentMum
         width: parent.width
-        height: Constants.HEIGHT_TEXT_BOX
-        anchors.top: rowSex.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
-
-        Item {
-            id: rectDocumentNum
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE) * 0.50
-            height: parent.height
-            Components.LabelTextBoxForm {
-                id: textBoxDocumentNum
-                propertyDateText.text: qsTranslate("GAPI",
-                                                   "STR_DOCUMENT_NUMBER")
+        height: firstColumnInfo.height + secondColumnInfo.height
+        ColumnLayout {
+            id: firstColumnInfo
+            spacing: Constants.SIZE_ROW_V_SPACE
+            width:  parent.width * 0.60 - Constants.SIZE_ROW_H_SPACE
+            RowLayout {
+                spacing: Constants.SIZE_ROW_H_SPACE
+                height: Constants.HEIGHT_TEXT_BOX
+                Item {
+                    id: rectSex
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Components.LabelTextBoxForm {
+                        id: textBoxSex
+                        propertyDateText.text: qsTranslate("GAPI", "STR_GENDER")
+                    }
+                    Accessible.role: Accessible.Column
+                    Accessible.name: textBoxSex.accessibleText
+                    KeyNavigation.tab: rectNacionality
+                    KeyNavigation.down: rectNacionality
+                    KeyNavigation.right: rectNacionality
+                    KeyNavigation.backtab: savePhotoButton
+                    KeyNavigation.up: savePhotoButton
+                }
+                Item {
+                    id: rectNacionality
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Components.LabelTextBoxForm {
+                        id: textBoxNacionality
+                        propertyDateText.text: qsTranslate("GAPI", "STR_NATIONALITY")
+                    }
+                    Accessible.role: Accessible.Column
+                    Accessible.name: textBoxNacionality.accessibleText
+                    KeyNavigation.tab: rectDateOfBirth
+                    KeyNavigation.down: rectDateOfBirth
+                    KeyNavigation.right: rectDateOfBirth
+                    KeyNavigation.backtab: rectSex
+                    KeyNavigation.up: rectSex
+                }
             }
-            Accessible.role: Accessible.Column
-            Accessible.name: textBoxDocumentNum.accessibleText
-            KeyNavigation.tab: rectExpiryDate
-            KeyNavigation.down: rectExpiryDate
-            KeyNavigation.right: rectExpiryDate
-            KeyNavigation.backtab: rectDateOfBirth
-            KeyNavigation.up: rectDateOfBirth
+
+            Item {
+                id: rectDocumentNum
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Components.LabelTextBoxForm {
+                    id: textBoxDocumentNum
+                    propertyDateText.text: qsTranslate("GAPI",
+                                                       "STR_DOCUMENT_NUMBER")
+                }
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxDocumentNum.accessibleText
+                KeyNavigation.tab: rectExpiryDate
+                KeyNavigation.down: rectExpiryDate
+                KeyNavigation.right: rectExpiryDate
+                KeyNavigation.backtab: rectDateOfBirth
+                KeyNavigation.up: rectDateOfBirth
+            }
+
         }
-        Item {
-            id: rectExpiryDate
-            width: (parent.width - 1 * Constants.SIZE_ROW_H_SPACE) * 0.50
-            height: parent.height
-            anchors.left: rectDocumentNum.right
+        ColumnLayout {
+            id: secondColumnInfo
+            spacing: Constants.SIZE_ROW_V_SPACE
+            anchors.left: firstColumnInfo.right
+            width: parent.width * 0.40
             anchors.leftMargin: Constants.SIZE_ROW_H_SPACE
-            Components.LabelTextBoxForm {
-                id: textBoxExpirydate
-                propertyDateText.text: qsTranslate("GAPI", "STR_VALIDITY_DATE_DOCUMENTED")
+            Item {
+                id: rectDateOfBirth
+                Layout.fillWidth: true
+                height: Constants.HEIGHT_TEXT_BOX
+                Components.LabelTextBoxForm {
+                    id: textBoxDateOfBirth
+                    propertyDateText.text: qsTranslate("GAPI", "STR_DATE_OF_BIRTH_DOCUMENTED")
+                }
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxDateOfBirth.accessibleText
+                KeyNavigation.tab: rectDocumentNum
+                KeyNavigation.down: rectDocumentNum
+                KeyNavigation.right: rectDocumentNum
+                KeyNavigation.backtab: rectNacionality
+                KeyNavigation.up: rectNacionality
             }
-            Accessible.role: Accessible.Column
-            Accessible.name: textBoxExpirydate.accessibleText
-            KeyNavigation.tab: rectCountry
-            KeyNavigation.down: rectCountry
-            KeyNavigation.right: rectCountry
-            KeyNavigation.backtab: rectDocumentNum
-            KeyNavigation.up: rectDocumentNum
-        }
-    }
 
-    Item {
-        id: rowCountry
-        width: parent.width
-        height: Constants.SIZE_TEXT_LABEL + Constants.SIZE_TEXT_V_SPACE + 2
-                * Constants.SIZE_TEXT_FIELD
-        anchors.top: rowDocumentMum.bottom
-        anchors.topMargin: Constants.SIZE_ROW_V_SPACE
+            Item {
+                id: rectExpiryDate
+                Layout.fillWidth: true
+                height: Constants.HEIGHT_TEXT_BOX
+                Components.LabelTextBoxForm {
+                    id: textBoxExpirydate
+                    propertyDateText.text: qsTranslate("GAPI", "STR_VALIDITY_DATE_DOCUMENTED")
+                }
+                Accessible.role: Accessible.Column
+                Accessible.name: textBoxExpirydate.accessibleText
+                KeyNavigation.tab: rectCountry
+                KeyNavigation.down: rectCountry
+                KeyNavigation.right: rectCountry
+                KeyNavigation.backtab: rectDocumentNum
+                KeyNavigation.up: rectDocumentNum
+            }
+        }
 
         Item {
             id: rectCountry
             width: parent.width
             height: parent.height
+            anchors.top: secondColumnInfo.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Components.LabelTextBoxForm {
                 id: textBoxCountry
                 propertyDateText.text: qsTranslate("GAPI", "STR_ISSUER_COUNTRY")
