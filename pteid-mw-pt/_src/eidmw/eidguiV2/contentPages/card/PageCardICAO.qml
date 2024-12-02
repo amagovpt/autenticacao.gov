@@ -34,6 +34,13 @@ PageCardICAOForm {
     }
 
     Connections {
+        target: controler
+        onLanguageChanged: {
+            propertyTextBoxCountry.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.IssuingState), controler.getGuiLanguageString())
+        }
+    }
+
+    Connections {
         target: gapi
         onSignalGenericError: {
             propertyBusyIndicator.running = false
@@ -51,7 +58,7 @@ PageCardICAOForm {
             propertyTextBoxDateOfBirth.propertyDateField.text = gapi.getDataICAOValue(GAPI.DateOfBirth)
             propertyTextBoxDocumentNum.propertyDateField.text = gapi.getDataICAOValue(GAPI.DocumentNumber)
             propertyTextBoxExpirydate.propertyDateField.text = gapi.getDataICAOValue(GAPI.DateOfExpiry)
-            propertyTextBoxCountry.propertyDateField.text = gapi.getDataICAOValue(GAPI.IssuingState)
+            propertyTextBoxCountry.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.IssuingState), controler.getGuiLanguageString())
             propertyPhoto.source = ""
             propertyPhoto.cache = false
             propertyPhoto.source = "image://myimageprovider/photoICAO.png"

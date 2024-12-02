@@ -584,6 +584,8 @@ public slots:
 
 	void initTranslation();
 
+	QString loadCountryName(const QString &threeLetterCode, const QString &language);
+
 	QString getCachePath(void);
 	bool customSignImageExist(void);
 	void customSignImageRemove(void);
