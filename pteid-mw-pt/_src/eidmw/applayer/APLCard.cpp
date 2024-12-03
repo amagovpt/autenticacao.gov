@@ -695,6 +695,10 @@ std::pair<EIDMW_DataGroupReport, CByteArray> APL_ICAO::readDatagroup(DataGroupID
 	CByteArray out;
 	EIDMW_DataGroupReport report;
 
+	if (!m_ready) {
+		initializeCard();
+	}
+
 	m_reader->CalLock();
 	try {
 		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
