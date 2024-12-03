@@ -18,7 +18,7 @@
         "en": "Anguilla"
     },
     "ALA": {
-        "en": "Aland_Islands"
+        "en": "Aland Islands"
     },
     "ALB": {
         "en": "Albania",
@@ -29,11 +29,11 @@
         "pt": "Andorra"
     },
     "ANT": {
-        "en": "Netherlands_Antilles",
+        "en": "Netherlands Antilles",
         "pt": "Antilhas Holandesas"
     },
     "ARE": {
-        "en": "United_Arab_Emirates",
+        "en": "United Arab Emirates",
         "pt": "Emirados Árabes Unidos"
     },
     "ARG": {
@@ -45,16 +45,16 @@
         "pt": "Arménia"
     },
     "ASM": {
-        "en": "American_Samoa"
+        "en": "American Samoa"
     },
     "ATA": {
         "en": "Antarctica"
     },
     "ATF": {
-        "en": "French_Southern_Territories"
+        "en": "French Southern Territories"
     },
     "ATG": {
-        "en": "Antigua_and_Barbuda",
+        "en": "Antigua and Barbuda",
         "pt": "Antígua e Barbuda"
     },
     "AUS": {
@@ -82,10 +82,10 @@
         "pt": "Benim"
     },
     "BES": {
-        "en": "Bonaire,_Sint_Eustatius_and_Saba"
+        "en": "Bonaire, Sint Eustatius and Saba"
     },
     "BFA": {
-        "en": "Burkina_Faso",
+        "en": "Burkina Faso",
         "pt": "Burkina Faso"
     },
     "BGD": {
@@ -105,11 +105,11 @@
         "pt": "Bahamas"
     },
     "BIH": {
-        "en": "Bosnia_and_Herzegovina",
+        "en": "Bosnia and Herzegovina",
         "pt": "Bósnia-Herzegóvina"
     },
     "BLM": {
-        "en": "Saint_Barthelemy"
+        "en": "Saint Barthelemy"
     },
     "BLR": {
         "en": "Belarus",
@@ -124,7 +124,7 @@
         "pt": "Bermudas"
     },
     "BOL": {
-        "en": "Bolivia,_Plurinational_State_of",
+        "en": "Bolivia, Plurinational State of",
         "pt": "Bolívia"
     },
     "BRA": {
@@ -136,7 +136,7 @@
         "pt": "Barbados"
     },
     "BRN": {
-        "en": "Brunei_Darussalam",
+        "en": "Brunei Darussalam",
         "pt": "Brunei"
     },
     "BTN": {
@@ -144,14 +144,14 @@
         "pt": "Butão"
     },
     "BVT": {
-        "en": "Bouvet_Island"
+        "en": "Bouvet Island"
     },
     "BWA": {
         "en": "Botswana",
         "pt": "Botswana"
     },
     "CAF": {
-        "en": "Central_African_Republic",
+        "en": "Central African Republic",
         "pt": "República Centro-Africana"
     },
     "CAN": {
@@ -159,10 +159,10 @@
         "pt": "Canadá"
     },
     "CAR": {
-        "en": "Central_African_Republic"
+        "en": "Central African Republic"
     },
     "CCK": {
-        "en": "Cocos_(Keeling)_Islands"
+        "en": "Cocos (Keeling) Islands"
     },
     "CHE": {
         "en": "Switzerland",
@@ -177,7 +177,7 @@
         "pt": "China"
     },
     "CIV": {
-        "en": "Cote_d'Ivoire",
+        "en": "Cote d'Ivoire",
         "pt": "Costa do Marfim"
     },
     "CMR": {
@@ -185,7 +185,7 @@
         "pt": "Camarões"
     },
     "COD": {
-        "en": "Congo,_Democratic_Republic_of_the",
+        "en": "Congo, Democratic Republic of the",
         "pt": "República Democrática do Congo"
     },
     "COG": {
@@ -193,7 +193,7 @@
         "pt": "República do Congo (Francês)"
     },
     "COK": {
-        "en": "Cook_Islands",
+        "en": "Cook Islands",
         "pt": "Ilhas Cook"
     },
     "COL": {
@@ -205,11 +205,11 @@
         "pt": "Comores"
     },
     "CPV": {
-        "en": "Cape_Verde",
+        "en": "Cape Verde",
         "pt": "Cabo Verde"
     },
     "CRI": {
-        "en": "Costa_Rica",
+        "en": "Costa Rica",
         "pt": "Costa Rica"
     },
     "CUB": {
@@ -221,17 +221,17 @@
         "pt": "Curaçau"
     },
     "CXR": {
-        "en": "Christmas_Island"
+        "en": "Christmas Island"
     },
     "CYM": {
-        "en": "Cayman_Islands"
+        "en": "Cayman Islands"
     },
     "CYP": {
         "en": "Cyprus",
         "pt": "Chipre"
     },
     "CZE": {
-        "en": "Czech_Republic",
+        "en": "Czech Republic",
         "pt": "República Checa"
     },
     "D<<": {
@@ -239,10 +239,12 @@
         "pt": "Alemanha"
     },
     "D": {
-        "en": "Germany"
+        "en": "Germany",
+        "pt": "Alemanha"
     },
     "DEU": {
-        "en": "Germany"
+        "en": "Germany",
+        "pt": "Alemanha"
     },
     "DJI": {
         "en": "Djibouti",
@@ -257,7 +259,7 @@
         "pt": "Dinamarca"
     },
     "DOM": {
-        "en": "Dominican_Republic",
+        "en": "Dominican Republic",
         "pt": "República Dominicana"
     },
     "DZA": {
@@ -280,7 +282,7 @@
         "pt": "Eritreia"
     },
     "ESH": {
-        "en": "Western_Sahara",
+        "en": "Western Sahara",
         "pt": "Sara Ocidental"
     },
     "ESP": {
@@ -296,7 +298,7 @@
         "pt": "Etiópia"
     },
     "EUE": {
-        "en": "European_Union"
+        "en": "European Union"
     },
     "FIN": {
         "en": "Finland",
@@ -307,17 +309,17 @@
         "pt": "Ilhas Fidji"
     },
     "FLK": {
-        "en": "Falkland_Islands_(Malvinas)"
+        "en": "Falkland Islands (Malvinas)"
     },
     "FRA": {
         "en": "France",
         "pt": "França"
     },
     "FRO": {
-        "en": "Faroe_Islands"
+        "en": "Faroe Islands"
     },
     "FSM": {
-        "en": "Micronesia,_the_Federated_States_of",
+        "en": "Micronesia, the Federated States of",
         "pt": "Micronésia"
     },
     "GAB": {
@@ -325,23 +327,23 @@
         "pt": "Gabão"
     },
     "GBD": {
-        "en": "United_Kingdom_Territories"
+        "en": "United Kingdom Territories"
     },
     "GBN": {
-        "en": "United_Kingdom_British_National"
+        "en": "United Kingdom British National"
     },
     "GBO": {
-        "en": "United_Kingdom_British_Overseas"
+        "en": "United Kingdom British Overseas"
     },
     "GBP": {
-        "en": "United_Kingdom_British_Protected"
+        "en": "United Kingdom British Protected"
     },
     "GBR": {
-        "en": "United_Kingdom",
+        "en": "United Kingdom",
         "pt": "Reino Unido"
     },
     "GBS": {
-        "en": "United_Kingdom_British_Subject"
+        "en": "United Kingdom British Subject"
     },
     "GEO": {
         "en": "Georgia",
@@ -374,7 +376,7 @@
         "pt": "Guiné-Bissau"
     },
     "GNQ": {
-        "en": "Equatorial_Guinea",
+        "en": "Equatorial Guinea",
         "pt": "Guiné-Equatorial"
     },
     "GRC": {
@@ -393,7 +395,7 @@
         "pt": "Guatemala"
     },
     "GUF": {
-        "en": "French_Guiana"
+        "en": "French Guiana"
     },
     "GUM": {
         "en": "Guam"
@@ -403,10 +405,10 @@
         "pt": "Guiana"
     },
     "HKG": {
-        "en": "Hong_Kong_Special_Administrative_Region_of_China"
+        "en": "Hong Kong Special Administrative Region of China"
     },
     "HMD": {
-        "en": "Heard_Island_and_McDonald_Islands"
+        "en": "Heard Island and McDonald Islands"
     },
     "HND": {
         "en": "Honduras",
@@ -429,7 +431,7 @@
         "pt": "Indonésia"
     },
     "IMN": {
-        "en": "Isle_of_Man",
+        "en": "Isle of Man",
         "pt": "Ilha de Man"
     },
     "IND": {
@@ -440,14 +442,14 @@
         "en": "Interpol"
     },
     "IOT": {
-        "en": "British_Indian_Ocean_Territory"
+        "en": "British Indian Ocean Territory"
     },
     "IRL": {
         "en": "Ireland",
         "pt": "Irlanda"
     },
     "IRN": {
-        "en": "Iran,_Islamic_Republic_of",
+        "en": "Iran, Islamic Republic of",
         "pt": "Irão"
     },
     "IRQ": {
@@ -503,11 +505,11 @@
         "pt": "Kiribati"
     },
     "KNA": {
-        "en": "Saint_Kitts_and_Nevis",
+        "en": "Saint Kitts and Nevis",
         "pt": "São Cristóvão e Nevis"
     },
     "KOR": {
-        "en": "Korea,_the_Republic_of",
+        "en": "Korea, the Republic of",
         "pt": "República da Coreia"
     },
     "KWT": {
@@ -518,7 +520,7 @@
         "en": "Kenya"
     },
     "LAO": {
-        "en": "Lao_People's_Democratic_Republic",
+        "en": "Lao People's Democratic Republic",
         "pt": "Laos"
     },
     "LBN": {
@@ -534,7 +536,7 @@
         "pt": "Líbia"
     },
     "LCA": {
-        "en": "Saint_Lucia",
+        "en": "Saint Lucia",
         "pt": "Santa Lúcia"
     },
     "LIE": {
@@ -542,7 +544,7 @@
         "pt": "Liechtenstein"
     },
     "LKA": {
-        "en": "Sri_Lanka",
+        "en": "Sri Lanka",
         "pt": "Sri Lanka"
     },
     "LSO": {
@@ -562,10 +564,10 @@
         "pt": "Letónia"
     },
     "MAC": {
-        "en": "Macao_Special_Administrative_Region_of_China"
+        "en": "Macao Special Administrative Region of China"
     },
     "MAF": {
-        "en": "Saint_Martin_(French_part)"
+        "en": "Saint Martin (French part)"
     },
     "MAR": {
         "en": "Morocco",
@@ -576,7 +578,7 @@
         "pt": "Mónaco"
     },
     "MDA": {
-        "en": "Moldova,_Republic_of",
+        "en": "Moldova, Republic of",
         "pt": "Moldávia"
     },
     "MDG": {
@@ -592,11 +594,11 @@
         "pt": "México"
     },
     "MHL": {
-        "en": "Marshall_Islands",
+        "en": "Marshall Islands",
         "pt": "Ilhas Marshall"
     },
     "MKD": {
-        "en": "North_Macedonia,_Republic_of",
+        "en": "North Macedonia, Republic of",
         "pt": "Macedónia"
     },
     "MLI": {
@@ -620,7 +622,7 @@
         "pt": "Mongólia"
     },
     "MNP": {
-        "en": "Northern_Mariana_Islands"
+        "en": "Northern Mariana Islands"
     },
     "MOZ": {
         "en": "Mozambique",
@@ -656,14 +658,14 @@
         "pt": "Namíbia"
     },
     "NCL": {
-        "en": "New_Caledonia"
+        "en": "New Caledonia"
     },
     "NER": {
         "en": "Niger",
         "pt": "Níger"
     },
     "NFK": {
-        "en": "Norfolk_Island"
+        "en": "Norfolk Island"
     },
     "NGA": {
         "en": "Nigeria",
@@ -693,10 +695,10 @@
         "pt": "Nauru"
     },
     "NTZ": {
-        "en": "Neutral_Zone"
+        "en": "Neutral Zone"
     },
     "NZL": {
-        "en": "New_Zealand",
+        "en": "New Zealand",
         "pt": "Nova Zelândia"
     },
     "OMN": {
@@ -727,7 +729,7 @@
         "pt": "Palau"
     },
     "PNG": {
-        "en": "Papua_New_Guinea",
+        "en": "Papua New Guinea",
         "pt": "Papua - Nova Guiné"
     },
     "POL": {
@@ -735,11 +737,11 @@
         "pt": "Polónia"
     },
     "PRI": {
-        "en": "Puerto_Rico",
+        "en": "Puerto Rico",
         "pt": "Porto Rico"
     },
     "PRK": {
-        "en": "Korea,_Democratic_People's_Republic_of",
+        "en": "Korea, Democratic People's Republic of",
         "pt": "República Popular Democrática da Coreia"
     },
     "PRS": {
@@ -754,11 +756,11 @@
         "pt": "Paraguai"
     },
     "PSE": {
-        "en": "Palestine,_State_of",
+        "en": "Palestine, State of",
         "pt": "Território Palestiniano Ocupado"
     },
     "PYF": {
-        "en": "French_Polynesia"
+        "en": "French Polynesia"
     },
     "QAT": {
         "en": "Qatar",
@@ -784,16 +786,16 @@
         "pt": "Roménia"
     },
     "RSA": {
-        "en": "South_Africa"
+        "en": "South Africa"
     },
     "RSL": {
         "en": "Somaliland"
     },
     "RSS": {
-        "en": "South_Sudan"
+        "en": "South Sudan"
     },
     "RUS": {
-        "en": "Russian_Federation",
+        "en": "Russian Federation",
         "pt": "Rússia"
     },
     "RWA": {
@@ -801,7 +803,7 @@
         "pt": "Ruanda"
     },
     "SAU": {
-        "en": "Saudi_Arabia",
+        "en": "Saudi Arabia",
         "pt": "Arábia Saudita"
     },
     "SDN": {
@@ -817,28 +819,28 @@
         "pt": "Singapura"
     },
     "SGS": {
-        "en": "South_Georgia_and_the_South_Sandwich_Islands"
+        "en": "South Georgia and the South Sandwich Islands"
     },
     "SHN": {
-        "en": "Saint_Helena,_Ascension_and_Tristan_da_Cunha"
+        "en": "Saint Helena, Ascension and Tristan da Cunha"
     },
     "SJM": {
-        "en": "Svalbard_and_Jan_Mayen"
+        "en": "Svalbard and Jan Mayen"
     },
     "SLB": {
-        "en": "Solomon_Islands",
+        "en": "Solomon Islands",
         "pt": "Ilhas Salomão"
     },
     "SLE": {
-        "en": "Sierra_Leone",
+        "en": "Sierra Leone",
         "pt": "Serra Leoa"
     },
     "SLV": {
-        "en": "El_Salvador",
+        "en": "El Salvador",
         "pt": "El Salvador"
     },
     "SMR": {
-        "en": "San_Marino",
+        "en": "San Marino",
         "pt": "São Marino"
     },
     "SOM": {
@@ -846,18 +848,18 @@
         "pt": "Somália"
     },
     "SPM": {
-        "en": "Saint_Pierre_and_Miquelon"
+        "en": "Saint Pierre and Miquelon"
     },
     "SRB": {
         "en": "Serbia",
         "pt": "Sérvia"
     },
     "SSD": {
-        "en": "South_Sudan",
+        "en": "South Sudan",
         "pt": "Sudão do Sul"
     },
     "STP": {
-        "en": "Sao_Tome_and_Principe",
+        "en": "Sao Tome and Principe",
         "pt": "São Tomé e Príncipe"
     },
     "SUR": {
@@ -881,18 +883,18 @@
         "pt": "Eswatini"
     },
     "SXM": {
-        "en": "Sint_Maarten_(Dutch_part)"
+        "en": "Sint Maarten (Dutch part)"
     },
     "SYC": {
         "en": "Seychelles",
         "pt": "Seychelles"
     },
     "SYR": {
-        "en": "Syrian_Arab_Republic",
+        "en": "Syrian Arab Republic",
         "pt": "Síria"
     },
     "TCA": {
-        "en": "Turks_and_Caicos_Islands"
+        "en": "Turks and Caicos Islands"
     },
     "TCD": {
         "en": "Chad",
@@ -932,7 +934,7 @@
         "pt": "Tonga"
     },
     "TTO": {
-        "en": "Trinidad_and_Tobago",
+        "en": "Trinidad and Tobago",
         "pt": "Trindade e Tobago"
     },
     "TUN": {
@@ -948,10 +950,10 @@
         "pt": "Tuvalu"
     },
     "TWN": {
-        "en": "Taiwan,_Province_of_China"
+        "en": "Taiwan, Province of China"
     },
     "TZA": {
-        "en": "Tanzania,_United_Republic_of",
+        "en": "Tanzania, United Republic of",
         "pt": "Tanzânia"
     },
     "UGA": {
@@ -963,23 +965,23 @@
         "pt": "Ucrânia"
     },
     "UMI": {
-        "en": "United_States_Minor_Outlying_Islands"
+        "en": "United States Minor Outlying Islands"
     },
     "UNA": {
-        "en": "United_Nations_specialized_agency"
+        "en": "United Nations specialized agency"
     },
     "UNK": {
-        "en": "Resident_of_Kosovo"
+        "en": "Resident of Kosovo"
     },
     "UNO": {
-        "en": "United_Nations_Organization"
+        "en": "United Nations Organization"
     },
     "URY": {
         "en": "Uruguay",
         "pt": "Uruguai"
     },
     "USA": {
-        "en": "United_States",
+        "en": "United States",
         "pt": "Estados Unidos da América"
     },
     "UZB": {
@@ -987,25 +989,25 @@
         "pt": "Uzbequistão"
     },
     "VAT": {
-        "en": "Holy_See_Vatican_City_State",
+        "en": "Holy See Vatican City State",
         "pt": "Vaticano"
     },
     "VCT": {
-        "en": "Saint_Vincent_and_the_Grenadines",
+        "en": "Saint Vincent and the Grenadines",
         "pt": "São Vicente e Granadinas"
     },
     "VEN": {
-        "en": "Venezuela,_Bolivarian_Republic_of",
+        "en": "Venezuela, Bolivarian Republic of",
         "pt": "Venezuela"
     },
     "VGB": {
-        "en": "Virgin_Islands_British"
+        "en": "Virgin Islands British"
     },
     "VIR": {
-        "en": "Virgin_Islands_U.S."
+        "en": "Virgin Islands U.S."
     },
     "VNM": {
-        "en": "Viet_Nam",
+        "en": "Viet Nam",
         "pt": "Vietname"
     },
     "VUT": {
@@ -1013,14 +1015,14 @@
         "pt": "Vanuatu"
     },
     "WLF": {
-        "en": "Wallis_and_Futuna"
+        "en": "Wallis and Futuna"
     },
     "WSM": {
         "en": "Samoa",
         "pt": "Samoa"
     },
     "XBA": {
-        "en": "African_Development_Bank"
+        "en": "African Development Bank"
     },
     "XCC": {
         "en": "CARICOM"
@@ -1038,10 +1040,10 @@
         "en": "Organisation of Eastern Caribbean States (OECS)"
     },
     "XIM": {
-        "en": "AFREXIM_bank"
+        "en": "AFREXIM bank"
     },
     "XOM": {
-        "en": "Sovereign_Military_Order_of_Malta"
+        "en": "Sovereign Military Order of Malta"
     },
     "XPO": {
         "en": "INTERPOL"
@@ -1054,7 +1056,7 @@
         "en": "Yugoslavia"
     },
     "ZAF": {
-        "en": "South_Africa",
+        "en": "South Africa",
         "pt": "África do Sul"
     },
     "ZIM": {
