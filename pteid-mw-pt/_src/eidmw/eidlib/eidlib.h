@@ -740,10 +740,11 @@ public:
 	PTEIDSDK_API const char *GetOID() const;
 
 	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const std::string GetStatusMessage() const;
+	PTEIDSDK_API const char *GetStatusMessage() const;
 
 private:
 	const EIDMW_ActiveAuthenticationReport &m_impl;
+	mutable std::string m_statusMessage;
 	friend class ICAO_Card;
 	friend class PTEID_DocumentReport;
 
@@ -758,10 +759,11 @@ public:
 	PTEIDSDK_API const char *GetOID() const;
 
 	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const std::string GetStatusMessage() const;
+	PTEIDSDK_API const char *GetStatusMessage() const;
 
 private:
 	const EIDMW_ChipAuthenticationReport &m_impl;
+	mutable std::string m_statusMessage;
 	friend class ICAO_Card;
 	friend class PTEID_DocumentReport;
 
@@ -775,10 +777,11 @@ public:
 	PTEIDSDK_API PTEID_ByteArray GetSigner() const;
 
 	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const std::string GetStatusMessage() const;
+	PTEIDSDK_API const char *GetStatusMessage() const;
 
 private:
 	const EIDMW_SodReport &m_impl;
+	mutable std::string m_statusMessage;
 	friend class ICAO_Card;
 	friend class PTEID_DocumentReport;
 
@@ -791,10 +794,11 @@ public:
 	PTEIDSDK_API PTEID_ByteArray GetStoredHash() const;
 	PTEIDSDK_API PTEID_ByteArray GetComputedHash() const;
 	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const std::string GetStatusMessage() const;
+	PTEIDSDK_API const char *GetStatusMessage() const;
 
 private:
 	const EIDMW_DataGroupReport &m_impl;
+	mutable std::string m_statusMessage;
 
 	friend class ICAO_Card;
 	friend class PTEID_DocumentReport;

@@ -44,6 +44,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include "eidErrors.h"
 
 #define BEGIN_CAL_OPERATION(obj)                                                                                       \
 	obj->CalLock();                                                                                                    \
@@ -338,7 +339,7 @@ enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG1
 enum class EIDMW_CMN_API EIDMW_ReportType { Success, Error };
 
 struct EIDMW_Report {
-	unsigned int error_code = 0;
+	unsigned int error_code = EIDMW_OK;
 	EIDMW_ReportType type = EIDMW_ReportType::Success;
 };
 

@@ -52,6 +52,8 @@ private:
 	std::string error_message;
 };
 
+std::string CodeToString(long code);
+
 /******************************************************************************/ /**
   * Exception class Release Needed (error code = EIDMW_ERR_RELEASE_NEEDED)
   *

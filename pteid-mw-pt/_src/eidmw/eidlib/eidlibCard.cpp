@@ -785,8 +785,9 @@ const char *PTEID_ActiveAuthenticationReport::GetOID() const { return m_impl.oid
 
 long PTEID_ActiveAuthenticationReport::GetStatus() const { return m_impl.error_code; }
 
-const std::string PTEID_ActiveAuthenticationReport::GetStatusMessage() const {
-	return PTEID_Exception(m_impl.error_code).GetMessage();
+const char *PTEID_ActiveAuthenticationReport::GetStatusMessage() const {
+	m_statusMessage = CodeToString(m_impl.error_code);
+	return m_statusMessage.c_str();
 }
 
 /*****************************************************************************************
@@ -805,8 +806,9 @@ const char *PTEID_ChipAuthenticationReport::GetOID() const { return m_impl.oid.c
 
 long PTEID_ChipAuthenticationReport::GetStatus() const { return m_impl.error_code; }
 
-const std::string PTEID_ChipAuthenticationReport::GetStatusMessage() const {
-	return PTEID_Exception(m_impl.error_code).GetMessage();
+const char *PTEID_ChipAuthenticationReport::GetStatusMessage() const {
+	m_statusMessage = CodeToString(m_impl.error_code);
+	return m_statusMessage.c_str();
 }
 
 /*****************************************************************************************
@@ -819,7 +821,10 @@ PTEID_ByteArray PTEID_SodReport::GetSigner() const { return PTEID_ByteArray(m_co
 
 long PTEID_SodReport::GetStatus() const { return m_impl.error_code; }
 
-const std::string PTEID_SodReport::GetStatusMessage() const { return PTEID_Exception(m_impl.error_code).GetMessage(); }
+const char *PTEID_SodReport::GetStatusMessage() const {
+	m_statusMessage = CodeToString(m_impl.error_code);
+	return m_statusMessage.c_str();
+}
 
 /*****************************************************************************************
 ------------------------------------ PTEID_DocumentReport --------------------------------
@@ -881,8 +886,9 @@ PTEID_ByteArray PTEID_DataGroupReport::GetComputedHash() const {
 
 long PTEID_DataGroupReport::GetStatus() const { return m_impl.error_code; }
 
-const std::string PTEID_DataGroupReport::GetStatusMessage() const {
-	return PTEID_Exception(m_impl.error_code).GetMessage();
+const char *PTEID_DataGroupReport::GetStatusMessage() const {
+	m_statusMessage = CodeToString(m_impl.error_code);
+	return m_statusMessage.c_str();
 }
 
 /*****************************************************************************************
