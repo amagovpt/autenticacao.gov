@@ -801,13 +801,8 @@ private:
 	mutable std::string m_statusMessage;
 
 	friend class ICAO_Card;
+	friend class PTEID_BaseDGReport;
 	friend class PTEID_DocumentReport;
-	friend class PTEID_ICAO_DG1;
-	friend class PTEID_ICAO_DG2;
-	friend class PTEID_ICAO_DG3;
-	friend class PTEID_ICAO_DG11;
-	friend class PTEID_ICAO_DG12;
-	friend class PTEID_ICAO_DG13;
 
 	PTEID_DataGroupReport(const SDK_Context *context, const EIDMW_DataGroupReport &report);
 	PTEID_DataGroupReport(const PTEID_DataGroupReport &) = delete;
@@ -824,14 +819,29 @@ public:
 private:
 	const EIDMW_DocumentReport &m_impl;
 	friend class ICAO_Card;
+	friend class PTEID_BaseDGReport;
 
 	PTEID_DocumentReport(const SDK_Context *context, const EIDMW_DocumentReport &reports);
 	PTEID_DocumentReport(const PTEID_DocumentReport &) = delete;			/**< Copy not allowed - not implemented */
 	PTEID_DocumentReport &operator=(const PTEID_DocumentReport &) = delete; /**< Copy not allowed - not implemented */
 };
 
+class PTEID_BaseDGReport : public PTEID_Object {
+public:
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const = 0;
+	PTEIDSDK_API PTEID_DocumentReport *GetDocumentReport() const;
+
+protected:
+	PTEIDSDK_API const PTEID_DataGroupReport *GetReportByID(PTEID_DataGroupID id) const;
+
+	const EIDMW_DocumentReport &m_documentReport;
+	PTEID_BaseDGReport(const SDK_Context *context, const EIDMW_DocumentReport &report);
+	PTEID_BaseDGReport(const PTEID_BaseDGReport &) = delete;
+	PTEID_BaseDGReport &operator=(const PTEID_BaseDGReport &) = delete;
+};
+
 class IcaoDg1;
-class PTEID_ICAO_DG1 : public PTEID_Object {
+class PTEID_ICAO_DG1 : public PTEID_BaseDGReport {
 public:
 	PTEIDSDK_API const char *documentCode() const;
 	PTEIDSDK_API const char *issuingState() const;
@@ -846,13 +856,12 @@ public:
 	PTEIDSDK_API const char *secondaryIdentifier() const;
 	PTEIDSDK_API bool isPassport() const;
 	PTEIDSDK_API ~PTEID_ICAO_DG1();
-	PTEIDSDK_API const PTEID_DataGroupReport *GetReport() const;
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
 
 private:
 	const IcaoDg1 &m_impl;
-	const EIDMW_DataGroupReport &m_report;
 	friend class ICAO_Card;
-	PTEID_ICAO_DG1(const SDK_Context *context, const IcaoDg1 &dg1, const EIDMW_DataGroupReport &report);
+	PTEID_ICAO_DG1(const SDK_Context *context, const IcaoDg1 &dg1, const EIDMW_DocumentReport &documentReport);
 	PTEID_ICAO_DG1(const PTEID_ICAO_DG1 &);						/**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG1 &operator=(const PTEID_ICAO_DG1 &) = delete; /**< Copy not allowed - not implemented */
 };
@@ -957,19 +966,18 @@ private:
 	BiometricInformation &m_impl;
 };
 
-class PTEID_ICAO_DG2 : public PTEID_Object {
+class PTEID_ICAO_DG2 : public PTEID_BaseDGReport {
 public:
 	PTEIDSDK_API unsigned int numberOfBiometrics() const;
 	PTEIDSDK_API std::vector<PTEID_BiometricInfomation *> biometricInstances();
 	PTEIDSDK_API ~PTEID_ICAO_DG2();
-	PTEIDSDK_API const PTEID_DataGroupReport *GetReport() const;
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
 
 private:
 	const IcaoDg2 &m_impl;
-	const EIDMW_DataGroupReport &m_report;
 	std::vector<PTEID_BiometricInfomation *> m_biometricInstances; // delete this on destructor
 	friend class ICAO_Card;
-	PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2, const EIDMW_DataGroupReport &report);
+	PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2, const EIDMW_DocumentReport &report);
 	PTEID_ICAO_DG2(const PTEID_ICAO_DG2 &);						/**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG2 &operator=(const PTEID_ICAO_DG2 &) = delete; /**< Copy not allowed - not implemented */
 };
@@ -1032,25 +1040,24 @@ private:
 	std::vector<PTEID_BiometricInfoFingerImage *> m_bioFingerImageVec;
 };
 
-class PTEID_ICAO_DG3 : public PTEID_Object {
+class PTEID_ICAO_DG3 : public PTEID_BaseDGReport {
 public:
 	PTEIDSDK_API ~PTEID_ICAO_DG3();
 	PTEIDSDK_API unsigned int numberOfbiometrics() const;
 	PTEIDSDK_API std::vector<PTEID_BiometricInfomationDg3 *> biometricInformation() const;
-	PTEIDSDK_API const PTEID_DataGroupReport *GetReport() const;
+	virtual const PTEID_DataGroupReport *GetReport() const;
 
 private:
 	const IcaoDg3 &m_impl;
-	const EIDMW_DataGroupReport &m_report;
 	friend class ICAO_Card;
-	PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3, const EIDMW_DataGroupReport &report);
+	PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3, const EIDMW_DocumentReport &report);
 	PTEID_ICAO_DG3(const PTEID_ICAO_DG3 &);						/**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG3 &operator=(const PTEID_ICAO_DG3 &) = delete; /**< Copy not allowed - not implemented */
 	std::vector<PTEID_BiometricInfomationDg3 *> m_biometricInformation;
 };
 
 class IcaoDg11;
-class PTEID_ICAO_DG11 : public PTEID_Object {
+class PTEID_ICAO_DG11 : public PTEID_BaseDGReport {
 public:
 	PTEIDSDK_API PTEID_ByteArray listOfTags() const;
 	PTEIDSDK_API const char *fullName() const;
@@ -1068,13 +1075,12 @@ public:
 	PTEIDSDK_API int numberOfOtherNames() const;
 	PTEIDSDK_API const char *otherNames() const;
 	PTEIDSDK_API virtual ~PTEID_ICAO_DG11();
-	PTEIDSDK_API const PTEID_DataGroupReport *GetReport() const;
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
 
 private:
 	const IcaoDg11 &m_impl;
-	const EIDMW_DataGroupReport &m_report;
 	friend class ICAO_Card;
-	PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11, const EIDMW_DataGroupReport &report);
+	PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11, const EIDMW_DocumentReport &report);
 	PTEID_ICAO_DG11(const PTEID_ICAO_DG11 &);					  /**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG11 &operator=(const PTEID_ICAO_DG11 &) = delete; /**< Copy not allowed - not implemented */
 };
