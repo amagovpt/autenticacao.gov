@@ -359,20 +359,25 @@ void GAPI::initTranslation() {
 }
 
 QString GAPI::loadCountryName(const QString &threeLetterCode, const QString &language) {
-	QString filePath = ":/country_codes_%1.json";
-	filePath = filePath.arg(language == "nl" ? "pt" : "en");
+	QString filePath = ":/country_codes.json";
 	QFile file;
+	QString useLanguage = language == "nl" ? "pt" : "en";
 	file.setFileName(filePath);
 	file.open(QIODevice::ReadOnly | QIODevice::Text);
 	QString val = file.readAll();
 	file.close();
 	QJsonDocument doc = QJsonDocument::fromJson(val.toUtf8());
 	QJsonObject jsonObj = doc.object();
-	QJsonValue jsonValue = jsonObj.value(threeLetterCode);
-	if (jsonValue == QJsonValue::Undefined)
+	QJsonValue threeLetterTranslation = jsonObj.value(threeLetterCode);
+	if (threeLetterTranslation == QJsonValue::Undefined)
 		return threeLetterCode;
 
-	return jsonValue.toString();
+	QJsonObject threeLetterTranslationObj = threeLetterTranslation.toObject();
+	QJsonValue valueTranslated = threeLetterTranslationObj.value(useLanguage);
+	if(valueTranslated == QJsonValue::Undefined)
+		return threeLetterTranslationObj.value("en").toString();
+
+	return valueTranslated.toString();
 }
 
 bool GAPI::LoadTranslationFile(QString NewLanguage) {
