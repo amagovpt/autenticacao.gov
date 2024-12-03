@@ -857,6 +857,34 @@ PTEID_SodReport *PTEID_DocumentReport::GetSodReport() const {
 	return report;
 }
 
+PTEID_DataGroupReport *PTEID_DocumentReport::GetDataGroupReport(PTEID_DataGroupID tag) const {
+	PTEID_DataGroupReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_DataGroupReport(m_context, m_impl.getDataGroupReport(static_cast<DataGroupID>(tag)));
+
+	END_TRY_CATCH
+	return report;
+}
+
+/*****************************************************************************************
+------------------------------------ PTEID_DataGroupReport -------------------------------
+*****************************************************************************************/
+PTEID_DataGroupReport::PTEID_DataGroupReport(const SDK_Context *context, const EIDMW_DataGroupReport &report)
+	: PTEID_Object(context, NULL), m_impl(report) {}
+
+PTEID_ByteArray PTEID_DataGroupReport::GetStoredHash() const { return PTEID_ByteArray(m_context, m_impl.storedHash); }
+
+PTEID_ByteArray PTEID_DataGroupReport::GetComputedHash() const {
+	return PTEID_ByteArray(m_context, m_impl.computedHash);
+}
+
+long PTEID_DataGroupReport::GetStatus() const { return m_impl.error_code; }
+
+const std::string PTEID_DataGroupReport::GetStatusMessage() const {
+	return PTEID_Exception(m_impl.error_code).GetMessage();
+}
+
 /*****************************************************************************************
 --------------------------------------- ICAO_Card ----------------------------------------
 *****************************************************************************************/
@@ -903,7 +931,7 @@ PTEID_ByteArray ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
 
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
-	CByteArray result = icao->readDatagroup(static_cast<DataGroupID>(tag));
+	auto [report, result] = icao->readDatagroup(static_cast<DataGroupID>(tag));
 	out.Append(result.GetBytes(), result.Size());
 	END_TRY_CATCH
 

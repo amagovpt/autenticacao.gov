@@ -720,6 +720,112 @@ public:
 	 */
 	PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() = 0;
 };
+
+struct EIDMW_DocumentReport;
+struct EIDMW_ActiveAuthenticationReport;
+struct EIDMW_ChipAuthenticationReport;
+struct EIDMW_SodReport;
+struct EIDMW_DataGroupReport;
+
+class PTEID_ActiveAuthenticationReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetDG14() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG14StoredHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG14ComputedHash() const;
+
+	PTEIDSDK_API PTEID_ByteArray GetDG15() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG15StoredHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG15ComputedHash() const;
+
+	PTEIDSDK_API const char *GetOID() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const std::string GetStatusMessage() const;
+
+private:
+	const EIDMW_ActiveAuthenticationReport &m_impl;
+	friend class ICAO_Card;
+	friend class PTEID_DocumentReport;
+
+	PTEID_ActiveAuthenticationReport(const SDK_Context *context, const EIDMW_ActiveAuthenticationReport &report);
+	PTEID_ActiveAuthenticationReport &
+	operator=(const PTEID_ActiveAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class PTEID_ChipAuthenticationReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetPublicKey() const;
+	PTEIDSDK_API const char *GetOID() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const std::string GetStatusMessage() const;
+
+private:
+	const EIDMW_ChipAuthenticationReport &m_impl;
+	friend class ICAO_Card;
+	friend class PTEID_DocumentReport;
+
+	PTEID_ChipAuthenticationReport(const SDK_Context *context, const EIDMW_ChipAuthenticationReport &report);
+	PTEID_ChipAuthenticationReport &
+	operator=(const PTEID_ChipAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class PTEID_SodReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetSigner() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const std::string GetStatusMessage() const;
+
+private:
+	const EIDMW_SodReport &m_impl;
+	friend class ICAO_Card;
+	friend class PTEID_DocumentReport;
+
+	PTEID_SodReport(const SDK_Context *context, const EIDMW_SodReport &report);
+	PTEID_SodReport &operator=(const PTEID_SodReport &) = delete;
+};
+
+class PTEID_DataGroupReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetStoredHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetComputedHash() const;
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const std::string GetStatusMessage() const;
+
+private:
+	const EIDMW_DataGroupReport &m_impl;
+
+	friend class ICAO_Card;
+	friend class PTEID_DocumentReport;
+	friend class PTEID_ICAO_DG1;
+	friend class PTEID_ICAO_DG2;
+	friend class PTEID_ICAO_DG3;
+	friend class PTEID_ICAO_DG11;
+	friend class PTEID_ICAO_DG12;
+	friend class PTEID_ICAO_DG13;
+
+	PTEID_DataGroupReport(const SDK_Context *context, const EIDMW_DataGroupReport &report);
+	PTEID_DataGroupReport(const PTEID_DataGroupReport &) = delete;
+	PTEID_DataGroupReport &operator=(const PTEID_DataGroupReport &) = delete;
+};
+
+class PTEID_DocumentReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const;
+	PTEIDSDK_API PTEID_ChipAuthenticationReport *GetChipAuthenticationReport() const;
+	PTEIDSDK_API PTEID_SodReport *GetSodReport() const;
+	PTEIDSDK_API PTEID_DataGroupReport *GetDataGroupReport(PTEID_DataGroupID tag) const;
+
+private:
+	const EIDMW_DocumentReport &m_impl;
+	friend class ICAO_Card;
+
+	PTEID_DocumentReport(const SDK_Context *context, const EIDMW_DocumentReport &reports);
+	PTEID_DocumentReport(const PTEID_DocumentReport &) = delete;			/**< Copy not allowed - not implemented */
+	PTEID_DocumentReport &operator=(const PTEID_DocumentReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
 class IcaoDg1;
 class PTEID_ICAO_DG1 {
 public:
@@ -959,85 +1065,6 @@ private:
 	PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11);
 	PTEID_ICAO_DG11(const PTEID_ICAO_DG11 &);					  /**< Copy not allowed - not implemented */
 	PTEID_ICAO_DG11 &operator=(const PTEID_ICAO_DG11 &) = delete; /**< Copy not allowed - not implemented */
-};
-
-struct EIDMW_DocumentReport;
-struct EIDMW_ActiveAuthenticationReport;
-struct EIDMW_ChipAuthenticationReport;
-struct EIDMW_SodReport;
-
-class PTEID_ActiveAuthenticationReport : public PTEID_Object {
-public:
-	PTEIDSDK_API PTEID_ByteArray GetDG14() const;
-	PTEIDSDK_API PTEID_ByteArray GetDG14StoredHash() const;
-	PTEIDSDK_API PTEID_ByteArray GetDG14ComputedHash() const;
-
-	PTEIDSDK_API PTEID_ByteArray GetDG15() const;
-	PTEIDSDK_API PTEID_ByteArray GetDG15StoredHash() const;
-	PTEIDSDK_API PTEID_ByteArray GetDG15ComputedHash() const;
-
-	PTEIDSDK_API const char *GetOID() const;
-
-	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const std::string GetStatusMessage() const;
-
-private:
-	const EIDMW_ActiveAuthenticationReport &m_impl;
-	friend class ICAO_Card;
-	friend class PTEID_DocumentReport;
-
-	PTEID_ActiveAuthenticationReport(const SDK_Context *context, const EIDMW_ActiveAuthenticationReport &report);
-	PTEID_ActiveAuthenticationReport &
-	operator=(const PTEID_ActiveAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
-};
-
-class PTEID_ChipAuthenticationReport : public PTEID_Object {
-public:
-	PTEIDSDK_API PTEID_ByteArray GetPublicKey() const;
-	PTEIDSDK_API const char *GetOID() const;
-
-	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const std::string GetStatusMessage() const;
-
-private:
-	const EIDMW_ChipAuthenticationReport &m_impl;
-	friend class ICAO_Card;
-	friend class PTEID_DocumentReport;
-
-	PTEID_ChipAuthenticationReport(const SDK_Context *context, const EIDMW_ChipAuthenticationReport &report);
-	PTEID_ChipAuthenticationReport &
-	operator=(const PTEID_ChipAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
-};
-
-class PTEID_SodReport : public PTEID_Object {
-public:
-	PTEIDSDK_API PTEID_ByteArray GetSigner() const;
-
-	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const std::string GetStatusMessage() const;
-
-private:
-	const EIDMW_SodReport &m_impl;
-	friend class ICAO_Card;
-	friend class PTEID_DocumentReport;
-
-	PTEID_SodReport(const SDK_Context *context, const EIDMW_SodReport &report);
-	PTEID_SodReport &operator=(const PTEID_SodReport &) = delete;
-};
-
-class PTEID_DocumentReport : public PTEID_Object {
-public:
-	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const;
-	PTEIDSDK_API PTEID_ChipAuthenticationReport *GetChipAuthenticationReport() const;
-	PTEIDSDK_API PTEID_SodReport *GetSodReport() const;
-
-private:
-	const EIDMW_DocumentReport &m_impl;
-	friend class ICAO_Card;
-
-	PTEID_DocumentReport(const SDK_Context *context, const EIDMW_DocumentReport &reports);
-	PTEID_DocumentReport(const PTEID_DocumentReport &) = delete;			/**< Copy not allowed - not implemented */
-	PTEID_DocumentReport &operator=(const PTEID_DocumentReport &) = delete; /**< Copy not allowed - not implemented */
 };
 
 class ICAO_Card : public PTEID_Object {

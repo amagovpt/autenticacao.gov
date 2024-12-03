@@ -363,47 +363,33 @@ struct EIDMW_SodReport : public EIDMW_Report {
 	CByteArray signer;
 };
 
+struct EIDMW_DataGroupReport : public EIDMW_Report {
+	CByteArray storedHash;
+	CByteArray computedHash;
+};
+
 class EIDMW_CMN_API EIDMW_DocumentReport {
 public:
-	void setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report) {
-		if (report.type == EIDMW_ReportType::Error) {
-			m_hasFailed = true;
-		}
-
-		m_activeAuthenticationReport = report;
-	}
-
-	const EIDMW_ActiveAuthenticationReport &getActiveAuthenticationReport() const {
-		return m_activeAuthenticationReport;
-	}
-
-	void setChipAuthenticationReport(const EIDMW_ChipAuthenticationReport &report) {
-		if (report.type == EIDMW_ReportType::Error) {
-			m_hasFailed = true;
-		}
-
-		m_chipAuthenticationReport = report;
-	}
-
-	const EIDMW_ChipAuthenticationReport &getChipAuthenticationReport() const { return m_chipAuthenticationReport; }
-
-	void setSodReport(const EIDMW_SodReport &report) {
-		if (report.type == EIDMW_ReportType::Error) {
-			m_hasFailed = true;
-		}
-
-		m_sodReport = report;
-	}
-
-	const EIDMW_SodReport &getSodReport() const { return m_sodReport; }
+	EIDMW_APL_API void setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report);
+	EIDMW_APL_API const EIDMW_ActiveAuthenticationReport &getActiveAuthenticationReport() const;
+	EIDMW_APL_API void setChipAuthenticationReport(const EIDMW_ChipAuthenticationReport &report);
+	EIDMW_APL_API const EIDMW_ChipAuthenticationReport &getChipAuthenticationReport() const;
+	EIDMW_APL_API void setSodReport(const EIDMW_SodReport &report);
+	EIDMW_APL_API const EIDMW_SodReport &getSodReport() const;
+	EIDMW_APL_API void addDataGroupReport(DataGroupID id, const EIDMW_DataGroupReport &report);
+	EIDMW_APL_API const EIDMW_DataGroupReport &getDataGroupReport(DataGroupID id) const;
 
 	bool HasFailed() { return m_hasFailed; }
 
+	void setCard(APL_ICAO *card) { m_card = card; }
+
 private:
 	bool m_hasFailed = false;
+	mutable std::unordered_map<DataGroupID, EIDMW_DataGroupReport> m_dataGroupReports;
 	EIDMW_ActiveAuthenticationReport m_activeAuthenticationReport;
 	EIDMW_ChipAuthenticationReport m_chipAuthenticationReport;
 	EIDMW_SodReport m_sodReport;
+	APL_ICAO *m_card;
 };
 
 class APL_ICAO : public APL_SmartCard {
@@ -411,7 +397,7 @@ public:
 	~APL_ICAO();
 
 	EIDMW_APL_API virtual std::vector<DataGroupID> getAvailableDatagroups();
-	EIDMW_APL_API virtual CByteArray readDatagroup(DataGroupID tag);
+	EIDMW_APL_API virtual std::pair<EIDMW_DataGroupReport, CByteArray> readDatagroup(DataGroupID tag);
 	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
 	EIDMW_APL_API virtual IcaoDg2 *readDataGroup2();
 	EIDMW_APL_API virtual IcaoDg3 *readDataGroup3();

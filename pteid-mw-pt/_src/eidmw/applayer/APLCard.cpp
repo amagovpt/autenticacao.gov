@@ -589,6 +589,62 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex) {
 	return out;
 }
 
+void EIDMW_DocumentReport::setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report) {
+	if (report.type == EIDMW_ReportType::Error) {
+		m_hasFailed = true;
+	}
+
+	m_activeAuthenticationReport = report;
+}
+
+const EIDMW_ActiveAuthenticationReport &EIDMW_DocumentReport::getActiveAuthenticationReport() const {
+	return m_activeAuthenticationReport;
+}
+
+void EIDMW_DocumentReport::setChipAuthenticationReport(const EIDMW_ChipAuthenticationReport &report) {
+	if (report.type == EIDMW_ReportType::Error) {
+		m_hasFailed = true;
+	}
+
+	m_chipAuthenticationReport = report;
+}
+
+const EIDMW_ChipAuthenticationReport &EIDMW_DocumentReport::getChipAuthenticationReport() const {
+	return m_chipAuthenticationReport;
+}
+
+void EIDMW_DocumentReport::setSodReport(const EIDMW_SodReport &report) {
+	if (report.type == EIDMW_ReportType::Error) {
+		m_hasFailed = true;
+	}
+
+	m_sodReport = report;
+}
+
+const EIDMW_SodReport &EIDMW_DocumentReport::getSodReport() const { return m_sodReport; }
+
+void EIDMW_DocumentReport::addDataGroupReport(DataGroupID id, const EIDMW_DataGroupReport &report) {
+	if (m_dataGroupReports.find(id) != m_dataGroupReports.end()) {
+		return;
+	}
+
+	if (report.type == EIDMW_ReportType::Error) {
+		m_hasFailed = true;
+	}
+
+	m_dataGroupReports[id] = report;
+}
+
+const EIDMW_DataGroupReport &EIDMW_DocumentReport::getDataGroupReport(DataGroupID id) const {
+	if (m_dataGroupReports.find(id) != m_dataGroupReports.end()) {
+		return m_dataGroupReports.at(id);
+	}
+
+	// ...
+	auto [_, __] = m_card->readDatagroup(id);
+	return m_dataGroupReports.at(id);
+}
+
 // ICAO
 APL_ICAO::APL_ICAO(APL_ReaderContext *reader) : APL_SmartCard(reader), m_reader(reader) {}
 
@@ -610,6 +666,8 @@ void APL_ICAO::initializeCard() {
 
 	selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 	loadAvailableDataGroups();
+
+	m_reports.setCard(this);
 
 	auto aa_report = performActiveAuthentication();
 	m_reports.setActiveAuthenticationReport(aa_report);
@@ -633,8 +691,9 @@ std::vector<DataGroupID> APL_ICAO::getAvailableDatagroups() {
 	return datagroups;
 }
 
-CByteArray APL_ICAO::readDatagroup(DataGroupID tag) {
+std::pair<EIDMW_DataGroupReport, CByteArray> APL_ICAO::readDatagroup(DataGroupID tag) {
 	CByteArray out;
+	EIDMW_DataGroupReport report;
 
 	m_reader->CalLock();
 	try {
@@ -653,22 +712,31 @@ CByteArray APL_ICAO::readDatagroup(DataGroupID tag) {
 	}
 	m_reader->CalUnlock();
 
+	// store hashes
+	report.storedHash = m_SodAttributes->get(tag);
+	AppLayer.getCryptoFwk()->GetHash(out, m_SodAttributes->getHashFunction(), &report.computedHash);
+	report.type = EIDMW_ReportType::Success;
+
 	// verify sod
 	auto sod = verifySOD(tag, out);
 	if (!sod) {
-		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG);
+		report.error_code = EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG;
+		report.type = EIDMW_ReportType::Error;
 	}
 
-	return out;
+	m_reports.addDataGroupReport(tag, report);
+
+	return {report, out};
 }
 
 IcaoDg1 *APL_ICAO::readDataGroup1() {
 	if (m_mrzDg1.get() != nullptr)
 		return m_mrzDg1.get();
 
-	CByteArray arrayDg1 = readDatagroup(DG1);
+	auto [report, arrayDg1] = readDatagroup(DG1);
 	if (arrayDg1.Size() == 0)
 		return NULL;
+
 	m_mrzDg1.reset(new IcaoDg1(arrayDg1.GetBytes(5, arrayDg1.Size() - 5)));
 	return m_mrzDg1.get();
 }
@@ -677,9 +745,10 @@ IcaoDg2 *APL_ICAO::readDataGroup2() {
 	if (m_faceDg2.get() != nullptr)
 		return m_faceDg2.get();
 
-	CByteArray arrayDg2 = readDatagroup(DG2);
+	auto [report, arrayDg2] = readDatagroup(DG2);
 	if (arrayDg2.Size() == 0)
 		return NULL;
+
 	m_faceDg2.reset(new IcaoDg2(arrayDg2));
 	return m_faceDg2.get();
 }
@@ -688,9 +757,10 @@ IcaoDg3 *APL_ICAO::readDataGroup3() {
 	if (m_fingersDg3.get() != nullptr)
 		return m_fingersDg3.get();
 
-	CByteArray arrayDg3 = readDatagroup(DG3);
+	auto [report, arrayDg3] = readDatagroup(DG3);
 	if (arrayDg3.Size() == 0)
 		return NULL;
+
 	m_fingersDg3.reset(new IcaoDg3(arrayDg3));
 	return m_fingersDg3.get();
 }
@@ -699,7 +769,7 @@ IcaoDg11 *APL_ICAO::readDataGroup11() {
 	if (m_infoDg11.get() != nullptr)
 		return m_infoDg11.get();
 
-	CByteArray arrayDg11 = readDatagroup(DG11);
+	auto [report, arrayDg11] = readDatagroup(DG11);
 	if (arrayDg11.Size() == 0)
 		return NULL;
 
