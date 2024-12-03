@@ -840,6 +840,23 @@ protected:
 	PTEID_BaseDGReport &operator=(const PTEID_BaseDGReport &) = delete;
 };
 
+class PTEID_RawDataGroup : public PTEID_BaseDGReport {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetData() const;
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
+
+private:
+	friend class ICAO_Card;
+
+	PTEID_ByteArray m_data;
+	PTEID_DataGroupID m_id;
+
+	PTEID_RawDataGroup(const SDK_Context *context, PTEID_DataGroupID id, PTEID_ByteArray data,
+					   const EIDMW_DocumentReport &report);
+	PTEID_RawDataGroup(const PTEID_RawDataGroup &) = delete;
+	PTEID_RawDataGroup &operator=(const PTEID_RawDataGroup &) = delete;
+};
+
 class IcaoDg1;
 class PTEID_ICAO_DG1 : public PTEID_BaseDGReport {
 public:
@@ -1049,6 +1066,7 @@ public:
 
 private:
 	const IcaoDg3 &m_impl;
+
 	friend class ICAO_Card;
 	PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3, const EIDMW_DocumentReport &report);
 	PTEID_ICAO_DG3(const PTEID_ICAO_DG3 &);						/**< Copy not allowed - not implemented */
@@ -1097,7 +1115,7 @@ public:
 	/**
 	 * Read raw data from datagroup specified in @tag parameter
 	 */
-	PTEIDSDK_API virtual PTEID_ByteArray readDatagroupRaw(PTEID_DataGroupID tag);
+	PTEIDSDK_API virtual PTEID_RawDataGroup *readDatagroupRaw(PTEID_DataGroupID tag);
 
 	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
 	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();

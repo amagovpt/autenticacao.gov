@@ -899,6 +899,17 @@ const PTEID_DataGroupReport *PTEID_BaseDGReport::GetReportByID(PTEID_DataGroupID
 }
 
 /*****************************************************************************************
+------------------------------------- PTEID_RawDataGroup ---------------------------------
+*****************************************************************************************/
+PTEID_RawDataGroup::PTEID_RawDataGroup(const SDK_Context *context, PTEID_DataGroupID id, PTEID_ByteArray data,
+									   const EIDMW_DocumentReport &report)
+	: PTEID_BaseDGReport(context, report), m_data(data), m_id(id) {}
+
+PTEID_ByteArray PTEID_RawDataGroup::GetData() const { return m_data; }
+
+const PTEID_DataGroupReport *PTEID_RawDataGroup::GetReport() const { return GetReportByID(m_id); }
+
+/*****************************************************************************************
 ------------------------------------ PTEID_DataGroupReport -------------------------------
 *****************************************************************************************/
 PTEID_DataGroupReport::PTEID_DataGroupReport(const SDK_Context *context, const EIDMW_DataGroupReport &report)
@@ -958,14 +969,16 @@ void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_
 	END_TRY_CATCH
 }
 
-PTEID_ByteArray ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
-	PTEID_ByteArray out;
+PTEID_RawDataGroup *ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
+	PTEID_RawDataGroup *out = nullptr;
 
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
-	auto [report, result] = icao->readDatagroup(static_cast<DataGroupID>(tag));
-	out.Append(result.GetBytes(), result.Size());
-	END_TRY_CATCH
+	auto [_, result] = icao->readDatagroup(static_cast<DataGroupID>(tag));
+
+	PTEID_ByteArray content(m_context, result);
+	out = new PTEID_RawDataGroup(m_context, tag, content, icao->getDocumentReport());
+	END_TRY_CATCH;
 
 	return out;
 }
