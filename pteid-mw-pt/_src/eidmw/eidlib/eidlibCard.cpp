@@ -938,7 +938,18 @@ PTEID_ByteArray ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
 	return out;
 }
 
-PTEID_ICAO_DG1::PTEID_ICAO_DG1(const IcaoDg1 &dg1) : m_impl(dg1) {}
+PTEID_ICAO_DG1::PTEID_ICAO_DG1(const SDK_Context *context, const IcaoDg1 &dg1, const EIDMW_DataGroupReport &report)
+	: PTEID_Object(context, NULL), m_impl(dg1), m_report(report) {}
+
+const PTEID_DataGroupReport *PTEID_ICAO_DG1::GetReport() const {
+	PTEID_DataGroupReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_DataGroupReport(m_context, m_report);
+
+	END_TRY_CATCH
+	return report;
+}
 
 const char *PTEID_ICAO_DG1::documentCode() const { return m_impl.documentCode().c_str(); }
 
@@ -1120,11 +1131,21 @@ PTEID_BiometricInfomation::~PTEID_BiometricInfomation() { delete m_faceInfo; }
 PTEID_BiometricInfomation::PTEID_BiometricInfomation(const SDK_Context *context, BiometricInformation &bioInfo)
 	: PTEID_Object(context, NULL), m_impl(bioInfo), m_faceInfo(new PTEID_FaceInfo(context, *bioInfo.faceInfo())) {}
 
-PTEID_ICAO_DG2::PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2)
-	: PTEID_Object(context, NULL), m_impl(dg2) {
+PTEID_ICAO_DG2::PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2, const EIDMW_DataGroupReport &report)
+	: PTEID_Object(context, NULL), m_impl(dg2), m_report(report) {
 	for (auto &instance : m_impl.biometricInstances()) {
 		m_biometricInstances.push_back(new PTEID_BiometricInfomation(m_context, *instance));
 	}
+}
+
+const PTEID_DataGroupReport *PTEID_ICAO_DG2::GetReport() const {
+	PTEID_DataGroupReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_DataGroupReport(m_context, m_report);
+
+	END_TRY_CATCH
+	return report;
 }
 
 PTEID_ByteArray PTEID_BiometricInfomationDg3::icaoHeaderVersion() const {
@@ -1196,11 +1217,21 @@ PTEID_BiometricInfomationDg3::~PTEID_BiometricInfomationDg3() {
 	}
 }
 
-PTEID_ICAO_DG3::PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3)
-	: PTEID_Object(context, NULL), m_impl(dg3) {
+PTEID_ICAO_DG3::PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3, const EIDMW_DataGroupReport &report)
+	: PTEID_Object(context, NULL), m_impl(dg3), m_report(report) {
 	for (const auto &instance : dg3.biometricInstanceVec()) {
 		m_biometricInformation.push_back(new PTEID_BiometricInfomationDg3(context, *instance.get()));
 	}
+}
+
+const PTEID_DataGroupReport *PTEID_ICAO_DG3::GetReport() const {
+	PTEID_DataGroupReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_DataGroupReport(m_context, m_report);
+
+	END_TRY_CATCH
+	return report;
 }
 
 unsigned int PTEID_BiometricInfoFingerImage::length() const { return m_impl.length(); }
@@ -1275,8 +1306,18 @@ PTEID_ICAO_DG3::~PTEID_ICAO_DG3() {
 	}
 }
 
-PTEID_ICAO_DG11::PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11)
-	: PTEID_Object(context, NULL), m_impl(dg11) {}
+PTEID_ICAO_DG11::PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11, const EIDMW_DataGroupReport &report)
+	: PTEID_Object(context, NULL), m_impl(dg11), m_report(report) {}
+
+const PTEID_DataGroupReport *PTEID_ICAO_DG11::GetReport() const {
+	PTEID_DataGroupReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_DataGroupReport(m_context, m_report);
+
+	END_TRY_CATCH
+	return report;
+}
 
 unsigned int PTEID_ICAO_DG2::numberOfBiometrics() const { return m_impl.numberOfBiometrics(); }
 
@@ -1295,7 +1336,8 @@ PTEID_ICAO_DG1 *ICAO_Card::readDataGroup1() {
 	auto *dg = icao->readDataGroup1();
 	if (dg == NULL)
 		return NULL;
-	dg1 = new PTEID_ICAO_DG1(*dg);
+
+	dg1 = new PTEID_ICAO_DG1(m_context, *dg, icao->getDocumentReport().getDataGroupReport(DG1));
 	END_TRY_CATCH
 	return dg1;
 }
@@ -1307,7 +1349,7 @@ PTEID_ICAO_DG2 *ICAO_Card::readDataGroup2() {
 	IcaoDg2 *dg2Impl = icao->readDataGroup2();
 	if (dg2Impl == NULL)
 		return NULL;
-	dg2 = new PTEID_ICAO_DG2(m_context, *dg2Impl);
+	dg2 = new PTEID_ICAO_DG2(m_context, *dg2Impl, icao->getDocumentReport().getDataGroupReport(DG2));
 	END_TRY_CATCH
 	return dg2;
 }
@@ -1319,7 +1361,7 @@ PTEID_ICAO_DG3 *ICAO_Card::readDataGroup3() {
 	IcaoDg3 *impl = icao->readDataGroup3();
 	if (impl == NULL)
 		return NULL;
-	dg3 = new PTEID_ICAO_DG3(m_context, *impl);
+	dg3 = new PTEID_ICAO_DG3(m_context, *impl, icao->getDocumentReport().getDataGroupReport(DG3));
 	END_TRY_CATCH
 	return dg3;
 }
@@ -1332,7 +1374,7 @@ PTEID_ICAO_DG11 *ICAO_Card::readDataGroup11() {
 	if (dg11Impl == NULL)
 		return NULL;
 
-	dg11 = new PTEID_ICAO_DG11(m_context, *dg11Impl);
+	dg11 = new PTEID_ICAO_DG11(m_context, *dg11Impl, icao->getDocumentReport().getDataGroupReport(DG11));
 	END_TRY_CATCH
 	return dg11;
 }
