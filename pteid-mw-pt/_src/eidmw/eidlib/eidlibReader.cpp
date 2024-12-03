@@ -552,16 +552,11 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 
 	out = dynamic_cast<ICAO_Card *>(getObject(INCLUDE_OBJECT_ICAO));
 	if (!out) {
-		SDK_Context context;
-		context.contextid = m_context->contextid;
-		context.reader = static_cast<APL_ReaderContext *>(m_impl);
-		context.cardid = m_cardid;
-		context.mutex = m_context->mutex;
 
 		switch (pimpl->getCardType()) {
 		case APL_CARDTYPE_PTEID_IAS5:
 		case APL_CARDTYPE_ICAO:
-			out = new ICAO_Card(&context, pAplIcao);
+			out = new ICAO_Card(m_context, pAplIcao);
 			break;
 		default:
 			throw PTEID_ExCardTypeUnknown();

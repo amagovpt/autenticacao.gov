@@ -1346,51 +1346,45 @@ PTEID_ICAO_DG2::~PTEID_ICAO_DG2() {
 }
 
 PTEID_ICAO_DG1 *ICAO_Card::readDataGroup1() {
-	PTEID_ICAO_DG1 *dg1;
+	PTEID_ICAO_DG1 *dg1 = NULL;
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
 	auto *dg = icao->readDataGroup1();
-	if (dg == NULL)
-		return NULL;
-
-	dg1 = new PTEID_ICAO_DG1(m_context, *dg, icao->getDocumentReport());
+	if (dg != NULL)
+		dg1 = new PTEID_ICAO_DG1(m_context, *dg, icao->getDocumentReport());
 	END_TRY_CATCH
 	return dg1;
 }
 
 PTEID_ICAO_DG2 *ICAO_Card::readDataGroup2() {
-	PTEID_ICAO_DG2 *dg2;
+	PTEID_ICAO_DG2 *dg2 = NULL;
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
 	IcaoDg2 *dg2Impl = icao->readDataGroup2();
-	if (dg2Impl == NULL)
-		return NULL;
-	dg2 = new PTEID_ICAO_DG2(m_context, *dg2Impl, icao->getDocumentReport());
+	if (dg2Impl != NULL)
+		dg2 = new PTEID_ICAO_DG2(m_context, *dg2Impl, icao->getDocumentReport());
 	END_TRY_CATCH
 	return dg2;
 }
 
 PTEID_ICAO_DG3 *ICAO_Card::readDataGroup3() {
-	PTEID_ICAO_DG3 *dg3;
+	PTEID_ICAO_DG3 *dg3 = NULL;
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
 	IcaoDg3 *impl = icao->readDataGroup3();
-	if (impl == NULL)
-		return NULL;
-	dg3 = new PTEID_ICAO_DG3(m_context, *impl, icao->getDocumentReport());
+	if (impl != NULL)
+		dg3 = new PTEID_ICAO_DG3(m_context, *impl, icao->getDocumentReport());
 	END_TRY_CATCH
 	return dg3;
 }
 
 PTEID_ICAO_DG11 *ICAO_Card::readDataGroup11() {
-	PTEID_ICAO_DG11 *dg11;
+	PTEID_ICAO_DG11 *dg11 = NULL;
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
 	IcaoDg11 *dg11Impl = icao->readDataGroup11();
-	if (dg11Impl == NULL)
-		return NULL;
-
-	dg11 = new PTEID_ICAO_DG11(m_context, *dg11Impl, icao->getDocumentReport());
+	if (dg11Impl != NULL)
+		dg11 = new PTEID_ICAO_DG11(m_context, *dg11Impl, icao->getDocumentReport());
 	END_TRY_CATCH
 	return dg11;
 }
