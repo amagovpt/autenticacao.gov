@@ -261,6 +261,7 @@
 #define EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG 0xe1d01c0B
 #define EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY        0xe1d01c0B
 #define EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION         0xe1d01c0C
+#define EIDMW_SOD_ERR_NO_MASTERLIST 0xe1d01c0D
 
 // Errors related to CVC authentication and Secure Messaging
 #define EIDMW_ERR_CVC_GENERIC_ERROR 0xe1d01f01

@@ -809,9 +809,7 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	logFullSODFile(data);
 	auto csca_store = AppLayer.getCryptoFwk()->getMasterListStore();
 	if (!csca_store) {
-		report.type = EIDMW_ReportType::Error;
-		report.error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
-		return report;
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_NO_MASTERLIST);
 	}
 
 	PKCS7 *p7 = nullptr;

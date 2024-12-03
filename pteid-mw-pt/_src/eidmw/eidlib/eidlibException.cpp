@@ -273,15 +273,18 @@ const char *PTEID_Exception::GetMessage() {
 		case EIDMW_SOD_ERR_INVALID_PKCS7:
 			error_message = "SOD Error: invalid PKCS#7 object";
 			break;
-			case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
-				error_message = "SOD Error: inconsistent MRZ data";
-				break;
-			case EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY:
-				error_message = "SOD Error: inconsistent security object";
-				break;
-			case EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION:
-				error_message = "SOD Error: active authentication failed";
-				break;
+		case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
+			error_message = "SOD Error: inconsistent MRZ data";
+			break;
+		case EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY:
+			error_message = "SOD Error: inconsistent security object";
+			break;
+		case EIDMW_SOD_ERR_NO_MASTERLIST:
+			error_message = "SOD Error: no masterlist file";
+			break;
+		case EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION:
+			error_message = "SOD Error: active authentication failed";
+			break;
 
 		// Errors related to CVC authentication and Secure Messaging
 		case EIDMW_ERR_CVC_GENERIC_ERROR:
