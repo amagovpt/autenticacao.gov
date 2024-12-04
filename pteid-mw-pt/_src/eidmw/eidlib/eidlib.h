@@ -1062,7 +1062,7 @@ public:
 	PTEIDSDK_API ~PTEID_ICAO_DG3();
 	PTEIDSDK_API unsigned int numberOfbiometrics() const;
 	PTEIDSDK_API std::vector<PTEID_BiometricInfomationDg3 *> biometricInformation() const;
-	virtual const PTEID_DataGroupReport *GetReport() const;
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
 
 private:
 	const IcaoDg3 &m_impl;
