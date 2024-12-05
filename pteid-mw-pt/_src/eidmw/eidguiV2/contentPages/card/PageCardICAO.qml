@@ -37,6 +37,7 @@ PageCardICAOForm {
         target: controler
         onLanguageChanged: {
             propertyTextBoxCountry.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.IssuingState), controler.getGuiLanguageString())
+            propertyTextBoxNacionality.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.Nat), controler.getGuiLanguageString())
         }
     }
 
@@ -54,7 +55,7 @@ PageCardICAOForm {
             propertyIsFullNameMrz = gapi.getDataICAOValue(GAPI.IsNameFromMRZ) === "True" ? true : false
             propertyTextBoxSurName.propertyDateField.text = gapi.getDataICAOValue(GAPI.FullName)
             propertyTextBoxSex.propertyDateField.text = gapi.getDataICAOValue(GAPI.Gender)
-            propertyTextBoxNacionality.propertyDateField.text = gapi.getDataICAOValue(GAPI.Nat)
+            propertyTextBoxNacionality.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.Nat), controler.getGuiLanguageString())
             propertyTextBoxDateOfBirth.propertyDateField.text = gapi.getDataICAOValue(GAPI.DateOfBirth)
             propertyTextBoxDocumentNum.propertyDateField.text = gapi.getDataICAOValue(GAPI.DocumentNumber)
             propertyTextBoxExpirydate.propertyDateField.text = gapi.getDataICAOValue(GAPI.DateOfExpiry)
