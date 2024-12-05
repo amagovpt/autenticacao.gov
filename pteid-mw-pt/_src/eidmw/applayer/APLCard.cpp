@@ -864,7 +864,14 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 			BUF_MEM *buf;
 			BIO_get_mem_ptr(bio, &buf);
 			std::cerr << "Document signing certificate:" << '\n' << std::string(buf->data, buf->length) << std::endl;
-			report.signer = CByteArray(buf->data, buf->length);
+			
+			unsigned char *der = nullptr;
+			int len = i2d_X509(signer, &der);
+			if (len > 0) {
+				report.signer = CByteArray(der, len);
+				OPENSSL_free(der);
+			}
+
 			BIO_free(bio);
 		}
 
