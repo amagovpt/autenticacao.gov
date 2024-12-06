@@ -368,7 +368,7 @@ struct EIDMW_DataGroupReport : public EIDMW_Report {
 	CByteArray computedHash;
 };
 
-class EIDMW_CMN_API EIDMW_DocumentReport {
+class EIDMW_DocumentReport {
 public:
 	EIDMW_APL_API void setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report);
 	EIDMW_APL_API const EIDMW_ActiveAuthenticationReport &getActiveAuthenticationReport() const;
