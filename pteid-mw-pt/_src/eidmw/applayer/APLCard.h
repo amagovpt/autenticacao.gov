@@ -335,7 +335,7 @@ class IcaoDg3;
 class IcaoDg11;
 class PhotoPteid;
 enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
-enum class EIDMW_CMN_API EIDMW_ReportType { Success, Error };
+enum class EIDMW_APL_API EIDMW_ReportType { Success, Error };
 
 struct EIDMW_Report {
 	unsigned int error_code = EIDMW_OK;
