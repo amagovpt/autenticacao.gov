@@ -1142,4 +1142,14 @@ CByteArray PaceAuthentication::sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, lo
 void PaceAuthentication::setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType) {
 	return m_impl->setAuthentication(secret, secretLen, secretType);
 }
+
+// Wrappers around OpenPace NIDs for Applayer
+int get_NID_id_CA_ECDH_3DES_CBC_CBC() { return NID_id_CA_ECDH_3DES_CBC_CBC; }
+int get_NID_id_CA_ECDH_AES_CBC_CMAC_128() { return NID_id_CA_ECDH_AES_CBC_CMAC_128; }
+int get_NID_id_CA_ECDH_AES_CBC_CMAC_192() { return NID_id_CA_ECDH_AES_CBC_CMAC_192; }
+int get_NID_id_CA_ECDH_AES_CBC_CMAC_256() { return NID_id_CA_ECDH_AES_CBC_CMAC_256; }
+int get_NID_id_CA_DH_3DES_CBC_CBC() { return NID_id_CA_DH_3DES_CBC_CBC; }
+int get_NID_id_CA_DH_AES_CBC_CMAC_128() { return NID_id_CA_DH_AES_CBC_CMAC_128; }
+int get_NID_id_CA_DH_AES_CBC_CMAC_192() { return NID_id_CA_DH_AES_CBC_CMAC_192; }
+int get_NID_id_CA_DH_AES_CBC_CMAC_256() { return NID_id_CA_DH_AES_CBC_CMAC_256; }
 } // namespace eIDMW

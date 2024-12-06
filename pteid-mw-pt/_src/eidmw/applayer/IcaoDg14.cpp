@@ -2,6 +2,7 @@
 
 #include "Log.h"
 #include "aa_oids.h"
+#include "PaceAuthentication.h"
 
 #if defined(__WINCRYPT_H__)
 #undef X509_NAME
@@ -13,7 +14,6 @@
 #undef OCSP_RESPONSE
 #endif
 
-#include <eac/objects.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/x509.h>
@@ -121,10 +121,10 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 
 ASN1_OBJECT *getChipAuthenticationOid(const CByteArray &dg14_file) {
 	// List of supported NIDs for chip authentication
-	static const int CA_OIDS[] = {NID_id_CA_ECDH_3DES_CBC_CBC,	   NID_id_CA_ECDH_AES_CBC_CMAC_128,
-								  NID_id_CA_ECDH_AES_CBC_CMAC_192, NID_id_CA_ECDH_AES_CBC_CMAC_256,
-								  NID_id_CA_DH_3DES_CBC_CBC,	   NID_id_CA_DH_AES_CBC_CMAC_128,
-								  NID_id_CA_DH_AES_CBC_CMAC_192,   NID_id_CA_DH_AES_CBC_CMAC_256};
+	static const int CA_OIDS[] = {get_NID_id_CA_ECDH_3DES_CBC_CBC(),	 get_NID_id_CA_ECDH_AES_CBC_CMAC_128(),
+								  get_NID_id_CA_ECDH_AES_CBC_CMAC_192(), get_NID_id_CA_ECDH_AES_CBC_CMAC_256(),
+								  get_NID_id_CA_DH_3DES_CBC_CBC(),		 get_NID_id_CA_DH_AES_CBC_CMAC_128(),
+								  get_NID_id_CA_DH_AES_CBC_CMAC_192(),	 get_NID_id_CA_DH_AES_CBC_CMAC_256()};
 
 	auto security_infos = decodeDg14Data(dg14_file);
 	if (!security_infos) {

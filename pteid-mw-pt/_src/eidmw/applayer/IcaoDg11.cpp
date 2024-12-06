@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <string>
+#include <cctype>
 
 namespace eIDMW {
 

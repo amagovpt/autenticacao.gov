@@ -8,6 +8,16 @@
 #include <openssl/types.h>
 
 namespace eIDMW {
+// Wrappers around OpenPace NIDs for Applayer
+EIDMW_CAL_API int get_NID_id_CA_ECDH_3DES_CBC_CBC();
+EIDMW_CAL_API int get_NID_id_CA_ECDH_AES_CBC_CMAC_128();
+EIDMW_CAL_API int get_NID_id_CA_ECDH_AES_CBC_CMAC_192();
+EIDMW_CAL_API int get_NID_id_CA_ECDH_AES_CBC_CMAC_256();
+EIDMW_CAL_API int get_NID_id_CA_DH_3DES_CBC_CBC();
+EIDMW_CAL_API int get_NID_id_CA_DH_AES_CBC_CMAC_128();
+EIDMW_CAL_API int get_NID_id_CA_DH_AES_CBC_CMAC_192();
+EIDMW_CAL_API int get_NID_id_CA_DH_AES_CBC_CMAC_256();
+
 class PaceAuthenticationImpl;
 class EIDMW_CAL_API PaceAuthentication {
 public:
