@@ -5,7 +5,9 @@
 #include "Context.h"
 
 #include <memory>
-#include <openssl/types.h>
+
+typedef struct evp_pkey_st EVP_PKEY;
+typedef struct asn1_object_st ASN1_OBJECT;
 
 namespace eIDMW {
 // Wrappers around OpenPace NIDs for Applayer

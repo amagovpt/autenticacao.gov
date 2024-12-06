@@ -974,9 +974,9 @@ PTEID_RawDataGroup *ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
 
 	BEGIN_TRY_CATCH
 	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
-	auto [_, result] = icao->readDatagroup(static_cast<DataGroupID>(tag));
+	auto result = icao->readDatagroup(static_cast<DataGroupID>(tag));
 
-	PTEID_ByteArray content(m_context, result);
+	PTEID_ByteArray content(m_context, result.second);
 	out = new PTEID_RawDataGroup(m_context, tag, content, icao->getDocumentReport());
 	END_TRY_CATCH;
 

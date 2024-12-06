@@ -41,7 +41,6 @@
 #include "PaceAuthentication.h"
 
 #include <memory>
-#include <openssl/types.h>
 
 namespace eIDMW {
 class APDU;
