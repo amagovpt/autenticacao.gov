@@ -699,22 +699,11 @@ std::pair<EIDMW_DataGroupReport, CByteArray> APL_ICAO::readDatagroup(DataGroupID
 		initializeCard();
 	}
 
-	m_reader->CalLock();
-	try {
+	BEGIN_CAL_OPERATION(m_reader) {
 		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 		out = readFile(DATAGROUP_PATHS.at(tag));
-	} catch (CMWException &e) {
-		m_reader->CalUnlock();
-		if (e.GetError() == EIDMW_ERR_INCOMPATIBLE_READER)
-			throw e;
-
-		return {};
-	} catch (...) {
-		m_reader->CalUnlock();
-		throw;
-		return {};
 	}
-	m_reader->CalUnlock();
+	END_CAL_OPERATION(m_reader);
 
 	// store hashes
 	report.storedHash = m_SodAttributes->get(tag);
