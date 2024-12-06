@@ -851,7 +851,7 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	// failed to verify SOD but we still need the contents
 	if (!sod_verified) {
 		report.type = EIDMW_ReportType::Error;
-		report.error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
+		report.error_code = EIDMW_SOD_ERR_CSCA_VERIFY_FAILED;
 
 		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
 

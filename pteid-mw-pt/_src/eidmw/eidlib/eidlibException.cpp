@@ -287,14 +287,20 @@ std::string CodeToString(long code) {
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
 		error_message = "SOD Error: inconsistent MRZ data";
 		break;
+	case EIDMW_SOD_ERR_CSCA_VERIFY_FAILED:
+		error_message = "SOD Error: CSCA verification failed";
+		break;
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG:
+		error_message = "SOD Error: inconsistent ICAO datagroup";
+		break;
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY:
 		error_message = "SOD Error: inconsistent security object";
 		break;
-	case EIDMW_SOD_ERR_NO_MASTERLIST:
-		error_message = "SOD Error: no masterlist file";
-		break;
 	case EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION:
 		error_message = "SOD Error: active authentication failed";
+		break;
+	case EIDMW_SOD_ERR_NO_MASTERLIST:
+		error_message = "SOD Error: no masterlist file";
 		break;
 
 	// Errors related to CVC authentication and Secure Messaging
