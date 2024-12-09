@@ -15,7 +15,7 @@ Item {
 
     Item{
         id: rectTopLeft
-        width: parent.width - Constants.SIZE_ROW_H_SPACE - Constants.SIZE_IMAGE_LOGO_CC_WIDTH
+        width: parent.width - Constants.SIZE_ROW_H_SPACE - (gapi.hasOnlyICAO() ? Constants.SIZE_IMAGE_LOGO_ICAO_WIDTH : Constants.SIZE_IMAGE_LOGO_CC_WIDTH)
         height: parent.height
     }
     Connections {
@@ -26,8 +26,8 @@ Item {
         onSignalCardChanged: updateIcon()
 
         function updateIcon() {
-            iconImage.width = gapi.hasOnlyICAO() ? 65 : Constants.SIZE_IMAGE_LOGO_CC_WIDTH
-            iconImage.height = gapi.hasOnlyICAO() ? 55 : Constants.SIZE_IMAGE_LOGO_CC_HEIGHT
+            iconImage.width = gapi.hasOnlyICAO() ? Constants.SIZE_IMAGE_LOGO_ICAO_WIDTH : Constants.SIZE_IMAGE_LOGO_CC_WIDTH
+            iconImage.height = gapi.hasOnlyICAO() ? Constants.SIZE_IMAGE_LOGO_ICAO_HEIGHT : Constants.SIZE_IMAGE_LOGO_CC_HEIGHT
             iconImage.source = gapi.hasOnlyICAO() ? "../images/EPassport_logo.svg" : "../images/logo_CC.png"
         }
     }
@@ -44,10 +44,10 @@ Item {
         Image {
             id: iconImage
             antialiasing: true
-            width: gapi.hasOnlyICAO() ? 65 : Constants.SIZE_IMAGE_LOGO_CC_WIDTH
-            height: gapi.hasOnlyICAO() ? 55 : Constants.SIZE_IMAGE_LOGO_CC_HEIGHT
+            width: gapi.hasOnlyICAO() ? SIZE_IMAGE_LOGO_ICAO_WIDTH : Constants.SIZE_IMAGE_LOGO_CC_WIDTH
+            height: gapi.hasOnlyICAO() ? SIZE_IMAGE_LOGO_ICAO_HEIGHT : Constants.SIZE_IMAGE_LOGO_CC_HEIGHT
             source: gapi.hasOnlyICAO() ? "../images/EPassport_logo.svg" : "../images/logo_CC.png"
-
+            fillMode: gapi.hasOnlyICAO() ? Image.PreserveAspectFit : Image.Stretch
         }
     }
 }
