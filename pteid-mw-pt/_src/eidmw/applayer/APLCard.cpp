@@ -840,7 +840,31 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	// failed to verify SOD but we still need the contents
 	if (!sod_verified) {
 		report.type = EIDMW_ReportType::Error;
-		report.error_code = EIDMW_SOD_ERR_CSCA_VERIFY_FAILED;
+
+		// By default. In most cases, should be overwritten by the checks below
+		report.error_code = EIDMW_SOD_ERR_GENERIC_VALIDATION;
+
+		unsigned long err = ERR_peek_last_error();
+		int lib = ERR_GET_LIB(err);
+		int reason = ERR_GET_REASON(err);
+
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL,
+			  "verifySodFileIntegrity:: Error validating SOD signature. OpenSSL errors (%d:%d):\n%s", lib, reason,
+			  error_msg ? error_msg : "N/A");
+		free(error_msg);
+
+		if ((lib == ERR_LIB_X509 && reason == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT) ||
+			(lib == ERR_LIB_PKCS7 && reason == PKCS7_R_CERTIFICATE_VERIFY_ERROR)) {
+			// signer isnt in the CSCA (untrusted)
+			report.error_code = EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER;
+		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNATURE_FAILURE) {
+			// signature is not valid
+			report.error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
+		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNER_CERTIFICATE_NOT_FOUND) {
+			// couldnt find signer
+			report.error_code = EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND;
+		}
 
 		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
 
@@ -862,13 +886,6 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	unsigned char *p;
 	size_t size = BIO_get_mem_data(out, &p);
 	out_sod.Append(p, size);
-
-	if (!sod_verified) {
-		error_msg = Openssl_errors_to_string();
-		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Error validating SOD signature. OpenSSL errors:\n%s",
-			  error_msg != nullptr ? error_msg : "N/A");
-		free(error_msg);
-	}
 
 	BIO_free_all(out);
 	PKCS7_free(p7);

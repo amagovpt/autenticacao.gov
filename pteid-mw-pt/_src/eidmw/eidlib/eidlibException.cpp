@@ -287,8 +287,14 @@ std::string CodeToString(long code) {
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
 		error_message = "SOD Error: inconsistent MRZ data";
 		break;
-	case EIDMW_SOD_ERR_CSCA_VERIFY_FAILED:
-		error_message = "SOD Error: CSCA verification failed";
+	case EIDMW_SOD_ERR_GENERIC_VALIDATION:
+		error_message = "SOD Error: Unable to verify document security features";
+		break;
+	case EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER:
+		error_message = "SOD Error: Document signer certificate not trusted (CSCA not present in MasterList?)";
+		break;
+	case EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND:
+		error_message = "SOD Error: signer certificate missing";
 		break;
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG:
 		error_message = "SOD Error: inconsistent ICAO datagroup";
@@ -431,8 +437,12 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e) {
 	case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
 	case EIDMW_SOD_ERR_INVALID_PKCS7:
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
+	case EIDMW_SOD_ERR_GENERIC_VALIDATION:
+	case EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER:
+	case EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND:
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY:
 	case EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION:
+	case EIDMW_SOD_ERR_NO_MASTERLIST:
 		throw PTEID_ExSOD(e.GetError());
 	case EIDMW_PACE_ERR_BAD_TOKEN:
 	case EIDMW_PACE_ERR_NOT_INITIALIZED:
