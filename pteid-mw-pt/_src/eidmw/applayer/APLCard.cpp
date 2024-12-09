@@ -1001,7 +1001,7 @@ EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
 			return report;
 		} else {
 			MWLOG(LEV_WARN, MOD_APL,
-				  "Error reading DG15! Active Authentication failed. Error code %08x thrown at %s:%ld", e.GetError(),
+				  "Active Authentication failed! Error code %08x thrown at %s:%ld", e.GetError(),
 				  e.GetFile().c_str(), e.GetLine());
 			return report;
 		}
