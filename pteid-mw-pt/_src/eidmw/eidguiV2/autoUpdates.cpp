@@ -18,6 +18,7 @@
 #include <QStandardPaths>
 #include <QList>
 #include <QMap>
+#include <QFile>
 
 #include <fstream>
 #include <sstream>
@@ -148,11 +149,11 @@ static UpdateStatus perform_update_request(const std::string &url, std::string &
 	UpdateStatus status;
 	CURLcode ret = curl_easy_perform(curl);
 	if (ret == CURLE_ABORTED_BY_CALLBACK) {
-		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "autoupdate", "Update request cancelled by user.\n");
+		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "autoupdate", "Update request cancelled by user.");
 		*prog->cancel = false;
 		status = UpdateStatus::cancel;
 	} else if (ret != CURLE_OK) {
-		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "autoupdate", "Error on request %s. Libcurl returned %s\n", url.c_str(),
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "autoupdate", "Error on request %s. Libcurl returned %s", url.c_str(),
 				  error_buffer);
 
 		long auth = 0;
@@ -167,6 +168,11 @@ static UpdateStatus perform_update_request(const std::string &url, std::string &
 		unsigned int response_code;
 		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
 		status = response_code == UPDATES_OK ? UpdateStatus::ok : UpdateStatus::generic_error;
+	}
+
+	if (fp) {
+		//Download is only finished when the file is fully written
+		fflush(fp);
 	}
 
 	// should i cleanup?
@@ -726,25 +732,28 @@ void AutoUpdates::startUpdate(GAPI::AutoUpdateType update_type) {
 		QFileInfo fileInfo(url.path());
 		QString file_name = fileInfo.fileName();
 
-		std::string tmp_file_path = (QDir::tempPath() + "/" + file_name).toStdString();
-		FILE *tmp_file = NULL;
-		if ((tmp_file = fopen(tmp_file_path.c_str(), "wb")) == NULL) {
-			PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AutoUpdates::startUpdate: Unable to save the file.");
+		QFile temp_file(QDir::tempPath() + "/" + file_name);
+
+		if (!temp_file.open(QIODevice::WriteOnly)) {
+			PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+					  "AutoUpdates::startUpdate: Unable to open temp file. Error code: %d", temp_file.error());
 			m_app_controller->signalAutoUpdateFail(update_type, GAPI::UnableSaveFile);
 			return;
 		}
+		int fd = temp_file.handle();
+
+		FILE *fp_tmp_file = fdopen(fd, "wb");
 
 		m_app_controller->signalStartUpdate(update_type, file_name);
 
 		report_progress prog = {m_app_controller, update_type, &userCanceled};
 
 		std::string empty; // TODO: stop doing this please; dont pass an empty string
-		UpdateStatus status = perform_update_request(url.toString().toStdString(), empty, curl, tmp_file, &prog);
-		fclose(tmp_file);
+		UpdateStatus status = perform_update_request(url.toString().toStdString(), empty, curl, fp_tmp_file, &prog);
 		// TODO: report error cases
 		if (status != UpdateStatus::ok) {
 			PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "startUpdate() perform_update_request failed");
-			remove(tmp_file_path.c_str());
+			temp_file.remove();
 			if (status == UpdateStatus::cancel) {
 				m_app_controller->signalAutoUpdateFail(update_type, GAPI::DownloadCancelled);
 				return;

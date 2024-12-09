@@ -11,8 +11,9 @@
 #define AUTOUPDATES_H
 
 #include <QVariant>
-#include <QFile>
 #include <QUrl>
+#include <QString>
+#include <QStringList>
 #include "Settings.h"
 
 #include <cjson/cJSON.h>
