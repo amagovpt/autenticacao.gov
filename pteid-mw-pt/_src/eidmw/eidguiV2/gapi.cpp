@@ -3520,7 +3520,7 @@ void GAPI::doValidateCertificates() {
 	PTEID_Certificates &certificates = card->getCertificates();
 
 	certificatesMap.clear();
-	PTEID_Certificate &auth_cert = certificates.getCert(PTEID_Certificate::CITIZEN_AUTH);
+	PTEID_Certificate &auth_cert = certificates.getAuthentication();
 
 	certificatesMapChildren.insert("OwnerName", auth_cert.getOwnerName());
 	certificatesMapChildren.insert("IssuerName", auth_cert.getIssuerName());
@@ -3532,7 +3532,7 @@ void GAPI::doValidateCertificates() {
 	certificatesMap.insert("level0", certificatesMapChildren);
 	certificatesMapChildren.clear();
 
-	PTEID_Certificate &sign_cert = certificates.getCert(PTEID_Certificate::CITIZEN_SIGN);
+	PTEID_Certificate &sign_cert = certificates.getSignature();
 	certificatesMapChildren.insert("OwnerName", sign_cert.getOwnerName());
 	certificatesMapChildren.insert("IssuerName", sign_cert.getIssuerName());
 	certificatesMapChildren.insert("ValidityBegin", sign_cert.getValidityBegin());

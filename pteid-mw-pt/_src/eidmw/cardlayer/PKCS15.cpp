@@ -84,7 +84,7 @@ void CPKCS15::SetCard(CCard *poCard) { m_poCard = poCard; }
 std::vector<tCert> hardcodedCertificates() {
 	std::vector<tCert> certs = {{true, "CITIZEN AUTHENTICATION CERTIFICATE", 0, 0, 0, 69, false, false, "3F005F00EF02"},
 								{true, "CITIZEN SIGNATURE CERTIFICATE", 0, 0, 0, 70, false, false, "3F005F00EF04"},
-								{true, "ROOT CA", 0, 0, 0, 80, false, false, "3F005F00EF0A"}};
+								{true, "ROOT CA", 0, 0, 0, 80, false, false, ""}};
 
 	return certs;
 }
