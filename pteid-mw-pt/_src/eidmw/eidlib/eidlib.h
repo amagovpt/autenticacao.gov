@@ -722,7 +722,7 @@ public:
 	PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() = 0;
 };
 
-struct EIDMW_DocumentReport;
+class EIDMW_DocumentReport;
 struct EIDMW_ActiveAuthenticationReport;
 struct EIDMW_ChipAuthenticationReport;
 struct EIDMW_SodReport;
