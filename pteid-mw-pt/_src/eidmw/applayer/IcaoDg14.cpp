@@ -121,7 +121,7 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 
 ASN1_OBJECT *getChipAuthenticationOid(const CByteArray &dg14_file) {
 	// List of supported NIDs for chip authentication
-	static const int CA_OIDS[] = {get_NID_id_CA_ECDH_3DES_CBC_CBC(),	 get_NID_id_CA_ECDH_AES_CBC_CMAC_128(),
+	static ASN1_OBJECT* CA_OIDS[] = {get_NID_id_CA_ECDH_3DES_CBC_CBC(),	 get_NID_id_CA_ECDH_AES_CBC_CMAC_128(),
 								  get_NID_id_CA_ECDH_AES_CBC_CMAC_192(), get_NID_id_CA_ECDH_AES_CBC_CMAC_256(),
 								  get_NID_id_CA_DH_3DES_CBC_CBC(),		 get_NID_id_CA_DH_AES_CBC_CMAC_128(),
 								  get_NID_id_CA_DH_AES_CBC_CMAC_192(),	 get_NID_id_CA_DH_AES_CBC_CMAC_256()};
@@ -138,8 +138,7 @@ ASN1_OBJECT *getChipAuthenticationOid(const CByteArray &dg14_file) {
 	for (size_t i = 0; i < security_infos_n; i++) {
 		auto info = sk_SecurityInfo_value(security_infos->infos, i);
 
-		for (int nid : CA_OIDS) {
-			ASN1_OBJECT *std_oid = OBJ_nid2obj(nid);
+		for (auto std_oid : CA_OIDS) {
 			if (std_oid && OBJ_cmp(info->protocol, std_oid) == 0) {
 				found_oid = OBJ_dup(info->protocol);
 				ASN1_OBJECT_free(std_oid);
