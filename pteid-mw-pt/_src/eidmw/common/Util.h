@@ -88,7 +88,7 @@ EIDMW_CMN_API void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *lea
  * Scan the directory and call the call back function for each file corresponding to the extension
  */
 EIDMW_CMN_API void scanDir(const char *Dir, const char *SubDir, const char *ext, bool &bStopRequest, void *param,
-						   std::function<void(const char *SubDir, const char *File, void *param)>);
+						   std::function<void(const char *dir, const char *SubDir, const char *File, void *param)>);
 } // namespace eIDMW
 
 #ifndef WIN32

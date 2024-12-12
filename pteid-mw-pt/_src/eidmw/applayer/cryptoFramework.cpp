@@ -1022,6 +1022,35 @@ bool APL_CryptoFwk::GetOCSPUrl(const CByteArray &cert, std::string &url) {
 	return bOk;
 }
 
+bool APL_CryptoFwk::GetCAIssuerUrl(const CByteArray &cert, std::string &url) {
+	const unsigned char *pucCert = NULL;
+	X509 *pX509 = NULL;
+	char *pUrl = NULL;
+	bool bOk = false;
+
+	// Convert cert into pX509_Cert
+	pucCert = cert.GetBytes();
+	if (!d2i_X509_Wrapper(&pX509, pucCert, cert.Size()))
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+
+	// Get the URL of the OCSP responder
+	pUrl = GetCAIssuersUrl(pX509);
+
+	url.clear();
+
+	if (pUrl && strlen(pUrl) > 0) {
+		bOk = true;
+		url += pUrl;
+	}
+
+	if (pUrl)
+		free(pUrl);
+	if (pX509)
+		X509_free(pX509);
+
+	return bOk;
+}
+
 char *APL_CryptoFwk::GetOCSPUrl(X509 *pX509_Cert) {
 	STACK_OF(ACCESS_DESCRIPTION) *pStack = NULL;
 	const char *pData = NULL;
@@ -1035,6 +1064,35 @@ char *APL_CryptoFwk::GetOCSPUrl(X509 *pX509_Cert) {
 	for (int j = 0; j < sk_ACCESS_DESCRIPTION_num(pStack); j++) {
 		ACCESS_DESCRIPTION *pAccess = sk_ACCESS_DESCRIPTION_value(pStack, j);
 		if (pAccess != NULL && pAccess->method != NULL && OBJ_obj2nid(pAccess->method) == NID_ad_OCSP) {
+			GENERAL_NAME *pName = pAccess->location;
+			if (pName != NULL && pName->type == GEN_URI) {
+				pData = (const char *)ASN1_STRING_get0_data(pName->d.uniformResourceIdentifier);
+				bFound = true;
+				break;
+			}
+		}
+	}
+	sk_ACCESS_DESCRIPTION_free(pStack);
+
+	if (!bFound)
+		return NULL;
+
+	return _strdup(pData);
+}
+
+char *APL_CryptoFwk::GetCAIssuersUrl(X509 *pX509_Cert) {
+	STACK_OF(ACCESS_DESCRIPTION) *pStack = NULL;
+	const char *pData = NULL;
+	bool bFound = false;
+
+	pStack = (STACK_OF(ACCESS_DESCRIPTION) *)X509_get_ext_d2i(pX509_Cert, NID_info_access, NULL, NULL);
+
+	if (pStack == NULL)
+		return _strdup("");
+
+	for (int j = 0; j < sk_ACCESS_DESCRIPTION_num(pStack); j++) {
+		ACCESS_DESCRIPTION *pAccess = sk_ACCESS_DESCRIPTION_value(pStack, j);
+		if (pAccess != NULL && pAccess->method != NULL && OBJ_obj2nid(pAccess->method) == NID_ad_ca_issuers) {
 			GENERAL_NAME *pName = pAccess->location;
 			if (pName != NULL && pName->type == GEN_URI) {
 				pData = (const char *)ASN1_STRING_get0_data(pName->d.uniformResourceIdentifier);

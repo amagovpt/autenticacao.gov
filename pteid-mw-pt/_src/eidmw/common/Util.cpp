@@ -296,7 +296,7 @@ void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRe
 #include "errno.h"
 
 void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param,
-			 std::function<void(const char *, const char *, void *param)> callback) {
+			 std::function<void(const char *, const char *, const char *, void *param)> callback) {
 	std::string path = Dir;
 	std::string subdir;
 
@@ -334,7 +334,7 @@ void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRe
 						// check if the file has the requested extension
 						if (strlen(Ext) == 0 || (file.size() > ext.size() &&
 												 file.compare(file.size() - ext.size(), ext.size(), ext) == 0)) {
-							callback(SubDir, file.c_str(), param);
+							callback(Dir, SubDir, file.c_str(), param);
 						}
 					}
 				} else {

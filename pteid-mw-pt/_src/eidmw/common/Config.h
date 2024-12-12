@@ -345,6 +345,7 @@ public:
 	static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_INSTALL_SDK_DIR;
 	static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CACHEDIR;
 	static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR;
+	static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR_CERTS;
 	static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED;
 	static const struct Param_Num EIDMW_CONFIG_PARAM_GENERAL_PTEID_CAN_CACHE_ENABLED;
 	static const struct Param_Str EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR;

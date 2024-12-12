@@ -49,6 +49,8 @@
 #include "MiscUtil.h"
 #include "APLConfig.h"
 
+#include <sys/stat.h>
+
 #ifdef WIN32
 #include <io.h>
 #endif
@@ -96,8 +98,9 @@ APL_CertifStatus ConvertStatus(FWK_CertifStatus eStatus, APL_ValidationProcess e
 APL_Certifs::APL_Certifs(APL_SmartCard *card) {
 	init(card);
 
-	loadCard();
 	loadFromFile();
+	loadCard();
+	reOrderCerts();
 
 	initSODCAs();
 	defaultSODCertifs = true;
@@ -521,13 +524,43 @@ void APL_Certifs::loadCard() {
 void APL_Certifs::loadFromFile() {
 	bool bStopRequest = false;
 	scanDir(m_certs_dir.c_str(), "", m_certExtension.c_str(), bStopRequest, this, &APL_Certifs::foundCertificate);
-
-	resetFlags();
+	bStopRequest = false;
+	APL_Config cachePath(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR_CERTS);
+	scanDir(cachePath.getString(), "/", m_certExtension.c_str(), bStopRequest, this, &APL_Certifs::foundCertificate);
 }
 
-void APL_Certifs::foundCertificate(const char *SubDir, const char *File, void *param) {
+void APL_Certifs::reOrderCerts() {
+	//reorder certificates auth sign subcasign subcaauth
+	std::vector<unsigned long> cardSubCA;
+	std::vector<unsigned long> cardRoots;
+	APL_Certif *citizenSign;
+	APL_Certif *citizenAuth;
+
+	for (auto uniqueIndex : m_certifsOrder) {
+		auto itr = m_certifs.find(uniqueIndex);
+		APL_Certif *cert = itr->second;
+		if (cert->isRoot()) {
+			cardRoots.push_back(uniqueIndex);
+		} else if (cert->isAuthentication()) {
+			citizenAuth = cert;
+		} else if (cert->isSignature()) {
+			citizenSign = cert;
+		}
+	}
+
+	cardSubCA.push_back(citizenSign->getIssuer()->getUniqueId());
+	cardSubCA.push_back(citizenAuth->getIssuer()->getUniqueId());
+
+	m_certifsOrder.clear();
+	m_certifsOrder.push_back(citizenSign->getUniqueId());
+	m_certifsOrder.push_back(citizenAuth->getUniqueId());
+	m_certifsOrder.insert(m_certifsOrder.end(), cardSubCA.begin(), cardSubCA.end());
+	m_certifsOrder.insert(m_certifsOrder.end(), cardRoots.begin(), cardRoots.end());
+}
+
+void APL_Certifs::foundCertificate(const char *dir, const char *SubDir, const char *File, void *param) {
 	APL_Certifs *certifs = static_cast<APL_Certifs *>(param);
-	std::string path = certifs->m_certs_dir;
+	std::string path = dir;
 	FILE *m_stream;
 	long int bufsize;
 	int result;
@@ -588,7 +621,6 @@ err:
 
 APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert) {
 	APL_Certif *issuer = NULL;
-
 	// First we look in the already loaded
 	std::map<unsigned long, APL_Certif *>::const_iterator itr;
 	for (itr = m_certifs.begin(); itr != m_certifs.end(); itr++) {
@@ -597,7 +629,9 @@ APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert) {
 			return issuer;
 		}
 	}
-	return NULL;
+
+	APL_Certif *downloadedCert = downloadCAIssuerCertificate(cert);
+	return downloadedCert;
 }
 
 APL_Certif *APL_Certifs::findCrlIssuer(const CByteArray &crldata) {
@@ -643,6 +677,43 @@ void APL_Certifs::resetRoots() {
 		cert = itr->second;
 		cert->resetRoot();
 	}
+}
+
+APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
+	std::string caIssuerUrl;
+	m_cryptoFwk->GetCAIssuerUrl(cert->getData(), caIssuerUrl);
+	if (caIssuerUrl.empty())
+		return NULL;
+
+	CRLFetcher crlFetcher;
+	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Trying to download issuer certificate url: %s",
+		  caIssuerUrl.c_str());
+	CByteArray issuerCertificate = crlFetcher.fetch_CRL_file(caIssuerUrl.c_str());
+	if (issuerCertificate.Size() == 0) {
+		issuerCertificate = EmptyByteArray;
+		MWLOG(LEV_ERROR, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");
+	}
+
+	APL_Certif *issuerCertObj = addCert(issuerCertificate);
+	reOrderCerts();
+	if (issuerCertObj != NULL) {
+		APL_Config cachePath(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR_CERTS);
+		struct stat buffer;
+		if (stat(cachePath.getString(), &buffer)) { // build this on windows as well
+			mkdir(cachePath.getString(), 0700);
+		}
+		std::string certPath =
+			std::string(cachePath.getString()) + "/" + issuerCertObj->getSerialNumber() + "." + m_certExtension;
+		FILE *certWrite = fopen(certPath.c_str(), "wb");
+		if (certWrite != NULL) {
+			fwrite(issuerCertificate.GetBytes(), sizeof(unsigned char), issuerCertificate.Size(), certWrite);
+			fclose(certWrite);
+		} else {
+			MWLOG(LEV_ERROR, MOD_APL, L"Error trying to open certificate to write, cert owner name: %s",
+				  issuerCertObj->getOwnerName(), certPath.c_str());
+		}
+	}
+	return issuerCertObj;
 }
 
 APL_SmartCard *APL_Certifs::getCard() { return m_card; }

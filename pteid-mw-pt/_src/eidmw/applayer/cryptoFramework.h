@@ -237,6 +237,12 @@ public:
 	bool GetOCSPUrl(const CByteArray &cert, std::string &url);
 
 	/**
+	  * Return the Url of the CA Issuer
+	  * @return true if CA Issuer found
+	  */
+	bool GetCAIssuerUrl(const CByteArray &cert, std::string &url);
+
+	/**
 	  * Return the signing certificate of the OCSP responder
 	  * @return true if OCSP certificate has the "OCSP No-Check" extension
 	  */
@@ -259,6 +265,12 @@ public:
 	  * The char * buffer is created and must be destroy by the caller
 	  */
 	char *GetOCSPUrl(X509 *pX509_Cert);
+
+	/**
+	  * Return the Url of the CA Issuer
+	  * The char * buffer is created and must be destroy by the caller
+	  */
+	char *GetCAIssuersUrl(X509 *pX509_Cert);
 
 	/**
 	  * Return the CRL distribution point Url

@@ -282,7 +282,7 @@ void CCache::DeleteNonEncryptedFiles() {
 	std::string cachePath = GetCacheDir();
 	bool stopRequest = false;
 	scanDir(cachePath.c_str(), "", CACHE_EXT, stopRequest, &stopRequest,
-			[&](const char *SubDir, const char *File, void *param) {
+			[&](const char *dir, const char *SubDir, const char *File, void *param) {
 				std::string fileFullPath = cachePath + File;
 				remove(fileFullPath.c_str());
 			});
@@ -292,7 +292,7 @@ void CCache::CacheDirIterate(std::function<void(const char *FileName, const char
 	std::string cachePath = GetCacheDir();
 	bool stopRequest = false;
 	scanDir(cachePath.c_str(), "", ENCRYPTED_CACHE_EXT, stopRequest, &stopRequest,
-			[&](const char *SubDir, const char *File, void *param) {
+			[&](const char *dir, const char *SubDir, const char *File, void *param) {
 				std::string fileFullPath = cachePath + File;
 				step(File, fileFullPath.c_str());
 			});

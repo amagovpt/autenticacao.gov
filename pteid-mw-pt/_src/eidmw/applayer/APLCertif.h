@@ -301,11 +301,13 @@ private:
 
 	void loadCard();	 /**< Load all the certificates from the card */
 	void loadFromFile(); /**< Load all the certificates from the certificates directory */
+	void reOrderCerts();
 	void init(APL_SmartCard *card);
 
 	void resetIssuers(); /**< Reset issuer pointer in the certificates from the store */
 	void resetRoots();	 /**< Reset root flag in the certificates from the store */
 
+	APL_Certif *downloadCAIssuerCertificate(const APL_Certif *cert);
 	/**
 	 * This is a callback function for the scanDir
 	 *
@@ -313,7 +315,7 @@ private:
 	 * @param File is the file to threat
 	 * @param param must be this pointer
 	 */
-	static void foundCertificate(const char *SubDir, const char *File, void *param);
+	static void foundCertificate(const char *dir, const char *SubDir, const char *File, void *param);
 
 	APL_SmartCard *m_card;		/**< The smart card from which some certificates come */
 	APL_CryptoFwk *m_cryptoFwk; /**< Pointer to the crypto framework */
