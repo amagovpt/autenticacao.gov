@@ -836,7 +836,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 				cardIcao = &readerContext.getICAOCard();
 
 			} catch (PTEID_Exception err) {
-				qDebug() << "Error while trying to create ICAO Card object! error: " << err.GetError();
+				qDebug() << "Error while trying to create ICAO Card object! error: " << Qt::hex << err.GetError();
 			}
 		}
 	}
@@ -3096,7 +3096,7 @@ bool GAPI::hasOnlyICAO() {
 
 		cardType = readerContext.getCardType();
 	} catch (PTEID_Exception err) {
-		qDebug() << "Not able to get card type!" << "error" << err.GetError();
+		qDebug() << "Not able to get card type! Error code: " << Qt::hex << err.GetError();
 	}
 	return cardType == ICAO_CARDTYPE_MRTD;
 }
@@ -3133,7 +3133,7 @@ bool GAPI::hasICAO() {
 		auto &icaoCard = readerContext.getICAOCard();
 		hasIcao = true;
 	} catch (PTEID_Exception err) {
-		qDebug() << "Expection error: " << err.GetError();
+		qDebug() << "Card failed to read as ICAO doc. Error code: " << Qt::hex << err.GetError();
 	}
 
 	return hasIcao;
@@ -3142,7 +3142,7 @@ bool GAPI::hasICAO() {
 void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 
 	if (card == NULL) {
-		qDebug() << "This ICAO CARD doesn't exist!";
+		qDebug() << "This ICAO card doesn't exist!";
 		return;
 	}
 
@@ -3180,13 +3180,13 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	// Load the photo from PTEID_ICAO_DG2	
 	PTEID_ICAO_DG2* dg2 = card->readDataGroup2();
 	if (!dg2->biometricInstances().empty()) {
-		qDebug() << "Trying to process data group 2";
+		qDebug() << "Trying to process DG2";
 		std::vector<PTEID_BiometricInfomation*> biometric_instances = dg2->biometricInstances();
 		PTEID_BiometricInfomation* instance = biometric_instances.at(0);
 		PTEID_FaceInfo* faceInfo = instance->faceInfo();
 		PTEID_FaceInfoData* faceInfoData = faceInfo->faceInfoData().at(0);
 		unsigned short image_data_type = faceInfoData->imgDataType();
-		qDebug() << image_data_type;
+		qDebug() << "DG2 image data type: " << image_data_type;
 		QPixmap image_photo;
 		if (image_data_type == 1) {
 			// JPEG2000, which needs to be converted to PNG
@@ -3213,7 +3213,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 				cardData[IsNameFromMRZ] = "False";
 			}
 		} catch (PTEID_Exception &err) {
-			qDebug() << "Error while trying to read data group 11! error code: " << err.GetError();
+			qDebug() << "Error while trying to read DG11! Error code: " << Qt::hex << err.GetError();
 		}
 	}
 
