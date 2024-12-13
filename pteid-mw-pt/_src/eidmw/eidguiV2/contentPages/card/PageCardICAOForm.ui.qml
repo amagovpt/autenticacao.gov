@@ -288,14 +288,13 @@ Item {
         anchors.top: rowNamePhoto.bottom
         anchors.topMargin: Constants.SIZE_ROW_V_SPACE
         width: parent.width
-        height: firstColumnInfo.height + secondColumnInfo.height
         ColumnLayout {
             width:  parent.width
             spacing: Constants.SIZE_ROW_V_SPACE
             RowLayout {
                 spacing: Constants.SIZE_ROW_H_SPACE
                 Layout.fillWidth: true
-                height: Constants.HEIGHT_TEXT_BOX
+                Layout.preferredHeight: Constants.HEIGHT_TEXT_BOX
                 Item {
                     id: rectDocumentNum
                     Layout.fillWidth: true
@@ -335,7 +334,7 @@ Item {
             RowLayout {
                 spacing: Constants.SIZE_ROW_H_SPACE
                 Layout.fillWidth: true
-                height: Constants.HEIGHT_TEXT_BOX
+                Layout.preferredHeight: Constants.HEIGHT_TEXT_BOX
                 Item {
                     id: rectDateOfBirth
                     Layout.fillWidth: true
@@ -375,8 +374,7 @@ Item {
             RowLayout {
                 spacing: 0
                 Layout.fillWidth: true
-                height: Constants.HEIGHT_TEXT_BOX
-
+                Layout.preferredHeight: Constants.HEIGHT_TEXT_BOX
                 Item {
                     id: rectNacionality
                     Layout.fillWidth: true
