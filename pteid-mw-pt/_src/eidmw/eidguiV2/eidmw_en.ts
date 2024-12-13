@@ -234,11 +234,11 @@
     </message>
     <message>
         <source>STR_FULL_NAME_MRZ_EXTRACT</source>
-        <translation>Full name extracted from MRZ</translation>
+        <translation>Name of document holder</translation>
     </message>
     <message>
         <source>STR_FULL_NAME</source>
-        <translation>Full name</translation>
+        <translation>Full name of document holder</translation>
     </message>
     <message>
         <source>STR_PHOTO</source>

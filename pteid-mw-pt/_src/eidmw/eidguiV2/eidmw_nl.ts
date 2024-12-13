@@ -232,11 +232,11 @@
     </message>
     <message>
         <source>STR_FULL_NAME_MRZ_EXTRACT</source>
-        <translation>Nome completo extraído do MRZ</translation>
+        <translation>Nome do titular</translation>
     </message>
     <message>
         <source>STR_FULL_NAME</source>
-        <translation>Nome Completo</translation>
+        <translation>Nome completo do titular</translation>
     </message>
     <message>
         <source>STR_PHOTO</source>
