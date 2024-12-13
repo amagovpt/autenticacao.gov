@@ -556,6 +556,11 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 		throw PTEID_ExCardTypeUnknown();
 	}
 
+	if ((!pimpl->isCardContactless() && pimpl->getCardType() == APL_CARDTYPE_PTEID_IAS5) ||
+		(pimpl->getCardType() != APL_CARDTYPE_PTEID_IAS5 && pimpl->getCardType() != APL_CARDTYPE_ICAO)) {
+		throw PTEID_ExCardTypeUnknown();
+	}
+
 	out = dynamic_cast<ICAO_Card *>(getObject(INCLUDE_OBJECT_ICAO));
 
 	if (pimpl->isCardChanged(m_cardIcaoId) && out) {
