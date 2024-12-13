@@ -836,7 +836,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 				cardIcao = &readerContext.getICAOCard();
 
 			} catch (PTEID_Exception err) {
-				qDebug() << "Error while trying to create ICAO Card object! error: " << Qt::hex << err.GetError();
+				qDebug() << "Error while trying to create ICAO Card object! error: " << hex << err.GetError();
 			}
 		}
 	}
@@ -3096,7 +3096,7 @@ bool GAPI::hasOnlyICAO() {
 
 		cardType = readerContext.getCardType();
 	} catch (PTEID_Exception err) {
-		qDebug() << "Not able to get card type! Error code: " << Qt::hex << err.GetError();
+		qDebug() << "Not able to get card type! Error code: " << hex << err.GetError();
 	}
 	return cardType == ICAO_CARDTYPE_MRTD;
 }
@@ -3133,7 +3133,7 @@ bool GAPI::hasICAO() {
 		auto &icaoCard = readerContext.getICAOCard();
 		hasIcao = true;
 	} catch (PTEID_Exception err) {
-		qDebug() << "Card failed to read as ICAO doc. Error code: " << Qt::hex << err.GetError();
+		qDebug() << "Card failed to read as ICAO doc. Error code: " << hex << err.GetError();
 	}
 
 	return hasIcao;
@@ -3213,7 +3213,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 				cardData[IsNameFromMRZ] = "False";
 			}
 		} catch (PTEID_Exception &err) {
-			qDebug() << "Error while trying to read DG11! Error code: " << Qt::hex << err.GetError();
+			qDebug() << "Error while trying to read DG11! Error code: " << hex << err.GetError();
 		}
 	}
 
