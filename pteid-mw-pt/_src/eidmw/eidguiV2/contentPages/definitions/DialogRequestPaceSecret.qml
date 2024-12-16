@@ -124,6 +124,8 @@ Dialog {
 
         onClosed: {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
+        }
+        onRejected: {
             propertyBusyIndicator.running = false
         }
 
