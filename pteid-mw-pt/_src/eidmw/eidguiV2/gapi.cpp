@@ -3095,7 +3095,7 @@ bool GAPI::hasOnlyICAO() {
 		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
 
 		cardType = readerContext.getCardType();
-	} catch (PTEID_Exception err) {
+	} catch (PTEID_Exception &err) {
 		qDebug() << "Not able to get card type! Error code: " << hex << err.GetError();
 	}
 	return cardType == ICAO_CARDTYPE_MRTD;
@@ -3132,7 +3132,7 @@ bool GAPI::hasICAO() {
 		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
 		auto &icaoCard = readerContext.getICAOCard();
 		hasIcao = true;
-	} catch (PTEID_Exception err) {
+	} catch (PTEID_Exception &err) {
 		qDebug() << "Card failed to read as ICAO doc. Error code: " << hex << err.GetError();
 	}
 
