@@ -1408,7 +1408,7 @@ cleanup:
 }
 
 void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CByteArray &pubkey, APL_SmartCard *card) {
-	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
+	MWLOG(LEV_DEBUG, MOD_APL, "Starting %s", __FUNCTION__);
 
 	if (card == nullptr) {
 		card = m_card;

@@ -1756,7 +1756,7 @@ bool APL_EidFile_Sod::MapFields() {
 }
 
 void APL_EidFile_Sod::performActiveAuthentication() {
-	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
+	MWLOG(LEV_DEBUG, MOD_APL, "Active Authentication for national data");
 
 	APL_SmartCard *card = dynamic_cast<APL_SmartCard *>(m_card);
 	card->selectApplication({PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
@@ -1766,7 +1766,7 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 
 	// verify hash of security file with hash in SOD
 	if (!m_cryptoFwk->VerifyHashSha256(secopt_file, m_secOptHash)) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Security option hash does not match with SOD");
+		MWLOG(LEV_ERROR, MOD_APL, "Security option hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
 	}
 
@@ -1776,15 +1776,15 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 
 	// verify hash of public key with hash in SOD
 	if (!m_cryptoFwk->VerifyHashSha256(pubkey_file, m_pkHash)) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Public key hash does not match with SOD");
+		MWLOG(LEV_ERROR, MOD_APL, "Public key hash does not match with SOD");
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
 	}
 
 	// read OID from security file
 	auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
 	if (obj == nullptr) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Failed to find active authentication algorithm OID in security options file!");
-		MWLOG(LEV_ERROR, MOD_APL, L"DG14: %s", secopt_file.ToString(false, false).c_str());
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to find active authentication algorithm OID in security options file!");
+		MWLOG(LEV_ERROR, MOD_APL, "DG14: %s", secopt_file.ToString(false, false).c_str());
 		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
 	}
 

@@ -932,7 +932,7 @@ CByteArray extractPublicKeyFromDG15(CByteArray &dg15_data) {
 EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
 	EIDMW_ActiveAuthenticationReport report;
 
-	MWLOG(LEV_DEBUG, MOD_APL, L"Performing Active Authentication");
+	MWLOG(LEV_DEBUG, MOD_APL, "Active Authentication for ICAO eMRTD");
 
 	auto cryptFwk = AppLayer.getCryptoFwk();
 
