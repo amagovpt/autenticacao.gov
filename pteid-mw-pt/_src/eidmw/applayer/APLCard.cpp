@@ -58,7 +58,6 @@
 
 namespace eIDMW {
 
-
 /*****************************************************************************************
 ---------------------------------------- APL_Card --------------------------------------------
 *****************************************************************************************/
@@ -385,7 +384,6 @@ APL_SmartCard::~APL_SmartCard() {
 		delete m_pins;
 		m_pins = NULL;
 	}
-
 	if (m_certs) {
 		delete m_certs;
 		m_certs = NULL;
@@ -660,6 +658,11 @@ const std::vector<int> APL_ICAO::EXPECTED_TAGS = {
 };
 
 APL_ICAO::~APL_ICAO() {}
+
+void APL_ICAO::resetCardState() {
+	auto reader = m_reader->getCalReader();
+	reader->Disconnect(DISCONNECT_RESET_CARD);
+}
 
 void APL_ICAO::initializeCard() {
 	m_ready = true;
@@ -1000,8 +1003,7 @@ EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
 			MWLOG(LEV_WARN, MOD_APL, "DG15 not found! Active Authentication not available for this document.");
 			return report;
 		} else {
-			MWLOG(LEV_WARN, MOD_APL,
-				  "Active Authentication failed! Error code %08x thrown at %s:%ld", e.GetError(),
+			MWLOG(LEV_WARN, MOD_APL, "Active Authentication failed! Error code %08x thrown at %s:%ld", e.GetError(),
 				  e.GetFile().c_str(), e.GetLine());
 			return report;
 		}

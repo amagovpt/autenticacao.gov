@@ -983,6 +983,13 @@ PTEID_RawDataGroup *ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
 	return out;
 }
 
+void ICAO_Card::resetCardState() {
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	icao->resetCardState();
+	END_TRY_CATCH;
+}
+
 PTEID_ICAO_DG1::PTEID_ICAO_DG1(const SDK_Context *context, const IcaoDg1 &dg1,
 							   const EIDMW_DocumentReport &documentReport)
 	: PTEID_BaseDGReport(context, documentReport), m_impl(dg1) {}

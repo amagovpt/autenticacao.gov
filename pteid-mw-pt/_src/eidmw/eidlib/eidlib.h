@@ -1131,6 +1131,13 @@ public:
 	 Passive Authentication This method needs to be called before readDataGroupRaw() or any other readDataGroup* method
 	 */
 	PTEIDSDK_API virtual void loadMasterList(const char *filePath);
+	/**
+	 * Reset the card state, discarding any Secure Messaging session. This is useful for a multi-application card like PT eID v2
+	 * to be able to access other applications afterwards
+	 * Other methods of ICAO_Card will fail after this call!
+	 */
+	PTEIDSDK_API virtual void resetCardState();
+
 
 protected:
 	ICAO_Card(const SDK_Context *context, APL_ICAO *impl); /**< For internal use : Constructor */

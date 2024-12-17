@@ -412,6 +412,11 @@ public:
 	virtual const char *getTokenLabel() override;
 
 	EIDMW_APL_API virtual const EIDMW_DocumentReport &getDocumentReport();
+	/* In a multi application card this is meant to leave the card ready to access other applications
+	   i.e. reset any SM session previously setup
+	   Important: Don't call any other member function after this!
+	 */
+	EIDMW_APL_API void resetCardState();
 
 private:
 	void initializeCard();
