@@ -32,6 +32,33 @@ size_t CRLFetcher::curl_write_data(char *ptr, size_t size, size_t nmemb, void *s
 }
 
 #ifdef WIN32
+CByteArray CRLFetcher::fetch_Issuer_Cert_file(const char *url) {
+	CByteArray certData;
+	DWORD dwRetrievalFlags = 0;
+	DWORD dwTimeout = 20 * 1000;
+	CERT_CONTEXT *cert_ctx = NULL;
+
+	MWLOG(LEV_DEBUG, MOD_APL, "Downloading Issuer cert %s using CryptRetrieveObjectByUrlA", url);
+
+	BOOL ret = CryptRetrieveObjectByUrlA(url, CONTEXT_OID_CERTIFICATE, dwRetrievalFlags, dwTimeout, (LPVOID *)&cert_ctx,
+										 NULL, NULL, NULL, NULL);
+	if (!ret) {
+		MWLOG(LEV_ERROR, MOD_APL, "Error fetching Issuer cert! CryptRetrieveObjectByUrlA error code: %08x",
+			  GetLastError());
+	} else {
+		if (cert_ctx->dwCertEncodingType & X509_ASN_ENCODING) {
+			MWLOG(LEV_DEBUG, MOD_APL, "Successfully fetched %d bytes of issuer cert content", cert_ctx->cbCertEncoded);
+			certData.Append(cert_ctx->pbCertEncoded, cert_ctx->cbCertEncoded);
+		} else {
+			MWLOG(LEV_ERROR, MOD_APL,
+				  "CRLFetcher: unexpected encoding in CERT_CONTEXT object! This should never happen...");
+		}
+		CertFreeCertificateContext(cert_ctx);
+	}
+
+	return certData;
+}
+
 CByteArray CRLFetcher::fetch_CRL_file(const char *url) {
 	CByteArray crl_data;
 

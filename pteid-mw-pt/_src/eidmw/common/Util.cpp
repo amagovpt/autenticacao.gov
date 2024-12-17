@@ -238,7 +238,7 @@ void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dw
 #ifdef WIN32
 
 void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param,
-			 std::function<void(const char *, const char *, void *param)> callback) {
+			 std::function<void(const char *, const char *, const char *, void *param)> callback) {
 	WIN32_FIND_DATAA FindFileData;
 	std::string path;
 	std::string subdir;
@@ -275,7 +275,7 @@ void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRe
 				if (strlen(Ext) == 0 ||
 					(file.size() > ext.size() && file.compare(file.size() - ext.size(), ext.size(), ext) == 0)) {
 
-					callback(SubDir, FindFileData.cFileName, param);
+					callback(Dir, SubDir, FindFileData.cFileName, param);
 				}
 			}
 

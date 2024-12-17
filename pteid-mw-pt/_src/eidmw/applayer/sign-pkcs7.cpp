@@ -507,7 +507,7 @@ CByteArray computeHash_pkcs7(unsigned char *data, unsigned long dataLen, CByteAr
 
 	PKCS7_add_certificate(p7, x509);
 
-	if (card != NULL) {
+	if (card != NULL && card->getType() != APL_CARDTYPE_PTEID_IAS5) {
 		addCardCertificateChain(p7, card);
 	} else {
 		// For non-card signatures we need to add the supplied CA certificates

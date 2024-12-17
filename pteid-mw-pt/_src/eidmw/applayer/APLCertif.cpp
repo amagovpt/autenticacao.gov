@@ -548,8 +548,10 @@ void APL_Certifs::reOrderCerts() {
 		}
 	}
 
-	cardSubCA.push_back(citizenSign->getIssuer()->getUniqueId());
-	cardSubCA.push_back(citizenAuth->getIssuer()->getUniqueId());
+	if (citizenSign->getIssuer())
+		cardSubCA.push_back(citizenSign->getIssuer()->getUniqueId());
+	if (citizenAuth->getIssuer())
+		cardSubCA.push_back(citizenAuth->getIssuer()->getUniqueId());
 
 	m_certifsOrder.clear();
 	m_certifsOrder.push_back(citizenSign->getUniqueId());
@@ -630,7 +632,10 @@ APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert) {
 		}
 	}
 
-	APL_Certif *downloadedCert = downloadCAIssuerCertificate(cert);
+	APL_Certif *downloadedCert = NULL;
+	if (m_card->getType() == APL_CARDTYPE_PTEID_IAS5)
+		downloadedCert = downloadCAIssuerCertificate(cert);
+
 	return downloadedCert;
 }
 
@@ -688,7 +693,12 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 	CRLFetcher crlFetcher;
 	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Trying to download issuer certificate url: %s",
 		  caIssuerUrl.c_str());
-	CByteArray issuerCertificate = crlFetcher.fetch_CRL_file(caIssuerUrl.c_str());
+	CByteArray issuerCertificate;
+#ifdef WIN32
+	issuerCertificate = crlFetcher.fetch_Issuer_Cert_file(caIssuerUrl.c_str());
+#else
+	issuerCertificate = crlFetcher.fetch_CRL_file(caIssuerUrl.c_str());
+#endif
 	if (issuerCertificate.Size() == 0) {
 		issuerCertificate = EmptyByteArray;
 		MWLOG(LEV_ERROR, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");
@@ -697,11 +707,16 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 	APL_Certif *issuerCertObj = addCert(issuerCertificate);
 	reOrderCerts();
 	if (issuerCertObj != NULL) {
+#ifdef WIN32
+		APL_Config cachePath(CConfig::isTestModeEnabled() ? CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST
+														  : CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR);
+#else
 		APL_Config cachePath(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR_CERTS);
 		struct stat buffer;
-		if (stat(cachePath.getString(), &buffer)) { // build this on windows as well
+		if (stat(cachePath.getString(), &buffer)) {
 			mkdir(cachePath.getString(), 0700);
 		}
+#endif
 		std::string certPath =
 			std::string(cachePath.getString()) + "/" + issuerCertObj->getSerialNumber() + "." + m_certExtension;
 		FILE *certWrite = fopen(certPath.c_str(), "wb");
