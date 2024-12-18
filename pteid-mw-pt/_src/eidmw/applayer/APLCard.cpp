@@ -661,7 +661,10 @@ APL_ICAO::~APL_ICAO() {}
 
 void APL_ICAO::resetCardState() {
 	auto reader = m_reader->getCalReader();
-	reader->Disconnect(DISCONNECT_RESET_CARD);
+	unsigned char apdu_break_sm[] = {0x0C, 0xA4, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+	reader->SendAPDU(CByteArray(apdu_break_sm, sizeof(apdu_break_sm)));
+
 }
 
 void APL_ICAO::initializeCard() {
