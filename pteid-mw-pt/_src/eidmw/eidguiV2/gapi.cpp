@@ -3422,20 +3422,15 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 			//------------------------------------
 			// send an event to the main app to show the popup message
 			//------------------------------------
-			PTEID_CardType cardType = readerContext.getCardType();
-			if (cardType == ICAO_CARDTYPE_MRTD) {
-				pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_ICAO);
-				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_ICAO);
-			} else {
-				pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_CHANGED);
-				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
-			}
+			pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_CHANGED);
+			pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
 			pCallBackData->getMainWnd()->setAddressLoaded(false);
 			pCallBackData->getMainWnd()->resetReaderSelected();
 
 			//------------------------------------
 			// register certificates when needed
 			//------------------------------------
+			PTEID_CardType cardType = readerContext.getCardType();
 			if (pCallBackData->getMainWnd()->m_Settings.getRegCert()) {
 				switch (cardType) {
 				case PTEID_CARDTYPE_IAS101:

@@ -334,7 +334,7 @@ public:
 
 	enum PrintMessage { NoPrinterAvailable };
 
-	enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED, ET_CARD_ICAO};
+	enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED};
 
 	enum AutoUpdateMessage {
 		GenericError,
