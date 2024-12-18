@@ -3205,9 +3205,11 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	}
 
 	setDataCardICAO(cardData);
-	//Make the card ready to read other applications
-	card->resetCardState();
-	resetContactlessState();
+	if (!m_hasOnlyIcao) {
+		//Make the card ready to access other applications
+		card->resetCardState();
+		resetContactlessState();
+	}
 }
 
 QString GAPI::convertDate(const QString& date) {
