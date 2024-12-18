@@ -110,7 +110,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeacMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeac.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL%\lib;..\_Binaries35\$(Platform)\$(Configuration);%PTEID_DIR_OPEN_PACE%\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -142,7 +142,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeacMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeac.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL_X64%\lib;..\_Binaries35\$(Platform)\$(Configuration);%PTEID_DIR_OPEN_PACE%\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -169,7 +169,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeacMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;pteidDlgsWin32.lib;Crypt32.lib;pteidcommon.lib;winscard.lib;libeac.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL%\lib;..\_Binaries35\$(Platform)\$(Configuration);%PTEID_DIR_OPEN_PACE%\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -201,7 +201,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;Crypt32.lib;pteidDlgsWin32.lib;pteidcommon.lib;winscard.lib;libeacMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;setupapi.lib;WS2_32.Lib;Crypt32.lib;pteidDlgsWin32.lib;pteidcommon.lib;winscard.lib;libeac.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>%PTEID_DIR_OPENSSL_X64%\lib;..\_Binaries35\$(Platform)\$(Configuration);%PTEID_DIR_OPEN_PACE%\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
