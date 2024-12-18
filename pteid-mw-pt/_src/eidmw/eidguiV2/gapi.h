@@ -659,6 +659,7 @@ signals:
 	void signalShowMessage(QString msg, QString urlLink);
 	void signalOpenFile();
 	void signalSignatureFinished();
+	void aboutToSignalCardChanged(const int error_code);
 	void signalCardChanged(const int error_code);
 	void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage, bool success);
 	void signalCertificatesChanged(const QVariantMap certificatesMap);
@@ -817,7 +818,8 @@ private:
 
 	WindowGeometry m_wndGeometry;
 	QWindow *m_mainWnd;
-
+	bool m_hasIcao = false;
+	bool m_hasOnlyIcao = false;
 	QString g_systemArchitecture;
 
 protected:

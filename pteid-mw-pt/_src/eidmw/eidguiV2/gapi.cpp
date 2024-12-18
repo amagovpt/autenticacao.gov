@@ -343,6 +343,45 @@ GAPI::GAPI(GUISettings &settings, QObject *parent) : QObject(parent), m_Settings
 	m_timerReaderList = new QTimer(this);
 	connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
 	m_timerReaderList->start(TIMERREADERLIST);
+	connect(
+		this, &GAPI::aboutToSignalCardChanged, this,
+		[this](const int errorCode) {
+			if (errorCode == ET_CARD_REMOVED) {
+				m_hasIcao = false;
+				m_hasOnlyIcao = false;
+				return;
+			}
+			unsigned long ReaderCount = 0;
+			unsigned long ReaderIdx = 0;
+			unsigned long tempReaderIndex = 0;
+			PTEID_CardType cardType = PTEID_CARDTYPE_UNKNOWN;
+			try {
+				ReaderCount = ReaderSet.readerCount();
+				if (ReaderCount == 0) {
+					m_hasIcao = false;
+					m_hasOnlyIcao = false;
+				}
+				for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+					PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+					if (readerContext.isCardPresent()) {
+						tempReaderIndex = ReaderIdx;
+						break;
+					}
+				}
+
+				PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+				cardType = readerContext.getCardType();
+				m_hasOnlyIcao = cardType == ICAO_CARDTYPE_MRTD;
+				m_hasIcao = ((cardType == PTEID_CARDTYPE_IAS5) &&
+							 readerContext.getCardContactInterface() == PTEID_CARD_CONTACTLESS) ||
+							m_hasOnlyIcao;
+			} catch (PTEID_Exception &err) {
+				qDebug() << "Not able to get card type! Error code: " << hex << err.GetError();
+				m_hasOnlyIcao = false;
+				m_hasIcao = false;
+			}
+		},
+		Qt::DirectConnection);
 
 	ScapCredentials scap_credentials = {SCAP_BASIC_AUTH_USERID, SCAP_BASIC_AUTH_PASSWORD, get_scap_app_id()};
 	m_scap_client = new ScapClient(scap_credentials);
@@ -3073,33 +3112,7 @@ QVariantList GAPI::getRetReaderList() {
 	return list;
 }
 
-bool GAPI::hasOnlyICAO() {
-	unsigned long ReaderCount = 0;
-	unsigned long ReaderIdx = 0;
-	unsigned long tempReaderIndex = 0;
-	PTEID_CardType cardType = PTEID_CARDTYPE_UNKNOWN;
-	try {
-		ReaderCount = ReaderSet.readerCount();
-		if (ReaderCount == 0) {
-			return false;
-		}
-
-		for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
-			PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
-			if (readerContext.isCardPresent()) {
-				tempReaderIndex = ReaderIdx;
-				break;
-			}
-		}
-
-		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
-
-		cardType = readerContext.getCardType();
-	} catch (PTEID_Exception &err) {
-		qDebug() << "Not able to get card type! Error code: " << hex << err.GetError();
-	}
-	return cardType == ICAO_CARDTYPE_MRTD;
-}
+bool GAPI::hasOnlyICAO() { return m_hasOnlyIcao; }
 
 int GAPI::getReaderIndex(void) {
 	qDebug() << "GAPI::getReaderIndex!" << selectedReaderIndex;
@@ -3110,34 +3123,7 @@ int GAPI::getReaderIndex(void) {
 	return 0;
 }
 
-bool GAPI::hasICAO() {
-	unsigned long ReaderCount = 0;
-	unsigned long ReaderIdx = 0;
-	unsigned long tempReaderIndex = 0;
-	bool hasIcao = false;
-	try {
-		ReaderCount = ReaderSet.readerCount();
-		if (ReaderCount == 0) {
-			return false;
-		}
-
-		for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
-			PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
-			if (readerContext.isCardPresent()) {
-				tempReaderIndex = ReaderIdx;
-				break;
-			}
-		}
-
-		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
-		auto &icaoCard = readerContext.getICAOCard();
-		hasIcao = true;
-	} catch (PTEID_Exception &err) {
-		qDebug() << "Card failed to read as ICAO doc. Error code: " << hex << err.GetError();
-	}
-
-	return hasIcao;
-}
+bool GAPI::hasICAO() { return m_hasIcao; }
 
 void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 
@@ -3415,8 +3401,10 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 			// send an event to the main app to show the popup message
 			//------------------------------------
 			if (pCallBackData->getMainWnd()->returnReaderSelected() != -1) {
+				pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_CHANGED);
 				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
 			} else {
+				pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_REMOVED);
 				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_REMOVED);
 			}
 			pCallBackData->getMainWnd()->setAddressLoaded(false);
@@ -3435,8 +3423,10 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 			//------------------------------------
 			PTEID_CardType cardType = readerContext.getCardType();
 			if (cardType == ICAO_CARDTYPE_MRTD) {
+				pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_ICAO);
 				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_ICAO);
 			} else {
+				pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_CHANGED);
 				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
 			}
 			pCallBackData->getMainWnd()->setAddressLoaded(false);
@@ -3534,7 +3524,8 @@ void GAPI::setEventCallbacks(void) {
 			m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback, pCBData);
 			m_callBackData[readerName] = pCBData;
 		}
-	} catch (PTEID_Exception&)  {
+	} catch (PTEID_Exception &e) {
+		emit aboutToSignalCardChanged(ET_UNKNOWN);
 		emit signalCardChanged(ET_UNKNOWN);
 	}
 }
