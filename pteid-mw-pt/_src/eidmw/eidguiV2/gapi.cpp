@@ -370,6 +370,7 @@ GAPI::GAPI(GUISettings &settings, QObject *parent) : QObject(parent), m_Settings
 				}
 
 				PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+				readerContext.getICAOCard();
 				cardType = readerContext.getCardType();
 				m_hasOnlyIcao = cardType == ICAO_CARDTYPE_MRTD;
 				m_hasIcao = ((cardType == PTEID_CARDTYPE_IAS5) &&
