@@ -269,19 +269,17 @@ BOOL check_nonnull_objects(int n, ...) {
 	uint8_t fileid_auth_ca_cert[] = {0xef, 0x10};
 	uint8_t fileid_sign_ca_cert[] = {0xef, 0x0F};
 
-	uint8_t fileid_auth_ca_cert_cc2[] = {0xef, 0x06};
-	uint8_t fileid_sign_ca_cert_cc2[] = {0xef, 0x08};
-
 	_card_type = getAppletVersion(smartCard, error);
 
 	NSLog(@"card type read= %lu", _card_type);
+    bool isCC2 = _card_type > CARD_IAS_V4;
 
 	instanceID = readCardSerialNumber(smartCard, _card_type, error);
 	NSData *cert_file_id1 = nil;
 	NSData *cert_file_id2 = nil;
 	NSData *cert_file_id3 = nil;
 	NSData *cert_file_id4 = nil;
-	if (_card_type <= CARD_IAS_V4) {
+	if (!isCC2) {
 		cert_file_id1 = [NSData dataWithBytes:fileid_auth_cert length:sizeof fileid_auth_cert];
 		cert_file_id2 = [NSData dataWithBytes:fileid_sign_cert length:sizeof fileid_sign_cert];
 		cert_file_id3 = [NSData dataWithBytes:fileid_auth_ca_cert length:sizeof fileid_auth_ca_cert];
@@ -289,8 +287,6 @@ BOOL check_nonnull_objects(int n, ...) {
 	} else {
 		cert_file_id1 = [NSData dataWithBytes:fileid_auth_cert_cc2 length:sizeof fileid_auth_cert_cc2];
 		cert_file_id2 = [NSData dataWithBytes:fileid_sign_cert_cc2 length:sizeof fileid_sign_cert_cc2];
-		cert_file_id3 = [NSData dataWithBytes:fileid_auth_ca_cert_cc2 length:sizeof fileid_auth_ca_cert_cc2];
-		cert_file_id4 = [NSData dataWithBytes:fileid_sign_ca_cert_cc2 length:sizeof fileid_sign_ca_cert_cc2];
 		uint8_t df_id_5f00[] = {0x5f, 0x00};
 		NSData *df_id = [NSData dataWithBytes:df_id_5f00 length:sizeof df_id_5f00];
 		// Select 5F00 DF
@@ -307,10 +303,17 @@ BOOL check_nonnull_objects(int n, ...) {
 
 		NSData *cert_file_auth = readCompleteFile(smartCard, cert_file_id1, error);
 		NSData *cert_file_sign = readCompleteFile(smartCard, cert_file_id2, error);
-		NSData *cert_file_ca_auth = readCompleteFile(smartCard, cert_file_id3, error);
-		NSData *cert_file_ca_sign = readCompleteFile(smartCard, cert_file_id4, error);
-
-		if (check_nonnull_objects(4, cert_file_auth, cert_file_sign, cert_file_ca_auth, cert_file_ca_sign)) {
+        NSData *cert_file_ca_sign = nil;
+        NSData *cert_file_ca_auth = nil;
+        if (cert_file_id3 != nil) {
+            cert_file_ca_auth = readCompleteFile(smartCard, cert_file_id3, error);
+        }
+        if (cert_file_id4 != nil) {
+            cert_file_ca_sign = readCompleteFile(smartCard, cert_file_id4, error);
+        }
+        
+        if (isCC2 ? check_nonnull_objects(2, cert_file_auth, cert_file_sign) :
+            check_nonnull_objects(4, cert_file_auth, cert_file_sign, cert_file_ca_sign, cert_file_ca_auth)) {
 			NSLog(@"Read certificates files with size: %lu, %lu bytes", [cert_file_auth length],
 				  [cert_file_sign length]);
 			if (![self populateIdentityFromSmartCard:smartCard
@@ -334,29 +337,30 @@ BOOL check_nonnull_objects(int n, ...) {
 												sign:YES
 									   keyManagement:NO
 								  alwaysAuthenticate:YES
-											   error:error] ||
-				![self populateIdentityFromSmartCard:smartCard
-												into:items
-												data:cert_file_ca_sign
-									  certificateTag:0xEF0F
-												name:@"SIGNATURE SUBCA CERTIFICATE"
-											  keyTag:0
-												name:@"NO_KEY"
-												sign:NO
-									   keyManagement:NO
-								  alwaysAuthenticate:NO
-											   error:error] ||
-				![self populateIdentityFromSmartCard:smartCard
-												into:items
-												data:cert_file_ca_auth
-									  certificateTag:0xEF10
-												name:@"AUTHENTICATION SUBCA CERTIFICATE"
-											  keyTag:0
-												name:@"NO_KEY"
-												sign:NO
-									   keyManagement:NO
-								  alwaysAuthenticate:NO
-											   error:error]) {
+											   error:error] || (!isCC2 && (
+                ![self populateIdentityFromSmartCard:smartCard
+                                                    into:items
+                                                    data:cert_file_ca_sign
+                                          certificateTag:0xEF0F
+                                                    name:@"SIGNATURE SUBCA CERTIFICATE"
+                                                  keyTag:0
+                                                    name:@"NO_KEY"
+                                                    sign:NO
+                                           keyManagement:NO
+                                      alwaysAuthenticate:NO
+                                                   error:error] ||
+                    ![self populateIdentityFromSmartCard:smartCard
+                                                    into:items
+                                                    data:cert_file_ca_auth
+                                          certificateTag:0xEF10
+                                                    name:@"AUTHENTICATION SUBCA CERTIFICATE"
+                                                  keyTag:0
+                                                    name:@"NO_KEY"
+                                                    sign:NO
+                                           keyManagement:NO
+                                      alwaysAuthenticate:NO
+                                                   error:error])))
+                {
 				NSLog(@"Failed to populate Identity from smartcard (1)! Error: %@", *error);
 				return nil;
 			}
