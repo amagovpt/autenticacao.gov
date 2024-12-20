@@ -32,60 +32,28 @@ size_t CRLFetcher::curl_write_data(char *ptr, size_t size, size_t nmemb, void *s
 }
 
 #ifdef WIN32
-CByteArray CRLFetcher::fetch_Issuer_Cert_file(const char *url) {
-	CByteArray certData;
-	DWORD dwRetrievalFlags = 0;
-	DWORD dwTimeout = 20 * 1000;
-	CERT_CONTEXT *cert_ctx = NULL;
-
-	MWLOG(LEV_DEBUG, MOD_APL, "Downloading Issuer cert %s using CryptRetrieveObjectByUrlA", url);
-
-	BOOL ret = CryptRetrieveObjectByUrlA(url, CONTEXT_OID_CERTIFICATE, dwRetrievalFlags, dwTimeout, (LPVOID *)&cert_ctx,
-										 NULL, NULL, NULL, NULL);
-	if (!ret) {
-		MWLOG(LEV_ERROR, MOD_APL, "Error fetching Issuer cert! CryptRetrieveObjectByUrlA error code: %08x",
-			  GetLastError());
-	} else {
-		if (cert_ctx->dwCertEncodingType & X509_ASN_ENCODING) {
-			MWLOG(LEV_DEBUG, MOD_APL, "Successfully fetched %d bytes of issuer cert content", cert_ctx->cbCertEncoded);
-			certData.Append(cert_ctx->pbCertEncoded, cert_ctx->cbCertEncoded);
-		} else {
-			MWLOG(LEV_ERROR, MOD_APL,
-				  "CRLFetcher: unexpected encoding in CERT_CONTEXT object! This should never happen...");
-		}
-		CertFreeCertificateContext(cert_ctx);
-	}
-
-	return certData;
-}
-
 CByteArray CRLFetcher::fetch_CRL_file(const char *url) {
-	CByteArray crl_data;
-
-	DWORD dwRetrievalFlags = 0;
-	// Timeout in milliseconds
+	CByteArray certData;
 	DWORD dwTimeout = 20 * 1000;
-	CRL_CONTEXT *crl_ctx = NULL;
-	MWLOG(LEV_DEBUG, MOD_APL, "Downloading CRL %s using CryptRetrieveObjectByUrl", url);
+	CRYPT_BLOB_ARRAY *file_ctx = NULL;
 
-	BOOL ret = CryptRetrieveObjectByUrlA(url, CONTEXT_OID_CRL, dwRetrievalFlags, dwTimeout, (LPVOID *)&crl_ctx, NULL,
-										 NULL, NULL, NULL);
+	MWLOG(LEV_DEBUG, MOD_APL, "Downloading file %s using CryptRetrieveObjectByUrlA", url);
 
+	BOOL ret = CryptRetrieveObjectByUrlA(url, NULL, NULL, dwTimeout, (LPVOID *)&file_ctx, NULL, NULL, NULL, NULL);
 	if (!ret) {
-		MWLOG(LEV_ERROR, MOD_APL, "Error fetching CRL! CryptRetrieveObjectByUrl error code: %08x", GetLastError());
-
+		MWLOG(LEV_ERROR, MOD_APL, "Error fetching file! CryptRetrieveObjectByUrlA error code: %08x", GetLastError());
 	} else {
-		if (crl_ctx->dwCertEncodingType & X509_ASN_ENCODING) {
-			MWLOG(LEV_DEBUG, MOD_APL, "Successfully fetched %d bytes of CRL content", crl_ctx->cbCrlEncoded);
-			crl_data.Append(crl_ctx->pbCrlEncoded, crl_ctx->cbCrlEncoded);
-		} else {
+		if (file_ctx->cBlob != 1) {
 			MWLOG(LEV_ERROR, MOD_APL,
-				  "CRLFetcher: unexpected encoding in CRL_CONTEXT object! This should never happen...");
+				  "CRLFetcher: unexpected number of objects on the array: %d objects! This should never happen...",
+				  file_ctx->cBlob);
+		} else {
+			MWLOG(LEV_DEBUG, MOD_APL, "Successfully fetched %d bytes of file", file_ctx->rgBlob->cbData);
+			certData.Append(file_ctx->rgBlob->pbData, file_ctx->rgBlob->cbData);
 		}
-		CertFreeCRLContext(crl_ctx);
 	}
-
-	return crl_data;
+	CryptMemFree(file_ctx);
+	return certData;
 }
 
 #else

@@ -694,11 +694,7 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Trying to download issuer certificate url: %s",
 		  caIssuerUrl.c_str());
 	CByteArray issuerCertificate;
-#ifdef WIN32
-	issuerCertificate = crlFetcher.fetch_Issuer_Cert_file(caIssuerUrl.c_str());
-#else
 	issuerCertificate = crlFetcher.fetch_CRL_file(caIssuerUrl.c_str());
-#endif
 	if (issuerCertificate.Size() == 0) {
 		issuerCertificate = EmptyByteArray;
 		MWLOG(LEV_ERROR, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");

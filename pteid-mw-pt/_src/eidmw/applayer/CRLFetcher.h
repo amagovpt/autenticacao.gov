@@ -12,9 +12,6 @@ namespace eIDMW {
 class CRLFetcher {
 public:
 	CByteArray fetch_CRL_file(const char *url);
-#ifdef WIN32
-	CByteArray fetch_Issuer_Cert_file(const char *crl_url);
-#endif
 
 private:
 	static size_t curl_write_data(char *, size_t, size_t, void *);
