@@ -119,37 +119,40 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 	return pkey;
 }
 
-ASN1_OBJECT *getChipAuthenticationOid(const CByteArray &dg14_file) {
+OID_INFO getChipAuthenticationOid(const CByteArray &dg14_file) {
 	// List of supported NIDs for chip authentication
-	static ASN1_OBJECT* CA_OIDS[] = {get_NID_id_CA_ECDH_3DES_CBC_CBC(),	 get_NID_id_CA_ECDH_AES_CBC_CMAC_128(),
-								  get_NID_id_CA_ECDH_AES_CBC_CMAC_192(), get_NID_id_CA_ECDH_AES_CBC_CMAC_256(),
-								  get_NID_id_CA_DH_3DES_CBC_CBC(),		 get_NID_id_CA_DH_AES_CBC_CMAC_128(),
-								  get_NID_id_CA_DH_AES_CBC_CMAC_192(),	 get_NID_id_CA_DH_AES_CBC_CMAC_256()};
+	static OID_INFO CA_OIDS[] = {get_id_CA_ECDH_3DES_CBC_CBC(),		get_id_CA_ECDH_AES_CBC_CMAC_128(),
+								 get_id_CA_ECDH_AES_CBC_CMAC_192(), get_id_CA_ECDH_AES_CBC_CMAC_256(),
+								 get_id_CA_DH_3DES_CBC_CBC(),		get_id_CA_DH_AES_CBC_CMAC_128(),
+								 get_id_CA_DH_AES_CBC_CMAC_192(),	get_id_CA_DH_AES_CBC_CMAC_256()};
 
 	auto security_infos = decodeDg14Data(dg14_file);
 	if (!security_infos) {
 		MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to decode DG14 Security Options structure!", __FUNCTION__);
-		return NULL;
+		return {nullptr, 0, nullptr};
 	}
 
-	ASN1_OBJECT *found_oid = nullptr;
+	OID_INFO found_oid = {};
 
 	size_t security_infos_n = sk_SecurityInfo_num(security_infos->infos);
 	for (size_t i = 0; i < security_infos_n; i++) {
 		auto info = sk_SecurityInfo_value(security_infos->infos, i);
 
 		for (auto std_oid : CA_OIDS) {
-			if (std_oid && OBJ_cmp(info->protocol, std_oid) == 0) {
-				found_oid = OBJ_dup(info->protocol);
-				ASN1_OBJECT_free(std_oid);
+			if (std_oid.object && OBJ_cmp(info->protocol, std_oid.object) == 0) {
+				found_oid = std_oid;
+				found_oid.object = OBJ_dup(info->protocol);
+
+				ASN1_OBJECT_free(std_oid.object);
 				break;
 			}
-			if (std_oid) {
-				ASN1_OBJECT_free(std_oid);
+
+			if (std_oid.object) {
+				ASN1_OBJECT_free(std_oid.object);
 			}
 		}
 
-		if (found_oid) {
+		if (found_oid.object) {
 			break;
 		}
 	}

@@ -1143,13 +1143,22 @@ void PaceAuthentication::setAuthentication(const char *secret, size_t secretLen,
 	return m_impl->setAuthentication(secret, secretLen, secretType);
 }
 
+OID_INFO get_oid_info(int nid) {
+	OID_INFO info = {};
+	info.nid = nid;
+	info.object = OBJ_nid2obj(nid);
+	info.short_name = OBJ_nid2sn(nid);
+
+	return info;
+}
+
 // Wrappers around OpenPace NIDs for Applayer
-ASN1_OBJECT *get_NID_id_CA_ECDH_3DES_CBC_CBC() { return OBJ_nid2obj(NID_id_CA_ECDH_3DES_CBC_CBC); }
-ASN1_OBJECT *get_NID_id_CA_ECDH_AES_CBC_CMAC_128() { return OBJ_nid2obj(NID_id_CA_ECDH_AES_CBC_CMAC_128); }
-ASN1_OBJECT *get_NID_id_CA_ECDH_AES_CBC_CMAC_192() { return OBJ_nid2obj(NID_id_CA_ECDH_AES_CBC_CMAC_192); }
-ASN1_OBJECT *get_NID_id_CA_ECDH_AES_CBC_CMAC_256() { return OBJ_nid2obj(NID_id_CA_ECDH_AES_CBC_CMAC_256); }
-ASN1_OBJECT *get_NID_id_CA_DH_3DES_CBC_CBC() { return OBJ_nid2obj(NID_id_CA_DH_3DES_CBC_CBC); }
-ASN1_OBJECT *get_NID_id_CA_DH_AES_CBC_CMAC_128() { return OBJ_nid2obj(NID_id_CA_DH_AES_CBC_CMAC_128); }
-ASN1_OBJECT *get_NID_id_CA_DH_AES_CBC_CMAC_192() { return OBJ_nid2obj(NID_id_CA_DH_AES_CBC_CMAC_192); }
-ASN1_OBJECT *get_NID_id_CA_DH_AES_CBC_CMAC_256() { return OBJ_nid2obj(NID_id_CA_DH_AES_CBC_CMAC_256); }
+OID_INFO get_id_CA_ECDH_3DES_CBC_CBC() { return get_oid_info(NID_id_CA_ECDH_3DES_CBC_CBC); }
+OID_INFO get_id_CA_ECDH_AES_CBC_CMAC_128() { return get_oid_info(NID_id_CA_ECDH_AES_CBC_CMAC_128); }
+OID_INFO get_id_CA_ECDH_AES_CBC_CMAC_192() { return get_oid_info(NID_id_CA_ECDH_AES_CBC_CMAC_192); }
+OID_INFO get_id_CA_ECDH_AES_CBC_CMAC_256() { return get_oid_info(NID_id_CA_ECDH_AES_CBC_CMAC_256); }
+OID_INFO get_id_CA_DH_3DES_CBC_CBC() { return get_oid_info(NID_id_CA_DH_3DES_CBC_CBC); }
+OID_INFO get_id_CA_DH_AES_CBC_CMAC_128() { return get_oid_info(NID_id_CA_DH_AES_CBC_CMAC_128); }
+OID_INFO get_id_CA_DH_AES_CBC_CMAC_192() { return get_oid_info(NID_id_CA_DH_AES_CBC_CMAC_192); }
+OID_INFO get_id_CA_DH_AES_CBC_CMAC_256() { return get_oid_info(NID_id_CA_DH_AES_CBC_CMAC_256); }
 } // namespace eIDMW

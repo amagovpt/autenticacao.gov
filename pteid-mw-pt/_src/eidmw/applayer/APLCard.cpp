@@ -41,6 +41,7 @@
 #include "Log.h"
 #include "MiscUtil.h"
 #include "PDFSignature.h"
+#include "PaceAuthentication.h"
 #include "SODParser.h"
 #include "SigContainer.h"
 #include "Util.h"
@@ -1027,10 +1028,10 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 	int len = i2d_PublicKey(pkey, &buffer);
 	report.pubKey = CByteArray(buffer, len);
 
-	auto oid = getChipAuthenticationOid(dg14);
-	report.oid = OBJ_nid2sn(OBJ_obj2nid(oid));
+	auto oid_info = getChipAuthenticationOid(dg14);
+	report.oid = oid_info.short_name;
 
-	auto status = getCalReader()->initChipAuthentication(pkey, oid);
+	auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);
 	if (!status) {
 		report.type = EIDMW_ReportType::Error;
 	}
