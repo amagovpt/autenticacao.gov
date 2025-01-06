@@ -1684,7 +1684,7 @@
     <message>
         <source>STR_CERT_CHAIN_ERROR</source>
         <oldsource>STR__CERT_CHAIN_ERROR</oldsource>
-        <translation>Certificate chain couldn&apos;t be completed!</translation>
+		<translation>Certificate chain couldn&apos;t be completed!&lt;br&gt;Please check your Internet connection.</translation>
     </message>
     <message>
         <source>STR_EXPORT_CERTIFICATE_SUCCESS</source>
