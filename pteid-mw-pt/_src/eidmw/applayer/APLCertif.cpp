@@ -700,6 +700,9 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 		MWLOG(LEV_ERROR, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");
 	}
 
+	if (issuerCertificate.Size() == 0)
+		return NULL;
+
 	APL_Certif *issuerCertObj = addCert(issuerCertificate);
 	reOrderCerts();
 	if (issuerCertObj != NULL) {
