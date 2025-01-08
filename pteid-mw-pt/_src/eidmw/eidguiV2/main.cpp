@@ -288,7 +288,7 @@ int main(int argc, char *argv[]) {
 		app.setWindowIcon(QIcon(":/appicon.ico"));
 
 		// GAPI init
-		GAPI gapi;
+		GAPI gapi(settings);
 		GAPI::declareQMLTypes();
 
 		parseCommandlineGuiArguments(&parser, &gapi);

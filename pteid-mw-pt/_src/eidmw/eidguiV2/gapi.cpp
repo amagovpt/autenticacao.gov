@@ -296,7 +296,7 @@ static std::string get_scap_app_id() {
 	return appid;
 }
 
-GAPI::GAPI(QObject *parent) : QObject(parent) {
+GAPI::GAPI(GUISettings &settings, QObject *parent) : QObject(parent), m_Settings(settings) {
 	image_provider = new PhotoImageProvider();
 	image_provider_pdf = new PDFPreviewImageProvider();
 	m_mainWnd = NULL;

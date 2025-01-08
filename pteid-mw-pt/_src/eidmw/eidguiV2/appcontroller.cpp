@@ -324,7 +324,7 @@ QString AppController::getTimeStampHostValue(void) { return m_Settings.getTimeSt
 void AppController::setTimeStampHostValue(const QString &timeStamp_host) {
 	m_Settings.setTimeStampHost(timeStamp_host);
 }
-void AppController::setSCAPOptions(int bSCAPOptions){m_Settings.setSCAPOptions(bSCAPOptions);}
+void AppController::setSCAPOptions(int bSCAPOptions) { m_Settings.setSCAPOptions(bSCAPOptions); }
 int AppController::getSCAPOptions(void) { return m_Settings.getSCAPOptions(); }
 
 bool AppController::getProxySystemValue(void) { return m_Settings.getProxySystem(); }

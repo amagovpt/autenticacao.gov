@@ -209,7 +209,7 @@ class GAPI : public QObject {
 	Q_PROPERTY(QString persoData MEMBER m_persoData NOTIFY signalPersoDataLoaded)
 
 public:
-	explicit GAPI(QObject *parent = 0);
+	explicit GAPI(GUISettings &settings, QObject *parent = 0);
 
 	enum IDInfoKey {
 		Documenttype,
@@ -383,8 +383,8 @@ public:
 	PDFPreviewImageProvider *image_provider_pdf;
 
 	// Do not forget to declare your class to the QML system.
-	static void declareQMLTypes() { qmlRegisterType<GAPI>("eidguiV2", 1, 0, "GAPI"); }
-	GUISettings m_Settings;
+	static void declareQMLTypes() { qmlRegisterUncreatableType<GAPI>("eidguiV2", 1, 0, "GAPI", "GAPI object shouldn't be created on QML!"); }
+	GUISettings &m_Settings;
 	CERTIFICATES m_Certificates;
 	CMDCertificates *m_cmdCertificates;
 
