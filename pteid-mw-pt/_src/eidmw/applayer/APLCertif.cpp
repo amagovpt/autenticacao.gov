@@ -691,13 +691,13 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 		return NULL;
 
 	CRLFetcher crlFetcher;
-	MWLOG(LEV_DEBUG, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Trying to download issuer certificate url: %s",
+	MWLOG(LEV_DEBUG, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: Trying to download issuer certificate url: %s",
 		  caIssuerUrl.c_str());
 	CByteArray issuerCertificate;
 	issuerCertificate = crlFetcher.fetch_CRL_file(caIssuerUrl.c_str());
 	if (issuerCertificate.Size() == 0) {
 		issuerCertificate = EmptyByteArray;
-		MWLOG(LEV_ERROR, MOD_APL, L"APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");
+		MWLOG(LEV_ERROR, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");
 	}
 
 	if (issuerCertificate.Size() == 0)
@@ -723,7 +723,7 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 			fwrite(issuerCertificate.GetBytes(), sizeof(unsigned char), issuerCertificate.Size(), certWrite);
 			fclose(certWrite);
 		} else {
-			MWLOG(LEV_ERROR, MOD_APL, L"Error trying to open certificate to write, cert owner name: %s",
+			MWLOG(LEV_ERROR, MOD_APL, "Error trying to open certificate to write, cert owner name: %s",
 				  issuerCertObj->getOwnerName(), certPath.c_str());
 		}
 	}
