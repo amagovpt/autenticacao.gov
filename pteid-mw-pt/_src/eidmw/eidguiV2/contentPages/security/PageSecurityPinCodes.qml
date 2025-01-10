@@ -725,7 +725,7 @@ PageSecurityPinCodesForm {
     }
 
     function updateWithTriesLeft(triesLeft, pin) {
-    console.log("update with tries left: tries=" + triesLeft + " pin=" + pin)
+        console.log("update with tries left: tries=" + triesLeft + " pin=" + pin)
         var triesLeftText, modifyButton, testButton
         if (pin == GAPI.AuthPin){
             triesLeftText = propertyTriesLeftAuthPin
@@ -764,6 +764,7 @@ PageSecurityPinCodesForm {
             testButton.enabled = true
         }
         propertyBusyIndicator.running = false
+        mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
     }
 
     function getCurrentTab() {
