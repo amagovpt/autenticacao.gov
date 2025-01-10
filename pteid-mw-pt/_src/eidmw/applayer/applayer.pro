@@ -135,7 +135,7 @@ SOURCES += \
 	SecurityContext.cpp \
 	sign-pkcs7.cpp \
 	cJSON.c \
-	CRLFetcher.cpp \
+	PKIFetcher.cpp \
 	PDFSignature.cpp \
 	PAdESExtender.cpp \
 	MutualAuthentication.cpp \

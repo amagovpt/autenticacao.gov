@@ -48,7 +48,7 @@
     <ClCompile Include="cJSON.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CRLFetcher.cpp">
+    <ClCompile Include="PKIFetcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cryptoFramework.cpp">
@@ -158,7 +158,7 @@
     <ClInclude Include="cJSON.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CRLFetcher.h">
+    <ClInclude Include="PKIFetcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cryptoFramework.h">

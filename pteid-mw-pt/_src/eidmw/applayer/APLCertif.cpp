@@ -43,7 +43,7 @@
 #include "MWException.h"
 #include "CertStatusCache.h"
 #include "MiscUtil.h"
-#include "CRLFetcher.h"
+#include "PKIFetcher.h"
 #include "CardPteidDef.h"
 #include "Log.h"
 #include "MiscUtil.h"
@@ -696,11 +696,11 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 	if (caIssuerUrl.empty())
 		return NULL;
 
-	CRLFetcher crlFetcher;
+	PKIFetcher pkiFetcher;
 	MWLOG(LEV_DEBUG, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: Trying to download issuer certificate url: %s",
 		  caIssuerUrl.c_str());
 	CByteArray issuerCertificate;
-	issuerCertificate = crlFetcher.fetch_CRL_file(caIssuerUrl.c_str());
+	issuerCertificate = pkiFetcher.fetch_PKI_file(caIssuerUrl.c_str());
 	if (issuerCertificate.Size() == 0) {
 		issuerCertificate = EmptyByteArray;
 		MWLOG(LEV_ERROR, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");
@@ -1286,10 +1286,10 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload) {
 
 // Get data from the file and make the verification
 APL_CrlStatus APL_Crl::getData(CByteArray &data, std::string &crl_uri) {
-	CRLFetcher crl_fetcher;
+	PKIFetcher crl_fetcher;
 	APL_CrlStatus eRetStatus = APL_CRL_STATUS_ERROR;
 	// Can be changed to update with delta CRL
-	data = crl_fetcher.fetch_CRL_file(crl_uri.c_str());
+	data = crl_fetcher.fetch_PKI_file(crl_uri.c_str());
 
 	// If ok, we get the info, unless we return an empty bytearray
 	if (data.Size() == 0) {

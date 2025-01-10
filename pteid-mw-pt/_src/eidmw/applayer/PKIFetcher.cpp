@@ -10,7 +10,7 @@
 
 #include <cstdlib>
 #include <string>
-#include "CRLFetcher.h"
+#include "PKIFetcher.h"
 #include "APLConfig.h"
 #include "MiscUtil.h"
 #include "Util.h"
@@ -22,9 +22,9 @@
 
 namespace eIDMW {
 
-CByteArray CRLFetcher::received_data = CByteArray();
+CByteArray PKIFetcher::received_data = CByteArray();
 
-size_t CRLFetcher::curl_write_data(char *ptr, size_t size, size_t nmemb, void *stream) {
+size_t PKIFetcher::curl_write_data(char *ptr, size_t size, size_t nmemb, void *stream) {
 	size_t realsize = size * nmemb;
 	received_data.Append((const unsigned char *)ptr, realsize);
 
@@ -32,7 +32,7 @@ size_t CRLFetcher::curl_write_data(char *ptr, size_t size, size_t nmemb, void *s
 }
 
 #ifdef WIN32
-CByteArray CRLFetcher::fetch_CRL_file(const char *url) {
+CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 	CByteArray certData;
 	DWORD dwTimeout = 20 * 1000;
 	CRYPT_BLOB_ARRAY *file_ctx = NULL;
@@ -45,7 +45,7 @@ CByteArray CRLFetcher::fetch_CRL_file(const char *url) {
 	} else {
 		if (file_ctx->cBlob != 1) {
 			MWLOG(LEV_ERROR, MOD_APL,
-				  "CRLFetcher: unexpected number of objects on the array: %d objects! This should never happen...",
+				  "PKIFetcher: unexpected number of objects on the array: %d objects! This should never happen...",
 				  file_ctx->cBlob);
 		} else {
 			MWLOG(LEV_DEBUG, MOD_APL, "Successfully fetched %d bytes of file", file_ctx->rgBlob->cbData);
@@ -57,7 +57,7 @@ CByteArray CRLFetcher::fetch_CRL_file(const char *url) {
 }
 
 #else
-CByteArray CRLFetcher::fetch_CRL_file(const char *url) {
+CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 	CURL *curl;
 	CURLcode res;
 	char error_buf[CURL_ERROR_SIZE];
@@ -71,7 +71,7 @@ CByteArray CRLFetcher::fetch_CRL_file(const char *url) {
 	APL_Config proxy_pwd(CConfig::EIDMW_CONFIG_PARAM_PROXY_PWD);
 
 	if (strlen(url) == 0 || strstr(url, "http") != url) {
-		fprintf(stderr, "Invalid URL for fetch_CRL_file()\n");
+		fprintf(stderr, "Invalid URL for fetch_PKI_file()\n");
 		return received_data;
 	}
 

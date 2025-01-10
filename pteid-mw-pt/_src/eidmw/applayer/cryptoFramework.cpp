@@ -33,7 +33,7 @@
 #include "ByteArray.h"
 #include "APLConfig.h"
 #include "APLCardPteid.h"
-#include "CRLFetcher.h"
+#include "PKIFetcher.h"
 
 #include "MiscUtil.h"
 #include "Thread.h"
@@ -1190,8 +1190,8 @@ bool APL_CryptoFwk::GetCrlData(const CByteArray &cert, CByteArray &outCrl) {
 		return false;
 	}
 
-	CRLFetcher crlFetcher;
-	outCrl = crlFetcher.fetch_CRL_file(url.c_str());
+	PKIFetcher crlFetcher;
+	outCrl = crlFetcher.fetch_PKI_file(url.c_str());
 
 	if (outCrl.Size() == 0) {
 		MWLOG(LEV_ERROR, MOD_APL,

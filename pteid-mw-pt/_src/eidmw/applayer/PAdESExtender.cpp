@@ -18,7 +18,7 @@
 #include "TSAClient.h"
 #include "MiscUtil.h"
 #include "sign-pkcs7.h"
-#include "CRLFetcher.h"
+#include "PKIFetcher.h"
 #include "poppler/PDFDoc.h"
 
 #include <openssl/pkcs7.h>

@@ -135,7 +135,7 @@ SOURCES += \
 	../applayer/SecurityContext.cpp \
 	../applayer/sign-pkcs7.cpp \
 	../applayer/cJSON.c \
-	../applayer/CRLFetcher.cpp \
+	../applayer/PKIFetcher.cpp \
 	../applayer/PDFSignature.cpp \
 	../applayer/PAdESExtender.cpp \
 	../applayer/MutualAuthentication.cpp \
