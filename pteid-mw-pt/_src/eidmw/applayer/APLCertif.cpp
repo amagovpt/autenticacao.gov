@@ -524,9 +524,11 @@ void APL_Certifs::loadCard() {
 void APL_Certifs::loadFromFile() {
 	bool bStopRequest = false;
 	scanDir(m_certs_dir.c_str(), "", m_certExtension.c_str(), bStopRequest, this, &APL_Certifs::foundCertificate);
+#ifndef WIN32
 	bStopRequest = false;
 	APL_Config cachePath(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR_CERTS);
 	scanDir(cachePath.getString(), "/", m_certExtension.c_str(), bStopRequest, this, &APL_Certifs::foundCertificate);
+#endif
 }
 
 void APL_Certifs::reOrderCerts() {
@@ -539,19 +541,23 @@ void APL_Certifs::reOrderCerts() {
 	for (auto uniqueIndex : m_certifsOrder) {
 		auto itr = m_certifs.find(uniqueIndex);
 		APL_Certif *cert = itr->second;
-		if (cert->isRoot()) {
-			cardRoots.push_back(uniqueIndex);
-		} else if (cert->isAuthentication()) {
+		if (cert->isAuthentication()) {
 			citizenAuth = cert;
 		} else if (cert->isSignature()) {
 			citizenSign = cert;
+		} else {
+			cardRoots.push_back(uniqueIndex);
 		}
 	}
 
-	if (citizenSign->getIssuer())
+	if (citizenSign && citizenSign->getIssuer())
 		cardSubCA.push_back(citizenSign->getIssuer()->getUniqueId());
-	if (citizenAuth->getIssuer())
+
+	if (citizenAuth && citizenAuth->getIssuer())
 		cardSubCA.push_back(citizenAuth->getIssuer()->getUniqueId());
+
+	for (const auto &subCAIndex : cardSubCA)
+		cardRoots.erase(std::remove(cardRoots.begin(), cardRoots.end(), subCAIndex), cardRoots.end());
 
 	m_certifsOrder.clear();
 	m_certifsOrder.push_back(citizenSign->getUniqueId());
