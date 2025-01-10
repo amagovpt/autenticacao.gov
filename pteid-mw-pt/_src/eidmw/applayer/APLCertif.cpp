@@ -532,11 +532,10 @@ void APL_Certifs::loadFromFile() {
 }
 
 void APL_Certifs::reOrderCerts() {
-	//reorder certificates auth sign subcasign subcaauth
 	std::vector<unsigned long> cardSubCA;
 	std::vector<unsigned long> cardRoots;
-	APL_Certif *citizenSign;
-	APL_Certif *citizenAuth;
+	APL_Certif *citizenSign = NULL;
+	APL_Certif *citizenAuth = NULL;
 
 	for (auto uniqueIndex : m_certifsOrder) {
 		auto itr = m_certifs.find(uniqueIndex);
@@ -560,8 +559,11 @@ void APL_Certifs::reOrderCerts() {
 		cardRoots.erase(std::remove(cardRoots.begin(), cardRoots.end(), subCAIndex), cardRoots.end());
 
 	m_certifsOrder.clear();
-	m_certifsOrder.push_back(citizenSign->getUniqueId());
-	m_certifsOrder.push_back(citizenAuth->getUniqueId());
+	if (citizenSign)
+		m_certifsOrder.push_back(citizenSign->getUniqueId());
+	if (citizenAuth)
+		m_certifsOrder.push_back(citizenAuth->getUniqueId());
+
 	m_certifsOrder.insert(m_certifsOrder.end(), cardSubCA.begin(), cardSubCA.end());
 	m_certifsOrder.insert(m_certifsOrder.end(), cardRoots.begin(), cardRoots.end());
 }
