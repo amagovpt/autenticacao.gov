@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <cassert>
+#include <assert.h>
 
 #include "pteid_p11.h"
 #include "cert.h"

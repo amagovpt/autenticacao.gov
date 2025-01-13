@@ -491,7 +491,7 @@ static ScapResult<void> perform_citizen_signatures(PTEID_SigningDevice *device, 
 static CByteArray decode_base64(const std::string &encoded) {
 	unsigned int decoded_len = 0;
 	unsigned char *decoded_buffer;
-	assert(encoded.size <= UINT_MAX);
+	assert(encoded.size() <= UINT_MAX);
 	Base64Decode(encoded.c_str(), (unsigned int) encoded.size(), decoded_buffer, decoded_len);
 
 	CByteArray decoded(decoded_buffer, decoded_len);

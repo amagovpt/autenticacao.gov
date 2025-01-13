@@ -25,6 +25,8 @@
 #include "Card.h"
 #include "Log.h"
 
+#include <limits.h>
+
 #include "PaceAuthentication.h"
 
 namespace eIDMW {

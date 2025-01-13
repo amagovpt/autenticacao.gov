@@ -163,7 +163,7 @@ ValidationDataElement *PAdESExtender::addValidationElement(ValidationDataElement
 void PAdESExtender::removeValidationElement(ValidationDataElement *elem) {
 
 	if (elem->getType() == ValidationDataElement::CERT) {
-		assert(elem.getSize() <= INT_MAX);
+		assert(elem->getSize() <= INT_MAX);
 		signed long docCertId = getCertUniqueId(elem->getData(), (int) elem->getSize());
 		std::vector<ValidationDataElement *>::iterator it = m_validationData.begin();
 		while (it != m_validationData.end()) {

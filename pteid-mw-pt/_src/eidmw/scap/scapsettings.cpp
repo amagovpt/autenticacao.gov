@@ -12,6 +12,8 @@
 #include <QString>
 #include <string>
 
+#include <limits.h>
+
 #ifdef _WIN32
 #include <windows.h>
 #include <Wincrypt.h>

@@ -802,7 +802,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 		if (proxy_user_value != NULL && strlen(proxy_user_value) > 0) {
 			fprintf(stderr, "OCSP: Adding proxy auth header!\n");
 			std::string proxy_cleartext = std::string(proxy_user_value) + ":" + proxy_pwd.getString();
-			assert(proxy_cleartext.size <= LONG_MAX);
+			assert(proxy_cleartext.size() <= LONG_MAX);
 			char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), (long) proxy_cleartext.size());
 			std::string header_value = std::string("basic ") + auth_token;
 			OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", header_value.c_str());

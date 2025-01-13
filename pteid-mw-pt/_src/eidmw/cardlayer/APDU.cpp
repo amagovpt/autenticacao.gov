@@ -1,5 +1,7 @@
 #include "APDU.h"
 
+#include <limits.h>
+
 #include <iomanip>
 #include <sstream>
 #include <cassert>
