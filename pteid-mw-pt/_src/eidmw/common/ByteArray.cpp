@@ -32,6 +32,7 @@ using namespace std;
 #include "Util.h"
 #include "MWException.h"
 #include "eidErrors.h"
+#include "Log.h"
 
 const static unsigned long EXTRA_INCREMENT_LEN = 10;
 
@@ -241,6 +242,11 @@ void CByteArray::Append(const unsigned char *pucData, unsigned long ulSize) {
 //SafeAppend
 void CByteArray::SafeAppend(const unsigned char *pucData, size_t size){
 	assert(size <= ULONG_MAX);
+
+	if (size > ULONG_MAX) {
+		MWLOG(LEV_CRIT, MOD_SDK, "Appending data that is too big!!!");
+		return;
+	}
 	Append(pucData, (unsigned long) size);
 }
 
