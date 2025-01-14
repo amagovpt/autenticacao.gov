@@ -250,6 +250,11 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex) {
 			m_certifs[ulUniqueId] = cert;
 			m_certifsOrder.push_back(ulUniqueId);
 		}
+		else {
+			APL_Certif *foundCert = itr->second;
+			delete foundCert;
+			m_certifs[ulUniqueId] = cert;
+		}
 
 		return cert;
 	}
