@@ -537,10 +537,11 @@ void APL_Certifs::loadFromFile() {
 }
 
 void APL_Certifs::reOrderCerts() {
-	std::vector<unsigned long> cardSubCA;
 	std::vector<unsigned long> cardRoots;
 	APL_Certif *citizenSign = NULL;
 	APL_Certif *citizenAuth = NULL;
+	APL_Certif *citizenSignSubCA = NULL;
+	APL_Certif *citizenAuthSubCA = NULL;
 
 	for (auto uniqueIndex : m_certifsOrder) {
 		auto itr = m_certifs.find(uniqueIndex);
@@ -554,22 +555,33 @@ void APL_Certifs::reOrderCerts() {
 		}
 	}
 
-	if (citizenSign && citizenSign->getIssuer())
-		cardSubCA.push_back(citizenSign->getIssuer()->getUniqueId());
+	if (citizenAuth && citizenAuth->getIssuer()) {
+		citizenAuthSubCA = citizenAuth->getIssuer();
+	}
 
-	if (citizenAuth && citizenAuth->getIssuer())
-		cardSubCA.push_back(citizenAuth->getIssuer()->getUniqueId());
+	if (citizenSign && citizenSign->getIssuer()) {
+		citizenSignSubCA = citizenSign->getIssuer();
+	}
 
-	for (const auto &subCAIndex : cardSubCA)
-		cardRoots.erase(std::remove(cardRoots.begin(), cardRoots.end(), subCAIndex), cardRoots.end());
+	if (citizenSignSubCA)
+		cardRoots.erase(std::remove(cardRoots.begin(), cardRoots.end(), citizenSignSubCA->getUniqueId()),
+						cardRoots.end());
+	if (citizenAuthSubCA)
+		cardRoots.erase(std::remove(cardRoots.begin(), cardRoots.end(), citizenAuthSubCA->getUniqueId()),
+						cardRoots.end());
 
 	m_certifsOrder.clear();
-	if (citizenSign)
-		m_certifsOrder.push_back(citizenSign->getUniqueId());
 	if (citizenAuth)
 		m_certifsOrder.push_back(citizenAuth->getUniqueId());
 
-	m_certifsOrder.insert(m_certifsOrder.end(), cardSubCA.begin(), cardSubCA.end());
+	if (citizenSign)
+		m_certifsOrder.push_back(citizenSign->getUniqueId());
+
+	if (citizenSignSubCA)
+		m_certifsOrder.push_back(citizenSignSubCA->getUniqueId());
+	if (citizenAuthSubCA)
+		m_certifsOrder.push_back(citizenAuthSubCA->getUniqueId());
+
 	m_certifsOrder.insert(m_certifsOrder.end(), cardRoots.begin(), cardRoots.end());
 }
 
