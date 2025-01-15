@@ -377,13 +377,11 @@ std::string PDFSignature::generateFinalPath(const char *output_dir, const char *
 	fprintf(stderr, "%s Outdir: %s path: %s\n", __FUNCTION__, output_dir, path);
 	char *pdf_filename = Basename((char *)path);
 	std::string clean_filename = CPathUtil::remove_ext_from_basename(pdf_filename);
-	std::string clean_signed_filename = clean_filename + "_signed";
 
 	int equal_filename_count = 0;
-
 	for (unsigned int i = 0; i < unique_filenames.size(); i++) {
 		std::string current_file_name = unique_filenames.at(i).first;
-		if (clean_signed_filename.compare(current_file_name) == 0) {
+		if (clean_filename.compare(current_file_name) == 0) {
 			// unique_filenames contains clean_filename
 			equal_filename_count = ++unique_filenames.at(i).second;
 			break;
@@ -391,41 +389,16 @@ std::string PDFSignature::generateFinalPath(const char *output_dir, const char *
 	}
 
 	if (equal_filename_count == 0) {
-		// clean_signed_filename is not part of the vector, make sure it's added to it
-		unique_filenames.push_back(std::make_pair(clean_signed_filename, 0));
+		// clean_filename is not part of the vector, make sure it's added to it
+		unique_filenames.push_back(std::make_pair(clean_filename, equal_filename_count));
 	}
 
 	std::string final_path = std::string(output_dir) + PATH_SEP + clean_filename;
 
-	// If there was a duplicate path 
 	if (equal_filename_count > 0) {
-		// Will see if the new path is also unique
-		while (true) {
-			// Variable that stores if a match for the new name has been found
-			bool found = false;
-			// This is the file_name that will be tested
-			std::string tested_file_name = clean_filename + "_" + std::to_string(equal_filename_count) + "_signed";
-			// For each file in the unique_filenames vector
-			for (unsigned int i = 0; i < unique_filenames.size(); i++) {
-				std::string current_file_name = unique_filenames.at(i).first;
-				// Sees if the current_file_name matches the test file
-				if (tested_file_name.compare(current_file_name) == 0) {
-					// If it does, it increments the equal_filename:count
-					equal_filename_count = ++unique_filenames.at(i).second;
-					// Sets found to true, since a match has been found
-					found = true;
-					// Breaks and will test with the next name
-					break;
-				}
-			}
-			// If a match hasn't been found then the name can be used.
-			if (!found)
-				break;
-		}
 		final_path += "_" + std::to_string(equal_filename_count);
-		std::string added_pair = clean_filename + "_" + std::to_string(equal_filename_count) + "_signed";
-		unique_filenames.push_back(std::make_pair(added_pair, 0));
 	}
+
 	final_path += "_signed.pdf";
 
 	return final_path;
@@ -476,18 +449,6 @@ int PDFSignature::signFiles(const char *location, const char *reason, const char
 		bool throwTimestampError = false;
 		bool throwLTVError = false;
 		bool cachedPin = false;
-
-		MWLOG(LEV_ERROR, MOD_APL, "outfile_path: %s", outfile_path);
-
-		// Add files in current dir
-		for (const auto &entry : std::filesystem::directory_iterator(outfile_path)) {
-			std::string current_path = entry.path().string();
-			char *current_filename = Basename((char *)current_path.c_str());
-			std::string clean_filename = CPathUtil::remove_ext_from_basename(current_filename);
-			MWLOG(LEV_ERROR, MOD_APL, "current_path: %s", clean_filename);
-			unique_filenames.push_back(std::make_pair(clean_filename, 0));
-		}
-
 		for (unsigned int i = 0; i < m_files_to_sign.size(); i++) {
 			try {
 				char *current_file = m_files_to_sign.at(i).first;
