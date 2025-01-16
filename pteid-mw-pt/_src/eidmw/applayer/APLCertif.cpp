@@ -729,6 +729,7 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 		return NULL;
 
 	APL_Certif *issuerCertObj = addCert(issuerCertificate);
+	issuerCertObj->resetIssuer();
 	reOrderCerts();
 	if (issuerCertObj != NULL) {
 #ifdef WIN32
