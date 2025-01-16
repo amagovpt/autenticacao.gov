@@ -178,8 +178,14 @@
       <Component Id="DigicertRootCert" Guid="{A85481CF-5A7E-440F-A28A-0F2E1D4F5F3F}">
         <File Source="..\..\certs\DigicertRoot.der" />
       </Component>
+      <Component Id="SubCAAuth0019" Guid="{EAB15845-B695-4243-AE71-427EEE8275B2}">
+        <File Source="..\..\certs\EC de Autenticacao do Cartao de Cidadao 0019.der" />
+      </Component>
+      <Component Id="SubCASignature0019" Guid="{2EB0B93E-D4FC-488F-8DA7-FB1C0D1F8D02}">
+        <File Source="..\..\certs\EC de Assinatura Digital do Cartao de Cidadao 0019.der" />
+      </Component>
 			
-		</DirectoryRef>
+	  </DirectoryRef>
 
 			<DirectoryRef Id="CRLDIR">
 				<Component Id="CrlDir" Guid="{5731B322-17EE-4d08-90A5-9DB53F53EC29}">
@@ -547,11 +553,13 @@
 				<ComponentRef Id="CertCC004"/>
 				<ComponentRef Id="CertCC005"/>
 				<ComponentRef Id="CertCC006"/>
-        <ComponentRef Id="CertCC007"/>
-        <ComponentRef Id="CertCC008"/>
+				<ComponentRef Id="CertCC007"/>
+				<ComponentRef Id="CertCC008"/>
 				<ComponentRef Id="ECRaizEstado002"/>
 				<ComponentRef Id="SectigoRootCert"/>
 				<ComponentRef Id="DigicertRootCert"/>
+				<ComponentRef Id="SubCAAuth0019"/>
+				<ComponentRef Id="SubCASignature0019"/>
 				<ComponentRef Id="CrlDir"/>
 				<ComponentRef Id="HttpDir"/>
 
