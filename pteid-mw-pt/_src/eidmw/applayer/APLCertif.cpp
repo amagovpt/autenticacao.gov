@@ -5,7 +5,7 @@
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2011-2012 lmcm - <lmcm@caixamagica.pt>
- * Copyright (C) 2012, 2014, 2016-2023 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012, 2014, 2016-2025 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2012 Rui Martinho - <rui.martinho@ama.pt>
  * Copyright (C) 2014 Vasco Dias - <vasco.dias@caixamagica.pt>
  * Copyright (C) 2016 Luiz Lemos - <luiz.lemos@caixamagica.pt>
@@ -129,7 +129,7 @@ void APL_Certifs::initSODCAs() {
 		if (itrCert == m_certifs.end()) {
 			// The certif is not in the map
 			// Should not happen
-			MWLOG(LEV_ERROR, MOD_APL, L"Exception in initSODCAs(): certificate not found!");
+			MWLOG(LEV_ERROR, MOD_APL, "Exception in initSODCAs(): certificate not found!");
 			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 		}
 
@@ -144,7 +144,7 @@ void APL_Certifs::initSODCAs() {
 }
 
 void APL_Certifs::clearSODCAs() {
-	MWLOG(LEV_DEBUG, MOD_APL, L"resetSODCAs() called");
+	MWLOG(LEV_DEBUG, MOD_APL, "resetSODCAs() called");
 	m_sod_cas = std::vector<APL_Certif *>();
 }
 
@@ -160,7 +160,7 @@ void APL_Certifs::addToSODCAs(const CByteArray &cert_ba) {
 }
 
 unsigned long APL_Certifs::countSODCAs() {
-	MWLOG(LEV_DEBUG, MOD_APL, L"DEBUG: countSODCAs returns %lu", m_sod_cas.size());
+	MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: countSODCAs returns %lu", m_sod_cas.size());
 	return m_sod_cas.size();
 }
 
