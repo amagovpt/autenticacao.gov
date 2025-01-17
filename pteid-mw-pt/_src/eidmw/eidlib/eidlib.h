@@ -485,7 +485,7 @@ public:
 	 *			(PTEID_EIDCard).
 	 *
 	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
-	 * If the card is not an EIDcard, exception PTEID_ExCardBadType is thrown.
+	 * If the card type is not supported, exception PTEID_ExCardTypeUnknown is thrown.
 	 **/
 	PTEIDSDK_API PTEID_EIDCard &getEIDCard();
 
