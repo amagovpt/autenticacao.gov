@@ -580,7 +580,7 @@ PTEID_Certificate &PTEID_Certificates::addCertificate(PTEID_ByteArray &cert) {
 	APL_Certifs *pimpl = static_cast<APL_Certifs *>(m_impl);
 
 	CByteArray baCert(cert.GetBytes(), cert.Size());
-	APL_Certif *pAplCert = pimpl->addCert(baCert, APL_CERTIF_TYPE_ROOT, false);
+	APL_Certif *pAplCert = pimpl->addCert(baCert, APL_CERTIF_TYPE_ROOT);
 
 	out = dynamic_cast<PTEID_Certificate *>(getObject(pAplCert));
 

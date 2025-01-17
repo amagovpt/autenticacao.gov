@@ -154,7 +154,7 @@ void APL_Certifs::addToSODCAs(const CByteArray &cert_ba) {
 		defaultSODCertifs = false;
 	}
 
-	APL_Certif *cert = new APL_Certif(this, cert_ba, APL_CERTIF_TYPE_ROOT, false);
+	APL_Certif *cert = new APL_Certif(this, cert_ba, APL_CERTIF_TYPE_ROOT);
 	MWLOG(LEV_DEBUG, MOD_APL, "addToSODCAs(): Adding certificate %s", cert->getOwnerName());
 	m_sod_cas.push_back(cert);
 }
@@ -200,8 +200,6 @@ APL_Certifs::~APL_Certifs(void) {
 	m_certifs.clear();
 	m_certifsOrder.clear();
 }
-
-bool APL_Certifs::isAllowed() { return true; }
 
 unsigned long APL_Certifs::countFromCard() {
 	if (!m_card)
@@ -263,7 +261,7 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex) {
 /* This is used to add certificate from file. If the same certificate was already loaded from the card, we store the new
    one in m_certifs instead, we need this so that initSODCAs() picks up all the certificates in eidstore
  */
-APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type, bool bHidden) {
+APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type) {
 
 	std::map<unsigned long, APL_Certif *>::const_iterator itr;
 
@@ -281,7 +279,7 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type, 
 		if (m_cryptoFwk->isSelfIssuer(certIn)) {
 			type = APL_CERTIF_TYPE_ROOT;
 		}
-		cert = new APL_Certif(this, certIn, type, bHidden);
+		cert = new APL_Certif(this, certIn, type);
 		m_certifs[ulUniqueId] = cert;
 
 		std::vector<unsigned long>::iterator itrOrder;
@@ -296,7 +294,7 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type, 
 	}
 }
 
-APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard, bool bHidden,
+APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard,
 								 unsigned long ulIndex, const CByteArray *cert_data) {
 	if (!file && !cert_data)
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
@@ -320,8 +318,6 @@ APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file, APL_CertifType 
 
 		itr = m_certifs.find(ulUniqueId);
 		if (itr != m_certifs.end()) {
-			if (m_certifs[ulUniqueId]->m_hidden && !bHidden)
-				m_certifs[ulUniqueId]->m_hidden = bHidden;
 
 			if (m_certifs[ulUniqueId]->m_type == APL_CERTIF_TYPE_UNKNOWN)
 				m_certifs[ulUniqueId]->m_type = type;
@@ -340,7 +336,7 @@ APL_Certif *APL_Certifs::addCert(APL_CardFile_Certificate *file, APL_CertifType 
 		}
 
 		APL_Certif *cert = NULL;
-		cert = new APL_Certif(this, file, type, bOnCard, bHidden, ulIndex, cert_data);
+		cert = new APL_Certif(this, file, type, bOnCard, ulIndex, cert_data);
 		m_certifs[ulUniqueId] = cert;
 		m_certifsOrder.push_back(ulUniqueId);
 
@@ -481,8 +477,7 @@ unsigned long APL_Certifs::countChildren(const APL_Certif *certif) {
 	for (itr = store->begin(); itr != store->end(); itr++) {
 		children = itr->second;
 		if (children->getIssuer() == certif) {
-			if (!children->isHidden())
-				ulCount++;
+			ulCount++;
 		}
 	}
 
@@ -509,12 +504,10 @@ APL_Certif *APL_Certifs::getChildren(const APL_Certif *certif, unsigned long ulI
 
 		children = itrCert->second;
 		if (children->getIssuer() == certif) {
-			if (!children->isHidden()) {
-				if (ulCount == ulIndex)
-					return children;
-				else
-					ulCount++;
-			}
+			if (ulCount == ulIndex)
+				return children;
+			else
+				ulCount++;
 		}
 	}
 
@@ -641,7 +634,7 @@ void APL_Certifs::foundCertificate(const char *dir, const char *SubDir, const ch
 	}
 
 	cert = new CByteArray(buf, bufsize);
-	certifs->addCert(*cert, APL_CERTIF_TYPE_UNKNOWN, false);
+	certifs->addCert(*cert, APL_CERTIF_TYPE_UNKNOWN);
 	delete cert;
 
 	free(buf);
@@ -796,8 +789,6 @@ APL_Certif::APL_Certif(APL_SmartCard *card, APL_Certifs *store, unsigned long ul
 
 	m_issuer = NULL;
 
-	m_hidden = false;
-
 	m_test = 0;
 	m_root = 0;
 
@@ -834,7 +825,7 @@ void APL_Certif::setCardCertificateType() {
 
 
 APL_Certif::APL_Certif(APL_Certifs *store, APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard,
-					   bool bHidden, unsigned long ulIndex, const CByteArray *cert) {
+					    unsigned long ulIndex, const CByteArray *cert) {
 	m_cryptoFwk = AppLayer.getCryptoFwk();
 	m_statusCache = AppLayer.getCertStatusCache();
 
@@ -856,7 +847,6 @@ APL_Certif::APL_Certif(APL_Certifs *store, APL_CardFile_Certificate *file, APL_C
 	m_issuer = NULL;
 
 	m_onCard = bOnCard;
-	m_hidden = bHidden;
 
 	m_test = 0;
 	m_root = -1;
@@ -869,7 +859,7 @@ APL_Certif::APL_Certif(APL_Certifs *store, APL_CardFile_Certificate *file, APL_C
 	m_info = NULL;
 }
 
-APL_Certif::APL_Certif(APL_Certifs *store, const CByteArray &cert, APL_CertifType type, bool bHidden) {
+APL_Certif::APL_Certif(APL_Certifs *store, const CByteArray &cert, APL_CertifType type) {
 	m_cryptoFwk = AppLayer.getCryptoFwk();
 	m_statusCache = AppLayer.getCertStatusCache();
 
@@ -885,7 +875,6 @@ APL_Certif::APL_Certif(APL_Certifs *store, const CByteArray &cert, APL_CertifTyp
 
 	m_issuer = NULL;
 
-	m_hidden = bHidden;
 	m_onCard = false;
 
 	m_test = -1;
@@ -920,8 +909,6 @@ APL_Certif::~APL_Certif(void) {
 		m_info = NULL;
 	}
 }
-
-bool APL_Certif::isAllowed() { return true; }
 
 APL_CertifType APL_Certif::getType() const {
 
@@ -1141,8 +1128,6 @@ void APL_Certif::initInfo() {
 }
 
 bool APL_Certif::verifyDateValidity() { return m_cryptoFwk->VerifyDateValidity(getData()); }
-
-bool APL_Certif::isHidden() { return m_hidden; }
 
 bool APL_Certif::isFromCard() { return m_onCard; }
 

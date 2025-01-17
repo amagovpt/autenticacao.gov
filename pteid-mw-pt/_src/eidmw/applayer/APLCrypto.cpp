@@ -59,8 +59,6 @@ APL_Pins::~APL_Pins() {
 	}
 }
 
-bool APL_Pins::isAllowed() { return true; }
-
 unsigned long APL_Pins::count(bool bFromCard) {
 	if (bFromCard)
 		return m_card->pinCount();
@@ -136,8 +134,6 @@ APL_Pin::~APL_Pin() {
 		m_signature = NULL;
 	}
 }
-
-bool APL_Pin::isAllowed() { return true; }
 
 unsigned long APL_Pin::getIndex() { return m_ulIndex; }
 

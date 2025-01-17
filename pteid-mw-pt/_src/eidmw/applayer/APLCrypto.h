@@ -50,8 +50,6 @@ public:
 	  */
 	EIDMW_APL_API virtual ~APL_Pins();
 
-	EIDMW_APL_API virtual bool isAllowed(); /**< The document is allowed*/
-
 	/**
 	  * Return the number of P15 pins on the card
 	  */
@@ -113,8 +111,6 @@ public:
 	  * Destructor
 	  */
 	EIDMW_APL_API virtual ~APL_Pin();
-
-	EIDMW_APL_API virtual bool isAllowed(); /**< The document is allowed*/
 
 	/**
 	  * Return the remaining tries for giving the good pin

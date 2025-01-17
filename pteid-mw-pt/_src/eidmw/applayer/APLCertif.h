@@ -115,8 +115,6 @@ public:
 	 */
 	EIDMW_APL_API virtual ~APL_Certifs(void);
 
-	EIDMW_APL_API virtual bool isAllowed(); /**< The document is allowed*/
-
 	/**
 	 * Return the number of P15 certificates on the card
 	 */
@@ -150,8 +148,7 @@ public:
 	 * If the unique ID is not yet in the map m_certifsAll
 	 * it is create and add to this map only
 	 */
-	EIDMW_APL_API APL_Certif *addCert(const CByteArray &cert, APL_CertifType type = APL_CERTIF_TYPE_UNKNOWN,
-									  bool bHidden = false);
+	EIDMW_APL_API APL_Certif *addCert(const CByteArray &cert, APL_CertifType type = APL_CERTIF_TYPE_UNKNOWN);
 
 	/**
 	 * Return the certificate from its unique ID
@@ -277,7 +274,7 @@ public:
 	 *
 	 * No need to export
 	 */
-	APL_Certif *addCert(APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard, bool bHidden,
+	APL_Certif *addCert(APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard,
 						unsigned long ulIndex, const CByteArray *cert);
 
 	/**
@@ -365,8 +362,6 @@ public:
 	 * Destroy m_certFile if it has been created in the constructor
 	 */
 	EIDMW_APL_API virtual ~APL_Certif(void);
-
-	EIDMW_APL_API virtual bool isAllowed(); /**< The document is allowed*/
 
 	EIDMW_APL_API unsigned long getIndexOnCard() const; /**< Return Index off the certificate on card */
 	EIDMW_APL_API const char *getLabel();				/**< Return P15 Label */
@@ -517,7 +512,6 @@ public:
 	EIDMW_APL_API const char *getValidityEnd();			/**< Return validity end date */
 	EIDMW_APL_API unsigned long getKeyLength();			/**< Return the length of public/private key */
 
-	EIDMW_APL_API bool isHidden();			 /**< This is an hidden certificate */
 	EIDMW_APL_API bool isFromCard();		 /**< This certificate comes from the card */
 	EIDMW_APL_API bool verifyDateValidity(); /**< The current time is between notBefore and notAfter */
 
@@ -548,7 +542,7 @@ protected:
 	 * @param store is the store in which the APL_Certif object is hold
 	 * @param file is the certificate file
 	 */
-	APL_Certif(APL_Certifs *store, APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard, bool bHidden,
+	APL_Certif(APL_Certifs *store, APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard,
 			   unsigned long ulIndex, const CByteArray *cert);
 
 	/**
@@ -557,7 +551,7 @@ protected:
 	 * @param store is the store in which the APL_Certif object is hold
 	 * @param cert is the certificate
 	 */
-	APL_Certif(APL_Certifs *store, const CByteArray &cert, APL_CertifType type, bool bHidden);
+	APL_Certif(APL_Certifs *store, const CByteArray &cert, APL_CertifType type);
 
 private:
 	APL_Certif(const APL_Certif &certif);			 /**< Copy not allowed - not implemented */
@@ -585,7 +579,6 @@ private:
 	APL_Crl *m_crl;			  /**< The crl link to the certificate */
 	APL_OcspResponse *m_ocsp; /**< The ocsp link to the certificate */
 
-	bool m_hidden; /**< This is an hidden certificate */
 	bool m_onCard; /**< This certificate comes from the card */
 
 	int m_test;			  /**< Test certificate : -1 = unknown, 1 = test, 0 = good certificate */
@@ -605,11 +598,10 @@ private:
 	friend APL_Certif *
 	APL_Certifs::getCertFromCard(unsigned long ulIndex); /**< This method must access protected constructor */
 	friend APL_Certif *
-	APL_Certifs::addCert(APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard, bool bHidden,
+	APL_Certifs::addCert(APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard,
 						 unsigned long ulIndex,
 						 const CByteArray *cert); /**< This method must access protected constructor */
-	friend APL_Certif *APL_Certifs::addCert(const CByteArray &cert, APL_CertifType type,
-											bool bHidden); /**< This method must access protected constructor */
+	friend APL_Certif *APL_Certifs::addCert(const CByteArray &cert, APL_CertifType type); /**< This method must access protected constructor */
 	friend void APL_Certifs::addToSODCAs(const CByteArray &cert);
 };
 
