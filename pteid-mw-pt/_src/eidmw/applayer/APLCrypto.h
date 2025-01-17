@@ -170,9 +170,6 @@ private:
 	APL_Pin(const APL_Pin &pin);			/**< Copy not allowed - not implemented */
 	APL_Pin &operator=(const APL_Pin &pin); /**< Copy not allowed - not implemented */
 
-	CByteArray getP15TLV();						 /**< Return the P15 struct in a TLV CByteArray */
-	void setP15TLV(const CByteArray *bytearray); /**< Fill the P15 struct with the TLV CByteArray */
-
 	APL_SmartCard *m_card;	 /**< The smart card from which the pin comes */
 	unsigned long m_ulIndex; /**< The P15 index of the pin */
 	tPin m_pinP15;			 /**< The P15 structure */

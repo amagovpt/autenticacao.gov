@@ -564,8 +564,6 @@ private:
 
 	void setCardCertificateType();
 
-	void setP15TLV(const CByteArray *bytearray); /**< Fill the P15 struct with the TLV CByteArray */
-
 	unsigned long m_ulIndex; /**< Index of the P15 object on the card */
 
 	tCert m_certP15;					  /**< P15 structure load at construct time */
