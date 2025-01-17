@@ -493,6 +493,13 @@ PTEID_ExNoReader::PTEID_ExNoReader() : PTEID_Exception(EIDMW_ERR_NO_READER) {}
 PTEID_ExNoReader::~PTEID_ExNoReader() {}
 
 /*****************************************************************************************
+---------------------------------------- PTEID_ExCertNoIssuer --------------------------------------
+*****************************************************************************************/
+PTEID_ExCertNoIssuer::PTEID_ExCertNoIssuer() : PTEID_Exception(EIDMW_ERR_CERT_NOISSUER) {}
+
+PTEID_ExCertNoIssuer::~PTEID_ExCertNoIssuer() {}
+
+/*****************************************************************************************
 ---------------------------- PTEID_ExUnexpectedValue --------------------------------------
 *****************************************************************************************/
 PTEID_ExSOD::PTEID_ExSOD(long lError) : PTEID_Exception(lError) {}

@@ -243,6 +243,9 @@
 /** Trying to move a file by renaming it */
 #define EIDMW_ERR_FILE_DEV 0xe1d00236
 
+/* A certificate issuer couldn't be found or loaded */
+#define EIDMW_ERR_CERT_NOISSUER 0xe1d00240
+
 // SOD related errors
 
 #define EIDMW_SOD_UNEXPECTED_VALUE 0xe1d01c01

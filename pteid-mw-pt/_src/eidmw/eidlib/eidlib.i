@@ -879,6 +879,9 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 			case EIDMW_ERR_BAD_TRANSACTION:
 				classDescription += "/PTEID_ExBadTransaction";
 				break;
+			case EIDMW_ERR_CERT_NOISSUER:
+				classDescription += "/PTEID_ExCertNoIssuer";
+				break;
 			case EIDMW_ERR_NO_READER:
 				classDescription += "/PTEID_ExNoReader";
 				break;
