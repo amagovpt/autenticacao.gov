@@ -278,6 +278,9 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type, 
 			(certsIt->second->isFromCard())) { // return existing cert if this cert is already loaded from card
 			return certsIt->second;
 		}
+		if (m_cryptoFwk->isSelfIssuer(certIn)) {
+			type = APL_CERTIF_TYPE_ROOT;
+		}
 		cert = new APL_Certif(this, certIn, type, bHidden);
 		m_certifs[ulUniqueId] = cert;
 
@@ -286,6 +289,8 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type, 
 		itrOrder = std::find(m_certifsOrder.begin(), m_certifsOrder.end(), ulUniqueId);
 		if (itrOrder == m_certifsOrder.end())
 			m_certifsOrder.push_back(ulUniqueId);
+		cert->resetIssuer();
+		cert->resetRoot();
 
 		return cert;
 	}
@@ -577,10 +582,15 @@ void APL_Certifs::reOrderCerts() {
 	if (citizenSign)
 		m_certifsOrder.push_back(citizenSign->getUniqueId());
 
-	if (citizenSignSubCA)
+	if (citizenSignSubCA) {
 		m_certifsOrder.push_back(citizenSignSubCA->getUniqueId());
-	if (citizenAuthSubCA)
+		citizenSignSubCA->setType(APL_CERTIF_TYPE_ROOT_SIGN);
+	}
+
+	if (citizenAuthSubCA) {
 		m_certifsOrder.push_back(citizenAuthSubCA->getUniqueId());
+		citizenAuthSubCA->setType(APL_CERTIF_TYPE_ROOT_AUTH);
+	}
 
 	m_certifsOrder.insert(m_certifsOrder.end(), cardRoots.begin(), cardRoots.end());
 }
@@ -729,7 +739,6 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 		return NULL;
 
 	APL_Certif *issuerCertObj = addCert(issuerCertificate);
-	issuerCertObj->resetIssuer();
 	reOrderCerts();
 	if (issuerCertObj != NULL) {
 #ifdef WIN32
@@ -779,6 +788,7 @@ APL_Certif::APL_Certif(APL_SmartCard *card, APL_Certifs *store, unsigned long ul
 	} else {
 		m_certFile = new APL_CardFile_Certificate(card, m_certP15.csPath.c_str());
 	}
+	setCardCertificateType();
 	m_delCertFile = true;
 
 	m_initInfo = false;
@@ -789,7 +799,7 @@ APL_Certif::APL_Certif(APL_SmartCard *card, APL_Certifs *store, unsigned long ul
 	m_hidden = false;
 
 	m_test = 0;
-	m_root = -1;
+	m_root = 0;
 
 	m_countChildren = 0xFFFFFFFF;
 
@@ -798,6 +808,30 @@ APL_Certif::APL_Certif(APL_SmartCard *card, APL_Certifs *store, unsigned long ul
 
 	m_info = NULL;
 }
+
+void APL_Certif::setCardCertificateType() {
+	switch (m_certP15.ulID) // From File EF0C: we are using CertIDs: 45, 46, 51, 52, 50 (Auth, Signature,
+	// Signature SubCA, Authentication SubCA, RootCA)
+	{
+	case 0x45:
+		m_type = APL_CERTIF_TYPE_AUTHENTICATION;
+		break;
+	case 0x46:
+		m_type = APL_CERTIF_TYPE_SIGNATURE;
+		break;
+	case 0x51:
+		m_type = APL_CERTIF_TYPE_ROOT_SIGN;
+		break;
+	case 0x52:
+		m_type = APL_CERTIF_TYPE_ROOT_AUTH;
+		break;
+	case 0x50:
+		m_type = APL_CERTIF_TYPE_ROOT;
+		break;
+	}
+}
+
+
 
 APL_Certif::APL_Certif(APL_Certifs *store, APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard,
 					   bool bHidden, unsigned long ulIndex, const CByteArray *cert) {
@@ -889,32 +923,7 @@ APL_Certif::~APL_Certif(void) {
 
 bool APL_Certif::isAllowed() { return true; }
 
-APL_CertifType APL_Certif::getType() {
-	if (m_type == APL_CERTIF_TYPE_UNKNOWN) {
-		if (isRoot()) {
-			m_type = APL_CERTIF_TYPE_ROOT;
-		} else {
-			switch (m_certP15.ulID) // From File EF0C: we are using CertIDs: 45, 46, 51, 52, 50 (Auth, Signature,
-									// Signature SubCA, Authentication SubCA, RootCA)
-			{
-			case 69:
-				m_type = APL_CERTIF_TYPE_AUTHENTICATION;
-				break;
-			case 70:
-				m_type = APL_CERTIF_TYPE_SIGNATURE;
-				break;
-			case 81:
-				m_type = APL_CERTIF_TYPE_ROOT_SIGN;
-				break;
-			case 82:
-				m_type = APL_CERTIF_TYPE_ROOT_AUTH;
-				break;
-			case 80:
-				m_type = APL_CERTIF_TYPE_ROOT;
-				break;
-			}
-		}
-	}
+APL_CertifType APL_Certif::getType() const {
 
 	return m_type;
 }
@@ -943,7 +952,6 @@ void APL_Certif::getFormattedData(CByteArray &data) const {
 void APL_Certif::resetIssuer() { m_issuer = m_store->findIssuer(this); }
 
 void APL_Certif::resetRoot() {
-	// Make temporary fix to make certificates appear on certain IAS cards
 	if (m_cryptoFwk->isSelfIssuer(getData()))
 		m_root = 1;
 	else
@@ -978,17 +986,17 @@ unsigned long APL_Certif::countChildren(bool bForceRecount) {
 
 APL_Certif *APL_Certif::getChildren(unsigned long ulIndex) { return m_store->getChildren(this, ulIndex); }
 
-bool APL_Certif::isTest() { return (m_test != 0); }
+bool APL_Certif::isTest()  { return (m_test != 0); }
 
-bool APL_Certif::isType(APL_CertifType type) { return (getType() == type); }
+bool APL_Certif::isType(APL_CertifType type) const { return (getType() == type); }
 
-bool APL_Certif::isRoot() { return (m_root == 1); }
+bool APL_Certif::isRoot() const { return (m_root == 1); }
 
-bool APL_Certif::isAuthentication() { return isType(APL_CERTIF_TYPE_AUTHENTICATION); }
+bool APL_Certif::isAuthentication() const { return isType(APL_CERTIF_TYPE_AUTHENTICATION); }
 
-bool APL_Certif::isSignature() { return isType(APL_CERTIF_TYPE_SIGNATURE); }
+bool APL_Certif::isSignature() const { return isType(APL_CERTIF_TYPE_SIGNATURE); }
 
-bool APL_Certif::isCA() { return isType(APL_CERTIF_TYPE_ROOT_AUTH); }
+bool APL_Certif::isCA() const { return isType(APL_CERTIF_TYPE_ROOT_AUTH); }
 
 bool APL_Certif::isFromPteidValidChain() {
 	APL_Certif *root = getRoot();

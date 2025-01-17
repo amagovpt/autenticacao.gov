@@ -373,9 +373,8 @@ public:
 	EIDMW_APL_API unsigned long getID() const;			/**< Return P15 ID */
 	EIDMW_APL_API unsigned long getUniqueId() const;	/**< Return the unique ID */
 	EIDMW_APL_API const CByteArray &getData() const;	/**< Return content of certificate file */
-	EIDMW_APL_API void
-	getFormattedData(CByteArray &data) const; /**< Return content of certificate file without ending zero */
-	EIDMW_APL_API APL_CertifType getType();	  /**< Return the type of the certificate */
+	EIDMW_APL_API void getFormattedData(CByteArray &data) const; /**< Return content of certificate file without ending zero */
+	EIDMW_APL_API APL_CertifType getType() const;	    /**< Return the type of the certificate */
 
 	/**
 	 * Return the certificate issuer (NULL if not found)
@@ -415,7 +414,7 @@ public:
 	 * @return true if the certificate is of that type
 	 * @return false otherwise
 	 */
-	EIDMW_APL_API bool isType(APL_CertifType type);
+	EIDMW_APL_API bool isType(APL_CertifType type) const;
 
 	/**
 	 * Return the root status
@@ -423,7 +422,7 @@ public:
 	 * @return true if it is a root certificate
 	 * @return false otherwise
 	 */
-	EIDMW_APL_API bool isRoot();
+	EIDMW_APL_API bool isRoot() const;
 
 	/**
 	 * Return the authentication status
@@ -431,7 +430,7 @@ public:
 	 * @return true if it is a authentication certificate
 	 * @return false otherwise
 	 */
-	EIDMW_APL_API bool isAuthentication();
+	EIDMW_APL_API bool isAuthentication() const;
 
 	/**
 	 * Return the signature status
@@ -439,7 +438,7 @@ public:
 	 * @return true if it is a signature certificate
 	 * @return false otherwise
 	 */
-	EIDMW_APL_API bool isSignature();
+	EIDMW_APL_API bool isSignature() const;
 
 	/**
 	 * Return the CA status
@@ -447,7 +446,7 @@ public:
 	 * @return true if it is a CA certificate
 	 * @return false otherwise
 	 */
-	EIDMW_APL_API bool isCA();
+	EIDMW_APL_API bool isCA() const;
 
 	/**
 	 * Check if the certificate chain end by the one of pteid root;
@@ -531,6 +530,8 @@ public:
 
 	void resetIssuer(); /**< reset m_issuer pointer */
 	void resetRoot();	/**< reset m_root flag */
+	/** It's useful to set the type after APL_Certif construction for certificates loaded from eidstore/cache */
+	void setType(APL_CertifType type) { m_type = type; }; 
 
 protected:
 	/**
@@ -566,6 +567,8 @@ private:
 	 * Init m_info
 	 */
 	void initInfo();
+
+	void setCardCertificateType();
 
 	void setP15TLV(const CByteArray *bytearray); /**< Fill the P15 struct with the TLV CByteArray */
 
