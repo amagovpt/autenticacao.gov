@@ -538,13 +538,6 @@ PTEID_ExCardChanged::PTEID_ExCardChanged() : PTEID_Exception(-1) {}
 PTEID_ExCardChanged::~PTEID_ExCardChanged() {}
 
 /*****************************************************************************************
----------------------------------------- PTEID_ExCertNoIssuer --------------------------------------
-*****************************************************************************************/
-PTEID_ExCertNoIssuer::PTEID_ExCertNoIssuer() : PTEID_Exception(-1) {}
-
-PTEID_ExCertNoIssuer::~PTEID_ExCertNoIssuer() {}
-
-/*****************************************************************************************
 ---------------------------------------- PTEID_ExDocTypeUnknown --------------------------------------
 *****************************************************************************************/
 PTEID_ExDocTypeUnknown::PTEID_ExDocTypeUnknown() : PTEID_Exception(-1) {}
