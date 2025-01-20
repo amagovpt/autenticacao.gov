@@ -661,7 +661,7 @@ APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert) {
 	}
 
 	APL_Certif *downloadedCert = NULL;
-	if (m_card->getType() == APL_CARDTYPE_PTEID_IAS5)
+	if (m_card != NULL && m_card->getType() == APL_CARDTYPE_PTEID_IAS5)
 		downloadedCert = downloadCAIssuerCertificate(cert);
 
 	return downloadedCert;

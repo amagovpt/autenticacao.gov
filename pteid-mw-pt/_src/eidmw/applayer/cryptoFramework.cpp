@@ -859,13 +859,14 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 		store = X509_STORE_new();
 
 		std::vector<APL_Certif *> certsToLoad;
-		APL_Certifs eidstore;
 		if (m_card) {
 			APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
 			for (int i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
 				certsToLoad.push_back(pcard->getCertificates()->getSODCA(i));
 			}
 		} else {
+			//APL_Certifs instance without card, used for CMD certificates
+			APL_Certifs eidstore;
 			for (int i = 0; i < eidstore.countAll(); i++) {
 				certsToLoad.push_back(eidstore.getCert(i));
 			}
