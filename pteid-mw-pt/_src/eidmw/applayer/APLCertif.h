@@ -88,17 +88,14 @@ class APL_Certif;
 class APL_OcspResponse;
 
 /******************************************************************************/ /**
-																				  * Class that represents a certificates
-																				  *store
-																				  *
-																				  * The store is linked to a smart card
-																				  * It contains the P15 certificates
-																				  *that are on this card and can contain
-																				  *other certificates
-																				  *
-																				  * To get a APL_Certifs object, we have
-																				  *to ask it from the APL_SmartCard
-																				  *********************************************************************************/
+  * Class that represents a certificates store
+  *
+  * The store is linked to a smart card
+  * It contains the P15 certificates that are on this card and can contain
+  * other certificates
+  *
+  * To get a APL_Certifs object, we have to ask it from the APL_SmartCard
+  *********************************************************************************/
 class APL_Certifs {
 public:
 	/**
@@ -343,16 +340,13 @@ class APL_Crl;
 struct tCertifInfo;
 
 /******************************************************************************/ /**
-																				  * Class that represents one
-																				  *certificate
-																				  *
-																				  * Can be constructed from a PKSC15
-																				  *object from a smart card or from a
-																				  *certificates store and a file.
-																				  *
-																				  * To get APL_Certif object, we have to
-																				  *ask it from APL_Certifs
-																				  *********************************************************************************/
+  * Class that represents one certificate
+  *
+  * Can be constructed from a PKCS15
+  * object from a smart card or from a certificates store and a file.
+  *
+  * To get APL_Certif object, we have to ask it from APL_Certifs
+  *********************************************************************************/
 class APL_Certif {
 
 public:
@@ -607,11 +601,11 @@ class APL_CrlDownloadingCache;
 struct tCrlInfo;
 
 /******************************************************************************/ /**
-																				  * Class that represents one crl
-																				  *
-																				  * To get APL_Crl object, we have to
-																				  *ask it from APL_Certif
-																				  *********************************************************************************/
+  * Class that represents one crl
+  *
+  * To get APL_Crl object, we have to
+  *ask it from APL_Certif
+  *********************************************************************************/
 class APL_Crl {
 public:
 	/**
@@ -673,12 +667,12 @@ private:
 struct tOcspCertID;
 
 /******************************************************************************/ /**
-																				  * Class that represents an OCSP
-																				  *response
-																				  *
-																				  * To get APL_OcspResponse object, we
-																				  *have to ask it from APL_Certif
-																				  *********************************************************************************/
+  * Class that represents an OCSP
+  *response
+  *
+  * To get APL_OcspResponse object, we
+  *have to ask it from APL_Certif
+  *********************************************************************************/
 class APL_OcspResponse {
 public:
 	/**

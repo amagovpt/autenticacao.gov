@@ -65,11 +65,10 @@ class APL_PersonalNotesEId;
 typedef void (*t_callback_addr)(void *, int);
 
 /******************************************************************************/ /**
-																				  * Class that represent a PTEID card
-																				  *
-																				  * To get APL_EIDCard object, we have
-																				  *to ask it from APL_ReaderContext
-																				  *********************************************************************************/
+  * Class that represents a PTEID card
+  *
+  * To get APL_EIDCard object, we have to ask it from APL_ReaderContext
+  *********************************************************************************/
 class APL_EIDCard : public APL_SmartCard {
 public:
 	/**
@@ -202,11 +201,9 @@ private:
 
 class APL_XmlUserRequestedInfo;
 /******************************************************************************/ /**
-																				  * Class that represent the custom XML
-																				  *document on a PTEID card as requested
-																				  * To get APL_CCXML_Doc object, we have
-																				  *to ask it from APL_EIDCard
-																				  *********************************************************************************/
+  * Class that represents the custom XML document on a PTEID card as requested
+  * To get APL_CCXML_Doc object, we have to ask it from APL_EIDCard
+  *********************************************************************************/
 class APL_CCXML_Doc {
 public:
 	/**
@@ -233,16 +230,13 @@ private:
 };
 
 /******************************************************************************/ /**
-																				  * Class that represent the document ID
-																				  *on a PTEID card
-																				  *
-																				  * This class show id informations to
-																				  *APL_EIDCard user (This information
-																				  *comes from the ID file)
-																				  *
-																				  * To get APL_DocEId object, we have to
-																				  *ask it from APL_EIDCard
-																				  *********************************************************************************/
+  * Class that represents the document ID on a PTEID card
+  *
+  * This class show id informations to APL_EIDCard user (This information
+  * comes from the ID file)
+  *
+  * To get APL_DocEId object, we have to ask it from APL_EIDCard
+  *********************************************************************************/
 class APL_DocEId {
 public:
 	/**
@@ -309,16 +303,13 @@ private:
 enum RemoteAddressProtocol { CC1_PROTOCOL = 1, CC2_PROTOCOL = 2 };
 
 /******************************************************************************/ /**
-																				  * Class that represent the document
-																				  *Address on a PTEID card
-																				  *
-																				  * This class show id informations to
-																				  *APL_EIDCard user (These informations
-																				  *comes from the Address file)
-																				  *
-																				  * To get APL_AddrEId object, we have
-																				  *to ask it from APL_EIDCard
-																				  *********************************************************************************/
+  * Class that represents the document address on a PTEID card
+  *
+  * This class show id informations to APL_EIDCard user (These informations
+  * come from the Address file)
+  *
+  * To get APL_AddrEId object, we have to ask it from APL_EIDCard
+  *********************************************************************************/
 class APL_AddrEId {
 public:
 	/**
@@ -484,15 +475,12 @@ private:
 };
 
 /******************************************************************************/ /**
-																				  * Class that represent the document
-																				  *SOD on a PTEID card
-																				  *
-																				  * This class show the SOD to
-																				  *APL_EIDCard user
-																				  *
-																				  * To get APL_SodEid object, we have to
-																				  *ask it from APL_EIDCard
-																				  *********************************************************************************/
+  * Class that represents the document SOD on a PTEID card
+  *
+  * This class show the SOD to APL_EIDCard user
+  *
+  * To get APL_SodEid object, we have to ask it from APL_EIDCard
+  *********************************************************************************/
 class APL_SodEid {
 public:
 	/**
@@ -520,8 +508,8 @@ private:
 };
 
 /******************************************************************************/ /**
-																				  * Class for VersionInfo document
-																				  *********************************************************************************/
+  * Class for VersionInfo document
+  *********************************************************************************/
 class APL_DocVersionInfo {
 public:
 	/**
@@ -538,19 +526,14 @@ public:
 	EIDMW_APL_API const char *getSoftmaskVersion(); /**< Return field SoftmaskVersion from the Info file */
 	EIDMW_APL_API const char *getAppletVersion();	/**< Return field AppletVersion from the Info file */
 	EIDMW_APL_API const char *getGlobalOsVersion(); /**< Return field GlobalOsVersion from the Info file */
-	EIDMW_APL_API const char *
-	getAppletInterfaceVersion();					   /**< Return field AppletInterfaceVersion from the Info file */
+	EIDMW_APL_API const char *getAppletInterfaceVersion();	/**< Return field AppletInterfaceVersion from the Info file */
 	EIDMW_APL_API const char *getPKCS1Support();	   /**< Return field PKCS1Support from the Info file */
 	EIDMW_APL_API const char *getKeyExchangeVersion(); /**< Return field KeyExchangeVersion from the Info file */
 	EIDMW_APL_API const char *getAppletLifeCicle();	   /**< Return field AppletLifeCicle from the Info file */
 
-	EIDMW_APL_API const char *
-	getGraphicalPersonalisation(); /**< Return field GraphicalPersonalisation from the TokenInfo file */
-	EIDMW_APL_API const char *
-	getElectricalPersonalisation(); /**< Return field ElectricalPersonalisation from the TokenInfo file */
-	EIDMW_APL_API const char *
-	getElectricalPersonalisationInterface(); /**< Return field ElectricalPersonalisationInterface from the TokenInfo
-												file */
+	EIDMW_APL_API const char * getGraphicalPersonalisation(); /**< Return field GraphicalPersonalisation from the TokenInfo file */
+	EIDMW_APL_API const char * getElectricalPersonalisation(); /**< Return field ElectricalPersonalisation from the TokenInfo file */
+	EIDMW_APL_API const char * getElectricalPersonalisationInterface(); /**< Return field ElectricalPersonalisationInterface from the TokenInfo file */
 
 protected:
 	/**
