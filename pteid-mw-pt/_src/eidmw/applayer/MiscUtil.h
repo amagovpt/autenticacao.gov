@@ -177,45 +177,6 @@ public:
 														const char *suffix = "");
 };
 
-class CByteArray;
-
-/******************************************************************************/ /**
-* Util class for parsing CSV file
-*********************************************************************************/
-#define CSV_SEPARATOR ';'
-
-class CSVParser {
-public:
-	CSVParser(const CByteArray &data, unsigned char separator);
-
-	virtual ~CSVParser();
-
-	unsigned long count();
-
-	const CByteArray &getData(unsigned long idx);
-
-private:
-	void parse(const CByteArray &data, unsigned char separator);
-
-	std::vector<CByteArray *> m_vector;
-};
-
-class CTLV;
-
-/******************************************************************************/ /**
- * Util class for parsing TLV file
- *********************************************************************************/
-class TLVParser : public CTLVBuffer {
-public:
-	TLVParser();
-
-	virtual ~TLVParser();
-
-	CTLV *GetSubTagData(unsigned char ucTag, unsigned char ucSubTag);
-
-private:
-	std::map<unsigned char, CTLVBuffer *> m_subfile;
-};
 } // namespace eIDMW
 
 #endif // __APL_MISCSUTIL_H__

@@ -405,9 +405,6 @@ private:
 	CAppLayer::getReader(const char *readerName); /**< This method must access protected constructor */
 };
 
-class TLVParser;
-class CSVParser;
-
 } // namespace eIDMW
 
 #endif //__SCREADERUTIL_H__
