@@ -117,7 +117,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>winscard.lib;Rpcrt4.lib;Crypt32.lib;comctl32.lib;pteidcommon.lib;pteidcardlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)pteidmdrv.dll</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidmdrv32.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>Src\res\pteidmdrv.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -158,7 +158,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>winscard.lib;Rpcrt4.lib;Crypt32.lib;comctl32.lib;pteidcommon.lib;pteidcardlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)pteidmdrv64.dll</OutputFile>
+      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidmdrv64.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>Src\res\pteidmdrv.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -111,7 +111,6 @@
 						<Directory Id="JAVA_SDK" Name="Java"/>
 						<Directory Id="CSHARP_SDK" Name="dotnet"/>
 					</Directory>
-					<Directory Id="MINIDRIVERROOTFOLDER" Name="PTeID Minidriver"/>
 				</Directory>
 
 			</Directory>
@@ -216,27 +215,7 @@
 					<RemoveFile Id="RemoveCacheFiles" On="uninstall" Name="*"/>
 					<RemoveFolder Id="RemoveCacheFolder" On="uninstall"/>
 				</Component>
-			</DirectoryRef>
-   
-			<DirectoryRef Id="MINIDRIVERROOTFOLDER">
-				<Component Id="pteidmdrv" Guid="2bdf2bb0-4f7a-4ed6-a3d4-abcbe212fa14" Win64="yes">
-					<File Id="pteidmdrv.inf" Name="pteidmdrv.inf" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.inf" KeyPath="yes" DiskId="1" />
-					<File Id="pteidmdrv.cat" Name="pteidmdrv.cat" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv.cat" KeyPath="no" DiskId="1" />
-					<File Id="pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="no" DiskId="1" />
-					<File Id="pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="no" DiskId="1" />
-					<!-- <difx:Driver ForceInstall="no" PlugAndPlayPrompt="no" DeleteFiles="yes" /> -->
-				</Component>
-        
-        <!-- Certificate Propagation Service is a standard Windows service available in Windows Vista and later versions. In order to use the minidriver
-			   it is necessary that this service is running. When a smart card reader is inserted this service should be started  by the smart card
-			   driver. As not all drivers are following this guidance, we start CertPropSvc during the minidriver install -->
-				<Component Id="CertPropService" Guid="932459d0-df59-11de-8a39-0800200c9a66" Permanent="yes" Win64="yes">
-					<!-- Start Certificate Propagation Service during startup -->
-					<RegistryValue Root="HKLM" Key="System\CurrentControlSet\Services\CertPropSvc" Type="integer" Name="Start" Value="2" KeyPath="yes"/>
-					<!-- Start Certificate Propagation Service now -->
-					<!--<ServiceControl Id="StartCertPropSvc" Name="CertPropSvc" Start="install" />-->
-				</Component>
-			</DirectoryRef>
+			</DirectoryRef> 
 
 			<DirectoryRef Id="APPLICATIONFOLDER">
 
@@ -278,7 +257,7 @@
       </Component>
                 
                 <Component Win64="no" Id="pteidmdrvsystem32" Guid="{9C571B6F-E4E0-47AF-812D-E51CFA406F67}" Permanent="no">
-                  <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv32.dll" KeyPath="yes"/>
+                  <File Id="system32_pteidmdrv32.dll" Name="pteidmdrv32.dll" Source="$(var.PTEID_BUILD_FOLDER_X86)pteidmdrv32.dll" KeyPath="yes"/>
                 </Component>
 
 				<Component Win64="no" Id="pkcs11" Guid="D54164C0-795D-4B2D-96C6-C8E395100896" SharedDllRefCount="yes">
@@ -312,7 +291,7 @@
 				</Component>
 
         <Component Id="pteidmdrvsystem64" Guid="{BA4FED31-E6E6-4D39-9D3A-3D0F2B572524}" Permanent="no">
-          <File Id="system32_pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="..\..\..\minidriver\makemsi\Release\pteidmdrv64.dll" KeyPath="yes" DiskId="1" />
+          <File Id="system32_pteidmdrv64.dll" Name="pteidmdrv64.dll" Source="$(var.PTEID_BUILD_FOLDER_X64)pteidmdrv64.dll" KeyPath="yes" DiskId="1" />
         </Component>
  
 			</DirectoryRef>
@@ -581,8 +560,6 @@
         <ComponentRef Id="Java_SDK_Component"/>
         <ComponentRef Id="CSharp_SDK_Component"/>
 
-        <ComponentRef Id="pteidmdrv"/>
-        <ComponentRef Id="CertPropService"/>
         <ComponentRef Id="pteidmdrvsystem32"/>
         <ComponentRef Id="pteidmdrvsystem64"/>
         <ComponentRef Id="REGISTERMINIDRIVER_64"/>
