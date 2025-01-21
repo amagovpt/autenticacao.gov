@@ -440,16 +440,18 @@ protected:
 	  */
 	bool isCrlIssuer(X509_CRL *pX509_Crl, X509 *pX509_issuer);
 
-	APL_SmartCard *m_card;
+	APL_SmartCard *m_card = NULL;
 
 	std::string m_proxy_host; /**< proxy host */
 	std::string m_proxy_port; /**< proxy port */
 	std::string m_proxy_pac;  /**< proxy pac file */
 
 private:
+
 	APL_CryptoFwk(const APL_CryptoFwk &cryptofwk);			  /**< Copy not allowed - not implemented */
 	APL_CryptoFwk &operator=(const APL_CryptoFwk &cryptofwk); /**< Copy not allowed - not implemented */
 
+	void loadCertificatesToOcspStore(X509_STORE *store);
 	CrlMemoryCache *m_CrlMemoryCache;
 };
 

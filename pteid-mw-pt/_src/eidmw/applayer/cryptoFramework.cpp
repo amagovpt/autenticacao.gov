@@ -681,6 +681,32 @@ inline int getSocketError() {
 #endif
 }
 
+void APL_CryptoFwk::loadCertificatesToOcspStore(X509_STORE *store) {
+	auto add_certif_to_store = [store](APL_Certif * cert) {
+		X509 * pX509 = NULL;
+		const CByteArray &ba = cert->getData();
+		const unsigned char *p_data = ba.GetBytes();
+
+		if (d2i_X509_Wrapper(&pX509, p_data, (int)ba.Size()))
+			X509_STORE_add_cert(store, pX509);
+	};
+
+	if (m_card) {
+		APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
+		for (int i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
+			add_certif_to_store(pcard->getCertificates()->getSODCA(i));
+		}
+	}
+	else {
+		//APL_Certifs instance without card, used for CMD certificates
+		APL_Certifs eidstore;
+		
+		for (int i = 0; i < eidstore.countAll(); i++) {
+			add_certif_to_store(eidstore.getCert(i));
+		}
+	}
+}
+
 FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_CERTID *pCertID,
 												OCSP_RESPONSE **pResponse, X509 *pX509_Issuer) {
 	// The pointer should not be NULL
@@ -858,28 +884,7 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 		// Create new store to verify the OCSP responder certificate
 		store = X509_STORE_new();
 
-		std::vector<APL_Certif *> certsToLoad;
-		if (m_card) {
-			APL_EIDCard *pcard = dynamic_cast<APL_EIDCard *>(m_card);
-			for (int i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
-				certsToLoad.push_back(pcard->getCertificates()->getSODCA(i));
-			}
-		} else {
-			//APL_Certifs instance without card, used for CMD certificates
-			APL_Certifs eidstore;
-			for (int i = 0; i < eidstore.countAll(); i++) {
-				certsToLoad.push_back(eidstore.getCert(i));
-			}
-		}
-
-		for (int i = 0; i < certsToLoad.size(); i++) {
-			APL_Certif *ca = certsToLoad.at(i);
-			X509 *pX509 = NULL;
-			const unsigned char *p = ca->getData().GetBytes();
-
-			pX509 = d2i_X509(&pX509, &p, ca->getData().Size());
-			X509_STORE_add_cert(store, pX509);
-		}
+		loadCertificatesToOcspStore(store);
 
 		if (pX509_Issuer) {
 			STACK_OF(X509) *intermediate_certs = sk_X509_new_null();
