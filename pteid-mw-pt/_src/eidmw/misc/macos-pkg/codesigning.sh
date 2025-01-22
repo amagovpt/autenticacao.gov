@@ -29,7 +29,7 @@ done
 #Sign libraries and frameworks in application bundle
 
 #Qt frameworks
-for frm in Core Concurrent DBus GUI Network PrintSupport Qml Quick QuickControls2 QuickTemplates2 Svg VirtualKeyboard Widgets Xml
+for frm in Core Concurrent DBus GUI Network PrintSupport Qml Quick QuickControls2 QuickTemplates2 Svg Widgets Xml
 do
 	codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp "apps/Autenticação.gov.app/Contents/Frameworks/Qt$frm.framework/Versions/Current/Qt$frm"
 done
@@ -44,6 +44,7 @@ codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime --entit
 #Sign applications with hardened runtime enabled and entitlements file if needed
 echo "Signing appbundle..."
 find "apps/Autenticação.gov.app/Contents/Resources" -name '*.dylib' -exec codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp "{}" \;
+find "apps/Autenticação.gov.app/Contents/PlugIns" -name '*.dylib' -exec codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp "{}" \;
 
 codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp -o runtime --entitlements entitlements.plist apps/Autenticação.gov.app/
 
