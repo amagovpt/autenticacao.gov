@@ -145,7 +145,7 @@ public:
 	 * If the unique ID is not yet in the map m_certifsAll
 	 * it is create and add to this map only
 	 */
-	EIDMW_APL_API APL_Certif *addCert(const CByteArray &cert, APL_CertifType type = APL_CERTIF_TYPE_UNKNOWN);
+	EIDMW_APL_API APL_Certif *addCert(const CByteArray &cert, APL_CertifType type = APL_CERTIF_TYPE_UNKNOWN, bool needToSetIssuer=false);
 
 	/**
 	 * Return the certificate from its unique ID
@@ -586,7 +586,7 @@ private:
 	APL_Certifs::addCert(APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard,
 						 unsigned long ulIndex,
 						 const CByteArray *cert); /**< This method must access protected constructor */
-	friend APL_Certif *APL_Certifs::addCert(const CByteArray &cert, APL_CertifType type); /**< This method must access protected constructor */
+	friend APL_Certif *APL_Certifs::addCert(const CByteArray &cert, APL_CertifType type, bool needToSetIssuer); /**< This method must access protected constructor */
 	friend void APL_Certifs::addToSODCAs(const CByteArray &cert);
 };
 

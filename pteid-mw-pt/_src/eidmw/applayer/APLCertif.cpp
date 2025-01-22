@@ -261,7 +261,7 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex) {
 /* This is used to add certificate from file. If the same certificate was already loaded from the card, we store the new
    one in m_certifs instead, we need this so that initSODCAs() picks up all the certificates in eidstore
  */
-APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type) {
+APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type, bool needToSetIssuer) {
 
 	std::map<unsigned long, APL_Certif *>::const_iterator itr;
 
@@ -287,7 +287,9 @@ APL_Certif *APL_Certifs::addCert(const CByteArray &certIn, APL_CertifType type) 
 		itrOrder = std::find(m_certifsOrder.begin(), m_certifsOrder.end(), ulUniqueId);
 		if (itrOrder == m_certifsOrder.end())
 			m_certifsOrder.push_back(ulUniqueId);
-		cert->resetIssuer();
+
+		if (needToSetIssuer)
+			cert->resetIssuer();
 		cert->resetRoot();
 
 		return cert;
@@ -731,7 +733,7 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 	if (issuerCertificate.Size() == 0)
 		return NULL;
 
-	APL_Certif *issuerCertObj = addCert(issuerCertificate);
+	APL_Certif *issuerCertObj = addCert(issuerCertificate, APL_CERTIF_TYPE_UNKNOWN, true);
 	reOrderCerts();
 	if (issuerCertObj != NULL) {
 #ifdef WIN32
