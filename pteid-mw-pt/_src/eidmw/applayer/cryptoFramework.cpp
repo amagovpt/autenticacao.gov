@@ -1258,7 +1258,6 @@ void APL_CryptoFwk::updateCRL(X509_CRL *crl, X509_CRL *delta_crl) {
 			if (exists != 0) {
 				// If it exists in the CRL, but needs to be removed from CRL
 				if (revocation_reason && ASN1_ENUMERATED_get(revocation_reason) == OCSP_REVOKED_STATUS_REMOVEFROMCRL) {
-					std::cout << "Removed a Certificate from CRL" << std::endl;
 					// Remove contract
 					X509_REVOKED *deleted_X509 = sk_X509_REVOKED_delete_ptr(pRevokeds, pRevoked);
 					// Frees the deleted X509
