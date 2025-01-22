@@ -251,13 +251,6 @@ public:
 	EIDMW_APL_API APL_Certif *findIssuer(const APL_Certif *cert);
 
 	/**
-	 * Loop through m_certifs to find the issuer of the certificate
-	 *
-	 * If no issuer is found, NULL is return
-	 */
-	EIDMW_APL_API APL_Certif *findIssuer(const CByteArray *data);
-
-	/**
 	 * Loop through m_certifs to find the issuer of the crl
 	 *
 	 * If no issuer is found, NULL is return
