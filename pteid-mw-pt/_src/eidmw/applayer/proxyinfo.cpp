@@ -9,7 +9,6 @@
 ****************************************************************************-*/
 
 #include "proxyinfo.h"
-#include <codecvt>
 #include <string.h>
 #include "Util.h"
 #include "APLConfig.h"
@@ -25,29 +24,6 @@ ProxyInfo::ProxyInfo() {
 	APL_Config config_pacfile(CConfig::EIDMW_CONFIG_PARAM_PROXY_PACFILE);
 	APL_Config useSystemProxy(CConfig::EIDMW_CONFIG_PARAM_PROXY_USE_SYSTEM);
 
-#ifdef WIN32
-	// in Windows the proxy configs come in utf16. Convert them to utf8:
-	std::wstring proxy_hostW = eIDMW::utilStringWiden(config_host.getString());
-	std::wstring proxy_usernameW = eIDMW::utilStringWiden(config_username.getString());
-	std::wstring proxy_pwdW = eIDMW::utilStringWiden(config_pwd.getString());
-
-	std::wstring proxy_host_u16(proxy_hostW.begin(), proxy_hostW.end());
-	std::wstring proxy_username_u16(proxy_usernameW.begin(), proxy_usernameW.end());
-	std::wstring proxy_pwd_16(proxy_pwdW.begin(), proxy_pwdW.end());
-
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> convert;
-	std::string proxy_host = convert.to_bytes(proxy_host_u16);
-	std::string proxy_username = convert.to_bytes(proxy_username_u16);
-	std::string proxy_pwd = convert.to_bytes(proxy_pwd_16);
-
-	std::string pacfile;
-	if (config_pacfile.getString()) {
-		std::wstring pacfileW = eIDMW::utilStringWiden(config_pacfile.getString());
-		std::wstring pacfile_16(pacfileW.begin(), pacfileW.end());
-		pacfile = convert.to_bytes(pacfile_16);
-	}
-
-#else
 	std::string proxy_host = config_host.getString();
 	std::string proxy_username = config_username.getString();
 	std::string proxy_pwd = config_pwd.getString();
@@ -55,7 +31,6 @@ ProxyInfo::ProxyInfo() {
 	if (config_pacfile.getString()) {
 		pacfile = config_pacfile.getString();
 	}
-#endif
 
 	long proxy_port = config_port.getLong();
 	system_proxy = (useSystemProxy.getLong() == 1);

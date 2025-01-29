@@ -22,6 +22,7 @@
 
 **************************************************************************** */
 #include <algorithm>
+#include <codecvt>
 #include <fstream>
 #include <functional>
 #include <vector>
@@ -32,7 +33,6 @@
 #include <openssl/asn1.h>
 
 #ifndef WIN32
-#include <codecvt>
 #include <unistd.h>
 #endif
 #include <stdlib.h>
@@ -114,18 +114,9 @@ const unsigned char *findASN1Object(const CByteArray &array, long &size, long ta
 	return desc_data;
 }
 
-std::string utilStringNarrow(const std::wstring &in, const std::locale &locale) {
-	std::string out(in.size(), 0);
-
-	for (std::wstring::size_type i = 0; in.size() > i; ++i)
-#ifdef WIN32
-		out[i] = std::use_facet<std::ctype<wchar_t>>(locale).narrow(in[i]);
-#else
-		// in the unix implementation of std::locale narrow needs 2 arguments
-		// (the second is a default char, here the choice is random)
-		out[i] = std::use_facet<std::ctype<wchar_t>>(locale).narrow(in[i], 'x');
-#endif
-	return out;
+std::string utilStringNarrow(const std::wstring &in) {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	return converter.to_bytes(in);
 }
 
 /**
