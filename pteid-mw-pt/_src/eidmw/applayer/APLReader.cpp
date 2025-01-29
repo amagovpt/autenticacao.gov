@@ -158,7 +158,8 @@ APL_CardType APL_ReaderContext::getPhysicalCardType() {
 	case CARD_PTEID_IAS07:
 	case CARD_PTEID_IAS101:
 	case CARD_PTEID_IAS5:
-	case CARD_ICAO: {
+	case CARD_ICAO:
+	case CARD_MULTIPASS: {
 
 		ret = ConvertCardType(calCardType);
 
@@ -226,6 +227,9 @@ bool APL_ReaderContext::connectCard() {
 		break;
 	case APL_CARDTYPE_ICAO:
 		m_card = new APL_ICAO(this);
+		break;
+	case APL_CARDTYPE_MULTIPASS:
+		m_card = new APL_MultiPass(this);
 		break;
 	default:
 		return false;
@@ -710,6 +714,8 @@ APL_CardType ConvertCardType(tCardType cardType) {
 		return APL_CARDTYPE_PTEID_IAS5;
 	case CARD_ICAO:
 		return APL_CARDTYPE_ICAO;
+	case CARD_MULTIPASS:
+		return APL_CARDTYPE_MULTIPASS;
 	default:
 		return APL_CARDTYPE_UNKNOWN;
 	}

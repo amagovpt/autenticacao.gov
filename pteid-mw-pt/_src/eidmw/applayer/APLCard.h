@@ -449,6 +449,23 @@ protected:
 	friend bool APL_ReaderContext::connectCard();
 };
 
+class APL_MultiPass : public APL_SmartCard {
+public:
+	EIDMW_APL_API APL_MultiPass(APL_ReaderContext *reader);
+	EIDMW_APL_API ~APL_MultiPass();
+
+	EIDMW_APL_API virtual APL_CardType getType() const override;
+	EIDMW_APL_API CByteArray readTokenData();
+
+	virtual const CByteArray &getRawData(APL_RawDataType type) override;
+	virtual APLPublicKey *getRootCAPubKey() override;
+	virtual const char *getTokenSerialNumber() override;
+	virtual const char *getTokenLabel() override;
+
+private:
+	APL_ReaderContext *m_reader;
+};
+
 } // namespace eIDMW
 
 #endif //__SCCARDUTIL_H__

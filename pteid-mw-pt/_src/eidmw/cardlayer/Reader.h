@@ -115,6 +115,7 @@ public:
 
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 	bool initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid);
+	void openBACChannel(const CByteArray& mrz_info);
 
 	/* Read the file indicated by 'csPath'.
 	 * This path can be absolute, relative or empty

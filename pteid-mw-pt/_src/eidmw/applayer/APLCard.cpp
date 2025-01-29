@@ -40,6 +40,7 @@
 #include "IcaoDg3.h"
 #include "Log.h"
 #include "MiscUtil.h"
+#include "MultiPassCard.h"
 #include "PDFSignature.h"
 #include "PaceAuthentication.h"
 #include "SODParser.h"
@@ -1061,5 +1062,112 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 	auto cryptoFwk = AppLayer.getCryptoFwk();
 	cryptoFwk->loadMasterList(filePath);
 }
+
+APL_CardType APL_MultiPass::getType() const {
+	return APL_CARDTYPE_MULTIPASS;
+};
+
+/* Check digit algorithm specified in ICAO doc 9303 part 2 (??) */
+int icao_check_digit(const char *mrz_field) {
+	int sum = 0;
+	int weight = 0;
+	const char *str = mrz_field;
+
+	for (size_t i = 0; i < strlen(str); i++) {
+		if (i % 3 == 0) {
+			weight = 7;
+		} else if (i % 3 == 1) {
+			weight = 3;
+		} else {
+			weight = 1;
+		}
+		if (isdigit(str[i])) {
+			sum += weight * (str[i] - '0');
+		} else if (isalpha(str[i])) {
+			sum += weight * (tolower(str[i]) - 'a' + 10);
+		}
+	}
+
+	return sum % 10;
+}
+typedef struct {
+	unsigned char * mrz_bytes;
+	size_t mrz_length;
+} mrz_info_t;
+
+mrz_info_t *multipass_mrz_info_from_sod_bytes(mrz_info_t *in) {
+	mrz_info_t *output = (mrz_info_t *)OPENSSL_zalloc(sizeof(mrz_info_t));
+
+	size_t hex_len = in->mrz_length * 2 + 1;
+	char *hex_string = (char *)OPENSSL_zalloc(hex_len);
+	OPENSSL_buf2hexstr_ex(hex_string, hex_len, NULL, in->mrz_bytes, in->mrz_length, '\0');
+
+	// Split the string in 3 fields to mimic the standard MRZ fields used in BAC
+	std::string field1(hex_string, 12);
+	std::string field2(hex_string + 12, 6);
+	std::string field3(hex_string + 18, 6);
+
+	// Add check digits
+	field1 += ('0' + icao_check_digit(field1.c_str()));
+	field2 += ('0' + icao_check_digit(field2.c_str()));
+	field3 += ('0' + icao_check_digit(field3.c_str()));
+
+	std::string mrz_info_str = field1 + field2 + field3;
+
+	output->mrz_bytes = (unsigned char *)OPENSSL_zalloc(mrz_info_str.size());
+	memcpy(output->mrz_bytes, mrz_info_str.c_str(), mrz_info_str.size());
+	output->mrz_length = mrz_info_str.size();
+
+	OPENSSL_free(hex_string);
+	// return encoded bytes
+	return output;
+}
+
+CByteArray APL_MultiPass::readTokenData() {
+	printf("Printing from multi pass class APL\n");
+
+	printf("Step 1. Select Application...\n");
+	selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
+	printf("Done\n");
+
+
+	printf("Step 2. Read File...\n");
+	CByteArray sod_data;
+	auto ret = readFile("011D", sod_data, 0UL);
+	printf("Done\n");
+
+	// remove padding (? not sure if still needed)
+	printf("Step 3. Getting certificate length...\n");
+	auto length = der_certificate_length(sod_data);
+	sod_data.Chop(sod_data.Size() - length);
+	printf("Done\n");
+
+	// get last 12 bytes
+	printf("Step 4. Getting sod last 12 bytes...\n");
+	CByteArray sod_last12 = sod_data.GetBytes(sod_data.Size() - 12);
+	printf("Done\n");
+
+	printf("Step 5. Creating MRZ from the 12 bytes...\n");
+	mrz_info_t sod_info = {sod_last12.GetBytes(), 12};
+	mrz_info_t*mrz_bytes = multipass_mrz_info_from_sod_bytes(&sod_info);
+	printf("Done\n");
+
+	printf("Step 6. Opening BAC Channel...\n");
+	getCalReader()->openBACChannel({mrz_bytes->mrz_bytes, mrz_bytes->mrz_length});
+	printf("Done\n");
+	
+	return {};
+}
+
+APL_MultiPass::APL_MultiPass(APL_ReaderContext *reader) : APL_SmartCard(reader), m_reader(reader) {}
+APL_MultiPass::~APL_MultiPass() {}
+
+const CByteArray &APL_MultiPass::getRawData(APL_RawDataType type) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
+
+APLPublicKey *APL_MultiPass::getRootCAPubKey() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
+
+const char *APL_MultiPass::getTokenSerialNumber() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
+
+const char *APL_MultiPass::getTokenLabel() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
 } // namespace eIDMW

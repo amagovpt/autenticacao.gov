@@ -36,13 +36,16 @@
 #include "Config.h"
 
 #include "PteidCard.h"
+#include "MultiPassCard.h"
+
 #include <vector>
 #include <string>
 
 namespace eIDMW {
 
 /*
-  Card type detection function for use in modules where we are supplied with a SCARDHANDLE already created, e.g. minidriver  
+  Card type detection function for use in modules where we are supplied with a SCARDHANDLE already created, e.g.
+  minidriver
 */
 
 CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReader, CContext *poContext,
@@ -180,31 +183,36 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 				if (ulRespLen < 2)
 					return false;
 				unsigned long select_sw12 = 256 * oResp.GetByte(ulRespLen - 2) + oResp.GetByte(ulRespLen - 1);
-				//We only need to test for application presence
+				// We only need to test for application presence
 				return (select_sw12 == 0x9000 || select_sw12 == 0x6982);
 			};
 
-			if (!isContactLess) {
-				bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
-				if (aidStatus) {
-					appletVersion = 1;
-				} else {
-					bool nationalDataStatus =
-						selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
-					if (nationalDataStatus)
-						appletVersion = 3;
-				}
-				if (appletVersion > 0) {
-					long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
-
-					poCard =
-						PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
-					if (cacheEnabled)
-						poCard->InitEncryptionKey();
-				}
+			bool multipass = selectAppId(MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET));
+			if (multipass) {
+				poCard = new CMultiPassCard(hCard, poContext, poPinpad, param_structure);
 			} else {
-				appletVersion = 3;
-				poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure);
+				if (!isContactLess) {
+					bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
+					if (aidStatus) {
+						appletVersion = 1;
+					} else {
+						bool nationalDataStatus =
+							selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
+						if (nationalDataStatus)
+							appletVersion = 3;
+					}
+					if (appletVersion > 0) {
+						long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+
+						poCard =
+							PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+						if (cacheEnabled)
+							poCard->InitEncryptionKey();
+					}
+				} else {
+					appletVersion = 3;
+					poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure);
+				}
 			}
 
 			CCache::LimitDiskCacheFiles(10);

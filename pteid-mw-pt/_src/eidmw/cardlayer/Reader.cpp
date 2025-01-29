@@ -30,6 +30,7 @@
 #include "Log.h"
 #include "Config.h"
 // cardlayer headers
+#include "MultiPassCard.h"
 #include "Reader.h"
 #include "Card.h"
 #include "APDU.h"
@@ -427,6 +428,12 @@ void CReader::initPaceAuthentication(const char *secret, size_t secretLen, PaceS
 
 bool CReader::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	return m_poCard->initChipAuthentication(pkey, oid);
+}
+
+void CReader::openBACChannel(const CByteArray& mrz_info) {
+	printf("CReader:: Trying to open BAC Channel\n");
+	reinterpret_cast<CMultiPassCard*>(m_poCard)->openBACChannel(mrz_info);
+	printf("Done\n");
 }
 
 CByteArray CReader::ReadFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen,
