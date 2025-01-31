@@ -364,8 +364,7 @@ cleanup:
 //*****************************************************
 // store the authority certificates of the card in a specific reader
 //*****************************************************
-bool CERTIFICATES::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits,
-									   const char *readerName) {
+bool CERTIFICATES::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext,  const char *readerName) {
 #ifdef WIN32
 	bool bRet = false;
 	HCERTSTORE hMemoryStore = NULL; // memory store handle
@@ -550,7 +549,7 @@ bool CERTIFICATES::ImportCertificates(const char *readerName) {
 				// i.e. no CA or root certificates
 				// ----------------------------------------------------
 				if ((KeyUsageBits & CERT_KEY_CERT_SIGN_KEY_USAGE) == CERT_KEY_CERT_SIGN_KEY_USAGE) {
-					if (StoreAuthorityCerts(pCertContext, KeyUsageBits, readerName)) {
+					if (StoreAuthorityCerts(pCertContext, readerName)) {
 						bImported = true;
 					}
 				} else {
