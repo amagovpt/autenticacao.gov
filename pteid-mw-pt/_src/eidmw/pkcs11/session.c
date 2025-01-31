@@ -211,7 +211,7 @@ int isAcroread() {
 #ifdef _WIN32
 
 	DWORD bufsize;
-	bufsize = GetModuleFileNameA(NULL, (LPTSTR)buf, (DWORD)buf_len);
+	bufsize = GetModuleFileNameA(NULL, buf, (DWORD)buf_len);
 #endif
 #ifdef __linux__
 	ssize_t s = readlink("/proc/self/exe", buf, (size_t)buf_len);
@@ -236,7 +236,6 @@ CK_RV C_GetSessionInfo(CK_SESSION_HANDLE hSession, /* the session's handle */
 					   CK_SESSION_INFO_PTR pInfo)  /* receives session information */
 {
 	int ret;
-	char buf[256];
 	P11_SESSION *pSession = NULL;
 	P11_SLOT *pSlot = NULL;
 	CK_TOKEN_INFO tokeninfo;
