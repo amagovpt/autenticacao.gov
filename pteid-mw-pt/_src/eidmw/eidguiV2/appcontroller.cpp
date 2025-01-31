@@ -867,8 +867,8 @@ void AppController::getSignatureOptions() {
         if ((attributes = cJSON_GetObjectItem(json, "attributes")) == NULL) {
             PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse attributes array", __FUNCTION__);
         } else {
-            const size_t array_size = cJSON_GetArraySize(attributes);
-            for (size_t i = 0; i < array_size; ++i) {
+            const int array_size = cJSON_GetArraySize(attributes);
+            for (int i = 0; i < array_size; ++i) {
                 cJSON *array_item = NULL;
                 if ((array_item = cJSON_GetArrayItem(attributes, i)) == NULL) {
                     PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "%s failed to parse attributes item", __FUNCTION__);
