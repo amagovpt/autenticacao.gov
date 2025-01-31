@@ -617,7 +617,7 @@ public:
 		m_proxy_host = proxy_host;
 
 		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_HOST);
-		config.setString(proxy_host.toUtf8());
+		config.setString(proxy_host.toUtf8().constData());
 	}
 
 	QString getProxyHost() { return m_proxy_host; }
@@ -626,14 +626,14 @@ public:
 		m_proxy_username = proxy_user;
 
 		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_USERNAME);
-		config.setString(proxy_user.toUtf8());
+		config.setString(proxy_user.toUtf8().constData());
 	}
 
 	void setProxyPwd(const QString &proxy_pwd) {
 		m_proxy_pwd = proxy_pwd;
 
 		eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_PROXY_PWD);
-		config.setString(proxy_pwd.toUtf8());
+		config.setString(proxy_pwd.toUtf8().constData());
 	}
 
 	void setEnablePteidCache(bool bEnabled) {

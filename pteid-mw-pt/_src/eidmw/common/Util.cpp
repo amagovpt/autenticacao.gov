@@ -47,13 +47,10 @@ char a_cHexChars[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B'
 
 namespace eIDMW {
 
-std::wstring utilStringWiden(const std::string &in, const std::locale &locale) {
+std::wstring utilStringWiden(const std::string &in) {
 #ifndef WIN32
-	std::wstring out(in.size(), 0);
-
-	for (std::string::size_type i = 0; in.size() > i; ++i)
-		out[i] = std::use_facet<std::ctype<wchar_t>>(locale).widen(in[i]);
-	return out;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	return converter.from_bytes(in);
 #else
 	int required_size = MultiByteToWideChar(CP_UTF8, 0, in.c_str(), (int)in.size(), NULL, 0);
 

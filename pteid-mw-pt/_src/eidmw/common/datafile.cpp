@@ -58,7 +58,9 @@
 #include "eidErrors.h"
 #include "MWException.h"
 #include "Thread.h"
+#include <codecvt>
 #include <ctype.h>
+#include <locale>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -217,7 +219,7 @@ bool CDataFile::Load(bool bLock) {
 
 	t_Str szLine;
 	t_Str szComment;
-	wchar_t buffer[MAX_BUFFER_LEN] = {0};
+	char buffer[MAX_BUFFER_LEN] = {0};
 	t_Section *pSection = GetSection(L"");
 
 	// These need to be set, we'll restore the original values later.
@@ -226,10 +228,10 @@ bool CDataFile::Load(bool bLock) {
 
 	while (!bDone) {
 		memset(buffer, 0, sizeof(buffer));
-		wchar_t *tmp = fgetws(buffer, MAX_BUFFER_LEN, m_stream);
+		char *tmp = fgets(buffer, MAX_BUFFER_LEN, m_stream);
 		tmp = tmp; // avoid warning
 
-		szLine = buffer;
+		szLine = utilStringWiden(buffer);
 		Trim(szLine);
 
 		bDone = ferror(m_stream) || feof(m_stream);
