@@ -1550,6 +1550,10 @@ Item {
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             font.bold: activeFocus
                             clip: false
+                            validator: RegExpValidator {
+                                regExp: /^[\x00-\x7F]+$/
+
+                            }
                             enabled: checkboxAutProxy.checked
                             opacity: checkboxAutProxy.checked ? 1.0 : Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                             Accessible.role: Accessible.EditableText
@@ -1579,6 +1583,10 @@ Item {
                                                  "STR_NETWORK_AUTH_PASSWORD_OP")
                             echoMode: TextInput.Password
                             font.family: lato.name
+                            validator: RegExpValidator {
+                                regExp: /^[\x00-\x7F]+$/
+
+                            }
                             font.pixelSize: Constants.SIZE_TEXT_FIELD
                             clip: false
                             enabled: checkboxAutProxy.checked
