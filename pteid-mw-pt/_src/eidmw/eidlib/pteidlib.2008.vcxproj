@@ -175,11 +175,6 @@
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Command>"%25PTEID_DIR_DOXYGEN%25\doxygen.exe" $(SolutionDir)..\eidlib\Doxygen
-"%25PTEID_DIR_7ZIP%25\7z.exe" a $(SolutionDir)..\eidlib\cppdocs.zip  $(SolutionDir)..\eidlib\docs -mx9</Command>
-      <Message>documentation</Message>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -214,11 +209,6 @@
       <DataExecutionPrevention />
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Command>"%25PTEID_DIR_DOXYGEN%25\doxygen.exe" $(SolutionDir)..\eidlib\Doxygen
-"%25PTEID_DIR_7ZIP%25\7z.exe" a $(SolutionDir)..\eidlib\cppdocs.zip  $(SolutionDir)..\eidlib\docs -mx9</Command>
-      <Message>documentation</Message>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="eidlibCmdClient.cpp" />
