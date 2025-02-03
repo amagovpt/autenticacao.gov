@@ -400,7 +400,6 @@ bool CERTIFICATES::StoreAuthorityCerts(PCCERT_CONTEXT pCertContext,  const char 
 	return bRet;
 #else
 	Q_UNUSED(pCertContext);
-	Q_UNUSED(KeyUsageBits);
 	Q_UNUSED(readerName);
 	return true;
 #endif
