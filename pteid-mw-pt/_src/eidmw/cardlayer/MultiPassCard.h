@@ -5,30 +5,24 @@
 
 namespace eIDMW {
 
+typedef struct {
+	unsigned char ks_enc[16];
+	unsigned char ks_mac[16];
+	unsigned char ssc[8];
+} sm_keys_t;
+
 class CMultiPassCard : public CIcaoCard {
 public:
 	CMultiPassCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol);
 
 	void openBACChannel(const CByteArray &mrzInfo);
+	CByteArray readToken();
 
 	virtual tCardType GetType() override;
 	CByteArray GetRandom();
 
-	// virtual CByteArray GetSerialNrBytes();
-	// virtual unsigned long PinStatus(const tPin &pin);
-	// virtual CByteArray RootCAPubKey();
-
-	// virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN);
-	// virtual bool unlockPIN(const eIDMW::tPin &, const eIDMW::tPin *, const char *, const char *, long unsigned int &,
-	// 					   long unsigned int);
-	// virtual DlgPinUsage PinUsage2Dlg(const eIDMW::tPin &, const eIDMW::tPrivKey *);
-	// virtual void InitEncryptionKey();
-	// virtual void ReadSerialNumber();
-	// virtual void showPinDialog(eIDMW::tPinOperation, const eIDMW::tPin &, std::string &, std::string &,
-	// 						   const eIDMW::tPrivKey *, void *);
-	// virtual void SetSecurityEnv(const eIDMW::tPrivKey &, long unsigned int, long unsigned int);
-	// virtual CByteArray SignInternal(const eIDMW::tPrivKey &, long unsigned int, const eIDMW::CByteArray &,
-	// 								const eIDMW::tPin *);
+private:
+	sm_keys_t *m_sm_keys;
 };
 
 } // namespace eIDMW

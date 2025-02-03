@@ -1155,8 +1155,8 @@ CByteArray APL_MultiPass::readTokenData() {
 	printf("Step 6. Opening BAC Channel...\n");
 	getCalReader()->openBACChannel({mrz_bytes->mrz_bytes, mrz_bytes->mrz_length});
 	printf("Done\n");
-	
-	return {};
+
+	return getCalReader()->readMultiPassToken();
 }
 
 APL_MultiPass::APL_MultiPass(APL_ReaderContext *reader) : APL_SmartCard(reader), m_reader(reader) {}

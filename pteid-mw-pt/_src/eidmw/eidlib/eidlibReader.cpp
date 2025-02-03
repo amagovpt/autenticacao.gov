@@ -594,6 +594,20 @@ void PTEID_ReaderContext::TestMultiPass() {
 	}
 }
 
+PTEID_ByteArray PTEID_ReaderContext::getMultiPassToken() {
+	PTEID_ByteArray out;
+	CByteArray token;
+
+	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
+	if (pimpl->getCardType() == APL_CARDTYPE_MULTIPASS) {
+		token = reinterpret_cast<APL_MultiPass *>(pimpl->getCard())->readTokenData();
+	}
+
+	out.Append(token.GetBytes(), token.Size());
+
+	return out;
+}
+
 PTEID_Card &PTEID_ReaderContext::getCard() {
 	PTEID_Card *out = NULL;
 

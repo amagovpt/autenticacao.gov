@@ -498,7 +498,7 @@ public:
 
 	PTEIDSDK_API ICAO_Card &getICAOCard();
 
-	PTEIDSDK_API void TestMultiPass();
+	PTEIDSDK_API PTEID_ByteArray getMultiPassToken();
 
 	/**
 	 * Specify a callback function to be called each time a

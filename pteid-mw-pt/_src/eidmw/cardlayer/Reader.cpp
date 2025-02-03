@@ -436,6 +436,10 @@ void CReader::openBACChannel(const CByteArray& mrz_info) {
 	printf("Done\n");
 }
 
+CByteArray CReader::readMultiPassToken() {
+	return reinterpret_cast<CMultiPassCard*>(m_poCard)->readToken();
+}
+
 CByteArray CReader::ReadFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen,
 							 bool bDoNotCache) {
 	if (m_poCard == NULL)
