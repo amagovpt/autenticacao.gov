@@ -1,4 +1,5 @@
 #include "MultiPassCard.h"
+#include "Util.h"
 #include <openssl/des.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
@@ -11,14 +12,7 @@ CMultiPassCard::CMultiPassCard(SCARDHANDLE hCard, CContext *poContext, GenericPi
 	m_pace.reset(nullptr);
 }
 
-void dumpByteArray(unsigned char *ba, size_t len) {
-	for (size_t i = 0; i < len; i++)
-		printf("%02X ", ba[i] & 0xFF);
-
-	puts("\n");
-}
-
-void CMultiPassCard::openBACChannel(const CByteArray& mrzInfo) {
+void CMultiPassCard::openBACChannel(const CByteArray &mrzInfo) {
 	m_bac.authenticate(m_hCard, m_comm_protocol, mrzInfo);
 }
 
@@ -30,7 +24,6 @@ CByteArray CMultiPassCard::readToken() {
 	auto resp = m_bac.sendSecureAPDU(read_binary);
 	auto token = m_bac.decryptData(resp);
 
-	dumpByteArray(token.GetBytes(), token.Size());
 	return token;
 }
 

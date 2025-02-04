@@ -21,14 +21,13 @@
 #include "BacAuthentication.h"
 #include "APDU.h"
 #include "ByteArray.h"
+#include "Util.h"
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
 #include <openssl/des.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
-
-void dumpByteArray(unsigned char *ba, size_t len);
 
 namespace eIDMW {
 
@@ -369,13 +368,8 @@ err:
 
 CByteArray BacAuthentication::decryptData(const CByteArray &data) {
 	CByteArray encryptionKey = {m_smKeys.ksEnc, sizeof(m_smKeys.ksEnc)};
-
 	CByteArray cryptogram(data.GetBytes(3, data.GetByte(1)-1));
-
-	CByteArray out = decrypt_data_3des(encryptionKey, cryptogram);
-	dumpByteArray(out.GetBytes(), out.Size());
-	
-	return out; 
+    return decrypt_data_3des(encryptionKey, cryptogram);
 }
 
 CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
