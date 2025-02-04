@@ -59,6 +59,7 @@ HEADERS += \
            PCSC.h \
            GenericPinpad.h \
            PaceAuthentication.h \
+           BacAuthentication.h \
            Pinpad.h \
            PKCS15.h \
            PKCS15Parser.h \
@@ -86,6 +87,7 @@ SOURCES += \
            Context.cpp \
            PCSC.cpp \
            PaceAuthentication.cpp \
+           BacAuthentication.cpp \
            Pinpad.cpp \
            GenericPinpad.cpp \
            PKCS15.cpp \

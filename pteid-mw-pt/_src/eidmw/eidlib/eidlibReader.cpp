@@ -587,13 +587,6 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 	return *out;
 }
 
-void PTEID_ReaderContext::TestMultiPass() {
-	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
-	if (pimpl->getCardType() == APL_CARDTYPE_MULTIPASS) {
-		reinterpret_cast<APL_MultiPass *>(pimpl->getCard())->readTokenData();
-	}
-}
-
 PTEID_ByteArray PTEID_ReaderContext::getMultiPassToken() {
 	PTEID_ByteArray out;
 	CByteArray token;
