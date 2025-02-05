@@ -31,7 +31,6 @@
 #include "APLCrypto.h"
 #include "APLReader.h"
 #include "CardFile.h"
-#include "CardLayer.h"
 #include "CardPteidDef.h"
 #include "IcaoDg1.h"
 #include "IcaoDg11.h"
@@ -40,12 +39,10 @@
 #include "IcaoDg3.h"
 #include "Log.h"
 #include "MiscUtil.h"
-#include "MultiPassCard.h"
 #include "PDFSignature.h"
 #include "PaceAuthentication.h"
 #include "SODParser.h"
 #include "SigContainer.h"
-#include "Util.h"
 #include "XadesSignature.h"
 #include "aa_oids.h"
 #include "cryptoFwkPteid.h"
@@ -54,9 +51,6 @@
 #include <time.h>
 #include <sys/types.h>
 #include <openssl/err.h>
-
-#include <fstream>
-#include <sstream>
 
 namespace eIDMW {
 
@@ -663,10 +657,9 @@ APL_ICAO::~APL_ICAO() {}
 
 void APL_ICAO::resetCardState() {
 	auto reader = m_reader->getCalReader();
-	unsigned char apdu_break_sm[] = {0x0C, 0xA4, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+	unsigned char apdu_break_sm[] = {0x0C, 0xA4, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 	reader->SendAPDU(CByteArray(apdu_break_sm, sizeof(apdu_break_sm)));
-
 }
 
 void APL_ICAO::initializeCard() {
@@ -1063,9 +1056,7 @@ void APL_ICAO::loadMasterList(const char *filePath) {
 	cryptoFwk->loadMasterList(filePath);
 }
 
-APL_CardType APL_MultiPass::getType() const {
-	return APL_CARDTYPE_MULTIPASS;
-};
+APL_CardType APL_MultiPass::getType() const { return APL_CARDTYPE_MULTIPASS; };
 
 /* Check digit algorithm specified in ICAO doc 9303 part 2 (??) */
 int icao_check_digit(const char *mrz_field) {
@@ -1091,7 +1082,7 @@ int icao_check_digit(const char *mrz_field) {
 	return sum % 10;
 }
 typedef struct {
-	unsigned char * mrz_bytes;
+	unsigned char *mrz_bytes;
 	size_t mrz_length;
 } mrz_info_t;
 
@@ -1124,39 +1115,37 @@ mrz_info_t *multipass_mrz_info_from_sod_bytes(mrz_info_t *in) {
 }
 
 CByteArray APL_MultiPass::readTokenData() {
-	printf("Printing from multi pass class APL\n");
+	MWLOG_CTX(LEV_INFO, MOD_APL, "Reading token from MultiPass application");
 
-	printf("Step 1. Select Application...\n");
-	selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
-	printf("Done\n");
+	try {
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Selecting multi-pass application");
+		selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
 
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Reading SOD file");
+		CByteArray sod_data;
+		auto ret = readFile("011D", sod_data, 0UL);
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Multi-pass SOD read size: %ld", sod_data.Size());
 
-	printf("Step 2. Read File...\n");
-	CByteArray sod_data;
-	auto ret = readFile("011D", sod_data, 0UL);
-	printf("Done\n");
+		// remove padding (? not sure if still needed)
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Getting certificate length of multi-pass SOD");
+		auto length = der_certificate_length(sod_data);
+		sod_data.Chop(sod_data.Size() - length);
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Multi-pass SOD size: %ld", sod_data.Size());
 
-	// remove padding (? not sure if still needed)
-	printf("Step 3. Getting certificate length...\n");
-	auto length = der_certificate_length(sod_data);
-	sod_data.Chop(sod_data.Size() - length);
-	printf("Done\n");
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Generating MRZ from the last 12 bytes of multi-pass SOD");
+		CByteArray sod_last12 = sod_data.GetBytes(sod_data.Size() - 12);
+		mrz_info_t sod_info = {sod_last12.GetBytes(), 12};
+		mrz_info_t *mrz_bytes = multipass_mrz_info_from_sod_bytes(&sod_info);
 
-	// get last 12 bytes
-	printf("Step 4. Getting sod last 12 bytes...\n");
-	CByteArray sod_last12 = sod_data.GetBytes(sod_data.Size() - 12);
-	printf("Done\n");
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Opening BAC channel");
+		getCalReader()->openBACChannel({mrz_bytes->mrz_bytes, mrz_bytes->mrz_length});
 
-	printf("Step 5. Creating MRZ from the 12 bytes...\n");
-	mrz_info_t sod_info = {sod_last12.GetBytes(), 12};
-	mrz_info_t*mrz_bytes = multipass_mrz_info_from_sod_bytes(&sod_info);
-	printf("Done\n");
-
-	printf("Step 6. Opening BAC Channel...\n");
-	getCalReader()->openBACChannel({mrz_bytes->mrz_bytes, mrz_bytes->mrz_length});
-	printf("Done\n");
-
-	return getCalReader()->readMultiPassToken();
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Reading multi-pass token");
+		return getCalReader()->readMultiPassToken();
+	} catch (CMWException &e) {
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Token Read Failed: %ld", e.GetError());
+		throw;
+	}
 }
 
 APL_MultiPass::APL_MultiPass(APL_ReaderContext *reader) : APL_SmartCard(reader), m_reader(reader) {}
