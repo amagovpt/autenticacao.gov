@@ -25,6 +25,7 @@
 
 #include "Export.h"
 #include "ByteArray.h"
+#include "Log.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -38,6 +39,12 @@
 #endif
 
 namespace eIDMW {
+
+template <typename... Args>
+[[noreturn]] void LOG_AND_THROW(tLevel level, tModule module, long err, const char *fmt, Args &&...args) {
+	MWLOG(level, module, fmt, std::forward<Args>(args)...);
+	throw CMWEXCEPTION(err);
+}
 
 //--- string conversion between std::wstring and std::string
 EIDMW_CMN_API std::wstring utilStringWiden(const std::string &in);
