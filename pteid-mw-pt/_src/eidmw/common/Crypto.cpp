@@ -22,6 +22,7 @@
 #include "Log.h"
 #include "Util.h"
 #include "eidErrors.h"
+#include <cstdio>
 #include <openssl/evp.h>
 
 namespace eIDMW {
@@ -69,34 +70,6 @@ std::vector<uint8_t> BlockCipherCtx::processBlock(const uint8_t *data, size_t le
 	}
 
 	return out;
-}
-
-std::vector<uint8_t> BlockCipherCtx::decrypt(unsigned char *key, const uint8_t *data, size_t len,
-										  const unsigned char *iv) {
-	TripleDesCipher cipher;
-	cipher.init(key, nullptr, false); // decrypt mode
-	auto decrypted = cipher.processBlock(data, len);
-
-	if (len != decrypted.size()) {
-		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR,
-					  "Input length and decrypted length do not match (%ld != %ld)", len, decrypted.size());
-	}
-
-	return decrypted;
-}
-
-std::vector<uint8_t> BlockCipherCtx::encrypt(unsigned char *key, const uint8_t *data, size_t len,
-										  const unsigned char *iv) {
-	TripleDesCipher cipher;
-	cipher.init(key, nullptr, true); // encrypt mode
-	auto decrypted = cipher.processBlock(data, len);
-
-	if (len != decrypted.size()) {
-		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR,
-					  "Input length and encrypted length do not match (%ld != %ld)", len, decrypted.size());
-	}
-
-	return decrypted;
 }
 
 } // namespace eIDMW

@@ -260,7 +260,8 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to verify ICC MAC");
 	}
 
-	auto decrypted = TripleDesCipher::decrypt(bacKeys.kEnc.data(), iccBacData, sizeof(decryptedIccData) - MAC_KEYSIZE);
+	auto decrypted = BlockCipherCtx::decrypt<TripleDesCipher>(bacKeys.kEnc.data(), iccBacData,
+															  sizeof(decryptedIccData) - MAC_KEYSIZE);
 	std::memcpy(decryptedIccData, decrypted.data(), decrypted.size());
 
 	if (memcmp(bacKeys.rndIcc.data(), decryptedIccData, 8) != 0 ||
@@ -300,7 +301,8 @@ CByteArray BacAuthentication::decryptData(const CByteArray &data) {
 	CByteArray encryptionKey = {m_smKeys.ksEnc.data(), m_smKeys.ksEnc.size()};
 	CByteArray cryptogram(data.GetBytes(3, data.GetByte(1) - 1));
 
-	auto decrypted = TripleDesCipher::decrypt(encryptionKey.GetBytes(), cryptogram.GetBytes(), cryptogram.Size());
+	auto decrypted =
+		BlockCipherCtx::decrypt<TripleDesCipher>(encryptionKey.GetBytes(), cryptogram.GetBytes(), cryptogram.Size());
 
 	return {decrypted.data(), decrypted.size()};
 }
@@ -327,7 +329,8 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		CByteArray input_data(apdu.GetBytes(5, apdu.Size() - 5));
 		CByteArray paddedInput = paddedByteArray(input_data);
 
-		auto encrypted = TripleDesCipher::encrypt(encryptionKey.GetBytes(), paddedInput.GetBytes(), paddedInput.Size());
+		auto encrypted = BlockCipherCtx::encrypt<TripleDesCipher>(encryptionKey.GetBytes(), paddedInput.GetBytes(),
+																  paddedInput.Size());
 		CByteArray cryptogram = {encrypted.data(), encrypted.size()};
 		// LCg = Len(Cg) + Len(PI = 1)
 		int lcg = cryptogram.Size() + 1;
@@ -438,7 +441,7 @@ BacAuthentication::BacKeys BacAuthentication::generateBacData(const CByteArray &
 	memcpy(enc_input + 16, bacKeys.kifd.data(), 16);
 
 	// Encrypt SIFD = (RND.IFD || RND.ICC || KIFD) and generate MAC
-	auto encrypted = TripleDesCipher::encrypt(bacKeys.kEnc.data(), enc_input, sizeof(enc_input));
+	auto encrypted = BlockCipherCtx::encrypt<TripleDesCipher>(bacKeys.kEnc.data(), enc_input, sizeof(enc_input));
 	std::memcpy(bac_data, encrypted.data(), encrypted.size());
 
 	auto mac = retailMacDes(bacKeys.kMac.data(), bac_data, encrypted.size());

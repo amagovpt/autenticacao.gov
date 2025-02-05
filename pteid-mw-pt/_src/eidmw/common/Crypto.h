@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "Log.h"
+#include "eidErrors.h"
 #include <cstdint>
 #include <memory>
 #include <openssl/evp.h>
@@ -92,8 +94,20 @@ public:
 	 * @param len size of data
 	 * @param iv iv or nullptr for zero
 	 */
-	static std::vector<uint8_t> decrypt(unsigned char *key, const uint8_t *data, size_t len,
-										const unsigned char *iv = nullptr);
+	template <typename T>
+	static std::vector<uint8_t> decrypt(const unsigned char *key, const uint8_t *data, size_t len,
+										const unsigned char *iv = nullptr) {
+		T cipher;
+		cipher.init(key, nullptr, false); // decrypt mode
+		auto decrypted = cipher.processBlock(data, len);
+
+		if (len != decrypted.size()) {
+			LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR,
+						  "Input length and decrypted length do not match (%ld != %ld)", len, decrypted.size());
+		}
+
+		return decrypted;
+	}
 
 	/**
 	 * @brief Decrypts blob of data based on constructed cipher
@@ -102,8 +116,20 @@ public:
 	 * @param len size of data
 	 * @param iv iv or nullptr for zero
 	 */
-	static std::vector<uint8_t> encrypt(unsigned char *key, const uint8_t *data, size_t len,
-										const unsigned char *iv = nullptr);
+	template <typename T>
+	static std::vector<uint8_t> encrypt(const unsigned char *key, const uint8_t *data, size_t len,
+										const unsigned char *iv = nullptr) {
+		T cipher;
+		cipher.init(key, nullptr, true); // encrypt mode
+		auto decrypted = cipher.processBlock(data, len);
+
+		if (len != decrypted.size()) {
+			LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR,
+						  "Input length and encrypted length do not match (%ld != %ld)", len, decrypted.size());
+		}
+
+		return decrypted;
+	}
 };
 
 /**
