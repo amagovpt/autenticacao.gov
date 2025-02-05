@@ -37,20 +37,20 @@ public:
 
 private:
 	struct SM_Keys {
-		unsigned char ksEnc[16];
-		unsigned char ksMac[16];
-		unsigned char ssc[8];
+        std::array<unsigned char, 16> ksEnc;
+        std::array<unsigned char, 16> ksMac;
+        std::array<unsigned char, 8> ssc;
 
 		void generate3DesKeysFromKeySeed(const unsigned char *keySeed16, size_t keySeedLen);
 	};
 
 	struct BacKeys {
-		unsigned char rndIfd[8];
-		unsigned char rndIcc[8];
-		unsigned char kifd[16];
-		unsigned char kicc[16];
-		unsigned char kEnc[16];
-		unsigned char kMac[16];
+        std::array<unsigned char, 8> rndIfd;
+        std::array<unsigned char, 8> rndIcc;
+        std::array<unsigned char, 16> kifd;
+        std::array<unsigned char, 16> kicc;
+        std::array<unsigned char, 16> kEnc;
+        std::array<unsigned char, 16> kMac;
 
 		void generateAccessKeys(const CByteArray &mrzInfo);
 	};

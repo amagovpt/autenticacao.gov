@@ -21,7 +21,7 @@
 #include "BacAuthentication.h"
 #include "APDU.h"
 #include "ByteArray.h"
-#include "Util.h"
+#include <array>
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
@@ -49,47 +49,47 @@ CByteArray paddedByteArray(CByteArray &input) {
 #define MAC_LEN 8
 
 void BacAuthentication::SM_Keys::generate3DesKeysFromKeySeed(const unsigned char *keySeed16, size_t keySeedLen) {
-	unsigned char k_seed[SHA_DIGEST_LENGTH];
-	unsigned char k_seed_digest[SHA_DIGEST_LENGTH];
+	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeed;
+	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeedDigest;
 	if (keySeedLen != 16) {
 		// TODO: Error fprintf(stderr, "Illegal input for %s: should be a 16-byte key_seed\n", __FUNCTION__);
 		assert(false);
 	}
-	memcpy(k_seed, keySeed16, 16);
+	memcpy(kSeed.data(), keySeed16, 16);
 	// Only the 16 most significant bytes are used from kseed so we can overwrite the last 4
-	k_seed[SHA_DIGEST_LENGTH - 4] = 0x00;
-	k_seed[SHA_DIGEST_LENGTH - 3] = 0x00;
-	k_seed[SHA_DIGEST_LENGTH - 2] = 0x00;
-	k_seed[SHA_DIGEST_LENGTH - 1] = 0x01;
+	kSeed[SHA_DIGEST_LENGTH - 4] = 0x00;
+	kSeed[SHA_DIGEST_LENGTH - 3] = 0x00;
+	kSeed[SHA_DIGEST_LENGTH - 2] = 0x00;
+	kSeed[SHA_DIGEST_LENGTH - 1] = 0x01;
 
-	SHA1(k_seed, SHA_DIGEST_LENGTH, k_seed_digest);
-	memcpy(ksEnc, k_seed_digest, 16);
+	SHA1(kSeed.data(), SHA_DIGEST_LENGTH, kSeedDigest.data());
+	memcpy(ksEnc.data(), kSeedDigest.data(), 16);
 
-	k_seed[SHA_DIGEST_LENGTH - 1] = 0x02;
+	kSeed[SHA_DIGEST_LENGTH - 1] = 0x02;
 
-	SHA1(k_seed, SHA_DIGEST_LENGTH, k_seed_digest);
-	memcpy(ksMac, k_seed_digest, 16);
+	SHA1(kSeed.data(), SHA_DIGEST_LENGTH, kSeedDigest.data());
+	memcpy(ksMac.data(), kSeedDigest.data(), 16);
 }
 
 void BacAuthentication::BacKeys::generateAccessKeys(const CByteArray &mrzInfo) {
-	unsigned char k_seed[SHA_DIGEST_LENGTH];
-	unsigned char k_seed_digest[SHA_DIGEST_LENGTH];
+	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeed;
+	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeedDigest;
 
-	SHA1(mrzInfo.GetBytes(), mrzInfo.Size(), k_seed);
+	SHA1(mrzInfo.GetBytes(), mrzInfo.Size(), kSeed.data());
 
 	// Only the 16 most significant bytes are used from kseed so we can overwrite the last 4
-	k_seed[SHA_DIGEST_LENGTH - 4] = 0x00;
-	k_seed[SHA_DIGEST_LENGTH - 3] = 0x00;
-	k_seed[SHA_DIGEST_LENGTH - 2] = 0x00;
-	k_seed[SHA_DIGEST_LENGTH - 1] = 0x01;
+	kSeed[SHA_DIGEST_LENGTH - 4] = 0x00;
+	kSeed[SHA_DIGEST_LENGTH - 3] = 0x00;
+	kSeed[SHA_DIGEST_LENGTH - 2] = 0x00;
+	kSeed[SHA_DIGEST_LENGTH - 1] = 0x01;
 
-	SHA1(k_seed, SHA_DIGEST_LENGTH, k_seed_digest);
-	memcpy(kEnc, k_seed_digest, 16);
+	SHA1(kSeed.data(), SHA_DIGEST_LENGTH, kSeedDigest.data());
+	memcpy(kEnc.data(), kSeedDigest.data(), 16);
 
-	k_seed[SHA_DIGEST_LENGTH - 1] = 0x02;
+	kSeed[SHA_DIGEST_LENGTH - 1] = 0x02;
 
-	SHA1(k_seed, SHA_DIGEST_LENGTH, k_seed_digest);
-	memcpy(kMac, k_seed_digest, 16);
+	SHA1(kSeed.data(), SHA_DIGEST_LENGTH, kSeedDigest.data());
+	memcpy(kMac.data(), kSeedDigest.data(), 16);
 }
 
 int triple_des_cbc_nopadding(const unsigned char *enc_input, size_t len, const unsigned char *k_enc, unsigned char *out,
@@ -286,27 +286,27 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	// Check ICC and store derived keys
 	unsigned char decryptedIccData[40] = {0};
 	const size_t MAC_OFFSET = sizeof(iccBacData) - MAC_KEYSIZE;
-	unsigned char *mac = retail_mac_des(bacKeys.kMac, iccBacData, sizeof(iccBacData) - MAC_KEYSIZE);
+	unsigned char *mac = retail_mac_des(bacKeys.kMac.data(), iccBacData, sizeof(iccBacData) - MAC_KEYSIZE);
 	const unsigned char *iccMac = iccBacData + MAC_OFFSET;
 	if (memcmp(mac, iccMac, MAC_KEYSIZE) != 0) {
 		// TODO: Failed to verify ICC MAC
 		assert(false);
 	}
-	int outl =
-		triple_des_cbc_nopadding(iccBacData, sizeof(decryptedIccData) - MAC_KEYSIZE, bacKeys.kEnc, decryptedIccData, 0);
-	int matchRndIcc = memcmp(bacKeys.rndIcc, decryptedIccData, 8);
-	int matchRndIfd = memcmp(bacKeys.rndIfd, decryptedIccData + 8, 8);
+	int outl = triple_des_cbc_nopadding(iccBacData, sizeof(decryptedIccData) - MAC_KEYSIZE, bacKeys.kEnc.data(),
+										decryptedIccData, 0);
+	int matchRndIcc = memcmp(bacKeys.rndIcc.data(), decryptedIccData, 8);
+	int matchRndIfd = memcmp(bacKeys.rndIfd.data(), decryptedIccData + 8, 8);
 
 	// TODO: Error
 	assert(matchRndIcc == 0 && matchRndIfd == 0 && "Failed to verify Rnd ICC or IFD");
 
 	// Store keys
-	memcpy(bacKeys.kicc, decryptedIccData + 16, 16);
+	memcpy(bacKeys.kicc.data(), decryptedIccData + 16, 16);
 
 	// --------------------
 	// Generate session keys and SSC
-	unsigned char *rnd_icc = bacKeys.rndIcc;
-	unsigned char *rnd_ifd = bacKeys.rndIfd;
+	unsigned char *rnd_icc = bacKeys.rndIcc.data();
+	unsigned char *rnd_ifd = bacKeys.rndIfd.data();
 
 	unsigned char *ssc = &(m_smKeys.ssc[0]);
 	memcpy(ssc, rnd_icc + 4, 4);
@@ -325,7 +325,7 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 		}
 		return value;
 	};
-	m_ssc = bigEndianBytesToLong(m_smKeys.ssc, sizeof(m_smKeys.ssc));
+	m_ssc = bigEndianBytesToLong(m_smKeys.ssc.data(), m_smKeys.ssc.size());
 
 	printf("Authenticated with back with success!\n");
 }
@@ -367,14 +367,14 @@ err:
 }
 
 CByteArray BacAuthentication::decryptData(const CByteArray &data) {
-	CByteArray encryptionKey = {m_smKeys.ksEnc, sizeof(m_smKeys.ksEnc)};
-	CByteArray cryptogram(data.GetBytes(3, data.GetByte(1)-1));
-    return decrypt_data_3des(encryptionKey, cryptogram);
+	CByteArray encryptionKey = {m_smKeys.ksEnc.data(), m_smKeys.ksEnc.size()};
+	CByteArray cryptogram(data.GetBytes(3, data.GetByte(1) - 1));
+	return decrypt_data_3des(encryptionKey, cryptogram);
 }
 
 CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
-	CByteArray encryptionKey = {m_smKeys.ksEnc, sizeof(m_smKeys.ksEnc)};
-	CByteArray macKey = {m_smKeys.ksMac, sizeof(m_smKeys.ksMac)};
+	CByteArray encryptionKey = {m_smKeys.ksEnc.data(), m_smKeys.ksEnc.size()};
+	CByteArray macKey = {m_smKeys.ksMac.data(), m_smKeys.ksMac.size()};
 
 	CByteArray final_apdu;
 	const unsigned char Tcg = 0x87;
@@ -462,13 +462,13 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 	long returnValue = {0};
 	auto response = sendAPDU(final_apdu, returnValue);
 
-    if (!checkMacInResponse(response, macKey) ) {
-        fprintf(stderr, "Failed to verifiy MAC on response");
-    }
+	if (!checkMacInResponse(response, macKey)) {
+		fprintf(stderr, "Failed to verifiy MAC on response");
+	}
 
-    printf("ssc -> %ld\n", m_ssc);
+	printf("ssc -> %ld\n", m_ssc);
 
-    return response;
+	return response;
 }
 
 CByteArray BacAuthentication::sendAPDU(const CByteArray &apdu, long &returnValue) {
@@ -487,28 +487,28 @@ CByteArray BacAuthentication::getRandomFromCard() {
 }
 
 BacAuthentication::BacKeys BacAuthentication::generateBacData(const CByteArray &mrzInfo, const CByteArray &random,
-										   unsigned char *bac_data) {
+															  unsigned char *bac_data) {
 	const int CIPHER_KEY_SIZE = 16;
 
 	BacKeys bac_keys = {0};
 	bac_keys.generateAccessKeys(mrzInfo);
 
 	// Copy random ICC to bac keys
-	memcpy(bac_keys.rndIcc, random.GetBytes(), random.Size());
+	memcpy(bac_keys.rndIcc.data(), random.GetBytes(), random.Size());
 
 	// Generate random IFD and KIFD
-	RAND_bytes(bac_keys.rndIfd, 8);
-	RAND_bytes(bac_keys.kifd, 16);
+	RAND_bytes(bac_keys.rndIfd.data(), 8);
+	RAND_bytes(bac_keys.kifd.data(), 16);
 
 	unsigned char enc_input[32] = {0};
-	memcpy(enc_input, bac_keys.rndIfd, 8);
+	memcpy(enc_input, bac_keys.rndIfd.data(), 8);
 	memcpy(enc_input + 8, random.GetBytes(), 8);
-	memcpy(enc_input + 16, bac_keys.kifd, 16);
+	memcpy(enc_input + 16, bac_keys.kifd.data(), 16);
 
 	// Encrypt SIFD = (RND.IFD || RND.ICC || KIFD) and generate MAC
-	int outl = triple_des_cbc_nopadding(enc_input, sizeof(enc_input), bac_keys.kEnc, bac_data, 1);
+	int outl = triple_des_cbc_nopadding(enc_input, sizeof(enc_input), bac_keys.kEnc.data(), bac_data, 1);
 
-	unsigned char *mac = retail_mac_des(bac_keys.kMac, bac_data, outl);
+	unsigned char *mac = retail_mac_des(bac_keys.kMac.data(), bac_data, outl);
 	memcpy(bac_data + 32, mac, MAC_KEYSIZE);
 
 	return bac_keys;
