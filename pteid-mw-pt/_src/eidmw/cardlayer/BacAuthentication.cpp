@@ -21,6 +21,9 @@
 #include "BacAuthentication.h"
 #include "APDU.h"
 #include "ByteArray.h"
+#include "Log.h"
+#include "Util.h"
+#include "eidErrors.h"
 #include <array>
 #include <cstddef>
 #include <cstdio>
@@ -50,13 +53,16 @@ CByteArray paddedByteArray(CByteArray &input) {
 #define MAC_LEN 8
 
 void BacAuthentication::SM_Keys::generate3DesKeysFromKeySeed(const unsigned char *keySeed16, size_t keySeedLen) {
-	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeed;
-	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeedDigest;
 	if (keySeedLen != 16) {
-		// TODO: Error fprintf(stderr, "Illegal input for %s: should be a 16-byte key_seed\n", __FUNCTION__);
-		assert(false);
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "%s: Illegal input. Key seed must be 16 bytes",
+					  __FUNCTION__);
 	}
+
+	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeed = {0};
+	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeedDigest = {0};
+
 	memcpy(kSeed.data(), keySeed16, 16);
+
 	// Only the 16 most significant bytes are used from kseed so we can overwrite the last 4
 	kSeed[SHA_DIGEST_LENGTH - 4] = 0x00;
 	kSeed[SHA_DIGEST_LENGTH - 3] = 0x00;
@@ -73,6 +79,8 @@ void BacAuthentication::SM_Keys::generate3DesKeysFromKeySeed(const unsigned char
 }
 
 void BacAuthentication::BacKeys::generateAccessKeys(const CByteArray &mrzInfo) {
+	assert(mrzInfo.Size() != 0 && "Empty MRZ when generating access keys");
+
 	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeed;
 	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeedDigest;
 
@@ -93,39 +101,50 @@ void BacAuthentication::BacKeys::generateAccessKeys(const CByteArray &mrzInfo) {
 	memcpy(kMac.data(), kSeedDigest.data(), 16);
 }
 
-int triple_des_cbc_nopadding(const unsigned char *enc_input, size_t len, const unsigned char *k_enc, unsigned char *out,
-							 int encrypt_mode) {
+enum EncryptMode {
+	Decrypt = 0,
+	Encrypt,
+};
+
+int tripleDesCbcNoPadding(const unsigned char *encInput, size_t len, const unsigned char *kEnc, unsigned char *out,
+						  EncryptMode encryptMode) {
 	unsigned char zero_iv[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-	int outl = 0;
 	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
 	if (!ctx) {
-		goto cleanup;
+		EVP_CIPHER_CTX_free(ctx);
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_3DES, "%s: Failed to create new context", __FUNCTION__);
 	}
 	EVP_CIPHER_CTX_init(ctx);
-	if (!EVP_CipherInit_ex(ctx, EVP_des_ede_cbc(), NULL, (const unsigned char *)k_enc, zero_iv, encrypt_mode)) {
-		goto cleanup;
+	if (!EVP_CipherInit_ex(ctx, EVP_des_ede_cbc(), NULL, (const unsigned char *)kEnc, zero_iv, encryptMode)) {
+		EVP_CIPHER_CTX_free(ctx);
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_3DES, "%s: Failed to initialize Cipher", __FUNCTION__);
 	}
 	EVP_CIPHER_CTX_set_padding(ctx, 0);
-	if (!EVP_CipherUpdate(ctx, out, &outl, enc_input, len)) {
-		goto cleanup;
-	}
-	fprintf(stderr, "DBG: %s %d bytes\n", encrypt_mode ? "Encrypted" : "Decrypted", outl);
-	return outl;
 
-cleanup:
+	int outl = 0;
+	if (!EVP_CipherUpdate(ctx, out, &outl, encInput, len)) {
+		EVP_CIPHER_CTX_free(ctx);
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_3DES, "%s: Cipher Update failed (encryptMode: %d)",
+					  __FUNCTION__, encryptMode);
+	}
+
 	EVP_CIPHER_CTX_free(ctx);
 	return outl;
 }
 
-std::array<unsigned char, MAC_KEYSIZE> retail_mac_des(const unsigned char *key, const unsigned char *mac_input,
-													  size_t mac_input_len) {
+std::array<unsigned char, MAC_KEYSIZE> retailMacDes(const unsigned char *key, const unsigned char *macInput,
+													size_t macInputLen) {
+	assert(key);
+	assert(macInput);
+
+	if (macInputLen % MAC_KEYSIZE != 0) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
+					  "%s: Input data is not multiple of cipher block size (MAC_KEYSIZE: $ld)", __FUNCTION__,
+					  MAC_KEYSIZE);
+	}
 
 	unsigned char xx[MAC_KEYSIZE];
 	unsigned char padding[] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-	if (mac_input_len % MAC_KEYSIZE != 0) {
-		fprintf(stderr, "Warning: input data is not multiple of cipher block size!\n");
-	}
 
 	DES_key_schedule ks_a;
 	DES_key_schedule ks_b;
@@ -133,19 +152,25 @@ std::array<unsigned char, MAC_KEYSIZE> retail_mac_des(const unsigned char *key, 
 	const unsigned char *key_b = key + 8;
 
 	// Padding method 2 will always add some padding bytes
-	size_t input_len = mac_input_len + MAC_KEYSIZE;
-    auto msg = std::make_unique<unsigned char[]>(input_len);
+	size_t inputLen = macInputLen + MAC_KEYSIZE;
+	auto msg = std::make_unique<unsigned char[]>(inputLen);
 
-	memcpy(msg.get(), mac_input, mac_input_len);
-	memcpy(msg.get() + mac_input_len, padding, sizeof(padding));
+	memcpy(msg.get(), macInput, macInputLen);
+	memcpy(msg.get() + macInputLen, padding, sizeof(padding));
 
 	auto des_out = std::array<unsigned char, MAC_KEYSIZE>{};
 	memset(des_out.data(), 0, MAC_KEYSIZE);
 
+	// TODO: is doing DES unchecked a good idea??
 	DES_set_key_unchecked((const_DES_cblock *)key_a, &ks_a);
 	DES_set_key_unchecked((const_DES_cblock *)key_b, &ks_b);
 
-	for (size_t j = 0; j < (input_len / MAC_KEYSIZE); j++) {
+	for (size_t j = 0; j < (inputLen / MAC_KEYSIZE); j++) {
+		if (j >= SIZE_MAX / MAC_KEYSIZE) {
+			LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: Loop counter would overflow",
+						  __FUNCTION__);
+		}
+
 		for (size_t i = 0; i < MAC_KEYSIZE; i++)
 			xx[i] = msg[i + j * MAC_KEYSIZE] ^ des_out[i];
 
@@ -161,88 +186,82 @@ std::array<unsigned char, MAC_KEYSIZE> retail_mac_des(const unsigned char *key, 
 	return des_out;
 }
 
-// TODO: two next functions, error handling and logging
-CByteArray encrypt_data_3des(CByteArray &key, CByteArray &in) {
-	CByteArray cipher_text;
-    auto out = std::make_unique<unsigned char[]>(in.Size());
-	EVP_CIPHER_CTX *ctx = NULL;
-	unsigned int len = 0;
+CByteArray encryptData3Des(const CByteArray &key, const CByteArray &in) {
+	auto out = std::make_unique<unsigned char[]>(in.Size());
 
 	if (key.Size() == 0) {
-		fprintf(stderr, "encrypt_data_3des(): Empty key!\n");
-		goto err;
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: Empty Key", __FUNCTION__);
 	}
 
-	ctx = EVP_CIPHER_CTX_new();
-	if (!ctx)
-		goto err;
+	auto ctx = EVP_CIPHER_CTX_new();
+	if (!ctx) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: Cipher Context failed", __FUNCTION__);
+	}
 
 	// Null as the 5th param means that IV is empty
 	//  1 as last param means encryption
 	if (!EVP_CipherInit_ex(ctx, EVP_des_ede_cbc(), NULL, (unsigned char *)key.GetBytes(), NULL, 1) ||
-		!EVP_CIPHER_CTX_set_padding(ctx, 0))
-		goto err;
+		!EVP_CIPHER_CTX_set_padding(ctx, 0)) {
+		EVP_CIPHER_CTX_free(ctx);
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: Cipher Context init failed", __FUNCTION__);
+	}
 
+	unsigned int len = 0;
 	if (EVP_EncryptUpdate(ctx, out.get(), (int *)&len, in.GetBytes(), in.Size()) == 0) {
-		fprintf(stderr, "Error in encrypt_data_3des() !\n");
+		EVP_CIPHER_CTX_free(ctx);
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: Cipher update failed", __FUNCTION__);
 	}
 
 	if (len != in.Size()) {
-		fprintf(stderr, "encrypt_data_3des() error: len < in.size()\n");
+		EVP_CIPHER_CTX_free(ctx);
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: error: len < in.Size()", __FUNCTION__);
 	}
 
-	cipher_text = CByteArray(out.get(), (unsigned long)len);
-	return cipher_text;
-
-err:
-	return CByteArray();
+	return CByteArray(out.get(), (unsigned long)len);
 }
 
-CByteArray sm_retail_mac_des(CByteArray &key, CByteArray &mac_input, uint64_t ssc) {
-	CByteArray macInputWithSSC;
+CByteArray smRetailMacDes(CByteArray &key, CByteArray &macInput, uint64_t ssc) {
 	CByteArray secondKey = key.GetBytes(MAC_KEYSIZE, MAC_KEYSIZE);
 
+	auto desOut = std::array<unsigned char, MAC_KEYSIZE>{0};
 	unsigned char ssc_block[] = {0, 0, 0, 0, 0, 0, 0, 0};
-	unsigned char xx[MAC_KEYSIZE];
-	unsigned char des_out[MAC_KEYSIZE];
-	unsigned char *msg = NULL;
+	auto xx = std::array<unsigned char, MAC_KEYSIZE>{0};
+
 	DES_key_schedule ks_a;
 	DES_key_schedule ks_b;
-	size_t i, j;
-
-	CByteArray in;
 
 	// SSC is an 8-byte counter that serves as the first block of the MAC input
-	for (i = 0; i < sizeof(ssc_block); i++)
+	for (size_t i = 0; i < sizeof(ssc_block); i++)
 		ssc_block[i] = (0xFF & ssc >> (7 - i) * 8);
 
-	// unsigned char output[8];
+	CByteArray macInputWithSSC;
 	macInputWithSSC.Append(ssc_block, sizeof(ssc_block));
-	macInputWithSSC.Append(mac_input);
+	macInputWithSSC.Append(macInput);
 
-	msg = macInputWithSSC.GetBytes();
+	if (macInputWithSSC.Size() > SIZE_MAX - MAC_KEYSIZE) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: mac input too large", __FUNCTION__);
+	}
 
-	memset(des_out, 0, sizeof(des_out));
+	unsigned char *msg = macInputWithSSC.GetBytes();
 
+	// TODO: again, des uncheced... maybe look into it
 	DES_set_key_unchecked((const_DES_cblock *)key.GetBytes(), &ks_a);
 	DES_set_key_unchecked((const_DES_cblock *)secondKey.GetBytes(), &ks_b);
 
-	for (j = 0; j < (macInputWithSSC.Size() / MAC_KEYSIZE); j++) {
-		// fprintf(stderr, "Running DES_ENCRYPT iteration: %d\n", j);
-		for (i = 0; i < MAC_KEYSIZE; i++)
-			xx[i] = msg[i + j * MAC_KEYSIZE] ^ des_out[i];
+	for (size_t j = 0; j < (macInputWithSSC.Size() / MAC_KEYSIZE); j++) {
+		for (size_t i = 0; i < MAC_KEYSIZE; i++)
+			xx[i] = msg[i + j * MAC_KEYSIZE] ^ desOut[i];
 
-		DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out, &ks_a, 1);
+		DES_ecb_encrypt((const_DES_cblock *)xx.data(), (DES_cblock *)desOut.data(), &ks_a, 1);
 	}
 
-	memcpy(xx, des_out, MAC_KEYSIZE);
-	DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out, &ks_b, 0);
+	memcpy(xx.data(), desOut.data(), MAC_KEYSIZE);
+	DES_ecb_encrypt((const_DES_cblock *)xx.data(), (DES_cblock *)desOut.data(), &ks_b, 0);
 
-	memcpy(xx, des_out, MAC_KEYSIZE);
-	DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out, &ks_a, 1);
+	memcpy(xx.data(), desOut.data(), MAC_KEYSIZE);
+	DES_ecb_encrypt((const_DES_cblock *)xx.data(), (DES_cblock *)desOut.data(), &ks_a, 1);
 
-	CByteArray result(des_out, MAC_KEYSIZE);
-
+	CByteArray result(desOut.data(), MAC_KEYSIZE);
 	return result;
 }
 
@@ -250,6 +269,10 @@ BacAuthentication::BacAuthentication(CContext *poContext) : m_context(poContext)
 BacAuthentication::~BacAuthentication() {}
 
 void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructure, const CByteArray &mrzInfo) {
+	if (mrzInfo.Size() == 0) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_INVALID_MRZ, "Invalid MRZ info. Size should be > 0");
+	}
+
 	// set temporary state
 	m_card = hCard;
 	m_param = paramStructure;
@@ -274,9 +297,14 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	mutual_auth.Append(0x00); // Le
 	auto resp = sendAPDU(mutual_auth, retValue);
 
-	// TODO: Error
-	assert(resp.Size() - 2 == sizeof(iccBacData));
-	assert(resp.GetByte(resp.Size() - 2) == 0x90 && "Failed to perform mutual authentication");
+	if (resp.Size() - 2 != sizeof(iccBacData)) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
+					  "Returned data from mutual authentication does not match icc bac data size");
+	}
+
+	if (resp.GetByte(resp.Size() - 2) != 0x90 || resp.GetByte(resp.Size() - 1) != 0x00) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to perform mutual authentication");
+	}
 
 	// Save response
 	memcpy(iccBacData, resp.GetBytes(), resp.Size() - 2);
@@ -285,19 +313,19 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	// Check ICC and store derived keys
 	unsigned char decryptedIccData[40] = {0};
 	const size_t MAC_OFFSET = sizeof(iccBacData) - MAC_KEYSIZE;
-	auto mac = retail_mac_des(bacKeys.kMac.data(), iccBacData, sizeof(iccBacData) - MAC_KEYSIZE);
+	auto mac = retailMacDes(bacKeys.kMac.data(), iccBacData, sizeof(iccBacData) - MAC_KEYSIZE);
 	const unsigned char *iccMac = iccBacData + MAC_OFFSET;
 	if (memcmp(mac.data(), iccMac, MAC_KEYSIZE) != 0) {
-		// TODO: Failed to verify ICC MAC
-		assert(false);
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to verify ICC MAC");
 	}
-	int outl = triple_des_cbc_nopadding(iccBacData, sizeof(decryptedIccData) - MAC_KEYSIZE, bacKeys.kEnc.data(),
-										decryptedIccData, 0);
-	int matchRndIcc = memcmp(bacKeys.rndIcc.data(), decryptedIccData, 8);
-	int matchRndIfd = memcmp(bacKeys.rndIfd.data(), decryptedIccData + 8, 8);
 
-	// TODO: Error
-	assert(matchRndIcc == 0 && matchRndIfd == 0 && "Failed to verify Rnd ICC or IFD");
+	tripleDesCbcNoPadding(iccBacData, sizeof(decryptedIccData) - MAC_KEYSIZE, bacKeys.kEnc.data(), decryptedIccData,
+						  EncryptMode::Decrypt);
+
+	if (memcmp(bacKeys.rndIcc.data(), decryptedIccData, 8) != 0 ||
+		memcmp(bacKeys.rndIfd.data(), decryptedIccData + 8, 8) != 0) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to verify Rnd ICC or IFD");
+	}
 
 	// Store keys
 	memcpy(bacKeys.kicc.data(), decryptedIccData + 16, 16);
@@ -325,42 +353,39 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 		return value;
 	};
 	m_ssc = bigEndianBytesToLong(m_smKeys.ssc.data(), m_smKeys.ssc.size());
-
-	printf("Authenticated with back with success!\n");
 }
 
 CByteArray decrypt_data_3des(CByteArray &key, CByteArray &in) {
-	CByteArray plain_text;
-    auto out = std::make_unique<unsigned char>(in.Size());
-	EVP_CIPHER_CTX *ctx = NULL;
-	unsigned int len = 0;
+	auto out = std::make_unique<unsigned char>(in.Size());
 
 	if (key.Size() == 0) {
-		fprintf(stderr, "decrypt_data_3des(): Empty key!\n");
-		goto err;
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_DECRYPTION_FAILED, "Failed to decrypt 3des data: Empty key");
 	}
 
-	ctx = EVP_CIPHER_CTX_new();
-	if (!ctx)
-		goto err;
+	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+	if (!ctx) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_DECRYPTION_FAILED,
+					  "Failed to decrypt 3des data: Could not create context");
+	}
 
 	if (!EVP_CipherInit_ex(ctx, EVP_des_ede_cbc(), NULL, (unsigned char *)key.GetBytes(), NULL, 0) ||
-		!EVP_CIPHER_CTX_set_padding(ctx, 0))
-		goto err;
+		!EVP_CIPHER_CTX_set_padding(ctx, 0)) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_DECRYPTION_FAILED,
+					  "Failed to decrypt 3des data: CipherInit failed");
+	}
 
+	unsigned int len = 0;
 	if (EVP_DecryptUpdate(ctx, out.get(), (int *)&len, in.GetBytes(), in.Size()) == 0) {
-		fprintf(stderr, "Error in decrypt_data_3des() !\n");
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_DECRYPTION_FAILED,
+					  "Failed to decrypt 3des data: DecryptUpdate failed");
 	}
 
 	if (len != in.Size()) {
-		fprintf(stderr, "decrypt_data_3des() Error: len < in.size()\n");
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_DECRYPTION_FAILED,
+					  "Failed to decrypt 3des data: len != in.Size()");
 	}
 
-	plain_text = CByteArray(out.get(), (unsigned long)len);
-	return plain_text;
-
-err:
-	return CByteArray();
+	return CByteArray(out.get(), (unsigned long)len);
 }
 
 CByteArray BacAuthentication::decryptData(const CByteArray &data) {
@@ -391,7 +416,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		CByteArray input_data(apdu.GetBytes(5, apdu.Size() - 5));
 		CByteArray paddedInput = paddedByteArray(input_data);
 
-		CByteArray cryptogram = encrypt_data_3des(encryptionKey, paddedInput);
+		CByteArray cryptogram = encryptData3Des(encryptionKey, paddedInput);
 		// LCg = Len(Cg) + Len(PI = 1)
 		int lcg = cryptogram.Size() + 1;
 		CByteArray inputForMac = paddedByteArray(command_header);
@@ -411,7 +436,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		// Pre-increment SSC
 		m_ssc++;
 
-		CByteArray mac = sm_retail_mac_des(macKey, inputForMac, m_ssc);
+		CByteArray mac = smRetailMacDes(macKey, inputForMac, m_ssc);
 
 		// Build final APDU including Cryptogram and MAC
 		int lc_final = MAC_LEN + 2 + cryptogram.Size() + 3; // CG + Tcg + Lcg + PI
@@ -444,7 +469,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		// Pre-increment SSC
 		m_ssc++;
 
-		CByteArray mac = sm_retail_mac_des(macKey, inputForMac, m_ssc);
+		CByteArray mac = smRetailMacDes(macKey, inputForMac, m_ssc);
 
 		int lc_final = MAC_LEN + 2 + TlvLe.Size();
 		final_apdu.Append(command_header);
@@ -460,10 +485,8 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 	auto response = sendAPDU(final_apdu, returnValue);
 
 	if (!checkMacInResponse(response, macKey)) {
-		fprintf(stderr, "Failed to verifiy MAC on response");
+		MWLOG(LEV_ERROR, MOD_CAL, "Failed to verifiy MAC on response");
 	}
-
-	printf("ssc -> %ld\n", m_ssc);
 
 	return response;
 }
@@ -503,9 +526,10 @@ BacAuthentication::BacKeys BacAuthentication::generateBacData(const CByteArray &
 	memcpy(enc_input + 16, bac_keys.kifd.data(), 16);
 
 	// Encrypt SIFD = (RND.IFD || RND.ICC || KIFD) and generate MAC
-	int outl = triple_des_cbc_nopadding(enc_input, sizeof(enc_input), bac_keys.kEnc.data(), bac_data, 1);
+	auto outl =
+		tripleDesCbcNoPadding(enc_input, sizeof(enc_input), bac_keys.kEnc.data(), bac_data, EncryptMode::Encrypt);
 
-	auto mac = retail_mac_des(bac_keys.kMac.data(), bac_data, outl);
+	auto mac = retailMacDes(bac_keys.kMac.data(), bac_data, outl);
 	memcpy(bac_data + 32, mac.data(), MAC_KEYSIZE);
 
 	return bac_keys;
@@ -535,7 +559,7 @@ bool BacAuthentication::checkMacInResponse(CByteArray &resp, CByteArray &macKey)
 	// Pre-increment SSC
 	m_ssc++;
 
-	CByteArray mac = sm_retail_mac_des(macKey, paddedInput, m_ssc);
+	CByteArray mac = smRetailMacDes(macKey, paddedInput, m_ssc);
 	return mac.Equals(receivedMac);
 }
 

@@ -308,4 +308,8 @@
 
 #define EIDMW_ERR_BAC_PROTOCOL 0xe1d11001
 #define EIDMW_ERR_BAC_INVALID_MAC 0xe1d11002
-#define EIDMW_ERR_BAC_NOT_INITIALIZED 0xe1d11002
+#define EIDMW_ERR_BAC_NOT_INITIALIZED 0xe1d11003 // Failed to perform BAC
+#define EIDMW_ERR_BAC_INVALID_MRZ 0xe1d11004	 // Invalid MRZ info. Most likely empty.
+#define EIDMW_ERR_BAC_DECRYPTION_FAILED 0xe1d11005
+#define EIDMW_ERR_BAC_3DES 0xe1d11005
+#define EIDMW_ERR_BAC_CRYPTO_ERROR 0xe1d11006 // Generic BAC crypto operations error. Check logs for more details.

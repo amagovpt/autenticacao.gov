@@ -1,4 +1,5 @@
 #include "MultiPassCard.h"
+#include "MWException.h"
 #include "Util.h"
 #include <openssl/des.h>
 #include <openssl/rand.h>
@@ -22,9 +23,7 @@ CByteArray CMultiPassCard::readToken() {
 
 	CByteArray read_binary("00B0000000", true);
 	auto resp = m_bac.sendSecureAPDU(read_binary);
-	auto token = m_bac.decryptData(resp);
-
-	return token;
+	return m_bac.decryptData(resp);
 }
 
 tCardType CMultiPassCard::GetType() { return m_cardType; }
