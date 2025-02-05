@@ -76,6 +76,15 @@ typedef enum {
   #define FORMAT_CHECK_FROM_3RD_ARG __attribute__((format(printf, 3, 4)))
 #endif
 
+#ifdef _WIN32
+#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
+#else
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#endif
+
+#define MWLOG_CTX(level, mod, format, ...)                                                                             \
+	MWLOG(level, mod, "[%s:%s:%d] " format, __FILENAME__, __FUNCTION__, __LINE__, ##__VA_ARGS__)
+
 /**
  * Log.
  * Example:
