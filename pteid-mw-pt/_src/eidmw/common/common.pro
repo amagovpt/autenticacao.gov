@@ -58,6 +58,7 @@ QMAKE_CFLAGS_DEBUG += -O
 # Input
 HEADERS += ByteArray.h \
            Config.h \
+           Crypto.h \
            datafile.h \
            ThreadDefines.h \
            eidmwErrors.h \
@@ -81,6 +82,7 @@ HEADERS += ByteArray.h \
 SOURCES += ByteArray.cpp \
            ConfigCommon.cpp \
            Config.cpp \
+           Crypto.cpp \
            datafile.cpp \
            Hash.cpp \
            Log.cpp \
