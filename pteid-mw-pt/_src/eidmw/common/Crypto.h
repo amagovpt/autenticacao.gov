@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "ByteArray.h"
 #include "Log.h"
 #include "eidErrors.h"
 #include <cstdint>
@@ -95,8 +96,8 @@ public:
 	 * @param iv iv or nullptr for zero
 	 */
 	template <typename T>
-	static std::vector<uint8_t> decrypt(const unsigned char *key, const uint8_t *data, size_t len,
-										const unsigned char *iv = nullptr) {
+	static CByteArray decrypt(const unsigned char *key, const uint8_t *data, size_t len,
+							  const unsigned char *iv = nullptr) {
 		T cipher;
 		cipher.init(key, nullptr, false); // decrypt mode
 		auto decrypted = cipher.processBlock(data, len);
@@ -106,7 +107,7 @@ public:
 						  "Input length and decrypted length do not match (%ld != %ld)", len, decrypted.size());
 		}
 
-		return decrypted;
+		return {decrypted.data(), decrypted.size()};
 	}
 
 	/**
@@ -117,8 +118,8 @@ public:
 	 * @param iv iv or nullptr for zero
 	 */
 	template <typename T>
-	static std::vector<uint8_t> encrypt(const unsigned char *key, const uint8_t *data, size_t len,
-										const unsigned char *iv = nullptr) {
+	static CByteArray encrypt(const unsigned char *key, const uint8_t *data, size_t len,
+							  const unsigned char *iv = nullptr) {
 		T cipher;
 		cipher.init(key, nullptr, true); // encrypt mode
 		auto decrypted = cipher.processBlock(data, len);
@@ -128,7 +129,7 @@ public:
 						  "Input length and encrypted length do not match (%ld != %ld)", len, decrypted.size());
 		}
 
-		return decrypted;
+		return {decrypted.data(), decrypted.size()};
 	}
 };
 
@@ -146,6 +147,11 @@ public:
 class AesCipher : public BlockCipherCtx {
 public:
 	AesCipher() : BlockCipherCtx("AES-256-CBC", 16, 32) {}
+};
+
+class DesCipher : public BlockCipherCtx {
+public:
+	DesCipher() : BlockCipherCtx("des-cbc", 8, 8) {}
 };
 
 } // namespace eIDMW
