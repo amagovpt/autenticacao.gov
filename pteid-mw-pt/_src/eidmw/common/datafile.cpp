@@ -323,7 +323,7 @@ bool CDataFile::Save() {
 	}
 
 	// std::wofstream outStream(utilStringNarrow(m_szFileName).c_str());
-	std::wstringstream outStream(m_szFileName.c_str());
+	std::stringstream outStream(utilStringNarrow(m_szFileName).c_str());
 	if (!outStream)
 		return false;
 
@@ -338,19 +338,21 @@ bool CDataFile::Save() {
 
 		if (Section.szComment.size() > 0) {
 			bWroteComment = true;
-			outStream << "\n" << CommentStr(Section.szComment) << "\n";
+			outStream << "\n" << utilStringNarrow(CommentStr(Section.szComment)) << "\n";
 		}
 
 		if (Section.szName.size() > 0) {
-			outStream << (bWroteComment ? L"" : L"\n") << "[" << Section.szName.c_str() << "]" << "\n";
+			outStream << (bWroteComment ? "" : "\n") << "[" << utilStringNarrow(Section.szName) << "]" << "\n";
 		}
 
 		for (k_pos = Section.Keys.begin(); k_pos != Section.Keys.end(); k_pos++) {
 			Key = (*k_pos);
 
 			if (Key.szKey.size() > 0 && Key.szValue.size() > 0) {
-				outStream << (Key.szComment.size() > 0 ? L"\n" : L"") << CommentStr(Key.szComment)
-						  << (Key.szComment.size() > 0 ? L"\n" : L"") << Key.szKey << EqualIndicators[0] << Key.szValue
+				outStream << (Key.szComment.size() > 0 ? "\n" : "") << utilStringNarrow(CommentStr(Key.szComment))
+						  << (Key.szComment.size() > 0 ? "\n" : "") << utilStringNarrow(Key.szKey)
+						  << utilStringNarrow(EqualIndicators)[0]
+						  << utilStringNarrow(Key.szValue)
 						  << "\n";
 			}
 		}
@@ -362,7 +364,7 @@ bool CDataFile::Save() {
 #ifdef WIN32
 	fprintf_s(m_stream, "%ls", outStream.str().c_str());
 #else
-	fprintf(m_stream, "%ls", outStream.str().c_str());
+	fprintf(m_stream, "%s", outStream.str().c_str());
 #endif
 
 #ifdef WIN32

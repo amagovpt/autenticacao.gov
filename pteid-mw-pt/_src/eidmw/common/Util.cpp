@@ -34,6 +34,7 @@
 
 #ifndef WIN32
 #include <unistd.h>
+#include "iconv.h"
 #endif
 #include <stdlib.h>
 
@@ -49,8 +50,33 @@ namespace eIDMW {
 
 std::wstring utilStringWiden(const std::string &in) {
 #ifndef WIN32
-	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	return converter.from_bytes(in);
+	if (in.empty())
+		return std::wstring();
+
+	iconv_t cd = iconv_open("UTF-32LE", "UTF-8");
+	if (cd == (iconv_t)-1) {
+		return std::wstring();
+	}
+
+	size_t inSize = in.size();
+	size_t outSize = (in.length() + 1) * 4;
+	std::vector<char> outputBuffer(outSize);
+
+	char* inBuf = const_cast<char*>(in.data());
+	char* outBuf = outputBuffer.data();
+
+	size_t inBytesLeft = inSize;
+	size_t outBytesLeft = outSize;
+
+	if (iconv(cd, &inBuf, &inBytesLeft, &outBuf, &outBytesLeft) == (size_t)-1) {
+		iconv_close(cd);
+		return std::wstring();
+	}
+
+	iconv_close(cd);
+
+	return std::wstring(reinterpret_cast<wchar_t*>(outputBuffer.data()), (outSize - outBytesLeft) / sizeof(wchar_t));
+
 #else
 	int required_size = MultiByteToWideChar(CP_UTF8, 0, in.c_str(), (int)in.size(), NULL, 0);
 
@@ -112,8 +138,38 @@ const unsigned char *findASN1Object(const CByteArray &array, long &size, long ta
 }
 
 std::string utilStringNarrow(const std::wstring &in) {
-    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+#ifdef WIN32
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 	return converter.to_bytes(in);
+
+#else
+	if (in.empty())
+		return std::string();
+
+	iconv_t cd = iconv_open("UTF-8", "UTF-32LE");
+	if (cd == (iconv_t)-1) {
+		return std::string();
+	}
+
+	size_t inSize = in.size() * sizeof(wchar_t);
+	size_t outSize = in.length() * 4;
+	std::vector<char> outputBuffer(outSize);
+
+	char* inBuf = reinterpret_cast<char*>(const_cast<wchar_t*>(in.data()));
+	char* outBuf = outputBuffer.data();
+
+	size_t inBytesLeft = inSize;
+	size_t outBytesLeft = outSize;
+
+	if (iconv(cd, &inBuf, &inBytesLeft, &outBuf, &outBytesLeft) == (size_t)-1) {
+		iconv_close(cd);
+		return std::string();
+	}
+
+	iconv_close(cd);
+
+	return std::string(outputBuffer.data(), outSize - outBytesLeft);
+#endif
 }
 
 /**

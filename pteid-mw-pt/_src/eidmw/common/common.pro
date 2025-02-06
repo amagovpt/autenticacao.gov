@@ -40,6 +40,7 @@ unix:!macx: LIBS += -ldl -pthread
 macx: LIBS += -Wl,-framework -Wl,Carbon
 macx: LIBS += -L $$DEPS_DIR/openssl-3/lib/
 unix: LIBS += -lcrypto
+macx: LIBS += -liconv
 
 PROJECT_DIR = common
 
