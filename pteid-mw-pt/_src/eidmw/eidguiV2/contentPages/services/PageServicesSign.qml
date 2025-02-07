@@ -2185,7 +2185,7 @@ PageServicesSignForm {
                 propertyFileDialogOutput.title = qsTranslate("Popup File", "STR_POPUP_FILE_OUTPUT")
 
                 var outputFile = propertyListViewFiles.model.get(0).fileUrl
-                var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
+                var newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.zip"
 
                 if (contains_package_asic()) {
                     var output = decodeURIComponent(Functions.stripFilePrefix(outputFile))
@@ -2208,7 +2208,7 @@ PageServicesSignForm {
                         var outputFolderPath = propertyListViewFiles.model.get(propertyListViewFiles.count-1).fileUrl
                         if (outputFolderPath.lastIndexOf('/') >= 0)
                             outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
-                        propertyFileDialogOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
+                        propertyFileDialogOutput.currentFile = prefix + outputFolderPath + "/xadessign.zip";
                         propertyFileDialogOutput.open()
                     }
                 }
@@ -2281,7 +2281,7 @@ PageServicesSignForm {
         if (dialogSignCMD.isSignSingleFile() || !pades) {
             if (contains_package_asic()) {
                 outputFile = propertyListViewFiles.model.get(0).fileUrl
-                const newSuffix = "_xadessign.asics"
+                const newSuffix = "_xadessign.zip"
                 outputFile = Functions.replaceFileSuffix(outputFile, newSuffix)
             } else {
                 outputFile = propertyFileDialogCMDOutput.file.toString()
@@ -2645,7 +2645,7 @@ PageServicesSignForm {
             }
 
             const outputFile = propertyListViewFiles.model.get(0).fileUrl
-            const newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.asics"
+            const newSuffix = propertyRadioButtonPADES.checked ? "_signed.pdf" : "_xadessign.zip"
             if (contains_package_asic()) {
                 //no need to get output file in this case; we are adding a signature to an existing ASiC
                 sign_CMD()
@@ -2674,7 +2674,7 @@ PageServicesSignForm {
                         outputFolderPath = outputFolderPath.substring(0, outputFolderPath.lastIndexOf('/'))
 
                     propertyFileDialogCMDOutput.title = qsTranslate("Popup File","STR_POPUP_FILE_OUTPUT")
-                    propertyFileDialogCMDOutput.currentFile = prefix + outputFolderPath + "/xadessign.asice";
+                    propertyFileDialogCMDOutput.currentFile = prefix + outputFolderPath + "/xadessign.zip";
                     propertyFileDialogCMDOutput.open()
                 }
             }

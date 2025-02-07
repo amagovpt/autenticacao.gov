@@ -40,15 +40,14 @@ static const char *MIMETYPE_ASIC_E = "application/vnd.etsi.asic-e+zip";
 static const char *README =
 	"############################################################" NL "LEIA-ME" NL "" NL
 	"Este ficheiro zip contém informação assinada com a(s) respectiva(s) assinatura(s) em META-INF/signatures*.xml" NL
+	"A assinatura contida no ficheiro .zip pode ser validada em https://validador.autenticacao.gov.pt/validation" NL
 	"Esta assinatura foi criada através da aplicação Autenticação.gov" NL "" NL "Mais Informação:" NL "" NL
 	"Download da aplicação Autenticação.gov:" NL "https://www.autenticacao.gov.pt/cc-aplicacao" NL "" NL
-	"Especificação Técnica da Assinatura Digital:" NL "XAdES / XAdES-T / XAdES-LTA" NL
 	"https://www.etsi.org/deliver/etsi_en/319100_319199/31913201/01.01.01_60/en_31913201v010101p.pdf" NL "" NL
 	"############################################################" NL "README" NL "" NL
 	"This zip file includes signed information. The signature file(s) can be found in META-INF/signatures.*xml" NL
 	"This signature was produced through Autenticação.gov application." NL "" NL "More Info:" NL "" NL
 	"Download Portuguese ID Card Management application:" NL "https://www.autenticacao.gov.pt/cc-aplicacao" NL "" NL
-	"Signature technical specification:" NL "XAdES / XAdES-T / XAdES-LTA" NL
 	"https://www.etsi.org/deliver/etsi_en/319100_319199/31913201/01.01.01_60/en_31913201v010101p.pdf" NL;
 
 // Write 32-bit value to buffer `data` in little-endian format
