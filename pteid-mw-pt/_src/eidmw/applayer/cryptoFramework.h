@@ -468,6 +468,9 @@ private:
 	APL_CryptoFwk(const APL_CryptoFwk &cryptofwk);			  /**< Copy not allowed - not implemented */
 	APL_CryptoFwk &operator=(const APL_CryptoFwk &cryptofwk); /**< Copy not allowed - not implemented */
 
+	OSSL_PROVIDER *m_LegacyProvider = nullptr;
+	OSSL_PROVIDER *m_DefaultProvider = nullptr;
+
 	void loadCertificatesToOcspStore(X509_STORE *store);
 	CrlMemoryCache *m_CrlMemoryCache;
 };

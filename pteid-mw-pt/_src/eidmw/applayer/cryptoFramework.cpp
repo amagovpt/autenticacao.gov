@@ -38,6 +38,7 @@
 
 #include "MiscUtil.h"
 #include "Thread.h"
+#include <openssl/provider.h>
 #include <openssl/rand.h>
 
 #ifdef WIN32
@@ -188,6 +189,9 @@ private:
 *** APL_CryptoFwk ***
 ***************** */
 APL_CryptoFwk::APL_CryptoFwk() {
+	m_LegacyProvider = OSSL_PROVIDER_load(NULL, "legacy");
+	m_DefaultProvider = OSSL_PROVIDER_load(NULL, "default");
+
 	m_proxy_host.clear();
 	m_proxy_port.clear();
 	m_proxy_pac.clear();
@@ -205,6 +209,9 @@ APL_CryptoFwk::~APL_CryptoFwk(void) {
 	if (m_MasterListCertificate) {
 		X509_STORE_free(m_MasterListCertificate);
 	}
+
+	OSSL_PROVIDER_unload(m_LegacyProvider);
+	OSSL_PROVIDER_unload(m_DefaultProvider);
 }
 
 bool d2i_X509_Wrapper(X509 **pX509, const unsigned char *pucContent, int iContentSize) {
@@ -1418,7 +1425,7 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	ECDSA_SIG *ec_sig = nullptr;
 	EVP_PKEY_CTX *ctx = nullptr;
 	EVP_MD_CTX *mdctx = nullptr;
-	
+
 	EVP_PKEY *pkey = nullptr;
 	unsigned char *signature_bytes = nullptr;
 	unsigned char *der_signature = nullptr;
@@ -1512,10 +1519,11 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 			failed = true;
 			goto cleanup;
 		}
-	} else {  /* RSA signature */
+	} else { /* RSA signature */
 		signature.Chop(2);
 		CByteArray ifd_random(data_to_sign, sizeof(data_to_sign));
-		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type RSA and size: %d", signature.Size());
+		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type RSA and size: %d",
+			  signature.Size());
 
 		AA_RsaSignatureVerify(ifd_random, signature, pkey);
 	}
