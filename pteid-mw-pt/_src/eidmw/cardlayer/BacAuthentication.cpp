@@ -26,6 +26,7 @@
 #include "Util.h"
 #include "eidErrors.h"
 #include <array>
+#include <cmath>
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
@@ -50,7 +51,6 @@ CByteArray paddedByteArray(CByteArray &input) {
 	return paddedContent;
 }
 
-#define MAC_KEYSIZE 8
 #define MAC_LEN 8
 
 void BacAuthentication::SM_Keys::generate3DesKeysFromKeySeed(const unsigned char *keySeed16, size_t keySeedLen) {
@@ -102,110 +102,6 @@ void BacAuthentication::BacKeys::generateAccessKeys(const CByteArray &mrzInfo) {
 	memcpy(kMac.data(), kSeedDigest.data(), 16);
 }
 
-enum EncryptMode {
-	Decrypt = 0,
-	Encrypt,
-};
-
-std::array<unsigned char, MAC_KEYSIZE> retailMacDes(const unsigned char *key, const unsigned char *macInput,
-													size_t macInputLen) {
-	assert(key);
-	assert(macInput);
-
-	if (macInputLen % MAC_KEYSIZE != 0) {
-		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
-					  "%s: Input data is not multiple of cipher block size (MAC_KEYSIZE: $ld)", __FUNCTION__,
-					  MAC_KEYSIZE);
-	}
-
-	unsigned char xx[MAC_KEYSIZE];
-	unsigned char padding[] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-	DES_key_schedule ks_a;
-	DES_key_schedule ks_b;
-	const unsigned char *key_a = key;
-	const unsigned char *key_b = key + 8;
-
-	// Padding method 2 will always add some padding bytes
-	size_t inputLen = macInputLen + MAC_KEYSIZE;
-	auto msg = std::make_unique<unsigned char[]>(inputLen);
-
-	memcpy(msg.get(), macInput, macInputLen);
-	memcpy(msg.get() + macInputLen, padding, sizeof(padding));
-
-	auto des_out = std::array<unsigned char, MAC_KEYSIZE>{};
-	memset(des_out.data(), 0, MAC_KEYSIZE);
-
-	// TODO: is doing DES unchecked a good idea??
-	DES_set_key_unchecked((const_DES_cblock *)key_a, &ks_a);
-	DES_set_key_unchecked((const_DES_cblock *)key_b, &ks_b);
-
-	for (size_t j = 0; j < (inputLen / MAC_KEYSIZE); j++) {
-		if (j >= SIZE_MAX / MAC_KEYSIZE) {
-			LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: Loop counter would overflow",
-						  __FUNCTION__);
-		}
-
-		for (size_t i = 0; i < MAC_KEYSIZE; i++)
-			xx[i] = msg[i + j * MAC_KEYSIZE] ^ des_out[i];
-
-		DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out.data(), &ks_a, 1);
-	}
-
-	memcpy(xx, des_out.data(), MAC_KEYSIZE);
-	DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out.data(), &ks_b, 0);
-
-	memcpy(xx, des_out.data(), MAC_KEYSIZE);
-	DES_ecb_encrypt((const_DES_cblock *)xx, (DES_cblock *)des_out.data(), &ks_a, 1);
-
-	return des_out;
-}
-
-CByteArray smRetailMacDes(CByteArray &key, CByteArray &macInput, uint64_t ssc) {
-	CByteArray secondKey = key.GetBytes(MAC_KEYSIZE, MAC_KEYSIZE);
-
-	auto desOut = std::array<unsigned char, MAC_KEYSIZE>{0};
-	unsigned char ssc_block[] = {0, 0, 0, 0, 0, 0, 0, 0};
-	auto xx = std::array<unsigned char, MAC_KEYSIZE>{0};
-
-	DES_key_schedule ks_a;
-	DES_key_schedule ks_b;
-
-	// SSC is an 8-byte counter that serves as the first block of the MAC input
-	for (size_t i = 0; i < sizeof(ssc_block); i++)
-		ssc_block[i] = (0xFF & ssc >> (7 - i) * 8);
-
-	CByteArray macInputWithSSC;
-	macInputWithSSC.Append(ssc_block, sizeof(ssc_block));
-	macInputWithSSC.Append(macInput);
-
-	if (macInputWithSSC.Size() > SIZE_MAX - MAC_KEYSIZE) {
-		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: mac input too large", __FUNCTION__);
-	}
-
-	unsigned char *msg = macInputWithSSC.GetBytes();
-
-	// TODO: again, des uncheced... maybe look into it
-	DES_set_key_unchecked((const_DES_cblock *)key.GetBytes(), &ks_a);
-	DES_set_key_unchecked((const_DES_cblock *)secondKey.GetBytes(), &ks_b);
-
-	for (size_t j = 0; j < (macInputWithSSC.Size() / MAC_KEYSIZE); j++) {
-		for (size_t i = 0; i < MAC_KEYSIZE; i++)
-			xx[i] = msg[i + j * MAC_KEYSIZE] ^ desOut[i];
-
-		DES_ecb_encrypt((const_DES_cblock *)xx.data(), (DES_cblock *)desOut.data(), &ks_a, 1);
-	}
-
-	memcpy(xx.data(), desOut.data(), MAC_KEYSIZE);
-	DES_ecb_encrypt((const_DES_cblock *)xx.data(), (DES_cblock *)desOut.data(), &ks_b, 0);
-
-	memcpy(xx.data(), desOut.data(), MAC_KEYSIZE);
-	DES_ecb_encrypt((const_DES_cblock *)xx.data(), (DES_cblock *)desOut.data(), &ks_a, 1);
-
-	CByteArray result(desOut.data(), MAC_KEYSIZE);
-	return result;
-}
-
 BacAuthentication::BacAuthentication(CContext *poContext) : m_context(poContext) {}
 BacAuthentication::~BacAuthentication() {}
 
@@ -221,7 +117,9 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	long retValue = {0};
 
 	unsigned char ifdBacData[40] = {0};
-	unsigned char iccBacData[40] = {0}; // Returned from the card
+
+	CByteArray iccBacData;
+	iccBacData.Resize(40);
 
 	auto iccRandom = getRandomFromCard();
 	BacKeys bacKeys = generateBacData(mrzInfo, iccRandom, ifdBacData);
@@ -236,31 +134,32 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	mutual_auth.Append(0x28); // 40
 	mutual_auth.Append(ifdBacData, sizeof(ifdBacData));
 	mutual_auth.Append(0x00); // Le
-	auto resp = sendAPDU(mutual_auth, retValue);
+	iccBacData = sendAPDU(mutual_auth, retValue);
 
-	if (resp.Size() - 2 != sizeof(iccBacData)) {
+	if (iccBacData.GetByte(iccBacData.Size() - 2) != 0x90 || iccBacData.GetByte(iccBacData.Size() - 1) != 0x00) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to perform mutual authentication");
+	}
+
+	iccBacData.Chop(2); // Remove the status code
+	if (iccBacData.Size() != sizeof(ifdBacData)) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
 					  "Returned data from mutual authentication does not match icc bac data size");
 	}
 
-	if (resp.GetByte(resp.Size() - 2) != 0x90 || resp.GetByte(resp.Size() - 1) != 0x00) {
-		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to perform mutual authentication");
-	}
-
-	// Save response
-	memcpy(iccBacData, resp.GetBytes(), resp.Size() - 2);
-
 	// --------------------
 	// Check ICC and store derived keys
-	const size_t MAC_OFFSET = sizeof(iccBacData) - MAC_KEYSIZE;
-	auto mac = retailMacDes(bacKeys.kMac.data(), iccBacData, sizeof(iccBacData) - MAC_KEYSIZE);
-	const unsigned char *iccMac = iccBacData + MAC_OFFSET;
-	if (memcmp(mac.data(), iccMac, MAC_KEYSIZE) != 0) {
+	const size_t MAC_OFFSET = iccBacData.Size() - MAC_KEYSIZE;
+
+	auto key = CByteArray(bacKeys.kMac.data(), bacKeys.kMac.size());
+	auto data = CByteArray(iccBacData.GetBytes(), iccBacData.Size() - MAC_KEYSIZE);
+	auto mac = retailMacWithPadding(key, data);
+
+	const unsigned char *iccMac = iccBacData.GetBytes() + MAC_OFFSET;
+	if (memcmp(mac.GetBytes(), iccMac, MAC_KEYSIZE) != 0) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to verify ICC MAC");
 	}
 
-	auto decryptedIccData =
-		BlockCipherCtx::decrypt<TripleDesCipher>(bacKeys.kEnc.data(), iccBacData, sizeof(iccBacData));
+	auto decryptedIccData = BlockCipherCtx::decrypt<TripleDesCipher>(bacKeys.kEnc.data(), iccBacData);
 
 	if (memcmp(bacKeys.rndIcc.data(), decryptedIccData.GetBytes(), 8) != 0 ||
 		memcmp(bacKeys.rndIfd.data(), decryptedIccData.GetBytes() + 8, 8) != 0) {
@@ -299,7 +198,7 @@ CByteArray BacAuthentication::decryptData(const CByteArray &data) {
 	CByteArray encryptionKey = {m_smKeys.ksEnc.data(), m_smKeys.ksEnc.size()};
 	CByteArray cryptogram(data.GetBytes(3, data.GetByte(1) - 1));
 
-	return BlockCipherCtx::decrypt<TripleDesCipher>(encryptionKey.GetBytes(), cryptogram.GetBytes(), cryptogram.Size());
+	return BlockCipherCtx::decrypt<TripleDesCipher>(encryptionKey.GetBytes(), cryptogram);
 }
 
 CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
@@ -324,8 +223,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		CByteArray input_data(apdu.GetBytes(5, apdu.Size() - 5));
 		CByteArray paddedInput = paddedByteArray(input_data);
 
-		auto cryptogram = BlockCipherCtx::encrypt<TripleDesCipher>(encryptionKey.GetBytes(), paddedInput.GetBytes(),
-																   paddedInput.Size());
+		auto cryptogram = BlockCipherCtx::encrypt<TripleDesCipher>(encryptionKey.GetBytes(), paddedInput);
 		// LCg = Len(Cg) + Len(PI = 1)
 		int lcg = cryptogram.Size() + 1;
 		CByteArray inputForMac = paddedByteArray(command_header);
@@ -345,7 +243,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		// Pre-increment SSC
 		m_ssc++;
 
-		CByteArray mac = smRetailMacDes(macKey, inputForMac, m_ssc);
+		auto mac = retailMacWithSSC(inputForMac, m_ssc);
 
 		// Build final APDU including Cryptogram and MAC
 		int lc_final = MAC_LEN + 2 + cryptogram.Size() + 3; // CG + Tcg + Lcg + PI
@@ -378,7 +276,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		// Pre-increment SSC
 		m_ssc++;
 
-		CByteArray mac = smRetailMacDes(macKey, inputForMac, m_ssc);
+		auto mac = retailMacWithSSC(inputForMac, m_ssc);
 
 		int lc_final = MAC_LEN + 2 + TlvLe.Size();
 		final_apdu.Append(command_header);
@@ -393,7 +291,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 	long returnValue = {0};
 	auto response = sendAPDU(final_apdu, returnValue);
 
-	if (!checkMacInResponse(response, macKey)) {
+	if (!checkMacInResponse(response)) {
 		MWLOG(LEV_ERROR, MOD_CAL, "Failed to verifiy MAC on response");
 	}
 
@@ -435,16 +333,19 @@ BacAuthentication::BacKeys BacAuthentication::generateBacData(const CByteArray &
 	memcpy(enc_input + 16, bacKeys.kifd.data(), 16);
 
 	// Encrypt SIFD = (RND.IFD || RND.ICC || KIFD) and generate MAC
-	auto encrypted = BlockCipherCtx::encrypt<TripleDesCipher>(bacKeys.kEnc.data(), enc_input, sizeof(enc_input));
+	auto encrypted = BlockCipherCtx::encrypt<TripleDesCipher>(bacKeys.kEnc.data(), {enc_input, sizeof(enc_input)});
 	std::memcpy(bac_data, encrypted.GetBytes(), encrypted.Size());
 
-	auto mac = retailMacDes(bacKeys.kMac.data(), bac_data, encrypted.Size());
-	memcpy(bac_data + 32, mac.data(), MAC_KEYSIZE);
+	auto key = CByteArray(bacKeys.kMac.data(), bacKeys.kMac.size());
+	auto data = CByteArray(bac_data, encrypted.Size());
+	auto mac = retailMacWithPadding(key, data);
+
+	memcpy(bac_data + 32, mac.GetBytes(), MAC_KEYSIZE);
 
 	return bacKeys;
 }
 
-bool BacAuthentication::checkMacInResponse(CByteArray &resp, CByteArray &macKey) {
+bool BacAuthentication::checkMacInResponse(CByteArray &resp) {
 	CByteArray receivedMac;
 	CByteArray paddedInput;
 
@@ -468,8 +369,44 @@ bool BacAuthentication::checkMacInResponse(CByteArray &resp, CByteArray &macKey)
 	// Pre-increment SSC
 	m_ssc++;
 
-	CByteArray mac = smRetailMacDes(macKey, paddedInput, m_ssc);
+	auto mac = retailMacWithSSC(paddedInput, m_ssc);
 	return mac.Equals(receivedMac);
+}
+
+CByteArray BacAuthentication::retailMacWithSSC(const CByteArray &macInput, uint64_t ssc) {
+	unsigned char ssc_block[] = {0, 0, 0, 0, 0, 0, 0, 0};
+	// SSC is an 8-byte counter that serves as the first block of the MAC input
+	for (size_t i = 0; i < sizeof(ssc_block); i++)
+		ssc_block[i] = (0xFF & ssc >> (7 - i) * 8);
+
+	CByteArray macInputWithSSC;
+	macInputWithSSC.Append(ssc_block, sizeof(ssc_block));
+	macInputWithSSC.Append(macInput);
+	if (macInputWithSSC.Size() > SIZE_MAX - MAC_KEYSIZE) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: mac input too large", __FUNCTION__);
+	}
+
+	auto key = CByteArray{m_smKeys.ksMac.data(), m_smKeys.ksMac.size()};
+	return BlockCipherCtx::retailMac(key, macInputWithSSC);
+}
+
+CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const CByteArray &macInput) {
+	if (macInput.Size() % MAC_KEYSIZE != 0) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
+					  "%s: Input data is not multiple of cipher block size (MAC_KEYSIZE: $ld)", __FUNCTION__,
+					  MAC_KEYSIZE);
+	}
+
+	unsigned char padding[] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+	// Padding method 2 will always add some padding bytes
+	size_t inputLen = macInput.Size() + MAC_KEYSIZE;
+	auto msg = std::make_unique<unsigned char[]>(inputLen);
+
+	memcpy(msg.get(), macInput.GetBytes(), macInput.Size());
+	memcpy(msg.get() + macInput.Size(), padding, sizeof(padding));
+
+	return BlockCipherCtx::retailMac(key, {msg.get(), inputLen});
 }
 
 } // namespace eIDMW

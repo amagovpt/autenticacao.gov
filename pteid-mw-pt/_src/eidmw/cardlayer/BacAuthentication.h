@@ -58,7 +58,9 @@ private:
 	CByteArray sendAPDU(const CByteArray &apdu, long &returnValue);
 	CByteArray getRandomFromCard();
 	BacKeys generateBacData(const CByteArray &mrzInfo, const CByteArray &random, unsigned char *bacData);
-	bool checkMacInResponse(CByteArray &response, CByteArray &macKey);
+	bool checkMacInResponse(CByteArray &response);
+	CByteArray retailMacWithSSC(const CByteArray &macInput, uint64_t ssc);
+	CByteArray retailMacWithPadding(const CByteArray &key, const CByteArray &macInput);
 
 	CContext *m_context = {0};
 

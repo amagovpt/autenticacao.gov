@@ -35,6 +35,8 @@ public:
 	CByteArray(const std::string &csData, bool bIsHex = false);
 	~CByteArray();
 
+    void Resize(unsigned long ulNewSize);
+
 	CByteArray &operator=(const CByteArray &oByteArray);
 
 	unsigned long Size() const;

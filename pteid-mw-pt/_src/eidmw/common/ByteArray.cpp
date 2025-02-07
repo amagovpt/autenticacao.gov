@@ -418,4 +418,21 @@ void CByteArray::Replace(unsigned char ucByteSrc, unsigned char ucByteDest) {
 	}
 }
 
+void CByteArray::Resize(unsigned long ulNewSize) {
+	if (m_bMallocError)
+		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
+
+	unsigned char *pNewData = static_cast<unsigned char *>(realloc(m_pucData, ulNewSize));
+	if (!pNewData && ulNewSize > 0) {
+		m_bMallocError = true;
+		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
+	}
+
+	m_pucData = pNewData;
+	m_ulSize = ulNewSize;
+	m_ulCapacity = ulNewSize;
+
+	memset(pNewData, 0, ulNewSize);
+}
+
 } // namespace eIDMW

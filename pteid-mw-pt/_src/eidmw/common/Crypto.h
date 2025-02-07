@@ -31,6 +31,8 @@
 
 namespace eIDMW {
 
+#define MAC_KEYSIZE 8
+
 /**
  * @brief Base class for Cipher context
  */
@@ -66,7 +68,7 @@ public:
 	 * @brief Init cipher with algorithm params
 	 * @throws EIDMW_ERR_BAC_CRYPTO_ERROR if init fails
 	 */
-	BlockCipherCtx(const char *cipher_name, size_t block_sz, size_t key_sz);
+	BlockCipherCtx(const char *cipher_name, size_t block_sz, size_t key_sz, const char *provider = nullptr);
 	virtual ~BlockCipherCtx() = default;
 
 	BlockCipherCtx(const BlockCipherCtx &) = delete;
@@ -96,15 +98,15 @@ public:
 	 * @param iv iv or nullptr for zero
 	 */
 	template <typename T>
-	static CByteArray decrypt(const unsigned char *key, const uint8_t *data, size_t len,
-							  const unsigned char *iv = nullptr) {
+	static CByteArray decrypt(const unsigned char *key, const CByteArray &input, const unsigned char *iv = nullptr) {
 		T cipher;
 		cipher.init(key, nullptr, false); // decrypt mode
-		auto decrypted = cipher.processBlock(data, len);
+		auto decrypted = cipher.processBlock(input.GetBytes(), input.Size());
 
-		if (len != decrypted.size()) {
-			LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR,
-						  "Input length and decrypted length do not match (%ld != %ld)", len, decrypted.size());
+		if (input.Size() != decrypted.size()) {
+			LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR,
+						  "Input length and decrypted length do not match (%ld != %ld)", input.Size(),
+						  decrypted.size());
 		}
 
 		return {decrypted.data(), decrypted.size()};
@@ -118,19 +120,27 @@ public:
 	 * @param iv iv or nullptr for zero
 	 */
 	template <typename T>
-	static CByteArray encrypt(const unsigned char *key, const uint8_t *data, size_t len,
-							  const unsigned char *iv = nullptr) {
+	static CByteArray encrypt(const unsigned char *key, const CByteArray &input, const unsigned char *iv = nullptr) {
 		T cipher;
 		cipher.init(key, nullptr, true); // encrypt mode
-		auto decrypted = cipher.processBlock(data, len);
+		auto decrypted = cipher.processBlock(input.GetBytes(), input.Size());
 
-		if (len != decrypted.size()) {
-			LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR,
-						  "Input length and encrypted length do not match (%ld != %ld)", len, decrypted.size());
+		if (input.Size() != decrypted.size()) {
+			LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR,
+						  "Input length and encrypted length do not match (%ld != %ld)", input.Size(),
+						  decrypted.size());
 		}
 
 		return {decrypted.data(), decrypted.size()};
 	}
+
+	/**
+	 * @brief ICAO 9303 BAC Retail MAC (ISO/IEC 9797-1 Algorithm 3) implementation
+	 * @param key 16-byte key (K1||K2) from BAC key derivation
+	 * @param macInput concatenated challenge data, MUST be block-aligned (8-byte blocks)
+	 * @return 8-byte MAC value for BAC authentication
+	 */
+	static CByteArray retailMac(const CByteArray &key, const CByteArray &input);
 };
 
 /**
