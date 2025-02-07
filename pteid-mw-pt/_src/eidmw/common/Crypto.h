@@ -22,6 +22,7 @@
 
 #include "ByteArray.h"
 #include "Log.h"
+#include "MWException.h"
 #include "eidErrors.h"
 #include <cstdint>
 #include <memory>
@@ -31,7 +32,12 @@
 
 namespace eIDMW {
 
-#define MAC_KEYSIZE 8
+namespace Crypto {
+
+static constexpr size_t MAC_KEYSIZE = 8;
+
+static constexpr size_t DES_BLOCK_SIZE = 8;
+static constexpr size_t AES_BLOCK_SIZE = 16;
 
 /**
  * @brief Base class for Cipher context
@@ -104,9 +110,9 @@ public:
 		auto decrypted = cipher.processBlock(input.GetBytes(), input.Size());
 
 		if (input.Size() != decrypted.size()) {
-			LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR,
-						  "Input length and decrypted length do not match (%ld != %ld)", input.Size(),
-						  decrypted.size());
+			MWLOG_CTX(LEV_ERROR, MOD_SSL, "Input length and decrypted length do not match (%ld != %ld)", input.Size(),
+					  decrypted.size());
+			throw CMWEXCEPTION(EIDMW_ERR_BAC_CRYPTO_ERROR);
 		}
 
 		return {decrypted.data(), decrypted.size()};
@@ -126,9 +132,9 @@ public:
 		auto decrypted = cipher.processBlock(input.GetBytes(), input.Size());
 
 		if (input.Size() != decrypted.size()) {
-			LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR,
-						  "Input length and encrypted length do not match (%ld != %ld)", input.Size(),
-						  decrypted.size());
+			MWLOG_CTX(LEV_ERROR, MOD_SSL, "Input length and encrypted length do not match (%ld != %ld)", input.Size(),
+					  decrypted.size());
+			throw CMWEXCEPTION(EIDMW_ERR_BAC_CRYPTO_ERROR);
 		}
 
 		return {decrypted.data(), decrypted.size()};
@@ -144,11 +150,20 @@ public:
 };
 
 /**
+ * Adds iso7816-4 padding to input (0x80 + zeroes) up to block boundary
+ *
+ * @param input      source data to pad
+ * @param blockSize  target block size (default DES_BLOCK_SIZE)
+ * @return          new CByteArray, length will be multiple of blockSize
+ */
+CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize = DES_BLOCK_SIZE);
+
+/**
  * @brief Triple des
  */
 class TripleDesCipher : public BlockCipherCtx {
 public:
-	TripleDesCipher() : BlockCipherCtx("DES-EDE-CBC", 8, 16) {}
+	TripleDesCipher() : BlockCipherCtx("DES-EDE-CBC", MAC_KEYSIZE, DES_BLOCK_SIZE) {}
 };
 
 /**
@@ -161,7 +176,9 @@ public:
 
 class DesCipher : public BlockCipherCtx {
 public:
-	DesCipher() : BlockCipherCtx("des-cbc", 8, 8) {}
+	DesCipher() : BlockCipherCtx("des-cbc", MAC_KEYSIZE, DES_BLOCK_SIZE) {}
 };
+
+} // namespace Crypto
 
 } // namespace eIDMW

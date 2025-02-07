@@ -37,19 +37,7 @@
 
 namespace eIDMW {
 
-CByteArray paddedByteArray(CByteArray &input) {
-	int padLen = 8 - input.Size() % 8;
-
-	CByteArray paddedContent;
-	paddedContent.Append(input);
-	paddedContent.Append(0x80);
-
-	// Padlen - 1 because one byte was already spent with 0x80
-	for (int i = 0; i < padLen - 1; i++)
-		paddedContent.Append(0x00);
-
-	return paddedContent;
-}
+using namespace Crypto;
 
 #define MAC_LEN 8
 
@@ -221,12 +209,11 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		command_header.SetByte(command_header.GetByte(0) | controlByte, 0);
 
 		CByteArray input_data(apdu.GetBytes(5, apdu.Size() - 5));
-		CByteArray paddedInput = paddedByteArray(input_data);
-
+		CByteArray paddedInput = withIso7816Padding(input_data);
 		auto cryptogram = BlockCipherCtx::encrypt<TripleDesCipher>(encryptionKey.GetBytes(), paddedInput);
 		// LCg = Len(Cg) + Len(PI = 1)
 		int lcg = cryptogram.Size() + 1;
-		CByteArray inputForMac = paddedByteArray(command_header);
+		CByteArray inputForMac = withIso7816Padding(command_header);
 
 		CByteArray paddedCryptogram;
 		paddedCryptogram.Append(Tcg);
@@ -235,7 +222,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		paddedCryptogram.Append(paddingIndicator);
 		paddedCryptogram.Append(cryptogram);
 
-		paddedCryptogram = paddedByteArray(paddedCryptogram);
+		paddedCryptogram = withIso7816Padding(paddedCryptogram);
 
 		// Padded Command Header + Padded [Tcg Lcg PI,CG]
 		inputForMac.Append(paddedCryptogram);
@@ -265,13 +252,13 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		CByteArray command_header(apdu.GetBytes(0, 4));
 		command_header.SetByte(command_header.GetByte(0) | controlByte, 0);
 		int le = apdu.GetByte(4);
-		CByteArray inputForMac = paddedByteArray(command_header);
+		CByteArray inputForMac = withIso7816Padding(command_header);
 
 		TlvLe.Append(Tle);
 		TlvLe.Append(0x01);
 		TlvLe.Append(le);
 
-		inputForMac.Append(paddedByteArray(TlvLe));
+		inputForMac.Append(withIso7816Padding(TlvLe));
 
 		// Pre-increment SSC
 		m_ssc++;
@@ -355,7 +342,7 @@ bool BacAuthentication::checkMacInResponse(CByteArray &resp) {
 	if (resp.GetByte(0) == 0x99) {
 		receivedMac = (resp.GetBytes(6, 8));
 		CByteArray inputForMac = resp.GetBytes(0, 4);
-		paddedInput = paddedByteArray(inputForMac);
+		paddedInput = withIso7816Padding(inputForMac);
 
 	} else if (resp.GetByte(0) == 0x87 || resp.GetByte(0) == 0x81) {
 		resp.Chop(2);
@@ -363,7 +350,7 @@ bool BacAuthentication::checkMacInResponse(CByteArray &resp) {
 		int lcg = resp.GetByte(1) == 0x81 ? resp.GetByte(2) : resp.GetByte(1);
 		CByteArray inputForMac = resp.GetByte(1) == 0x81 ? resp.GetBytes(0, lcg + 3) : resp.GetBytes(0, lcg + 2);
 		receivedMac = (resp.GetBytes(mac_offset, 8));
-		paddedInput = paddedByteArray(inputForMac);
+		paddedInput = withIso7816Padding(inputForMac);
 	}
 
 	// Pre-increment SSC

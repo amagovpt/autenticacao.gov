@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <cstring>
-#include <iostream>
 #include <string>
 #include <functional>
 
@@ -40,11 +39,20 @@
 
 namespace eIDMW {
 
-template <typename... Args>
-[[noreturn]] void LOG_AND_THROW(tLevel level, tModule module, long err, const char *fmt, Args &&...args) {
-	MWLOG(level, module, fmt, std::forward<Args>(args)...);
-	throw CMWEXCEPTION(err);
-}
+/**
+ * @brief Logs error and throws exception atomically
+ *
+ * @param lvl from tLevel
+ * @param mod from tModule
+ * @param err error code for exception
+ * @param fmt printf-style format string
+ * @param ... format arguments
+ */
+#define LOG_AND_THROW(lvl, mod, err, fmt, ...)                                                                         \
+	do {                                                                                                               \
+		MWLOG_CTX(lvl, mod, fmt, ##__VA_ARGS__);                                                                       \
+		throw CMWEXCEPTION(err);                                                                                       \
+	} while (0)
 
 //--- string conversion between std::wstring and std::string
 EIDMW_CMN_API std::wstring utilStringWiden(const std::string &in);

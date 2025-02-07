@@ -27,13 +27,14 @@
 
 namespace eIDMW {
 
+namespace Crypto {
+
 CipherCtx::CipherCtx() : ctx(EVP_CIPHER_CTX_new(), EVP_CIPHER_CTX_free) {}
 
 BlockCipherCtx::BlockCipherCtx(const char *cipher_name, size_t block_sz, size_t key_sz, const char *provider_name)
 	: cipher(EVP_CIPHER_fetch(nullptr, cipher_name, provider_name), EVP_CIPHER_free), block_size(block_sz),
 	  key_size(key_sz) {
 	if (!ctx || !cipher) {
-		printf("could not fetch cipher: %s\n", cipher_name);
 		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Failed to initialize cipher context");
 	}
 
@@ -106,4 +107,19 @@ CByteArray BlockCipherCtx::retailMac(const CByteArray &key, const CByteArray &in
 	return BlockCipherCtx::encrypt<DesCipher>(key1.GetBytes(), res);
 }
 
+CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize) {
+	int padLen = blockSize - input.Size() % blockSize;
+
+	CByteArray paddedContent;
+	paddedContent.Append(input);
+	paddedContent.Append(0x80);
+
+	// Padlen - 1 because one byte was already spent with 0x80
+	for (int i = 0; i < padLen - 1; i++)
+		paddedContent.Append(0x00);
+
+	return paddedContent;
+}
+
+} // namespace Crypto
 } // namespace eIDMW
