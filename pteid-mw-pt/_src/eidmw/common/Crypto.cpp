@@ -91,11 +91,8 @@ CByteArray BlockCipherCtx::retailMac(const CByteArray &key, const CByteArray &in
 	auto key1 = key.GetBytes(0, MAC_KEYSIZE);
 	auto key2 = key.GetBytes(MAC_KEYSIZE, MAC_KEYSIZE);
 
-	CByteArray res;
-	res.Resize(MAC_KEYSIZE);
-
-	CByteArray xx;
-	xx.Resize(MAC_KEYSIZE);
+	CByteArray res(MAC_KEYSIZE, 0);
+	CByteArray xx(MAC_KEYSIZE, 0);
 
 	for (size_t j = 0; j < (input.Size() / MAC_KEYSIZE); j++) {
 		for (size_t i = 0; i < MAC_KEYSIZE; i++)

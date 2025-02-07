@@ -30,6 +30,7 @@ namespace eIDMW {
 class EIDMW_CMN_API CByteArray {
 public:
 	CByteArray(unsigned long ulCapacity = 0);
+	CByteArray(size_t size, unsigned char value);
 	CByteArray(const unsigned char *pucData, unsigned long ulSize, unsigned long ulCapacity = 0);
 	CByteArray(const CByteArray &oByteArray);
 	CByteArray(const std::string &csData, bool bIsHex = false);

@@ -104,13 +104,11 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 
 	long retValue = {0};
 
-	unsigned char ifdBacData[40] = {0};
-
-	CByteArray iccBacData;
-	iccBacData.Resize(40);
+	CByteArray ifdBacData(40, 0);
+	CByteArray iccBacData(40, 0);
 
 	auto iccRandom = getRandomFromCard();
-	BacKeys bacKeys = generateBacData(mrzInfo, iccRandom, ifdBacData);
+	BacKeys bacKeys = generateBacData(mrzInfo, iccRandom, ifdBacData.GetBytes());
 
 	// --------------------
 	// Send mutual authentication
@@ -120,7 +118,7 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	mutual_auth.Append(0x00);
 	mutual_auth.Append(0x00);
 	mutual_auth.Append(0x28); // 40
-	mutual_auth.Append(ifdBacData, sizeof(ifdBacData));
+	mutual_auth.Append(ifdBacData);
 	mutual_auth.Append(0x00); // Le
 	iccBacData = sendAPDU(mutual_auth, retValue);
 
@@ -129,7 +127,7 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	}
 
 	iccBacData.Chop(2); // Remove the status code
-	if (iccBacData.Size() != sizeof(ifdBacData)) {
+	if (iccBacData.Size() != ifdBacData.Size()) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
 					  "Returned data from mutual authentication does not match icc bac data size");
 	}

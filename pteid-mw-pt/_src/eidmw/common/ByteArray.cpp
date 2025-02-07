@@ -19,10 +19,6 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-#include <exception>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
@@ -46,6 +42,12 @@ namespace eIDMW {
 
 CByteArray::CByteArray(unsigned long ulCapacity)
 	: m_pucData(NULL), m_ulSize(0), m_ulCapacity(ulCapacity), m_bMallocError(false) {}
+
+CByteArray::CByteArray(size_t size, unsigned char value)
+	: m_pucData(NULL), m_ulSize(0), m_ulCapacity(size), m_bMallocError(false) {
+	Resize(size);
+	memset(m_pucData, value, size);
+}
 
 // copy mem into object
 CByteArray::CByteArray(const unsigned char *pucData, unsigned long ulSize, unsigned long ulCapacity) {
@@ -431,8 +433,6 @@ void CByteArray::Resize(unsigned long ulNewSize) {
 	m_pucData = pNewData;
 	m_ulSize = ulNewSize;
 	m_ulCapacity = ulNewSize;
-
-	memset(pNewData, 0, ulNewSize);
 }
 
 } // namespace eIDMW
