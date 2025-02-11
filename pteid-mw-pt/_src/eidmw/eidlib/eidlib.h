@@ -249,10 +249,8 @@ class PTEID_Photo : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_Photo(); /**< Destructor */
 
-	PTEIDSDK_API PTEID_ByteArray &
-	getphotoRAW(); /**< Retrieve the byte contents of the photo as stored in the card in JPEG-2000 format */
-	PTEIDSDK_API PTEID_ByteArray &
-	getphoto(); /**< Retrieve the byte contents of the photo converted to PNG format for maximum compatibility */
+	PTEIDSDK_API PTEID_ByteArray & getphotoRAW(); /**< Retrieve the byte contents of the photo as stored in the card in JPEG-2000 format */
+	PTEIDSDK_API PTEID_ByteArray & getphoto(); /**< Retrieve the byte contents of the photo converted to PNG format for maximum compatibility */
 	PTEIDSDK_API PTEID_ByteArray &getphotoCbeff();
 	PTEIDSDK_API PTEID_ByteArray &getphotoFacialrechdr();
 	PTEIDSDK_API PTEID_ByteArray &getphotoFacialinfo();
@@ -1052,11 +1050,9 @@ public:
 	PTEIDSDK_API bool clearPersonalNotes(PTEID_Pin *pin = NULL, const char *csPinCode = "");
 	PTEIDSDK_API const char *readPersonalNotes();
 
-	PTEIDSDK_API PTEID_PublicKey &
-	getRootCAPubKey(); /**< Get the CVC CA public key that this card uses to verify the CVC key */
+	PTEIDSDK_API PTEID_PublicKey & getRootCAPubKey(); /**< Get the CVC CA public key that this card uses to verify the CVC key */
 	PTEIDSDK_API bool isActive();
-	PTEIDSDK_API void
-	doSODCheck(bool check); /**< Enable/disable the verification of ID and address data against the SOD file */
+	PTEIDSDK_API void doSODCheck(bool check); /**< Enable/disable the verification of ID and address data against the SOD file */
 
 #if !defined SWIG
 	PTEIDSDK_API SSLConnection *buildSSLConnection();
@@ -1080,8 +1076,7 @@ private:
 	PTEID_EIDCard &operator=(const PTEID_EIDCard &card); /**< Copy not allowed - not implemented */
 	bool persoNotesDirty;
 
-	friend PTEID_Card &
-	PTEID_ReaderContext::getCard(); /**< For internal use : This method must access protected constructor */
+	friend PTEID_Card & PTEID_ReaderContext::getCard(); /**< For internal use : This method must access protected constructor */
 	friend PTEIDSDK_API long ::PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge,
 											  int iChallengeLen);
 };
@@ -1294,8 +1289,7 @@ class APL_SodEid;
 class PTEID_Sod : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_Sod(); /**< Destructor */
-	/** Return the SOD data - it contains a PKCS#7 signed object as described in ICAO Doc 9303 - "Machine Readable
-	 * Travel Documents"  */
+	/** Return the SOD data - it contains a PKCS#7 signed object as described in ICAO Doc 9303 - "Machine Readable Travel Documents"  */
 	PTEIDSDK_API const PTEID_ByteArray &getData();
 
 private:
@@ -1639,12 +1633,10 @@ public:
 	PTEIDSDK_API PTEID_CertifType getType(); /**< Return the type of the certificate */
 
 	PTEIDSDK_API const PTEID_ByteArray &getCertData(); /**< Return the content of the certificate */
-	PTEIDSDK_API void
-	getFormattedData(PTEID_ByteArray &data);	/**< Return the content of the certificate without ending zero */
+	PTEIDSDK_API void getFormattedData(PTEID_ByteArray &data);	/**< Return the content of the certificate without padding zeros */
 	PTEIDSDK_API const char *getSerialNumber(); /**< Return the serial number of the certificate */
 	PTEIDSDK_API const char *getOwnerName();	/**< Return the name of the owner of the certificate */
-	PTEIDSDK_API const char *
-	getSubjectSerialNumber();					 /**< Return the serial number of the subject of the certificate */
+	PTEIDSDK_API const char * getSubjectSerialNumber();	 /**< Return the serial number of the subject of the certificate */
 	PTEIDSDK_API const char *getIssuerName();	 /**< Return the name of the issuer of the certificate */
 	PTEIDSDK_API const char *getValidityBegin(); /**< Return the validity begin date of the certificate */
 	PTEIDSDK_API const char *getValidityEnd();	 /**< Return the validity end date of the certificate */
@@ -1760,10 +1752,8 @@ public:
 	PTEIDSDK_API const char *getString(); /**< Return the string value (Throw exception for numerical parameter) */
 	PTEIDSDK_API long getLong();		  /**< Return the numerical value (Throw exception for string parameter) */
 
-	PTEIDSDK_API void
-	setString(const char *csValue); /**< Set the string value (Throw exception for numerical parameter) */
-	PTEIDSDK_API void
-	DeleteKeysByPrefix(); /**< Reset the strings with some prefix (Throw exception for numerical parameter) */
+	PTEIDSDK_API void setString(const char *csValue); /**< Set the string value (Throw exception for numerical parameter) */
+	PTEIDSDK_API void DeleteKeysByPrefix(); /**< Reset the strings with some prefix (Throw exception for numerical parameter) */
 	PTEIDSDK_API unsigned int CountKeysByPrefix(); /**< Count keys with some prefix */
 	PTEIDSDK_API void setLong(long lValue); /**< Set the numerical value (Throw exception for string parameter) */
 	PTEIDSDK_API static void SetTestMode(bool bTestMode); /**< Set the test mode */
