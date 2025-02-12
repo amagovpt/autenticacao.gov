@@ -89,10 +89,11 @@
       <AdditionalIncludeDirectories>$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtANGLE;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc;..\common;..\applayer;..\cardlayer;..\eidlib;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_CJSON_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;QT_GUI_LIB;QT_NETWORK_LIB;QT_CORE_LIB;CURL_STATICLIB;WIN32;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;QT_GUI_LIB;QT_NETWORK_LIB;QT_CORE_LIB;CURL_STATICLIB;WIN32;_LIB;OPENSSL_SUPPRESS_DEPRECATED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/wd4251 /wd4275 %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,8 +140,9 @@
       <AdditionalIncludeDirectories>$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtCore;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc;..\common;..\applayer;..\cardlayer;..\eidlib;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_CJSON)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;QT_GUI_LIB;QT_NETWORK_LIB;QT_CORE_LIB;CURL_STATICLIB;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;QT_GUI_LIB;QT_NETWORK_LIB;QT_CORE_LIB;CURL_STATICLIB;NDEBUG;_LIB;OPENSSL_SUPPRESS_DEPRECATED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
