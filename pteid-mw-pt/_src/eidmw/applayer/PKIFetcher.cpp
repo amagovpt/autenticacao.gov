@@ -60,7 +60,7 @@ CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 	CURL *curl;
 	CURLcode res;
-	char error_buf[CURL_ERROR_SIZE];
+	char error_buf[CURL_ERROR_SIZE] = { 0 };
 	std::string pac_proxy_host;
 	std::string pac_proxy_port;
 
@@ -75,7 +75,7 @@ CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 		return received_data;
 	}
 
-	MWLOG(LEV_DEBUG, MOD_APL, "Downloading CRL: %s", url);
+	MWLOG(LEV_DEBUG, MOD_APL, "Downloading PKI file: %s", url);
 
 	// Make sure the static array receiving the network reply
 	//  is zero'd out before each request
@@ -86,7 +86,7 @@ CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 	curl = curl_easy_init();
 
 	if (curl == NULL) {
-		MWLOG(LEV_ERROR, MOD_APL, L"curl_easy_init() failed!");
+		MWLOG(LEV_ERROR, MOD_APL, "curl_easy_init() failed!");
 		return CByteArray();
 	}
 
@@ -129,15 +129,15 @@ CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 	res = curl_easy_perform(curl);
 
 	if (res != 0) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Error downloading CRL. Libcurl returned %ls\n",
-			  utilStringWiden(std::string(error_buf)).c_str());
+		MWLOG(LEV_ERROR, MOD_APL, "Error downloading PKI file. Libcurl returned %s\n",
+			  error_buf);
 	} else {
 		long http_code = 0;
 		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 		if (http_code == 200 && res != CURLE_ABORTED_BY_CALLBACK) {
-			MWLOG(LEV_DEBUG, MOD_APL, "CRL download succeeded.");
+			MWLOG(LEV_DEBUG, MOD_APL, "PKI file download succeeded.");
 		} else {
-			MWLOG(LEV_ERROR, MOD_APL, "CRL Download failed! HTTP status code: %ld", http_code);
+			MWLOG(LEV_ERROR, MOD_APL, "PKI file download failed! HTTP status code: %ld", http_code);
 		}
 	}
 
