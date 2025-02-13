@@ -61,6 +61,8 @@ EIDMW_CMN_API std::string utilStringNarrow(const std::wstring &in);
 EIDMW_CMN_API std::wstring windowsANSIToWideString(const std::string &in);
 #endif
 
+long bigEndianBytesToLong(const uint8_t *bytes, size_t length);
+
 /**
  * Case insensitve search, csSearch should be in lower case.
  * Returns true is csSearch is present in csData.

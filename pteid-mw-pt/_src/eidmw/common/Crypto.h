@@ -24,6 +24,7 @@
 #include "Log.h"
 #include "MWException.h"
 #include "eidErrors.h"
+#include <array>
 #include <cstdint>
 #include <memory>
 #include <openssl/evp.h>
@@ -147,6 +148,120 @@ public:
 	 * @return 8-byte MAC value for BAC authentication
 	 */
 	static CByteArray retailMac(const CByteArray &key, const CByteArray &input);
+};
+
+/**
+ * @brief Base class for message digest context management
+ */
+class HashCtx {
+protected:
+	std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> ctx;
+
+public:
+	HashCtx() : ctx(EVP_MD_CTX_new(), EVP_MD_CTX_free) {}
+	virtual ~HashCtx() = default;
+
+	HashCtx(const HashCtx &) = delete;
+	HashCtx &operator=(const HashCtx &) = delete;
+
+	HashCtx(HashCtx &&) = default;
+	HashCtx &operator=(HashCtx &&) = default;
+
+	operator EVP_MD_CTX *() { return ctx.get(); }
+};
+
+/**
+ * @brief Base class for cryptographic hash operations
+ */
+class MessageDigestCtx {
+protected:
+	HashCtx ctx;
+	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md;
+	const size_t digest_size;
+
+public:
+	/**
+	 * @brief Initialize digest with algorithm params
+	 * @param md_name openssl digest name (e.g. "SHA256")
+	 * @param dgst_size expected size of digest output
+	 * @param provider optional provider name for openssl 3.0
+	 * @throws EIDMW_ERR_BAC_CRYPTO_ERROR if init fails
+	 */
+	MessageDigestCtx(const char *md_name, size_t dgst_size, const char *provider = nullptr);
+
+	/**
+	 * @brief setup digest context
+	 * @return true if initialization succeeded
+	 */
+	bool init();
+
+	/**
+	 * @brief update digest with new data
+	 * @param data pointer to input data
+	 * @param len length of input
+	 * @return true if update succeeded
+	 */
+	bool update(const uint8_t *data, size_t len);
+
+	/**
+	 * @brief finalize and get digest
+	 * @return CByteArray containing the digest
+	 * @throws EIDMW_ERR_BAC_CRYPTO_ERROR if finalization fails
+	 */
+	CByteArray final();
+
+	/**
+	 * @brief convenience method to hash a complete buffer
+	 * @param data input buffer
+	 * @return digest of input
+	 */
+	template <typename T> static CByteArray hash(const CByteArray &input) {
+		T md;
+		md.init();
+		md.update(input.GetBytes(), input.Size());
+		return md.final();
+	}
+};
+
+class Sha256 : public MessageDigestCtx {
+public:
+	static constexpr size_t DIGEST_SIZE = 32;
+	Sha256() : MessageDigestCtx("SHA256", DIGEST_SIZE) {}
+};
+
+class Sha1 : public MessageDigestCtx {
+public:
+	static constexpr size_t DIGEST_SIZE = 20;
+	Sha1() : MessageDigestCtx("SHA1", DIGEST_SIZE) {}
+};
+
+/**
+ * @brief Implements generic ICAO 9303 key derivation and secure messaging state
+ *
+ * Handles generation and management of session keys for BAC/PACE/CA protocols
+ * per ICAO 9303 part 11:
+ *   1. append 4 zero bytes to input seed
+ *   2. derive Kenc using counter 0x01
+ *   3. derive Kmac using counter 0x02
+ *
+ * Maintains send sequence counter (SSC) state for secure messaging.
+ * Supports both 3DES (16 bytes for K1||K2) and AES-based implementations.
+ */
+class SecureMessagingKeys {
+public:
+	void deriveKeys(const CByteArray &seed);
+
+	CByteArray getCBAEncKey() const { return {m_ksEnc.data(), m_ksEnc.size()}; };
+	CByteArray getCBAMacKey() const { return {m_ksMac.data(), m_ksMac.size()}; };
+
+	void setSSC(uint64_t newSsc) { m_ssc = newSsc; }
+	uint64_t getSSC() const { return m_ssc; }
+	void incrementSSC() { m_ssc++; }
+
+private:
+	std::array<unsigned char, 16> m_ksEnc;
+	std::array<unsigned char, 16> m_ksMac;
+	uint64_t m_ssc = {0};
 };
 
 /**

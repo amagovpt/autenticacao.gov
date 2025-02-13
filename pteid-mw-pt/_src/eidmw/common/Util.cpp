@@ -117,6 +117,14 @@ std::u32string stringWidenUTF32(std::string utf8_str) {
 }
 #endif
 
+long bigEndianBytesToLong(const uint8_t *bytes, size_t length) {
+	long value = 0;
+	for (size_t i = 0; i < length; i++) {
+		value = (value << 8) | bytes[i]; // Shift existing value and add next byte
+	}
+	return value;
+};
+
 const unsigned char *findASN1Object(const unsigned char **array, long &size, long tag, const int &maxLength) {
 	const unsigned char *old_data = NULL;
 	const unsigned char *desc_data = *array;
@@ -582,4 +590,3 @@ EIDMW_CMN_API size_t read_binary_file(const char *filename, unsigned char **outB
 	fclose(file);
 	return fileSize;
 }
-

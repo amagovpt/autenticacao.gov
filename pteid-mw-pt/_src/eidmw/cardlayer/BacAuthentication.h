@@ -22,6 +22,7 @@
 
 #include "ByteArray.h"
 #include "Context.h"
+#include "Crypto.h"
 #include <cstdint>
 
 namespace eIDMW {
@@ -36,14 +37,6 @@ public:
 	CByteArray decryptData(const CByteArray &data);
 
 private:
-	struct SM_Keys {
-		std::array<unsigned char, 16> ksEnc;
-		std::array<unsigned char, 16> ksMac;
-		std::array<unsigned char, 8> ssc;
-
-		void generate3DesKeysFromKeySeed(const unsigned char *keySeed16, size_t keySeedLen);
-	};
-
 	struct BacKeys {
 		std::array<unsigned char, 8> rndIfd;
 		std::array<unsigned char, 8> rndIcc;
@@ -68,7 +61,6 @@ private:
 	SCARDHANDLE m_card = {0};
 	const void *m_param = {0};
 
-	uint64_t m_ssc = {0};
-	SM_Keys m_smKeys = {0};
+	Crypto::SecureMessagingKeys m_sm;
 };
 } // namespace eIDMW

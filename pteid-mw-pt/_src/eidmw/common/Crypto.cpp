@@ -23,6 +23,7 @@
 #include "Util.h"
 #include "eidErrors.h"
 #include <cstdio>
+#include <cstring>
 #include <openssl/evp.h>
 
 namespace eIDMW {
@@ -102,6 +103,48 @@ CByteArray BlockCipherCtx::retailMac(const CByteArray &key, const CByteArray &in
 	}
 	res = BlockCipherCtx::decrypt<DesCipher>(key2.GetBytes(), res);
 	return BlockCipherCtx::encrypt<DesCipher>(key1.GetBytes(), res);
+}
+
+MessageDigestCtx::MessageDigestCtx(const char *md_name, size_t dgst_size, const char *provider)
+	: md(EVP_MD_fetch(nullptr, md_name, provider), EVP_MD_free), digest_size(dgst_size) {
+	if (!ctx || !md) {
+		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Failed to initialize message digest context");
+	}
+}
+
+bool MessageDigestCtx::init() { return EVP_DigestInit_ex2(ctx, md.get(), nullptr) > 0; }
+
+bool MessageDigestCtx::update(const uint8_t *data, size_t len) { return EVP_DigestUpdate(ctx, data, len) > 0; }
+
+CByteArray MessageDigestCtx::final() {
+	std::vector<uint8_t> digest(digest_size);
+	unsigned int len;
+	if (!EVP_DigestFinal_ex(ctx, digest.data(), &len)) {
+		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Digest finalization failed");
+	}
+	return CByteArray(digest.data(), len);
+}
+
+void SecureMessagingKeys::deriveKeys(const CByteArray &seed) {
+	if (seed.Size() == 0) {
+		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Empty seed for secure messaging key derivation");
+	}
+
+	CByteArray kSeed(SHA_DIGEST_LENGTH);
+	kSeed.Append(seed);
+	kSeed.Append(0x00);
+	kSeed.Append(0x00);
+	kSeed.Append(0x00);
+	kSeed.Append(0x00);
+
+	// Enc key
+	kSeed.SetByte(0x01, SHA_DIGEST_LENGTH - 1);
+	auto out = MessageDigestCtx::hash<Sha1>(kSeed);
+	memcpy(m_ksEnc.data(), out.GetBytes(), 16);
+
+	kSeed.SetByte(0x02, SHA_DIGEST_LENGTH - 1);
+	out = MessageDigestCtx::hash<Sha1>(kSeed);
+	memcpy(m_ksMac.data(), out.GetBytes(), 16);
 }
 
 CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize) {

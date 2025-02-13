@@ -41,32 +41,6 @@ using namespace Crypto;
 
 #define MAC_LEN 8
 
-void BacAuthentication::SM_Keys::generate3DesKeysFromKeySeed(const unsigned char *keySeed16, size_t keySeedLen) {
-	if (keySeedLen != 16) {
-		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "%s: Illegal input. Key seed must be 16 bytes",
-					  __FUNCTION__);
-	}
-
-	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeed = {0};
-	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeedDigest = {0};
-
-	memcpy(kSeed.data(), keySeed16, 16);
-
-	// Only the 16 most significant bytes are used from kseed so we can overwrite the last 4
-	kSeed[SHA_DIGEST_LENGTH - 4] = 0x00;
-	kSeed[SHA_DIGEST_LENGTH - 3] = 0x00;
-	kSeed[SHA_DIGEST_LENGTH - 2] = 0x00;
-	kSeed[SHA_DIGEST_LENGTH - 1] = 0x01;
-
-	SHA1(kSeed.data(), SHA_DIGEST_LENGTH, kSeedDigest.data());
-	memcpy(ksEnc.data(), kSeedDigest.data(), 16);
-
-	kSeed[SHA_DIGEST_LENGTH - 1] = 0x02;
-
-	SHA1(kSeed.data(), SHA_DIGEST_LENGTH, kSeedDigest.data());
-	memcpy(ksMac.data(), kSeedDigest.data(), 16);
-}
-
 void BacAuthentication::BacKeys::generateAccessKeys(const CByteArray &mrzInfo) {
 	assert(mrzInfo.Size() != 0 && "Empty MRZ when generating access keys");
 
@@ -157,39 +131,28 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 
 	// --------------------
 	// Generate session keys and SSC
-	unsigned char *rnd_icc = bacKeys.rndIcc.data();
-	unsigned char *rnd_ifd = bacKeys.rndIfd.data();
-
-	unsigned char *ssc = &(m_smKeys.ssc[0]);
-	memcpy(ssc, rnd_icc + 4, 4);
-	memcpy(ssc + 4, rnd_ifd + 4, 4);
-
 	unsigned char kseed[16] = {0}; // Kseed = XOR of Kicc and Kifd
 	for (int i = 0; i < sizeof(bacKeys.kifd); i++) {
 		kseed[i] = bacKeys.kifd[i] ^ bacKeys.kicc[i];
 	}
-	m_smKeys.generate3DesKeysFromKeySeed(kseed, sizeof(kseed));
+	m_sm.deriveKeys({kseed, sizeof(kseed)});
 
-	auto bigEndianBytesToLong = [](const uint8_t *bytes, size_t length) {
-		long value = 0;
-		for (size_t i = 0; i < length; i++) {
-			value = (value << 8) | bytes[i]; // Shift existing value and add next byte
-		}
-		return value;
-	};
-	m_ssc = bigEndianBytesToLong(m_smKeys.ssc.data(), m_smKeys.ssc.size());
+	CByteArray ssc(8);
+	ssc.Append(bacKeys.rndIcc.data() + 4, 4);
+	ssc.Append(bacKeys.rndIfd.data() + 4, 4);
+	m_sm.setSSC(bigEndianBytesToLong(ssc.GetBytes(), ssc.Size()));
 }
 
 CByteArray BacAuthentication::decryptData(const CByteArray &data) {
-	CByteArray encryptionKey = {m_smKeys.ksEnc.data(), m_smKeys.ksEnc.size()};
+	CByteArray encryptionKey = m_sm.getCBAEncKey();
 	CByteArray cryptogram(data.GetBytes(3, data.GetByte(1) - 1));
 
 	return BlockCipherCtx::decrypt<TripleDesCipher>(encryptionKey.GetBytes(), cryptogram);
 }
 
 CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
-	CByteArray encryptionKey = {m_smKeys.ksEnc.data(), m_smKeys.ksEnc.size()};
-	CByteArray macKey = {m_smKeys.ksMac.data(), m_smKeys.ksMac.size()};
+	CByteArray encryptionKey = m_sm.getCBAEncKey();
+	CByteArray macKey = m_sm.getCBAMacKey();
 
 	CByteArray final_apdu;
 	const unsigned char Tcg = 0x87;
@@ -226,9 +189,9 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		inputForMac.Append(paddedCryptogram);
 
 		// Pre-increment SSC
-		m_ssc++;
+		m_sm.incrementSSC();
 
-		auto mac = retailMacWithSSC(inputForMac, m_ssc);
+		auto mac = retailMacWithSSC(inputForMac, m_sm.getSSC());
 
 		// Build final APDU including Cryptogram and MAC
 		int lc_final = MAC_LEN + 2 + cryptogram.Size() + 3; // CG + Tcg + Lcg + PI
@@ -259,9 +222,9 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
 		inputForMac.Append(withIso7816Padding(TlvLe));
 
 		// Pre-increment SSC
-		m_ssc++;
+		m_sm.incrementSSC();
 
-		auto mac = retailMacWithSSC(inputForMac, m_ssc);
+		auto mac = retailMacWithSSC(inputForMac, m_sm.getSSC());
 
 		int lc_final = MAC_LEN + 2 + TlvLe.Size();
 		final_apdu.Append(command_header);
@@ -352,9 +315,9 @@ bool BacAuthentication::checkMacInResponse(CByteArray &resp) {
 	}
 
 	// Pre-increment SSC
-	m_ssc++;
+	m_sm.incrementSSC();
 
-	auto mac = retailMacWithSSC(paddedInput, m_ssc);
+	auto mac = retailMacWithSSC(paddedInput, m_sm.getSSC());
 	return mac.Equals(receivedMac);
 }
 
@@ -371,8 +334,7 @@ CByteArray BacAuthentication::retailMacWithSSC(const CByteArray &macInput, uint6
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_CRYPTO_ERROR, "%s: mac input too large", __FUNCTION__);
 	}
 
-	auto key = CByteArray{m_smKeys.ksMac.data(), m_smKeys.ksMac.size()};
-	return BlockCipherCtx::retailMac(key, macInputWithSSC);
+	return BlockCipherCtx::retailMac(m_sm.getCBAMacKey(), macInputWithSSC);
 }
 
 CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const CByteArray &macInput) {
