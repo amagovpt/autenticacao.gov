@@ -130,8 +130,13 @@ void SecureMessagingKeys::deriveKeys(const CByteArray &seed) {
 		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Empty seed for secure messaging key derivation");
 	}
 
+	if (seed.Size() != 16) {
+		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR,
+					  "Seed for secure messaging key derivation must be 16 bytes long");
+	}
+
 	CByteArray kSeed(SHA_DIGEST_LENGTH);
-	kSeed.Append(seed);
+	kSeed.Append(seed.GetBytes(), 16);
 	kSeed.Append(0x00);
 	kSeed.Append(0x00);
 	kSeed.Append(0x00);
