@@ -25,7 +25,6 @@
 #include "Log.h"
 #include "Util.h"
 #include "eidErrors.h"
-#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdio>
@@ -40,29 +39,6 @@ namespace eIDMW {
 using namespace Crypto;
 
 #define MAC_LEN 8
-
-void BacAuthentication::BacKeys::generateAccessKeys(const CByteArray &mrzInfo) {
-	assert(mrzInfo.Size() != 0 && "Empty MRZ when generating access keys");
-
-	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeed;
-	std::array<unsigned char, SHA_DIGEST_LENGTH> kSeedDigest;
-
-	SHA1(mrzInfo.GetBytes(), mrzInfo.Size(), kSeed.data());
-
-	// Only the 16 most significant bytes are used from kseed so we can overwrite the last 4
-	kSeed[SHA_DIGEST_LENGTH - 4] = 0x00;
-	kSeed[SHA_DIGEST_LENGTH - 3] = 0x00;
-	kSeed[SHA_DIGEST_LENGTH - 2] = 0x00;
-	kSeed[SHA_DIGEST_LENGTH - 1] = 0x01;
-
-	SHA1(kSeed.data(), SHA_DIGEST_LENGTH, kSeedDigest.data());
-	memcpy(kEnc.data(), kSeedDigest.data(), 16);
-
-	kSeed[SHA_DIGEST_LENGTH - 1] = 0x02;
-
-	SHA1(kSeed.data(), SHA_DIGEST_LENGTH, kSeedDigest.data());
-	memcpy(kMac.data(), kSeedDigest.data(), 16);
-}
 
 BacAuthentication::BacAuthentication(CContext *poContext) : m_context(poContext) {}
 BacAuthentication::~BacAuthentication() {}
@@ -81,8 +57,35 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	CByteArray ifdBacData(40, 0);
 	CByteArray iccBacData(40, 0);
 
-	auto iccRandom = getRandomFromCard();
-	BacKeys bacKeys = generateBacData(mrzInfo, iccRandom, ifdBacData.GetBytes());
+	CByteArray rndIfd(8, 0);
+	CByteArray rndIcc(8, 0);
+	CByteArray keyIfd(16, 0);
+	CByteArray keyIcc(16, 0);
+
+	// --------------------
+	// Generate bac data and derive session keys
+	rndIcc = getRandomFromCard();
+	RAND_bytes(rndIfd.GetBytes(), rndIfd.Size());
+	RAND_bytes(keyIfd.GetBytes(), keyIfd.Size());
+
+	auto hashMrz = MessageDigestCtx::hash<Sha1>(mrzInfo);
+	hashMrz.Chop(hashMrz.Size() - 16);
+	m_sm.deriveKeys(hashMrz);
+
+	// --------------------
+	// 3des encrypt mutual authentication data
+	CByteArray encInput;
+	encInput.Append(rndIfd);
+	encInput.Append(rndIcc);
+	encInput.Append(keyIfd);
+
+	auto encKey = m_sm.getCBAEncKey();
+	auto encrypted = BlockCipherCtx::encrypt<TripleDesCipher>(encKey.GetBytes(), encInput);
+	memcpy(ifdBacData.GetBytes(), encrypted.GetBytes(), encrypted.Size());
+
+	// retail mac
+	auto mac = retailMacWithPadding(m_sm.getCBAMacKey(), encrypted);
+	memcpy(ifdBacData.GetBytes() + 32, mac.GetBytes(), MAC_KEYSIZE);
 
 	// --------------------
 	// Send mutual authentication
@@ -91,7 +94,7 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	mutual_auth.Append(0x82);
 	mutual_auth.Append(0x00);
 	mutual_auth.Append(0x00);
-	mutual_auth.Append(0x28); // 40
+	mutual_auth.Append(ifdBacData.Size());
 	mutual_auth.Append(ifdBacData);
 	mutual_auth.Append(0x00); // Le
 	iccBacData = sendAPDU(mutual_auth, retValue);
@@ -110,40 +113,45 @@ void BacAuthentication::authenticate(SCARDHANDLE hCard, const void *paramStructu
 	// Check ICC and store derived keys
 	const size_t MAC_OFFSET = iccBacData.Size() - MAC_KEYSIZE;
 
-	auto key = CByteArray(bacKeys.kMac.data(), bacKeys.kMac.size());
 	auto data = CByteArray(iccBacData.GetBytes(), iccBacData.Size() - MAC_KEYSIZE);
-	auto mac = retailMacWithPadding(key, data);
+	mac = retailMacWithPadding(m_sm.getCBAMacKey(), data);
 
 	const unsigned char *iccMac = iccBacData.GetBytes() + MAC_OFFSET;
 	if (memcmp(mac.GetBytes(), iccMac, MAC_KEYSIZE) != 0) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to verify ICC MAC");
 	}
 
-	auto decryptedIccData = BlockCipherCtx::decrypt<TripleDesCipher>(bacKeys.kEnc.data(), iccBacData);
+	auto decryptedIccData = BlockCipherCtx::decrypt<TripleDesCipher>(encKey.GetBytes(), iccBacData);
 
-	if (memcmp(bacKeys.rndIcc.data(), decryptedIccData.GetBytes(), 8) != 0 ||
-		memcmp(bacKeys.rndIfd.data(), decryptedIccData.GetBytes() + 8, 8) != 0) {
+	if (memcmp(rndIcc.GetBytes(), decryptedIccData.GetBytes(), 8) != 0 ||
+		memcmp(rndIfd.GetBytes(), decryptedIccData.GetBytes() + 8, 8) != 0) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "Failed to verify Rnd ICC or IFD");
 	}
 
 	// Store keys
-	memcpy(bacKeys.kicc.data(), decryptedIccData.GetBytes() + 16, 16);
+	memcpy(keyIcc.GetBytes(), decryptedIccData.GetBytes() + 16, 16);
 
 	// --------------------
 	// Generate session keys and SSC
 	unsigned char kseed[16] = {0}; // Kseed = XOR of Kicc and Kifd
-	for (int i = 0; i < sizeof(bacKeys.kifd); i++) {
-		kseed[i] = bacKeys.kifd[i] ^ bacKeys.kicc[i];
+	for (int i = 0; i < keyIfd.Size(); i++) {
+		kseed[i] = keyIfd.GetByte(i) ^ keyIcc.GetByte(i);
 	}
 	m_sm.deriveKeys({kseed, sizeof(kseed)});
 
 	CByteArray ssc(8);
-	ssc.Append(bacKeys.rndIcc.data() + 4, 4);
-	ssc.Append(bacKeys.rndIfd.data() + 4, 4);
+	ssc.Append(rndIcc.GetBytes() + 4, 4);
+	ssc.Append(rndIfd.GetBytes() + 4, 4);
 	m_sm.setSSC(bigEndianBytesToLong(ssc.GetBytes(), ssc.Size()));
+
+	m_authenticated = true;
 }
 
 CByteArray BacAuthentication::decryptData(const CByteArray &data) {
+	if (!m_authenticated) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "BAC not initialized");
+	}
+
 	CByteArray encryptionKey = m_sm.getCBAEncKey();
 	CByteArray cryptogram(data.GetBytes(3, data.GetByte(1) - 1));
 
@@ -151,6 +159,10 @@ CByteArray BacAuthentication::decryptData(const CByteArray &data) {
 }
 
 CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu) {
+	if (!m_authenticated) {
+		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "BAC not initialized");
+	}
+
 	CByteArray encryptionKey = m_sm.getCBAEncKey();
 	CByteArray macKey = m_sm.getCBAMacKey();
 
@@ -258,39 +270,10 @@ CByteArray BacAuthentication::getRandomFromCard() {
 	apdu.p1() = 0x00;
 	apdu.p2() = 0x00;
 	apdu.setLe(0x08);
-	return sendAPDU(apdu.ToByteArray(), returnValue);
-}
+	auto out = sendAPDU(apdu.ToByteArray(), returnValue);
+	out.Chop(2);
 
-BacAuthentication::BacKeys BacAuthentication::generateBacData(const CByteArray &mrzInfo, const CByteArray &random,
-															  unsigned char *bac_data) {
-	const int CIPHER_KEY_SIZE = 16;
-
-	BacKeys bacKeys = {0};
-	bacKeys.generateAccessKeys(mrzInfo);
-
-	// Copy random ICC to bac keys
-	memcpy(bacKeys.rndIcc.data(), random.GetBytes(), random.Size());
-
-	// Generate random IFD and KIFD
-	RAND_bytes(bacKeys.rndIfd.data(), 8);
-	RAND_bytes(bacKeys.kifd.data(), 16);
-
-	unsigned char enc_input[32] = {0};
-	memcpy(enc_input, bacKeys.rndIfd.data(), 8);
-	memcpy(enc_input + 8, random.GetBytes(), 8);
-	memcpy(enc_input + 16, bacKeys.kifd.data(), 16);
-
-	// Encrypt SIFD = (RND.IFD || RND.ICC || KIFD) and generate MAC
-	auto encrypted = BlockCipherCtx::encrypt<TripleDesCipher>(bacKeys.kEnc.data(), {enc_input, sizeof(enc_input)});
-	std::memcpy(bac_data, encrypted.GetBytes(), encrypted.Size());
-
-	auto key = CByteArray(bacKeys.kMac.data(), bacKeys.kMac.size());
-	auto data = CByteArray(bac_data, encrypted.Size());
-	auto mac = retailMacWithPadding(key, data);
-
-	memcpy(bac_data + 32, mac.GetBytes(), MAC_KEYSIZE);
-
-	return bacKeys;
+	return out;
 }
 
 bool BacAuthentication::checkMacInResponse(CByteArray &resp) {

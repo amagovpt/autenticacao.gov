@@ -37,20 +37,8 @@ public:
 	CByteArray decryptData(const CByteArray &data);
 
 private:
-	struct BacKeys {
-		std::array<unsigned char, 8> rndIfd;
-		std::array<unsigned char, 8> rndIcc;
-		std::array<unsigned char, 16> kifd;
-		std::array<unsigned char, 16> kicc;
-		std::array<unsigned char, 16> kEnc;
-		std::array<unsigned char, 16> kMac;
-
-		void generateAccessKeys(const CByteArray &mrzInfo);
-	};
-
 	CByteArray sendAPDU(const CByteArray &apdu, long &returnValue);
 	CByteArray getRandomFromCard();
-	BacKeys generateBacData(const CByteArray &mrzInfo, const CByteArray &random, unsigned char *bacData);
 	bool checkMacInResponse(CByteArray &response);
 	CByteArray retailMacWithSSC(const CByteArray &macInput, uint64_t ssc);
 	CByteArray retailMacWithPadding(const CByteArray &key, const CByteArray &macInput);
@@ -61,6 +49,7 @@ private:
 	SCARDHANDLE m_card = {0};
 	const void *m_param = {0};
 
+	bool m_authenticated = false;
 	Crypto::SecureMessagingKeys m_sm;
 };
 } // namespace eIDMW

@@ -136,7 +136,7 @@ void SecureMessagingKeys::deriveKeys(const CByteArray &seed) {
 	}
 
 	CByteArray kSeed(SHA_DIGEST_LENGTH);
-	kSeed.Append(seed.GetBytes(), 16);
+	kSeed.Append(seed);
 	kSeed.Append(0x00);
 	kSeed.Append(0x00);
 	kSeed.Append(0x00);
