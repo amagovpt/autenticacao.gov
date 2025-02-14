@@ -2,7 +2,7 @@
 
 > **⚠ IMPORTANTE: Suporte ao novo Cartão de Cidadão.**
 >
-> Para adaptar-se ao novo Cartão de Cidadão, que em breve será emitido, garantindo a padronização europeia estabelecida na diretiva UE 1157/2019, novas funcionalidades e mais segurança dos documentos de identificação, procedeu-se à atualização da aplicação desktop Autenticação.gov e do SDK do middleware do Cartão de Cidadão, que se disponibiliza aqui em modo "pre-release": https://github.com/amagovpt/autenticacao.gov/releases
+> Para adaptar-se ao novo Cartão de Cidadão, que é emitido desde junho de 2024, garantindo a padronização europeia estabelecida na diretiva UE 1157/2019, novas funcionalidades e mais segurança dos documentos de identificação, procedeu-se à atualização da aplicação desktop Autenticação.gov e do SDK do middleware do Cartão de Cidadão, na versão 3.12.0 e posteriores.
 > 
 > As principais mudanças na versão desktop da aplicação Autenticação.gov são:
 > 
@@ -58,7 +58,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
 
 ### Linux
 
-1. Instalação das dependências.
+1. Instalar as dependências.
    As dependências para a compilação do Middleware em Linux (nomes de pacotes válidos para a distribuição Ubuntu 22.04), são as seguintes:
 
    ```bash
@@ -84,7 +84,7 @@ A documentação da API disponibilizada pelo SDK está disponível nos seguintes
    make
    ```
 
-4. Caso pretenda instalar a aplicação e as bibliotecas que fazem parte do projeto:
+4. Instalar a aplicação e as bibliotecas que fazem parte do projeto:
 
    ```bash
    sudo make install && sudo ldconfig
@@ -123,12 +123,12 @@ Ferramentas adicionais a instalar:
 - Windows Platform SDK
 - Windows Cryptographic Provider Development Kit
 - Visual Studio
-- doxygen - disponível em http://www.doxygen.nl/download.html
+- doxygen (geração de documentação) - disponível em http://www.doxygen.nl/download.html
 - Swigwin 4.0.1 - disponível em  https://sourceforge.net/projects/swig/files/swigwin/swigwin-4.0.1/
 - Java JDK
 - Wix - disponível em https://wixtoolset.org/releases/
 - Wix Visual Studio Extension - https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2017Extension
-- Git for Windows - disponível em https://gitforwindows.org/
+- Git - disponível em https://git-scm.com/
 
 Após configurado o ambiente conforme acima descrito, efetuar os seguintes passos:
 
