@@ -14,8 +14,6 @@
       "GlobalChambersignRoot-2008.der":"136335439334a7698016a0d324de72284e079d7b5220bb8fbd747816eebebaca",
       "Usertrust_RSA_Certification_Authority.der":"e793c9b02fd8aa13e21c31228accb08119643b749c898964b1746d46c3d4cbd2",
       "DigicertRoot.der": "4348a0e9444c78cb265e058d5e8944b4d84f9662bd26db257f8934a443c70161",
-      "cacerts.pem":"7563b29f62bcf979950e57dea0e59587122f998e2d6d1451baf0a9730390f1b8",
-      "EC de Assinatura Digital do Cartao de Cidadao 0019.der":"73a0d6bfaad017084090ee16443266050431b274830c4615819a342c59d28cd7",
-      "EC de Autenticacao do Cartao de Cidadao 0019.der":"667c149e29bf5c5563992de6239c964f6a9bca67b8fcb09a41f2eccfe29707fb"
+      "cacerts.pem":"7563b29f62bcf979950e57dea0e59587122f998e2d6d1451baf0a9730390f1b8"
    }
 }
