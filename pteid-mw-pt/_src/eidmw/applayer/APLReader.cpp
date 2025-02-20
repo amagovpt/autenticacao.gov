@@ -158,8 +158,7 @@ APL_CardType APL_ReaderContext::getPhysicalCardType() {
 	case CARD_PTEID_IAS07:
 	case CARD_PTEID_IAS101:
 	case CARD_PTEID_IAS5:
-	case CARD_ICAO:
-	case CARD_MULTIPASS: {
+	case CARD_ICAO: {
 
 		ret = ConvertCardType(calCardType);
 
@@ -227,9 +226,6 @@ bool APL_ReaderContext::connectCard() {
 		break;
 	case APL_CARDTYPE_ICAO:
 		m_card = new APL_ICAO(this);
-		break;
-	case APL_CARDTYPE_MULTIPASS:
-		m_card = new APL_MultiPass(this);
 		break;
 	default:
 		return false;
@@ -424,7 +420,7 @@ void CAppLayer::startAllServices() {
 	if (!m_cryptoFwk)
 		m_cryptoFwk = new APL_CryptoFwkPteid;
 
-	//Initialize needed context for active authentication
+	// Initialize needed context for active authentication
 	initializeAAContext();
 
 	// Then start the caches (Certificates and CRL)
@@ -502,10 +498,10 @@ void CAppLayer::readerListInit(bool bForceRefresh) {
 }
 
 void CAppLayer::initializeAAContext() {
-	const auto registerOID = [](const unsigned char* bsiOID, const char* SN, const char* LN) {
+	const auto registerOID = [](const unsigned char *bsiOID, const char *SN, const char *LN) {
 		auto len = BSI_OID_LEN;
 
-		ASN1_OBJECT* oid = d2i_ASN1_OBJECT(nullptr, &bsiOID, len);
+		ASN1_OBJECT *oid = d2i_ASN1_OBJECT(nullptr, &bsiOID, len);
 		if (oid == nullptr) {
 			MWLOG(LEV_ERROR, MOD_APL, L"Failed to create ASN1 object for %s", LN);
 			return;
@@ -518,7 +514,7 @@ void CAppLayer::initializeAAContext() {
 			ASN1_OBJECT_free(oid);
 			return;
 		}
-		
+
 		auto created_nid = OBJ_create(oid_str, SN, LN);
 		if (created_nid == NID_undef) {
 			MWLOG(LEV_ERROR, MOD_APL, L"Failed to create NID for %s", LN);
@@ -714,8 +710,6 @@ APL_CardType ConvertCardType(tCardType cardType) {
 		return APL_CARDTYPE_PTEID_IAS5;
 	case CARD_ICAO:
 		return APL_CARDTYPE_ICAO;
-	case CARD_MULTIPASS:
-		return APL_CARDTYPE_MULTIPASS;
 	default:
 		return APL_CARDTYPE_UNKNOWN;
 	}

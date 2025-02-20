@@ -129,6 +129,8 @@ public:
 	 */
 	EIDMW_APL_API APL_DocVersionInfo &getDocInfo();
 
+	EIDMW_APL_API CByteArray readTokenData();
+
 	/**
 	 * Return rawdata from the card
 	 */

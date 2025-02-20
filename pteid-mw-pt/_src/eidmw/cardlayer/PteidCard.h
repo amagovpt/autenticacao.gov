@@ -25,6 +25,7 @@
 #ifndef __PTEIDCARD_H__
 #define __PTEIDCARD_H__
 
+#include "BacAuthentication.h"
 #include "PkiCard.h"
 #include "Card.h"
 
@@ -83,6 +84,9 @@ public:
 	virtual void InitEncryptionKey();
 	virtual void ReadSerialNumber();
 
+	void openBACChannel(const CByteArray &mrzInfo);
+	CByteArray readToken();
+
 	virtual unsigned long GetSupportedAlgorithms();
 
 protected:
@@ -102,6 +106,8 @@ protected:
 
 	CByteArray m_oCardData;
 	CByteArray m_oSerialNr;
+
+	BacAuthentication m_bac;
 };
 
 } // namespace eIDMW

@@ -35,6 +35,7 @@
 
 #include "APLReader.h"
 #include "APLConfig.h"
+#include "APLCardPteid.h"
 
 #include "Log.h"
 #include "Mutex.h"
@@ -592,8 +593,9 @@ PTEID_ByteArray PTEID_ReaderContext::getMultiPassToken() {
 	CByteArray token;
 
 	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
-	if (pimpl->getCardType() == APL_CARDTYPE_MULTIPASS) {
-		token = reinterpret_cast<APL_MultiPass *>(pimpl->getCard())->readTokenData();
+	auto card = pimpl->getCard();
+	if (pimpl->getCardType() == APL_CARDTYPE_PTEID_IAS5) {
+		token = reinterpret_cast<APL_EIDCard*>(pimpl->getCard())->readTokenData();
 	}
 
 	out.Append(token.GetBytes(), token.Size());

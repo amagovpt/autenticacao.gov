@@ -106,7 +106,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, SCARD
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
 					   tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol)
-	: CPkiCard(hCard, poContext, poPinpad) {
+	: CPkiCard(hCard, poContext, poPinpad), m_bac(m_poContext) {
 	switch (ulVersion) {
 	case 1:
 		m_cardType = CARD_PTEID_IAS07;
@@ -126,7 +126,7 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *po
 
 /* Constructor for IASv5 cards in CL mode */
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol)
-	: CPkiCard(hCard, poContext, poPinpad) {
+	: CPkiCard(hCard, poContext, poPinpad),  m_bac(m_poContext) {
 
 	setProtocol(protocol);
 	m_cardType = CARD_PTEID_IAS5;
@@ -846,4 +846,17 @@ void CPteidCard::InitEncryptionKey() {
 		m_oCache.setEncryptionKey(hash);
 	} catch (CMWException e) {
 	}
+}
+
+void CPteidCard::openBACChannel(const CByteArray &mrzInfo) {
+	m_bac.authenticate(m_hCard, m_comm_protocol, mrzInfo);
+}
+
+CByteArray CPteidCard::readToken() {
+	CByteArray plaintext_apdu("00A4020C02010D", true);
+	m_bac.sendSecureAPDU(plaintext_apdu);
+
+	CByteArray read_binary("00B0000000", true);
+	auto resp = m_bac.sendSecureAPDU(read_binary);
+	return m_bac.decryptData(resp);
 }

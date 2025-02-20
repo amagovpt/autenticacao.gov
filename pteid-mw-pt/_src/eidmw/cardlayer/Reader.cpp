@@ -30,7 +30,7 @@
 #include "Log.h"
 #include "Config.h"
 // cardlayer headers
-#include "MultiPassCard.h"
+#include "PteidCard.h"
 #include "Reader.h"
 #include "Card.h"
 #include "APDU.h"
@@ -431,10 +431,10 @@ bool CReader::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 }
 
 void CReader::openBACChannel(const CByteArray &mrz_info) {
-	reinterpret_cast<CMultiPassCard *>(m_poCard)->openBACChannel(mrz_info);
+	reinterpret_cast<CPteidCard*>(m_poCard)->openBACChannel(mrz_info);
 }
 
-CByteArray CReader::readMultiPassToken() { return reinterpret_cast<CMultiPassCard *>(m_poCard)->readToken(); }
+CByteArray CReader::readMultiPassToken() { return reinterpret_cast<CPteidCard*>(m_poCard)->readToken(); }
 
 CByteArray CReader::ReadFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen,
 							 bool bDoNotCache) {

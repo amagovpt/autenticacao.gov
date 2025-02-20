@@ -100,7 +100,6 @@ typedef enum {
 	CARD_PTEID_IAS101, // legacy
 	CARD_PTEID_IAS5,   // v5 (CC 2.0)
 	CARD_ICAO,
-	CARD_MULTIPASS,
 	CARD_UNKNOWN,
 } tCardType;
 

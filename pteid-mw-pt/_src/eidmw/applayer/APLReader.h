@@ -45,7 +45,6 @@ enum APL_CardType {
 	APL_CARDTYPE_PTEID_IAS101,
 	APL_CARDTYPE_PTEID_IAS5,
 	APL_CARDTYPE_ICAO,
-	APL_CARDTYPE_MULTIPASS,
 };
 
 struct APL_RawData_Eid {
@@ -242,8 +241,8 @@ private:
 	void readerListInit(bool bForceRefresh = false);
 
 	/**
-	  * Initialize openSSL related objects for active authentication
-	*/
+	 * Initialize openSSL related objects for active authentication
+	 */
 	void initializeAAContext();
 
 	static CAppLayer *m_instance; /**< Pointer to singleton object */
@@ -405,7 +404,7 @@ private:
 
 	CMutex m_newcardmutex;
 
-	APL_Card *m_card;	  /**< Pointer to the card in the reader */
+	APL_Card *m_card; /**< Pointer to the card in the reader */
 	std::unique_ptr<APL_ICAO> m_icao;
 	CReader *m_calreader; /**< Pointer to the reader object in the cardlayer */
 	tCardStatus m_status; /**< Hold the status of the reader */

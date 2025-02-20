@@ -36,7 +36,6 @@
 #include "Config.h"
 
 #include "PteidCard.h"
-#include "MultiPassCard.h"
 
 #include <vector>
 #include <string>
@@ -187,32 +186,27 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 				return (select_sw12 == 0x9000 || select_sw12 == 0x6982);
 			};
 
-			bool multipass = selectAppId(MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET));
-			if (multipass) {
-				poCard = new CMultiPassCard(hCard, poContext, poPinpad, param_structure);
-			} else {
-				if (!isContactLess) {
-					bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
-					if (aidStatus) {
-						appletVersion = 1;
-					} else {
-						bool nationalDataStatus =
-							selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
-						if (nationalDataStatus)
-							appletVersion = 3;
-					}
-					if (appletVersion > 0) {
-						long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
-
-						poCard =
-							PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
-						if (cacheEnabled)
-							poCard->InitEncryptionKey();
-					}
+			if (!isContactLess) {
+				bool aidStatus = selectAppId(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
+				if (aidStatus) {
+					appletVersion = 1;
 				} else {
-					appletVersion = 3;
-					poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure);
+					bool nationalDataStatus =
+						selectAppId(PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA));
+					if (nationalDataStatus)
+						appletVersion = 3;
 				}
+				if (appletVersion > 0) {
+					long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
+
+					poCard =
+						PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, param_structure);
+					if (cacheEnabled)
+						poCard->InitEncryptionKey();
+				}
+			} else {
+				appletVersion = 3;
+				poCard = new CPteidCard(hCard, poContext, poPinpad, param_structure);
 			}
 
 			CCache::LimitDiskCacheFiles(10);
