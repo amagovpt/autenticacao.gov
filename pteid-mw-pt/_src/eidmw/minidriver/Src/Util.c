@@ -34,6 +34,9 @@
 #include "log.h"
 #include "util.h"
 #include "smartcard.h"
+#include "../release_data.h"
+#include <windows.h>
+#include <msi.h>
 #include <stdio.h>
 #include <Strsafe.h>
 #include <direct.h>
@@ -53,6 +56,15 @@ void bin2AsciiHex(const unsigned char *pData, char *out, unsigned long ulLen) {
 		}
 		pszHex[j] = 0;
 	}
+}
+
+BOOL isGUIApplicationInstalled() {
+	//Values defined in Wix installer
+	char * productCode = "{824563DE-75AD-4166-9DC0-B6482F20" REVISION_NUM_STRING "}";
+    char * featureGUI = "GUI";
+
+    INSTALLSTATE state = MsiQueryFeatureState(productCode, featureGUI);
+    return state == INSTALLSTATE_LOCAL;
 }
 
 BOOL runningUnderService() {

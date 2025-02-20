@@ -137,7 +137,8 @@ DWORD WINAPI CardAcquireContext(IN PCARD_DATA pCardData, __in DWORD dwFlags) {
 			iLgCnt++;
 		}
 	}
-	if (card_type == IAS_V5_CARD && runningUnderService()) {
+	
+	if (card_type == IAS_V5_CARD && runningUnderService() && isGUIApplicationInstalled()) {
 		CLEANUP(SCARD_F_INTERNAL_ERROR);
 	}
 
