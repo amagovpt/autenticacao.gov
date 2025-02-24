@@ -1112,22 +1112,20 @@ private:
 	std::mutex m_mutex;
 };
 
-PaceAuthentication::PaceAuthentication(CContext *poContext)
-	: m_impl(new PaceAuthenticationImpl(poContext)), initialized(false) {}
+PaceAuthentication::PaceAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
+	: SecureMessaging(hCard, poContext, paramStructure), m_impl(new PaceAuthenticationImpl(poContext)) {}
 
 PaceAuthentication::~PaceAuthentication() {}
 
 void PaceAuthentication::initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure) {
 	m_impl->initAuthentication(hCard, param_structure);
-	initialized = true;
+	m_authenticated = true;
 }
 
 bool PaceAuthentication::chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey,
 											ASN1_OBJECT *oid) {
 	return m_impl->initChipAuthentication(hCard, param_structure, pkey, oid);
 }
-
-bool PaceAuthentication::isInitialized() { return initialized; }
 
 CByteArray PaceAuthentication::sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal,
 										const void *param_structure) {
@@ -1137,6 +1135,14 @@ CByteArray PaceAuthentication::sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE
 CByteArray PaceAuthentication::sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal,
 										const void *param_structure) {
 	return m_impl->sendAPDU(apdu, hCard, lRetVal, param_structure);
+}
+
+CByteArray PaceAuthentication::sendSecureAPDU(const APDU &apdu, long &retValue) {
+	return m_impl->sendAPDU(apdu, m_card, retValue, m_param);
+}
+
+CByteArray PaceAuthentication::sendSecureAPDU(const CByteArray &apdu, long &retValue) {
+	return m_impl->sendAPDU(apdu, m_card, retValue, m_param);
 }
 
 void PaceAuthentication::setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType) {

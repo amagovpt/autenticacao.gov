@@ -53,7 +53,7 @@ static const std::string TRACEFILE = "3F000003";
 unsigned long ulVersion;
 
 static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const void *protocol_struct,
-								  std::unique_ptr<PaceAuthentication> &paceAuthentication) {
+								  SecureMessaging *secureMessaging) {
 	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
 	CByteArray oCmd(sizeof(PTEID_1_APPLET_AID) + 5);
@@ -62,8 +62,8 @@ static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const 
 	oCmd.Append(PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID));
 
 	CByteArray oResp;
-	if (paceAuthentication.get()) {
-		oResp = paceAuthentication->sendAPDU(oCmd, hCard, lRetVal, protocol_struct);
+	if (auto pace = dynamic_cast<PaceAuthentication *>(secureMessaging)) {
+		oResp = pace->sendSecureAPDU(oCmd, lRetVal);
 	} else {
 		oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
 	}
@@ -106,7 +106,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, SCARD
 
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
 					   tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol)
-	: CPkiCard(hCard, poContext, poPinpad), m_bac(m_poContext) {
+	: CPkiCard(hCard, poContext, poPinpad) {
 	switch (ulVersion) {
 	case 1:
 		m_cardType = CARD_PTEID_IAS07;
@@ -126,7 +126,7 @@ CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *po
 
 /* Constructor for IASv5 cards in CL mode */
 CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol)
-	: CPkiCard(hCard, poContext, poPinpad),  m_bac(m_poContext) {
+	: CPkiCard(hCard, poContext, poPinpad) {
 
 	setProtocol(protocol);
 	m_cardType = CARD_PTEID_IAS5;
@@ -766,7 +766,9 @@ bool CPteidCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12) {
 	return ulSW12 == 0x6A82 || ulSW12 == 0x6A86 || ulSW12 == 0x6D00;
 }
 
-bool CPteidCard::SelectApplet() { return PteidCardSelectApplet(m_poContext, m_hCard, getProtocolStructure(), m_pace); }
+bool CPteidCard::SelectApplet() {
+	return PteidCardSelectApplet(m_poContext, m_hCard, getProtocolStructure(), m_secureMessaging.get());
+}
 
 // Compatible with older CC where only 1 AID present
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, bool bReturnFileInfo) {
@@ -849,14 +851,17 @@ void CPteidCard::InitEncryptionKey() {
 }
 
 void CPteidCard::openBACChannel(const CByteArray &mrzInfo) {
-	m_bac.authenticate(m_hCard, m_comm_protocol, mrzInfo);
+	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext, m_comm_protocol);
+	bac->authenticate(mrzInfo);
+
+	m_secureMessaging = std::move(bac);
 }
 
 CByteArray CPteidCard::readToken() {
-	CByteArray plaintext_apdu("00A4020C02010D", true);
-	m_bac.sendSecureAPDU(plaintext_apdu);
+	if (auto bac = dynamic_cast<BacAuthentication *>(m_secureMessaging.get())) {
+		return ReadFile("010D");
+	}
 
-	CByteArray read_binary("00B0000000", true);
-	auto resp = m_bac.sendSecureAPDU(read_binary);
-	return m_bac.decryptData(resp);
+	MWLOG(tLevel::LEV_ERROR, tModule::MOD_CAL, "BAC authentication not initialized while trying to read token!");
+	throw CMWEXCEPTION(EIDMW_ERR_BAC_NOT_INITIALIZED);
 }

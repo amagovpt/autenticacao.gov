@@ -106,8 +106,6 @@ protected:
 
 	CByteArray m_oCardData;
 	CByteArray m_oSerialNr;
-
-	BacAuthentication m_bac;
 };
 
 } // namespace eIDMW

@@ -27,29 +27,42 @@
 
 namespace eIDMW {
 
-class BacAuthentication {
+class SecureMessaging {
 public:
-	BacAuthentication(CContext *poContext);
+	SecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
+
+	virtual bool isInitialized() { return m_authenticated; };
+
+	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) = 0;
+	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) = 0;
+
+protected:
+	SCARDHANDLE m_card = {0};
+	const void *m_param = {0};
+	CContext *m_context = {0};
+
+	bool m_authenticated = false;
+};
+
+class BacAuthentication : public SecureMessaging {
+public:
+	BacAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
 	~BacAuthentication();
 
-	void authenticate(SCARDHANDLE hCard, const void *paramStructure, const CByteArray &mrzInfo);
-	CByteArray sendSecureAPDU(const CByteArray &apdu);
-	CByteArray decryptData(const CByteArray &data);
+	void authenticate(const CByteArray &mrzInfo);
+
+	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) override;
+	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) override;
 
 private:
+	CByteArray decryptData(const CByteArray &data);
+
 	CByteArray sendAPDU(const CByteArray &apdu, long &returnValue);
 	CByteArray getRandomFromCard();
 	bool checkMacInResponse(CByteArray &response);
 	CByteArray retailMacWithSSC(const CByteArray &macInput, uint64_t ssc);
 	CByteArray retailMacWithPadding(const CByteArray &key, const CByteArray &macInput);
 
-	CContext *m_context = {0};
-
-	// temporary state set after calling `authenticate`
-	SCARDHANDLE m_card = {0};
-	const void *m_param = {0};
-
-	bool m_authenticated = false;
 	Crypto::SecureMessagingKeys m_sm;
 };
 } // namespace eIDMW

@@ -301,12 +301,12 @@ CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE
 										 const void *param_structure) {
 	CByteArray result;
 	bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C || cleartext_next;
-	if (isAlreadySM && m_pace.get()) {
+	if (isAlreadySM && m_secureMessaging.get()) {
 		MWLOG(LEV_DEBUG, MOD_CAL, "This message is already secure and will not use PACE module! Message: %s",
 			  oCmdAPDU.ToString().c_str());
 	}
-	if (m_pace.get() && m_pace->isInitialized() && !isAlreadySM) {
-		result = m_pace->sendAPDU(oCmdAPDU, m_hCard, lRetVal, param_structure);
+	if (m_secureMessaging.get() && m_secureMessaging->isInitialized() && !isAlreadySM) {
+		result = m_secureMessaging->sendSecureAPDU(oCmdAPDU, lRetVal);
 	} else {
 		result = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, param_structure);
 		cleartext_next = false;
@@ -318,13 +318,13 @@ CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, SCARDHANDLE &hCard, l
 										 const void *param_structure) {
 	bool isAlreadySM = apdu.cla() & 0x0C || cleartext_next;
 	CByteArray result;
-	if (isAlreadySM && m_pace.get()) {
+	if (isAlreadySM && m_secureMessaging.get()) {
 		MWLOG(LEV_DEBUG, MOD_CAL, "This message is already secure and will not use PACE module! Message: %s",
 			  apdu.ToByteArray().ToString().c_str());
 	}
 
-	if (m_pace.get() && m_pace->isInitialized() && !isAlreadySM) {
-		result = m_pace->sendAPDU(apdu, m_hCard, lRetVal, param_structure);
+	if (m_secureMessaging.get() && m_secureMessaging->isInitialized() && !isAlreadySM) {
+		result = m_secureMessaging->sendSecureAPDU(apdu, lRetVal);
 	} else {
 		result = m_poContext->m_oPCSC.Transmit(m_hCard, apdu.ToByteArray(), &lRetVal, param_structure);
 		cleartext_next = false;
@@ -401,20 +401,24 @@ CByteArray CCard::SendAPDU(const APDU &apdu) {
 	return oResp;
 }
 
-void CCard::createPace() { m_pace.reset(new PaceAuthentication(m_poContext)); }
+void CCard::createPace() { m_secureMessaging.reset(new PaceAuthentication(m_hCard, m_poContext, m_comm_protocol)); }
 
 void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType) {
-	if (m_pace.get()) {
-		m_pace->setAuthentication(secret, secretLen, secretType);
-		m_pace->initPaceAuthentication(m_hCard, m_comm_protocol);
+	if (!dynamic_cast<PaceAuthentication *>(m_secureMessaging.get())) {
+		createPace();
+	}
+
+	if (auto pace = dynamic_cast<PaceAuthentication *>(m_secureMessaging.get())) {
+		pace->setAuthentication(secret, secretLen, secretType);
+		pace->initPaceAuthentication(m_hCard, m_comm_protocol);
 		// Missing steps in Contactless card construction
 		InitEncryptionKey();
 	}
 }
 
 bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
-	if (m_pace.get()) {
-		return m_pace->chipAuthentication(m_hCard, m_comm_protocol, pkey, oid);
+	if (auto pace = dynamic_cast<PaceAuthentication *>(m_secureMessaging.get())) {
+		return pace->chipAuthentication(m_hCard, m_comm_protocol, pkey, oid);
 	}
 
 	MWLOG(LEV_ERROR, MOD_CAL, L"Tried performing Chip Authentication without initialized pace");

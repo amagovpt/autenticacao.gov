@@ -2,6 +2,7 @@
 #define PACEAUTHENTICATION_H
 
 #include "APDU.h"
+#include "BacAuthentication.h"
 #include "Context.h"
 
 #include <memory>
@@ -28,23 +29,22 @@ EIDMW_CAL_API OID_INFO get_id_CA_DH_AES_CBC_CMAC_192();
 EIDMW_CAL_API OID_INFO get_id_CA_DH_AES_CBC_CMAC_256();
 
 class PaceAuthenticationImpl;
-class EIDMW_CAL_API PaceAuthentication {
+class EIDMW_CAL_API PaceAuthentication : public SecureMessaging {
 public:
-	PaceAuthentication(CContext *poContext);
+	PaceAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
 	~PaceAuthentication();
 
 	void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
 	bool chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey, ASN1_OBJECT *oid);
-	bool isInitialized();
-
-	CByteArray sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
-	CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
 	void setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
-private:
-	std::unique_ptr<PaceAuthenticationImpl> m_impl;
+	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) override;
+	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) override;
 
-	bool initialized;
+private:
+	CByteArray sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
+	CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
+	std::unique_ptr<PaceAuthenticationImpl> m_impl;
 };
 
 } // namespace eIDMW

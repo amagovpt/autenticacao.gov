@@ -439,6 +439,7 @@ CByteArray APL_EIDCard::readTokenData() {
 		getCalReader()->openBACChannel({mrz_bytes->mrz_bytes, mrz_bytes->mrz_length});
 
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Reading multi-pass token");
+
 		return getCalReader()->readMultiPassToken();
 	} catch (CMWException &e) {
 		MWLOG_CTX(LEV_ERROR, MOD_APL, "Token Read Failed: %ld", e.GetError());

@@ -160,7 +160,7 @@ protected:
 	bool m_askPinOnSign;
 
 	const void *m_comm_protocol;
-	std::unique_ptr<PaceAuthentication> m_pace{};
+	std::unique_ptr<SecureMessaging> m_secureMessaging{};
 
 private:
 	// No copies allowed
