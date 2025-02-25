@@ -347,11 +347,69 @@ PTEID_PublicKey::PTEID_PublicKey(const SDK_Context *context, const APLPublicKey 
 	: PTEID_Object(context, (void *)&impl) {}
 
 PTEID_PublicKey::~PTEID_PublicKey() {
+
 	if (m_delimpl) {
 		APLPublicKey *pimpl = static_cast<APLPublicKey *>(m_impl);
 		delete pimpl;
 		m_impl = NULL;
 	}
+}
+
+bool PTEID_PublicKey::isECCPublicKey() {
+	BEGIN_TRY_CATCH
+
+	APLPublicKey *pimpl = static_cast<APLPublicKey *>(m_impl);
+	return pimpl->isECCPublicKey();
+
+	END_TRY_CATCH
+}
+
+PTEID_ByteArray &PTEID_PublicKey::getCardAuthECCKey() {
+	PTEID_ByteArray *out = NULL;
+
+	BEGIN_TRY_CATCH
+
+	APLPublicKey *pimpl = static_cast<APLPublicKey *>(m_impl);
+	if (!pimpl->isECCPublicKey()) {
+		throw PTEID_ExBadUsage();
+	}
+
+	CByteArray *pkey_data = pimpl->getECCPublicKey();
+
+	out = dynamic_cast<PTEID_ByteArray *>(getObject(pkey_data));
+	if (!out) {
+		out = new PTEID_ByteArray(m_context, *pkey_data);
+		if (out)
+			addObject(out);
+		else
+			throw PTEID_ExParamRange();
+	}
+
+	END_TRY_CATCH
+
+	return *out;
+}
+
+PTEID_ECC_CurveIdentifier PTEID_PublicKey::getECCCurveIdentifier() {
+	BEGIN_TRY_CATCH
+
+	auto *pimpl = static_cast<APLPublicKey *>(m_impl);
+	if (!pimpl->isECCPublicKey()) {
+		throw PTEID_ExBadUsage();
+	}
+
+	switch (pimpl->getECCPublicKeyCurveIdentifier()) {
+	case ECC_Curve_Identifier::NIST_P256:
+		return PTEID_ECC_CurveIdentifier::NIST_P256;
+	case ECC_Curve_Identifier::NIST_P384:
+		return PTEID_ECC_CurveIdentifier::NIST_P384;
+	case ECC_Curve_Identifier::NIST_P521:
+		return PTEID_ECC_CurveIdentifier::NIST_P521;
+	default:
+		throw PTEID_ExBadUsage();
+	}
+
+	END_TRY_CATCH
 }
 
 PTEID_ByteArray &PTEID_PublicKey::getCardAuthKeyModulus() {
@@ -360,6 +418,10 @@ PTEID_ByteArray &PTEID_PublicKey::getCardAuthKeyModulus() {
 	BEGIN_TRY_CATCH
 
 	APLPublicKey *pimpl = static_cast<APLPublicKey *>(m_impl);
+	if (pimpl->isECCPublicKey()) {
+		throw PTEID_ExBadUsage();
+	}
+
 	CByteArray *ca = pimpl->getModulus();
 
 	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));
@@ -382,6 +444,10 @@ PTEID_ByteArray &PTEID_PublicKey::getCardAuthKeyExponent() {
 	BEGIN_TRY_CATCH
 
 	APLPublicKey *pimpl = static_cast<APLPublicKey *>(m_impl);
+	if (pimpl->isECCPublicKey()) {
+		throw PTEID_ExBadUsage();
+	}
+
 	CByteArray *ca = pimpl->getExponent();
 
 	out = dynamic_cast<PTEID_ByteArray *>(getObject(ca));

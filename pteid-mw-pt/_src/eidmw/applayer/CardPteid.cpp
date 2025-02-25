@@ -934,6 +934,17 @@ tCardFileStatus APL_EidFile_ID_V2::VerifyFile() {
 	return CARDFILESTATUS_OK;
 }
 
+void APL_EidFile_ID_V2::parseCardPublicKey(void *icc_public_key) {
+	if (icc_public_key != NULL) {
+		ICC_PUBLICKEY *_public_key = (ICC_PUBLICKEY *)icc_public_key;
+
+		if (_public_key->pk_q != NULL) {
+			CByteArray pubkey_data(_public_key->pk_q->data, _public_key->pk_q->length);
+			cardKey = new APLPublicKey(pubkey_data);
+		}
+	}
+}
+
 void APL_EidFile_ID_V2::MapFieldsInternal() {
 	const auto id_file = eIDMW::decode_id_data(m_data);
 
@@ -983,7 +994,7 @@ void APL_EidFile_ID_V2::MapFieldsInternal() {
 		m_MRZ3.assign(full_mrz + PTEIDNG_FIELD_ID_LEN_Mrz1 + PTEIDNG_FIELD_ID_LEN_Mrz2, PTEIDNG_FIELD_ID_LEN_Mrz3);
 	}
 
-	// TODO (DEV-CC2): parse public key from DG13 data to make it available in eidlib
+	parseCardPublicKey(id_file->icc_public_key);
 
 	IDFILE_free(id_file);
 	m_mappedFields = true;

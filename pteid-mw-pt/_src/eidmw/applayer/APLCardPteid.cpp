@@ -449,12 +449,16 @@ APLPublicKey *APL_EIDCard::getRootCAPubKey() {
 		CByteArray out;
 		CByteArray modulus;
 		CByteArray exponent;
+		CByteArray ec_pubkey;
 
 		BEGIN_CAL_OPERATION(m_reader)
 		out = m_reader->getCalReader()->RootCAPubKey();
 		END_CAL_OPERATION(m_reader)
 
-		switch (m_reader->getCardType()) {
+		const unsigned long EC_PUBKEY_OFFSET = 10;
+
+		switch(m_reader->getCardType()) {
+
 		case APL_CARDTYPE_PTEID_IAS101:
 			modulus = out.GetBytes(PTEIDNG_FIELD_ROOTCA_PK_POS_MODULUS_IAS101, PTEIDNG_FIELD_ROOTCA_PK_LEN_MODULUS);
 			exponent = out.GetBytes(PTEIDNG_FIELD_ROOTCA_PK_POS_EXPONENT_IAS_101, PTEIDNG_FIELD_ROOTCA_PK_LEN_EXPONENT);
@@ -463,12 +467,20 @@ APLPublicKey *APL_EIDCard::getRootCAPubKey() {
 			modulus = out.GetBytes(PTEIDNG_FIELD_ROOTCA_PK_POS_MODULUS_IAS07, PTEIDNG_FIELD_ROOTCA_PK_LEN_MODULUS);
 			exponent = out.GetBytes(PTEIDNG_FIELD_ROOTCA_PK_POS_EXPONENT_IAS_07, PTEIDNG_FIELD_ROOTCA_PK_LEN_EXPONENT);
 			break;
+		case APL_CARDTYPE_PTEID_IAS5:
+			ec_pubkey = out.GetBytes(EC_PUBKEY_OFFSET);
+			break;
 		case APL_CARDTYPE_UNKNOWN:
 			throw CMWEXCEPTION(EIDMW_ERR_CARDTYPE_UNKNOWN);
 			break;
 		}
 
-		m_RootCAPubKey = new APLPublicKey(modulus, exponent);
+		if (ec_pubkey.Size() > 0) {
+			m_RootCAPubKey = new APLPublicKey(ec_pubkey);
+		}
+		else {
+			m_RootCAPubKey = new APLPublicKey(modulus,exponent);
+		}
 	}
 
 	return m_RootCAPubKey;

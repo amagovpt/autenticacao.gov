@@ -265,6 +265,8 @@ private:
 
 class APLPublicKey;
 
+enum class PTEID_ECC_CurveIdentifier { NOT_ECC_CURVE, NIST_P256, NIST_P384, NIST_P521 };
+
 /**
    Class that represents the card authentication public key - to be used in a mutual authentication process (1024 bit
    RSA key) This key is totally unrelated to the citizen authentication key which is present in the authentication
@@ -275,8 +277,14 @@ class PTEID_PublicKey : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual ~PTEID_PublicKey(); /**< Destructor */
 
-	PTEIDSDK_API PTEID_ByteArray &getCardAuthKeyModulus();
-	PTEIDSDK_API PTEID_ByteArray &getCardAuthKeyExponent();
+	PTEIDSDK_API PTEID_ByteArray &
+	getCardAuthKeyModulus(); /**< Return the RSA public key module if this object contains an RSA public key */
+	PTEIDSDK_API PTEID_ByteArray &
+	getCardAuthKeyExponent(); /**< Return the RSA public key exponent if this object contains an RSA public key */
+	PTEIDSDK_API bool isECCPublicKey(); /**< Return true if this object contains an Elliptic Curve public key instead of RSA */
+    /** Return the EC public key data in uncompressed format. This is only applicable for objects coming from PTEID_CARDTYPE_IAS5 cards. */
+	PTEIDSDK_API PTEID_ByteArray &getCardAuthECCKey(); 	
+    PTEIDSDK_API PTEID_ECC_CurveIdentifier getECCCurveIdentifier();
 
 	NOEXPORT_PTEIDSDK PTEID_PublicKey(const SDK_Context *context, const APLPublicKey &impl);
 
@@ -1049,10 +1057,12 @@ public:
 	PTEIDSDK_API bool writePersonalNotes(const PTEID_ByteArray &out, PTEID_Pin *pin = NULL, const char *csPinCode = "");
 	PTEIDSDK_API bool clearPersonalNotes(PTEID_Pin *pin = NULL, const char *csPinCode = "");
 	PTEIDSDK_API const char *readPersonalNotes();
-
-	PTEIDSDK_API PTEID_PublicKey & getRootCAPubKey(); /**< Get the CVC CA public key that this card uses to verify the CVC key */
+	/** Get the CVC CA public key that this card uses to verify the CVC key */
+	PTEIDSDK_API PTEID_PublicKey &getRootCAPubKey();
 	PTEIDSDK_API bool isActive();
-	PTEIDSDK_API void doSODCheck(bool check); /**< Enable/disable the verification of ID and address data against the SOD file */
+
+	/** Enable/disable the verification of ID and address data against the SOD file */
+	PTEIDSDK_API void doSODCheck(bool check);
 
 #if !defined SWIG
 	PTEIDSDK_API SSLConnection *buildSSLConnection();

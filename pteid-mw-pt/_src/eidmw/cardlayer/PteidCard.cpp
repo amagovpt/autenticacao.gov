@@ -246,9 +246,8 @@ CByteArray CPteidCard::RootCAPubKey() {
 			CByteArray getData("4D04FFA00180", true);
 			oResp = SendAPDU(0xCB, 0x3F, 0xFF, getData);
 			getSW12(oResp, 0x9000);
-			oResp.Chop(2); ////remove the SW12 bytes
+			oResp.Chop(2); // remove the SW12 bytes
 		} break;
-		// TODO: changes needed for IAS5
 		case CARD_PTEID_IAS07: {
 			unsigned char apdu_cvc_pubkey_mod[] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83,
 												   0x01, 0x44, 0x7F, 0x49, 0x02, 0x81, 0x00, 0x00};
@@ -269,6 +268,18 @@ CByteArray CPteidCard::RootCAPubKey() {
 			oResp.Append(oRespModule);
 			oResp.Append(oRespExponent);
 		} break;
+
+		case CARD_PTEID_IAS5: {
+			SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
+			unsigned char apdu_cvc_pubkey[] = {0x00, 0xCB, 0x00, 0xFF, 0x0A, 0xB6, 0x03, 0x83,
+											   0x01, 0x44, 0x7F, 0x49, 0x02, 0x86, 0x00, 0x00};
+			CByteArray get_data_ca_pubkey(apdu_cvc_pubkey, sizeof(apdu_cvc_pubkey));
+			CByteArray resp_pubkey_data = SendAPDU(get_data_ca_pubkey);
+			getSW12(resp_pubkey_data, 0x9000);
+			resp_pubkey_data.Chop(2); // remove the SW12 bytes
+			oResp.Append(resp_pubkey_data);
+		} break;
+
 		default:
 			throw CMWEXCEPTION(EIDMW_ERR_CARDTYPE_UNKNOWN);
 			break;

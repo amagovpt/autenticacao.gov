@@ -302,6 +302,8 @@ private:
 	APL_EidFile_ID_V2(const APL_EidFile_ID_V2 &file);			 /**< Copy not allowed - not implemented */
 	APL_EidFile_ID_V2 &operator=(const APL_EidFile_ID_V2 &file); /**< Copy not allowed - not implemented */
 
+	void parseCardPublicKey(void *icc_public_key_struct);
+
 	/**
 	 * Check if the ID signature correspond to this file
 	 * @return - if bad signature file => status of signature file
