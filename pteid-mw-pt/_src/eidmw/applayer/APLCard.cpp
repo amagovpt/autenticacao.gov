@@ -77,12 +77,17 @@ unsigned long APL_Card::readFile(const char *csPath, CByteArray &oData, unsigned
 	try {
 		oData = m_reader->getCalReader()->ReadFile(csPath, ulOffset, (ulMaxLength == 0 ? FULL_FILE : ulMaxLength));
 	} catch (CMWException &e) {
+		MWLOG(LEV_ERROR, MOD_APL,
+			  "Error trying to read file error: 0x%x file: %s line: %d, csPath: %s, uloffset: %lu, ulmaxlen: %lu",
+			  e.GetError(), e.GetFile().c_str(), e.GetLine(), csPath, ulOffset, ulMaxLength);
 		m_reader->CalUnlock();
 		if (e.GetError() == EIDMW_ERR_INCOMPATIBLE_READER)
 			throw e;
 
 		return 0;
 	} catch (...) {
+		MWLOG(LEV_ERROR, MOD_APL, "Error trying to read file csPath: %s, uloffset: %lu, ulmaxlen: %lu", csPath,
+			  ulOffset, ulMaxLength);
 		m_reader->CalUnlock();
 		throw;
 		return 0;
