@@ -190,6 +190,9 @@
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_PublicKey.cs">
       <Link>GeneratedFiles\PTEID_PublicKey.cs</Link>
     </Compile>
+    <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ECC_CurveIdentifier.cs">
+      <Link>GeneratedFiles\PTEID_ECC_CurveIdentifier.cs</Link>
+    </Compile>
     <Compile Include="..\eidlibCS_Wrapper\GeneratedFiles\PTEID_ReaderContext.cs">
       <Link>GeneratedFiles\PTEID_ReaderContext.cs</Link>
     </Compile>
