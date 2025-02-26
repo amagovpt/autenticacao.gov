@@ -218,8 +218,8 @@ public:
 	  * @param pin : is the pin to verify before reading (if null the code will be asked)
 	  * @param csPinCode : is the pin code (if empty the code will be asked)
 	  */
-	EIDMW_APL_API virtual unsigned long readFile(const char *fileID, CByteArray &in, APL_Pin *pin = NULL,
-												 const char *csPinCode = "");
+	EIDMW_APL_API virtual unsigned long readFile(const char *fileID, CByteArray &in, APL_Pin *pin,
+												 const char *csPinCode);
 
 	/**
 	  * Write a file to the card
