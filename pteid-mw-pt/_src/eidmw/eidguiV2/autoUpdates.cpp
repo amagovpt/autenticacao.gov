@@ -203,7 +203,11 @@ void AutoUpdates::checkForUpdate(GAPI::AutoUpdateType update_type) {
 	UpdateStatus status = perform_update_request(update_verify_url, json_data);
 	// TODO: treat and report other error cases
 	if (status != UpdateStatus::ok) {
-		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "checkForUpdate() perform_update_request failed");
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "checkForUpdate() perform_update_request failed reason: %s",
+				  status == UpdateStatus::possible_bad_proxy ? "Proxy didn't work"
+				  : status == UpdateStatus::proxy_auth_req	 ? "Proxy needs to authenticate"
+				  : status == UpdateStatus::cancel			 ? "Update canceled by the user"
+															 : "Generic error");
 		return;
 	}
 
