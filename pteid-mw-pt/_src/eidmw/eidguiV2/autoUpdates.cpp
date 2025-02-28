@@ -209,8 +209,8 @@ void AutoUpdates::checkForUpdate(GAPI::AutoUpdateType update_type) {
 				  : status == UpdateStatus::cancel			 ? "Update canceled by the user"
 															 : "Generic error");
 
-		if (update_type == GAPI::AutoUpdateApp) {
-			m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateApp,
+		if (update_type == GAPI::AutoUpdateApp || update_type == GAPI::AutoUpdateCerts) {
+			m_app_controller->signalAutoUpdateFail(update_type,
 												   status == UpdateStatus::generic_error ||
 														   status == UpdateStatus::possible_bad_proxy ||
 														   status == UpdateStatus::proxy_auth_req
