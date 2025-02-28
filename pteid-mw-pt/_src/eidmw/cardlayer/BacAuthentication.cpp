@@ -153,19 +153,19 @@ CByteArray BacAuthentication::decryptData(const CByteArray &data) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "BAC not initialized");
 	}
 
-	CByteArray encryptionKey = m_sm.getCBAEncKey();
-
-	// Find encrypted data block (tag 0x87)
-	if (data.GetByte(0) == 0x87) {
-		int dataLength = data.GetByte(1);
-		// Skip tag (1) + length (1) + padding indicator (1)
-		CByteArray cryptogram(data.GetBytes(3, dataLength - 1)); // -1 for padding indicator
-		return BlockCipherCtx::decrypt<TripleDesCipher>(encryptionKey.GetBytes(), cryptogram);
+	if (data.GetByte(0) != 0x87) {
+		return data;
 	}
 
-	// If no encrypted data block found, return original data
-	// (some responses might not have encrypted data)
-	return data;
+	CByteArray encryptionKey = m_sm.getCBAEncKey();
+
+	// Either a) length is byte1 or b) byte1 is 0x81 and length is encoded on the next byte
+	bool hasEncodedLength = data.GetByte(1) == 0x81;
+	size_t dataLength = hasEncodedLength ? data.GetByte(2) : data.GetByte(1);
+
+	size_t encDataOffset = 3 + hasEncodedLength;
+	CByteArray cryptogram(data.GetBytes(encDataOffset, dataLength - 1)); // -1 for padding indicator
+	return BlockCipherCtx::decrypt<TripleDesCipher>(encryptionKey.GetBytes(), cryptogram);
 }
 
 CByteArray BacAuthentication::sendSecureAPDU(const APDU &apdu, long &retValue) {
@@ -274,6 +274,8 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu, long &retVa
 	}
 
 	if (response.GetByte(0) == 0x87) {
+		auto status = response.GetBytes(response.Size() - 2, 2);
+
 		size_t enc_length = response.GetByte(1);
 		auto decrypted = decryptData(response);
 
@@ -283,7 +285,6 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu, long &retVa
 				  response.ToString(true, false).c_str(), mac.ToString(true, false).c_str());
 		}
 
-		auto status = response.GetBytes(enc_length + 4, 2);
 		auto response = decrypted;
 		response.Append(status);
 		return response;
