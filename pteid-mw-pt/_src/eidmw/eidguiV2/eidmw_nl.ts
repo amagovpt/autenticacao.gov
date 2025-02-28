@@ -2584,6 +2584,14 @@ Este número de 6 digitos está impresso no seu cartão no canto inferior direit
 <context>
     <name>main</name>
     <message>
+        <source>STR_WARNING_NOT_CORRECT_FOLDER_MAC</source>
+        <translation>Aviso</translation>
+    </message>
+    <message>
+        <source>STR_WARNING_NOT_CORRECT_FOLDER_MAC_BODY</source>
+        <translation>Aplicação está localizada num caminho incorreto. Para garantir o funcionamento correto mover para a pasta Aplicações do macOS.</translation>
+    </message>
+    <message>
         <source>STR_AUTOUPDATE_APP_TITLE</source>
         <translation>Atualização da aplicação disponível</translation>
     </message>

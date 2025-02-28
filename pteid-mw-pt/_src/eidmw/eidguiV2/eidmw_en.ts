@@ -2586,6 +2586,14 @@
 <context>
     <name>main</name>
     <message>
+        <source>STR_WARNING_NOT_CORRECT_FOLDER_MAC</source>
+        <translation>Warning</translation>
+    </message>
+    <message>
+        <source>STR_WARNING_NOT_CORRECT_FOLDER_MAC_BODY</source>
+        <translation>Application is located on the wrong path. To assure the correct function of the application, move the app to the application folder on macOS.</translation>
+    </message>
+    <message>
         <source>STR_AUTOUPDATE_APP_TITLE</source>
         <translation>Application Update Available</translation>
     </message>

@@ -1547,6 +1547,13 @@ Load language error. Please reinstall the application"
         console.log("Window mainWindow Completed")
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
         
+        if(Qt.platform.os === "osx") {
+            if(!gapi.isMacOSApplicationFolder()) {
+                mainFormID.propertyPageLoader.activateGeneralPopup(qsTranslate("main", "STR_WARNING_NOT_CORRECT_FOLDER_MAC"),
+                                                                   qsTranslate("main", "STR_WARNING_NOT_CORRECT_FOLDER_MAC_BODY"), false)
+            }
+        }
+
         // Only update certificates on Windows and MacOS
         if (Qt.platform.os !== "linux")
             controler.autoUpdatesCerts()

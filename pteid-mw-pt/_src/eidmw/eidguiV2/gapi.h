@@ -420,6 +420,8 @@ public slots:
 	const char *telemetryActionToString(TelemetryAction action);
 	static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 
+	bool isMacOSApplicationFolder() const;
+
 	// get notes functionality support
 	bool isNotesSupported();
 

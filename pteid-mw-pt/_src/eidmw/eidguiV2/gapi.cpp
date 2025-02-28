@@ -80,6 +80,15 @@ size_t GAPI::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata
 	return size * nmemb;
 }
 
+bool GAPI::isMacOSApplicationFolder() const
+{
+	QString currentAppFolder = QCoreApplication::applicationDirPath();
+	QString executableInsidePackage = "/Contents/MacOS";
+	QString macOSInstallationPath = "/Applications/Autenticação.gov.app";
+	currentAppFolder.chop(executableInsidePackage.length());
+	return currentAppFolder == macOSInstallationPath;
+}
+
 const char *GAPI::telemetryActionToString(TelemetryAction action) {
 	switch (action) {
 	case TelemetryAction::Startup:
