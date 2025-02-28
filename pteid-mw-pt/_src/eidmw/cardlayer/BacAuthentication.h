@@ -28,14 +28,47 @@
 
 namespace eIDMW {
 
+/**
+ * @class BacAuthentication
+ * @brief Basic Access Control implementation for eID secure messaging
+ *
+ * Implements the Basic Access Control (BAC) protocol used in the Portuguese
+ * multi-pass feature for citizen cards. BAC establishes a secure channel with
+ * session keys for protected communication between the card and terminal.
+ *
+ * @details This class handles encryption, decryption, and MAC verification
+ * for secure communication according to the BAC protocol specification.
+ * Communication uses 3DES encryption and ISO/IEC 9797-1 MAC algorithm 3.
+ *
+ * @see SecureMessaging
+ */
 class BacAuthentication : public SecureMessaging {
 public:
 	BacAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
 	~BacAuthentication();
 
+	/**
+	 * @brief Establishes the BAC secure channel with the card
+	 *
+	 * @param mrzInfo Must be the last 12 bytes present in SOD
+	 * @throws EIDMW_ERR_BAC_* on authentication failure
+	 */
 	void authenticate(const CByteArray &mrzInfo);
 
+	/**
+	 * @brief Sends an APDU through the secure BAC channel
+	 *
+	 * Encrypts with 3des, adds mac, and handles ber-tlv encoded responses
+	 * @throws EIDMW_ERR_BAC_NOT_INITIALIZED If called before successful authenticate()
+	 */
 	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) override;
+
+	/**
+	 * @brief sends raw APDU bytes through the secure BAC channel
+	 *
+	 * Encrypts with 3des, adds mac, and handles ber-tlv encoded responses
+	 * @throws EIDMW_ERR_BAC_NOT_INITIALIZED if called before successful authenticate()
+	 */
 	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) override;
 
 private:

@@ -40,9 +40,6 @@ using namespace Crypto;
 
 #define MAC_LEN 8
 
-SecureMessaging::SecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
-	: m_card(hCard), m_context(poContext), m_param(paramStructure), m_authenticated(false) {}
-
 BacAuthentication::BacAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
 	: SecureMessaging(hCard, poContext, paramStructure) {}
 

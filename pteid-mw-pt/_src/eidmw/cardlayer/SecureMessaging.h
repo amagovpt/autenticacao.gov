@@ -24,6 +24,17 @@
 
 namespace eIDMW {
 
+/**
+ * @class SecureMessaging
+ * @brief Abstract base class defining secure messaging protocol interface
+ *
+ * Provides the foundation for secure communication channels with smart cards
+ * using various secure messaging protocols. Implementations should handle
+ * command encryption, response decryption, and message authentication.
+ *
+ * @note Child classes must implement the sendSecureAPDU methods
+ * @see BacAuthentication
+ */
 class SecureMessaging {
 public:
 	SecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
@@ -31,7 +42,22 @@ public:
 
 	virtual bool isInitialized() { return m_authenticated; };
 
+	/**
+	 * @brief Sends an APDU through a secure channel
+	 *
+	 * @param apdu The command to send (will be encrypted)
+	 * @param retValue Stores the return code from card transmission
+	 * @return CByteArray Decrypted response with status code appended at the end
+	 */
 	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) = 0;
+
+	/**
+	 * @brief sends raw APDU bytes through a secure channel
+	 *
+	 * @param apdu The raw command bytes to send (will be encrypted)
+	 * @param retValue Stores the return code from card transmission
+	 * @return CByteArray Decrypted response with status code appended at the end
+	 */
 	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) = 0;
 
 protected:
