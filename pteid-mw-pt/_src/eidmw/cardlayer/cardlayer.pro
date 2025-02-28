@@ -58,6 +58,7 @@ HEADERS += \
            P15Objects.h \
            PCSC.h \
            GenericPinpad.h \
+           SecureMessaging.h \
            PaceAuthentication.h \
            BacAuthentication.h \
            Pinpad.h \

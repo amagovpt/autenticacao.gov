@@ -2,7 +2,7 @@
 #define PACEAUTHENTICATION_H
 
 #include "APDU.h"
-#include "BacAuthentication.h"
+#include "SecureMessaging.h"
 #include "Context.h"
 
 #include <memory>
