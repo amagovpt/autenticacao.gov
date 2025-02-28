@@ -312,20 +312,22 @@ bool BacAuthentication::checkMacInResponse(CByteArray &resp) {
 	CByteArray receivedMac;
 	CByteArray paddedInput;
 
-	/*
-		Deal with 2 different formats of response APDUs: with just SW12 or also with data
-	*/
+	// Response only contains the status
 	if (resp.GetByte(0) == 0x99) {
 		receivedMac = (resp.GetBytes(6, 8));
 		CByteArray inputForMac = resp.GetBytes(0, 4);
 		paddedInput = withIso7816Padding(inputForMac);
+	}
 
-	} else if (resp.GetByte(0) == 0x87 || resp.GetByte(0) == 0x81) {
-		resp.Chop(2);
-		int mac_offset = resp.Size() - 8;
-		int lcg = resp.GetByte(1) == 0x81 ? resp.GetByte(2) : resp.GetByte(1);
-		CByteArray inputForMac = resp.GetByte(1) == 0x81 ? resp.GetBytes(0, lcg + 3) : resp.GetBytes(0, lcg + 2);
-		receivedMac = (resp.GetBytes(mac_offset, 8));
+	// Response contains data
+	else if (resp.GetByte(0) == 0x87) {
+		int macOffset = resp.Size() - 10; // 2 for sw, 8 for mac size
+
+		bool hasEncSize = resp.GetByte(1) == 0x81;
+		size_t dataLength = hasEncSize ? resp.GetByte(2) : resp.GetByte(1);
+
+		receivedMac = resp.GetBytes(macOffset, 8);
+		CByteArray inputForMac = resp.GetBytes(0, macOffset - 2); // From the start, up until mac tag
 		paddedInput = withIso7816Padding(inputForMac);
 	}
 
