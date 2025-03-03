@@ -59,7 +59,7 @@ double getStringWidth(const char *winansi_encoded_string, double font_size, Myri
 std::string getFittingSubString(const std::string &str, double font_size, MyriadFontType font, double space_available) {
 	size_t i = str.length() - 1;
 	const double reserved = getStringWidth("(...)", font_size, font);
-	while (i >= 0) {
+	while (i > 0) {
 		std::string tmp = str.substr(0, i);
 		if (getStringWidth(tmp.c_str(), font_size, font) <= (space_available - reserved))
 			return tmp;
