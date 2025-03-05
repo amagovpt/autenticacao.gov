@@ -166,5 +166,22 @@ CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize) {
 	return paddedContent;
 }
 
+CByteArray removeIso7816Padding(const CByteArray &input) {
+	if (input.Size() == 0) {
+		return input;
+	}
+
+	int i = input.Size() - 1;
+	while (i >= 0 && input.GetByte(i) == 0x00) {
+		i--;
+	}
+
+	if (i >= 0 && input.GetByte(i) == 0x80) {
+		return CByteArray(input.GetBytes(), i);
+	}
+
+	return input;
+}
+
 } // namespace Crypto
 } // namespace eIDMW

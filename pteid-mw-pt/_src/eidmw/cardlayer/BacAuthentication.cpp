@@ -274,7 +274,7 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu, long &retVa
 		auto status = response.GetBytes(response.Size() - 2, 2);
 
 		size_t enc_length = response.GetByte(1);
-		auto decrypted = decryptData(response);
+		auto decrypted = removeIso7816Padding(decryptData(response));
 
 		// check if MAC
 		if (!checkMacInResponse(response)) {

@@ -274,6 +274,14 @@ private:
 CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize = DES_BLOCK_SIZE);
 
 /**
+ * Removes iso7816-4 padding from input (0x80 + zeroes)
+ *
+ * @param input      source data to remove padding from
+ * @return          new CByteArray
+ */
+CByteArray removeIso7816Padding(const CByteArray &input);
+
+/**
  * @brief Triple des
  */
 class TripleDesCipher : public BlockCipherCtx {
