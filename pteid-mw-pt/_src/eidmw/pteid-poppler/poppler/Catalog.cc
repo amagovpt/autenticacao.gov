@@ -88,9 +88,10 @@
 #include "VisibleSignatureBitmap.h"
 #include "Myriad-Font.h"
 
-//Forward-declaration of the function defined in Iconv.cc
+//Forward-declaration of the functions defined in Iconv.cc
 //couldn't bother to write a header for it
 extern char *utf8_to_latin1(const char *str);
+extern char *utf8_to_utf16be(const char *str, int *outlen);
 
 //------------------------------------------------------------------------
 // Catalog
@@ -546,11 +547,18 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 
 	build_prop.dictAdd(copyString("App"), &build_prop_app);
 
-	const char *loc = location != NULL ? utf8_to_latin1(location) : "";
-	signature_dict->dictAdd(copyString("Location"), obj1.initString(new GooString(loc)));
+	int out_len = 0;
+	const char *loc = location != NULL ? utf8_to_utf16be(location, &out_len) : "";
+	//Start with UTF-16 BOM
+	GooString *s1 = new GooString("\xFE\xFF");
+	s1->append(loc, out_len);
+	signature_dict->dictAdd(copyString("Location"), obj1.initString(s1));
 
-	const char *rea = reason != NULL ? utf8_to_latin1(reason): "";
-	signature_dict->dictAdd(copyString("Reason"), obj1.initString(new GooString(rea)));
+	GooString *s2 = new GooString("\xFE\xFF");
+	out_len = 0;
+	const char *rea = reason != NULL ? utf8_to_utf16be(reason, &out_len): "";
+	s2->append(rea, out_len);
+	signature_dict->dictAdd(copyString("Reason"), obj1.initString(s2));
 	/* TODO: initialize pdf_date for Mac and Linux
 	if (strftime(date_outstr, sizeof(date_outstr), "D:%Y%m%d%H%M%S+00'00'", tmp_date) == 0) {
                fprintf(stderr, "strftime returned 0");

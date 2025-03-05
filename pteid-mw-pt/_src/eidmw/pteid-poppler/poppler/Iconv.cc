@@ -15,24 +15,25 @@
 /* Iconv Wrapper */
 
 #ifdef __APPLE__
-const char * OUTPUT_CHARSET = "ISO-8859-1";
+const char * SINGLE_BYTE_CHARSET_CP1252 = "WINDOWS-1252";
 #else
-const char * OUTPUT_CHARSET = "ISO-8859-1//IGNORE";
+const char * SINGLE_BYTE_CHARSET_CP1252 = "WINDOWS-1252//IGNORE";
 #endif
+const char * CHARSET_UTF16BE = "UTF-16BE";
 
 const char * INPUT_CHARSET = "UTF-8";
 
 iconv_t
-iconv_init(void)
+iconv_init(const char *out_charset)
 {
     iconv_t conv_desc;
-    conv_desc = iconv_open (OUTPUT_CHARSET, INPUT_CHARSET);
+    conv_desc = iconv_open (out_charset, INPUT_CHARSET);
     if (conv_desc == (iconv_t)-1) {
 	/* Initialization failure. */
 	if (errno == EINVAL) {
 	    fprintf (stderr,
 		     "Conversion from '%s' to '%s' is not supported.\n",
-		     INPUT_CHARSET, OUTPUT_CHARSET);
+		     INPUT_CHARSET, out_charset);
 	} else {
 	    fprintf (stderr, "Initialization failure: %s\n",
 		     strerror (errno));
@@ -44,13 +45,12 @@ iconv_init(void)
 
 /* Convert UTF-8 into LATIN-1 using the iconv library. */
 
-char *
-utf82latin1(iconv_t conv_desc, const char * euc)
+char * iconv_convert(iconv_t conv_desc, const char * utf8_input, bool double_alloc, int *outlen)
 {
     size_t iconv_value;
-    char * utf8;
+    char * out_buf;
     size_t len;
-    size_t utf8len;
+    size_t out_len;
     /* The variables with "start" in their name are solely for display
        of what the function is doing. As iconv runs, it alters the
        values of the variables, so these are for keeping track of the
@@ -58,20 +58,19 @@ utf82latin1(iconv_t conv_desc, const char * euc)
     char * utf8start;
     const char * euc_start;
     int len_start;
-    int utf8len_start;
 
-    len = strlen (euc);
+    len = strlen (utf8_input);
     if (!len) {
 		return (0);
     }
-    /* Assign enough space to put the Latin1. */
-    utf8len = len;
-    utf8 = (char *)calloc (utf8len+1, 1);
+    /* Alloc enough space to put the output string. */
+    out_len = double_alloc ? len*2: len+1;
+    out_buf = (char *)calloc (out_len, 1);
     /* Keep track of the variables. */
     len_start = len;
-    utf8len_start = utf8len;
-    utf8start = utf8;
-    euc_start = euc;
+    size_t outbuffer_len = out_len;
+    utf8start = out_buf;
+    euc_start = utf8_input;
 
 #ifdef __APPLE__
     //MacOS specific API from libiconv
@@ -79,15 +78,15 @@ utf82latin1(iconv_t conv_desc, const char * euc)
     iconvctl(conv_desc, ICONV_SET_DISCARD_ILSEQ, &discard_value);
 #endif
 #ifdef _WIN32
-    iconv_value = iconv(conv_desc, (const char **)&euc, &len, &utf8, &utf8len);
+    iconv_value = iconv(conv_desc, (const char **)&utf8_input, &len, &out_buf, &out_len);
 #else
-	iconv_value = iconv(conv_desc, (char **)&euc, &len, &utf8, &utf8len);
+	iconv_value = iconv(conv_desc, (char **)&utf8_input, &len, &out_buf, &out_len);
 #endif
     /* Handle failures. */
     if (iconv_value == (size_t) -1) {
 		fprintf(stderr, "iconv failed: in string '%s', length %d, "
 			"out string '%s', length %d\n",
-			 euc, (int)len, utf8start, (int)utf8len);
+			 utf8_input, (int)len, utf8start, (int)out_len);
 		switch (errno) {
 		    /* See "man 3 iconv" for an explanation. */
 		case EILSEQ:
@@ -103,13 +102,12 @@ utf82latin1(iconv_t conv_desc, const char * euc)
 		    fprintf(stderr, "Error: %s.\n", strerror (errno));
 		}
     }
+	if (outlen != NULL)
+		*outlen = outbuffer_len-out_len;
     return utf8start;
 }
 
-/* Close the connection with the library. */
-
-void
-iconv_finalize (iconv_t conv_desc)
+void iconv_finalize (iconv_t conv_desc)
 {
     int v;
     v = iconv_close (conv_desc);
@@ -122,12 +120,22 @@ iconv_finalize (iconv_t conv_desc)
 char * utf8_to_latin1(const char * in)
 {
 	iconv_t conv_desc;
-	conv_desc = iconv_init();
-	char *out_string = utf82latin1(conv_desc, in);
+	conv_desc = iconv_init(SINGLE_BYTE_CHARSET_CP1252);
+	bool double_alloc = false;
+	char *out_string = iconv_convert(conv_desc, in, double_alloc, NULL);
 	iconv_finalize (conv_desc);
 
 	return out_string;
+}
 
+char * utf8_to_utf16be(const char * in, int *out_len) {
+	iconv_t conv_desc;
+	conv_desc = iconv_init(CHARSET_UTF16BE);
+	bool double_alloc = true;
+	char *out_string = iconv_convert(conv_desc, in, double_alloc, out_len);
+	iconv_finalize(conv_desc);
+
+	return out_string;
 }
 
 
