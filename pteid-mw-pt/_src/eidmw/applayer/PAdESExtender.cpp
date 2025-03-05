@@ -301,7 +301,7 @@ bool PAdESExtender::addLT() {
 			unsigned char *certBytes = NULL;
 			X509 *cert = sk_X509_value(certs, i);
 
-			unsigned int len = i2d_X509(cert, &certBytes);
+			int len = i2d_X509(cert, &certBytes);
 			if (len < 0) {
 				MWLOG(LEV_ERROR, MOD_APL, "addLT(): Failed to parse certificate in signature.");
 				success = false;
@@ -309,7 +309,8 @@ bool PAdESExtender::addLT() {
 			}
 			size_t vd_size = m_validationData.size();
 
-			ValidationDataElement certElem(certBytes, len, ValidationDataElement::CERT);
+			//Cast to size_t is safe because len is positive
+			ValidationDataElement certElem(certBytes, (size_t)len, ValidationDataElement::CERT);
 			ValidationDataElement *addedElem = addValidationElement(certElem);
 			addedElem->addVriKey(hexHash);
 			// Add to signerCerts_idx if it's a signing cert and ignore duplicates
