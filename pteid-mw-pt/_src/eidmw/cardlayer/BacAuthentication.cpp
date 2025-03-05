@@ -373,4 +373,9 @@ CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const 
 	return BlockCipherCtx::retailMac(key, {msg.get(), inputLen});
 }
 
+void BacAuthentication::upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
+									const CAParams &params) {
+	m_sm.upgradeKeys(enc, mac);
+}
+
 } // namespace eIDMW

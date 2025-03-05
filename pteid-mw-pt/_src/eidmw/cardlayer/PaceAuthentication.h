@@ -35,11 +35,11 @@ public:
 	~PaceAuthentication();
 
 	void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
-	bool chipAuthentication(SCARDHANDLE &hCard, const void *param_structure, EVP_PKEY *pkey, ASN1_OBJECT *oid);
 	void setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
 	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) override;
 	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) override;
+	virtual void upgradeKeys(EVP_PKEY* eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac, const CAParams &params) override;
 
 private:
 	CByteArray sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);

@@ -23,6 +23,7 @@
 
 **************************************************************************** */
 #include "Card.h"
+#include "ChipAuthentication.h"
 #include "Log.h"
 
 #include <limits.h>
@@ -417,12 +418,9 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
 }
 
 bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
-	if (auto pace = dynamic_cast<PaceAuthentication *>(m_secureMessaging.get())) {
-		return pace->chipAuthentication(m_hCard, m_comm_protocol, pkey, oid);
-	}
+	ChipAuthentication ca;
+	return ca.upgradeSecureMessaging(m_secureMessaging.get(), pkey, oid);
 
-	MWLOG(LEV_ERROR, MOD_CAL, L"Tried performing Chip Authentication without initialized pace");
-	return false;
 }
 
 const void *CCard::getProtocolStructure() { return m_comm_protocol; }

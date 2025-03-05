@@ -71,6 +71,8 @@ public:
 	 */
 	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) override;
 
+	virtual void upgradeKeys(EVP_PKEY* eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac, const CAParams &params) override;
+
 private:
 	CByteArray decryptData(const CByteArray &data);
 

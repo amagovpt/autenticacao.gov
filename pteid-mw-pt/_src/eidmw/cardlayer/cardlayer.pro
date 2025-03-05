@@ -59,6 +59,7 @@ HEADERS += \
            PCSC.h \
            GenericPinpad.h \
            SecureMessaging.h \
+           ChipAuthentication.h \
            PaceAuthentication.h \
            BacAuthentication.h \
            Pinpad.h \
@@ -86,6 +87,7 @@ SOURCES += \
            CardReaderInfo.cpp \
            Context.cpp \
            PCSC.cpp \
+           ChipAuthentication.cpp \
            PaceAuthentication.cpp \
            BacAuthentication.cpp \
            Pinpad.cpp \

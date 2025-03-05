@@ -25,8 +25,11 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+#include "PaceAuthentication.h"
 #include "APLCardPteid.h"
 #include "CardPteid.h"
+#include "IcaoDg14.h"
+#include "TLVBuffer.h"
 #include "APLCertif.h"
 #include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
@@ -438,8 +441,19 @@ CByteArray APL_EIDCard::readTokenData() {
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Opening BAC channel");
 		getCalReader()->openBACChannel({mrz_bytes->mrz_bytes, mrz_bytes->mrz_length});
 
-		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Reading multi-pass token");
+		auto dg14 = getCalReader()->ReadFile("010E");
 
+		auto pkey = getChipAuthenticationKey(dg14);
+		unsigned char *buffer = nullptr;
+		int len = i2d_PublicKey(pkey, &buffer);
+
+		auto oid_info = getChipAuthenticationOid(dg14);
+		auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);
+		if (!status) {
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Failed to upgrade to Chip Authentication");
+		}
+
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Reading multi-pass token");
 		return getCalReader()->readMultiPassToken();
 	} catch (CMWException &e) {
 		MWLOG_CTX(LEV_ERROR, MOD_APL, "Token Read Failed: %ld", e.GetError());

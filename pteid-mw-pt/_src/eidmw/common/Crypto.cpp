@@ -183,5 +183,15 @@ CByteArray removeIso7816Padding(const CByteArray &input) {
 	return input;
 }
 
+void SecureMessagingKeys::upgradeKeys(const CByteArray &enc, const CByteArray &mac) {
+	if (enc.Size() != 16 || mac.Size() != 16) {
+		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR,
+					  "Seed for secure messaging key derivation must be 16 bytes long");
+	}
+
+	memcpy(m_ksEnc.data(), enc.GetBytes(), 16);
+	memcpy(m_ksMac.data(), mac.GetBytes(), 16);
+}
+
 } // namespace Crypto
 } // namespace eIDMW

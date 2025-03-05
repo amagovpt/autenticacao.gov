@@ -21,8 +21,11 @@
 #pragma once
 
 #include "Context.h"
+#include <openssl/types.h>
 
 namespace eIDMW {
+	
+struct CAParams;
 
 /**
  * @class SecureMessaging
@@ -59,6 +62,9 @@ public:
 	 * @return CByteArray Decrypted response with status code appended at the end
 	 */
 	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) = 0;
+
+	virtual void upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
+							 const CAParams &params) = 0;
 
 protected:
 	SCARDHANDLE m_card = {0};

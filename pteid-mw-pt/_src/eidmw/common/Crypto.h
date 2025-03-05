@@ -254,6 +254,8 @@ public:
 	CByteArray getCBAEncKey() const { return {m_ksEnc.data(), m_ksEnc.size()}; };
 	CByteArray getCBAMacKey() const { return {m_ksMac.data(), m_ksMac.size()}; };
 
+	void upgradeKeys(const CByteArray &enc, const CByteArray &mac);
+
 	void setSSC(uint64_t newSsc) { m_ssc = newSsc; }
 	uint64_t getSSC() const { return m_ssc; }
 	void incrementSSC() { m_ssc++; }
