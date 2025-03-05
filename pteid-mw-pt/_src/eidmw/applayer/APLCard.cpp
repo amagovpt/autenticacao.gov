@@ -516,9 +516,7 @@ bool APL_SmartCard::pinCmd(tPinOperation operation, const tPin &Pin, const char 
 unsigned long APL_SmartCard::certificateCount() {
 	if (m_certificateCount == COUNT_UNDEF) {
 		BEGIN_CAL_OPERATION(m_reader)
-		// Minus one because we're excluding the Root Cert from card
-		// (we're assuming it's always the last in the PKCS15 structure)
-		m_certificateCount = m_reader->getCalReader()->CertCount() - 1;
+		m_certificateCount = m_reader->getCalReader()->CertCount();
 		END_CAL_OPERATION(m_reader)
 	}
 
