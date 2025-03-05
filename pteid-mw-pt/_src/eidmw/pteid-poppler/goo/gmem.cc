@@ -14,7 +14,7 @@
 // under GPL version 2 or later
 //
 // Copyright (C) 2005 Takashi Iwai <tiwai@suse.de>
-// Copyright (C) 2007-2010 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2007-2010, 2012 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2008 Jonathan Kew <jonathan_kew@sil.org>
 //
 // To see a description of the changes please see the Changelog file that
@@ -71,11 +71,6 @@ inline static void *gmalloc(size_t size, bool checkoverflow) {
   void *data;
   unsigned long *trl, *p;
 
-  if (size < 0) {
-    fprintf(stderr, "Invalid memory allocation size\n");
-    if (checkoverflow) return NULL;
-    else exit(1);
-  }
   if (size == 0) {
     return NULL;
   }
@@ -109,11 +104,6 @@ inline static void *gmalloc(size_t size, bool checkoverflow) {
 #else
   void *p;
 
-  if (size < 0) {
-    fprintf(stderr, "Invalid memory allocation size\n");
-    if (checkoverflow) return NULL;
-    else exit(1);
-  }
   if (size == 0) {
     return NULL;
   }
@@ -140,11 +130,6 @@ inline static void *grealloc(void *p, size_t size, bool checkoverflow) {
   void *q;
   int oldSize;
 
-  if (size < 0) {
-    fprintf(stderr, "Invalid memory allocation size\n");
-    if (checkoverflow) return NULL;
-    else exit(1);
-  }
   if (size == 0) {
     if (p) {
       gfree(p);
@@ -164,11 +149,6 @@ inline static void *grealloc(void *p, size_t size, bool checkoverflow) {
 #else
   void *q;
 
-  if (size < 0) {
-    fprintf(stderr, "Invalid memory allocation size\n");
-    if (checkoverflow) return NULL;
-    else exit(1);
-  }
   if (size == 0) {
     if (p) {
       free(p);
