@@ -160,14 +160,9 @@ PageDefinitionsSCAPForm {
                             + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
                 }else if(pdfsignresult == GAPI.ScapZeroAttributesError){
                     console.log("ScapZeroAttributesError")
-                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
-                            + " "
-                            + "<a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
-                            + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
-                    linkUrl = 'https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais'
-                    accessibleText = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
-                            + " "
-                            + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
+                    linkUrl = qsTranslate("PageDefinitionsSCAP", "STR_SCAP_COMPANY_ZERO_ATTRIBUTES_LINK_URL")
+                    bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES").arg(linkUrl)
+                    accessibleText = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES").arg(linkUrl)
                 }else {
                     console.log("ScapGenericError")
                     show_generic_scap_error_message()
@@ -267,12 +262,9 @@ PageDefinitionsSCAPForm {
             var linkUrl = ""
             var accessibleText = ""
             if (enterprise) {
-                bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
-                    + " <a href=\"https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais\">"
-                    + "https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
-                linkUrl = 'https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais'
-                accessibleText = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES")
-                    + " https://www.autenticacao.gov.pt/a-autenticacao-de-profissionais"
+                linkUrl = qsTranslate("PageDefinitionsSCAP", "STR_SCAP_COMPANY_ZERO_ATTRIBUTES_LINK_URL")
+                bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES").arg(linkUrl)
+                accessibleText = qsTranslate("PageDefinitionsSCAP","STR_SCAP_COMPANY_ZERO_ATTRIBUTES").arg(linkUrl)
             } else {
                 bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ENTITIES_ZERO_ATTRIBUTES_FIRST")
                     + "<ul><li>" + failed_providers.join("</li><li>") + "</li></ul>"

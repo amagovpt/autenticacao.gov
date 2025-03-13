@@ -1162,7 +1162,11 @@
     </message>
     <message>
         <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
-        <translation>Não tem atributos empresariais.&lt;br&gt;Para associar novos atributos, por favor aceda a</translation>
+        <translation>Não foram encontradas empresas para as quais tenha atributos associados.&lt;br&gt;&lt;br&gt;Se for administrador, diretor ou gerente de uma sociedade anónima, sociedade por quotas ou cooperativa, e não está a ver aqui a sua empresa, envie um email para &lt;a href=&quot;mailto:helpdesk.scap@irn.mj.pt&quot;&gt;helpdesk.scap@irn.mj.pt&lt;/a&gt; ou &lt;a href=&quot;%1&quot;&gt;dirija-se a uma conservatória do registo comercial&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES_LINK_URL</source>
+        <translation>https://www2.gov.pt/locais-de-atendimento-de-servicos-publicos/-/pesquisa/search_stores?_searchresults_formDate=1741341814931&amp;_searchresults_keywords=&amp;_searchresults_keywords2=&amp;_searchresults_portalCategoryTypesId=&amp;_searchresults_LojasEspacos+47584867=on&amp;_searchresults_checkboxNames=LojasEspacos+47584870%2CLojasEspacos+47584871%2CLojasEspacos+47584867%2CLojasEspacos+238351%2CLojasEspacos+238352%2CLojasEspacos+47584869%2CLojasEspacos+47584872%2CLojasEspacos+238350%2CLojasEspacos+47584873%2CLojasEspacos+47584868%2CDistritos+238329%2CDistritos+238330%2CDistritos+238331%2CDistritos+238332%2CDistritos+238333%2CDistritos+238334%2CDistritos+238407%2CDistritos+238408%2CDistritos+238409%2CDistritos+238410%2CDistritos+238411%2CDistritos+238412%2CDistritos+238413%2CDistritos+238414%2CDistritos+238415%2CDistritos+238416%2CDistritos+238417%2CDistritos+238418%2CDistritos+238419%2CDistritos+238420%2CDistritos+238421%2CDistritos+238422%2CDistritos+238423%2CDistritos+238424%2CDistritos+238425%2CDistritos+238426%2CDistritos+238427%2CDistritos+238428%2CDistritos+238429%2CPaises+25290870%2CPaises+25290864%2CPaises+25290908%2CPaises+25291018%2CPaises+25291021</translation>
     </message>
     <message>
         <source>STR_WARNING</source>
@@ -1682,7 +1686,7 @@
     <message>
         <source>STR_CERT_CHAIN_ERROR</source>
         <oldsource>STR__CERT_CHAIN_ERROR</oldsource>
-		<translation>Não foi possível completar a cadeia de certificados!&lt;br&gt;Verifique a ligação à internet.</translation>
+        <translation>Não foi possível completar a cadeia de certificados!&lt;br&gt;Verifique a ligação à internet.</translation>
     </message>
     <message>
         <source>STR_EXPORT_CERTIFICATE_SUCCESS</source>

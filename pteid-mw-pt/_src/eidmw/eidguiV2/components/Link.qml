@@ -35,7 +35,7 @@ Item {
         color: Constants.COLOR_TEXT_BODY
         visible: parent.visible
         font.underline: mouseArea.containsMouse
-        onLinkActivated: Qt.openUrlExternally(propertyLinkUrl)
+        onLinkActivated: Qt.openUrlExternally(link === "" ? propertyLinkUrl : link)
         wrapMode: Text.WordWrap
 
         Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 
