@@ -2092,6 +2092,18 @@
         <translation>Para mais informação sobre assinatura digital, consulte</translation>
     </message>
     <message>
+        <source>STR_SIGN_HELP_TOPIC_VERIFY</source>
+        <translation>Aqui pode verificar a validade da assinatura qualificada</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK</source>
+        <translation>https://validador.autenticacao.gov.pt/validation</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_SUCESS_VERIFY</source>
+        <translation>Este tipo de assinatura pode ser validado no link abaixo: </translation>
+    </message>
+    <message>
         <source>STR_SIGN_NAV_DESCRIPTION</source>
         <translation>Arraste o selo de assinatura</translation>
     </message>

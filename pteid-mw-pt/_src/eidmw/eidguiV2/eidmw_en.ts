@@ -2094,6 +2094,18 @@
         <translation>For more information about digital signature, see</translation>
     </message>
     <message>
+        <source>STR_SIGN_HELP_TOPIC_VERIFY</source>
+        <translation>Use the link below to verify your signed files, see &lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK</source>
+        <translation>https://validador.autenticacao.gov.pt/validation</translation>
+    </message>
+    <message>
+        <source>STR_SIGN_OPEN_SUCESS_VERIFY</source>
+        <translation>This type of signature can be validated in the link below </translation>
+    </message>
+    <message>
         <source>STR_SIGN_NAV_DESCRIPTION</source>
         <translation>Move the signature seal</translation>
     </message>

@@ -278,9 +278,9 @@ Item {
                                                                "PageServicesSign",
                                                                "STR_SIGN_HELP_AUTENTICACAO.GOV_SELECT")
                             propertyLinkUrl: 'https://www.autenticacao.gov.pt'
-                            KeyNavigation.tab: buttonArrowHelp
-                            KeyNavigation.down: buttonArrowHelp
-                            KeyNavigation.right: buttonArrowHelp
+                            KeyNavigation.tab: verifySignLink
+                            KeyNavigation.down: verifySignLink
+                            KeyNavigation.right: verifySignLink
                             Keys.onPressed: {
                                 handle_key_pressed(event.key, autenticacaoGovLink)
                             }
@@ -288,6 +288,41 @@ Item {
                             KeyNavigation.backtab: textSubTitle.propertyText
                             KeyNavigation.up: textSubTitle.propertyText
                         }
+
+                        Components.Link {
+                            id: verifySignLink
+                            visible: rectMainLeftHelp.height > Constants.HEIGHT_HELP_COLLAPSED
+                            anchors.top: autenticacaoGovLink.bottom
+                            propertyText.text: qsTranslate("PageServicesSign",
+                                                           "STR_SIGN_HELP_TOPIC_VERIFY")
+                                               + ("<a href='%1'>").arg(qsTranslate(
+                                                                           "PageServicesSign",
+                                                                           "STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK")) + " " + qsTranslate(
+                                                   "PageServicesSign",
+                                                   "STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK")
+                            propertyAccessibleDescription: qsTranslate(
+                                                               "PageServicesSign",
+                                                               "STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK")
+                            propertyLinkUrl: qsTranslate(
+                                                 "PageServicesSign",
+                                                 "STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK")
+                            propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                            propertyText.width: parent.width
+                            Keys.onPressed: {
+                                handle_key_pressed(event.key, verifySignLink)
+                            }
+                            propertyText.textMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
+                            propertyText.wrapMode: Text.Wrap
+                            propertyText.font.bold: activeFocus
+                            Layout.fillWidth: true
+                            KeyNavigation.tab: buttonArrowHelp
+                            KeyNavigation.down: buttonArrowHelp
+                            KeyNavigation.right: buttonArrowHelp
+                            KeyNavigation.left: autenticacaoGovLink.propertyText
+                            KeyNavigation.backtab: autenticacaoGovLink.propertyText
+                            KeyNavigation.up: autenticacaoGovLink.propertyText
+                        }
+
                         Rectangle {
                             id: arrowHelpRect
                             width: parent.width

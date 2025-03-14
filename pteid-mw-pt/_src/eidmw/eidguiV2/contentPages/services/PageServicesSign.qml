@@ -1497,6 +1497,49 @@ PageServicesSignForm {
                     anchors.top: labelText.text == "" ? parent.top : labelText.bottom
                     anchors.topMargin: labelText.text == "" ? 0 : Constants.SIZE_ROW_V_SPACE
                 }
+
+                Text {
+                    id: labelClickOnVerifySign
+                    width: parent.width
+                    visible: propertyRadioButtonXADES.checked
+                    text: qsTranslate("PageServicesSign",
+                                      "STR_SIGN_OPEN_SUCESS_VERIFY")
+
+                    font.bold: activeFocus
+                    font.pixelSize: Constants.SIZE_TEXT_LABEL
+                    font.family: lato.name
+                    color: Constants.COLOR_TEXT_LABEL
+                    wrapMode: Text.Wrap
+
+                    anchors.top: labelClickOnVerifySign.text == "" ? parent.top : labelText.bottom
+                    anchors.topMargin: labelClickOnVerifySign.text == "" ? 0 : Constants.SIZE_ROW_V_SPACE
+                }
+
+                Components.Link {
+                    id: verifySignLinkSigned
+                    visible: propertyRadioButtonXADES.checked
+                    anchors.top: labelClickOnVerifySign.bottom
+                    anchors.left: labelClickOnVerifySign.left
+                    propertyText.text: ("<a href='%1'>").arg(qsTranslate(
+                                                                 "PageServicesSign",
+                                                                 "STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK")) + "" + qsTranslate(
+                                           "PageServicesSign",
+                                           "STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK")
+                    propertyLinkUrl: qsTranslate(
+                                         "PageServicesSign",
+                                         "STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK")
+                    propertyText.width: parent.width
+                    propertyText.leftPadding: 0
+                    propertyText.rightPadding: 0
+                    propertyText.textMargin: 0
+                    Keys.onPressed: {
+                        handle_key_pressed(event.key, verifySignLinkSigned)
+                    }
+                    propertyText.wrapMode: Text.Wrap
+                    propertyText.font.bold: activeFocus
+                    propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
+                    propertyText.font.family: lato.name
+                }
             }
         }
 
