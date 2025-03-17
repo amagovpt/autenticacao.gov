@@ -1546,6 +1546,11 @@ Load language error. Please reinstall the application"
     Component.onCompleted: {
         console.log("Window mainWindow Completed")
         mainFormID.propertShowAnimation = controler.isAnimationsEnabled()
+
+        if(mainWindow.screen.desktopAvailableHeight < mainWindow.height || mainWindow.screen.desktopAvailableWidth < mainWindow.width) {
+            console.log("Resize window to fit the screen")
+            mainWindow.visibility = Window.Maximized
+        }
         
         if(Qt.platform.os === "osx") {
             if(!gapi.isMacOSApplicationFolder()) {
