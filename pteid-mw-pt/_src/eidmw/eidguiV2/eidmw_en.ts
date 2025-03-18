@@ -1164,7 +1164,7 @@
     </message>
     <message>
         <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES</source>
-        <translation>No companies were found to which you have associated attributes.&lt;br&gt;&lt;br&gt;If you are an administrator, director, or manager of a public limited company, private limited company, or cooperative and do not see your company listed here, please send an email to &lt;a href=&quot;mailto:helpdesk.scap@irn.mj.pt&quot;&gt;helpdesk.scap@irn.mj.pt&lt;/a&gt; or &lt;a href=&quot;%1&quot;&gt;visit a commercial registry office&lt;/a&gt;.</translation>
+        <translation>No companies were found for which you have associated attributes.&lt;br&gt;&lt;br&gt;If you are a manager or director of a Portuguese company or legal entity and do not see your company listed here, please send an email to &lt;a href=&quot;mailto:helpdesk.scap@irn.mj.pt&quot;&gt;helpdesk.scap@irn.mj.pt&lt;/a&gt; or &lt;a href=&quot;%1&quot;&gt;visit a commercial registry office&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>STR_SCAP_COMPANY_ZERO_ATTRIBUTES_LINK_URL</source>
