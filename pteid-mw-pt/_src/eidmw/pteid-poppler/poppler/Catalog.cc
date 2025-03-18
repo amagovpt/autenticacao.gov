@@ -571,6 +571,9 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	signature_dict->dictAdd(copyString("Filter"), obj1.initName("Adobe.PPKLite"));
 
 	m_sig_dict = signature_dict;
+    //Reserve space for the padded byte range
+    SignatureDict *d = dynamic_cast<SignatureDict *>(m_sig_dict->getDict());
+    d->setPadding(PADDED_BYTERANGE_LEN);
 
 	Ref ref_to_sigdict = xref->addIndirectObject(signature_dict);
 
@@ -602,18 +605,17 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
  */
 int Catalog::setSignatureByteRange(unsigned long sig_contents_offset, unsigned
 		long estimated_len, unsigned long filesize, Object *signature_dict, Ref *signature_dict_ref) {
-	unsigned int padded_byterange_len = 100;
 	Object obj, obj2;
 	int off2 = sig_contents_offset;
+    //The estimated signature length* 2 (hex string) plus 2 for the <> delimiters
 	int off3 = sig_contents_offset + estimated_len +2;
-	int off4 = filesize-sig_contents_offset-estimated_len-2+
-				padded_byterange_len;
+	int off4 = filesize-off3;
 	obj.initArray(xref);
 	obj.arrayAdd(obj2.initInt(0));
 	obj.arrayAdd(obj2.initInt(off2));
-	obj.arrayAdd(obj2.initInt(off3)); //The estimated siglen *2 (hex string) plus <> delimiters
+	obj.arrayAdd(obj2.initInt(off3)); 
 
-	obj.arrayAdd(obj2.initInt(off4)); //This is correct if the updated ByteRange has the same number of chars
+	obj.arrayAdd(obj2.initInt(off4));
 
     if (signature_dict)
     {
@@ -631,12 +633,13 @@ int Catalog::setSignatureByteRange(unsigned long sig_contents_offset, unsigned
 	int actual_size = snprintf(NULL, 0,
 		       	"/ByteRange [0 %d %d %d ] ", off2, off3, off4);
 
+    //Add padding bytes so that /ByteRange has the expected length i.e. PADDED_BYTERANGE_LEN
 	SignatureDict *d = dynamic_cast<SignatureDict *>(m_sig_dict->getDict());
-	d->setPadding(padded_byterange_len - actual_size);
+	d->setPadding(PADDED_BYTERANGE_LEN - actual_size);
 
 	xref->setModifiedObject(m_sig_dict, m_sig_ref);
 
-	return padded_byterange_len - actual_size;
+	return PADDED_BYTERANGE_LEN - actual_size;
 }
 
 void Catalog::closeSignature(const char * signature_contents, unsigned long len)
