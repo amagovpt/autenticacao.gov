@@ -21,6 +21,7 @@
 #include "BacAuthentication.h"
 #include "APDU.h"
 #include "ByteArray.h"
+#include "ChipAuthentication.h"
 #include "Crypto.h"
 #include "Log.h"
 #include "Util.h"
@@ -29,10 +30,13 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
+#include <eac/eac.h>
 #include <memory>
 #include <openssl/des.h>
+#include <openssl/err.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
+#include <openssl/ssl.h>
 
 namespace eIDMW {
 
@@ -104,7 +108,8 @@ void BacAuthentication::authenticate(const CByteArray &mrzInfo) {
 	iccBacData.Chop(2); // Remove the status code
 	if (iccBacData.Size() != ifdBacData.Size()) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
-					  "Returned data from mutual authentication does not match icc bac data size");
+					  "Returned data from mutual authentication does not match icc "
+					  "bac data size");
 	}
 
 	// --------------------
@@ -145,6 +150,25 @@ void BacAuthentication::authenticate(const CByteArray &mrzInfo) {
 	m_authenticated = true;
 }
 
+BUF_MEM *bufMemFromByteArray(const CByteArray &array) {
+	BUF_MEM *buf = BUF_MEM_new();
+	if (buf == NULL) {
+		// no memory
+		return NULL;
+	}
+
+	buf->data = (char *)malloc(array.Size() * sizeof(char));
+	if (buf->data == NULL) {
+		// no memory
+		return NULL;
+	}
+	memcpy(buf->data, (char *)array.GetBytes(), array.Size());
+	buf->length = array.Size();
+	buf->max = buf->length;
+
+	return buf;
+}
+
 CByteArray BacAuthentication::decryptData(const CByteArray &data) {
 	if (!m_authenticated) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED, "BAC not initialized");
@@ -156,18 +180,27 @@ CByteArray BacAuthentication::decryptData(const CByteArray &data) {
 
 	CByteArray encryptionKey = m_sm.getCBAEncKey();
 
-	// Either a) length is byte1 or b) byte1 is 0x81 and length is encoded on the next byte
+	// Either a) length is byte1 or b) byte1 is 0x81 and length is encoded on the
+	// next byte
 	bool hasEncodedLength = data.GetByte(1) == 0x81;
 	size_t dataLength = hasEncodedLength ? data.GetByte(2) : data.GetByte(1);
 
 	size_t encDataOffset = 3 + hasEncodedLength;
 	CByteArray cryptogram(data.GetBytes(encDataOffset, dataLength - 1)); // -1 for padding indicator
-	return BlockCipherCtx::decrypt<TripleDesCipher>(encryptionKey.GetBytes(), cryptogram);
+
+	if (m_ctx) {
+		auto decrypted = EAC_decrypt(m_ctx, bufMemFromByteArray(cryptogram));
+		return CByteArray{(unsigned char *)decrypted->data, decrypted->length};
+	} else {
+		return BlockCipherCtx::decrypt<TripleDesCipher>(encryptionKey.GetBytes(), cryptogram);
+	}
 }
 
 CByteArray BacAuthentication::sendSecureAPDU(const APDU &apdu, long &retValue) {
 	return sendSecureAPDU(apdu.ToByteArray(), retValue);
 };
+
+CByteArray arrayFromBufMem(BUF_MEM *mem) { return CByteArray((unsigned char *)mem->data, mem->length); }
 
 CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu, long &retValue) {
 	if (!m_authenticated) {
@@ -199,33 +232,80 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu, long &retVa
 		// Mark the APDU as SM
 		command_header.SetByte(command_header.GetByte(0) | controlByte, 0);
 
-		CByteArray input_data(apdu.GetBytes(5, apdu.Size() - 6));
-		CByteArray paddedInput = withIso7816Padding(input_data);
-		auto cryptogram = BlockCipherCtx::encrypt<TripleDesCipher>(encryptionKey.GetBytes(), paddedInput);
-		// LCg = Len(Cg) + Len(PI = 1)
-		int lcg = cryptogram.Size() + 1;
-		CByteArray inputForMac = withIso7816Padding(command_header);
+		size_t lc = apdu.GetByte(4);
+		CByteArray TlvLe;
 
-		CByteArray paddedCryptogram;
-		paddedCryptogram.Append(Tcg);
-		// This is safe because Lcg will be always lower than
-		paddedCryptogram.Append((unsigned char)lcg);
-		paddedCryptogram.Append(paddingIndicator);
-		paddedCryptogram.Append(cryptogram);
-		paddedCryptogram.Append(TlvLe);
+		if (command_header.Size() + lc + 2 == apdu.Size()) {
+			TlvLe.Append(Tle);
+			TlvLe.Append(0x01);
+			TlvLe.Append(apdu.GetByte(apdu.Size() - 1));
+		}
 
-		paddedCryptogram = withIso7816Padding(paddedCryptogram);
+		CByteArray input_data(apdu.GetBytes(5, apdu.Size() - 5 - (TlvLe.Size() > 0)));
 
-		// Padded Command Header + Padded [Tcg Lcg PI,CG]
-		inputForMac.Append(paddedCryptogram);
+		CByteArray cryptogram;
+		int lcg;
+		if (m_ctx) {
+			//
+			// cryptogram
+			//
+			BUF_MEM *input = bufMemFromByteArray(input_data);
+			BUF_MEM *paddedInput = EAC_add_iso_pad(m_ctx, input);
 
-		// Pre-increment SSC
-		m_sm.incrementSSC();
+			EAC_increment_ssc(m_ctx);
+			BUF_MEM *mem = EAC_encrypt(m_ctx, paddedInput);
+			cryptogram = CByteArray{(unsigned char *)mem->data, mem->length};
+			lcg = cryptogram.Size() + 1;
 
-		mac = retailMacWithSSC(inputForMac, m_sm.getSSC());
+			//
+			// mac calculation
+			//
+			BUF_MEM *ch = bufMemFromByteArray(command_header);
+			BUF_MEM *paddedCommandHeader = EAC_add_iso_pad(m_ctx, ch);
+
+			CByteArray taggedCryptogram;
+			taggedCryptogram.Append(Tcg);
+			taggedCryptogram.Append((unsigned char)lcg);
+			taggedCryptogram.Append(paddingIndicator);
+			taggedCryptogram.Append(cryptogram);
+			taggedCryptogram.Append(TlvLe);
+			BUF_MEM *paddedTaggedCryptogram = bufMemFromByteArray(taggedCryptogram);
+			paddedTaggedCryptogram = EAC_add_iso_pad(m_ctx, paddedTaggedCryptogram);
+
+			CByteArray inputMac = CByteArray{(unsigned char *)paddedCommandHeader->data, paddedCommandHeader->length};
+			CByteArray ptc = CByteArray{(unsigned char *)paddedTaggedCryptogram->data, paddedTaggedCryptogram->length};
+			inputMac.Append(ptc);
+
+			BUF_MEM *bifm = bufMemFromByteArray(inputMac);
+			BUF_MEM *mac_mem = EAC_authenticate(m_ctx, bifm);
+			EAC_increment_ssc(m_ctx);
+
+			mac = CByteArray{(unsigned char *)mac_mem->data, mac_mem->length};
+		} else {
+			CByteArray paddedInput = withIso7816Padding(input_data);
+			m_sm.incrementSSC();
+			cryptogram = BlockCipherCtx::encrypt<TripleDesCipher>(encryptionKey.GetBytes(), paddedInput);
+			lcg = cryptogram.Size() + 1;
+
+			CByteArray inputForMac = withIso7816Padding(command_header);
+
+			CByteArray paddedCryptogram;
+			paddedCryptogram.Append(Tcg);
+			// This is safe because Lcg will be always lower than
+			paddedCryptogram.Append((unsigned char)lcg);
+			paddedCryptogram.Append(paddingIndicator);
+			paddedCryptogram.Append(cryptogram);
+			paddedCryptogram.Append(TlvLe);
+			paddedCryptogram = withIso7816Padding(paddedCryptogram);
+			inputForMac.Append(paddedCryptogram);
+			// Pre-increment SSC
+			mac = retailMacWithSSC(inputForMac, m_sm.getSSC());
+			m_sm.incrementSSC();
+		}
 
 		// Build final APDU including Cryptogram and MAC
-		// int lc_final = MAC_LEN + 2 + cryptogram.Size() + 3; // CG + Tcg + Lcg + PI
+		// int lc_final = MAC_LEN + 2 + cryptogram.Size() + 3; // CG + Tcg + Lcg +
+		// PI
 		int lc_final = 3 + cryptogram.Size() + TlvLe.Size() + 2 + MAC_LEN;
 		final_apdu.Append(command_header);
 		final_apdu.Append((unsigned char)lc_final);
@@ -241,22 +321,30 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu, long &retVa
 
 		response = sendAPDU(final_apdu, retValue);
 	} else {
+		m_sm.incrementSSC();
+
 		CByteArray TlvLe;
 		CByteArray command_header(apdu.GetBytes(0, 4));
 		command_header.SetByte(command_header.GetByte(0) | controlByte, 0);
 		int le = apdu.GetByte(4);
-		CByteArray inputForMac = withIso7816Padding(command_header);
-
 		TlvLe.Append(Tle);
 		TlvLe.Append(0x01);
 		TlvLe.Append(le);
 
-		inputForMac.Append(withIso7816Padding(TlvLe));
+		if (m_ctx) {
+			EAC_increment_ssc(m_ctx);
+			auto inputForMac = arrayFromBufMem(EAC_add_iso_pad(m_ctx, bufMemFromByteArray(command_header)));
+			inputForMac.Append(arrayFromBufMem(EAC_add_iso_pad(m_ctx, bufMemFromByteArray(TlvLe))));
 
-		// Pre-increment SSC
-		m_sm.incrementSSC();
+			auto m = EAC_authenticate(m_ctx, bufMemFromByteArray(inputForMac));
+			mac = arrayFromBufMem(m);
+			EAC_increment_ssc(m_ctx);
+		} else {
+			CByteArray inputForMac = withIso7816Padding(command_header);
+			inputForMac.Append(withIso7816Padding(TlvLe));
 
-		mac = retailMacWithSSC(inputForMac, m_sm.getSSC());
+			mac = retailMacWithSSC(inputForMac, m_sm.getSSC());
+		}
 
 		int lc_final = MAC_LEN + 2 + TlvLe.Size();
 		final_apdu.Append(command_header);
@@ -267,24 +355,28 @@ CByteArray BacAuthentication::sendSecureAPDU(const CByteArray &apdu, long &retVa
 		final_apdu.Append(mac);
 		final_apdu.Append(0x00); // Le
 
+		m_sm.incrementSSC();
+
 		response = sendAPDU(final_apdu, retValue);
 	}
 
-	if (response.GetByte(0) == 0x87) {
-		auto status = response.GetBytes(response.Size() - 2, 2);
+	auto status = response.GetBytes(response.Size() - 2, 2);
 
+	// check if MAC
+	if (!checkMacInResponse(response)) {
+		MWLOG(tLevel::LEV_ERROR, tModule::MOD_CAL, "Mac check failed for [APDU] with [MAC]:\n APDU: %s\n MAC: %s\n",
+			  response.ToString(true, false).c_str(), mac.ToString(true, false).c_str());
+	}
+
+	if (response.GetByte(0) == 0x87) {
 		size_t enc_length = response.GetByte(1);
 		auto decrypted = removeIso7816Padding(decryptData(response));
-
-		// check if MAC
-		if (!checkMacInResponse(response)) {
-			MWLOG(tLevel::LEV_ERROR, tModule::MOD_CAL, "Mac check failed for [APDU] with [MAC]:\n APDU: %s\n MAC: %s\n",
-				  response.ToString(true, false).c_str(), mac.ToString(true, false).c_str());
-		}
 
 		auto response = decrypted;
 		response.Append(status);
 		return response;
+	} else {
+		response = status;
 	}
 
 	return response;
@@ -331,9 +423,6 @@ bool BacAuthentication::checkMacInResponse(CByteArray &resp) {
 		paddedInput = withIso7816Padding(inputForMac);
 	}
 
-	// Pre-increment SSC
-	m_sm.incrementSSC();
-
 	auto mac = retailMacWithSSC(paddedInput, m_sm.getSSC());
 	return mac.Equals(receivedMac);
 }
@@ -357,8 +446,9 @@ CByteArray BacAuthentication::retailMacWithSSC(const CByteArray &macInput, uint6
 CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const CByteArray &macInput) {
 	if (macInput.Size() % MAC_KEYSIZE != 0) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
-					  "%s: Input data is not multiple of cipher block size (MAC_KEYSIZE: $ld)", __FUNCTION__,
-					  MAC_KEYSIZE);
+					  "%s: Input data is not multiple of cipher block size "
+					  "(MAC_KEYSIZE: $ld)",
+					  __FUNCTION__, MAC_KEYSIZE);
 	}
 
 	unsigned char padding[] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -375,7 +465,41 @@ CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const 
 
 void BacAuthentication::upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
 									const CAParams &params) {
-	m_sm.upgradeKeys(enc, mac);
+	EAC_init();
+	m_ctx = EAC_CTX_new();
+	if (!EAC_CTX_init_ca(m_ctx, params.nid, 0)) {
+		MWLOG_CTX(LEV_ERROR, MOD_CAL, "Failed to initialize CA context");
+	}
+
+	if (!m_ctx->ca_ctx || !m_ctx->ca_ctx->ka_ctx) {
+		MWLOG_CTX(LEV_ERROR, MOD_CAL, "CA context or KA context is NULL");
+	}
+	KA_CTX *ka = m_ctx->ca_ctx->ka_ctx;
+	ka->shared_secret = shared_secret;
+	ka->shared_secret->length = shared_secret->length;
+
+	ka->k_enc = BUF_MEM_new();
+	assert(ka->k_enc);
+	BUF_MEM_grow(ka->k_enc, params.key_size);
+	memcpy(ka->k_enc->data, enc.GetBytes(), params.key_size);
+	ka->k_enc->length = params.key_size;
+
+	ka->k_mac = BUF_MEM_new();
+	assert(ka->k_mac);
+	BUF_MEM_grow(ka->k_mac, params.key_size);
+	memcpy(ka->k_mac->data, mac.GetBytes(), params.key_size);
+	ka->k_mac->length = params.key_size;
+	ka->key = eph_pkey;
+
+	// Switch to CA secure messaging
+	ka->enc_keylen = ka->mac_keylen = params.key_size;
+	ka->cipher = params.cipher;
+	ka->md = params.kdf_md;
+	if (!EAC_CTX_set_encryption_ctx(m_ctx, EAC_ID_CA)) {
+		MWLOG_CTX(LEV_ERROR, MOD_CAL, "Failed to set encryption CTX to CA");
+	}
+
+	EAC_set_ssc(m_ctx, 0);
 }
 
 } // namespace eIDMW
