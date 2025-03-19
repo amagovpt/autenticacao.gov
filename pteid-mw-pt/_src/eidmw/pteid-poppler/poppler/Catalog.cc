@@ -571,9 +571,9 @@ void Catalog::prepareSignature(PDFRectangle *rect, SignatureSignerInfo *signer_i
 	signature_dict->dictAdd(copyString("Filter"), obj1.initName("Adobe.PPKLite"));
 
 	m_sig_dict = signature_dict;
-    //Reserve space for the padded byte range
-    SignatureDict *d = dynamic_cast<SignatureDict *>(m_sig_dict->getDict());
-    d->setPadding(PADDED_BYTERANGE_LEN);
+	//Reserve space for the padded byte range
+	SignatureDict *d = dynamic_cast<SignatureDict *>(m_sig_dict->getDict());
+	d->setPadding(PADDED_BYTERANGE_LEN);
 
 	Ref ref_to_sigdict = xref->addIndirectObject(signature_dict);
 
@@ -607,7 +607,7 @@ int Catalog::setSignatureByteRange(unsigned long sig_contents_offset, unsigned
 		long estimated_len, unsigned long filesize, Object *signature_dict, Ref *signature_dict_ref) {
 	Object obj, obj2;
 	int off2 = sig_contents_offset;
-    //The estimated signature length* 2 (hex string) plus 2 for the <> delimiters
+	//The estimated signature length* 2 (hex string) plus 2 for the <> delimiters
 	int off3 = sig_contents_offset + estimated_len +2;
 	int off4 = filesize-off3;
 	obj.initArray(xref);
