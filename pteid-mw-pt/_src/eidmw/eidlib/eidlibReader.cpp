@@ -590,6 +590,8 @@ ICAO_Card &PTEID_ReaderContext::getICAOCard() {
 
 PTEID_ByteArray PTEID_ReaderContext::getMultiPassToken() {
 	PTEID_ByteArray out;
+	BEGIN_TRY_CATCH
+
 	CByteArray token;
 
 	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
@@ -600,6 +602,7 @@ PTEID_ByteArray PTEID_ReaderContext::getMultiPassToken() {
 
 	out.Append(token.GetBytes(), token.Size());
 
+	END_TRY_CATCH
 	return out;
 }
 
