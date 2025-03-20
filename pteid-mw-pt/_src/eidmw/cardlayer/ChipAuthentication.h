@@ -20,8 +20,12 @@
 
 #pragma once
 
+#include "ByteArray.h"
 #include "Context.h"
+#include "Reader.h"
 #include "SecureMessaging.h"
+#include <eac/eac.h>
+#include <openssl/types.h>
 
 namespace eIDMW {
 
@@ -35,6 +39,29 @@ struct CAParams {
 class ChipAuthentication {
 public:
 	bool upgradeSecureMessaging(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid);
+};
+
+class ChipAuthSecureMessaging : public SecureMessaging {
+public:
+	ChipAuthSecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
+
+	bool authenticate(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid);
+	virtual void upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
+							 const CAParams &params) override {}
+
+protected:
+	virtual CByteArray encryptData(const CByteArray &data) override;
+	virtual CByteArray decryptData(const CByteArray &encryptedData) override;
+	virtual CByteArray computeMac(const CByteArray &data) override;
+	virtual CByteArray addPadding(const CByteArray &data) override;
+	virtual CByteArray removePadding(const CByteArray &data) override;
+	virtual void incrementSSC() override;
+
+private:
+	void initEACContext(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
+						const CAParams &params);
+
+	EAC_CTX *m_ctx;
 };
 
 } // namespace eIDMW

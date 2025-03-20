@@ -29,6 +29,7 @@
 #include <limits.h>
 
 #include "PaceAuthentication.h"
+#include <memory>
 #include <openssl/types.h>
 #include <openssl/x509.h>
 
@@ -418,9 +419,18 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
 }
 
 bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
-	ChipAuthentication ca;
-	return ca.upgradeSecureMessaging(m_secureMessaging.get(), pkey, oid);
+	auto casm = std::make_unique<ChipAuthSecureMessaging>(m_hCard, m_poContext, m_comm_protocol);
+	auto status = casm->authenticate(m_secureMessaging.get(), pkey, oid);
+	if (!status) {
+		MWLOG_CTX(LEV_ERROR, MOD_CAL,
+				  "Failed to authenticate Chip Authentication. Skipping secure messaging upgrade...");
+		return status;
+	}
 
+	// swap secure messaging to new chip authentication
+	m_secureMessaging.reset();
+	m_secureMessaging = std::move(casm);
+	return status;
 }
 
 const void *CCard::getProtocolStructure() { return m_comm_protocol; }
