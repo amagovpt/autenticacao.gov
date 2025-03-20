@@ -36,18 +36,10 @@ struct CAParams {
 	const EVP_CIPHER *cipher;
 };
 
-class ChipAuthentication {
-public:
-	bool upgradeSecureMessaging(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid);
-};
-
 class ChipAuthSecureMessaging : public SecureMessaging {
 public:
 	ChipAuthSecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
-
 	bool authenticate(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid);
-	virtual void upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
-							 const CAParams &params) override {}
 
 protected:
 	virtual CByteArray encryptData(const CByteArray &data) override;

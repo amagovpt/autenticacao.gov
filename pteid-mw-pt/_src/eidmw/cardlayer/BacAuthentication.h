@@ -57,9 +57,6 @@ public:
 	 */
 	void authenticate(const CByteArray &mrzInfo);
 
-	virtual void upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
-							 const CAParams &params) override;
-
 protected:
 	virtual CByteArray encryptData(const CByteArray &data) override;
 	virtual CByteArray decryptData(const CByteArray &encryptedData) override;

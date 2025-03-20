@@ -21,7 +21,6 @@
 #include "BacAuthentication.h"
 #include "APDU.h"
 #include "ByteArray.h"
-#include "ChipAuthentication.h"
 #include "Crypto.h"
 #include "Log.h"
 #include "Util.h"
@@ -264,45 +263,6 @@ CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const 
 	memcpy(msg.get() + macInput.Size(), padding, sizeof(padding));
 
 	return BlockCipherCtx::retailMac(key, {msg.get(), inputLen});
-}
-
-void BacAuthentication::upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
-									const CAParams &params) {
-	EAC_init();
-	m_ctx = EAC_CTX_new();
-	if (!EAC_CTX_init_ca(m_ctx, params.nid, 0)) {
-		MWLOG_CTX(LEV_ERROR, MOD_CAL, "Failed to initialize CA context");
-	}
-
-	if (!m_ctx->ca_ctx || !m_ctx->ca_ctx->ka_ctx) {
-		MWLOG_CTX(LEV_ERROR, MOD_CAL, "CA context or KA context is NULL");
-	}
-	KA_CTX *ka = m_ctx->ca_ctx->ka_ctx;
-	ka->shared_secret = shared_secret;
-	ka->shared_secret->length = shared_secret->length;
-
-	ka->k_enc = BUF_MEM_new();
-	assert(ka->k_enc);
-	BUF_MEM_grow(ka->k_enc, params.key_size);
-	memcpy(ka->k_enc->data, enc.GetBytes(), params.key_size);
-	ka->k_enc->length = params.key_size;
-
-	ka->k_mac = BUF_MEM_new();
-	assert(ka->k_mac);
-	BUF_MEM_grow(ka->k_mac, params.key_size);
-	memcpy(ka->k_mac->data, mac.GetBytes(), params.key_size);
-	ka->k_mac->length = params.key_size;
-	ka->key = eph_pkey;
-
-	// Switch to CA secure messaging
-	ka->enc_keylen = ka->mac_keylen = params.key_size;
-	ka->cipher = params.cipher;
-	ka->md = params.kdf_md;
-	if (!EAC_CTX_set_encryption_ctx(m_ctx, EAC_ID_CA)) {
-		MWLOG_CTX(LEV_ERROR, MOD_CAL, "Failed to set encryption CTX to CA");
-	}
-
-	EAC_set_ssc(m_ctx, 0);
 }
 
 } // namespace eIDMW
