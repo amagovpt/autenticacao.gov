@@ -37,13 +37,15 @@ public:
 	void initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure);
 	void setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
-	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) override;
-	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) override;
-	virtual void upgradeKeys(EVP_PKEY* eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac, const CAParams &params) override;
+protected:
+	virtual CByteArray encryptData(const CByteArray &data) override;
+	virtual CByteArray decryptData(const CByteArray &encryptedData) override;
+	virtual CByteArray computeMac(const CByteArray &data) override;
+	virtual CByteArray addPadding(const CByteArray &data) override;
+	virtual CByteArray removePadding(const CByteArray &data) override;
+	virtual void incrementSSC() override;
 
 private:
-	CByteArray sendAPDU(const CByteArray &plainAPDU, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
-	CByteArray sendAPDU(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
 	std::unique_ptr<PaceAuthenticationImpl> m_impl;
 };
 
