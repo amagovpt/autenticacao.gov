@@ -304,11 +304,9 @@ public:
 	DesCipher() : BlockCipherCtx("des-cbc", MAC_KEYSIZE, DES_BLOCK_SIZE) {}
 };
 
-// Possibly some functions like View<BUF_MEM> as a non-owning BUF_MEM (dangerous if passed to functions that free it)
-// or stuff like TakeOwnership(View<T> t)...
-// This would prevent 2 allocations where all its needed is to be passed as a paremeter...
-
+// Base template class for unique reference wrapper types
 template <typename T> class Ref;
+
 template <> class Ref<BUF_MEM> {
 public:
 	Ref() = default;
