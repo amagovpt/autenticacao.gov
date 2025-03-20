@@ -52,34 +52,23 @@ public:
 	/**
 	 * @brief Establishes the BAC secure channel with the card
 	 *
-	 * @param mrzInfo Must be the last 12 bytes present in SOD
+	 * @param mrzInfo MRZ data
 	 * @throws EIDMW_ERR_BAC_* on authentication failure
 	 */
 	void authenticate(const CByteArray &mrzInfo);
 
-	/**
-	 * @brief Sends an APDU through the secure BAC channel
-	 *
-	 * Encrypts with 3des, adds mac, and handles ber-tlv encoded responses
-	 * @throws EIDMW_ERR_BAC_NOT_INITIALIZED If called before successful authenticate()
-	 */
-	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) override;
-
-	/**
-	 * @brief sends raw APDU bytes through the secure BAC channel
-	 *
-	 * Encrypts with 3des, adds mac, and handles ber-tlv encoded responses
-	 * @throws EIDMW_ERR_BAC_NOT_INITIALIZED if called before successful authenticate()
-	 */
-	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) override;
-
 	virtual void upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
 							 const CAParams &params) override;
 
-private:
-	CByteArray decryptData(const CByteArray &data);
+protected:
+	virtual CByteArray encryptData(const CByteArray &data) override;
+	virtual CByteArray decryptData(const CByteArray &encryptedData) override;
+	virtual CByteArray computeMac(const CByteArray &data) override;
+	virtual CByteArray addPadding(const CByteArray &data) override;
+	virtual CByteArray removePadding(const CByteArray &data) override;
+	virtual void incrementSSC() override;
 
-	CByteArray sendAPDU(const CByteArray &apdu, long &returnValue);
+private:
 	CByteArray getRandomFromCard();
 	bool checkMacInResponse(CByteArray &response);
 	CByteArray retailMacWithSSC(const CByteArray &macInput, uint64_t ssc);

@@ -858,10 +858,9 @@ void CPteidCard::openBACChannel(const CByteArray &mrzInfo) {
 }
 
 CByteArray CPteidCard::readToken() {
-	if (auto bac = dynamic_cast<BacAuthentication *>(m_secureMessaging.get())) {
+	if (m_secureMessaging)
 		return ReadFile("010D");
-	}
 
-	MWLOG(tLevel::LEV_ERROR, tModule::MOD_CAL, "BAC authentication not initialized while trying to read token!");
+	MWLOG(tLevel::LEV_ERROR, tModule::MOD_CAL, "Secure Messaging not initialized while trying to read token!");
 	throw CMWEXCEPTION(EIDMW_ERR_BAC_NOT_INITIALIZED);
 }
