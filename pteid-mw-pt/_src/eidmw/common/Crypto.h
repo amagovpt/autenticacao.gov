@@ -304,6 +304,63 @@ public:
 	DesCipher() : BlockCipherCtx("des-cbc", MAC_KEYSIZE, DES_BLOCK_SIZE) {}
 };
 
+// Possibly some functions like View<BUF_MEM> as a non-owning BUF_MEM (dangerous if passed to functions that free it)
+// or stuff like TakeOwnership(View<T> t)...
+// This would prevent 2 allocations where all its needed is to be passed as a paremeter...
+
+template <typename T> class Ref;
+template <> class Ref<BUF_MEM> {
+public:
+	Ref() = default;
+
+	static Ref takeOwnership(BUF_MEM *buf) {
+		auto ref = Ref();
+		ref.m_buf = buf;
+		return ref;
+	}
+
+	explicit Ref(const CByteArray &byteArray) : Ref() {
+		if (byteArray.Size() > 0) {
+			BUF_MEM_grow(m_buf, byteArray.Size());
+			memcpy(m_buf->data, byteArray.GetBytes(), byteArray.Size());
+		}
+	}
+
+	~Ref() {
+		if (m_buf) {
+			BUF_MEM_free(m_buf);
+		}
+	}
+
+	// Move constructor
+	Ref(Ref &&other) noexcept : m_buf(other.m_buf) { other.m_buf = nullptr; }
+
+	// Delete copy constructor and assignment
+	Ref(const Ref &) = delete;
+	Ref &operator=(const Ref &) = delete;
+	Ref &operator=(Ref &&) = delete;
+
+	BUF_MEM *operator->() const { return m_buf; }
+	operator BUF_MEM *() const { return m_buf; }
+
+	CByteArray toByteArray() const { return CByteArray((unsigned char *)m_buf->data, m_buf->length); }
+
+private:
+	BUF_MEM *m_buf = nullptr;
+};
+
+// Create a non-owning BUF_MEM view of a CByteArray
+// WARNING:
+// - The CByteArray must remain valid while BUF_MEM is in use
+// - Do not pass to non-const parameters
+inline BUF_MEM bufMemView(const CByteArray &array) {
+	BUF_MEM view = {0};
+	view.data = (char *)array.GetBytes();
+	view.length = array.Size();
+	view.max = array.Size();
+	return view;
+}
+
 } // namespace Crypto
 
 } // namespace eIDMW
