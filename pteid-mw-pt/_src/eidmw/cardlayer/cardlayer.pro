@@ -87,6 +87,7 @@ SOURCES += \
            CardReaderInfo.cpp \
            Context.cpp \
            PCSC.cpp \
+           SecureMessaging.cpp \
            ChipAuthentication.cpp \
            PaceAuthentication.cpp \
            BacAuthentication.cpp \

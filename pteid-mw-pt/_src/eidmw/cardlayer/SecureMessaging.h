@@ -20,11 +20,12 @@
 
 #pragma once
 
+#include "ByteArray.h"
 #include "Context.h"
 #include <openssl/types.h>
 
 namespace eIDMW {
-	
+
 struct CAParams;
 
 /**
@@ -52,7 +53,7 @@ public:
 	 * @param retValue Stores the return code from card transmission
 	 * @return CByteArray Decrypted response with status code appended at the end
 	 */
-	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue) = 0;
+	virtual CByteArray sendSecureAPDU(const APDU &apdu, long &retValue);
 
 	/**
 	 * @brief sends raw APDU bytes through a secure channel
@@ -61,12 +62,22 @@ public:
 	 * @param retValue Stores the return code from card transmission
 	 * @return CByteArray Decrypted response with status code appended at the end
 	 */
-	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue) = 0;
+	virtual CByteArray sendSecureAPDU(const CByteArray &apdu, long &retValue);
 
 	virtual void upgradeKeys(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
 							 const CAParams &params) = 0;
 
 protected:
+	virtual CByteArray encryptData(const CByteArray &data) = 0;
+	virtual CByteArray decryptData(const CByteArray &encryptedData) = 0;
+	virtual CByteArray computeMac(const CByteArray &data) = 0;
+	virtual CByteArray addPadding(const CByteArray &data) = 0;
+	virtual CByteArray removePadding(const CByteArray &data) = 0;
+	virtual void incrementSSC() = 0;
+
+	virtual CByteArray sendAPDU(const CByteArray &apdu, long &retValue);
+	CByteArray decryptAPDUResponse(const CByteArray &encryptedResponse);
+
 	SCARDHANDLE m_card = {0};
 	const void *m_param = {0};
 	CContext *m_context = {0};
