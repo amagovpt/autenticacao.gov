@@ -30,13 +30,6 @@ using namespace Crypto;
 
 class PaceAuthenticationImpl {
 
-	const unsigned char Tcg = 0x87;
-	const unsigned char TcgOdd = 0x85;
-	const unsigned char Tcc = 0x8E;
-	const unsigned char Tle = 0x97;
-	const unsigned char paddingIndicator = 0x01;
-	const unsigned char controlByte = 0x0C;
-
 	BUF_MEM *findObjectMem(const CByteArray &array, long tag) {
 		long size = 0;
 		const unsigned char *desc_data = findASN1Object(array, size, tag);
@@ -54,36 +47,6 @@ class PaceAuthenticationImpl {
 public:
 	explicit PaceAuthenticationImpl(CContext *poContext)
 		: m_context(poContext), m_secret(NULL), m_ctx(NULL), m_secretLen(0) {}
-
-	BUF_MEM *bufMemFromByteArray(const CByteArray &array) {
-		BUF_MEM *buf = BUF_MEM_new();
-		if (buf == NULL) {
-			// no memory
-			return NULL;
-		}
-
-		buf->data = (char *)malloc(array.Size() * sizeof(char));
-		if (buf->data == NULL) {
-			// no memory
-			return NULL;
-		}
-		memcpy(buf->data, (char *)array.GetBytes(), array.Size());
-		buf->length = array.Size();
-		buf->max = buf->length;
-
-		return buf;
-	}
-
-	CByteArray arrayFromBufMem(BUF_MEM *mem) { return CByteArray((unsigned char *)mem->data, mem->length); }
-
-	BUF_MEM *copyFromArray(const CByteArray &array, long index, long length) {
-		BUF_MEM *copiedMem = BUF_MEM_new();
-		copiedMem->data = (char *)malloc(length * sizeof(char));
-		memcpy(copiedMem->data, array.GetBytes(index, length).GetBytes(), length);
-		copiedMem->length = length;
-		copiedMem->max = copiedMem->length;
-		return copiedMem;
-	}
 
 	CByteArray buildSetPaceAPDU(int protocol_nid) {
 		unsigned char setPace[] = {0x00, 0x22, 0xC1, 0xA4, 0x0F, 0x80};
