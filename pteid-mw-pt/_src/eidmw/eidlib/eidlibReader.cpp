@@ -597,7 +597,9 @@ PTEID_ByteArray PTEID_ReaderContext::getMultiPassToken() {
 	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
 	auto card = pimpl->getCard();
 	if (pimpl->getCardType() == APL_CARDTYPE_PTEID_IAS5) {
-		token = reinterpret_cast<APL_EIDCard*>(pimpl->getCard())->readTokenData();
+		token = reinterpret_cast<APL_EIDCard *>(pimpl->getCard())->readTokenData();
+	} else {
+		throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 	}
 
 	out.Append(token.GetBytes(), token.Size());
