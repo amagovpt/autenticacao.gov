@@ -346,13 +346,11 @@ void ChipAuthSecureMessaging::initEACContext(EVP_PKEY *eph_pkey, BUF_MEM *shared
 	ka->shared_secret->length = shared_secret->length;
 
 	ka->k_enc = BUF_MEM_new();
-	assert(ka->k_enc);
 	BUF_MEM_grow(ka->k_enc, params.key_size);
 	memcpy(ka->k_enc->data, enc.GetBytes(), params.key_size);
 	ka->k_enc->length = params.key_size;
 
 	ka->k_mac = BUF_MEM_new();
-	assert(ka->k_mac);
 	BUF_MEM_grow(ka->k_mac, params.key_size);
 	memcpy(ka->k_mac->data, mac.GetBytes(), params.key_size);
 	ka->k_mac->length = params.key_size;

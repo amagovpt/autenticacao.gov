@@ -21,11 +21,10 @@
 #include "SecureMessaging.h"
 #include "APDU.h"
 #include "ByteArray.h"
-#include <cassert>
+#include "Log.h"
 #include <cstring>
 #include <fcntl.h>
 #include <openssl/asn1.h>
-#include <utility>
 
 namespace eIDMW {
 
@@ -119,7 +118,10 @@ CByteArray SecureMessaging::sendSecureAPDU(const CByteArray &apdu, long &retValu
 };
 
 CByteArray SecureMessaging::decryptAPDUResponse(const CByteArray &encryptedResponse) {
-	assert(encryptedResponse.Size() > 2 && "Secure messaging error");
+	if (encryptedResponse.Size() <= 2) {
+		MWLOG(LEV_ERROR, MOD_CAL, "Secure Messaging error");
+		return encryptedResponse;
+	}
 
 	bool isOdd = encryptedResponse.GetByte(0) == TcgOdd;
 	uint64_t startOfData = 0;
@@ -158,8 +160,9 @@ CByteArray SecureMessaging::decryptAPDUResponse(const CByteArray &encryptedRespo
 	auto mac = encryptedResponse.GetBytes(macIndex, encryptedResponse.GetByte(macIndex - 1));
 
 	if (memcmp(responseMac.GetBytes(), mac.GetBytes(), mac.Size()) != 0) {
-		printf("invalid mac apdu: %s\n", encryptedResponse.ToString(true, false).c_str());
-		assert(false && "Failed to verify mac");
+		MWLOG(LEV_ERROR, MOD_CAL, "Response from encrypted APDU is invalid! APDU: %s",
+			  encryptedResponse.ToString().c_str());
+		return encryptedResponse;
 	}
 
 	CByteArray decrypted;
