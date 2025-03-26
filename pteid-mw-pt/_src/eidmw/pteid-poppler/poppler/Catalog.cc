@@ -642,7 +642,7 @@ int Catalog::setSignatureByteRange(unsigned long sig_contents_offset, unsigned
 	return PADDED_BYTERANGE_LEN - actual_size;
 }
 
-void Catalog::closeSignature(const char * signature_contents, unsigned long len)
+void Catalog::closeSignature(const char * signature_contents, size_t placeholder_len)
 {
 	Object obj;
 
@@ -652,17 +652,17 @@ void Catalog::closeSignature(const char * signature_contents, unsigned long len)
 		return;
 	}
 
-	char * padded_string = (char *)gmalloc(len+1);
-
-	if (strlen(signature_contents) > len)
+	char * padded_string = (char *)gmalloc(placeholder_len+1);
+	size_t signature_len = strlen(signature_contents);
+	if (signature_len > placeholder_len)
 	{
-      	error(errInternal, -1, "Signature length is greater than allocated buffer!");
+      	error(errInternal, -1, "Signature length {0:d} is greater than allocated buffer!", signature_len);
       	gfree(padded_string);
       	return;
 	}
 
-	memset(padded_string, '0', len);
-	padded_string[len] = 0;
+	memset(padded_string, '0', placeholder_len);
+	padded_string[placeholder_len] = 0;
 
 	memcpy(padded_string, signature_contents, strlen(signature_contents));
 
