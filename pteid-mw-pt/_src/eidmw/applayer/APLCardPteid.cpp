@@ -25,10 +25,12 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+#include "APLReader.h"
 #include "PaceAuthentication.h"
 #include "APLCardPteid.h"
 #include "CardPteid.h"
 #include "IcaoDg14.h"
+#include "SODParser.h"
 #include "TLVBuffer.h"
 #include "APLCertif.h"
 #include "cryptoFwkPteid.h"
@@ -48,6 +50,7 @@
 
 #include <memory>
 #include <ctime>
+#include <future>
 
 namespace eIDMW {
 
@@ -419,6 +422,23 @@ CByteArray APL_EIDCard::readTokenData() {
 	MWLOG_CTX(LEV_INFO, MOD_APL, "Reading token from MultiPass application");
 
 	try {
+		// Load all certificates and create x509 store
+		auto store = std::async(std::launch::async, []() {
+			X509_STORE *store = X509_STORE_new();
+			APL_Certifs certs = APL_Certifs(true);
+			certs.initSODCAs();
+			for (unsigned long i = 0; i < certs.countSODCAs(); i++) {
+				APL_Certif *sod_ca = certs.getSODCA(i);
+				X509 *pX509 = NULL;
+				const unsigned char *p = sod_ca->getData().GetBytes();
+				pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
+				X509_STORE_add_cert(store, pX509);
+				MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
+			}
+
+			return store;
+		});
+
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Selecting multi-pass application");
 		selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
 
@@ -441,7 +461,20 @@ CByteArray APL_EIDCard::readTokenData() {
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Opening BAC channel");
 		getCalReader()->openBACChannel({mrz_bytes->mrz_bytes, mrz_bytes->mrz_length});
 
+		// Get SOD contents and its validation state
+		auto sod_contents = AppLayer.getCryptoFwk()->getSodContents(sod_data, store.get());
+		if (sod_contents.first != 0) {
+			MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to verify SOD validity with error: %x", sod_contents.first);
+		}
+
+		const std::vector<int> expected_tags = {13, 14, 15};
+		SODParser sodParser;
+		sodParser.ParseSodEncapsulatedContent(sod_contents.second, expected_tags);
+
 		auto dg14 = getCalReader()->ReadFile("010E");
+		if (!sodParser.getAttributes().validateHash(14, dg14)) {
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION, "DG 14 hash verification failed");
+		}
 
 		auto pkey = getChipAuthenticationKey(dg14);
 		unsigned char *buffer = nullptr;
@@ -454,7 +487,15 @@ CByteArray APL_EIDCard::readTokenData() {
 		}
 
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Reading multi-pass token");
-		return getCalReader()->readMultiPassToken();
+		CByteArray token = getCalReader()->readMultiPassToken();
+
+		// verify token hash
+		if (!sodParser.getAttributes().validateHash(13, token)) {
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_HASH_NO_MATCH_FILE,
+						  "Token (DG 13) hash verification failed");
+		}
+
+		return token;
 	} catch (CMWException &e) {
 		MWLOG_CTX(LEV_ERROR, MOD_APL, "Token Read Failed: %ld", e.GetError());
 		throw;

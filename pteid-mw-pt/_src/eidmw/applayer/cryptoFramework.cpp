@@ -40,6 +40,7 @@
 #include "Thread.h"
 #include <openssl/provider.h>
 #include <openssl/rand.h>
+#include <openssl/types.h>
 
 #ifdef WIN32
 #include <wincrypt.h>
@@ -1623,6 +1624,79 @@ void APL_CryptoFwk::loadMasterList(const char *filePath) {
 }
 
 X509_STORE *APL_CryptoFwk::getMasterListStore() { return m_MasterListCertificate; }
+
+std::pair<long, CByteArray> APL_CryptoFwk::getSodContents(const CByteArray &data, X509_STORE *store) {
+	long error_code = 0;
+	PKCS7 *p7 = nullptr;
+	char *error_msg = nullptr;
+	bool sod_verified = false;
+
+	ERR_load_crypto_strings();
+	OpenSSL_add_all_digests();
+
+	const unsigned char *temp = data.GetBytes();
+	size_t length = data.Size();
+	temp += 4; // Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
+
+	p7 = d2i_PKCS7(nullptr, &temp, length);
+	if (!p7) {
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to decode SOD PKCS7 object! Openssl errors:\n%s",
+			  error_msg != nullptr ? error_msg : "N/A");
+		free(error_msg);
+
+		// no data to return
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_INVALID_PKCS7);
+	}
+
+	BIO *out = BIO_new(BIO_s_mem());
+	/* Some document signing certificates may have wrong values in Extended Key Usage field which generates a "purpose"
+	   validation error. Set the cert verify parameters to have unrestricted purpose X509_PURPOSE_ANY
+	*/
+	X509_VERIFY_PARAM *verify_params = X509_STORE_get0_param(store);
+	X509_VERIFY_PARAM_set_purpose(verify_params, X509_PURPOSE_ANY);
+	X509_STORE_set1_param(store, verify_params);
+
+	sod_verified = PKCS7_verify(p7, nullptr, store, nullptr, out, 0) == 1;
+
+	// failed to verify SOD but we still need the contents
+	if (!sod_verified) {
+		// By default. In most cases, should be overwritten by the checks below
+		error_code = EIDMW_SOD_ERR_GENERIC_VALIDATION;
+
+		unsigned long err = ERR_peek_last_error();
+		int lib = ERR_GET_LIB(err);
+		int reason = ERR_GET_REASON(err);
+
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL,
+			  "verifySodFileIntegrity:: Error validating SOD signature. OpenSSL errors (%d:%d):\n%s", lib, reason,
+			  error_msg ? error_msg : "N/A");
+		free(error_msg);
+
+		if ((lib == ERR_LIB_X509 && reason == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT) ||
+			(lib == ERR_LIB_PKCS7 && reason == PKCS7_R_CERTIFICATE_VERIFY_ERROR)) {
+			// signer isnt in the CSCA (untrusted)
+			error_code = EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER;
+		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNATURE_FAILURE) {
+			// signature is not valid
+			error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
+		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNER_CERTIFICATE_NOT_FOUND) {
+			// couldnt find signer
+			error_code = EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND;
+		}
+
+		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
+	}
+
+	unsigned char *p;
+	size_t size = BIO_get_mem_data(out, &p);
+	CByteArray out_data = CByteArray(p, size);
+
+	BIO_free_all(out);
+	PKCS7_free(p7);
+	return {error_code, out_data};
+}
 
 void APL_CryptoFwk::initMasterListStore(CscaMasterList *cml) {
 	if (cml == NULL || cml->certList == NULL) {

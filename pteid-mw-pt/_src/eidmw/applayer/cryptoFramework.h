@@ -335,6 +335,12 @@ public:
 
 	X509_STORE *getMasterListStore();
 
+	/** Returns a pair of status and sod contents.
+	 * Might fail to verify the validity and return an approriate status code,
+	 * but it will always return its contents.
+	 */
+	std::pair<long, CByteArray> getSodContents(const CByteArray &sod, X509_STORE *store);
+
 	/**
 	 * Verify if the data has the correct hash
 	 */
