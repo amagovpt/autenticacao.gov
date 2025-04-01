@@ -43,6 +43,7 @@ class SecureMessaging {
 public:
 	SecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
 		: m_card(hCard), m_context(poContext), m_param(paramStructure), m_authenticated(false) {}
+	virtual ~SecureMessaging() = default;
 
 	virtual bool isInitialized() { return m_authenticated; };
 

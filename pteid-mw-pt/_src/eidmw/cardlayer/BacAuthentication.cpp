@@ -47,8 +47,6 @@ using namespace Crypto;
 BacAuthentication::BacAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
 	: SecureMessaging(hCard, poContext, paramStructure) {}
 
-BacAuthentication::~BacAuthentication() {}
-
 void BacAuthentication::authenticate(const CByteArray &mrzInfo) {
 	if (mrzInfo.Size() == 0) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_INVALID_MRZ, "Invalid MRZ info. Size should be > 0");

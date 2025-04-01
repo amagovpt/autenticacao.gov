@@ -56,7 +56,6 @@ public:
 	static MrzInfo mrzFromBytes(const CByteArray &data);
 
 	BacAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
-	~BacAuthentication();
 
 	/**
 	 * @brief Establishes the BAC secure channel with the card
