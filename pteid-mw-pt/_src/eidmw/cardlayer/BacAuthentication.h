@@ -46,6 +46,15 @@ namespace eIDMW {
  */
 class BacAuthentication : public SecureMessaging {
 public:
+	/**
+	 * @brief Generate MRZ information from SOD bytes for MultiPass
+	 *
+	 * @param in MRZ data
+	 * @return A new MRZ information structure with properly formatted data
+	 */
+	using MrzInfo = CByteArray;
+	static MrzInfo mrzFromBytes(const CByteArray &data);
+
 	BacAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
 	~BacAuthentication();
 

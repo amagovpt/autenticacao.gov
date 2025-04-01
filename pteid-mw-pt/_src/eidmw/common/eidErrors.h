@@ -314,3 +314,5 @@
 #define EIDMW_ERR_BAC_DECRYPTION_FAILED 0xe1d11005
 #define EIDMW_ERR_BAC_3DES 0xe1d11005
 #define EIDMW_ERR_BAC_CRYPTO_ERROR 0xe1d11006 // Generic BAC crypto operations error. Check logs for more details.
+
+#define EIDMW_MULTIPASS_ERR_INVALID_TOKEN 0xe1d0200

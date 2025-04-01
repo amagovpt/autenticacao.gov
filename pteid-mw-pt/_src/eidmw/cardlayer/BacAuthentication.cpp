@@ -36,6 +36,7 @@
 #include <openssl/rand.h>
 #include <openssl/sha.h>
 #include <openssl/ssl.h>
+#include <string>
 
 namespace eIDMW {
 
@@ -263,6 +264,54 @@ CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const 
 	memcpy(msg.get() + macInput.Size(), padding, sizeof(padding));
 
 	return BlockCipherCtx::retailMac(key, {msg.get(), inputLen});
+}
+
+/**
+ * Calculate ICAO check digit as specified in ICAO doc 9303
+ * @param mrz_field The MRZ field to calculate check digit for
+ * @return Check digit (0-9)
+ */
+int icao_check_digit(const char *mrz_field) {
+	int sum = 0;
+	int weight = 0;
+	const char *str = mrz_field;
+
+	for (size_t i = 0; i < strlen(str); i++) {
+		if (i % 3 == 0) {
+			weight = 7;
+		} else if (i % 3 == 1) {
+			weight = 3;
+		} else {
+			weight = 1;
+		}
+		if (isdigit(str[i])) {
+			sum += weight * (str[i] - '0');
+		} else if (isalpha(str[i])) {
+			sum += weight * (tolower(str[i]) - 'a' + 10);
+		}
+	}
+
+	return sum % 10;
+}
+
+BacAuthentication::MrzInfo BacAuthentication::mrzFromBytes(const CByteArray &data) {
+	size_t hex_len = data.Size() * 2 + 1;
+	auto hex_string = std::vector<char>(hex_len);
+	OPENSSL_buf2hexstr_ex(hex_string.data(), hex_len, NULL, data.GetBytes(), data.Size(), '\0');
+
+	// Split the string in 3 fields to mimic the standard MRZ fields used in BAC
+	std::string hex_string_str(hex_string.data()); // Convert to std::string first
+	std::string field1 = hex_string_str.substr(0, 12);
+	std::string field2 = hex_string_str.substr(12, 6);
+	std::string field3 = hex_string_str.substr(18, 6);
+
+	// Add check digits
+	field1 += ('0' + icao_check_digit(field1.c_str()));
+	field2 += ('0' + icao_check_digit(field2.c_str()));
+	field3 += ('0' + icao_check_digit(field3.c_str()));
+
+	std::string mrz_info_str = field1 + field2 + field3;
+	return CByteArray(mrz_info_str);
 }
 
 } // namespace eIDMW

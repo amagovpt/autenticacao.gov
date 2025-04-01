@@ -26,6 +26,7 @@
 
 **************************************************************************** */
 #include "APLReader.h"
+#include "BacAuthentication.h"
 #include "PaceAuthentication.h"
 #include "APLCardPteid.h"
 #include "CardPteid.h"
@@ -362,62 +363,6 @@ APL_DocVersionInfo &APL_EIDCard::getDocInfo() {
 	return *m_docinfo;
 }
 
-/* Check digit algorithm specified in ICAO doc 9303 part 2 (??) */
-int icao_check_digit(const char *mrz_field) {
-	int sum = 0;
-	int weight = 0;
-	const char *str = mrz_field;
-
-	for (size_t i = 0; i < strlen(str); i++) {
-		if (i % 3 == 0) {
-			weight = 7;
-		} else if (i % 3 == 1) {
-			weight = 3;
-		} else {
-			weight = 1;
-		}
-		if (isdigit(str[i])) {
-			sum += weight * (str[i] - '0');
-		} else if (isalpha(str[i])) {
-			sum += weight * (tolower(str[i]) - 'a' + 10);
-		}
-	}
-
-	return sum % 10;
-}
-typedef struct {
-	unsigned char *mrz_bytes;
-	size_t mrz_length;
-} mrz_info_t;
-
-mrz_info_t *multipass_mrz_info_from_sod_bytes(mrz_info_t *in) {
-	mrz_info_t *output = (mrz_info_t *)OPENSSL_zalloc(sizeof(mrz_info_t));
-
-	size_t hex_len = in->mrz_length * 2 + 1;
-	char *hex_string = (char *)OPENSSL_zalloc(hex_len);
-	OPENSSL_buf2hexstr_ex(hex_string, hex_len, NULL, in->mrz_bytes, in->mrz_length, '\0');
-
-	// Split the string in 3 fields to mimic the standard MRZ fields used in BAC
-	std::string field1(hex_string, 12);
-	std::string field2(hex_string + 12, 6);
-	std::string field3(hex_string + 18, 6);
-
-	// Add check digits
-	field1 += ('0' + icao_check_digit(field1.c_str()));
-	field2 += ('0' + icao_check_digit(field2.c_str()));
-	field3 += ('0' + icao_check_digit(field3.c_str()));
-
-	std::string mrz_info_str = field1 + field2 + field3;
-
-	output->mrz_bytes = (unsigned char *)OPENSSL_zalloc(mrz_info_str.size());
-	memcpy(output->mrz_bytes, mrz_info_str.c_str(), mrz_info_str.size());
-	output->mrz_length = mrz_info_str.size();
-
-	OPENSSL_free(hex_string);
-	// return encoded bytes
-	return output;
-}
-
 CByteArray APL_EIDCard::readTokenData() {
 	MWLOG_CTX(LEV_INFO, MOD_APL, "Reading token from MultiPass application");
 
@@ -455,11 +400,10 @@ CByteArray APL_EIDCard::readTokenData() {
 
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Generating MRZ from the last 12 bytes of multi-pass SOD");
 		CByteArray sod_last12 = sod_data.GetBytes(sod_data.Size() - 12);
-		mrz_info_t sod_info = {sod_last12.GetBytes(), 12};
-		mrz_info_t *mrz_bytes = multipass_mrz_info_from_sod_bytes(&sod_info);
+		auto mrz_bytes = BacAuthentication::mrzFromBytes(sod_last12);
 
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Opening BAC channel");
-		getCalReader()->openBACChannel({mrz_bytes->mrz_bytes, mrz_bytes->mrz_length});
+		getCalReader()->openBACChannel(mrz_bytes);
 
 		// Get SOD contents and its validation state
 		auto sod_contents = AppLayer.getCryptoFwk()->getSodContents(sod_data, store.get());
@@ -495,7 +439,11 @@ CByteArray APL_EIDCard::readTokenData() {
 						  "Token (DG 13) hash verification failed");
 		}
 
-		return token;
+		if (token.Size() < 20 || token.GetByte(0) != 0x6D || token.GetByte(1) != 0x12 || token.GetByte(2) != 0xC0) {
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_MULTIPASS_ERR_INVALID_TOKEN, "Invalid token format");
+		}
+
+		return token.GetBytes(4, token.GetByte(3));
 	} catch (CMWException &e) {
 		MWLOG_CTX(LEV_ERROR, MOD_APL, "Token Read Failed: %ld", e.GetError());
 		throw;
