@@ -128,7 +128,7 @@
     </message>
     <message>
         <source>STR_CMD_INVALID_PIN</source>
-        <translation type="vanished">Número de telemóvel ou PIN errado</translation>
+        <translation>PIN de assinatura incorreto.</translation>
     </message>
     <message>
         <source>STR_CMD_INVALID_OTP</source>

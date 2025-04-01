@@ -1002,6 +1002,9 @@ void GAPI::showSignCMDDialog(long error_code) {
 	case EIDMW_ERR_CMD_INVALID_CODE:
 		message = tr("STR_CMD_INVALID_OTP");
 		break;
+	case EIDMW_ERR_CMD_INVALID_PIN:
+		message = tr("STR_CMD_INVALID_PIN");
+		break;
 	case SOAP_ERR_INACTIVE_SERVICE:
 		message = tr("STR_CMD_INACTIVE_SERVICE");
 		break;

@@ -130,7 +130,7 @@
     </message>
     <message>
         <source>STR_CMD_INVALID_PIN</source>
-        <translation type="vanished">Wrong mobile phone number or PIN</translation>
+        <translation>Incorrect signature PIN.</translation>
     </message>
     <message>
         <source>STR_CMD_INVALID_OTP</source>
