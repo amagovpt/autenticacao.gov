@@ -469,6 +469,8 @@ bool APL_CryptoFwk::VerifyCertSignature(X509 *pX509_Cert, X509 *pX509_Issuer) {
 
 	int verification = X509_verify(pX509_Cert, pKey);
 
+	EVP_PKEY_free(pKey);
+
 	return verification == 1;
 }
 
