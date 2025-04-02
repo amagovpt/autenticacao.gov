@@ -740,10 +740,15 @@ CByteArray CPteidCard::SignInternal(const tPrivKey &key, unsigned long paddingTy
 	}
 
 	unsigned long ulSW12 = getSW12(oResp);
-	MWLOG(LEV_INFO, MOD_CAL, L"Resp oResp PSO is: 0x%2X", ulSW12);
+	MWLOG(LEV_INFO, MOD_CAL, L"PSO-Compute digital signature returned: 0x%2X", ulSW12);
 
 	if (ulSW12 != 0x9000)
 		throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+
+	if (GetType() == CARD_PTEID_IAS5) {
+		CByteArray rapdu = SendAPDU(0x20, 0xFF, (unsigned char)pPin->ulPinRef, 0x00);
+		getSW12(rapdu, 0x9000);
+	}
 
 	// Remove SW1-SW2 from the response
 	oResp.Chop(2);

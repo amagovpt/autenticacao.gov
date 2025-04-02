@@ -504,8 +504,12 @@ void matchDigestAlgorithmInRawRSAInputData(NSData *data, unsigned long start_off
 			break;
 	default:
 		NSLog(@"PteidTokenSession signData failed to sign SW: %04x", sw);
-		return nil;
+        signature = nil;
 	}
+    
+    if(_card_type == CARD_IAS_V5) {
+        [self.smartCard sendIns:0x20 p1:0xFF p2:self.use_auth_key ? 0x81 : 0x82 data:nil le:@0 sw:&sw error:error];
+    }
 
 	return signature;
 }

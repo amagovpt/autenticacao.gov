@@ -485,6 +485,14 @@
         <translation>Failed to write on a read only file.</translation>
     </message>
     <message>
+        <source>STR_CMD_NEEDS_CHANGE_PIN</source>
+        <translation>To continue using the signature service, you need to change the signature PIN on &lt;a href=&quot;https://www.autenticacao.gov.pt&quot;&gt;www.autenticacao.gov.pt&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>STR_CMD_MUST_CHANGE_PIN</source>
+        <translation>To continue using the signature service, you need to change the signature PIN on &lt;a href=&quot;https://www.autenticacao.gov.pt&quot;&gt;www.autenticacao.gov.pt&lt;/a&gt;. Log in and access "Área Reservada -> A Minha Chave Móvel Digital" and choose edit in "Assinatura Digital"</translation>
+    </message>
+    <message>
         <source>STR_SIGN_FILE_NO_SPACE</source>
         <translation>Failed to write the file, no space on the disk.</translation>
     </message>

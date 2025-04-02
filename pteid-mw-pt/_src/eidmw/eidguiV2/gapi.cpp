@@ -1030,6 +1030,16 @@ void GAPI::showSignCMDDialog(long error_code) {
 	case EIDMW_ERR_FILE_READ_ONLY:
 		message = tr("STR_SIGN_FILE_READ_ONLY");
 		break;
+	case EIDMW_ERR_CMD_CHANGE_PIN_AUTH:
+		message = tr("STR_CMD_NEEDS_CHANGE_PIN");
+		support_string = "";
+		urlLink = tr("STR_URL_AUTENTICACAO_GOT_PT");
+		break;
+	case EIDMW_ERR_CMD_CHANGE_PIN_SIGN:
+		message = tr("STR_CMD_MUST_CHANGE_PIN");
+		support_string = "";
+		urlLink = tr("STR_URL_AUTENTICACAO_GOT_PT");
+		break;
 	default:
 		message = tr("STR_CMD_LOGIN_ERROR");
 		break;

@@ -483,6 +483,14 @@
         <translation>Falha a escrever o ficheiro, verifique se está a escrever num local apenas de leitura.</translation>
     </message>
     <message>
+        <source>STR_CMD_NEEDS_CHANGE_PIN</source>
+        <translation>Para continuar a utilizar o serviço de assinatura, é necessário alterar o seu PIN de assinatura em &lt;a href=&quot;https://www.autenticacao.gov.pt&quot;&gt;www.autenticacao.gov.pt&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>STR_CMD_MUST_CHANGE_PIN</source>
+        <translation>Para continuar a usar a assinatura da CMD, tem de alterar o seu PIN de assinatura em &lt;a href=&quot;https://www.autenticacao.gov.pt&quot;&gt;www.autenticacao.gov.pt&lt;/a&gt;. Inicie sessão e aceda a "Área Reservada -> A Minha Chave Móvel Digital" e escolha editar em "Assinatura Digital"</translation>
+    </message>
+    <message>
         <source>STR_SIGN_FILE_NO_SPACE</source>
         <translation>Falha a escrever o ficheiro, por favor verifique se tem espaço no disco.</translation>
     </message>

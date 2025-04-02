@@ -306,7 +306,12 @@ void CMDSignatureClient::handleErrorCode(int err, bool isOtp) {
 		case SOAP_EOF:
 			MWLOG(LEV_ERROR, MOD_CMD, "%s: timeout in service request", __FUNCTION__);
 			throw CMWEXCEPTION(EIDMW_ERR_CMD_SERVICE);
-
+		case ERR_CHANGE_PIN_AUTH:
+			MWLOG(LEV_ERROR, MOD_CMD, "%s: CMD operation requests authentication PIN change", __FUNCTION__);
+			throw CMWEXCEPTION(EIDMW_ERR_CMD_CHANGE_PIN_AUTH);
+		case ERR_CHANGE_PIN_SIGN:
+			MWLOG(LEV_ERROR, MOD_CMD, "%s: CMD operation requests signature PIN change", __FUNCTION__);
+			throw CMWEXCEPTION(EIDMW_ERR_CMD_CHANGE_PIN_SIGN);
 		default:
 			if (err > ERR_ADDR_CMD_BASE + 200) {
 				MWLOG(LEV_ERROR, MOD_CMD, "%s: HTTP service Error code %d.", __FUNCTION__, err - ERR_ADDR_CMD_BASE);

@@ -326,6 +326,16 @@ int CMDServices::checkGetCertificateWithPinResponse(_ns2__GetCertificateWithPinR
 			MWLOG_ERR("GetCertificateWithPinResult SOAP Error Code %d", statusCode);
 		}
 
+		if(statusCode == SOAP_ERR_CHANGE_PIN_SIGN) {
+			MWLOG_ERR("Need to change pin sign information");
+			return ERR_CHANGE_PIN_SIGN;
+		}
+
+		if(statusCode == SOAP_ERR_CHANGE_PIN_AUTH) {
+			MWLOG_ERR("Need to change pin auth information");
+			return ERR_CHANGE_PIN_AUTH;
+		}
+
 		if (statusCode == SOAP_ERR_GENERIC) {
 			return ERR_GET_CERTIFICATE;
 		}
@@ -486,6 +496,18 @@ int CMDServices::checkCCMovelSignResponse(_ns2__CCMovelSignResponse *response) {
 		return ERR_NULL_DATA;
 	}
 
+	int statusCode = atoi(response->CCMovelSignResult->Code->c_str());
+
+	if(statusCode == SOAP_ERR_CHANGE_PIN_SIGN) {
+		MWLOG_ERR("Need to change pin sign information");
+		return ERR_CHANGE_PIN_SIGN;
+	}
+
+	if(statusCode == SOAP_ERR_CHANGE_PIN_AUTH) {
+		MWLOG_ERR("Need to change pin auth information");
+		return ERR_CHANGE_PIN_AUTH;
+	}
+
 	return ERR_NONE;
 }
 
@@ -627,6 +649,17 @@ int CMDServices::checkCCMovelMultipleSignResponse(_ns2__CCMovelMultipleSignRespo
 	}
 
 	int statusCode = atoi(response->CCMovelMultipleSignResult->Code->c_str());
+
+	if(statusCode == SOAP_ERR_CHANGE_PIN_SIGN) {
+		MWLOG_ERR("Need to change pin sign information");
+		return ERR_CHANGE_PIN_SIGN;
+	}
+
+	if(statusCode == SOAP_ERR_CHANGE_PIN_AUTH) {
+		MWLOG_ERR("Need to change pin auth information");
+		return ERR_CHANGE_PIN_AUTH;
+	}
+
 	if (IS_SOAP_ERROR(statusCode)) {
 		MWLOG_ERR("CCMovelMultipleSignResult SOAP Error Code %d", statusCode);
 		return statusCode;
