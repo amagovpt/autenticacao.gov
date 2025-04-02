@@ -369,7 +369,7 @@ CByteArray APL_EIDCard::readTokenData() {
 	try {
 		// Load all certificates and create x509 store
 		auto store =
-			std::async(std::launch::async, []() { return AppLayer.getCryptoFwk()->getMultipassStore(); }).share();
+			AppLayer.getCryptoFwk()->getMultipassStore();
 
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Selecting multi-pass application");
 		selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
@@ -393,7 +393,7 @@ CByteArray APL_EIDCard::readTokenData() {
 		getCalReader()->openBACChannel(mrz_bytes);
 
 		// Get SOD contents and its validation state
-		auto sod_contents = AppLayer.getCryptoFwk()->getSodContents(sod_data, store.get());
+		auto sod_contents = AppLayer.getCryptoFwk()->getSodContents(sod_data, store);
 		if (sod_contents.first != 0) {
 			MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to verify SOD validity with error: %x", sod_contents.first);
 		}
