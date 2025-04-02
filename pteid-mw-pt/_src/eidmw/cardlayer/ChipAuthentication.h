@@ -39,6 +39,7 @@ struct CAParams {
 class ChipAuthSecureMessaging : public SecureMessaging {
 public:
 	ChipAuthSecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
+	virtual ~ChipAuthSecureMessaging() override;
 	bool authenticate(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid);
 
 protected:

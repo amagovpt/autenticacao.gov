@@ -368,21 +368,8 @@ CByteArray APL_EIDCard::readTokenData() {
 
 	try {
 		// Load all certificates and create x509 store
-		auto store = std::async(std::launch::async, []() {
-			X509_STORE *store = X509_STORE_new();
-			APL_Certifs certs = APL_Certifs(true);
-			certs.initSODCAs();
-			for (unsigned long i = 0; i < certs.countSODCAs(); i++) {
-				APL_Certif *sod_ca = certs.getSODCA(i);
-				X509 *pX509 = NULL;
-				const unsigned char *p = sod_ca->getData().GetBytes();
-				pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
-				X509_STORE_add_cert(store, pX509);
-				MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
-			}
-
-			return store;
-		});
+		auto store =
+			std::async(std::launch::async, []() { return AppLayer.getCryptoFwk()->getMultipassStore(); }).share();
 
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Selecting multi-pass application");
 		selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
@@ -421,9 +408,6 @@ CByteArray APL_EIDCard::readTokenData() {
 		}
 
 		auto pkey = getChipAuthenticationKey(dg14);
-		unsigned char *buffer = nullptr;
-		int len = i2d_PublicKey(pkey, &buffer);
-
 		auto oid_info = getChipAuthenticationOid(dg14);
 		auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);
 		if (!status) {

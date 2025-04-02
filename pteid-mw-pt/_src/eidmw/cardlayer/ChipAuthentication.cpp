@@ -161,6 +161,10 @@ cleanup:
 ChipAuthSecureMessaging::ChipAuthSecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
 	: SecureMessaging(hCard, poContext, paramStructure) {}
 
+ChipAuthSecureMessaging::~ChipAuthSecureMessaging() {
+	EAC_CTX_clear_free(m_ctx);
+}
+
 bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	bool status = true;
 	long ret_value = 0;

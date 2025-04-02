@@ -341,6 +341,8 @@ public:
 	 */
 	std::pair<long, CByteArray> getSodContents(const CByteArray &sod, X509_STORE *store);
 
+	X509_STORE *getMultipassStore();
+
 	/**
 	 * Verify if the data has the correct hash
 	 */
@@ -464,6 +466,7 @@ protected:
 
 	std::string m_MasterListPath = "";
 	X509_STORE *m_MasterListCertificate = nullptr;
+	X509_STORE *m_multipassStore = nullptr;
 
 	std::string m_proxy_host; /**< proxy host */
 	std::string m_proxy_port; /**< proxy port */

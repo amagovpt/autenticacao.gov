@@ -211,6 +211,10 @@ APL_CryptoFwk::~APL_CryptoFwk(void) {
 		X509_STORE_free(m_MasterListCertificate);
 	}
 
+	if (m_multipassStore) {
+		X509_STORE_free(m_multipassStore);
+	}
+
 	OSSL_PROVIDER_unload(m_LegacyProvider);
 	OSSL_PROVIDER_unload(m_DefaultProvider);
 }
@@ -1696,6 +1700,29 @@ std::pair<long, CByteArray> APL_CryptoFwk::getSodContents(const CByteArray &data
 	BIO_free_all(out);
 	PKCS7_free(p7);
 	return {error_code, out_data};
+}
+
+X509_STORE *APL_CryptoFwk::getMultipassStore() {
+	if (!m_multipassStore) {
+		m_multipassStore = X509_STORE_new();
+		APL_Certifs certs = APL_Certifs(true);
+		certs.initSODCAs();
+		for (unsigned long i = 0; i < certs.countSODCAs(); i++) {
+			APL_Certif *sod_ca = certs.getSODCA(i);
+			X509 *pX509 = NULL;
+			const unsigned char *p = sod_ca->getData().GetBytes();
+			pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
+			if (pX509) {
+				X509_STORE_add_cert(m_multipassStore, pX509);
+				X509_free(pX509);
+			}
+			MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
+		}
+
+		certs.clearSODCAs();
+	}
+
+	return m_multipassStore;
 }
 
 void APL_CryptoFwk::initMasterListStore(CscaMasterList *cml) {
