@@ -47,6 +47,7 @@
 #include <locale>
 #include <cstring>
 #include <string>
+#include <algorithm>
 #include <sstream>
 #include <cassert>
 
@@ -197,11 +198,14 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 
 	std::vector<std::string> certs;
 
-	std::string strCertificate(certificates_pem, certificateLen);
+	std::string in_str(certificates_pem, certificateLen);
 
-	if (strCertificate.empty()) {
+	if (in_str.empty()) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
+
+	//Remove any Windows CR character
+	in_str.erase(std::remove(in_str.begin(), in_str.end(), '\r'), in_str.end());
 
 	std::size_t found_init = 0;
 	std::size_t found_after = 0;
@@ -212,36 +216,37 @@ std::vector<std::string> parsePEMCertSequence(char *certificates_pem, int certif
 		/*
 		  Search for STR_BEGIN_CERTIFICATE
 		*/
-		found_init = strCertificate.find(STR_BEGIN_CERTIFICATE, found_init);
+		found_init = in_str.find(STR_BEGIN_CERTIFICATE, found_init);
 		if (found_init == std::string::npos) {
 			break;
 		}
 
 		/*
-		  Add newline after STR_BEGIN_CERTIFICATE
+		  Add newline after STR_BEGIN_CERTIFICATE if not present
 		*/
 		found_after = found_init + strlen(STR_BEGIN_CERTIFICATE);
-		if (strCertificate.substr(found_after, 1) != "\n") {
-			strCertificate.insert(found_after, "\n");
+
+		if (in_str.substr(found_after, 1) != "\n") {
+			in_str.insert(found_after, "\n");
 		}
 
 		/*
-			Search for STR_END_CERTIFICATE
+		   Search for STR_END_CERTIFICATE
 		*/
-		found_end = strCertificate.find(STR_END_CERTIFICATE, found_init);
+		found_end = in_str.find(STR_END_CERTIFICATE, found_init);
 		if (found_end == std::string::npos) {
 			throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 		}
 
 		/*
-			Add newline before STR_END_CERTIFICATE
+		   Add newline before STR_END_CERTIFICATE if not present
 		*/
-		if (strCertificate.substr((found_end - 1), 1) != "\n") {
-			strCertificate.insert(found_end, "\n");
+		if (in_str.substr((found_end - 1), 1) != "\n") {
+			in_str.insert(found_end, "\n");
 		}
 		size_t pos_end = found_end + strlen(STR_END_CERTIFICATE) + 1;
 
-		certificate = strCertificate.substr(found_init, pos_end - found_init);
+		certificate = in_str.substr(found_init, pos_end - found_init);
 		certs.push_back(certificate);
 
 		found_init = found_end;
