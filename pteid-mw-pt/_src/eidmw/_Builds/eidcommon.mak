@@ -40,6 +40,8 @@ isEmpty(PCSC_INCLUDE_DIR){
   unix:!macx: PCSC_INCLUDE_DIR += /usr/include/PCSC
 }
 
+QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
+
 unix:!macx: QMAKE_CXXFLAGS += -fPIC
 
 isEmpty(PKG_NAME){	
