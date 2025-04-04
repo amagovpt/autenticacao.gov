@@ -157,13 +157,13 @@ DEFINE_LANG_STR(InsertMobileNumber) = {L"Insert associated mobile number", L"Ins
 DEFINE_LANG_STR(SigningDataWithIdentifier) = {L"Signing data with identifier:",
 											  L"Assinatura de dados com identificador:", L"", L""};
 DEFINE_LANG_STR(InsertOtpSignature) = {
-	L"To confirm the signature, insert in the next 5 minutes the security code that was sent to your mobile phone.",
-	L"Para confirmar a assinatura, insira nos próximos 5 minutos o código de segurança que foi enviado para o seu "
+	L"To confirm the signature, insert in the next 2 minutes the security code that was sent to your mobile phone.",
+	L"Para confirmar a assinatura, insira nos próximos 2 minutos o código de segurança que foi enviado para o seu "
 	L"telemóvel.",
 	L"", L""};
-DEFINE_LANG_STR(InsertOtpCert) = {L"To obtain the certificate chain, insert in the next 5 minutes the security code "
+DEFINE_LANG_STR(InsertOtpCert) = {L"To obtain the certificate chain, insert in the next 2 minutes the security code "
 								  L"that was sent to your mobile phone.",
-								  L"Para obter a cadeia de certificados, insira nos próximos 5 minutos o código de "
+								  L"Para obter a cadeia de certificados, insira nos próximos 2 minutos o código de "
 								  L"segurança que foi enviado para o seu telemóvel.",
 								  L"", L""};
 DEFINE_LANG_STR(InsertSecurityCode) = {L"Insert the temporary security code", L"Inserir código de segurança temporário",
