@@ -358,6 +358,10 @@ void ChipAuthSecureMessaging::initEACContext(EVP_PKEY *eph_pkey, BUF_MEM *shared
 	BUF_MEM_grow(ka->k_mac, params.key_size);
 	memcpy(ka->k_mac->data, mac.GetBytes(), params.key_size);
 	ka->k_mac->length = params.key_size;
+
+	// EAC_CTX_init_ca initializes this key by default. We will overwrite it, so we should free it first
+	if (ka->key)
+		EVP_PKEY_free(ka->key);
 	ka->key = eph_pkey;
 
 	// Switch to CA secure messaging
