@@ -724,17 +724,20 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 	PKIFetcher pkiFetcher;
 	MWLOG(LEV_DEBUG, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: Trying to download issuer certificate url: %s",
 		  caIssuerUrl.c_str());
-	CByteArray issuerCertificate;
-	issuerCertificate = pkiFetcher.fetch_PKI_file(caIssuerUrl.c_str());
-	if (issuerCertificate.Size() == 0) {
-		issuerCertificate = EmptyByteArray;
+	CByteArray issuer_cert_data;
+	issuer_cert_data = pkiFetcher.fetch_PKI_file(caIssuerUrl.c_str());
+	if (issuer_cert_data.Size() == 0) {
+		issuer_cert_data = EmptyByteArray;
 		MWLOG(LEV_ERROR, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");
+		return NULL;
 	}
 
-	if (issuerCertificate.Size() == 0)
+	if (m_cryptoFwk->isSelfIssuer(issuer_cert_data)) {
+		MWLOG(LEV_WARN, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: discarding downloaded root certificate!");
 		return NULL;
+	}
 
-	APL_Certif *issuerCertObj = addCert(issuerCertificate, APL_CERTIF_TYPE_UNKNOWN, true);
+	APL_Certif *issuerCertObj = addCert(issuer_cert_data, APL_CERTIF_TYPE_UNKNOWN, true);
 	reOrderCerts();
 	if (issuerCertObj != NULL) {
 #ifdef WIN32
@@ -751,7 +754,7 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 			std::string(cachePath.getString()) + "/" + issuerCertObj->getSerialNumber() + "." + m_certExtension;
 		FILE *certWrite = fopen(certPath.c_str(), "wb");
 		if (certWrite != NULL) {
-			fwrite(issuerCertificate.GetBytes(), sizeof(unsigned char), issuerCertificate.Size(), certWrite);
+			fwrite(issuer_cert_data.GetBytes(), sizeof(unsigned char), issuer_cert_data.Size(), certWrite);
 			fclose(certWrite);
 		} else {
 			MWLOG(LEV_ERROR, MOD_APL, "Error trying to open certificate to write, cert owner name: %s",
