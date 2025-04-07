@@ -322,6 +322,9 @@ private:
 
 	std::string m_certExtension;
 	std::string m_certs_dir;
+	int cert_dl_count = 0;
+	/* 2 subCAs +1 Cartao de Cidadao CA */
+	const int CERT_MAX_DOWNLOADS = 3;
 	CMutex m_Mutex;
 
 	friend APL_Certifs *APL_SmartCard::getCertificates(); /**< This method must access protected constructor */

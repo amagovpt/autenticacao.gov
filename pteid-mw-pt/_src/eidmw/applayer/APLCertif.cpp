@@ -664,7 +664,8 @@ APL_Certif *APL_Certifs::findIssuer(const APL_Certif *cert) {
 	}
 
 	APL_Certif *downloadedCert = NULL;
-	if (m_card != NULL && m_card->getType() == APL_CARDTYPE_PTEID_IAS5)
+	/* cert_dl_count avoids infinite or too long cert download sequences */
+	if (m_card != NULL && m_card->getType() == APL_CARDTYPE_PTEID_IAS5 && cert_dl_count < CERT_MAX_DOWNLOADS)
 		downloadedCert = downloadCAIssuerCertificate(cert);
 
 	return downloadedCert;
@@ -736,6 +737,7 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 		MWLOG(LEV_WARN, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: discarding downloaded root certificate!");
 		return NULL;
 	}
+	cert_dl_count++;
 
 	APL_Certif *issuerCertObj = addCert(issuer_cert_data, APL_CERTIF_TYPE_UNKNOWN, true);
 	reOrderCerts();
