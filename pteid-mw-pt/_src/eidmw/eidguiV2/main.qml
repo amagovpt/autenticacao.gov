@@ -973,7 +973,6 @@ Load language error. Please reinstall the application"
             }
 
             if ( mainFormID.state === Constants.MenuState.FIRST_RUN){
-                console.log("Runing First time" + mainWindow.width)
                 mainFormID.propertyMainMenuView.width = mainWindow.width * 2 * Constants.MAIN_MENU_VIEW_RELATIVE_SIZE
                 mainFormID.propertySubMenuView.width = 0
                 mainFormID.propertyContentPagesView.width = mainWindow.width * Constants.CONTENT_PAGES_VIEW_RELATIVE_SIZE
