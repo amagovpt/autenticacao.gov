@@ -383,12 +383,6 @@ CByteArray APL_EIDCard::readTokenData() {
 		auto ret = readFile("011D", sod_data, 0UL);
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Multi-pass SOD read size: %ld", sod_data.Size());
 
-		// remove padding (? not sure if still needed)
-		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Getting certificate length of multi-pass SOD");
-		auto length = der_certificate_length(sod_data);
-		sod_data.Chop(sod_data.Size() - length);
-		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Multi-pass SOD size: %ld", sod_data.Size());
-
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Generating MRZ from the last 12 bytes of multi-pass SOD");
 		CByteArray sod_last12 = sod_data.GetBytes(sod_data.Size() - 12);
 		auto mrz_bytes = BacAuthentication::mrzFromBytes(sod_last12);
