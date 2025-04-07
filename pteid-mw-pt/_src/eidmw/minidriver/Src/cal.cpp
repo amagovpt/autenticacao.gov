@@ -81,9 +81,9 @@ DWORD cal_init(PCARD_DATA pCardData, const char *reader_name, DWORD protocol_) {
 		reader.Connect(pCardData->hScard, protocol);
 		reader.setAskPinOnSign(false);
 
-		break_pace();
-
 		if (reader.isCardContactless()) {
+			break_pace();
+
 			const auto can = get_can();
 			if (can.empty())
 				return SCARD_F_INTERNAL_ERROR;
