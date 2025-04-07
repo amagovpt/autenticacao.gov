@@ -364,6 +364,10 @@ APL_DocVersionInfo &APL_EIDCard::getDocInfo() {
 }
 
 CByteArray APL_EIDCard::readTokenData() {
+	if (m_cachedMultipassToken.Size() > 0) {
+		return m_cachedMultipassToken;
+	}
+
 	MWLOG_CTX(LEV_INFO, MOD_APL, "Reading token from MultiPass application");
 
 	try {
@@ -427,7 +431,8 @@ CByteArray APL_EIDCard::readTokenData() {
 			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_MULTIPASS_ERR_INVALID_TOKEN, "Invalid token format");
 		}
 
-		return token.GetBytes(4, token.GetByte(3));
+		m_cachedMultipassToken = token.GetBytes(4, token.GetByte(3));
+		return m_cachedMultipassToken;
 	} catch (CMWException &e) {
 		MWLOG_CTX(LEV_ERROR, MOD_APL, "Token Read Failed: %ld", e.GetError());
 		throw;

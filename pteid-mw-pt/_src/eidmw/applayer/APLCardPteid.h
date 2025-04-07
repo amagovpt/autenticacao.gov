@@ -173,6 +173,7 @@ private:
 	APL_EIDCard &operator=(const APL_EIDCard &card); /**< Copy not allowed - not implemented */
 	void invalidateAddressSOD();
 
+	CByteArray m_cachedMultipassToken; /**< Cached multipass token used for re-reads */
 	CByteArray *m_cardinfosign;
 	APL_CardType m_cardType;
 	APL_CCXML_Doc *m_CCcustomDoc;	  /**< Pointer to the custom document */
