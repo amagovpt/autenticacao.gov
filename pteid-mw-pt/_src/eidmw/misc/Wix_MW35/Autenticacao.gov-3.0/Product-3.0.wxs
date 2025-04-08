@@ -203,10 +203,10 @@
         <File Source="..\..\certs\DigicertRoot.der" />
       </Component>
       <Component Id="SubCAAuth0019" Guid="{EAB15845-B695-4243-AE71-427EEE8275B2}">
-        <File Source="..\..\certs\EC de Autenticacao do Cartao de Cidadao 0019.der" />
+        <File Source="..\..\certs\CC_Auc0019.der" />
       </Component>
       <Component Id="SubCASignature0019" Guid="{2EB0B93E-D4FC-488F-8DA7-FB1C0D1F8D02}">
-        <File Source="..\..\certs\EC de Assinatura Digital do Cartao de Cidadao 0019.der" />
+        <File Source="..\..\certs\CC_Asc0019.der" />
       </Component>
 			
     </DirectoryRef>
