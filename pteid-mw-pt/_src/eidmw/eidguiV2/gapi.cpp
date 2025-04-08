@@ -2417,20 +2417,20 @@ void GAPI::removeCANCache() {
 
 void GAPI::startSigningSCAP(QList<QString> inputPDFs, QString outputPDF, int page, double location_x, double location_y,
 							QString location, QString reason, bool isTimestamp, bool isLtv, bool isLastPage,
-							QList<QString> attribute_ids) {
+							QList<QString> attribute_ids, bool useProfessionalName) {
 
 	SCAPSignParams signParams = {inputPDFs, outputPDF,	 page,	location_x, location_y,	  reason,
-								 location,	isTimestamp, isLtv, isLastPage, attribute_ids};
+								 location,	isTimestamp, isLtv, isLastPage, useProfessionalName, attribute_ids};
 
 	Concurrent::run(this, &GAPI::doSignSCAP, signParams, false);
 }
 
 void GAPI::signScapWithCMD(QList<QString> inputPDFs, QString outputPDF, QList<QString> attribute_ids, int page,
 						   double location_x, double location_y, QString reason, QString location, bool isTimestamp,
-						   bool isLtv, bool isLastPage) {
+						   bool isLtv, bool isLastPage, bool useProfessionalName) {
 
 	SCAPSignParams signParams = {inputPDFs, outputPDF,	 page,	location_x, location_y,	  reason,
-								 location,	isTimestamp, isLtv, isLastPage, attribute_ids};
+								 location,	isTimestamp, isLtv, isLastPage, useProfessionalName, attribute_ids};
 
 	Concurrent::run(this, &GAPI::doSignSCAP, signParams, true);
 }
@@ -2591,6 +2591,7 @@ void GAPI::doSignSCAP(const SCAPSignParams &params, bool isCMD) {
 									   params.isLastPage,
 									   seal_geometry,
 									   useCustomSignature(),
+									   params.useProfessionalName,
 									   reinterpret_cast<unsigned char *>(m_jpeg_scaled_data.data()),
 									   static_cast<unsigned long>(m_jpeg_scaled_data.size())};
 

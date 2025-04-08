@@ -181,6 +181,7 @@ public:
 	bool isTimestamp;
 	bool isLtv;
 	bool isLastPage;
+	bool useProfessionalName{};
 	QList<QString> attribute_ids;
 };
 
@@ -493,7 +494,7 @@ public slots:
 
 	void startSigningSCAP(QList<QString> inputPdfs, QString outputPDF, int page, double location_x, double location_y,
 						  QString location, QString reason, bool isTimestamp, bool isLtv, bool isLastPage,
-						  QList<QString> attribute_ids);
+						  QList<QString> attribute_ids, bool useProfessionalName);
 
 	void abortSCAPWithCMD(); // close the listing server
 	QString getSCAPProviderLogo(QList<QString> qstring_ids);
@@ -537,7 +538,7 @@ public slots:
 	// SCAP with CMD
 	void signScapWithCMD(QList<QString> loadedFilePaths, QString outputFile, QList<QString> attribute_list, int page,
 						 double coord_x, double coord_y, QString reason, QString location, bool isTimestamp, bool isLtv,
-						 bool isLastPage);
+						 bool isLastPage, bool useProfessionalName);
 
 	static void addressChangeCallback(void *, int);
 	void showSignCMDDialog(long error_code);

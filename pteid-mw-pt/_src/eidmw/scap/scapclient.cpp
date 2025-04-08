@@ -299,7 +299,7 @@ static std::string open_scap_signature(const ScapTransaction &transaction, Docum
 			std::string sig_name;
 			std::string professional_name = get_professional_name(attributes);
 
-			if (professional_name.empty()) {
+			if (professional_name.empty() || !signature_info.use_professional_name) {
 				sig_name = citizen_info.name;
 			} else {
 				sig_name = professional_name;

@@ -34,6 +34,7 @@ struct PDFSignatureInfo {
 	bool is_last_page;
 	SealGeometry seal_geometry;
 	bool use_custom_image;
+	bool use_professional_name{};
 	unsigned char *seal_image_data;
 	unsigned long seal_image_length;
 };

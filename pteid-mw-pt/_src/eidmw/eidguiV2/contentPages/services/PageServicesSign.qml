@@ -2296,9 +2296,10 @@ PageServicesSignForm {
             const scap = propertySwitchAddAttributes.checked
             if (scap) {
                 const attr_list = get_selected_attributes_ids()
+                const useProfessionalName = propertyCheckboxProfessionalName.enabled && propertyCheckboxProfessionalName.checked
 
                 gapi.startSigningSCAP(input_files, outputFile, page, coord_x, coord_y,
-                    location, reason, isTimestamp, isLTV, isLastPage, attr_list)
+                    location, reason, isTimestamp, isLTV, isLastPage, attr_list, useProfessionalName)
             } else {
                 if (propertyListViewFiles.count == 1) {
                     gapi.startSigningPDF(input_files[0], outputFile, page, coord_x, coord_y,
@@ -2375,8 +2376,9 @@ PageServicesSignForm {
             const scap_signature = propertySwitchAddAttributes.checked
             if (scap_signature) {
                 const attributeList = get_selected_attributes_ids()
+                const useProfessionalName = propertyCheckboxProfessionalName.enabled && propertyCheckboxProfessionalName.checked
                 gapi.signScapWithCMD(inputFiles, outputFile, attributeList, page, coord_x, coord_y,
-                    reason, location, isTimestamp, isLTV, isLastPage)
+                    reason, location, isTimestamp, isLTV, isLastPage, useProfessionalName)
             } else {
                 gapi.signCMD(inputFiles, outputFile, page, coord_x, coord_y, reason, location, isTimestamp,
                     isLTV,isSmallSignature, isLastPage)
