@@ -2382,9 +2382,9 @@ void GAPI::startWritingPersoNotes(const QString &text) {
 	QFuture<void> future = Concurrent::run(this, &GAPI::setPersoDataFile, text);
 }
 
-size_t GAPI::getStringByteLength(QString text) {
+int GAPI::getStringByteLength(const QString &text) {
 
-	return text.toStdString().size() + 1; // '\0' should be considered as a byte
+	return (int)text.toStdString().size() + 1; // +1 for the NULL terminator
 }
 
 void GAPI::startGettingEntities() { Concurrent::run(this, &GAPI::getSCAPEntities); }
