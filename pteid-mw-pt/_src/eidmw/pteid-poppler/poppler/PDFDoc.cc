@@ -978,6 +978,10 @@ void PDFDoc::prepareTimestamp()
     signatureField.dictAdd(copyString("V"), &timestampRefObj);
     Ref sigFieldRef = xref->addIndirectObject(&signatureField);
 
+    //Reserve space for the padded byte range
+    SignatureDict *d = dynamic_cast<SignatureDict *>(timestampDictObj->getDict());
+    d->setPadding(PADDED_BYTERANGE_LEN);
+
     getCatalog()->addSigFieldToAcroForm(&sigFieldRef, NULL);
 
     /* Write and fill content with placeholder for the byterange. */
