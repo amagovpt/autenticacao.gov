@@ -639,7 +639,7 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_LINK</source>
-        <translation>ePortugal portal.</translation>
+        <translation>gov.pt portal.</translation>
     </message>
     <message>
         <source>STR_REMOTEADDRESS_SERVER_ERROR</source>

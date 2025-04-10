@@ -637,7 +637,7 @@
     </message>
     <message>
         <source>STR_ADDRESS_CHANGE_CONFIRMATION_LINK</source>
-        <translation>no portal ePortugal.</translation>
+        <translation>no portal gov.pt.</translation>
     </message>
     <message>
         <source>STR_REMOTEADDRESS_SERVER_ERROR</source>
