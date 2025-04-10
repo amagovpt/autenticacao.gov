@@ -2113,7 +2113,7 @@
     </message>
     <message>
         <source>STR_SIGN_OPEN_SUCESS_VERIFY</source>
-        <translation>Este tipo de assinatura pode ser validado no link abaixo: </translation>
+        <translation>Este tipo de assinatura pode ser validado na seguinte página: </translation>
     </message>
     <message>
         <source>STR_SIGN_NAV_DESCRIPTION</source>
