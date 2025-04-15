@@ -1,6 +1,6 @@
 #ifndef __RELEASE_DATA_H__ 
 #define __RELEASE_DATA_H__ 
-#define PTEID_COPYRIGHT          "Copyright (C) 2010-2024" 
+#define PTEID_COPYRIGHT          "Copyright (C) 2010-2025" 
 #define PTEID_PRODUCT_VERSION    "3.13.2" 
 #define BASE_VERSION_STRING      "3, 13, 2, " 
 #define BASE_VERSION1            3 
