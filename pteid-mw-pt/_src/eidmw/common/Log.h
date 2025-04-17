@@ -69,6 +69,13 @@ typedef enum {
 	MOD_SCAP, // SCAP
 } tModule;
 
+/* Format string checking for printf wrapper functions is not available on MSVC */
+#ifdef _WIN32
+  #define FORMAT_CHECK_FROM_3RD_ARG 
+#else
+  #define FORMAT_CHECK_FROM_3RD_ARG __attribute__((format(printf, 3, 4)))
+#endif
+
 /**
  * Log.
  * Example:
@@ -76,7 +83,7 @@ typedef enum {
  */
 EIDMW_CMN_API bool MWLOG(tLevel level, tModule mod, const wchar_t *format, ...);
 
-EIDMW_CMN_API bool MWLOG(tLevel level, tModule mod, const char *format, ...);
+EIDMW_CMN_API bool MWLOG(tLevel level, tModule mod, const char *format, ...) FORMAT_CHECK_FROM_3RD_ARG ;
 
 /**
  * Log.
