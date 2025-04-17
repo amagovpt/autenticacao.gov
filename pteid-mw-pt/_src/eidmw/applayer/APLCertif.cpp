@@ -759,7 +759,7 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 			fwrite(issuer_cert_data.GetBytes(), sizeof(unsigned char), issuer_cert_data.Size(), certWrite);
 			fclose(certWrite);
 		} else {
-			MWLOG(LEV_ERROR, MOD_APL, "Error trying to open certificate to write, cert owner name: %s",
+			MWLOG(LEV_ERROR, MOD_APL, "Error trying to open certificate to write at %s, cert owner name: %s",
 				  issuerCertObj->getOwnerName(), certPath.c_str());
 		}
 	}

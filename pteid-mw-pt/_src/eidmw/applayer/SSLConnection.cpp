@@ -288,7 +288,7 @@ CURL *SSLConnection::connect_encrypted() {
 	res = curl_easy_setopt(m_curl, CURLOPT_SSL_CTX_FUNCTION, sslctxfun);
 
 	if (res != CURLE_OK) {
-		MWLOG(LEV_ERROR, MOD_APL, "CURLOPT_SSL_CTX_FUNCTION error code: %d\n", CURLOPT_SSL_CTX_FUNCTION, res);
+		MWLOG(LEV_ERROR, MOD_APL, "CURLOPT_SSL_CTX_FUNCTION error code: %d\n", res);
 	}
 	// Card pointer passed to the SSL_CTX setup function
 	curl_easy_setopt(m_curl, CURLOPT_SSL_CTX_DATA, m_card);
