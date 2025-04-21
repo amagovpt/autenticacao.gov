@@ -139,6 +139,8 @@ static void addManifest(zip_t *asic, const char **paths, int path_count) {
 	XMLCh *default_mime = XMLString::transcode("application/octet-stream");
 	XMLCh *asic_mime = XMLString::transcode(MIMETYPE_ASIC_E);
 	XMLCh *manifest_ns = XMLString::transcode("urn:oasis:names:tc:opendocument:xmlns:manifest:1.0");
+	XMLCh * version_attr_name = XMLString::transcode("version");
+	XMLCh * version_12 = XMLString::transcode("1.2");
 
 	DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("Core"));
 
@@ -147,6 +149,7 @@ static void addManifest(zip_t *asic, const char **paths, int path_count) {
 	XERCES_NS DOMDocument *doc = impl->createDocument(manifest_ns, manifest.rawXMLChBuffer(), NULL);
 
 	DOMElement *rootElem = doc->getDocumentElement();
+	rootElem->setAttributeNS(manifest_ns, version_attr_name, version_12);
 
 	safeBuffer file_entry, full_path, media_type;
 	makeQName(file_entry, manifest_prefix, "file-entry");
