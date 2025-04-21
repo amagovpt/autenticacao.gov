@@ -126,6 +126,20 @@ static void addReadme(zip_t *asic) {
 	addEntryExtendedTimestamp(asic, index, NULL);
 }
 
+static void setFilePathAttribute(DOMElement * element, XMLCh *attribute_namespace, safeBuffer *attribute_name, const char *file_path) {
+#ifdef WIN32
+	std::string file_basename = Basename((char *)file_path);
+	std::wstring utf16_file = utilStringWiden(file_basename);
+
+	element->setAttributeNS(attribute_namespace, attribute_name->rawXMLChBuffer(),
+		(XMLCh *)utf16_file.c_str());
+#else 
+	element->setAttributeNS(attribute_namespace, attribute_name->rawXMLChBuffer(),
+		XMLString::transcode(Basename((char *)file_path)) );
+#endif
+
+}
+
 static void addManifest(zip_t *asic, const char **paths, int path_count) {
 	// don't include manifest file for asic-s containers
 	if (path_count == 1) {
@@ -163,8 +177,7 @@ static void addManifest(zip_t *asic, const char **paths, int path_count) {
 
 	for (int i = 0; i < path_count; ++i) {
 		DOMElement *element = doc->createElementNS(manifest_ns, file_entry.rawXMLChBuffer());
-		element->setAttributeNS(manifest_ns, full_path.rawXMLChBuffer(),
-								XMLString::transcode(Basename((char *)paths[i])));
+		setFilePathAttribute(element, manifest_ns, &full_path, paths[i]);
 		element->setAttributeNS(manifest_ns, media_type.rawXMLChBuffer(), default_mime);
 		rootElem->appendChild(element);
 	}
