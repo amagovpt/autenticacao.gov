@@ -231,6 +231,7 @@ bool APL_ReaderContext::connectCard() {
 		return false;
 	}
 
+	return true;
 }
 
 APL_Card *APL_ReaderContext::getCard() {
