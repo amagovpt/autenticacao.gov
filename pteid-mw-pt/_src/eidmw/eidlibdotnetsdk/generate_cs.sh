@@ -5,7 +5,7 @@ set -v
 
 mkdir -p "../eidlibCS_Wrapper/GeneratedFiles"
 
-swig -c++ -csharp -namespace pt.portugal.eid -dllimport pteidlib_dotnet8+ -o ../eidlibCS_Wrapper/GeneratedFiles/eidlibCS_Wrapper.cpp -DSWIG2_CSHARP -DSWIG_CSHARP_NO_STRING_HELPER -outdir ../eidlibCS_Wrapper/GeneratedFiles "../eidlib/eidlib.i" 
+swig -c++ -csharp -namespace pt.portugal.eid -dllimport /usr/local/lib/pteidlib_dotnet8+.dylib -o ../eidlibCS_Wrapper/GeneratedFiles/eidlibCS_Wrapper.cpp -DSWIG2_CSHARP -DSWIG_CSHARP_NO_STRING_HELPER -outdir ../eidlibCS_Wrapper/GeneratedFiles "../eidlib/eidlib.i" 
 
 REVISION_NUM=$(git rev-list --count HEAD)
 
