@@ -97,8 +97,6 @@ Item {
                                         + rectangleEntities.height
                                         + 4 * Constants.SIZE_TEXT_V_SPACE
 
-    property int propertyListViewHeight:0
-
     property alias propertyItemOptions: itemOptions
     property alias propertySettingsScroll: settingsScroll
     property alias propertyFlickable: flickable
@@ -672,6 +670,7 @@ Item {
                             width: parent.width - 2 * Constants.SIZE_TEXT_FIELD_H_SPACE
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.top: arrowOptionsRect.bottom
+                            height: propertyShowOptions ? propertyOptionsHeight : 0
                             clip: true
                             Item {
                                 id: rectFormatOptions
@@ -985,7 +984,7 @@ Item {
                                 id: rectangleEntities
                                 width: parent.width
                                 height: listViewEntities.count > 0
-                                    ? (propertyListViewHeight + (listViewEntities.count - 1) * Constants.SIZE_LISTVIEW_SPACING)
+                                    ? listViewEntities.height
                                     : textAttributesMsg.height
                                 anchors.top: checkboxProfessionalName.bottom
                                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -1023,7 +1022,7 @@ Item {
                                 }
                                 ListView {
                                     id: listViewEntities
-                                    anchors.fill: parent
+                                    width: parent.width
                                     model: entityAttributesModel
                                     delegate: attributeListDelegate
                                     focus: true
@@ -1033,6 +1032,7 @@ Item {
                                     highlightMoveVelocity: 1000
                                     cacheBuffer: Constants.SCAP_ATTR_LISTVIEW_CACHEBUFFER
                                     interactive: false //disables scroll/drag for this listview
+                                    height: contentHeight
                                     Keys.forwardTo: attributeListDelegate
                                 }
                             }

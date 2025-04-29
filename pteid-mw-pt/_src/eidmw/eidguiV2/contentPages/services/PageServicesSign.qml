@@ -94,8 +94,6 @@ PageServicesSignForm {
                     ? propertyListViewEntities.forceActiveFocus()
                     : propertyTextAttributesMsg.forceActiveFocus()
 
-            propertyItemOptions.height = propertyOptionsHeight
-
             // Scroll down to see attributes rectangle
             if (!propertyFlickable.atYEnd && fileLoaded) {
                 var velocity = Math.min(get_max_flick_velocity(), Constants.FLICK_Y_VELOCITY_MAX_ATTR_LIST)
@@ -858,10 +856,6 @@ PageServicesSignForm {
                 handle_key_pressed(event.key, attributeListDelegate)
             }
 
-            Component.onCompleted: {
-                propertyListViewHeight += height
-            }
-
             color: propertyListViewEntities.currentIndex === index && propertyListViewEntities.focus
                     ? Constants.COLOR_MAIN_DARK_GRAY : Constants.COLOR_MAIN_SOFT_GRAY
 
@@ -899,7 +893,7 @@ PageServicesSignForm {
             Column {
                 id: columnItem
                 anchors.left: checkboxSel.right
-                width: parent.width - checkboxSel.width
+                width: parent.width - checkboxSel.width - Constants.SIZE_LISTVIEW_SPACING * 3
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.leftMargin: Constants.SIZE_LISTVIEW_SPACING
                 Text {
@@ -1386,8 +1380,6 @@ PageServicesSignForm {
 
         if (!propertyShowHelp)
             propertyRectHelp.height = Constants.HEIGHT_HELP_COLLAPSED
-        if (propertyShowOptions)
-            propertyItemOptions.height = propertyOptionsHeight
 
         update_image_on_seal()
 
@@ -2480,8 +2472,6 @@ PageServicesSignForm {
         propertyCheckboxProfessionalName.enabled = false
 
         entityAttributesModel.clear()
-        propertyListViewHeight = 0
-        propertyItemOptions.height = propertyOptionsHeight
         propertyPDFPreview.propertyDragSigCertifiedByText.visible = false
         propertyPDFPreview.propertyDragSigAttributesText.visible = false
         update_image_on_seal()
