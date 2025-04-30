@@ -552,17 +552,6 @@ Item {
                     anchors.top: rectMainLeftFile.bottom
                     anchors.topMargin: 3 * Constants.SIZE_ROW_V_SPACE
 
-                    DropShadow {
-                        anchors.fill: rectOptions
-                        horizontalOffset: Constants.FORM_SHADOW_H_OFFSET
-                        verticalOffset: Constants.FORM_SHADOW_V_OFFSET
-                        radius: Constants.FORM_SHADOW_RADIUS
-                        samples: Constants.FORM_SHADOW_SAMPLES
-                        color: Constants.COLOR_FORM_SHADOW
-                        source: rectOptions
-                        spread: Constants.FORM_SHADOW_SPREAD
-                        opacity: Constants.FORM_SHADOW_OPACITY_FORM_EFFECT
-                    }
                     RectangularGlow {
                         anchors.fill: rectOptions
                         glowRadius: Constants.FORM_GLOW_RADIUS
