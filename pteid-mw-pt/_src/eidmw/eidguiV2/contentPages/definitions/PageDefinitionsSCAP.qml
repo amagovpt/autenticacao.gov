@@ -218,8 +218,14 @@ PageDefinitionsSCAPForm {
             console.log("ScapIncompleteResponse")
 
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
-            var bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_INCOMPLETE_RESPONSE_FIRST") + "<br>"
+            var bodyPopup = ""
+            if(failed_providers.length === 0) {
+                bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_INCOMPLETE_RESPONSE_NO_LIST")
+            }
+            else {
+                bodyPopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_INCOMPLETE_RESPONSE_FIRST") + "<br>"
                 + "<ul><li>" + failed_providers.join("</li><li>") + "</li></ul>"
+            }
 
             show_error_message(titlePopup, bodyPopup)
         }

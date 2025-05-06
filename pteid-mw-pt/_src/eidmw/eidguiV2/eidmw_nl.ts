@@ -1286,6 +1286,10 @@
         <translation>Não foi possível carregar os atributos profissionais para as seguintes entidades:</translation>
     </message>
     <message>
+        <source>STR_SCAP_INCOMPLETE_RESPONSE_NO_LIST</source>
+        <translation>Não foi possível carregar todos os seus atributos empresariais.</translation>
+    </message>
+    <message>
         <source>STR_SCAP_BAD_CREDENTIALS</source>
         <translation>A aplicação instalada não possui suporte para o serviço do Sistema de Certificação de Atributos Profissionais.</translation>
     </message>

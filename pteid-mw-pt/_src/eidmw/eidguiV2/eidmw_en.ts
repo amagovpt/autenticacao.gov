@@ -1288,6 +1288,10 @@
         <translation>It was not possible to load professional attributes for the following entitites:</translation>
     </message>
     <message>
+        <source>STR_SCAP_INCOMPLETE_RESPONSE_NO_LIST</source>
+        <translation>It was not possible to load all enterprise attributes.</translation>
+    </message>
+    <message>
         <source>STR_SCAP_BAD_CREDENTIALS</source>
         <translation>The installed application does not have support for the professional attributes certification system (SCAP).</translation>
     </message>
