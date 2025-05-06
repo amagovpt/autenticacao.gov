@@ -37,7 +37,7 @@ cd ../../eidlibdotnetsdk
 sh ./generate_cs.sh
 popd
 
-VERSION="3.13.0.$git_revision"
+VERSION="3.13.3.$git_revision"
 
 echo "Packaging PTEID version $VERSION"
 echo "IMPORTANT: Don't forget to update the version in apps/Info.plist and release notes in resources dir"
