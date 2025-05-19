@@ -112,7 +112,7 @@ tCardStatus CReader::Status(bool bReconnect) {
 	static int iStatusCount = 0;
 
 	if (m_poCard == NULL) {
-		if (m_poContext->m_oPCSC.Status(m_csReader)) {
+		if (m_poContext->m_oCardInterface->Status(m_csReader)) {
 			status = Connect() ? CARD_INSERTED : CARD_NOT_PRESENT;
 		} else
 			status = CARD_NOT_PRESENT;
@@ -124,7 +124,7 @@ tCardStatus CReader::Status(bool bReconnect) {
 			Disconnect();
 			// if bReconnect = true, then we try to connect to a
 			// possibly new card that has been inserted
-			if (bReconnect && m_poContext->m_oPCSC.Status(m_csReader))
+			if (bReconnect && m_poContext->m_oCardInterface->Status(m_csReader))
 				status = Connect() ? CARD_OTHER : CARD_REMOVED;
 			else
 				status = CARD_REMOVED;
@@ -203,7 +203,7 @@ void CReader::readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, 
 	CByteArray oCmd;
 	try {
 
-		CByteArray resp = m_poContext->m_oPCSC.Control(hCard, ioctl_get_properties_tlv, oCmd);
+		CByteArray resp = m_poContext->m_oCardInterface->Control(hCard, ioctl_get_properties_tlv, oCmd);
 		parse_reader_device_properties(resp.GetBytes(), resp.Size(), &deviceInfo->vendorID, &deviceInfo->productID);
 	} catch (const CMWException &e) {
 		MWLOG(LEV_WARN, MOD_CAL, "Failed to get device info for reader: %s Error code: %ld", m_csReader.c_str(),

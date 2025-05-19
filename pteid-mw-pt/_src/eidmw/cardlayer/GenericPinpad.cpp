@@ -288,7 +288,7 @@ CByteArray GenericPinpad::PinpadControl(unsigned long ulControl, const CByteArra
 
 	CByteArray oResp;
 	try {
-		oResp = m_poContext->m_oPCSC.Control(m_hCard, ulControl, oCmd);
+		oResp = m_poContext->m_oCardInterface->Control(m_hCard, ulControl, oCmd);
 
 		// give some time for the dialog process to fork() (it was killing too fast :-) )
 		unsigned long ulSW12 = 256 * oResp.GetByte(oResp.Size() - 2) + oResp.GetByte(oResp.Size() - 1);

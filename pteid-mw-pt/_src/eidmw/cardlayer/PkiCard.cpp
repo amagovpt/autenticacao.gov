@@ -119,7 +119,7 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string &csPath, unsigned long u
 		} else if (ulSW12 == 0x6B00)
 			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 		else
-			throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+			throw CMWEXCEPTION(m_poContext->m_oCardInterface->SW12ToErr(ulSW12));
 	}
 
 	MWLOG(LEV_INFO, MOD_CAL, L"   Read file %ls (%d bytes) from card", utilStringWiden(csPath).c_str(),
@@ -168,7 +168,7 @@ void CPkiCard::WriteUncachedFile(const std::string &csPath, unsigned long ulOffs
 			bEOF = false;
 		// Comment to Avoid problems with IAS cards
 		// else
-		// throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+		// throw CMWEXCEPTION(m_poContext->m_oCardInterface.SW12ToErr(ulSW12));
 
 		ulLen -= ulSendLen;
 	}
@@ -276,7 +276,7 @@ bad_pin:
 	else if (ulSW12 / 16 == 0x63C)
 		ulRemaining = ulSW12 % 16;
 	else
-		throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+		throw CMWEXCEPTION(m_poContext->m_oCardInterface->SW12ToErr(ulSW12));
 
 	// Wrong PIN with no user interaction: return false and don't ask for retries
 	// For PIN unlock we don't ask for retries
@@ -424,7 +424,7 @@ bad_pin:
 	else if (ulSW12 / 16 == 0x63C)
 		ulRemaining = ulSW12 % 16;
 	else
-		throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+		throw CMWEXCEPTION(m_poContext->m_oCardInterface->SW12ToErr(ulSW12));
 
 	// Wrong PIN with no user interaction: return false and don't ask for retries
 	if (!bRet && !bShowDlg) {
@@ -560,7 +560,7 @@ tFileInfo CPkiCard::SelectFile(const std::string &csPath, bool bReturnFileInfo) 
 		unsigned long ulSW12 = getSW12(oResp);
 		if (ulSW12 == 0x6A82 || ulSW12 == 0x6A86) {
 			if (ulPathLen == 2)
-				throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+				throw CMWEXCEPTION(m_poContext->m_oCardInterface->SW12ToErr(ulSW12));
 
 			// The file wasn't found in this DF, so let's select by full path
 			oResp = SelectByPath(csPath, bReturnFileInfo);

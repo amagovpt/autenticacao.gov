@@ -27,6 +27,7 @@
 #include "ByteArray.h"
 #include "Log.h"
 
+#include <cstdint>
 #include <stdio.h>
 #include <stdarg.h>
 #include <cstring>

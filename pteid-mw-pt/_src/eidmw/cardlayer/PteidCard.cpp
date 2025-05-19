@@ -66,7 +66,7 @@ namespace eIDMW {
 			oResp = pace->sendSecureAPDU(oCmd, lRetVal);
 		}
 		else {
-			oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, protocol_struct);
+			oResp = poContext->m_oCardInterface->Transmit(hCard, oCmd, &lRetVal, protocol_struct);
 		}
 		return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 	}
@@ -79,7 +79,7 @@ namespace eIDMW {
 		try {
 			// Don't remove these brackets, CAutoLock dtor must be called!
 			{
-				CAutoLock oAutLock(&poContext->m_oPCSC, hCard);
+				CAutoLock oAutLock(poContext->m_oCardInterface.get(), hCard);
 
 				poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
 				MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
@@ -211,7 +211,7 @@ namespace eIDMW {
 				return 3; // Maximum Try Counter for PteID Cards
 
 			if (oResp.GetByte(0) != 0x63) {
-				throw m_poContext->m_oPCSC.SW12ToErr(ulSW12);
+				throw m_poContext->m_oCardInterface->SW12ToErr(ulSW12);
 			}
 
 			return (ulSW12 % 16);
@@ -672,7 +672,7 @@ namespace eIDMW {
 		while (1) {
 			CThread::SleepMillisecs(100);
 			// If the card was removed stop this thread
-			if (!m_poPCSC->Status(m_hCard))
+			if (!m_poCardInterface->Status(m_hCard))
 				break;
 
 			if (m_bStopRequest)
@@ -708,7 +708,7 @@ namespace eIDMW {
 					// Regularly call SCardStatus()
 					MWLOG(LEV_DEBUG, MOD_CAL,
 						L"Starting KeepAliveThread to keep transaction while waiting for user PIN input");
-					eIDMW::KeepAliveThread keepAlive(&(m_poContext->m_oPCSC), m_hCard);
+					eIDMW::KeepAliveThread keepAlive(&(m_poContext->m_oCardInterface), m_hCard);
 					keepAlive.Start();
 #endif
 
@@ -742,7 +742,7 @@ namespace eIDMW {
 					throw CMWEXCEPTION(EIDMW_ERR_ALGO_BAD);
 				}
 				else {
-					throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(SW12));
+					throw CMWEXCEPTION(m_poContext->m_oCardInterface->SW12ToErr(SW12));
 				}
 			}
 
@@ -765,7 +765,7 @@ namespace eIDMW {
 		MWLOG(LEV_INFO, MOD_CAL, L"PSO-Compute digital signature returned: 0x%2X", ulSW12);
 
 		if (ulSW12 != 0x9000)
-			throw CMWEXCEPTION(m_poContext->m_oPCSC.SW12ToErr(ulSW12));
+			throw CMWEXCEPTION(m_poContext->m_oCardInterface->SW12ToErr(ulSW12));
 
 		if (GetType() == CARD_PTEID_IAS5) {
 			CByteArray rapdu = SendAPDU(0x20, 0xFF, (unsigned char)pPin->ulPinRef, 0x00);

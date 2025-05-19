@@ -70,7 +70,7 @@ public:
 	bool CardPresent(unsigned long ulIndex);
 
 private:
-	CReadersInfo(CPCSC *poPCSC, const CByteArray &oReaders);
+	CReadersInfo(CardInterface *poCardInterface, const CByteArray &oReaders);
 
 	bool bFirstTime;
 	unsigned long m_ulReaderCount;
@@ -78,7 +78,7 @@ private:
 
 	friend class CCardLayer; // calls the CReadersInfo constructor
 
-	CPCSC *m_poPCSC;
+	CardInterface *m_poCardInterface;
 };
 
 } // namespace eIDMW

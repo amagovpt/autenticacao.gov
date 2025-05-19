@@ -26,6 +26,7 @@
 #define __PTEIDCARD_H__
 
 #include "BacAuthentication.h"
+#include "PCSC.h"
 #include "PkiCard.h"
 #include "Card.h"
 
@@ -42,9 +43,9 @@ namespace eIDMW {
 // we make sure the transaction has activity so that Windows doesn't kill it
 class KeepAliveThread : public CThread {
 public:
-	KeepAliveThread(CPCSC *poPCSC, SCARDHANDLE &card) {
+	KeepAliveThread(CardInterface *poCardInterface, SCARDHANDLE &card) {
 		m_hCard = card;
-		m_poPCSC = poPCSC;
+		m_poCardInterface = poCardInterface;
 	}
 
 	~KeepAliveThread() { RequestStop(); }
@@ -52,7 +53,7 @@ public:
 	void Run();
 
 private:
-	CPCSC *m_poPCSC;
+	CardInterface *m_poCardInterface;
 	SCARDHANDLE m_hCard;
 };
 

@@ -21,6 +21,7 @@
 **************************************************************************** */
 #pragma once
 
+#include <memory>
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
@@ -34,7 +35,7 @@ public:
 	CContext();
 	~CContext();
 
-	CPCSC m_oPCSC;
+	std::unique_ptr<CardInterface> m_oCardInterface;
 	CThreadPool m_oThreadPool;
 
 	bool m_bSSO; // force Single Sign-On

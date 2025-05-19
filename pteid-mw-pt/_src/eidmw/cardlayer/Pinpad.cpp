@@ -73,7 +73,7 @@ CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray &oCm
 	CByteArray oResp;
 
 	try {
-		oResp = m_poContext->m_oPCSC.Control(m_hCard, ulControl, oCmd);
+		oResp = m_poContext->m_oCardInterface->Control(m_hCard, ulControl, oCmd);
 	} catch (...) {
 		throw;
 	}

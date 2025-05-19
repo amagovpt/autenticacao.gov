@@ -28,12 +28,15 @@ Takes care of
 #ifndef PCSC_H
 #define PCSC_H
 
+#include "Export.h"
 #include "eidErrors.h"
 #include "ByteArray.h"
 #include "MWException.h"
 #include "CardLayerConst.h"
 #include "InternalConst.h"
 
+#include <cstdint>
+#include <unordered_map>
 #include <utility>
 
 #ifndef WIN32
@@ -79,54 +82,88 @@ typedef struct {
 	unsigned long ulEventState;	  // the state after the new check
 } tReaderInfo;
 
-class EIDMW_CAL_API CPCSC {
+typedef uint32_t CardHandle;
+
+class EIDMW_CAL_API CardInterface {
+public:
+	virtual void EstablishContext() = 0;
+	virtual void ReleaseContext() = 0;
+
+	virtual CByteArray ListReaders() = 0;
+
+	virtual CByteArray GetATR(CardHandle hCard) = 0;
+	virtual CByteArray GetIFDVersion(CardHandle hCard) = 0;
+
+	virtual bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount) = 0;
+	virtual bool Status(const std::string &csReader) = 0;
+	virtual bool Status(CardHandle hCard) = 0;
+
+	virtual void BeginTransaction(CardHandle hCard) = 0;
+	virtual void EndTransaction(CardHandle hCard) = 0;
+
+	virtual std::pair<CardHandle, DWORD>
+	Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) = 0;
+	virtual void Disconnect(CardHandle hCard, tDisconnectMode disconnectMode) = 0;
+
+	virtual CByteArray Transmit(CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
+								const void *pSendPci = NULL, void *pRecvPci = NULL) = 0;
+	virtual void Recover(CardHandle hCard, unsigned long *pulLockCount) = 0;
+	virtual CByteArray Control(CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
+							   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) = 0;
+
+	long SW12ToErr(unsigned long ulSW12);
+
+private:
+};
+
+class EIDMW_CAL_API CPCSC : public CardInterface {
 public:
 	CPCSC(void);
 	~CPCSC(void);
 
-	void EstablishContext();
+	void EstablishContext() override;
 
-	void ReleaseContext();
+	void ReleaseContext() override;
 
 	/**
 	 * We can't return a string because the output is a "multistring",
 	 * which means a multiple strings separated by a 0x00 and ended
 	 * by 2 0x00 bytes.
 	 */
-	CByteArray ListReaders();
+	CByteArray ListReaders() override;
 
 	/** Returns true if something changed */
-	bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount);
+	bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount) override;
 
-	bool Status(const std::string &csReader);
+	bool Status(const std::string &csReader) override;
 
-	std::pair<SCARDHANDLE, DWORD> Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
-										  unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1);
-	void Disconnect(SCARDHANDLE hCard, tDisconnectMode disconnectMode);
+	std::pair<CardHandle, DWORD> Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+										 unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 |
+																			  SCARD_PROTOCOL_T1) override;
+	void Disconnect(CardHandle hCard, tDisconnectMode disconnectMode) override;
 
-	CByteArray GetATR(SCARDHANDLE hCard);
-	CByteArray GetIFDVersion(SCARDHANDLE hCard);
+	CByteArray GetATR(CardHandle hCard) override;
+	CByteArray GetIFDVersion(CardHandle hCard) override;
 
 	/**
 	 * Returns true if the same card is still present,
 	 * false if the card has been removed (and perhaps
 	 * the same or antoher card has been inserted).
 	 */
-	bool Status(SCARDHANDLE hCard);
+	bool Status(CardHandle hCard) override;
 
-	CByteArray Transmit(SCARDHANDLE hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,
-						void *pRecvPci = NULL);
-	void Recover(SCARDHANDLE hCard, unsigned long *pulLockCount);
-	CByteArray Control(SCARDHANDLE hCard, unsigned long ulControl, const CByteArray &oCmd,
-					   unsigned long ulMaxResponseSize = CTRL_BUF_LEN);
+	CByteArray Transmit(CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,
+						void *pRecvPci = NULL) override;
+	void Recover(CardHandle hCard, unsigned long *pulLockCount) override;
+	CByteArray Control(CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
+					   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) override;
 
-	void BeginTransaction(SCARDHANDLE hCard);
-	void EndTransaction(SCARDHANDLE hCard);
+	void BeginTransaction(CardHandle hCard) override;
+	void EndTransaction(CardHandle hCard) override;
 
 	// unsigned long GetContext();
 	SCARDCONTEXT GetContext();
-
-	long SW12ToErr(unsigned long ulSW12);
 
 private:
 	long PcscToErr(unsigned long lRet);
@@ -140,6 +177,83 @@ private:
 	int m_iListReadersCount;
 
 	unsigned long m_ulCardTxDelay; // delay before each transmission to a smartcard; in millie-seconds, default 1
+
+	std::unordered_map<CardHandle, SCARDHANDLE> m_handles;
+};
+
+// C friendly interface
+struct CardInterfaceCallbacks {
+	void *context;
+
+	void (*establishContext)(void *context);
+	void (*releaseContext)(void *context);
+
+	void (*listReaders)(unsigned char *buffer, unsigned long *bufferSize, void *context);
+	int (*getStatusChange)(unsigned long ulTimeout, void *pReaderInfos, unsigned long ulReaderCount, void *context);
+
+	int (*statusReader)(const char *csReader, void *context);
+	int (*connect)(const char *csReader, CardHandle *outHandle, unsigned long *outProtocol, unsigned long ulShareMode,
+				   unsigned long ulPreferredProtocols, void *context);
+
+	void (*disconnect)(CardHandle handle, int disconnectMode, void *context);
+
+	void (*getATR)(CardHandle handle, unsigned char *buffer, unsigned long *bufferSize, void *context);
+
+	void (*getIFDVersion)(CardHandle handle, unsigned char *buffer, unsigned long *bufferSize, void *context);
+
+	int (*statusCard)(CardHandle handle, void *context);
+
+	void (*transmit)(CardHandle handle, const unsigned char *cmdData, unsigned long cmdLength,
+					 unsigned char *responseBuffer, unsigned long *respBufferSize, long *plRetVal, const void *pSendPci,
+					 void *pRecvPci, void *context);
+
+	void (*recover)(CardHandle handle, unsigned long *pulLockCount, void *context);
+
+	void (*control)(CardHandle handle, unsigned long ulControl, const unsigned char *cmdData, unsigned long cmdLength,
+					unsigned char *respBuffer, unsigned long *respBufferSize, unsigned long ulMaxResponseSize,
+					void *context);
+
+	void (*beginTransaction)(CardHandle handle, void *context);
+	void (*endTransaction)(CardHandle handle, void *context);
+
+	unsigned long (*getContext)(CardHandle handle, void *context);
+};
+
+class EIDMW_CAL_API ExternalCardInterface : public CardInterface {
+public:
+	ExternalCardInterface(const CardInterfaceCallbacks *callbacks);
+	~ExternalCardInterface();
+
+	void EstablishContext() override;
+
+	void ReleaseContext() override;
+
+	CByteArray ListReaders() override;
+	bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount) override;
+
+	bool Status(const std::string &csReader) override;
+
+	std::pair<CardHandle, DWORD> Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+										 unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 |
+																			  SCARD_PROTOCOL_T1) override;
+	void Disconnect(CardHandle hCard, tDisconnectMode disconnectMode) override;
+
+	CByteArray GetATR(CardHandle hCard) override;
+	CByteArray GetIFDVersion(CardHandle hCard) override;
+
+	bool Status(CardHandle hCard) override;
+
+	CByteArray Transmit(CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,
+						void *pRecvPci = NULL) override;
+	void Recover(CardHandle hCard, unsigned long *pulLockCount) override;
+	CByteArray Control(CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
+					   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) override;
+
+	void BeginTransaction(CardHandle hCard) override;
+	void EndTransaction(CardHandle hCard) override;
+
+private:
+	CardInterfaceCallbacks callbacks = {};
 };
 
 } // namespace eIDMW

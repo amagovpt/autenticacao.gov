@@ -35,6 +35,7 @@
 #include "ByteArray.h"
 #include "MWException.h"
 #include "Hash.h"
+#include "PCSC.h"
 #include "Util.h"
 #include "GenericPinpad.h"
 #include "../dialogs/dialogs.h"
@@ -179,13 +180,13 @@ public:
 	 *  the CAutoLock(CCard *poCard) ctor; so make sure this
 	 *  object gets out of scope before making a new one for
 	 *  the same card handle! */
-	CAutoLock(CPCSC *poPCSC, SCARDHANDLE hCard);
+	CAutoLock(CardInterface *poCardInterface, SCARDHANDLE hCard);
 
 	~CAutoLock();
 
 private:
 	CCard *m_poCard;
-	CPCSC *m_poPCSC;
+	CardInterface *m_poCardInterface;
 	SCARDHANDLE m_hCard;
 };
 

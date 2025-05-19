@@ -184,8 +184,8 @@ bool CPCSC::Status(const std::string &csReader) {
 	return (xReaderState.dwEventState & SCARD_STATE_PRESENT) == SCARD_STATE_PRESENT;
 }
 
-std::pair<SCARDHANDLE, DWORD> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
-											 unsigned long ulPreferredProtocols) {
+std::pair<CardHandle, DWORD> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
+											unsigned long ulPreferredProtocols) {
 	DWORD dwActiveProtocol;
 	SCARDHANDLE hCard = 0;
 
@@ -207,64 +207,72 @@ std::pair<SCARDHANDLE, DWORD> CPCSC::Connect(const std::string &csReader, unsign
 		//CThread::SleepMillisecs(200);
 	} */
 
+	CardHandle handle = static_cast<CardHandle>(hCard);
+	m_handles.insert({handle, hCard});
+
 	return std::make_pair(hCard, dwActiveProtocol);
 }
 
-void CPCSC::Disconnect(SCARDHANDLE hCard, tDisconnectMode disconnectMode) {
+void CPCSC::Disconnect(CardHandle hCard, tDisconnectMode disconnectMode) {
+	auto handle = m_handles[hCard];
 	DWORD dwDisposition = disconnectMode == DISCONNECT_RESET_CARD ? SCARD_RESET_CARD : SCARD_LEAVE_CARD;
 
-	LONG lRet = SCardDisconnect(hCard, dwDisposition);
-	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardDisconnect(0x%0x): 0x%0x ; mode: %d", hCard, lRet, dwDisposition);
+	LONG lRet = SCardDisconnect(handle, dwDisposition);
+	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardDisconnect(0x%0x): 0x%0x ; mode: %d", handle, lRet, dwDisposition);
 	if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
 }
 
-CByteArray CPCSC::GetATR(SCARDHANDLE hCard) {
+CByteArray CPCSC::GetATR(CardHandle hCard) {
+	auto handle = m_handles[hCard];
 	DWORD dwReaderLen = 0;
 	DWORD dwState, dwProtocol;
 	unsigned char tucATR[64];
 	DWORD dwATRLen = sizeof(tucATR);
 
-	LONG lRet = SCardStatus(hCard, NULL, &dwReaderLen, &dwState, &dwProtocol, tucATR, &dwATRLen);
-	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardStatus(0x%0x): 0x%0x", hCard, lRet);
+	LONG lRet = SCardStatus(handle, NULL, &dwReaderLen, &dwState, &dwProtocol, tucATR, &dwATRLen);
+	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardStatus(0x%0x): 0x%0x", handle, lRet);
 	if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
 
 	return CByteArray(tucATR, dwATRLen);
 }
 
-CByteArray CPCSC::GetIFDVersion(SCARDHANDLE hCard) {
+CByteArray CPCSC::GetIFDVersion(CardHandle hCard) {
+	auto handle = m_handles[hCard];
 	unsigned char tucIFDVers[4] = {0, 0, 0, 0};
 	DWORD dwIFDVersLen = sizeof(tucIFDVers);
 
-	LONG lRet = SCardGetAttrib(hCard, SCARD_ATTR_VENDOR_IFD_VERSION, tucIFDVers, &dwIFDVersLen);
-	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardGetAttrib(0x%0x): 0x%0x", hCard, lRet);
+	LONG lRet = SCardGetAttrib(handle, SCARD_ATTR_VENDOR_IFD_VERSION, tucIFDVers, &dwIFDVersLen);
+	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardGetAttrib(0x%0x): 0x%0x", handle, lRet);
 
 	return CByteArray(tucIFDVers, dwIFDVersLen);
 }
 
-bool CPCSC::Status(SCARDHANDLE hCard) {
+bool CPCSC::Status(CardHandle hCard) {
+	auto handle = m_handles[hCard];
 	DWORD dwReaderLen = 0;
 	DWORD dwState, dwProtocol;
 	unsigned char tucATR[64];
 	DWORD dwATRLen = sizeof(tucATR);
 	static int iStatusCount = 0;
 
-	LONG lRet = SCardStatus(hCard, NULL, &dwReaderLen, &dwState, &dwProtocol, tucATR, &dwATRLen);
+	LONG lRet = SCardStatus(handle, NULL, &dwReaderLen, &dwState, &dwProtocol, tucATR, &dwATRLen);
 
 	// lRet = 0;
 	// printf("ups: %ld vs %ld\n",lRet,SCARD_S_SUCCESS);
 
 	if (iStatusCount < 5 || SCARD_S_SUCCESS != lRet) {
 		iStatusCount++;
-		MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardStatus(0x%0x): 0x%0x", hCard, lRet);
+		MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardStatus(0x%0x): 0x%0x", handle, lRet);
 	}
 
 	return SCARD_S_SUCCESS == lRet;
 }
 
-CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &inputAPDU, long *plRetVal, const void *pSendPci,
+CByteArray CPCSC::Transmit(CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal, const void *pSendPci,
 						   void *pRecvPci) {
+	auto handle = m_handles[hCard];
 	CByteArray oCmdAPDU(inputAPDU);
 
 	unsigned char tucRecv[APDU_BUF_LEN];
@@ -306,7 +314,7 @@ CByteArray CPCSC::Transmit(SCARDHANDLE hCard, const CByteArray &inputAPDU, long 
 try_again:
 #endif
 	LONG lRet =
-		SCardTransmit(hCard, pioSendPci, oCmdAPDU.GetBytes(), (DWORD)oCmdAPDU.Size(), NULL, tucRecv, &dwRecvLen);
+		SCardTransmit(handle, pioSendPci, oCmdAPDU.GetBytes(), (DWORD)oCmdAPDU.Size(), NULL, tucRecv, &dwRecvLen);
 
 	*plRetVal = lRet;
 	if (SCARD_S_SUCCESS != lRet) {
@@ -336,7 +344,8 @@ try_again:
 	return CByteArray(tucRecv, (unsigned long)dwRecvLen);
 }
 
-void CPCSC::Recover(SCARDHANDLE hCard, unsigned long *pulLockCount) {
+void CPCSC::Recover(CardHandle hCard, unsigned long *pulLockCount) {
+	auto handle = m_handles[hCard];
 	// try to recover when the card is not responding (properly) anymore
 
 	DWORD ap = 0;
@@ -349,14 +358,14 @@ void CPCSC::Recover(SCARDHANDLE hCard, unsigned long *pulLockCount) {
 		if (i != 0)
 			CThread::SleepMillisecs(100);
 
-		lRet = SCardReconnect(hCard, SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0, SCARD_RESET_CARD, &ap);
+		lRet = SCardReconnect(handle, SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0, SCARD_RESET_CARD, &ap);
 		if (lRet != SCARD_S_SUCCESS) {
 			MWLOG(LEV_DEBUG, MOD_CAL, L"        [%d] SCardReconnect errorcode: [0x%02X]", i, lRet);
 			continue;
 		}
 		// transaction is lost after an SCardReconnect()
 		if (*pulLockCount > 0) {
-			lRet = SCardBeginTransaction(hCard);
+			lRet = SCardBeginTransaction(handle);
 			if (lRet != SCARD_S_SUCCESS) {
 				MWLOG(LEV_DEBUG, MOD_CAL, L"        [%d] SCardBeginTransaction errorcode: [0x%02X]", i, lRet);
 				continue;
@@ -368,8 +377,9 @@ void CPCSC::Recover(SCARDHANDLE hCard, unsigned long *pulLockCount) {
 	}
 }
 
-CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByteArray &oCmd,
+CByteArray CPCSC::Control(CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 						  unsigned long ulMaxResponseSize) {
+	auto handle = m_handles[hCard];
 	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardControl(ctrl=0x%0x, %ls)", ulControl,
 		  oCmd.ToWString(true, true, 0, 5).c_str());
 
@@ -383,7 +393,7 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
 	DWORD dwRecvLen = ulMaxResponseSize;
 
-	long lRet = SCardControl(hCard, ulControl, oCmd.GetBytes(), (DWORD)oCmd.Size(), pucRecv, dwRecvLen, &dwRecvLen);
+	long lRet = SCardControl(handle, ulControl, oCmd.GetBytes(), (DWORD)oCmd.Size(), pucRecv, dwRecvLen, &dwRecvLen);
 
 	if (SCARD_S_SUCCESS != lRet) {
 #ifndef WIN32
@@ -414,16 +424,18 @@ CByteArray CPCSC::Control(SCARDHANDLE hCard, unsigned long ulControl, const CByt
 	return oResp;
 }
 
-void CPCSC::BeginTransaction(SCARDHANDLE hCard) {
-	LONG lRet = SCardBeginTransaction(hCard);
+void CPCSC::BeginTransaction(CardHandle hCard) {
+	auto handle = m_handles[hCard];
+	LONG lRet = SCardBeginTransaction(handle);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardBeginTransaction(0x%0x): 0x%0x", hCard, lRet);
 	if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
 }
 
-void CPCSC::EndTransaction(SCARDHANDLE hCard) {
-	LONG lRet = SCardEndTransaction(hCard, SCARD_LEAVE_CARD);
-	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardEndTransaction(0x%0x): 0x%0x", hCard, lRet);
+void CPCSC::EndTransaction(CardHandle hCard) {
+	auto handle = m_handles[hCard];
+	LONG lRet = SCardEndTransaction(handle, SCARD_LEAVE_CARD);
+	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardEndTransaction(0x%0x): 0x%0x", handle, lRet);
 
 	// Log this specific case as error, it may be useful to know if the user removed the card in the middle of an
 	// operation
@@ -431,7 +443,7 @@ void CPCSC::EndTransaction(SCARDHANDLE hCard) {
 		MWLOG(LEV_DEBUG, MOD_CAL, L"Smart card removed when performing SCardEndTransaction!");
 }
 
-long CPCSC::SW12ToErr(unsigned long ulSW12) {
+long CardInterface::SW12ToErr(unsigned long ulSW12) {
 	long lRet = EIDMW_ERR_CARD;
 
 	switch (ulSW12) {
@@ -521,6 +533,184 @@ long CPCSC::PcscToErr(unsigned long lPcscErr) {
 	}
 
 	return lRet;
+}
+
+ExternalCardInterface::ExternalCardInterface(const CardInterfaceCallbacks *callbacks) {
+	if (callbacks != nullptr) {
+		this->callbacks = *callbacks;
+	} else {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+}
+
+ExternalCardInterface::~ExternalCardInterface() {
+	// Nothing to clean up
+}
+
+void ExternalCardInterface::EstablishContext() {
+	if (callbacks.establishContext == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+	callbacks.establishContext(callbacks.context);
+}
+
+void ExternalCardInterface::ReleaseContext() {
+	if (callbacks.releaseContext == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+	callbacks.releaseContext(callbacks.context);
+}
+
+CByteArray ExternalCardInterface::ListReaders() {
+	if (callbacks.listReaders == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	unsigned char buffer[1024];
+	unsigned long bufferSize = sizeof(buffer);
+
+	callbacks.listReaders(buffer, &bufferSize, callbacks.context);
+
+	return CByteArray(buffer, bufferSize);
+}
+
+bool ExternalCardInterface::GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos,
+											unsigned long ulReaderCount) {
+	if (callbacks.getStatusChange == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	return callbacks.getStatusChange(ulTimeout, pReaderInfos, ulReaderCount, callbacks.context) != 0;
+}
+
+bool ExternalCardInterface::Status(const std::string &csReader) {
+	if (callbacks.statusReader == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	return callbacks.statusReader(csReader.c_str(), callbacks.context) != 0;
+}
+
+std::pair<CardHandle, DWORD> ExternalCardInterface::Connect(const std::string &csReader, unsigned long ulShareMode,
+															unsigned long ulPreferredProtocols) {
+	if (callbacks.connect == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	CardHandle outHandle = 0;
+	unsigned long outProtocol = 0;
+
+	int result = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, ulShareMode, ulPreferredProtocols,
+								   callbacks.context);
+
+	if (result == 0) {
+		return std::make_pair(outHandle, outProtocol);
+	} else {
+		throw CMWEXCEPTION(EIDMW_ERR_CARD);
+	}
+}
+
+void ExternalCardInterface::Disconnect(CardHandle hCard, tDisconnectMode disconnectMode) {
+	if (callbacks.disconnect == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	callbacks.disconnect(hCard, static_cast<int>(disconnectMode), callbacks.context);
+}
+
+CByteArray ExternalCardInterface::GetATR(CardHandle hCard) {
+	if (callbacks.getATR == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	unsigned char buffer[64];
+	unsigned long bufferSize = sizeof(buffer);
+
+	callbacks.getATR(hCard, buffer, &bufferSize, callbacks.context);
+
+	return CByteArray(buffer, bufferSize);
+}
+
+CByteArray ExternalCardInterface::GetIFDVersion(CardHandle hCard) {
+	if (callbacks.getIFDVersion == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	unsigned char buffer[4];
+	unsigned long bufferSize = sizeof(buffer);
+
+	callbacks.getIFDVersion(hCard, buffer, &bufferSize, callbacks.context);
+
+	return CByteArray(buffer, bufferSize);
+}
+
+bool ExternalCardInterface::Status(CardHandle hCard) {
+	if (callbacks.statusCard == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	return callbacks.statusCard(hCard, callbacks.context) != 0;
+}
+
+CByteArray ExternalCardInterface::Transmit(CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
+										   const void *pSendPci, void *pRecvPci) {
+	if (callbacks.transmit == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	unsigned char responseBuffer[APDU_BUF_LEN];
+	unsigned long respBufferSize = sizeof(responseBuffer);
+
+	callbacks.transmit(hCard, oCmdAPDU.GetBytes(), oCmdAPDU.Size(), responseBuffer, &respBufferSize, plRetVal, pSendPci,
+					   pRecvPci, callbacks.context);
+
+	return CByteArray(responseBuffer, respBufferSize);
+}
+
+void ExternalCardInterface::Recover(CardHandle hCard, unsigned long *pulLockCount) {
+	if (callbacks.recover == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	callbacks.recover(hCard, pulLockCount, callbacks.context);
+}
+
+CByteArray ExternalCardInterface::Control(CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
+										  unsigned long ulMaxResponseSize) {
+	if (callbacks.control == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	unsigned char *respBuffer = new unsigned char[ulMaxResponseSize];
+	if (respBuffer == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
+	}
+
+	unsigned long respBufferSize = ulMaxResponseSize;
+
+	callbacks.control(hCard, ulControl, oCmd.GetBytes(), oCmd.Size(), respBuffer, &respBufferSize, ulMaxResponseSize,
+					  callbacks.context);
+
+	CByteArray result(respBuffer, respBufferSize);
+	delete[] respBuffer;
+
+	return result;
+}
+
+void ExternalCardInterface::BeginTransaction(CardHandle hCard) {
+	if (callbacks.beginTransaction == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	callbacks.beginTransaction(hCard, callbacks.context);
+}
+
+void ExternalCardInterface::EndTransaction(CardHandle hCard) {
+	if (callbacks.endTransaction == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	callbacks.endTransaction(hCard, callbacks.context);
 }
 
 } // namespace eIDMW

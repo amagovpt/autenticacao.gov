@@ -22,17 +22,21 @@
 **************************************************************************** */
 #include "Context.h"
 #include "Config.h"
+#include "PCSC.h"
+#include <memory>
 
 namespace eIDMW {
 CContext::CContext() {
 	m_bSSO = false;
 
 	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
+
+	m_oCardInterface = std::make_unique<CPCSC>();
 }
 
 CContext::~CContext() {
 	m_oThreadPool.FinishThreads();
 
-	m_oPCSC.ReleaseContext();
+	m_oCardInterface->ReleaseContext();
 }
 } // namespace eIDMW

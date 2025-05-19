@@ -97,16 +97,17 @@ public:
 		// Select MF to cancel out any previous application selection due to EF.CardAccess read permissions
 		long fileReturn = 0;
 		CByteArray selectMf(SELECT_MF, sizeof(SELECT_MF));
-		m_context->m_oPCSC.Transmit(hCard, selectMf, &fileReturn, param_structure);
+		m_context->m_oCardInterface->Transmit(hCard, selectMf, &fileReturn, param_structure);
 
 		CByteArray oCmd(8);
 		oCmd.Append(SELECT_ADF, sizeof(SELECT_ADF));
 		const unsigned char SIZE_AND_EF_ACCESS[] = {0x02, 0x01, 0x01C, 0x00};
 		oCmd.Append(SIZE_AND_EF_ACCESS, sizeof(SIZE_AND_EF_ACCESS));
-		m_context->m_oPCSC.Transmit(hCard, oCmd, &fileReturn, param_structure);
+		m_context->m_oCardInterface->Transmit(hCard, oCmd, &fileReturn, param_structure);
 		const unsigned char READ_BINARY[] = {0x00, 0xB0, 0x9C, 0x00, 0x00};
 		CByteArray readBinary(READ_BINARY, sizeof(READ_BINARY));
-		CByteArray readBinEFAccess = m_context->m_oPCSC.Transmit(hCard, readBinary, &fileReturn, param_structure);
+		CByteArray readBinEFAccess =
+			m_context->m_oCardInterface->Transmit(hCard, readBinary, &fileReturn, param_structure);
 		// Discard SW12 from received data
 		readBinEFAccess.Chop(2);
 
@@ -149,7 +150,8 @@ public:
 		CByteArray verifyToken;
 		CByteArray responseverifyToken;
 
-		CByteArray cardNonceResponse = m_context->m_oPCSC.Transmit(hCard, setPaceAuth, &fileReturn, param_structure);
+		CByteArray cardNonceResponse =
+			m_context->m_oCardInterface->Transmit(hCard, setPaceAuth, &fileReturn, param_structure);
 
 		CByteArray encryptedNonce;
 		const unsigned char authEncrypt[] = {0x10, 0x86, 0x00, 0x00};
@@ -158,7 +160,7 @@ public:
 		encryptedNonce.Append(authType, sizeof(authType));
 
 		CByteArray responseEncryptedNonce =
-			m_context->m_oPCSC.Transmit(hCard, encryptedNonce, &fileReturn, param_structure);
+			m_context->m_oCardInterface->Transmit(hCard, encryptedNonce, &fileReturn, param_structure);
 
 		BUF_MEM *dec_nonce = findObjectMem(responseEncryptedNonce, 0x80);
 
@@ -180,7 +182,7 @@ public:
 		sendMapData.Append(reinterpret_cast<unsigned char *>(mappingData->data), (unsigned long) mappingData->length);
 		sendMapData.Append(0x00);
 
-		responseMappingData = m_context->m_oPCSC.Transmit(hCard, sendMapData, &fileReturn, param_structure);
+		responseMappingData = m_context->m_oCardInterface->Transmit(hCard, sendMapData, &fileReturn, param_structure);
 		cardMappingData = findObjectMem(responseMappingData, 0x82);
 		if (!PACE_STEP3A_map_generator(m_ctx, cardMappingData)) {
 			MWLOG(LEV_ERROR, MOD_CAL, "Couldn't generate map");
@@ -200,7 +202,7 @@ public:
 		sendEphePubKey.Append(reinterpret_cast<unsigned char *>(pubkey->data), (unsigned long) pubkey->length);
 		sendEphePubKey.Append(0x00);
 
-		responseEphePubKey = m_context->m_oPCSC.Transmit(hCard, sendEphePubKey, &fileReturn, param_structure);
+		responseEphePubKey = m_context->m_oCardInterface->Transmit(hCard, sendEphePubKey, &fileReturn, param_structure);
 
 		cardPubKey = findObjectMem(responseEphePubKey, 0x84);
 
@@ -217,7 +219,7 @@ public:
 		verifyToken.Append(reinterpret_cast<unsigned char *>(token->data), (unsigned long) token->length);
 		verifyToken.Append(0x00);
 
-		responseverifyToken = m_context->m_oPCSC.Transmit(hCard, verifyToken, &fileReturn, param_structure);
+		responseverifyToken = m_context->m_oCardInterface->Transmit(hCard, verifyToken, &fileReturn, param_structure);
 		if (responseverifyToken.Size() <= 2) {
 			MWLOG(LEV_ERROR, MOD_CAL, "Error verifying generated token, perhaps wrong CAN code, error response: %s",
 				  responseverifyToken.ToString().c_str());

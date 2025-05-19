@@ -60,7 +60,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 	strReader = csReader.c_str();
 
 	if (hCard) {
-		CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
+		CByteArray atr = poContext->m_oCardInterface->GetATR(hCard);
 		CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
 		isContactLess = atr.Equals(atrContactLessCard);
 
@@ -82,7 +82,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 			oCmd.Append(oAID, size);
 
 			CByteArray oResp;
-			oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, paramStructure);
+			oResp = poContext->m_oCardInterface->Transmit(hCard, oCmd, &lRetVal, paramStructure);
 			return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 		};
 
@@ -134,7 +134,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 	SCARDHANDLE hCard = 0;
 	std::pair<SCARDHANDLE, DWORD> ret;
 	try {
-		ret = poContext->m_oPCSC.Connect(csReader);
+		ret = poContext->m_oCardInterface->Connect(csReader);
 		hCard = ret.first;
 
 		if (hCard == 0) {
@@ -153,7 +153,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 
 	if (hCard != 0) {
 		if (poCard == NULL) {
-			CByteArray atr = poContext->m_oPCSC.GetATR(hCard);
+			CByteArray atr = poContext->m_oCardInterface->GetATR(hCard);
 			CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
 			isContactLess = atr.Equals(atrContactLessCard);
 
@@ -177,7 +177,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 				select_command.Append(oAID, size);
 
 				CByteArray oResp;
-				oResp = poContext->m_oPCSC.Transmit(hCard, select_command, &lRetVal, param_structure);
+				oResp = poContext->m_oCardInterface->Transmit(hCard, select_command, &lRetVal, param_structure);
 				unsigned long ulRespLen = oResp.Size();
 				if (ulRespLen < 2)
 					return false;

@@ -22,6 +22,7 @@
 
 **************************************************************************** */
 #include "ReadersInfo.h"
+#include "PCSC.h"
 
 namespace eIDMW {
 
@@ -43,18 +44,18 @@ bool CReadersInfo::CheckReaderEvents(unsigned long ulTimeout, unsigned long ulIn
 	bool bChanged = false;
 
 	if (bFirstTime) {
-		m_poPCSC->GetStatusChange(0, m_tInfos, m_ulReaderCount);
+		m_poCardInterface->GetStatusChange(0, m_tInfos, m_ulReaderCount);
 		bFirstTime = false;
 	}
 
 wait_again:
 	if (ulIndex == ALL_READERS) {
-		bChanged = m_poPCSC->GetStatusChange(ulTimeout, m_tInfos, m_ulReaderCount);
+		bChanged = m_poCardInterface->GetStatusChange(ulTimeout, m_tInfos, m_ulReaderCount);
 	} else {
 		if (ulIndex >= m_ulReaderCount)
 			throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 
-		bChanged = m_poPCSC->GetStatusChange(ulTimeout, &m_tInfos[ulIndex], 1);
+		bChanged = m_poCardInterface->GetStatusChange(ulTimeout, &m_tInfos[ulIndex], 1);
 	}
 
 	// Extra safety: if nothing changed and we should wait forever
@@ -74,7 +75,7 @@ bool CReadersInfo::ReaderStateChanged(unsigned long ulIndex) {
 
 bool CReadersInfo::CardPresent(unsigned long ulIndex) {
 	if (bFirstTime) {
-		m_poPCSC->GetStatusChange(0, m_tInfos, m_ulReaderCount);
+		m_poCardInterface->GetStatusChange(0, m_tInfos, m_ulReaderCount);
 		bFirstTime = false;
 	}
 
@@ -85,8 +86,8 @@ bool CReadersInfo::CardPresent(unsigned long ulIndex) {
 }
 
 /** Constructor */
-CReadersInfo::CReadersInfo(CPCSC *poPCSC, const CByteArray &oReaders) {
-	m_poPCSC = poPCSC;
+CReadersInfo::CReadersInfo(CardInterface *poCardInterface, const CByteArray &oReaders) {
+	m_poCardInterface = poCardInterface;
 	bFirstTime = true;
 	m_ulReaderCount = 0;
 
