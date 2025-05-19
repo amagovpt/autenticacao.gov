@@ -67,7 +67,7 @@ private:
 	APL_CryptoFwkPteid(const APL_CryptoFwkPteid &service);			  /**< Copy not allowed - not implemented */
 	APL_CryptoFwkPteid &operator=(const APL_CryptoFwkPteid &service); /**< Copy not allowed - not implemented */
 
-	friend void CAppLayer::startAllServices(); /**< This method must access private constructor */
+	friend void CAppLayer::startAllServices(const PTEID_CardInterfaceCallbacks *callbacks); /**< This method must access private constructor */
 };
 
 } // namespace eIDMW

@@ -28,6 +28,7 @@
 #include "Context.h"
 #include "CardLayerConst.h"
 #include "../dialogs/dialogs.h"
+#include <memory>
 
 namespace eIDMW {
 
@@ -42,6 +43,8 @@ public:
 	 * card resource manager yet (no SCardEstablishContext() yet)
 	 */
 	CCardLayer(void);
+
+	CCardLayer(const PTEID_CardInterfaceCallbacks *callbacks);
 
 	~CCardLayer(void);
 
@@ -82,7 +85,7 @@ private:
 	CCardLayer &operator=(const CCardLayer &oCardLayer);
 	std::string *GetDefaultReader();
 
-	CContext m_oContext;
+	std::unique_ptr<CContext> m_oContext;
 
 	std::string m_szDefaultReaderName;
 	unsigned long m_ulReaderCount;

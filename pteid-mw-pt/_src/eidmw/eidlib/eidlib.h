@@ -39,6 +39,7 @@
 #include <stdint.h>
 #endif
 #include "eidlibdefines.h"
+#include "CardCallbacks.h"
 
 namespace eIDMW {
 
@@ -293,45 +294,6 @@ private:
 	PTEID_PublicKey &operator=(const PTEID_PublicKey &cardKey); /**< Copy not allowed - not implemented */
 };
 
-typedef uint32_t PTEID_CardHandle;
-
-struct PTEID_CardInterfaceCallbacks {
-	void *context;
-
-	void (*establishContext)(void *context);
-	void (*releaseContext)(void *context);
-
-	void (*listReaders)(unsigned char *buffer, unsigned long *bufferSize, void *context);
-	int (*getStatusChange)(unsigned long ulTimeout, void *pReaderInfos, unsigned long ulReaderCount, void *context);
-
-	int (*statusReader)(const char *csReader, void *context);
-	int (*connect)(const char *csReader, PTEID_CardHandle *outHandle, unsigned long *outProtocol,
-				   unsigned long ulShareMode, unsigned long ulPreferredProtocols, void *context);
-
-	void (*disconnect)(PTEID_CardHandle handle, int disconnectMode, void *context);
-
-	void (*getATR)(PTEID_CardHandle handle, unsigned char *buffer, unsigned long *bufferSize, void *context);
-
-	void (*getIFDVersion)(PTEID_CardHandle handle, unsigned char *buffer, unsigned long *bufferSize, void *context);
-
-	int (*statusCard)(PTEID_CardHandle handle, void *context);
-
-	void (*transmit)(PTEID_CardHandle handle, const unsigned char *cmdData, unsigned long cmdLength,
-					 unsigned char *responseBuffer, unsigned long *respBufferSize, long *plRetVal, const void *pSendPci,
-					 void *pRecvPci, void *context);
-
-	void (*recover)(PTEID_CardHandle handle, unsigned long *pulLockCount, void *context);
-
-	void (*control)(PTEID_CardHandle handle, unsigned long ulControl, const unsigned char *cmdData,
-					unsigned long cmdLength, unsigned char *respBuffer, unsigned long *respBufferSize,
-					unsigned long ulMaxResponseSize, void *context);
-
-	void (*beginTransaction)(PTEID_CardHandle handle, void *context);
-	void (*endTransaction)(PTEID_CardHandle handle, void *context);
-
-	unsigned long (*getContext)(PTEID_CardHandle handle, void *context);
-};
-
 /**
  * This define give an easy access to the PTEID_ReaderSet singleton (no declaration/instantiation is needed).
  *
@@ -373,6 +335,7 @@ public:
 	 * @param bManageTestCard If false other applications (ex. gui) take that into their scope
 	 **/
 	PTEIDSDK_API static void initSDK(bool bManageTestCard = false);
+	PTEIDSDK_API static void initSDKWithCallbacks(const PTEID_CardInterfaceCallbacks &callbacks, bool bManageTestCard = false);
 	PTEIDSDK_API static void releaseSDK(); /**< Release the SDK */
 
 	PTEIDSDK_API virtual ~PTEID_ReaderSet(); /**< Destructor */
@@ -2248,8 +2211,10 @@ public:
 	PTEIDSDK_API const char *getString(); /**< Return the string value (Throw exception for numerical parameter) */
 	PTEIDSDK_API long getLong();		  /**< Return the numerical value (Throw exception for string parameter) */
 
-	PTEIDSDK_API void setString(const char *csValue); /**< Set the string value (Throw exception for numerical parameter) */
-	PTEIDSDK_API void DeleteKeysByPrefix(); /**< Reset the strings with some prefix (Throw exception for numerical parameter) */
+	PTEIDSDK_API void
+	setString(const char *csValue); /**< Set the string value (Throw exception for numerical parameter) */
+	PTEIDSDK_API void
+	DeleteKeysByPrefix(); /**< Reset the strings with some prefix (Throw exception for numerical parameter) */
 	PTEIDSDK_API unsigned int CountKeysByPrefix(); /**< Count keys with some prefix */
 	PTEIDSDK_API void setLong(long lValue); /**< Set the numerical value (Throw exception for string parameter) */
 	PTEIDSDK_API static void SetTestMode(bool bTestMode); /**< Set the test mode */

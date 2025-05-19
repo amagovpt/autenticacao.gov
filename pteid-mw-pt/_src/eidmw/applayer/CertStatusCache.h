@@ -325,7 +325,7 @@ private:
 
 	FILE *m_f; /**< Pointer to the cache file */
 
-	friend void CAppLayer::startAllServices(); /**< This method must access private constructor */
+	friend void CAppLayer::startAllServices(const PTEID_CardInterfaceCallbacks *callbacks); /**< This method must access private constructor */
 
 #ifndef WIN32
 	struct flock m_tFl;

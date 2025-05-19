@@ -57,7 +57,6 @@ public:
 
 	virtual CByteArray GetATR();
 
-	virtual CByteArray GetIFDVersion();
 	virtual bool Status();
 
 	virtual bool IsPinpadReader();

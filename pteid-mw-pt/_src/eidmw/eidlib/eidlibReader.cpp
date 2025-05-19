@@ -235,7 +235,7 @@ public:
 
 	~PTEID_CheckRelease() {
 		if (!m_ReleaseOk) {
-			fprintf(stderr,"WARNING: Please do not forget to release the SDK\n");
+			fprintf(stderr, "WARNING: Please do not forget to release the SDK\n");
 		}
 	}
 
@@ -282,7 +282,15 @@ PTEID_ReaderSet &PTEID_ReaderSet::instance() {
 
 void PTEID_ReaderSet::initSDK(bool bManageTestCard) {
 	try {
-		CAppLayer::init(bManageTestCard);
+		CAppLayer::init(nullptr, bManageTestCard);
+	} catch (CMWException &e) {
+		throw PTEID_Exception::THROWException(e);
+	}
+}
+
+void PTEID_ReaderSet::initSDKWithCallbacks(const PTEID_CardInterfaceCallbacks &callbacks, bool bManageTestCard) {
+	try {
+		CAppLayer::init(&callbacks, bManageTestCard);
 	} catch (CMWException &e) {
 		throw PTEID_Exception::THROWException(e);
 	}

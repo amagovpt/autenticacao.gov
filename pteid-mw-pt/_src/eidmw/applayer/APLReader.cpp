@@ -347,7 +347,9 @@ CReader *APL_ReaderContext::getCalReader() const { return m_calreader; }
 CAppLayer *CAppLayer::m_instance = NULL;
 CMutex CAppLayer::m_Mutex;
 
-CAppLayer::CAppLayer() {
+CAppLayer::CAppLayer() : CAppLayer(nullptr) {}
+
+CAppLayer::CAppLayer(const PTEID_CardInterfaceCallbacks *callbacks) {
 	MWLOG(LEV_INFO, MOD_APL, L"Create CAppLayer object");
 	m_readerList = NULL;
 	m_readerCount = COUNT_UNDEF;
@@ -362,7 +364,7 @@ CAppLayer::CAppLayer() {
 
 	updateVersion();
 
-	startAllServices();
+	startAllServices(callbacks);
 }
 
 CAppLayer::~CAppLayer(void) {
@@ -371,13 +373,24 @@ CAppLayer::~CAppLayer(void) {
 }
 
 // Get the singleton instance of the CAppLayer
-CAppLayer &CAppLayer::instance() {
+CAppLayer &CAppLayer::instance(const PTEID_CardInterfaceCallbacks *callbacks) {
 	if (m_instance == NULL) // First we test if we need to instantiated (without locking to be quicker
 	{
 		CAutoMutex autoMutex(&m_Mutex); // We lock for only one instantiation
 		if (m_instance == NULL) // We test again to be sure it isn't instantiated between the first if and the lock
 		{
-			m_instance = new CAppLayer;
+			if (callbacks) {
+				PTEID_CardInterfaceCallbacks ci_callbacks = {
+					callbacks->context,		callbacks->establishContext, callbacks->releaseContext,
+					callbacks->listReaders, callbacks->getStatusChange,	 callbacks->statusReader,
+					callbacks->connect,		callbacks->disconnect,		 callbacks->getATR,
+					callbacks->statusCard,	callbacks->transmit,		 callbacks->recover,
+					callbacks->control,		callbacks->beginTransaction, callbacks->endTransaction};
+
+				m_instance = new CAppLayer(&ci_callbacks);
+			} else {
+				m_instance = new CAppLayer;
+			}
 		}
 	}
 	return *m_instance;
@@ -387,7 +400,9 @@ void CAppLayer::setAskForTestCard(bool bAskForTestCard) { m_askfortestcard = bAs
 
 bool CAppLayer::getAskForTestCard() { return m_askfortestcard; }
 
-void CAppLayer::init(bool bAskForTestCard) { instance().setAskForTestCard(bAskForTestCard); }
+void CAppLayer::init(const PTEID_CardInterfaceCallbacks *callbacks, bool bAskForTestCard) {
+	instance(callbacks).setAskForTestCard(bAskForTestCard);
+}
 
 // Release the singleton instance of the CAppLayer
 void CAppLayer::release() {
@@ -409,11 +424,11 @@ void CAppLayer::releaseReaders() {
 	readerListRelease();
 }
 
-void CAppLayer::startAllServices() {
+void CAppLayer::startAllServices(const PTEID_CardInterfaceCallbacks *callbacks) {
 	MWLOG(LEV_INFO, MOD_APL, L"Start all applayer services");
 	// First start the card layer
 	if (!m_Cal)
-		m_Cal = new CCardLayer;
+		m_Cal = new CCardLayer(callbacks);
 
 	readerListInit(true);
 

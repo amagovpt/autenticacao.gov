@@ -39,4 +39,12 @@ CContext::~CContext() {
 
 	m_oCardInterface->ReleaseContext();
 }
+
+CContext::CContext(const PTEID_CardInterfaceCallbacks &callbacks) {
+	m_bSSO = false;
+
+	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
+
+	m_oCardInterface = std::make_unique<ExternalCardInterface>(&callbacks);
+}
 } // namespace eIDMW

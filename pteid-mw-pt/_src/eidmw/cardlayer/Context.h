@@ -33,6 +33,7 @@ namespace eIDMW {
 class EIDMW_CAL_API CContext {
 public:
 	CContext();
+	CContext(const PTEID_CardInterfaceCallbacks& callbacks);
 	~CContext();
 
 	std::unique_ptr<CardInterface> m_oCardInterface;

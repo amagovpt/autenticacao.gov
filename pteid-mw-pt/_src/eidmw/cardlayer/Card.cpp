@@ -52,8 +52,6 @@ void CCard::Disconnect(tDisconnectMode disconnectMode) {
 
 CByteArray CCard::GetATR() { return m_poContext->m_oCardInterface->GetATR(m_hCard); }
 
-CByteArray CCard::GetIFDVersion() { return m_poContext->m_oCardInterface->GetIFDVersion(m_hCard); }
-
 bool CCard::Status() { return m_poContext->m_oCardInterface->Status(m_hCard); }
 
 void CCard::setSSO(bool value) {

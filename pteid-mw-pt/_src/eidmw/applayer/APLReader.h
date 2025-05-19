@@ -24,6 +24,7 @@
 **************************************************************************** */
 #pragma once
 
+#include <CardCallbacks.h>
 #ifndef __SCREADERUTIL_H__
 #define __SCREADERUTIL_H__
 
@@ -87,12 +88,12 @@ public:
 	/**
 	  * Return the singleton object (create it at first use)
 	  */
-	EIDMW_APL_API static CAppLayer &instance();
+	EIDMW_APL_API static CAppLayer &instance(const PTEID_CardInterfaceCallbacks *callbacks = nullptr);
 
 	/**
 	  * Init the applayer
 	  */
-	EIDMW_APL_API static void init(bool bAskForTestCard = false);
+	EIDMW_APL_API static void init(const PTEID_CardInterfaceCallbacks *callbacks, bool bAskForTestCard = false);
 
 	/**
 	  * Release the whole applayer
@@ -188,7 +189,7 @@ public:
 	  * NOT for using outside the library (NO EXPORT)
 	  * Must be public to be friend of class that are instanciated
 	  */
-	void startAllServices();
+	void startAllServices(const PTEID_CardInterfaceCallbacks *callbacks);
 
 	bool getAskForTestCard();
 
@@ -197,6 +198,8 @@ private:
 	  * Constructor - used within "instance"
 	  */
 	CAppLayer();
+
+	CAppLayer(const PTEID_CardInterfaceCallbacks *callbacks);
 
 	/**
 	  * Destructor - used within release

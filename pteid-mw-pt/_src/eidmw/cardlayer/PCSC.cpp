@@ -184,7 +184,7 @@ bool CPCSC::Status(const std::string &csReader) {
 	return (xReaderState.dwEventState & SCARD_STATE_PRESENT) == SCARD_STATE_PRESENT;
 }
 
-std::pair<CardHandle, DWORD> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
+std::pair<PTEID_CardHandle, DWORD> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
 											unsigned long ulPreferredProtocols) {
 	DWORD dwActiveProtocol;
 	SCARDHANDLE hCard = 0;
@@ -207,13 +207,13 @@ std::pair<CardHandle, DWORD> CPCSC::Connect(const std::string &csReader, unsigne
 		//CThread::SleepMillisecs(200);
 	} */
 
-	CardHandle handle = static_cast<CardHandle>(hCard);
+	PTEID_CardHandle handle = static_cast<PTEID_CardHandle>(hCard);
 	m_handles.insert({handle, hCard});
 
 	return std::make_pair(hCard, dwActiveProtocol);
 }
 
-void CPCSC::Disconnect(CardHandle hCard, tDisconnectMode disconnectMode) {
+void CPCSC::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
 	auto handle = m_handles[hCard];
 	DWORD dwDisposition = disconnectMode == DISCONNECT_RESET_CARD ? SCARD_RESET_CARD : SCARD_LEAVE_CARD;
 
@@ -223,7 +223,7 @@ void CPCSC::Disconnect(CardHandle hCard, tDisconnectMode disconnectMode) {
 		throw CMWEXCEPTION(PcscToErr(lRet));
 }
 
-CByteArray CPCSC::GetATR(CardHandle hCard) {
+CByteArray CPCSC::GetATR(PTEID_CardHandle hCard) {
 	auto handle = m_handles[hCard];
 	DWORD dwReaderLen = 0;
 	DWORD dwState, dwProtocol;
@@ -238,18 +238,7 @@ CByteArray CPCSC::GetATR(CardHandle hCard) {
 	return CByteArray(tucATR, dwATRLen);
 }
 
-CByteArray CPCSC::GetIFDVersion(CardHandle hCard) {
-	auto handle = m_handles[hCard];
-	unsigned char tucIFDVers[4] = {0, 0, 0, 0};
-	DWORD dwIFDVersLen = sizeof(tucIFDVers);
-
-	LONG lRet = SCardGetAttrib(handle, SCARD_ATTR_VENDOR_IFD_VERSION, tucIFDVers, &dwIFDVersLen);
-	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardGetAttrib(0x%0x): 0x%0x", handle, lRet);
-
-	return CByteArray(tucIFDVers, dwIFDVersLen);
-}
-
-bool CPCSC::Status(CardHandle hCard) {
+bool CPCSC::Status(PTEID_CardHandle hCard) {
 	auto handle = m_handles[hCard];
 	DWORD dwReaderLen = 0;
 	DWORD dwState, dwProtocol;
@@ -270,7 +259,7 @@ bool CPCSC::Status(CardHandle hCard) {
 	return SCARD_S_SUCCESS == lRet;
 }
 
-CByteArray CPCSC::Transmit(CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal, const void *pSendPci,
+CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal, const void *pSendPci,
 						   void *pRecvPci) {
 	auto handle = m_handles[hCard];
 	CByteArray oCmdAPDU(inputAPDU);
@@ -344,7 +333,7 @@ try_again:
 	return CByteArray(tucRecv, (unsigned long)dwRecvLen);
 }
 
-void CPCSC::Recover(CardHandle hCard, unsigned long *pulLockCount) {
+void CPCSC::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) {
 	auto handle = m_handles[hCard];
 	// try to recover when the card is not responding (properly) anymore
 
@@ -377,7 +366,7 @@ void CPCSC::Recover(CardHandle hCard, unsigned long *pulLockCount) {
 	}
 }
 
-CByteArray CPCSC::Control(CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
+CByteArray CPCSC::Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 						  unsigned long ulMaxResponseSize) {
 	auto handle = m_handles[hCard];
 	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardControl(ctrl=0x%0x, %ls)", ulControl,
@@ -424,7 +413,7 @@ CByteArray CPCSC::Control(CardHandle hCard, unsigned long ulControl, const CByte
 	return oResp;
 }
 
-void CPCSC::BeginTransaction(CardHandle hCard) {
+void CPCSC::BeginTransaction(PTEID_CardHandle hCard) {
 	auto handle = m_handles[hCard];
 	LONG lRet = SCardBeginTransaction(handle);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardBeginTransaction(0x%0x): 0x%0x", hCard, lRet);
@@ -432,7 +421,7 @@ void CPCSC::BeginTransaction(CardHandle hCard) {
 		throw CMWEXCEPTION(PcscToErr(lRet));
 }
 
-void CPCSC::EndTransaction(CardHandle hCard) {
+void CPCSC::EndTransaction(PTEID_CardHandle hCard) {
 	auto handle = m_handles[hCard];
 	LONG lRet = SCardEndTransaction(handle, SCARD_LEAVE_CARD);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardEndTransaction(0x%0x): 0x%0x", handle, lRet);
@@ -535,7 +524,7 @@ long CPCSC::PcscToErr(unsigned long lPcscErr) {
 	return lRet;
 }
 
-ExternalCardInterface::ExternalCardInterface(const CardInterfaceCallbacks *callbacks) {
+ExternalCardInterface::ExternalCardInterface(const PTEID_CardInterfaceCallbacks *callbacks) {
 	if (callbacks != nullptr) {
 		this->callbacks = *callbacks;
 	} else {
@@ -591,13 +580,13 @@ bool ExternalCardInterface::Status(const std::string &csReader) {
 	return callbacks.statusReader(csReader.c_str(), callbacks.context) != 0;
 }
 
-std::pair<CardHandle, DWORD> ExternalCardInterface::Connect(const std::string &csReader, unsigned long ulShareMode,
+std::pair<PTEID_CardHandle, DWORD> ExternalCardInterface::Connect(const std::string &csReader, unsigned long ulShareMode,
 															unsigned long ulPreferredProtocols) {
 	if (callbacks.connect == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	CardHandle outHandle = 0;
+	PTEID_CardHandle outHandle = 0;
 	unsigned long outProtocol = 0;
 
 	int result = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, ulShareMode, ulPreferredProtocols,
@@ -610,7 +599,7 @@ std::pair<CardHandle, DWORD> ExternalCardInterface::Connect(const std::string &c
 	}
 }
 
-void ExternalCardInterface::Disconnect(CardHandle hCard, tDisconnectMode disconnectMode) {
+void ExternalCardInterface::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
 	if (callbacks.disconnect == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -618,7 +607,7 @@ void ExternalCardInterface::Disconnect(CardHandle hCard, tDisconnectMode disconn
 	callbacks.disconnect(hCard, static_cast<int>(disconnectMode), callbacks.context);
 }
 
-CByteArray ExternalCardInterface::GetATR(CardHandle hCard) {
+CByteArray ExternalCardInterface::GetATR(PTEID_CardHandle hCard) {
 	if (callbacks.getATR == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -631,20 +620,7 @@ CByteArray ExternalCardInterface::GetATR(CardHandle hCard) {
 	return CByteArray(buffer, bufferSize);
 }
 
-CByteArray ExternalCardInterface::GetIFDVersion(CardHandle hCard) {
-	if (callbacks.getIFDVersion == nullptr) {
-		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-	}
-
-	unsigned char buffer[4];
-	unsigned long bufferSize = sizeof(buffer);
-
-	callbacks.getIFDVersion(hCard, buffer, &bufferSize, callbacks.context);
-
-	return CByteArray(buffer, bufferSize);
-}
-
-bool ExternalCardInterface::Status(CardHandle hCard) {
+bool ExternalCardInterface::Status(PTEID_CardHandle hCard) {
 	if (callbacks.statusCard == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -652,7 +628,7 @@ bool ExternalCardInterface::Status(CardHandle hCard) {
 	return callbacks.statusCard(hCard, callbacks.context) != 0;
 }
 
-CByteArray ExternalCardInterface::Transmit(CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
+CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
 										   const void *pSendPci, void *pRecvPci) {
 	if (callbacks.transmit == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
@@ -667,7 +643,7 @@ CByteArray ExternalCardInterface::Transmit(CardHandle hCard, const CByteArray &o
 	return CByteArray(responseBuffer, respBufferSize);
 }
 
-void ExternalCardInterface::Recover(CardHandle hCard, unsigned long *pulLockCount) {
+void ExternalCardInterface::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) {
 	if (callbacks.recover == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -675,7 +651,7 @@ void ExternalCardInterface::Recover(CardHandle hCard, unsigned long *pulLockCoun
 	callbacks.recover(hCard, pulLockCount, callbacks.context);
 }
 
-CByteArray ExternalCardInterface::Control(CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
+CByteArray ExternalCardInterface::Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 										  unsigned long ulMaxResponseSize) {
 	if (callbacks.control == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
@@ -697,7 +673,7 @@ CByteArray ExternalCardInterface::Control(CardHandle hCard, unsigned long ulCont
 	return result;
 }
 
-void ExternalCardInterface::BeginTransaction(CardHandle hCard) {
+void ExternalCardInterface::BeginTransaction(PTEID_CardHandle hCard) {
 	if (callbacks.beginTransaction == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -705,7 +681,7 @@ void ExternalCardInterface::BeginTransaction(CardHandle hCard) {
 	callbacks.beginTransaction(hCard, callbacks.context);
 }
 
-void ExternalCardInterface::EndTransaction(CardHandle hCard) {
+void ExternalCardInterface::EndTransaction(PTEID_CardHandle hCard) {
 	if (callbacks.endTransaction == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
