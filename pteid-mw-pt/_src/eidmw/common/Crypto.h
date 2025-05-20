@@ -124,7 +124,7 @@ public:
 			throw CMWEXCEPTION(EIDMW_ERR_BAC_CRYPTO_ERROR);
 		}
 
-		return {decrypted.data(), decrypted.size()};
+		return {decrypted.data(), (unsigned long)decrypted.size()};
 	}
 
 	/**
@@ -146,7 +146,7 @@ public:
 			throw CMWEXCEPTION(EIDMW_ERR_BAC_CRYPTO_ERROR);
 		}
 
-		return {decrypted.data(), decrypted.size()};
+		return {decrypted.data(), (unsigned long)decrypted.size()};
 	}
 
 	/**
@@ -259,8 +259,8 @@ class EIDMW_CMN_API SecureMessagingKeys {
 public:
 	void deriveKeys(const CByteArray &seed);
 
-	CByteArray getCBAEncKey() const { return {m_ksEnc.data(), m_ksEnc.size()}; };
-	CByteArray getCBAMacKey() const { return {m_ksMac.data(), m_ksMac.size()}; };
+	CByteArray getCBAEncKey() const { return {m_ksEnc.data(), KEY_SIZE }; };
+	CByteArray getCBAMacKey() const { return {m_ksMac.data(), KEY_SIZE }; };
 
 	void upgradeKeys(const CByteArray &enc, const CByteArray &mac);
 
@@ -269,8 +269,9 @@ public:
 	void incrementSSC() { m_ssc++; }
 
 private:
-	std::array<unsigned char, 16> m_ksEnc;
-	std::array<unsigned char, 16> m_ksMac;
+	const static unsigned long KEY_SIZE = 16;
+	std::array<unsigned char, KEY_SIZE> m_ksEnc;
+	std::array<unsigned char, KEY_SIZE> m_ksMac;
 	uint64_t m_ssc = {0};
 };
 

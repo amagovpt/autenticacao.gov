@@ -261,7 +261,7 @@ CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const 
 	memcpy(msg.get(), macInput.GetBytes(), macInput.Size());
 	memcpy(msg.get() + macInput.Size(), padding, sizeof(padding));
 
-	return BlockCipherCtx::retailMac(key, {msg.get(), inputLen});
+	return BlockCipherCtx::retailMac(key, {msg.get(), (unsigned long) inputLen});
 }
 
 /**
