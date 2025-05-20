@@ -549,19 +549,15 @@ CByteArray ExternalCardInterface::ListReaders() {
 
 bool ExternalCardInterface::GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos,
 											unsigned long ulReaderCount) {
-	if (callbacks.getStatusChange == nullptr) {
-		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-	}
-
-	return callbacks.getStatusChange(ulTimeout, pReaderInfos, ulReaderCount, callbacks.context) != 0;
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_IMPLEMENTED);
 }
 
 bool ExternalCardInterface::Status(const std::string &csReader) {
-	if (callbacks.statusReader == nullptr) {
+	if (callbacks.cardPresentInReader == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	return callbacks.statusReader(csReader.c_str(), callbacks.context) != 0;
+	return callbacks.cardPresentInReader(csReader.c_str(), callbacks.context) != 0;
 }
 
 std::pair<PTEID_CardHandle, DWORD> ExternalCardInterface::Connect(const std::string &csReader,
@@ -574,22 +570,22 @@ std::pair<PTEID_CardHandle, DWORD> ExternalCardInterface::Connect(const std::str
 	PTEID_CardHandle outHandle = 0;
 	unsigned long outProtocol = 0;
 
-	int result = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, ulShareMode, ulPreferredProtocols,
-								   callbacks.context);
+	bool success = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, ulShareMode, ulPreferredProtocols,
+									 callbacks.context);
 
-	if (result == 0) {
+	if (success) {
 		return std::make_pair(outHandle, outProtocol);
 	} else {
 		throw CMWEXCEPTION(EIDMW_ERR_CARD);
 	}
 }
 
-void ExternalCardInterface::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
+void ExternalCardInterface::Disconnect(PTEID_CardHandle hCard, tDisconnectMode) {
 	if (callbacks.disconnect == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	callbacks.disconnect(hCard, static_cast<int>(disconnectMode), callbacks.context);
+	callbacks.disconnect(hCard, callbacks.context);
 }
 
 CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
@@ -658,11 +654,10 @@ std::pair<bool, CByteArray> ExternalCardInterface::StatusWithATR(PTEID_CardHandl
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	int status = 0;
 	unsigned char buffer[64];
 	unsigned long bufferSize = sizeof(buffer);
 
-	callbacks.statusWithATR(hCard, &status, buffer, &bufferSize, callbacks.context);
+	bool status = callbacks.statusWithATR(hCard, buffer, &bufferSize, callbacks.context);
 
 	return std::make_pair(status, (status) ? CByteArray(buffer, bufferSize) : CByteArray());
 }
