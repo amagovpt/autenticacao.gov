@@ -29,12 +29,14 @@
 #include "PkiCard.h"
 #include "Card.h"
 
-using namespace eIDMW;
+//using namespace eIDMW;
 
-CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, SCARDHANDLE hCard, CContext *poContext,
-							GenericPinpad *poPinpad, const void *protocol_struct);
 
 namespace eIDMW {
+
+	CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, SCARDHANDLE hCard, CContext *poContext,
+		GenericPinpad *poPinpad, const void *protocol_struct);
+
 
 // Workaround needed for Windows 8 and later: With the do-nothing call to SCardStatus() in PCSC::Status()
 // we make sure the transaction has activity so that Windows doesn't kill it
