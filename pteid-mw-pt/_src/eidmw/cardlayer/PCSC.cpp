@@ -43,6 +43,17 @@
 
 namespace eIDMW {
 
+PTEID_CardProtocol pcscProtocolToPteid(DWORD protocol) {
+	switch (protocol) {
+	case SCARD_PROTOCOL_T0:
+		return PTEID_CardProtocol::T0;
+	case SCARD_PROTOCOL_T1:
+		return PTEID_CardProtocol::T1;
+	default:
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+}
+
 CPCSC::CPCSC() {
 	CConfig config;
 
@@ -184,8 +195,8 @@ bool CPCSC::Status(const std::string &csReader) {
 	return (xReaderState.dwEventState & SCARD_STATE_PRESENT) == SCARD_STATE_PRESENT;
 }
 
-std::pair<PTEID_CardHandle, DWORD> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
-												  unsigned long ulPreferredProtocols) {
+std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
+															   unsigned long ulPreferredProtocols) {
 	DWORD dwActiveProtocol;
 	SCARDHANDLE hCard = 0;
 
@@ -210,7 +221,7 @@ std::pair<PTEID_CardHandle, DWORD> CPCSC::Connect(const std::string &csReader, u
 	PTEID_CardHandle handle = static_cast<PTEID_CardHandle>(hCard);
 	m_handles.insert({handle, hCard});
 
-	return std::make_pair(hCard, dwActiveProtocol);
+	return std::make_pair(hCard, pcscProtocolToPteid(dwActiveProtocol));
 }
 
 void CPCSC::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
@@ -560,18 +571,17 @@ bool ExternalCardInterface::Status(const std::string &csReader) {
 	return callbacks.cardPresentInReader(csReader.c_str(), callbacks.context) != 0;
 }
 
-std::pair<PTEID_CardHandle, DWORD> ExternalCardInterface::Connect(const std::string &csReader,
-																  unsigned long ulShareMode,
-																  unsigned long ulPreferredProtocols) {
+std::pair<PTEID_CardHandle, PTEID_CardProtocol> ExternalCardInterface::Connect(const std::string &csReader,
+																			   unsigned long ulShareMode,
+																			   unsigned long ulPreferredProtocols) {
 	if (callbacks.connect == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
 	PTEID_CardHandle outHandle = 0;
-	unsigned long outProtocol = 0;
+	PTEID_CardProtocol outProtocol = {};
 
-	bool success = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, ulShareMode, ulPreferredProtocols,
-									 callbacks.context);
+	bool success = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, callbacks.context);
 
 	if (success) {
 		return std::make_pair(outHandle, outProtocol);

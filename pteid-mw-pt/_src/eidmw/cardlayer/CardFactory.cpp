@@ -132,7 +132,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 
 	// Try if we can connect to the card via a normal SCardConnect()
 	SCARDHANDLE hCard = 0;
-	std::pair<SCARDHANDLE, DWORD> ret;
+	std::pair<SCARDHANDLE, PTEID_CardProtocol> ret;
 	try {
 		ret = poContext->m_oCardInterface->Connect(csReader);
 		hCard = ret.first;
@@ -161,9 +161,9 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 				  isContactLess ? "true" : "false");
 			MWLOG(LEV_DEBUG, MOD_CAL, "ATR input value: %s", atr.ToString(true, false).c_str());
 
-			if (ret.second == SCARD_PROTOCOL_T0)
+			if (ret.second == PTEID_CardProtocol::T0)
 				param_structure = SCARD_PCI_T0;
-			else if (ret.second == SCARD_PROTOCOL_T1)
+			else if (ret.second == PTEID_CardProtocol::T1)
 				param_structure = SCARD_PCI_T1;
 
 			int appletVersion = 0;

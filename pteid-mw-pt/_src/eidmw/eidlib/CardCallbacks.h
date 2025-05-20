@@ -4,6 +4,11 @@
 
 typedef uint32_t PTEID_CardHandle;
 
+enum class PTEID_CardProtocol {
+	T0, /**< T=0 active protocol. */
+	T1	/**< T=1 active protocol. */
+};
+
 /**
  * Type definitions for PTEID Card Reader interface functions
  */
@@ -52,14 +57,12 @@ typedef bool (*PTEID_StatusWithATRFn)(PTEID_CardHandle handle, unsigned char *bu
  * Function to connect to a card
  * @param csReader Name of the reader
  * @param outHandle Pointer to receive card handle
- * @param outProtocol Pointer to receive protocol
- * @param ulShareMode Share mode
- * @param ulPreferredProtocols Preferred protocols
+ * @param outProtocol Pointer to receive protocol used by the card
  * @param context Pointer to the context
  * @return True if success
  */
-typedef bool (*PTEID_ConnectFn)(const char *csReader, PTEID_CardHandle *outHandle, unsigned long *outProtocol,
-								unsigned long ulShareMode, unsigned long ulPreferredProtocols, void *context);
+typedef bool (*PTEID_ConnectFn)(const char *csReader, PTEID_CardHandle *outHandle, PTEID_CardProtocol *outProtocol,
+								void *context);
 
 /**
  * Function to disconnect from a card
