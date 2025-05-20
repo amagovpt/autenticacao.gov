@@ -155,7 +155,7 @@ namespace eIDMW {
 				e.GetFile().c_str(), e.GetLine());
 			Disconnect(DISCONNECT_LEAVE_CARD);
 		}
-		catch (const std::exception&) {
+		catch (const std::exception &) {
 			MWLOG(LEV_WARN, MOD_CAL, L"Failed to read serial number std::exception thrown");
 			Disconnect(DISCONNECT_LEAVE_CARD);
 		}
@@ -672,7 +672,7 @@ namespace eIDMW {
 		while (1) {
 			CThread::SleepMillisecs(100);
 			// If the card was removed stop this thread
-			if (!m_poCardInterface->Status(m_hCard))
+			if (!m_poCardInterface->StatusWithATR(m_hCard).first)
 				break;
 
 			if (m_bStopRequest)

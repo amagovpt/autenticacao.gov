@@ -167,7 +167,7 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation, const tPin &pin, unsigne
 	int ioctl2;
 	unsigned int apdu_length = 0, length = 0;
 
-	CByteArray atr = m_poContext->m_oCardInterface->GetATR(m_hCard);
+	CByteArray atr = m_poContext->m_oCardInterface->StatusWithATR(m_hCard).second;
 
 #ifdef WIN32 // Can't get this to work on Linux :(
 	rv = loadStrings(m_hCard, ucPinType, operation);

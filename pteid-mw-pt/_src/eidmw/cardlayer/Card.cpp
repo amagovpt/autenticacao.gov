@@ -50,9 +50,9 @@ void CCard::Disconnect(tDisconnectMode disconnectMode) {
 	}
 }
 
-CByteArray CCard::GetATR() { return m_poContext->m_oCardInterface->GetATR(m_hCard); }
+CByteArray CCard::GetATR() { return m_poContext->m_oCardInterface->StatusWithATR(m_hCard).second; }
 
-bool CCard::Status() { return m_poContext->m_oCardInterface->Status(m_hCard); }
+bool CCard::Status() { return m_poContext->m_oCardInterface->StatusWithATR(m_hCard).first; }
 
 void CCard::setSSO(bool value) {
 	m_poContext->m_bSSO = value;
@@ -60,7 +60,7 @@ void CCard::setSSO(bool value) {
 		// Zero-out currently stored PINs
 		for (size_t i = 0; i < m_verifiedPINs.size(); i++) {
 			assert(i <= UINT_MAX);
-			std::string &pin = m_verifiedPINs[(unsigned int) i];
+			std::string &pin = m_verifiedPINs[(unsigned int)i];
 			std::fill(pin.begin(), pin.end(), 0);
 		}
 	}

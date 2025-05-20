@@ -60,7 +60,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 	strReader = csReader.c_str();
 
 	if (hCard) {
-		CByteArray atr = poContext->m_oCardInterface->GetATR(hCard);
+		CByteArray atr = poContext->m_oCardInterface->StatusWithATR(hCard).second;
 		CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
 		isContactLess = atr.Equals(atrContactLessCard);
 
@@ -153,7 +153,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 
 	if (hCard != 0) {
 		if (poCard == NULL) {
-			CByteArray atr = poContext->m_oCardInterface->GetATR(hCard);
+			CByteArray atr = poContext->m_oCardInterface->StatusWithATR(hCard).second;
 			CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
 			isContactLess = atr.Equals(atrContactLessCard);
 

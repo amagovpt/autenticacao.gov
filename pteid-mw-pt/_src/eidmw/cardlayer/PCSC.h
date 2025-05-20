@@ -90,11 +90,9 @@ public:
 
 	virtual CByteArray ListReaders() = 0;
 
-	virtual CByteArray GetATR(PTEID_CardHandle hCard) = 0;
-
 	virtual bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount) = 0;
 	virtual bool Status(const std::string &csReader) = 0;
-	virtual bool Status(PTEID_CardHandle hCard) = 0;
+	virtual std::pair<bool, CByteArray> StatusWithATR(PTEID_CardHandle hCard) = 0;
 
 	virtual void BeginTransaction(PTEID_CardHandle hCard) = 0;
 	virtual void EndTransaction(PTEID_CardHandle hCard) = 0;
@@ -134,21 +132,20 @@ public:
 	/** Returns true if something changed */
 	bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount) override;
 
+	std::pair<bool, CByteArray> StatusWithATR(PTEID_CardHandle hCard) override;
 	bool Status(const std::string &csReader) override;
 
-	std::pair<PTEID_CardHandle, DWORD> Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
-										 unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 |
-																			  SCARD_PROTOCOL_T1) override;
+	std::pair<PTEID_CardHandle, DWORD>
+	Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) override;
 	void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) override;
-
-	CByteArray GetATR(PTEID_CardHandle hCard) override;
 
 	/**
 	 * Returns true if the same card is still present,
 	 * false if the card has been removed (and perhaps
 	 * the same or antoher card has been inserted).
 	 */
-	bool Status(PTEID_CardHandle hCard) override;
+	// bool Status(PTEID_CardHandle hCard) override;
 
 	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,
 						void *pRecvPci = NULL) override;
@@ -188,15 +185,12 @@ public:
 	bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount) override;
 
 	bool Status(const std::string &csReader) override;
+	std::pair<bool, CByteArray> StatusWithATR(PTEID_CardHandle hCard) override;
 
-	std::pair<PTEID_CardHandle, DWORD> Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
-										 unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 |
-																			  SCARD_PROTOCOL_T1) override;
+	std::pair<PTEID_CardHandle, DWORD>
+	Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) override;
 	void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) override;
-
-	CByteArray GetATR(PTEID_CardHandle hCard) override;
-
-	bool Status(PTEID_CardHandle hCard) override;
 
 	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,
 						void *pRecvPci = NULL) override;

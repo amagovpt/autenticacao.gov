@@ -185,7 +185,7 @@ bool CPCSC::Status(const std::string &csReader) {
 }
 
 std::pair<PTEID_CardHandle, DWORD> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
-											unsigned long ulPreferredProtocols) {
+												  unsigned long ulPreferredProtocols) {
 	DWORD dwActiveProtocol;
 	SCARDHANDLE hCard = 0;
 
@@ -223,40 +223,27 @@ void CPCSC::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
 		throw CMWEXCEPTION(PcscToErr(lRet));
 }
 
-CByteArray CPCSC::GetATR(PTEID_CardHandle hCard) {
+std::pair<bool, CByteArray> CPCSC::StatusWithATR(PTEID_CardHandle hCard) {
 	auto handle = m_handles[hCard];
 	DWORD dwReaderLen = 0;
 	DWORD dwState, dwProtocol;
 	unsigned char tucATR[64];
 	DWORD dwATRLen = sizeof(tucATR);
 
-	LONG lRet = SCardStatus(handle, NULL, &dwReaderLen, &dwState, &dwProtocol, tucATR, &dwATRLen);
-	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardStatus(0x%0x): 0x%0x", handle, lRet);
-	if (SCARD_S_SUCCESS != lRet)
-		throw CMWEXCEPTION(PcscToErr(lRet));
-
-	return CByteArray(tucATR, dwATRLen);
-}
-
-bool CPCSC::Status(PTEID_CardHandle hCard) {
-	auto handle = m_handles[hCard];
-	DWORD dwReaderLen = 0;
-	DWORD dwState, dwProtocol;
-	unsigned char tucATR[64];
-	DWORD dwATRLen = sizeof(tucATR);
 	static int iStatusCount = 0;
 
 	LONG lRet = SCardStatus(handle, NULL, &dwReaderLen, &dwState, &dwProtocol, tucATR, &dwATRLen);
 
-	// lRet = 0;
-	// printf("ups: %ld vs %ld\n",lRet,SCARD_S_SUCCESS);
-
 	if (iStatusCount < 5 || SCARD_S_SUCCESS != lRet) {
 		iStatusCount++;
-		MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardStatus(0x%0x): 0x%0x", handle, lRet);
+		MWLOG(LEV_DEBUG, MOD_CAL, L" SCardStatus(0x%0x): 0x%0x", handle, lRet);
 	}
 
-	return SCARD_S_SUCCESS == lRet;
+	if (SCARD_S_SUCCESS != lRet)
+		throw CMWEXCEPTION(PcscToErr(lRet));
+
+	return std::make_pair(SCARD_S_SUCCESS == lRet,
+						  (SCARD_S_SUCCESS == lRet) ? CByteArray(tucATR, dwATRLen) : CByteArray());
 }
 
 CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal, const void *pSendPci,
@@ -577,8 +564,9 @@ bool ExternalCardInterface::Status(const std::string &csReader) {
 	return callbacks.statusReader(csReader.c_str(), callbacks.context) != 0;
 }
 
-std::pair<PTEID_CardHandle, DWORD> ExternalCardInterface::Connect(const std::string &csReader, unsigned long ulShareMode,
-															unsigned long ulPreferredProtocols) {
+std::pair<PTEID_CardHandle, DWORD> ExternalCardInterface::Connect(const std::string &csReader,
+																  unsigned long ulShareMode,
+																  unsigned long ulPreferredProtocols) {
 	if (callbacks.connect == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -602,27 +590,6 @@ void ExternalCardInterface::Disconnect(PTEID_CardHandle hCard, tDisconnectMode d
 	}
 
 	callbacks.disconnect(hCard, static_cast<int>(disconnectMode), callbacks.context);
-}
-
-CByteArray ExternalCardInterface::GetATR(PTEID_CardHandle hCard) {
-	if (callbacks.getATR == nullptr) {
-		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-	}
-
-	unsigned char buffer[64];
-	unsigned long bufferSize = sizeof(buffer);
-
-	callbacks.getATR(hCard, buffer, &bufferSize, callbacks.context);
-
-	return CByteArray(buffer, bufferSize);
-}
-
-bool ExternalCardInterface::Status(PTEID_CardHandle hCard) {
-	if (callbacks.statusCard == nullptr) {
-		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
-	}
-
-	return callbacks.statusCard(hCard, callbacks.context) != 0;
 }
 
 CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
@@ -684,6 +651,18 @@ void ExternalCardInterface::EndTransaction(PTEID_CardHandle hCard) {
 	}
 
 	callbacks.endTransaction(hCard, callbacks.context);
+}
+
+std::pair<bool, CByteArray> ExternalCardInterface::StatusWithATR(PTEID_CardHandle hCard) {
+	if (callbacks.statusWithATR == nullptr) {
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	int status = 0;
+	unsigned char buffer[64];
+	unsigned long bufferSize = sizeof(buffer);
+
+	callbacks.statusWithATR(hCard, &status, buffer, &bufferSize, callbacks.context);
 }
 
 } // namespace eIDMW

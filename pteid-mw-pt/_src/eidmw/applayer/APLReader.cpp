@@ -380,14 +380,7 @@ CAppLayer &CAppLayer::instance(const PTEID_CardInterfaceCallbacks *callbacks) {
 		if (m_instance == NULL) // We test again to be sure it isn't instantiated between the first if and the lock
 		{
 			if (callbacks) {
-				PTEID_CardInterfaceCallbacks ci_callbacks = {
-					callbacks->context,		callbacks->establishContext, callbacks->releaseContext,
-					callbacks->listReaders, callbacks->getStatusChange,	 callbacks->statusReader,
-					callbacks->connect,		callbacks->disconnect,		 callbacks->getATR,
-					callbacks->statusCard,	callbacks->transmit,		 callbacks->recover,
-					callbacks->control,		callbacks->beginTransaction, callbacks->endTransaction};
-
-				m_instance = new CAppLayer(&ci_callbacks);
+				m_instance = new CAppLayer(callbacks);
 			} else {
 				m_instance = new CAppLayer;
 			}
