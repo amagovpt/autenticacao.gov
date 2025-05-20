@@ -46,6 +46,7 @@
 #include "XadesSignature.h"
 #include "aa_oids.h"
 #include "cryptoFwkPteid.h"
+#include "Reader.h"
 
 #include <openssl/rand.h>
 #include <time.h>

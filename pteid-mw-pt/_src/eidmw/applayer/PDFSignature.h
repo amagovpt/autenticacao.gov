@@ -42,8 +42,6 @@ class GooString;
 
 namespace eIDMW {
 
-class CReader;
-
 typedef struct {
 	unsigned char *img_data;
 	unsigned long img_length;
