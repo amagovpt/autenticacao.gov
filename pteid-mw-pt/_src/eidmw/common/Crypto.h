@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "Export.h"
 #include "ByteArray.h"
 #include "Log.h"
 #include "MWException.h"
@@ -27,6 +28,13 @@
 #include <array>
 #include <cstdint>
 #include <memory>
+#if defined(__WINCRYPT_H__)
+#undef X509_NAME
+#undef X509_EXTENSIONS
+#undef X509_CERT_PAIR
+#undef PKCS7_ISSUER_AND_SERIAL
+#undef PKCS7_SIGNER_INFO
+#endif
 #include <openssl/evp.h>
 #include <openssl/x509.h>
 #include <vector>
@@ -43,7 +51,7 @@ static constexpr size_t AES_BLOCK_SIZE = 16;
 /**
  * @brief Base class for Cipher context
  */
-class CipherCtx {
+class EIDMW_CMN_API CipherCtx {
 protected:
 	std::unique_ptr<EVP_CIPHER_CTX, decltype(&EVP_CIPHER_CTX_free)> ctx;
 
@@ -63,7 +71,7 @@ public:
 /**
  * @brief Base class for block cipher operations
  */
-class BlockCipherCtx {
+class EIDMW_CMN_API BlockCipherCtx {
 protected:
 	CipherCtx ctx;
 	std::unique_ptr<EVP_CIPHER, decltype(&EVP_CIPHER_free)> cipher;
@@ -153,7 +161,7 @@ public:
 /**
  * @brief Base class for message digest context management
  */
-class HashCtx {
+class EIDMW_CMN_API HashCtx {
 protected:
 	std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> ctx;
 
@@ -173,7 +181,7 @@ public:
 /**
  * @brief Base class for cryptographic hash operations
  */
-class MessageDigestCtx {
+class EIDMW_CMN_API MessageDigestCtx {
 protected:
 	HashCtx ctx;
 	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md;
@@ -247,7 +255,7 @@ public:
  * Maintains send sequence counter (SSC) state for secure messaging.
  * Supports both 3DES (16 bytes for K1||K2) and AES-based implementations.
  */
-class SecureMessagingKeys {
+class EIDMW_CMN_API SecureMessagingKeys {
 public:
 	void deriveKeys(const CByteArray &seed);
 
@@ -273,7 +281,7 @@ private:
  * @param blockSize  target block size (default DES_BLOCK_SIZE)
  * @return          new CByteArray, length will be multiple of blockSize
  */
-CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize = DES_BLOCK_SIZE);
+EIDMW_CMN_API CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize = DES_BLOCK_SIZE);
 
 /**
  * Removes iso7816-4 padding from input (0x80 + zeroes)
@@ -281,7 +289,7 @@ CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize = DES_BL
  * @param input      source data to remove padding from
  * @return          new CByteArray
  */
-CByteArray removeIso7816Padding(const CByteArray &input);
+EIDMW_CMN_API CByteArray removeIso7816Padding(const CByteArray &input);
 
 /**
  * @brief Triple des

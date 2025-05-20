@@ -219,11 +219,13 @@
   <ItemGroup>
     <ClCompile Include="ACR83Pinpad.cpp" />
     <ClCompile Include="APDU.cpp" />
+    <ClCompile Include="BacAuthentication.cpp" />
     <ClCompile Include="Cache.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardFactory.cpp" />
     <ClCompile Include="CardLayer.cpp" />
     <ClCompile Include="CardReaderInfo.cpp" />
+    <ClCompile Include="ChipAuthentication.cpp" />
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="GempcPinpad.cpp" />
     <ClCompile Include="GenericPinpad.cpp" />
@@ -237,6 +239,7 @@
     <ClCompile Include="PteidCard.cpp" />
     <ClCompile Include="Reader.cpp" />
     <ClCompile Include="ReadersInfo.cpp" />
+    <ClCompile Include="SecureMessaging.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="UnknownCard.cpp" />
     <ClCompile Include="Win32ReaderInfo.cpp" />
@@ -269,6 +272,7 @@
     <ClInclude Include="Reader.h" />
     <CustomBuild Include="ReadersInfo.h" />
     <ClInclude Include="ReaderDeviceInfo.h" />
+    <ClInclude Include="SecureMessaging.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="UnknownCard.h" />
     <ClInclude Include="FciData.h" />

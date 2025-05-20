@@ -22,7 +22,7 @@
 
 #include "ByteArray.h"
 #include "Context.h"
-#include <openssl/types.h>
+#include "APDU.h"
 
 namespace eIDMW {
 

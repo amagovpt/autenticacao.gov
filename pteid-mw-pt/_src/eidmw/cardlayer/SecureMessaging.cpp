@@ -25,6 +25,7 @@
 #include <cstring>
 #include <fcntl.h>
 #include <openssl/asn1.h>
+#include <openssl/types.h>
 
 namespace eIDMW {
 

@@ -21,6 +21,7 @@
 #pragma once
 
 #include "SecureMessaging.h"
+#include "Export.h"
 #include "ByteArray.h"
 #include "Context.h"
 #include "Crypto.h"
@@ -53,7 +54,7 @@ public:
 	 * @return A new MRZ information structure with properly formatted data
 	 */
 	using MrzInfo = CByteArray;
-	static MrzInfo mrzFromBytes(const CByteArray &data);
+	EIDMW_CAL_API static MrzInfo mrzFromBytes(const CByteArray &data);
 
 	BacAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
 

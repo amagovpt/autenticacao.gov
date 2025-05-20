@@ -235,6 +235,7 @@
     <ClCompile Include="ByteArray.cpp" />
     <ClCompile Include="ConfigCommon.cpp" />
     <ClCompile Include="ConfigReg.cpp" />
+    <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="datafile.cpp" />
     <ClCompile Include="Hash.cpp" />
     <ClCompile Include="libtomcrypt\sha1.c" />
@@ -253,6 +254,7 @@
   <ItemGroup>
     <ClInclude Include="ByteArray.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Crypto.h" />
     <ClInclude Include="datafile.h" />
     <ClInclude Include="eidErrors.h" />
     <ClInclude Include="Export.h" />
