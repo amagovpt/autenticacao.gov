@@ -663,6 +663,8 @@ std::pair<bool, CByteArray> ExternalCardInterface::StatusWithATR(PTEID_CardHandl
 	unsigned long bufferSize = sizeof(buffer);
 
 	callbacks.statusWithATR(hCard, &status, buffer, &bufferSize, callbacks.context);
+
+	return std::make_pair(status, (status) ? CByteArray(buffer, bufferSize) : CByteArray());
 }
 
 } // namespace eIDMW
