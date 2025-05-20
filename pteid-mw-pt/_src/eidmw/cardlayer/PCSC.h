@@ -159,9 +159,6 @@ public:
 	void BeginTransaction(PTEID_CardHandle hCard) override;
 	void EndTransaction(PTEID_CardHandle hCard) override;
 
-	// unsigned long GetContext();
-	SCARDCONTEXT GetContext();
-
 private:
 	long PcscToErr(unsigned long lRet);
 

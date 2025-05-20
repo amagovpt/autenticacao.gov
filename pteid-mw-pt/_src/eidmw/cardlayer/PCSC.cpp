@@ -474,9 +474,6 @@ long CardInterface::SW12ToErr(unsigned long ulSW12) {
 	return lRet;
 }
 
-// unsigned long CPCSC::GetContext()
-SCARDCONTEXT CPCSC::GetContext() { return m_hContext; }
-
 long CPCSC::PcscToErr(unsigned long lPcscErr) {
 	long lRet = EIDMW_ERR_CARD;
 
