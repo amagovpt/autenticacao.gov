@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <cstring>
 #include <openssl/evp.h>
+#include <openssl/err.h>
 
 namespace eIDMW {
 
@@ -32,11 +33,47 @@ namespace Crypto {
 
 CipherCtx::CipherCtx() : ctx(EVP_CIPHER_CTX_new(), EVP_CIPHER_CTX_free) {}
 
+char *memBIO_to_string(BIO *bio) {
+	char *str = NULL;
+
+	int alloc_size = (int)(BIO_number_written(bio) + 1);
+
+	str = (char *)malloc(alloc_size);
+	if (NULL == str) {
+		BIO_free(bio);
+		return NULL;
+	}
+
+	memset(str, 0, alloc_size);
+	BIO_read(bio, str, alloc_size);
+	BIO_free(bio);
+
+	return str;
+}
+
+char *Openssl_errors_dump() {
+	BIO *mem_bio = BIO_new(BIO_s_mem());
+	if (mem_bio == NULL) {
+		return NULL;
+	}
+	// Print the error strings for all errors that OpenSSL has recorded in this thread to mem_bio, thus emptying the
+	// error queue
+	ERR_print_errors(mem_bio);
+
+	return memBIO_to_string(mem_bio);
+}
+
 BlockCipherCtx::BlockCipherCtx(const char *cipher_name, size_t block_sz, size_t key_sz, const char *provider_name)
 	: cipher(EVP_CIPHER_fetch(nullptr, cipher_name, provider_name), EVP_CIPHER_free), block_size(block_sz),
 	  key_size(key_sz) {
-	if (!ctx || !cipher) {
-		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Failed to initialize cipher context");
+
+	if (!ctx) {
+		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Failed to build EVP_Cipher_context");
+	}
+	if (!cipher) {
+		MWLOG(LEV_DEBUG, MOD_SSL, "EVP_CIPHER_fetch error! Dump:\n %s", Openssl_errors_dump());
+		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Failed to initialize cipher context for algo: %s", cipher_name);
+
 	}
 
 	EVP_CIPHER_CTX_set_padding(ctx, 0);
@@ -191,6 +228,13 @@ void SecureMessagingKeys::upgradeKeys(const CByteArray &enc, const CByteArray &m
 
 	memcpy(m_ksEnc.data(), enc.GetBytes(), 16);
 	memcpy(m_ksMac.data(), mac.GetBytes(), 16);
+}
+
+void loadProviders() {
+	OSSL_PROVIDER * legacy_prov = OSSL_PROVIDER_load(NULL, "legacy");
+	MWLOG_CTX(LEV_DEBUG, MOD_SSL, "Legacy provider loaded in common: %p", legacy_prov);
+	OSSL_PROVIDER * default_prov = OSSL_PROVIDER_load(NULL, "default");
+	MWLOG_CTX(LEV_DEBUG, MOD_SSL, "Default provider loaded in common: %p", default_prov);
 }
 
 } // namespace Crypto

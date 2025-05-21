@@ -48,6 +48,10 @@ BacAuthentication::BacAuthentication(SCARDHANDLE hCard, CContext *poContext, con
 	: SecureMessaging(hCard, poContext, paramStructure) {}
 
 void BacAuthentication::authenticate(const CByteArray &mrzInfo) {
+
+#ifdef _WIN32
+	loadProviders();
+#endif
 	if (mrzInfo.Size() == 0) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_INVALID_MRZ, "Invalid MRZ info. Size should be > 0");
 	}

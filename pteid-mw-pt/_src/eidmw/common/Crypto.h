@@ -37,6 +37,7 @@
 #endif
 #include <openssl/evp.h>
 #include <openssl/x509.h>
+#include <openssl/provider.h>
 #include <vector>
 
 namespace eIDMW {
@@ -291,6 +292,8 @@ EIDMW_CMN_API CByteArray withIso7816Padding(const CByteArray &input, size_t bloc
  * @return          new CByteArray
  */
 EIDMW_CMN_API CByteArray removeIso7816Padding(const CByteArray &input);
+
+EIDMW_CMN_API void loadProviders();
 
 /**
  * @brief Triple des
