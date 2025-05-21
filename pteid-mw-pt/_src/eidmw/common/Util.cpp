@@ -117,8 +117,8 @@ std::u32string stringWidenUTF32(std::string utf8_str) {
 }
 #endif
 
-long bigEndianBytesToLong(const uint8_t *bytes, size_t length) {
-	long value = 0;
+uint64_t bigEndianBytesToLong(const uint8_t *bytes, size_t length) {
+	uint64_t value = 0;
 	for (size_t i = 0; i < length; i++) {
 		value = (value << 8) | bytes[i]; // Shift existing value and add next byte
 	}
