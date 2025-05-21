@@ -29,7 +29,6 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
-#include <eac/eac.h>
 #include <memory>
 #include <openssl/des.h>
 #include <openssl/err.h>
