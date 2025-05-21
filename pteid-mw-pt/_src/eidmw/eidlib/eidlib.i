@@ -1060,6 +1060,7 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 %javaexception("PTEID_Exception") getCardType 		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCard			JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getICAOCard		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getMultiPassToken	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getEIDCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") BeginTransaction	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") EndTransaction	JAVA_CODE_THROW
