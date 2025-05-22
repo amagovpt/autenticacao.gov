@@ -422,11 +422,11 @@
     </message>
     <message>
         <source>STR_ICAO_IS_SECURE</source>
-        <translation>Dados de viagem no cartão estão válidos.</translation>
+        <translation>Dados de viagem autênticos.</translation>
     </message>
     <message>
         <source>STR_ICAO_IS_NOT_SECURE</source>
-        <translation>Dados de viagem no cartão não estão válidos.</translation>
+        <translation>Dados de viagem não autênticos.</translation>
     </message>
     <message>
         <source>STR_STREET_NAME</source>

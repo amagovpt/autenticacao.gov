@@ -424,11 +424,11 @@
     </message>
     <message>
         <source>STR_ICAO_IS_SECURE</source>
-        <translation>Travel information on the card is valid.</translation>
+        <translation>Document data is authentic.</translation>
     </message>
     <message>
         <source>STR_ICAO_IS_NOT_SECURE</source>
-        <translation>Travel information on the card is not valid.</translation>
+        <translation>Document data is not authentic.</translation>
     </message>
     <message>
         <source>STR_STREET_NAME</source>
