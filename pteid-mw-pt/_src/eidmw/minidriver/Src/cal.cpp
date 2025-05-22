@@ -1,5 +1,4 @@
 #include "cal.h"
-#include "globmdrv.h"
 
 #include "CardLayer.h"
 #include "CardFactory.h"
@@ -183,7 +182,7 @@ DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey,
 	return SCARD_S_SUCCESS;
 }
 
-DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAttemptsRemaining, BYTE pin_id) {
+DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAttemptsRemaining, BYTE pin_id, BYTE card_type) {
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
 		reader.UseHandle(pCardData->hScard);
