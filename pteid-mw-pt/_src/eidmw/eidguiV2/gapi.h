@@ -271,6 +271,7 @@ public:
 		FullName,
 		IsPassport,
 		IsNameFromMRZ,
+		IsDgsSecured,
 	};
 
 	enum AddressInfoKey {

@@ -421,6 +421,14 @@
         <translation>País emissor</translation>
     </message>
     <message>
+        <source>STR_ICAO_IS_SECURE</source>
+        <translation>Dados de viagem no cartão estão válidos.</translation>
+    </message>
+    <message>
+        <source>STR_ICAO_IS_NOT_SECURE</source>
+        <translation>Dados de viagem no cartão não estão válidos.</translation>
+    </message>
+    <message>
         <source>STR_STREET_NAME</source>
         <oldsource>Ab. street type</oldsource>
         <translation>Nome da Via</translation>

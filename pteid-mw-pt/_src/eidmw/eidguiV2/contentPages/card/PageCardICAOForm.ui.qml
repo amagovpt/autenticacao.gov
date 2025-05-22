@@ -39,6 +39,7 @@ Item {
     property alias propertyJpegButton: jpegButton
     property alias propertyCancelExport: cancelExport
     property bool propertyIsFullNameMrz: false
+    property alias propertySecurityStatusText: securityStatusText
 
     Item {
         id: rowTop
@@ -90,8 +91,8 @@ Item {
                 KeyNavigation.tab: photoImage
                 KeyNavigation.down: photoImage
                 KeyNavigation.right: photoImage
-                KeyNavigation.backtab: rectCountry
-                KeyNavigation.up: rectCountry
+                KeyNavigation.backtab: securityStatusText
+                KeyNavigation.up: securityStatusText
             }
         }
 
@@ -408,11 +409,40 @@ Item {
                     }
                     Accessible.role: Accessible.Column
                     Accessible.name: textBoxCountry.accessibleText
+                    KeyNavigation.tab: securityStatusText
+                    KeyNavigation.down: securityStatusText
+                    KeyNavigation.right: securityStatusText
+                    KeyNavigation.backtab: rectNacionality
+                    KeyNavigation.up: rectNacionality
+                }
+            }
+
+            RowLayout {
+                spacing: 0
+                Layout.fillWidth: true
+                height: Constants.HEIGHT_TEXT_BOX
+                Item {
+                    id: securityStatus
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Text {
+                        id: securityStatusText
+                        font.pixelSize: securityStatusText.activeFocus || parent.activeFocus
+                                        ? Constants.SIZE_TEXT_LABEL_FOCUS
+                                        : Constants.SIZE_TEXT_LABEL
+                        font.family: lato.name
+                        font.bold: securityStatusText.activeFocus
+                                   || parent.activeFocus ? true : false
+                        color: "green"
+                        height: Constants.SIZE_TEXT_LABEL
+                    }
+                    Accessible.role: Accessible.Column
+                    Accessible.name: securityStatusText.text
                     KeyNavigation.tab: surNameTextTextForm
                     KeyNavigation.down: surNameTextTextForm
                     KeyNavigation.right: surNameTextTextForm
-                    KeyNavigation.backtab: rectNacionality
-                    KeyNavigation.up: rectNacionality
+                    KeyNavigation.backtab: rectCountry
+                    KeyNavigation.up: rectCountry
                 }
             }
         }

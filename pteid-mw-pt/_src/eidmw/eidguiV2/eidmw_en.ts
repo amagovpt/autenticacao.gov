@@ -423,6 +423,14 @@
         <translation>Issuer Country</translation>
     </message>
     <message>
+        <source>STR_ICAO_IS_SECURE</source>
+        <translation>Travel information on the card is valid.</translation>
+    </message>
+    <message>
+        <source>STR_ICAO_IS_NOT_SECURE</source>
+        <translation>Travel information on the card is not valid.</translation>
+    </message>
+    <message>
         <source>STR_STREET_NAME</source>
         <oldsource>Ab. street type</oldsource>
         <translation>Street Name</translation>

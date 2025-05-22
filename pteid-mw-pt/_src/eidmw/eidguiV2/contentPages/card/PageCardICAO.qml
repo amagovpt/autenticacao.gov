@@ -38,6 +38,8 @@ PageCardICAOForm {
         onLanguageChanged: {
             propertyTextBoxCountry.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.IssuingState), controler.getGuiLanguageString())
             propertyTextBoxNacionality.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.Nat), controler.getGuiLanguageString())
+            propertySecurityStatusText.text = gapi.getDataICAOValue(GAPI.IsDgsSecured) === "True" ? qsTranslate("GAPI", "STR_ICAO_IS_SECURE") : qsTranslate("GAPI", "STR_ICAO_IS_NOT_SECURE")
+            propertySecurityStatusText.color = gapi.getDataICAOValue(GAPI.IsDgsSecured) === "True" ? "green" : "red"
         }
     }
 
@@ -60,6 +62,8 @@ PageCardICAOForm {
             propertyTextBoxDocumentNum.propertyDateField.text = gapi.getDataICAOValue(GAPI.DocumentNumber)
             propertyTextBoxExpirydate.propertyDateField.text = gapi.getDataICAOValue(GAPI.DateOfExpiry)
             propertyTextBoxCountry.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.IssuingState), controler.getGuiLanguageString())
+            propertySecurityStatusText.text = gapi.getDataICAOValue(GAPI.IsDgsSecured) === "True" ? qsTranslate("GAPI", "STR_ICAO_IS_SECURE") : qsTranslate("GAPI", "STR_ICAO_IS_NOT_SECURE")
+            propertySecurityStatusText.color = gapi.getDataICAOValue(GAPI.IsDgsSecured) === "True" ? "green" : "red"
             propertyPhoto.source = ""
             propertyPhoto.cache = false
             propertyPhoto.source = "image://myimageprovider/photoICAO.png"
@@ -105,6 +109,7 @@ PageCardICAOForm {
             propertyTextBoxDocumentNum.propertyDateField.text = ""
             propertyTextBoxExpirydate.propertyDateField.text = ""
             propertyTextBoxCountry.propertyDateField.text = ""
+            propertySecurityStatusText.text = ""
             propertyPhoto.source = ""
             propertyPhoto.cache = false
             propertyBusyIndicator.running = false
@@ -123,6 +128,7 @@ PageCardICAOForm {
             propertyTextBoxDocumentNum.propertyDateField.text = ""
             propertyTextBoxExpirydate.propertyDateField.text = ""
             propertyTextBoxCountry.propertyDateField.text = ""
+            propertySecurityStatusText.text = ""
             propertyPhoto.source = ""
             propertyPhoto.cache = false
             propertyBusyIndicator.running = false
@@ -144,6 +150,7 @@ PageCardICAOForm {
                 propertyTextBoxDocumentNum.propertyDateField.text = ""
                 propertyTextBoxExpirydate.propertyDateField.text = ""
                 propertyTextBoxCountry.propertyDateField.text = ""
+                propertySecurityStatusText.text = ""
                 propertyPhoto.source = ""
                 propertyPhoto.cache = false
                 propertySavePhotoButton.enabled = false

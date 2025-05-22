@@ -3144,6 +3144,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 
 	QMap<ICAOInfoKey, QString> cardData;
 
+	bool statusDgs = dg->GetReport()->GetStatus() == 0 && card->GetDocumentReport()->GetSodReport()->GetStatus() == 0;
 	cardData[DocumentCode] = QString::fromUtf8(dg->documentCode());
 	cardData[IssuingState] = QString::fromUtf8(dg->issuingState());
 	QString optionalData;
@@ -3166,6 +3167,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 
 	// Load the photo from PTEID_ICAO_DG2	
 	PTEID_ICAO_DG2* dg2 = card->readDataGroup2();
+	statusDgs = statusDgs && dg2->GetReport()->GetStatus() == 0;
 	if (!dg2->biometricInstances().empty()) {
 		qDebug() << "Trying to process DG2";
 		std::vector<PTEID_BiometricInfomation*> biometric_instances = dg2->biometricInstances();
@@ -3194,6 +3196,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	if (it != availableDgs.end()) {
 		try {
 			PTEID_ICAO_DG11 *dg11 = card->readDataGroup11();
+			statusDgs = statusDgs && dg11->GetReport()->GetStatus() == 0;
 			//All the DG11 tags are optional so we need to check for presence of fullname
 			if (dg11 != NULL && strlen(dg11->fullName()) > 0) {
 				cardData[FullName] = dg11->fullName();
@@ -3204,6 +3207,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 		}
 	}
 
+	cardData[IsDgsSecured] = statusDgs ? "True" : "False";
 	setDataCardICAO(cardData);
 	if (!m_hasOnlyIcao) {
 		//Make the card ready to access other applications
