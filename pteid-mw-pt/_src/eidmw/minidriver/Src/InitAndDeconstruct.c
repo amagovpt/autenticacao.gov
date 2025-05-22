@@ -64,7 +64,12 @@ CARD_ATR CardAtr[] = {
 
 /****************************************************************************************************/
 
+//
+// Global declarations from `globmdrv.h`
+//
 BYTE card_type = 0;
+const SCARD_IO_REQUEST *g_pioSendPci = NULL;
+WORD g_keySize = 0;
 
 //
 // Function: CardAcquireContext

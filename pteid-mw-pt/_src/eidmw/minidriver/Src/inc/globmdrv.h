@@ -104,8 +104,8 @@ typedef struct _VENDOR_SPECIFIC {
 #define IAS_V5_CARD 2
 
 extern BYTE card_type;
-WORD g_keySize;
-const SCARD_IO_REQUEST *g_pioSendPci;
+extern WORD g_keySize;
+extern const SCARD_IO_REQUEST *g_pioSendPci;
 /* Gemsafe = 1, IAS = 2   */
 
 #endif
