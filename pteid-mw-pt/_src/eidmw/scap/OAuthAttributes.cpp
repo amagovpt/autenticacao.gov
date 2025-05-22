@@ -85,7 +85,7 @@ OAuthResult OAuthAttributes::fetchAttributes() {
 
 	MWLOG(LEV_DEBUG, MOD_SCAP, "Attributes fetched:");
 	for (const auto &attr : m_attributes) {
-		MWLOG(LEV_DEBUG, MOD_SCAP, "Attr: ", attributeToUri(attr.first).c_str());
+		MWLOG(LEV_DEBUG, MOD_SCAP, "Attr: %s", attributeToUri(attr.first).c_str());
 	}
 
 	return result;
