@@ -47,6 +47,7 @@
 #include "MWException.h"
 #include "cryptoFwkPteid.h"
 #include "CertStatusCache.h"
+#include "aa_oids.h"
 
 #include "../_Builds/pteidversions.h"
 
@@ -156,7 +157,8 @@ APL_CardType APL_ReaderContext::getPhysicalCardType() {
 	switch (calCardType) {
 	case CARD_PTEID_IAS07:
 	case CARD_PTEID_IAS101:
-	case CARD_PTEID_IAS5: {
+	case CARD_PTEID_IAS5:
+	case CARD_ICAO: {
 
 		ret = ConvertCardType(calCardType);
 
@@ -190,6 +192,7 @@ bool APL_ReaderContext::connectCard() {
 	// If there is no card, we delete the pointer and we quit
 	if (m_status == CARD_NOT_PRESENT || m_status == CARD_REMOVED) {
 		if (m_card) {
+			m_icao.reset(nullptr);
 			delete m_card;
 			m_card = NULL;
 		}
@@ -199,6 +202,7 @@ bool APL_ReaderContext::connectCard() {
 	if (m_card) {
 		// If there is a card and change, we delete the pointer
 		if (m_status == CARD_INSERTED || m_status == CARD_OTHER) {
+			m_icao.reset(nullptr);
 			delete m_card;
 			m_card = NULL;
 		} else // If there is a card and no change, we quit
@@ -218,11 +222,16 @@ bool APL_ReaderContext::connectCard() {
 	case APL_CARDTYPE_PTEID_IAS07:
 	case APL_CARDTYPE_PTEID_IAS101:
 	case APL_CARDTYPE_PTEID_IAS5:
-		return true; // New connection
+		m_card = new APL_EIDCard(this, cardType);
+		break;
+	case APL_CARDTYPE_ICAO:
+		m_card = new APL_ICAO(this);
+		break;
 	default:
 		return false;
 	}
 
+	return true;
 }
 
 APL_Card *APL_ReaderContext::getCard() {
@@ -232,6 +241,35 @@ APL_Card *APL_ReaderContext::getCard() {
 }
 
 bool APL_ReaderContext::isCardContactless() const { return m_card->getCalReader()->isCardContactless(); }
+
+APL_ICAO *APL_ReaderContext::getICAOCard() {
+	connectCard();
+
+	if (m_card == NULL) {
+		return NULL;
+	}
+
+	if (m_card->getType() == APL_CARDTYPE_ICAO) {
+		return dynamic_cast<APL_ICAO *>(m_card);
+	} else if (m_card->getType() == APL_CARDTYPE_PTEID_IAS5) {
+
+		// Confirm presence of ICAO application
+		try {
+			m_calreader->SelectApplication({ICAO_APPLET_MRTD, sizeof(ICAO_APPLET_MRTD)});
+		} catch (...) {
+			return NULL;
+		}
+
+		if (!m_icao) {
+			m_icao.reset();
+			m_icao = std::unique_ptr<APL_ICAO>(new APL_ICAO(this));
+		}
+
+		return m_icao.get();
+	}
+
+	return NULL;
+}
 
 APL_EIDCard *APL_ReaderContext::getEIDCard() {
 	connectCard();
@@ -383,6 +421,9 @@ void CAppLayer::startAllServices() {
 	if (!m_cryptoFwk)
 		m_cryptoFwk = new APL_CryptoFwkPteid;
 
+	// Initialize needed context for active authentication
+	initializeAAContext();
+
 	// Then start the caches (Certificates and CRL)
 	if (!m_certStatusCache)
 		m_certStatusCache = new APL_CertStatusCache(m_cryptoFwk);
@@ -455,6 +496,40 @@ void CAppLayer::readerListInit(bool bForceRefresh) {
 			}
 		}
 	}
+}
+
+void CAppLayer::initializeAAContext() {
+	const auto registerOID = [](const unsigned char *bsiOID, const char *SN, const char *LN) {
+		auto len = BSI_OID_LEN;
+
+		ASN1_OBJECT *oid = d2i_ASN1_OBJECT(nullptr, &bsiOID, len);
+		if (oid == nullptr) {
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to create ASN1 object for %s", LN);
+			return;
+		}
+
+		char oid_str[256];
+		int ret = OBJ_obj2txt(oid_str, sizeof(oid_str), oid, 1);
+		if (ret < 0) {
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to convert ASN1 object to text for %s", LN);
+			ASN1_OBJECT_free(oid);
+			return;
+		}
+
+		auto created_nid = OBJ_create(oid_str, SN, LN);
+		if (created_nid == NID_undef) {
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to create NID for %s", LN);
+		}
+
+		ASN1_OBJECT_free(oid);
+	};
+
+	// register future possible OIDs
+	registerOID(bsiSha1OID, bsiSha1SN, bsiSha1LN);
+	registerOID(bsiSha224OID, bsiSha224SN, bsiSha224LN);
+	registerOID(bsiSha256OID, bsiSha256SN, bsiSha256LN);
+	registerOID(bsiSha384OID, bsiSha384SN, bsiSha384LN);
+	registerOID(bsiSha512OID, bsiSha512SN, bsiSha512LN);
 }
 
 // Update the stored revision/build number
@@ -634,6 +709,8 @@ APL_CardType ConvertCardType(tCardType cardType) {
 		return APL_CARDTYPE_PTEID_IAS101;
 	case CARD_PTEID_IAS5:
 		return APL_CARDTYPE_PTEID_IAS5;
+	case CARD_ICAO:
+		return APL_CARDTYPE_ICAO;
 	default:
 		return APL_CARDTYPE_UNKNOWN;
 	}

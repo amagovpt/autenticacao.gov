@@ -2,22 +2,22 @@
 
 #include <limits.h>
 
-#include <iomanip>
 #include <sstream>
 #include <cassert>
 
 #define MAX_LC_LE_LENGTH 0xFFFF
 #define MAX_LC_LE_LENGTH_SHORT 255
+#define MAX_LC_LE_LENGTH_SHORT_PACE 223
 
 eIDMW::APDU::APDU() {
-	m_cls = m_ins = m_p1 = m_p2 = 0x00;
+	m_cla = m_ins = m_p1 = m_p2 = 0x00;
 	m_le = -1;
 	m_isExtended = m_forceExtended = false;
 }
 
 eIDMW::APDU::~APDU() {}
 
-unsigned char &eIDMW::APDU::cls() { return m_cls; }
+unsigned char &eIDMW::APDU::cla() { return m_cla; }
 
 unsigned char &eIDMW::APDU::ins() { return m_ins; }
 
@@ -25,7 +25,7 @@ unsigned char &eIDMW::APDU::p1() { return m_p1; }
 
 unsigned char &eIDMW::APDU::p2() { return m_p2; }
 
-unsigned char eIDMW::APDU::cls() const { return m_cls; }
+unsigned char eIDMW::APDU::cla() const { return m_cla; }
 
 unsigned char eIDMW::APDU::ins() const { return m_ins; }
 
@@ -36,21 +36,20 @@ unsigned char eIDMW::APDU::p2() const { return m_p2; }
 eIDMW::CByteArray eIDMW::APDU::getLe(bool onlyLe) const {
 	bool isExtended = m_isExtended || m_forceExtended;
 	CByteArray result;
-	if (m_le >= 0) {
-		if (isExtended) {
-			CByteArray formatLe;
-			if (m_data.Size() > 0 || onlyLe) {
-				formatLe = formatExtended(m_le, 2);
-			} else {
-				formatLe = formatExtended(m_le, 3);
-			}
-			result.Append(formatLe);
-		} else {
-			assert(m_le <= UCHAR_MAX);
-			result.Append((unsigned char) m_le);
-		}
-	}
+	if (m_le < 0)
+		return result;
 
+	if (isExtended) {
+		CByteArray formatLe;
+		if (m_data.Size() > 0 || onlyLe) {
+			formatLe = formatExtended(m_le, 2);
+		} else {
+			formatLe = formatExtended(m_le, 3);
+		}
+		result.Append(formatLe);
+	} else {
+		result.Append(m_le);
+	}
 	return result;
 }
 
@@ -58,18 +57,18 @@ eIDMW::CByteArray eIDMW::APDU::getLc(bool onlyLc) const {
 	CByteArray result;
 	bool isExtended = m_isExtended || m_forceExtended;
 	size_t lc = m_data.Size();
-	if (lc > 0) {
-		result.Append(m_data);
-		if (isExtended) {
-			if (onlyLc)
-				result.Append(formatExtended(lc, 2));
-			else
-				result.Append(formatExtended(lc, 3));
+	if (lc <= 0)
+		return result;
+
+	result.Append(m_data);
+	if (isExtended) {
+		if (onlyLc)
+			result.Append(formatExtended(lc, 2));
+		else
+			result.Append(formatExtended(lc, 3));
 		} else {
-			assert(lc <= UCHAR_MAX);
-			result.Append((unsigned char) lc);
+			result.Append(lc);
 		}
-	}
 
 	return result;
 }
@@ -106,10 +105,10 @@ bool eIDMW::APDU::canBeShort() const { return !m_isExtended; }
 
 bool eIDMW::APDU::isExtended() const { return m_isExtended || m_forceExtended; }
 
-eIDMW::CByteArray eIDMW::APDU::ToByteArray() const {
+eIDMW::CByteArray eIDMW::APDU::ToByteArray(bool usingPace) const {
 	size_t sizeOfAPDU = 2;
 	size_t lc = m_data.Size();
-	bool isExtended = m_isExtended || m_forceExtended;
+	bool isExtended = m_isExtended || m_forceExtended || usingPace ? (lc > MAX_LC_LE_LENGTH_SHORT_PACE) : false;
 	if (lc > 0) {
 		sizeOfAPDU += isExtended ? 3 : 1; // lc size
 		sizeOfAPDU += lc;
@@ -117,19 +116,19 @@ eIDMW::CByteArray eIDMW::APDU::ToByteArray() const {
 	sizeOfAPDU += isExtended ? lc > 0 ? 2 : 3 : 1; // le size
 	assert(sizeOfAPDU <= ULONG_MAX);
 	CByteArray result((unsigned long) sizeOfAPDU);
-	result.Append(m_cls);
+	result.Append(m_cla);
 	result.Append(m_ins);
 	result.Append(m_p1);
 	result.Append(m_p2);
 
 	if (lc > 0) {
-		result.Append(m_data);
 		if (isExtended) {
 			result.Append(formatExtended(lc, 3));
 		} else {
 			assert(lc <= UCHAR_MAX);
 			result.Append((unsigned char) lc);
 		}
+		result.Append(m_data);
 	}
 	if (m_le >= 0) {
 		if (isExtended) {
@@ -150,7 +149,7 @@ eIDMW::CByteArray eIDMW::APDU::ToByteArray() const {
 
 eIDMW::CByteArray eIDMW::APDU::getHeader() const {
 	CByteArray header(4);
-	header.Append(m_cls);
+	header.Append(m_cla);
 	header.Append(m_ins);
 	header.Append(m_p1);
 	header.Append(m_p2);
@@ -158,7 +157,7 @@ eIDMW::CByteArray eIDMW::APDU::getHeader() const {
 	return header;
 }
 
-eIDMW::CByteArray eIDMW::APDU::formatExtended(size_t lengthData, size_t byteSize) const // bytesize needed
+eIDMW::CByteArray eIDMW::APDU::formatExtended(size_t lengthData, size_t byteSize) // bytesize needed
 {
 	std::stringstream stream;
 	stream << std::hex << lengthData;

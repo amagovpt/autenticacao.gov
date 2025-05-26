@@ -14,6 +14,7 @@ import QtQuick 2.6
 ListModel {
     ListElement {
         name: QT_TR_NOOP("STR_MENU_SIGN_CARD")
+        isCard: true
         expand: false
         subdata:[
             ListElement {
@@ -40,6 +41,12 @@ ListModel {
                 name: QT_TR_NOOP("STR_MENU_PRINT")
                 expand: false
                 url: "contentPages/card/PageCardPrint.qml"
+            },
+            ListElement {
+                name: QT_TR_NOOP("STR_MENU_ICAO")
+                expand: false
+                isIcao: true
+                url: "contentPages/card/PageCardICAO.qml"
             }
         ]
     }
@@ -51,22 +58,26 @@ ListModel {
                 name: QT_TR_NOOP("STR_MENU_SIGN")
                 expand: false
                 url: "contentPages/services/PageServicesSign.qml"
+                shown : true
             }
         ]
     }
     ListElement {
         name: QT_TR_NOOP("STR_MENU_SECURITY")
         expand: false
+        isSecurity: true
         subdata:[
             ListElement {
                 name: QT_TR_NOOP("STR_MENU_CERTIFICATES")
                 expand: false
                 url: "contentPages/security/PageSecurityCertificateState.qml"
+                shown : true
             },
             ListElement {
                 name: QT_TR_NOOP("STR_MENU_PIN_CODES")
                 expand: false
                 url: "contentPages/security/PageSecurityPinCodes.qml"
+                shown : true
             }
         ]
     }

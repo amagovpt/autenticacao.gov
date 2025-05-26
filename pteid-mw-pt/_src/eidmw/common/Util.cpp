@@ -117,9 +117,17 @@ std::u32string stringWidenUTF32(std::string utf8_str) {
 }
 #endif
 
-const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag) {
+uint64_t bigEndianBytesToLong(const uint8_t *bytes, size_t length) {
+	uint64_t value = 0;
+	for (size_t i = 0; i < length; i++) {
+		value = (value << 8) | bytes[i]; // Shift existing value and add next byte
+	}
+	return value;
+};
+
+const unsigned char *findASN1Object(const unsigned char **array, long &size, long tag, const int &maxLength) {
 	const unsigned char *old_data = NULL;
-	const unsigned char *desc_data = array.GetBytes();
+	const unsigned char *desc_data = *array;
 	int xclass = 0;
 	int ans1Tag = 0;
 	int returnValue = 0;
@@ -129,12 +137,20 @@ const unsigned char *findASN1Object(const CByteArray &array, long &size, long ta
 		if (old_data == desc_data)
 			return NULL;
 		old_data = desc_data; // test this
-		long returnValue = ASN1_get_object(&desc_data, &size, &ans1Tag, &xclass, array.Size());
+		long returnValue = ASN1_get_object(&desc_data, &size, &ans1Tag, &xclass, maxLength);
 		int constructed = returnValue == V_ASN1_CONSTRUCTED ? 1 : 0;
 		genTag = xclass | (constructed & 0b1) << 5 | ans1Tag;
 	}
 
 	return desc_data;
+}
+
+unsigned short readTwoBytes(const unsigned char *data) { return (data[0] << 8) | data[1]; }
+
+const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag) {
+	const unsigned char *desc_data = array.GetBytes();
+
+	return findASN1Object(&desc_data, size, tag, array.Size());
 }
 
 std::string utilStringNarrow(const std::wstring &in) {
@@ -540,3 +556,37 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr) {
 }
 
 #endif
+
+EIDMW_CMN_API size_t read_binary_file(const char *filename, unsigned char **outBuffer) {
+	FILE *file = fopen(filename, "rb");
+	if (file == NULL) {
+		perror("Failed to open file");
+		return -1;
+	}
+
+	// Seek to the end of the file to determine the file size
+	fseek(file, 0, SEEK_END);
+	size_t fileSize = ftell(file);
+	rewind(file); // Go back to the start of the file
+
+	// Allocate memory for the entire file
+	*outBuffer = (unsigned char *)malloc(fileSize);
+	if (*outBuffer == NULL) {
+		fprintf(stderr, "Memory allocation failed\n");
+		fclose(file);
+		return -1;
+	}
+
+	// Read the file into the buffer
+	size_t bytesRead = fread(*outBuffer, 1, fileSize, file);
+	if (bytesRead != fileSize) {
+		fprintf(stderr, "Error reading file\n");
+		free(*outBuffer);
+		fclose(file);
+		return -1;
+	}
+
+	// Close the file
+	fclose(file);
+	return fileSize;
+}

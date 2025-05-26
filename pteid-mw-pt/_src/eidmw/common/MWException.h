@@ -24,6 +24,7 @@
 #define MWEXCEPTION_H
 
 #include "Export.h"
+#include "ByteArray.h"
 
 #include <exception>
 #include <iostream>

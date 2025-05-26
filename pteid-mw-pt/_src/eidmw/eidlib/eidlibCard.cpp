@@ -25,25 +25,30 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+#include "MiscUtil.h"
 #include "eidlib.h"
 
-#include "eidlibException.h"
 #include "InternalUtil.h"
 #include "MWException.h"
 #include "eidErrors.h"
+#include "eidlibException.h"
 
 #include "APLCard.h"
 #include "APLCardPteid.h"
-#include "APLCrypto.h"
 #include "APLCertif.h"
-#include "PhotoPteid.h"
+#include "APLCrypto.h"
 #include "ByteArray.h"
 #include "CardPteid.h"
-#include "SSLConnection.h"
+#include "IcaoDg1.h"
+#include "IcaoDg11.h"
+#include "IcaoDg2.h"
+#include "IcaoDg3.h"
 #include "PDFSignature.h"
+#include "PhotoPteid.h"
+#include "SSLConnection.h"
 #include "SecurityContext.h"
-#include "dialogs.h"
 #include "Util.h"
+#include "dialogs.h"
 #include <sstream>
 #include <cassert>
 
@@ -189,7 +194,9 @@ void PTEID_Card::initPaceAuthentication(const char *secret, size_t length, PTEID
 	APL_PACEAuthenticationType type = APL_PACE_UNSUPPORTED;
 	if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN)
 		type = APL_PACEAuthenticationType::APL_PACE_CAN;
-	else {
+	else if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_MRZ) {
+		type = APL_PACEAuthenticationType::APL_PACE_MRZ;
+	} else {
 		// not supported
 	}
 	BEGIN_TRY_CATCH
@@ -748,6 +755,654 @@ const char *PTEID_EIDCard::readPersonalNotes() {
 	END_TRY_CATCH
 
 	return out;
+}
+
+PTEID_ActiveAuthenticationReport::PTEID_ActiveAuthenticationReport(const SDK_Context *context,
+																   const EIDMW_ActiveAuthenticationReport &report)
+	: PTEID_Object(context, NULL), m_impl(report) {}
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG14() const { return PTEID_ByteArray(m_context, m_impl.dg14); }
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG14ComputedHash() const {
+	return PTEID_ByteArray(m_context, m_impl.hashDg14);
+}
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG14StoredHash() const {
+	return PTEID_ByteArray(m_context, m_impl.storedHashDg14);
+}
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG15() const { return PTEID_ByteArray(m_context, m_impl.dg15); }
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG15ComputedHash() const {
+	return PTEID_ByteArray(m_context, m_impl.hashDg15);
+}
+
+PTEID_ByteArray PTEID_ActiveAuthenticationReport::GetDG15StoredHash() const {
+	return PTEID_ByteArray(m_context, m_impl.storedHashDg15);
+}
+
+const char *PTEID_ActiveAuthenticationReport::GetOID() const { return m_impl.oid.c_str(); }
+
+long PTEID_ActiveAuthenticationReport::GetStatus() const { return m_impl.error_code; }
+
+const char *PTEID_ActiveAuthenticationReport::GetStatusMessage() const {
+	m_statusMessage = CodeToString(m_impl.error_code);
+	return m_statusMessage.c_str();
+}
+
+/*****************************************************************************************
+---------------------------- PTEID_ChipAuthenticationReport ------------------------------
+*****************************************************************************************/
+
+PTEID_ChipAuthenticationReport::PTEID_ChipAuthenticationReport(const SDK_Context *context,
+															   const EIDMW_ChipAuthenticationReport &report)
+	: PTEID_Object(context, NULL), m_impl(report) {}
+
+PTEID_ByteArray PTEID_ChipAuthenticationReport::GetPublicKey() const {
+	return PTEID_ByteArray(m_context, m_impl.pubKey);
+}
+
+const char *PTEID_ChipAuthenticationReport::GetOID() const { return m_impl.oid.c_str(); }
+
+long PTEID_ChipAuthenticationReport::GetStatus() const { return m_impl.error_code; }
+
+const char *PTEID_ChipAuthenticationReport::GetStatusMessage() const {
+	m_statusMessage = CodeToString(m_impl.error_code);
+	return m_statusMessage.c_str();
+}
+
+/*****************************************************************************************
+-------------------------------------- PTEID_SodReport -----------------------------------
+*****************************************************************************************/
+PTEID_SodReport::PTEID_SodReport(const SDK_Context *context, const EIDMW_SodReport &report)
+	: PTEID_Object(context, NULL), m_impl(report) {}
+
+PTEID_ByteArray PTEID_SodReport::GetSigner() const { return PTEID_ByteArray(m_context, m_impl.signer); }
+
+long PTEID_SodReport::GetStatus() const { return m_impl.error_code; }
+
+const char *PTEID_SodReport::GetStatusMessage() const {
+	m_statusMessage = CodeToString(m_impl.error_code);
+	return m_statusMessage.c_str();
+}
+
+/*****************************************************************************************
+------------------------------------ PTEID_DocumentReport --------------------------------
+*****************************************************************************************/
+PTEID_DocumentReport::PTEID_DocumentReport(const SDK_Context *context, const EIDMW_DocumentReport &reports)
+	: PTEID_Object(context, NULL), m_impl(reports) {}
+
+PTEID_ActiveAuthenticationReport *PTEID_DocumentReport::GetActiveAuthenticationReport() const {
+	PTEID_ActiveAuthenticationReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_ActiveAuthenticationReport(m_context, m_impl.getActiveAuthenticationReport());
+
+	END_TRY_CATCH
+	return report;
+}
+
+PTEID_ChipAuthenticationReport *PTEID_DocumentReport::GetChipAuthenticationReport() const {
+	PTEID_ChipAuthenticationReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_ChipAuthenticationReport(m_context, m_impl.getChipAuthenticationReport());
+
+	END_TRY_CATCH
+	return report;
+}
+
+PTEID_SodReport *PTEID_DocumentReport::GetSodReport() const {
+	PTEID_SodReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_SodReport(m_context, m_impl.getSodReport());
+
+	END_TRY_CATCH
+	return report;
+}
+
+PTEID_DataGroupReport *PTEID_DocumentReport::GetDataGroupReport(PTEID_DataGroupID tag) const {
+	PTEID_DataGroupReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_DataGroupReport(m_context, m_impl.getDataGroupReport(static_cast<DataGroupID>(tag)));
+
+	END_TRY_CATCH
+	return report;
+}
+
+/*****************************************************************************************
+------------------------------------- PTEID_BaseDGReport ---------------------------------
+*****************************************************************************************/
+PTEID_BaseDGReport::PTEID_BaseDGReport(const SDK_Context *context, const EIDMW_DocumentReport &report)
+	: PTEID_Object(context, NULL), m_documentReport(report) {}
+
+PTEID_DocumentReport *PTEID_BaseDGReport::GetDocumentReport() const {
+	PTEID_DocumentReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_DocumentReport(m_context, m_documentReport);
+
+	END_TRY_CATCH
+	return report;
+}
+
+const PTEID_DataGroupReport *PTEID_BaseDGReport::GetReportByID(PTEID_DataGroupID id) const {
+	PTEID_DataGroupReport *report;
+	BEGIN_TRY_CATCH
+
+	report = new PTEID_DataGroupReport(m_context, m_documentReport.getDataGroupReport(static_cast<DataGroupID>(id)));
+
+	END_TRY_CATCH
+	return report;
+}
+
+/*****************************************************************************************
+------------------------------------- PTEID_RawDataGroup ---------------------------------
+*****************************************************************************************/
+PTEID_RawDataGroup::PTEID_RawDataGroup(const SDK_Context *context, PTEID_DataGroupID id, PTEID_ByteArray data,
+									   const EIDMW_DocumentReport &report)
+	: PTEID_BaseDGReport(context, report), m_data(data), m_id(id) {}
+
+PTEID_ByteArray PTEID_RawDataGroup::GetData() const { return m_data; }
+
+const PTEID_DataGroupReport *PTEID_RawDataGroup::GetReport() const { return GetReportByID(m_id); }
+
+/*****************************************************************************************
+------------------------------------ PTEID_DataGroupReport -------------------------------
+*****************************************************************************************/
+PTEID_DataGroupReport::PTEID_DataGroupReport(const SDK_Context *context, const EIDMW_DataGroupReport &report)
+	: PTEID_Object(context, NULL), m_impl(report) {}
+
+PTEID_ByteArray PTEID_DataGroupReport::GetStoredHash() const { return PTEID_ByteArray(m_context, m_impl.storedHash); }
+
+PTEID_ByteArray PTEID_DataGroupReport::GetComputedHash() const {
+	return PTEID_ByteArray(m_context, m_impl.computedHash);
+}
+
+long PTEID_DataGroupReport::GetStatus() const { return m_impl.error_code; }
+
+const char *PTEID_DataGroupReport::GetStatusMessage() const {
+	m_statusMessage = CodeToString(m_impl.error_code);
+	return m_statusMessage.c_str();
+}
+
+/*****************************************************************************************
+--------------------------------------- ICAO_Card ----------------------------------------
+*****************************************************************************************/
+ICAO_Card::ICAO_Card(const SDK_Context *context, APL_ICAO *impl) : PTEID_Object(context, impl) {}
+
+std::vector<PTEID_DataGroupID> ICAO_Card::getAvailableDatagroups() {
+	std::vector<PTEID_DataGroupID> availableDatagroups;
+
+	BEGIN_TRY_CATCH
+	auto icao = static_cast<APL_ICAO *>(m_impl);
+	auto datagroups = icao->getAvailableDatagroups();
+	for (const auto &dg : datagroups) {
+		availableDatagroups.emplace_back(static_cast<PTEID_DataGroupID>(dg));
+	}
+
+	END_TRY_CATCH
+
+	return availableDatagroups;
+}
+
+PTEID_DocumentReport *ICAO_Card::GetDocumentReport() const {
+	auto icao = static_cast<APL_ICAO *>(m_impl);
+	return new PTEID_DocumentReport(m_context, icao->getDocumentReport());
+}
+
+void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_CardPaceSecretType secretType) {
+	APL_PACEAuthenticationType type = APL_PACE_UNSUPPORTED;
+	if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN)
+		type = APL_PACEAuthenticationType::APL_PACE_CAN;
+	else if (secretType == PTEID_CardPaceSecretType::PTEID_CARD_SECRET_MRZ) {
+		type = APL_PACEAuthenticationType::APL_PACE_MRZ;
+	} else {
+		// not supported
+	}
+
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	icao->initPaceAuthentication(secret, length, type);
+	END_TRY_CATCH
+}
+
+PTEID_RawDataGroup *ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
+	PTEID_RawDataGroup *out = nullptr;
+
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	auto result = icao->readDatagroup(static_cast<DataGroupID>(tag));
+
+	PTEID_ByteArray content(m_context, result.second);
+	out = new PTEID_RawDataGroup(m_context, tag, content, icao->getDocumentReport());
+	END_TRY_CATCH;
+
+	return out;
+}
+
+void ICAO_Card::resetCardState() {
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	icao->resetCardState();
+	END_TRY_CATCH;
+}
+
+PTEID_ICAO_DG1::PTEID_ICAO_DG1(const SDK_Context *context, const IcaoDg1 &dg1,
+							   const EIDMW_DocumentReport &documentReport)
+	: PTEID_BaseDGReport(context, documentReport), m_impl(dg1) {}
+
+const PTEID_DataGroupReport *PTEID_ICAO_DG1::GetReport() const { return GetReportByID(PTEID_DATA_GROUP_ID_DG1); }
+
+const char *PTEID_ICAO_DG1::documentCode() const { return m_impl.documentCode().c_str(); }
+
+const char *PTEID_ICAO_DG1::issuingState() const { return m_impl.issuingOrg().c_str(); }
+
+const char *PTEID_ICAO_DG1::documentNumber() const { return m_impl.serialNumber().c_str(); }
+
+int PTEID_ICAO_DG1::serialNumberCheckDigit() const { return m_impl.serialNumberCheckDigit(); }
+
+const char *PTEID_ICAO_DG1::optionalDataLine1() const { return m_impl.optionalData().c_str(); }
+
+const char *PTEID_ICAO_DG1::dateOfBirth() const { return m_impl.birthDay().c_str(); }
+
+char PTEID_ICAO_DG1::sex() const { return m_impl.sex(); }
+
+const char *PTEID_ICAO_DG1::dateOfExpiry() const { return m_impl.expireDay().c_str(); }
+
+const char *PTEID_ICAO_DG1::nationality() const { return m_impl.nationality().c_str(); }
+
+const char *PTEID_ICAO_DG1::optionalDataLine2() const { return m_impl.optionalDataSecondLine().c_str(); }
+
+const char *PTEID_ICAO_DG1::primaryIdentifier() const { return m_impl.primaryIdentifier().c_str(); }
+
+const char *PTEID_ICAO_DG1::secondaryIdentifier() const { return m_impl.secondaryIdentifier().c_str(); }
+
+bool PTEID_ICAO_DG1::isPassport() const { return m_impl.documentCode().front() == 'P'; }
+
+PTEID_ICAO_DG1::~PTEID_ICAO_DG1() {}
+
+unsigned char PTEID_FeaturePoint::type() const { return m_impl.type(); }
+
+unsigned char PTEID_FeaturePoint::featurePoint() const { return m_impl.featurePoint(); }
+
+unsigned char PTEID_FeaturePoint::majorCode() const { return m_impl.majorCode(); }
+
+unsigned char PTEID_FeaturePoint::minorCode() const { return m_impl.minorCode(); }
+
+unsigned short PTEID_FeaturePoint::x_coord() const { return m_impl.x_coord(); }
+
+unsigned short PTEID_FeaturePoint::y_coord() const { return m_impl.y_coord(); }
+
+unsigned short PTEID_FeaturePoint::reserved() const { return m_impl.reserved(); }
+
+PTEID_FeaturePoint::PTEID_FeaturePoint(FeaturePoint &featurePoint) : m_impl(featurePoint) {}
+
+long PTEID_FaceInfoData::facialRecordDataLength() const { return m_impl.facialRecordDataLength(); }
+
+unsigned short PTEID_FaceInfoData::numberOfFeaturePoints() const { return m_impl.numberOfFeaturePoints(); }
+
+unsigned char PTEID_FaceInfoData::gender() const { return m_impl.gender(); }
+
+PTEID_Gender PTEID_FaceInfoData::genderDecode() const { return static_cast<PTEID_Gender>(m_impl.genderDecode()); }
+
+unsigned char PTEID_FaceInfoData::eyeColor() const { return m_impl.eyeColor(); }
+
+PTEID_EyeColor PTEID_FaceInfoData::eyeColorDecode() const {
+	return static_cast<PTEID_EyeColor>(m_impl.eyeColorDecode());
+}
+
+unsigned char PTEID_FaceInfoData::hairColour() const { return m_impl.hairColour(); }
+
+PTEID_HairColour PTEID_FaceInfoData::hairColourDecode() const {
+	return static_cast<PTEID_HairColour>(m_impl.hairColourDecode());
+}
+
+long PTEID_FaceInfoData::featureMask() const { return m_impl.featureMask(); }
+
+long PTEID_FaceInfoData::expression() const { return m_impl.expression(); }
+
+long PTEID_FaceInfoData::poseAngle() const { return m_impl.poseAngle(); }
+
+long PTEID_FaceInfoData::poseAngleUncertainty() const { return m_impl.poseAngleUncertainty(); }
+
+std::vector<PTEID_FeaturePoint *> PTEID_FaceInfoData::featurePoints() const { return m_featurePoints; }
+
+unsigned char PTEID_FaceInfoData::faceImgType() const { return m_impl.faceImgType(); }
+
+PTEID_FaceImageType PTEID_FaceInfoData::faceImgTypeDecode() const {
+	return static_cast<PTEID_FaceImageType>(m_impl.faceImgTypeDecode());
+}
+
+unsigned char PTEID_FaceInfoData::imgDataType() const { return m_impl.imgDataType(); }
+
+PTEID_ImageDataType PTEID_FaceInfoData::imgDataTypeDecode() const {
+	return static_cast<PTEID_ImageDataType>(m_impl.imgDataTypeDecode());
+}
+
+unsigned short PTEID_FaceInfoData::imgWidth() const { return m_impl.imgWidth(); }
+
+unsigned short PTEID_FaceInfoData::imgHeight() const { return m_impl.imgHeight(); }
+
+unsigned char PTEID_FaceInfoData::colourSpace() const { return m_impl.colourSpace(); }
+
+PTEID_ImageColourSpace PTEID_FaceInfoData::colourSpaceDecode() const {
+	return static_cast<PTEID_ImageColourSpace>(m_impl.colourSpaceDecode());
+}
+
+unsigned char PTEID_FaceInfoData::sourceType() const { return m_impl.sourceType(); }
+
+PTEID_SourceType PTEID_FaceInfoData::sourceTypeDecode() const {
+	return static_cast<PTEID_SourceType>(m_impl.sourceTypeDecode());
+}
+
+unsigned short PTEID_FaceInfoData::deviceType() const { return m_impl.deviceType(); }
+
+unsigned short PTEID_FaceInfoData::quality() const { return m_impl.quality(); }
+
+PTEID_ByteArray PTEID_FaceInfoData::photoRawData() const { return PTEID_ByteArray(m_context, m_impl.photoRawData()); }
+
+PTEID_ByteArray PTEID_FaceInfoData::photoRawDataPNG() const { return PTEID_ByteArray(m_context, m_impl.photoRawDataPNG()); }
+
+PTEID_FaceInfoData::PTEID_FaceInfoData(const SDK_Context *context, FaceInfoData &data)
+	: PTEID_Object(context, NULL), m_impl(data) {
+	for (auto &fp : m_impl.featurePoints()) {
+		m_featurePoints.push_back(new PTEID_FeaturePoint(*fp));
+	}
+}
+
+PTEID_FaceInfoData::~PTEID_FaceInfoData() {
+	for (auto *instance : m_featurePoints) {
+		delete instance;
+	}
+}
+
+const char *PTEID_FaceInfo::version() const { return m_impl.version().c_str(); }
+
+unsigned short PTEID_FaceInfo::encodingBytes() const { return m_impl.encodingBytes(); }
+
+long PTEID_FaceInfo::sizeOfRecord() const { return m_impl.sizeOfRecord(); }
+
+long PTEID_FaceInfo::numberOfFacialImages() const { return m_impl.numberOfFacialImages(); }
+
+std::vector<PTEID_FaceInfoData *> PTEID_FaceInfo::faceInfoData() const { return m_faceInfoDataVec; }
+
+PTEID_FaceInfo::PTEID_FaceInfo(const SDK_Context *context, FaceInfo &face) : PTEID_Object(context, NULL), m_impl(face) {
+	for (auto &instance : m_impl.faceInfoData()) {
+		m_faceInfoDataVec.push_back(new PTEID_FaceInfoData(context, *instance));
+	}
+}
+
+PTEID_FaceInfo::~PTEID_FaceInfo() {
+	for (auto *instance : m_faceInfoDataVec) {
+		delete instance;
+	}
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::icaoHeaderVersion() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->icaoHeaderVersion());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::type() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->type());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::subType() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->subType());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::creationDateAndtime() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->creationDateAndtime());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::validPeriod() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->validPeriod());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::creatorOfBiometricRefData() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->creatorOfBiometricRefData());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::formatOwner() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->formatOwner());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomation::formatType() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->formatType());
+}
+
+PTEID_FaceInfo *PTEID_BiometricInfomation::faceInfo() const { return m_faceInfo; }
+
+PTEID_BiometricInfomation::~PTEID_BiometricInfomation() { delete m_faceInfo; }
+
+PTEID_BiometricInfomation::PTEID_BiometricInfomation(const SDK_Context *context, BiometricInformation &bioInfo)
+	: PTEID_Object(context, NULL), m_impl(bioInfo), m_faceInfo(new PTEID_FaceInfo(context, *bioInfo.faceInfo())) {}
+
+PTEID_ICAO_DG2::PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2, const EIDMW_DocumentReport &report)
+	: PTEID_BaseDGReport(context, report), m_impl(dg2) {
+	for (auto &instance : m_impl.biometricInstances()) {
+		m_biometricInstances.push_back(new PTEID_BiometricInfomation(m_context, *instance));
+	}
+}
+
+const PTEID_DataGroupReport *PTEID_ICAO_DG2::GetReport() const { return GetReportByID(PTEID_DATA_GROUP_ID_DG2); }
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::icaoHeaderVersion() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->icaoHeaderVersion());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::type() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->type());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::subType() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->subType());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::creationDateAndtime() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->creationDateAndtime());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::validPeriod() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->validPeriod());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::creatorOfBiometricRefData() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->creatorOfBiometricRefData());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::formatOwner() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->formatOwner());
+}
+
+PTEID_ByteArray PTEID_BiometricInfomationDg3::formatType() const {
+	return PTEID_ByteArray(m_context, m_impl.biometricTemplate()->formatType());
+}
+
+const char *PTEID_BiometricInfomationDg3::specVersion() const { return m_impl.specVersion().c_str(); }
+
+unsigned long long PTEID_BiometricInfomationDg3::recordLength() const { return m_impl.recordLength(); }
+
+unsigned short PTEID_BiometricInfomationDg3::scannerId() const { return m_impl.scannerId(); }
+
+unsigned short PTEID_BiometricInfomationDg3::imageAcquisitionLevel() const { return m_impl.imageAcquisitionLevel(); }
+
+unsigned int PTEID_BiometricInfomationDg3::numFingersOrPalmImages() const { return m_impl.numFingersOrPalmImages(); }
+
+unsigned int PTEID_BiometricInfomationDg3::scaleUnits() const { return m_impl.scaleUnits(); }
+
+unsigned short PTEID_BiometricInfomationDg3::xScanResolution() const { return m_impl.xScanResolution(); }
+
+unsigned short PTEID_BiometricInfomationDg3::yScanResolution() const { return m_impl.yScanResolution(); }
+
+unsigned short PTEID_BiometricInfomationDg3::xImageResolution() const { return m_impl.xImageResolution(); }
+
+unsigned short PTEID_BiometricInfomationDg3::yImageResolution() const { return m_impl.yImageResolution(); }
+
+unsigned int PTEID_BiometricInfomationDg3::pixelDepth() const { return m_impl.pixelDepth(); }
+
+unsigned int PTEID_BiometricInfomationDg3::imageCompressionAlgorithm() const {
+	return m_impl.imageCompressionAlgorithm();
+}
+
+unsigned short PTEID_BiometricInfomationDg3::reserved() const { return m_impl.reserved(); }
+
+PTEID_BiometricInfomationDg3::PTEID_BiometricInfomationDg3(const SDK_Context *context, const BiometricInfoDG3 &bioInfo)
+	: PTEID_Object(context, NULL), m_impl(bioInfo) {}
+
+PTEID_BiometricInfomationDg3::~PTEID_BiometricInfomationDg3() {
+	for (auto *instance : m_bioFingerImageVec) {
+		delete instance;
+	}
+}
+
+PTEID_ICAO_DG3::PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3, const EIDMW_DocumentReport &report)
+	: PTEID_BaseDGReport(context, report), m_impl(dg3) {
+	for (const auto &instance : dg3.biometricInstanceVec()) {
+		m_biometricInformation.push_back(new PTEID_BiometricInfomationDg3(context, *instance.get()));
+	}
+}
+
+const PTEID_DataGroupReport *PTEID_ICAO_DG3::GetReport() const { return GetReportByID(PTEID_DATA_GROUP_ID_DG2); }
+
+unsigned int PTEID_BiometricInfoFingerImage::length() const { return m_impl.length(); }
+
+unsigned int PTEID_BiometricInfoFingerImage::fingerPalmPosition() const { return m_impl.fingerPalmPosition(); }
+
+unsigned int PTEID_BiometricInfoFingerImage::countOfViews() const { return m_impl.countOfViews(); }
+
+unsigned int PTEID_BiometricInfoFingerImage::viewMumber() const { return m_impl.viewMumber(); }
+
+unsigned int PTEID_BiometricInfoFingerImage::quality() const { return m_impl.quality(); }
+
+unsigned int PTEID_BiometricInfoFingerImage::impressionType() const { return m_impl.impressionType(); }
+
+unsigned short PTEID_BiometricInfoFingerImage::horizontalLineLength() const { return m_impl.horizontalLineLength(); }
+
+unsigned short PTEID_BiometricInfoFingerImage::verticalLineLength() const { return m_impl.verticalLineLength(); }
+
+unsigned char PTEID_BiometricInfoFingerImage::reserved() const { return m_impl.reserved(); }
+
+PTEID_ByteArray PTEID_BiometricInfoFingerImage::imageData() const {
+	return PTEID_ByteArray(m_context, m_impl.imageData());
+}
+
+PTEID_BiometricInfoFingerImage::PTEID_BiometricInfoFingerImage(const SDK_Context *context,
+															   const BiometricInfoImage &bioInfo)
+	: PTEID_Object(context, NULL), m_impl(bioInfo)
+
+{}
+
+unsigned int PTEID_ICAO_DG3::numberOfbiometrics() const { return m_impl.numberOfbiometrics(); }
+
+std::vector<PTEID_BiometricInfomationDg3 *> PTEID_ICAO_DG3::biometricInformation() const {
+	return m_biometricInformation;
+}
+
+PTEID_ByteArray PTEID_ICAO_DG11::listOfTags() const { return PTEID_ByteArray(m_context, m_impl.listOfTags()); }
+
+const char *PTEID_ICAO_DG11::fullName() const { return m_impl.fullName().c_str(); }
+
+const char *PTEID_ICAO_DG11::personalNumber() const { return m_impl.personalNumber().c_str(); }
+
+const char *PTEID_ICAO_DG11::fullDateOfBirth() const { return m_impl.fullDateOfBirth().c_str(); }
+
+const char *PTEID_ICAO_DG11::placeOfBirth() const { return m_impl.placeOfBirth().c_str(); }
+
+const char *PTEID_ICAO_DG11::permanentAddress() const { return m_impl.permanentAddress().c_str(); }
+
+const char *PTEID_ICAO_DG11::telephone() const { return m_impl.telephone().c_str(); }
+
+const char *PTEID_ICAO_DG11::profession() const { return m_impl.profession().c_str(); }
+
+const char *PTEID_ICAO_DG11::title() const { return m_impl.title().c_str(); }
+
+const char *PTEID_ICAO_DG11::personalSummary() const { return m_impl.personalSummary().c_str(); }
+
+const char *PTEID_ICAO_DG11::proofOfCitizenship() const { return m_impl.proofOfCitizenship().c_str(); }
+
+const char *PTEID_ICAO_DG11::otherValidTDNumbers() const { return m_impl.otherValidTDNumbers().c_str(); }
+
+const char *PTEID_ICAO_DG11::custodyInformation() const { return m_impl.custodyInformation().c_str(); }
+
+int PTEID_ICAO_DG11::numberOfOtherNames() const { return m_impl.numberOfOtherNames(); }
+
+const char *PTEID_ICAO_DG11::otherNames() const { return m_impl.otherNames().c_str(); }
+
+PTEID_ICAO_DG11::~PTEID_ICAO_DG11() {}
+
+PTEID_ICAO_DG3::~PTEID_ICAO_DG3() {
+	for (auto *instance : m_biometricInformation) {
+		delete instance;
+	}
+}
+
+PTEID_ICAO_DG11::PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11, const EIDMW_DocumentReport &report)
+	: PTEID_BaseDGReport(context, report), m_impl(dg11) {}
+
+const PTEID_DataGroupReport *PTEID_ICAO_DG11::GetReport() const { return GetReportByID(PTEID_DATA_GROUP_ID_DG2); }
+
+unsigned int PTEID_ICAO_DG2::numberOfBiometrics() const { return m_impl.numberOfBiometrics(); }
+
+std::vector<PTEID_BiometricInfomation *> PTEID_ICAO_DG2::biometricInstances() { return m_biometricInstances; }
+
+PTEID_ICAO_DG2::~PTEID_ICAO_DG2() {
+	for (auto *instance : m_biometricInstances) {
+		delete instance;
+	}
+}
+
+PTEID_ICAO_DG1 *ICAO_Card::readDataGroup1() {
+	PTEID_ICAO_DG1 *dg1 = NULL;
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	auto *dg = icao->readDataGroup1();
+	if (dg != NULL)
+		dg1 = new PTEID_ICAO_DG1(m_context, *dg, icao->getDocumentReport());
+	END_TRY_CATCH
+	return dg1;
+}
+
+PTEID_ICAO_DG2 *ICAO_Card::readDataGroup2() {
+	PTEID_ICAO_DG2 *dg2 = NULL;
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	IcaoDg2 *dg2Impl = icao->readDataGroup2();
+	if (dg2Impl != NULL)
+		dg2 = new PTEID_ICAO_DG2(m_context, *dg2Impl, icao->getDocumentReport());
+	END_TRY_CATCH
+	return dg2;
+}
+
+PTEID_ICAO_DG3 *ICAO_Card::readDataGroup3() {
+	PTEID_ICAO_DG3 *dg3 = NULL;
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	IcaoDg3 *impl = icao->readDataGroup3();
+	if (impl != NULL)
+		dg3 = new PTEID_ICAO_DG3(m_context, *impl, icao->getDocumentReport());
+	END_TRY_CATCH
+	return dg3;
+}
+
+PTEID_ICAO_DG11 *ICAO_Card::readDataGroup11() {
+	PTEID_ICAO_DG11 *dg11 = NULL;
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	IcaoDg11 *dg11Impl = icao->readDataGroup11();
+	if (dg11Impl != NULL)
+		dg11 = new PTEID_ICAO_DG11(m_context, *dg11Impl, icao->getDocumentReport());
+	END_TRY_CATCH
+	return dg11;
+}
+
+void ICAO_Card::loadMasterList(const char *filePath) {
+	BEGIN_TRY_CATCH
+	APL_ICAO *icao = static_cast<APL_ICAO *>(m_impl);
+	icao->loadMasterList(filePath);
+	END_TRY_CATCH
 }
 
 /*****************************************************************************************

@@ -62,7 +62,7 @@ macx: LIBS += -Wl,-framework -Wl,CoreFoundation
 macx: LIBS += -Wl,-framework -Wl,SystemConfiguration
 macx: LIBS += -Wl,-framework -Wl,CoreServices
 macx: LIBS += -liconv
-macx: INCLUDEPATH +=$$DEPS_DIR/openssl-3/include $$DEPS_DIR/libzip/include $$DEPS_DIR/openjpeg/include/openjpeg-2.4/ $$DEPS_DIR/xml-security-c/include/ $$DEPS_DIR/xerces-c-3.2.4/include $$DEPS_DIR/libpng/include
+macx: INCLUDEPATH +=$$DEPS_DIR/openssl-3/include $$DEPS_DIR/libzip/include $$DEPS_DIR/openjpeg/include/openjpeg-2.4/ $$DEPS_DIR/xml-security-c/include/ $$DEPS_DIR/xerces-c-3.2.4/include $$DEPS_DIR/libpng/include $$DEPS_DIR/openpace/include
 macx: INCLUDEPATH += /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/CFNetwork.framework/Headers/
 !macx: INCLUDEPATH += /usr/include/libpng16
 
@@ -85,6 +85,11 @@ HEADERS += \
 	APLCCXmlDoc.h \
 	CardFile.h \
 	CertStatusCache.h \
+	IcaoDg1.h \
+	IcaoDg11.h \
+	IcaoDg2.h \
+	IcaoDg2Defines.h \
+	IcaoDg3.h \
 	cryptoFramework.h \
 	MiscUtil.h \
 	XercesUtils.h \
@@ -118,6 +123,11 @@ SOURCES += \
 	CardFile.cpp	        \
 	CardPteid.cpp        \
 	CertStatusCache.cpp  \
+	IcaoDg1.cpp \
+	IcaoDg11.cpp \
+	IcaoDg2.cpp \
+	IcaoDg14.cpp \
+	IcaoDg3.cpp \
 	cryptoFramework.cpp  \
 	cryptoFwkPteid.cpp   \
 	APLCard.cpp          \ 

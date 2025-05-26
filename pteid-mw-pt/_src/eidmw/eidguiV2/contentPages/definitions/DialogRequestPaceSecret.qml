@@ -187,9 +187,10 @@ Dialog {
                 }
             }
 
-        function startPaceFunction() {
-            if(textFieldCAN.length != 6)
+        function startPaceFunction(ICAO) {
+            if(textFieldCAN.length != 6){
                 return
+            }
             textFieldCAN.enabled = false
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             gapi.startPACEAuthentication(textFieldCAN.text, afterPaceAction)

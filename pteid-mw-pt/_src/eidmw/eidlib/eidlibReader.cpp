@@ -35,6 +35,7 @@
 
 #include "APLReader.h"
 #include "APLConfig.h"
+#include "APLCardPteid.h"
 
 #include "Log.h"
 #include "Mutex.h"
@@ -43,6 +44,7 @@
 
 // INCLUDE IN ReaderContext
 #define INCLUDE_OBJECT_CARD 1
+#define INCLUDE_OBJECT_ICAO 2
 
 // FOR ALL OBJECT
 #define INCLUDE_OBJECT_FIRST_EXTENDED_ADD 1000000
@@ -452,6 +454,7 @@ bool PTEID_ReaderSet::flushCache() {
 PTEID_ReaderContext::PTEID_ReaderContext(const SDK_Context *context, APL_ReaderContext *impl)
 	: PTEID_Object(context, impl) {
 	m_cardid = 0;
+	m_cardIcaoId = 0;
 
 	m_context->mutex = new CMutex;
 }
@@ -535,6 +538,73 @@ bool PTEID_ReaderContext::isCardChanged(unsigned long &ulOldId) {
 
 	END_TRY_CATCH
 
+	return out;
+}
+
+ICAO_Card &PTEID_ReaderContext::getICAOCard() {
+	ICAO_Card *out = nullptr;
+
+	BEGIN_TRY_CATCH
+
+	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
+
+	if (!isCardPresent()) {
+		throw PTEID_ExNoCardPresent();
+	}
+
+	APL_ICAO *pAplIcao = pimpl->getICAOCard();
+	if (!pAplIcao) {
+		throw PTEID_ExCardTypeUnknown();
+	}
+
+	if ((!pimpl->isCardContactless() && pimpl->getCardType() == APL_CARDTYPE_PTEID_IAS5) ||
+		(pimpl->getCardType() != APL_CARDTYPE_PTEID_IAS5 && pimpl->getCardType() != APL_CARDTYPE_ICAO)) {
+		throw PTEID_ExCardTypeUnknown();
+	}
+
+	out = dynamic_cast<ICAO_Card *>(getObject(INCLUDE_OBJECT_ICAO));
+
+	if (pimpl->isCardChanged(m_cardIcaoId) && out) {
+		backupObject(INCLUDE_OBJECT_ICAO);
+		out = NULL;
+	}
+
+	if (!out) {
+
+		switch (pimpl->getCardType()) {
+		case APL_CARDTYPE_PTEID_IAS5:
+		case APL_CARDTYPE_ICAO:
+			out = new ICAO_Card(m_context, pAplIcao);
+			break;
+		default:
+			throw PTEID_ExCardTypeUnknown();
+		}
+
+		if (out)
+			m_objects[INCLUDE_OBJECT_ICAO] = out;
+	}
+
+	END_TRY_CATCH
+	return *out;
+}
+
+PTEID_ByteArray PTEID_ReaderContext::getMultiPassToken() {
+	PTEID_ByteArray out;
+	BEGIN_TRY_CATCH
+
+	CByteArray token;
+
+	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
+	auto card = pimpl->getCard();
+	if (pimpl->getCardType() == APL_CARDTYPE_PTEID_IAS5) {
+		token = reinterpret_cast<APL_EIDCard *>(pimpl->getCard())->readTokenData();
+	} else {
+		throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+	}
+
+	out.Append(token.GetBytes(), token.Size());
+
+	END_TRY_CATCH
 	return out;
 }
 

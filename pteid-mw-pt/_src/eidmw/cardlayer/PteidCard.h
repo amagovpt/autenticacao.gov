@@ -25,15 +25,18 @@
 #ifndef __PTEIDCARD_H__
 #define __PTEIDCARD_H__
 
+#include "BacAuthentication.h"
 #include "PkiCard.h"
 #include "Card.h"
 
-using namespace eIDMW;
+//using namespace eIDMW;
 
-CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, SCARDHANDLE hCard, CContext *poContext,
-							GenericPinpad *poPinpad, const void *protocol_struct);
 
 namespace eIDMW {
+
+	CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, SCARDHANDLE hCard, CContext *poContext,
+		GenericPinpad *poPinpad, const void *protocol_struct);
+
 
 // Workaround needed for Windows 8 and later: With the do-nothing call to SCardStatus() in PCSC::Status()
 // we make sure the transaction has activity so that Windows doesn't kill it
@@ -83,20 +86,16 @@ public:
 	virtual void InitEncryptionKey();
 	virtual void ReadSerialNumber();
 
+	void openBACChannel(const CByteArray &mrzInfo);
+	CByteArray readToken();
+
 	virtual unsigned long GetSupportedAlgorithms();
 
 protected:
 	virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
 	virtual bool SelectApplet();
 
-	virtual void ResetApplication();
-	virtual void SelectApplication(const CByteArray &oAID);
-
-	tFileInfo SelectFile(const std::string &csPath, const unsigned char *oAID, bool bReturnFileInfo = false);
 	virtual tFileInfo SelectFile(const std::string &csPath, bool bReturnFileInfo = false);
-
-	virtual CByteArray SelectByPath(const std::string &csPath, bool bReturnFileInfo = false);
-	CByteArray OldSelectByPath(const std::string &csPath, bool bReturnFileInfo);
 
 	virtual void showPinDialog(tPinOperation operation, const tPin &Pin, std::string &csPin1, std::string &csPin2,
 							   const tPrivKey *pKey, void *wndGeometry = 0);

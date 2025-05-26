@@ -25,27 +25,35 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
-#include "APLReader.h"
 #include "APLCard.h"
-#include "APLCrypto.h"
 #include "APLCertif.h"
 #include "APLConfig.h"
+#include "APLCrypto.h"
+#include "APLReader.h"
 #include "CardFile.h"
-#include "CardLayer.h"
-#include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
-#include "XadesSignature.h"
-#include "SigContainer.h"
-#include "PDFSignature.h"
-#include "MiscUtil.h"
+#include "IcaoDg1.h"
+#include "IcaoDg11.h"
+#include "IcaoDg14.h"
+#include "IcaoDg2.h"
+#include "IcaoDg3.h"
 #include "Log.h"
+#include "MiscUtil.h"
+#include "PDFSignature.h"
+#include "PaceAuthentication.h"
+#include "SODParser.h"
+#include "SigContainer.h"
+#include "XadesSignature.h"
+#include "aa_oids.h"
+#include "cryptoFwkPteid.h"
+#include "Reader.h"
 
+#include <openssl/rand.h>
 #include <time.h>
 #include <sys/types.h>
+#include <openssl/err.h>
 
 namespace eIDMW {
-
-#define CHALLENGE_LEN 20
 
 /*****************************************************************************************
 ---------------------------------------- APL_Card --------------------------------------------
@@ -64,6 +72,16 @@ APL_Card::~APL_Card() {}
 CReader *APL_Card::getCalReader() const { return m_reader->getCalReader(); }
 
 APL_CardType APL_Card::getType() const { return APL_CARDTYPE_UNKNOWN; }
+
+CByteArray APL_Card::sendAPDU(const APDU &apdu) {
+	CByteArray out;
+
+	BEGIN_CAL_OPERATION(m_reader)
+	out = m_reader->getCalReader()->SendAPDU(apdu);
+	END_CAL_OPERATION(m_reader)
+
+	return out;
+}
 
 void APL_Card::CalLock() { return m_reader->CalLock(); }
 
@@ -113,12 +131,15 @@ void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_
 
 	if (secretType == APL_PACEAuthenticationType::APL_PACE_CAN)
 		paceSecretType = PaceSecretType::PACECAN;
-	else {
+	else if (secretType == APL_PACEAuthenticationType::APL_PACE_MRZ) {
+		paceSecretType = PaceSecretType::PACEMRZ;
+	} else {
 		// not supported types
 	}
 
 	BEGIN_CAL_OPERATION(m_reader)
 	m_reader->getCalReader()->initPaceAuthentication(secret, secretLen, paceSecretType);
+	m_reader->getCalReader()->ResetApplication();
 	END_CAL_OPERATION(m_reader)
 }
 
@@ -360,7 +381,6 @@ APL_SmartCard::~APL_SmartCard() {
 		delete m_pins;
 		m_pins = NULL;
 	}
-
 	if (m_certs) {
 		delete m_certs;
 		m_certs = NULL;
@@ -394,6 +414,14 @@ void APL_SmartCard::selectApplication(const CByteArray &applicationId) const {
 	BEGIN_CAL_OPERATION(m_reader)
 	m_reader->getCalReader()->SelectApplication(applicationId);
 	END_CAL_OPERATION(m_reader)
+}
+
+CByteArray APL_SmartCard::sendAPDU(const APDU &apdu, APL_Pin *pin, const char *csPinCode) {
+	unsigned long lRemaining = 0;
+	if (pin)
+		if (csPinCode != NULL)
+			pin->verifyPin(csPinCode, lRemaining);
+	return APL_Card::sendAPDU(apdu);
 }
 
 CByteArray APL_SmartCard::sendAPDU(const CByteArray &cmd, APL_Pin *pin, const char *csPinCode) {
@@ -554,6 +582,479 @@ tCert APL_SmartCard::getP15Cert(unsigned long ulIndex) {
 	END_CAL_OPERATION(m_reader)
 
 	return out;
+}
+
+void EIDMW_DocumentReport::setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report) {
+	if (report.type == EIDMW_ReportType::Error) {
+		m_hasFailed = true;
+	}
+
+	m_activeAuthenticationReport = report;
+}
+
+const EIDMW_ActiveAuthenticationReport &EIDMW_DocumentReport::getActiveAuthenticationReport() const {
+	return m_activeAuthenticationReport;
+}
+
+void EIDMW_DocumentReport::setChipAuthenticationReport(const EIDMW_ChipAuthenticationReport &report) {
+	if (report.type == EIDMW_ReportType::Error) {
+		m_hasFailed = true;
+	}
+
+	m_chipAuthenticationReport = report;
+}
+
+const EIDMW_ChipAuthenticationReport &EIDMW_DocumentReport::getChipAuthenticationReport() const {
+	return m_chipAuthenticationReport;
+}
+
+void EIDMW_DocumentReport::setSodReport(const EIDMW_SodReport &report) {
+	if (report.type == EIDMW_ReportType::Error) {
+		m_hasFailed = true;
+	}
+
+	m_sodReport = report;
+}
+
+const EIDMW_SodReport &EIDMW_DocumentReport::getSodReport() const { return m_sodReport; }
+
+void EIDMW_DocumentReport::addDataGroupReport(DataGroupID id, const EIDMW_DataGroupReport &report) {
+	if (m_dataGroupReports.find(id) != m_dataGroupReports.end()) {
+		return;
+	}
+
+	if (report.type == EIDMW_ReportType::Error) {
+		m_hasFailed = true;
+	}
+
+	m_dataGroupReports[id] = report;
+}
+
+const EIDMW_DataGroupReport &EIDMW_DocumentReport::getDataGroupReport(DataGroupID id) const {
+	if (m_dataGroupReports.find(id) != m_dataGroupReports.end()) {
+		return m_dataGroupReports.at(id);
+	}
+
+	// ...
+	auto [_, __] = m_card->readDatagroup(id);
+	return m_dataGroupReports.at(id);
+}
+
+// ICAO
+APL_ICAO::APL_ICAO(APL_ReaderContext *reader) : APL_SmartCard(reader), m_reader(reader) {}
+
+const std::unordered_map<DataGroupID, std::string> APL_ICAO::DATAGROUP_PATHS = {
+	{DataGroupID::DG1, "0101"},	 {DataGroupID::DG2, "0102"},  {DataGroupID::DG3, "0103"},  {DataGroupID::DG4, "0104"},
+	{DataGroupID::DG5, "0105"},	 {DataGroupID::DG6, "0106"},  {DataGroupID::DG7, "0107"},  {DataGroupID::DG8, "0108"},
+	{DataGroupID::DG9, "0109"},	 {DataGroupID::DG10, "010A"}, {DataGroupID::DG11, "010B"}, {DataGroupID::DG12, "010C"},
+	{DataGroupID::DG13, "010D"}, {DataGroupID::DG14, "010E"}, {DataGroupID::DG15, "010F"}, {DataGroupID::DG16, "0110"},
+};
+
+const std::vector<int> APL_ICAO::EXPECTED_TAGS = {
+	DG1, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16,
+};
+
+APL_ICAO::~APL_ICAO() {}
+
+void APL_ICAO::resetCardState() {
+	auto reader = m_reader->getCalReader();
+	unsigned char apdu_break_sm[] = {0x0C, 0xA4, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+	reader->SendAPDU(CByteArray(apdu_break_sm, sizeof(apdu_break_sm)));
+}
+
+void APL_ICAO::initializeCard() {
+	m_ready = true;
+
+	selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
+	loadAvailableDataGroups();
+
+	m_reports.setCard(this);
+
+	auto aa_report = performActiveAuthentication();
+	m_reports.setActiveAuthenticationReport(aa_report);
+
+	auto ca_report = performChipAuthentication();
+	m_reports.setChipAuthenticationReport(ca_report);
+}
+
+std::vector<DataGroupID> APL_ICAO::getAvailableDatagroups() {
+	std::vector<DataGroupID> datagroups;
+	{
+		if (!m_ready) {
+			initializeCard();
+		}
+
+		for (const auto &hash : m_SodAttributes->getHashes()) {
+			datagroups.emplace_back(static_cast<DataGroupID>(hash.first));
+		}
+	}
+
+	return datagroups;
+}
+
+std::pair<EIDMW_DataGroupReport, CByteArray> APL_ICAO::readDatagroup(DataGroupID tag) {
+	CByteArray out;
+	EIDMW_DataGroupReport report;
+
+	if (!m_ready) {
+		initializeCard();
+	}
+
+	BEGIN_CAL_OPERATION(m_reader) {
+		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
+		out = readFile(DATAGROUP_PATHS.at(tag));
+	}
+	END_CAL_OPERATION(m_reader);
+
+	// store hashes
+	report.storedHash = m_SodAttributes->get(tag);
+	AppLayer.getCryptoFwk()->GetHash(out, m_SodAttributes->getHashFunction(), &report.computedHash);
+	report.type = EIDMW_ReportType::Success;
+
+	// verify sod
+	auto sod = verifySOD(tag, out);
+	if (!sod) {
+		report.error_code = EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG;
+		report.type = EIDMW_ReportType::Error;
+	}
+
+	m_reports.addDataGroupReport(tag, report);
+
+	return {report, out};
+}
+
+IcaoDg1 *APL_ICAO::readDataGroup1() {
+	if (m_mrzDg1.get() != nullptr)
+		return m_mrzDg1.get();
+
+	auto [report, arrayDg1] = readDatagroup(DG1);
+	if (arrayDg1.Size() == 0)
+		return NULL;
+
+	m_mrzDg1.reset(new IcaoDg1(arrayDg1.GetBytes(5, arrayDg1.Size() - 5)));
+	return m_mrzDg1.get();
+}
+
+IcaoDg2 *APL_ICAO::readDataGroup2() {
+	if (m_faceDg2.get() != nullptr)
+		return m_faceDg2.get();
+
+	auto [report, arrayDg2] = readDatagroup(DG2);
+	if (arrayDg2.Size() == 0)
+		return NULL;
+
+	m_faceDg2.reset(new IcaoDg2(arrayDg2));
+	return m_faceDg2.get();
+}
+
+IcaoDg3 *APL_ICAO::readDataGroup3() {
+	if (m_fingersDg3.get() != nullptr)
+		return m_fingersDg3.get();
+
+	auto [report, arrayDg3] = readDatagroup(DG3);
+	if (arrayDg3.Size() == 0)
+		return NULL;
+
+	m_fingersDg3.reset(new IcaoDg3(arrayDg3));
+	return m_fingersDg3.get();
+}
+
+IcaoDg11 *APL_ICAO::readDataGroup11() {
+	if (m_infoDg11.get() != nullptr)
+		return m_infoDg11.get();
+
+	auto [report, arrayDg11] = readDatagroup(DG11);
+	if (arrayDg11.Size() == 0)
+		return NULL;
+
+	m_infoDg11.reset(new IcaoDg11(arrayDg11));
+	return m_infoDg11.get();
+}
+
+void APL_ICAO::loadAvailableDataGroups() {
+	// Already loaded SOD and datagroup list
+	if (m_SodAttributes)
+		return;
+
+	CByteArray oData = readFile(SOD_PATH);
+
+	CByteArray sod;
+	auto report = verifySodFileIntegrity(oData, sod);
+	m_reports.setSodReport(report);
+	if (report.type == EIDMW_ReportType::Error) {
+		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to verify SOD validity");
+	}
+
+	SODParser parser;
+	parser.ParseSodEncapsulatedContent(sod, EXPECTED_TAGS);
+
+	m_SodAttributes = std::make_unique<SODAttributes>(parser.getAttributes());
+}
+
+void logFullSODFile(const CByteArray &sod_data) {
+	char *sod_hex = byteArrayToHexString(sod_data.GetBytes(), sod_data.Size());
+	MWLOG(LEV_DEBUG, MOD_APL, "EF.SOD: %s", sod_hex);
+	free(sod_hex);
+}
+
+EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod) {
+	EIDMW_SodReport report;
+
+	logFullSODFile(data);
+	auto csca_store = AppLayer.getCryptoFwk()->getMasterListStore();
+	if (!csca_store) {
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_NO_MASTERLIST);
+	}
+
+	PKCS7 *p7 = nullptr;
+	char *error_msg = nullptr;
+	bool sod_verified = false;
+
+	ERR_load_crypto_strings();
+	OpenSSL_add_all_digests();
+
+	const unsigned char *temp = data.GetBytes();
+	size_t length = data.Size();
+	temp += 4; // Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
+
+	p7 = d2i_PKCS7(nullptr, &temp, length);
+	if (!p7) {
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to decode SOD PKCS7 object! Openssl errors:\n%s",
+			  error_msg != nullptr ? error_msg : "N/A");
+		free(error_msg);
+		report.type = EIDMW_ReportType::Error;
+		report.error_code = EIDMW_SOD_ERR_INVALID_PKCS7;
+		return report;
+	}
+
+	BIO *out = BIO_new(BIO_s_mem());
+	/* Some document signing certificates may have wrong values in Extended Key Usage field which generates a "purpose"
+	   validation error. Set the cert verify parameters to have unrestricted purpose X509_PURPOSE_ANY
+	*/
+	X509_VERIFY_PARAM *verify_params = X509_STORE_get0_param(csca_store);
+	X509_VERIFY_PARAM_set_purpose(verify_params, X509_PURPOSE_ANY);
+	X509_STORE_set1_param(csca_store, verify_params);
+
+	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
+
+	// failed to verify SOD but we still need the contents
+	if (!sod_verified) {
+		report.type = EIDMW_ReportType::Error;
+
+		// By default. In most cases, should be overwritten by the checks below
+		report.error_code = EIDMW_SOD_ERR_GENERIC_VALIDATION;
+
+		unsigned long err = ERR_peek_last_error();
+		int lib = ERR_GET_LIB(err);
+		int reason = ERR_GET_REASON(err);
+
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL,
+			  "verifySodFileIntegrity:: Error validating SOD signature. OpenSSL errors (%d:%d):\n%s", lib, reason,
+			  error_msg ? error_msg : "N/A");
+		free(error_msg);
+
+		if ((lib == ERR_LIB_X509 && reason == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT) ||
+			(lib == ERR_LIB_PKCS7 && reason == PKCS7_R_CERTIFICATE_VERIFY_ERROR)) {
+			// signer isnt in the CSCA (untrusted)
+			report.error_code = EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER;
+		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNATURE_FAILURE) {
+			// signature is not valid
+			report.error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
+		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNER_CERTIFICATE_NOT_FOUND) {
+			// couldnt find signer
+			report.error_code = EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND;
+		}
+
+		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
+
+		// Get signer for debug purposes
+		STACK_OF(X509) *signers = PKCS7_get0_signers(p7, nullptr, 0);
+		if (sk_X509_num(signers) > 0) {
+			X509 *signer = sk_X509_value(signers, 0);
+			unsigned char *der = nullptr;
+			int len = i2d_X509(signer, &der);
+			if (len > 0) {
+				report.signer = CByteArray(der, len);
+				OPENSSL_free(der);
+			}
+		}
+
+		sk_X509_free(signers);
+	}
+
+	unsigned char *p;
+	size_t size = BIO_get_mem_data(out, &p);
+	out_sod.Append(p, size);
+
+	BIO_free_all(out);
+	PKCS7_free(p7);
+
+	return report;
+}
+
+CByteArray APL_ICAO::readFile(const std::string &csPath) const {
+	auto out = m_reader->getCalReader()->ReadFile(csPath);
+
+	// remove padding
+	auto length = der_certificate_length(out);
+	out.Chop(out.Size() - length);
+
+	return out;
+}
+
+bool APL_ICAO::verifySOD(DataGroupID tag, const CByteArray &data) {
+	if (!m_ready) {
+		initializeCard();
+	}
+
+	return m_SodAttributes->validateHash(tag, data);
+}
+
+CByteArray extractPublicKeyFromDG15(CByteArray &dg15_data) {
+	CByteArray pubkey_data;
+	long len = 0;
+	int tag = 0, xclass = 0;
+	const unsigned char *der_p = dg15_data.GetBytes();
+	int ret = ASN1_get_object(&der_p, &len, &tag, &xclass, dg15_data.Size());
+	if (ret & 0x80) {
+		MWLOG(LEV_ERROR, MOD_APL, "DG15 ASN.1 failed to decode! Error code: %08x", ERR_get_error());
+	} else if (tag != 15 && xclass != V_ASN1_APPLICATION) {
+		MWLOG(LEV_ERROR, MOD_APL,
+			  "Malformed DG15: expected tag 0x6F (APPLICATION 15)! Found ASN.1 tag with class: %d and tag number: %d",
+			  xclass, tag);
+	} else {
+		pubkey_data.Append(der_p, len);
+	}
+	return pubkey_data;
+}
+
+EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
+	EIDMW_ActiveAuthenticationReport report;
+
+	MWLOG(LEV_DEBUG, MOD_APL, "Active Authentication for ICAO eMRTD");
+
+	auto cryptFwk = AppLayer.getCryptoFwk();
+
+	// CByteArray security_file;
+	CByteArray secopt_file = readFile(PTEID_FILE_SECURITY);
+	report.dg14.Append(secopt_file);
+
+	char *dg14_str = byteArrayToHexString(secopt_file.GetBytes(), secopt_file.Size());
+	MWLOG(LEV_DEBUG, MOD_APL, "DG14 file: %s", dg14_str);
+	free(dg14_str);
+
+	// Store hashes
+	report.storedHashDg14 = m_SodAttributes->get(DG14);
+	cryptFwk->GetHash(secopt_file, m_SodAttributes->getHashFunction(), &report.hashDg14);
+
+	// verify hash of security file with hash in SOD
+	if (!verifySOD(DG14, secopt_file)) {
+		MWLOG(LEV_ERROR, MOD_APL, "Security option hash does not match with SOD");
+
+		report.error_code = EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY;
+		report.type = EIDMW_ReportType::Error;
+		return report;
+	}
+
+	try {
+		// read public key DG15
+		CByteArray pubkey_file = readFile(PTEID_FILE_PUB_KEY_AA);
+		report.dg15 = pubkey_file;
+
+		// Store hashes
+		report.storedHashDg15 = m_SodAttributes->get(DG15);
+		cryptFwk->GetHash(pubkey_file, m_SodAttributes->getHashFunction(), &report.hashDg15);
+
+		// verify hash of public key with hash in SOD
+		if (!verifySOD(DG15, pubkey_file)) {
+			MWLOG(LEV_ERROR, MOD_APL, "Public key hash does not match with SOD");
+
+			report.error_code = EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY;
+			report.type = EIDMW_ReportType::Error;
+			return report;
+		}
+
+		// read OID from security file
+		auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
+		if (obj == nullptr) {
+			MWLOG(LEV_WARN, MOD_APL,
+				  "Didn't find active authentication algorithm OID in security options file. This means we should try "
+				  "AA with RSA!");
+		}
+		report.oid = OBJ_nid2sn(OBJ_obj2nid(obj));
+
+		char *dg15_str = byteArrayToHexString(pubkey_file.GetBytes(), pubkey_file.Size());
+		MWLOG(LEV_DEBUG, MOD_APL, "DG15 file (card pubkey): %s", dg15_str);
+		free(dg15_str);
+
+		// Check the first tag of DG15 file (6F)
+		CByteArray pubkey = extractPublicKeyFromDG15(pubkey_file);
+
+		cryptFwk->performActiveAuthentication(obj, pubkey, this);
+	} catch (CMWException &e) {
+		report.error_code = e.GetError();
+		report.type = EIDMW_ReportType::Error;
+
+		if (e.GetError() == EIDMW_ERR_FILE_NOT_FOUND) {
+			MWLOG(LEV_WARN, MOD_APL, "DG15 not found! Active Authentication not available for this document.");
+			return report;
+		} else {
+			MWLOG(LEV_WARN, MOD_APL, "Active Authentication failed! Error code %08x thrown at %s:%ld", e.GetError(),
+				  e.GetFile().c_str(), e.GetLine());
+			return report;
+		}
+	}
+
+	return report;
+}
+
+EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
+	EIDMW_ChipAuthenticationReport report;
+
+	// Chip authentication is performed after Active Authentication.
+	// No need to re-verify dg14 hashes as it was already performed during the previous AA step
+	auto dg14 = readFile(DATAGROUP_PATHS.at(DG14));
+
+	auto pkey = getChipAuthenticationKey(dg14);
+	unsigned char *buffer = nullptr;
+	int len = i2d_PublicKey(pkey, &buffer);
+	report.pubKey = CByteArray(buffer, len);
+
+	auto oid_info = getChipAuthenticationOid(dg14);
+	report.oid = oid_info.short_name;
+
+	auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);
+	if (!status) {
+		report.type = EIDMW_ReportType::Error;
+	}
+
+	return report;
+}
+
+const EIDMW_DocumentReport &APL_ICAO::getDocumentReport() {
+	if (!m_ready) {
+		initializeCard();
+	}
+
+	return m_reports;
+}
+
+const CByteArray &APL_ICAO::getRawData(APL_RawDataType type) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
+
+APLPublicKey *APL_ICAO::getRootCAPubKey() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
+
+const char *APL_ICAO::getTokenSerialNumber() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
+
+const char *APL_ICAO::getTokenLabel() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
+
+APL_CardType APL_ICAO::getType() const { return APL_CARDTYPE_ICAO; };
+
+void APL_ICAO::loadMasterList(const char *filePath) {
+	auto cryptoFwk = AppLayer.getCryptoFwk();
+	cryptoFwk->loadMasterList(filePath);
 }
 
 } // namespace eIDMW

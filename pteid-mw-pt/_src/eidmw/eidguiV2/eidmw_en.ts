@@ -233,6 +233,14 @@
         <translation>Surname(s)</translation>
     </message>
     <message>
+        <source>STR_FULL_NAME_MRZ_EXTRACT</source>
+        <translation>Name of document holder</translation>
+    </message>
+    <message>
+        <source>STR_FULL_NAME</source>
+        <translation>Full name of document holder</translation>
+    </message>
+    <message>
         <source>STR_PHOTO</source>
         <translation>Citizen Photo</translation>
     </message>
@@ -265,12 +273,20 @@
         <translation>Date of Birth</translation>
     </message>
     <message>
+        <source>STR_DATE_OF_BIRTH_DOCUMENTED</source>
+        <translation>Date of Birth (DD-MM-YY)</translation>
+    </message>
+    <message>
         <source>STR_DOCUMENT_NUMBER</source>
         <translation>Document Number</translation>
     </message>
     <message>
         <source>STR_VALIDITY_DATE</source>
         <translation>Validity Date</translation>
+    </message>
+    <message>
+        <source>STR_VALIDITY_DATE_DOCUMENTED</source>
+        <translation>Validity Date (DD-MM-YY)</translation>
     </message>
     <message>
         <source>STR_AFFILIATION</source>
@@ -401,6 +417,18 @@
         <source>STR_COUNTRY</source>
         <oldsource>Country</oldsource>
         <translation>Country</translation>
+    </message>
+    <message>
+        <source>STR_ISSUER_COUNTRY</source>
+        <translation>Issuer Country</translation>
+    </message>
+    <message>
+        <source>STR_ICAO_IS_SECURE</source>
+        <translation>Document data is authentic.</translation>
+    </message>
+    <message>
+        <source>STR_ICAO_IS_NOT_SECURE</source>
+        <translation>Document data is not authentic.</translation>
     </message>
     <message>
         <source>STR_STREET_NAME</source>
@@ -569,6 +597,10 @@
     <message>
         <source>STR_MENU_OTHER_DATA</source>
         <translation>Other data</translation>
+    </message>
+    <message>
+        <source>STR_MENU_ICAO</source>
+        <translation>Travel data</translation>
     </message>
     <message>
         <source>STR_MENU_ADDRESS</source>
@@ -2311,6 +2343,14 @@
     <message>
         <source>STR_POPUP_CARD_CHANGED</source>
         <translation>Citizen card inserted</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CARD_ICAO</source>
+        <translation>ICAO document inserted</translation>
+    </message>
+    <message>
+        <source>STR_POPUP_CARD_INCOMPATIBLE_ICAO</source>
+        <translation>The inserted document is not an ICAO document.</translation>
     </message>
     <message>
         <source>STR_POPUP_CARD_READ_UNKNOWN</source>

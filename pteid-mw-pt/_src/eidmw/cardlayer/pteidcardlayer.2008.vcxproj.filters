@@ -81,6 +81,21 @@
     <ClCompile Include="APDU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FciData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IcaoCard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BacAuthentication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChipAuthentication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SecureMessaging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h">
@@ -159,6 +174,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PteidCard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FciData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IcaoCard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SecureMessaging.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -421,6 +421,7 @@ private:
 
 class PTEID_Card;
 class PTEID_EIDCard;
+class ICAO_Card;
 
 /**
  * This class represent a reader.
@@ -495,6 +496,10 @@ public:
 	 **/
 	PTEIDSDK_API PTEID_EIDCard &getEIDCard();
 
+	PTEIDSDK_API ICAO_Card &getICAOCard();
+
+	PTEIDSDK_API PTEID_ByteArray getMultiPassToken();
+
 	/**
 	 * Specify a callback function to be called each time a
 	 * card is inserted/remove in/from this reader.
@@ -520,6 +525,7 @@ private:
 	PTEID_ReaderContext(const SDK_Context *context, APL_ReaderContext *impl); /**< For internal use : Constructor */
 
 	unsigned long m_cardid;
+	unsigned long m_cardIcaoId;
 	// CMutex *m_mutex;
 
 	friend PTEID_ReaderContext &PTEID_ReaderSet::getReader(
@@ -528,6 +534,7 @@ private:
 
 class PTEID_PDFSignature;
 class APL_Card;
+class APL_ICAO;
 class PTEID_Certificate;
 class PTEID_Certificates;
 
@@ -715,6 +722,433 @@ public:
 	 * Get type of SigningDeviceType.
 	 */
 	PTEIDSDK_API virtual PTEID_SigningDeviceType getDeviceType() = 0;
+};
+
+class EIDMW_DocumentReport;
+struct EIDMW_ActiveAuthenticationReport;
+struct EIDMW_ChipAuthenticationReport;
+struct EIDMW_SodReport;
+struct EIDMW_DataGroupReport;
+
+class PTEID_ActiveAuthenticationReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetDG14() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG14StoredHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG14ComputedHash() const;
+
+	PTEIDSDK_API PTEID_ByteArray GetDG15() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG15StoredHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG15ComputedHash() const;
+
+	PTEIDSDK_API const char *GetOID() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const char *GetStatusMessage() const;
+
+private:
+	const EIDMW_ActiveAuthenticationReport &m_impl;
+	mutable std::string m_statusMessage;
+	friend class ICAO_Card;
+	friend class PTEID_DocumentReport;
+
+	PTEID_ActiveAuthenticationReport(const SDK_Context *context, const EIDMW_ActiveAuthenticationReport &report);
+	PTEID_ActiveAuthenticationReport &
+	operator=(const PTEID_ActiveAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class PTEID_ChipAuthenticationReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetPublicKey() const;
+	PTEIDSDK_API const char *GetOID() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const char *GetStatusMessage() const;
+
+private:
+	const EIDMW_ChipAuthenticationReport &m_impl;
+	mutable std::string m_statusMessage;
+	friend class ICAO_Card;
+	friend class PTEID_DocumentReport;
+
+	PTEID_ChipAuthenticationReport(const SDK_Context *context, const EIDMW_ChipAuthenticationReport &report);
+	PTEID_ChipAuthenticationReport &
+	operator=(const PTEID_ChipAuthenticationReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class PTEID_SodReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetSigner() const;
+
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const char *GetStatusMessage() const;
+
+private:
+	const EIDMW_SodReport &m_impl;
+	mutable std::string m_statusMessage;
+	friend class ICAO_Card;
+	friend class PTEID_DocumentReport;
+
+	PTEID_SodReport(const SDK_Context *context, const EIDMW_SodReport &report);
+	PTEID_SodReport &operator=(const PTEID_SodReport &) = delete;
+};
+
+class PTEID_DataGroupReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetStoredHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetComputedHash() const;
+	PTEIDSDK_API long GetStatus() const;
+	PTEIDSDK_API const char *GetStatusMessage() const;
+
+private:
+	const EIDMW_DataGroupReport &m_impl;
+	mutable std::string m_statusMessage;
+
+	friend class ICAO_Card;
+	friend class PTEID_BaseDGReport;
+	friend class PTEID_DocumentReport;
+
+	PTEID_DataGroupReport(const SDK_Context *context, const EIDMW_DataGroupReport &report);
+	PTEID_DataGroupReport(const PTEID_DataGroupReport &) = delete;
+	PTEID_DataGroupReport &operator=(const PTEID_DataGroupReport &) = delete;
+};
+
+class PTEID_DocumentReport : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const;
+	PTEIDSDK_API PTEID_ChipAuthenticationReport *GetChipAuthenticationReport() const;
+	PTEIDSDK_API PTEID_SodReport *GetSodReport() const;
+	PTEIDSDK_API PTEID_DataGroupReport *GetDataGroupReport(PTEID_DataGroupID tag) const;
+
+private:
+	const EIDMW_DocumentReport &m_impl;
+	friend class ICAO_Card;
+	friend class PTEID_BaseDGReport;
+
+	PTEID_DocumentReport(const SDK_Context *context, const EIDMW_DocumentReport &reports);
+	PTEID_DocumentReport(const PTEID_DocumentReport &) = delete;			/**< Copy not allowed - not implemented */
+	PTEID_DocumentReport &operator=(const PTEID_DocumentReport &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class PTEID_BaseDGReport : public PTEID_Object {
+public:
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const = 0;
+	PTEIDSDK_API PTEID_DocumentReport *GetDocumentReport() const;
+
+protected:
+	PTEIDSDK_API const PTEID_DataGroupReport *GetReportByID(PTEID_DataGroupID id) const;
+
+	const EIDMW_DocumentReport &m_documentReport;
+	PTEID_BaseDGReport(const SDK_Context *context, const EIDMW_DocumentReport &report);
+	PTEID_BaseDGReport(const PTEID_BaseDGReport &) = delete;
+	PTEID_BaseDGReport &operator=(const PTEID_BaseDGReport &) = delete;
+};
+
+class PTEID_RawDataGroup : public PTEID_BaseDGReport {
+public:
+	PTEIDSDK_API PTEID_ByteArray GetData() const;
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
+
+private:
+	friend class ICAO_Card;
+
+	PTEID_ByteArray m_data;
+	PTEID_DataGroupID m_id;
+
+	PTEID_RawDataGroup(const SDK_Context *context, PTEID_DataGroupID id, PTEID_ByteArray data,
+					   const EIDMW_DocumentReport &report);
+	PTEID_RawDataGroup(const PTEID_RawDataGroup &) = delete;
+	PTEID_RawDataGroup &operator=(const PTEID_RawDataGroup &) = delete;
+};
+
+class IcaoDg1;
+class PTEID_ICAO_DG1 : public PTEID_BaseDGReport {
+public:
+	PTEIDSDK_API const char *documentCode() const;
+	PTEIDSDK_API const char *issuingState() const;
+	PTEIDSDK_API const char *documentNumber() const;
+	PTEIDSDK_API int serialNumberCheckDigit() const;
+	PTEIDSDK_API const char *optionalDataLine1() const;
+	PTEIDSDK_API const char *dateOfBirth() const;
+	PTEIDSDK_API char sex() const;
+	PTEIDSDK_API const char *dateOfExpiry() const;
+	PTEIDSDK_API const char *nationality() const;
+	PTEIDSDK_API const char *optionalDataLine2() const;
+	PTEIDSDK_API const char *primaryIdentifier() const;
+	PTEIDSDK_API const char *secondaryIdentifier() const;
+	PTEIDSDK_API bool isPassport() const;
+	PTEIDSDK_API ~PTEID_ICAO_DG1();
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
+
+private:
+	const IcaoDg1 &m_impl;
+	friend class ICAO_Card;
+	PTEID_ICAO_DG1(const SDK_Context *context, const IcaoDg1 &dg1, const EIDMW_DocumentReport &documentReport);
+	PTEID_ICAO_DG1(const PTEID_ICAO_DG1 &);						/**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG1 &operator=(const PTEID_ICAO_DG1 &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class IcaoDg2;
+class BiometricInformation;
+class FaceInfo;
+class FaceInfoData;
+class FeaturePoint;
+class PTEID_FeaturePoint {
+public:
+	PTEIDSDK_API unsigned char type() const;
+	PTEIDSDK_API unsigned char featurePoint() const;
+	PTEIDSDK_API unsigned char majorCode() const;
+	PTEIDSDK_API unsigned char minorCode() const;
+	PTEIDSDK_API unsigned short x_coord() const;
+	PTEIDSDK_API unsigned short y_coord() const;
+	PTEIDSDK_API unsigned short reserved() const;
+
+private:
+	friend class PTEID_FaceInfoData;
+	PTEID_FeaturePoint(FeaturePoint &featurePoint);
+	PTEID_FeaturePoint &operator=(const PTEID_FeaturePoint &) = delete; /**< Copy not allowed - not implemented */
+	FeaturePoint &m_impl;
+};
+
+class PTEID_FaceInfoData : public PTEID_Object {
+public:
+	PTEIDSDK_API long facialRecordDataLength() const;
+	PTEIDSDK_API unsigned short numberOfFeaturePoints() const;
+	PTEIDSDK_API unsigned char gender() const;
+	PTEIDSDK_API PTEID_Gender genderDecode() const;
+	PTEIDSDK_API unsigned char eyeColor() const;
+	PTEIDSDK_API PTEID_EyeColor eyeColorDecode() const;
+	PTEIDSDK_API unsigned char hairColour() const;
+	PTEIDSDK_API PTEID_HairColour hairColourDecode() const;
+	PTEIDSDK_API long featureMask() const;
+	PTEIDSDK_API long expression() const;
+	PTEIDSDK_API long poseAngle() const;
+	PTEIDSDK_API long poseAngleUncertainty() const;
+	PTEIDSDK_API std::vector<PTEID_FeaturePoint *> featurePoints() const;
+	PTEIDSDK_API unsigned char faceImgType() const;
+	PTEIDSDK_API PTEID_FaceImageType faceImgTypeDecode() const;
+	PTEIDSDK_API unsigned char imgDataType() const;
+	PTEIDSDK_API PTEID_ImageDataType imgDataTypeDecode() const;
+	PTEIDSDK_API unsigned short imgWidth() const;
+	PTEIDSDK_API unsigned short imgHeight() const;
+	PTEIDSDK_API unsigned char colourSpace() const;
+	PTEIDSDK_API PTEID_ImageColourSpace colourSpaceDecode() const;
+	PTEIDSDK_API unsigned char sourceType() const;
+	PTEIDSDK_API PTEID_SourceType sourceTypeDecode() const;
+	PTEIDSDK_API unsigned short deviceType() const;
+	PTEIDSDK_API unsigned short quality() const;
+	PTEIDSDK_API PTEID_ByteArray photoRawData() const;
+	PTEIDSDK_API PTEID_ByteArray photoRawDataPNG() const;
+
+private:
+	friend class PTEID_FaceInfo;
+	PTEID_FaceInfoData(const SDK_Context *context, FaceInfoData &data);
+	~PTEID_FaceInfoData();
+	PTEID_FaceInfoData &operator=(const PTEID_FaceInfoData &) = delete; /**< Copy not allowed - not implemented */
+	FaceInfoData &m_impl;
+	std::vector<PTEID_FeaturePoint *> m_featurePoints;
+};
+
+class PTEID_FaceInfo : public PTEID_Object {
+public:
+	PTEIDSDK_API const char *version() const;
+	PTEIDSDK_API unsigned short encodingBytes() const;
+	PTEIDSDK_API long sizeOfRecord() const;
+	PTEIDSDK_API long numberOfFacialImages() const;
+	PTEIDSDK_API std::vector<PTEID_FaceInfoData *> faceInfoData() const;
+
+private:
+	friend class PTEID_ICAO_DG2;
+	friend class PTEID_BiometricInfomation;
+	PTEID_FaceInfo(const SDK_Context *context, FaceInfo &face);
+	~PTEID_FaceInfo();
+	PTEID_FaceInfo &operator=(const PTEID_FaceInfo &) = delete; /**< Copy not allowed - not implemented */
+	FaceInfo &m_impl;
+	std::vector<PTEID_FaceInfoData *> m_faceInfoDataVec;
+};
+
+class PTEID_BiometricInfomation : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray icaoHeaderVersion() const;
+	PTEIDSDK_API PTEID_ByteArray type() const;
+	PTEIDSDK_API PTEID_ByteArray subType() const;
+	PTEIDSDK_API PTEID_ByteArray creationDateAndtime() const;
+	PTEIDSDK_API PTEID_ByteArray validPeriod() const;
+	PTEIDSDK_API PTEID_ByteArray creatorOfBiometricRefData() const;
+	PTEIDSDK_API PTEID_ByteArray formatOwner() const;
+	PTEIDSDK_API PTEID_ByteArray formatType() const;
+	PTEIDSDK_API PTEID_FaceInfo *faceInfo() const;
+
+private:
+	friend class PTEID_ICAO_DG2;
+	PTEID_BiometricInfomation(const SDK_Context *context, BiometricInformation &bioInfo);
+	~PTEID_BiometricInfomation();
+	PTEID_FaceInfo *m_faceInfo;
+	PTEID_BiometricInfomation &
+	operator=(const PTEID_BiometricInfomation &) = delete; /**< Copy not allowed - not implemented */
+	BiometricInformation &m_impl;
+};
+
+class PTEID_ICAO_DG2 : public PTEID_BaseDGReport {
+public:
+	PTEIDSDK_API unsigned int numberOfBiometrics() const;
+	PTEIDSDK_API std::vector<PTEID_BiometricInfomation *> biometricInstances();
+	PTEIDSDK_API ~PTEID_ICAO_DG2();
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
+
+private:
+	const IcaoDg2 &m_impl;
+	std::vector<PTEID_BiometricInfomation *> m_biometricInstances; // delete this on destructor
+	friend class ICAO_Card;
+	PTEID_ICAO_DG2(const SDK_Context *context, const IcaoDg2 &dg2, const EIDMW_DocumentReport &report);
+	PTEID_ICAO_DG2(const PTEID_ICAO_DG2 &);						/**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG2 &operator=(const PTEID_ICAO_DG2 &) = delete; /**< Copy not allowed - not implemented */
+};
+class IcaoDg3;
+class BiometricInfoImage;
+class PTEID_BiometricInfoFingerImage : public PTEID_Object {
+public:
+	PTEIDSDK_API unsigned int length() const;
+	PTEIDSDK_API unsigned int fingerPalmPosition() const;
+	PTEIDSDK_API unsigned int countOfViews() const;
+	PTEIDSDK_API unsigned int viewMumber() const;
+	PTEIDSDK_API unsigned int quality() const;
+	PTEIDSDK_API unsigned int impressionType() const;
+	PTEIDSDK_API unsigned short horizontalLineLength() const;
+	PTEIDSDK_API unsigned short verticalLineLength() const;
+	PTEIDSDK_API unsigned char reserved() const;
+	PTEIDSDK_API PTEID_ByteArray imageData() const;
+
+private:
+	friend class PTEID_BiometricInfomationDg3;
+	const BiometricInfoImage &m_impl;
+	PTEID_BiometricInfoFingerImage(const SDK_Context *context, const BiometricInfoImage &bioInfo);
+	PTEID_BiometricInfoFingerImage(const PTEID_BiometricInfoFingerImage &);
+	PTEID_BiometricInfoFingerImage &operator=(const PTEID_BiometricInfoFingerImage &) = delete;
+};
+
+class BiometricInfoDG3;
+class PTEID_BiometricInfomationDg3 : public PTEID_Object {
+public:
+	PTEIDSDK_API PTEID_ByteArray icaoHeaderVersion() const;
+	PTEIDSDK_API PTEID_ByteArray type() const;
+	PTEIDSDK_API PTEID_ByteArray subType() const;
+	PTEIDSDK_API PTEID_ByteArray creationDateAndtime() const;
+	PTEIDSDK_API PTEID_ByteArray validPeriod() const;
+	PTEIDSDK_API PTEID_ByteArray creatorOfBiometricRefData() const;
+	PTEIDSDK_API PTEID_ByteArray formatOwner() const;
+	PTEIDSDK_API PTEID_ByteArray formatType() const;
+
+	PTEIDSDK_API const char *specVersion() const;
+	PTEIDSDK_API unsigned long long recordLength() const;
+	PTEIDSDK_API unsigned short scannerId() const;
+	PTEIDSDK_API unsigned short imageAcquisitionLevel() const;
+	PTEIDSDK_API unsigned int numFingersOrPalmImages() const;
+	PTEIDSDK_API unsigned int scaleUnits() const;
+	PTEIDSDK_API unsigned short xScanResolution() const;
+	PTEIDSDK_API unsigned short yScanResolution() const;
+	PTEIDSDK_API unsigned short xImageResolution() const;
+	PTEIDSDK_API unsigned short yImageResolution() const;
+	PTEIDSDK_API unsigned int pixelDepth() const;
+	PTEIDSDK_API unsigned int imageCompressionAlgorithm() const;
+	PTEIDSDK_API unsigned short reserved() const;
+
+private:
+	const BiometricInfoDG3 &m_impl;
+	friend class PTEID_ICAO_DG3;
+	PTEID_BiometricInfomationDg3(const SDK_Context *context, const BiometricInfoDG3 &bioInfo);
+	PTEID_BiometricInfomationDg3(const PTEID_BiometricInfomationDg3 &);
+	~PTEID_BiometricInfomationDg3();
+	PTEID_BiometricInfomationDg3 &operator=(const PTEID_BiometricInfomationDg3 &) = delete;
+	std::vector<PTEID_BiometricInfoFingerImage *> m_bioFingerImageVec;
+};
+
+class PTEID_ICAO_DG3 : public PTEID_BaseDGReport {
+public:
+	PTEIDSDK_API ~PTEID_ICAO_DG3();
+	PTEIDSDK_API unsigned int numberOfbiometrics() const;
+	PTEIDSDK_API std::vector<PTEID_BiometricInfomationDg3 *> biometricInformation() const;
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
+
+private:
+	const IcaoDg3 &m_impl;
+
+	friend class ICAO_Card;
+	PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3, const EIDMW_DocumentReport &report);
+	PTEID_ICAO_DG3(const PTEID_ICAO_DG3 &);						/**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG3 &operator=(const PTEID_ICAO_DG3 &) = delete; /**< Copy not allowed - not implemented */
+	std::vector<PTEID_BiometricInfomationDg3 *> m_biometricInformation;
+};
+
+class IcaoDg11;
+class PTEID_ICAO_DG11 : public PTEID_BaseDGReport {
+public:
+	PTEIDSDK_API PTEID_ByteArray listOfTags() const;
+	PTEIDSDK_API const char *fullName() const;
+	PTEIDSDK_API const char *personalNumber() const;
+	PTEIDSDK_API const char *fullDateOfBirth() const;
+	PTEIDSDK_API const char *placeOfBirth() const;
+	PTEIDSDK_API const char *permanentAddress() const;
+	PTEIDSDK_API const char *telephone() const;
+	PTEIDSDK_API const char *profession() const;
+	PTEIDSDK_API const char *title() const;
+	PTEIDSDK_API const char *personalSummary() const;
+	PTEIDSDK_API const char *proofOfCitizenship() const;
+	PTEIDSDK_API const char *otherValidTDNumbers() const;
+	PTEIDSDK_API const char *custodyInformation() const;
+	PTEIDSDK_API int numberOfOtherNames() const;
+	PTEIDSDK_API const char *otherNames() const;
+	PTEIDSDK_API virtual ~PTEID_ICAO_DG11();
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
+
+private:
+	const IcaoDg11 &m_impl;
+	friend class ICAO_Card;
+	PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11, const EIDMW_DocumentReport &report);
+	PTEID_ICAO_DG11(const PTEID_ICAO_DG11 &);					  /**< Copy not allowed - not implemented */
+	PTEID_ICAO_DG11 &operator=(const PTEID_ICAO_DG11 &) = delete; /**< Copy not allowed - not implemented */
+};
+
+class ICAO_Card : public PTEID_Object {
+public:
+	PTEIDSDK_API virtual std::vector<PTEID_DataGroupID> getAvailableDatagroups();
+
+	PTEIDSDK_API virtual PTEID_DocumentReport *GetDocumentReport() const;
+
+	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length,
+													 PTEID_CardPaceSecretType secretType);
+
+	/**
+	 * Read raw data from datagroup specified in @tag parameter
+	 */
+	PTEIDSDK_API virtual PTEID_RawDataGroup *readDatagroupRaw(PTEID_DataGroupID tag);
+
+	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
+	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();
+	PTEIDSDK_API virtual PTEID_ICAO_DG3 *readDataGroup3();
+
+	PTEIDSDK_API virtual PTEID_ICAO_DG11 *readDataGroup11();
+
+	/**
+	 * Load a certificate MasterList containing CSCA certificates. These are needed for certificate validation during
+	 Passive Authentication This method needs to be called before readDataGroupRaw() or any other readDataGroup* method
+	 */
+	PTEIDSDK_API virtual void loadMasterList(const char *filePath);
+	/**
+	 * Reset the card state, discarding any Secure Messaging session. This is useful for a multi-application card like
+	 * PT eID v2 to be able to access other applications afterwards Other methods of ICAO_Card will fail after this
+	 * call!
+	 */
+	PTEIDSDK_API virtual void resetCardState();
+
+protected:
+	ICAO_Card(const SDK_Context *context, APL_ICAO *impl); /**< For internal use : Constructor */
+
+private:
+	ICAO_Card(const ICAO_Card &card) = delete;			  /**< Copy not allowed - not implemented */
+	ICAO_Card &operator=(const ICAO_Card &card) = delete; /**< Copy not allowed - not implemented */
+
+	friend ICAO_Card &
+	PTEID_ReaderContext::getICAOCard(); /**< For internal use : This method must access protected constructor */
 };
 
 /**

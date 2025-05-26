@@ -43,6 +43,7 @@
 #include <memory>
 
 namespace eIDMW {
+class APDU;
 class EIDMW_CAL_API CCard {
 public:
 	CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
@@ -112,6 +113,7 @@ public:
 	 * if you know it's case 1 then preferably set bDataIsReturned to false */
 	virtual CByteArray SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2, const CByteArray &oData);
 	virtual CByteArray SendAPDU(const CByteArray &oCmdAPDU);
+	virtual CByteArray SendAPDU(const APDU &apdu);
 
 	virtual void InitEncryptionKey() = 0;
 	virtual void ReadSerialNumber() = 0;
@@ -121,6 +123,7 @@ public:
 	void createPace();
 
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
+	bool initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid);
 
 	const void *getProtocolStructure();
 	const void setNextAPDUClearText() { cleartext_next = true; }
@@ -157,7 +160,7 @@ protected:
 	bool m_askPinOnSign;
 
 	const void *m_comm_protocol;
-	std::unique_ptr<PaceAuthentication> m_pace{};
+	std::unique_ptr<SecureMessaging> m_secureMessaging{};
 
 private:
 	// No copies allowed
@@ -165,6 +168,7 @@ private:
 	CCard &operator=(const CCard &oCard);
 	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal,
 									  const void *param_structure);
+	CByteArray handleSendAPDUSecurity(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
 };
 
 class CAutoLock {

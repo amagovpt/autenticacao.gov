@@ -129,6 +129,8 @@ public:
 	 */
 	EIDMW_APL_API APL_DocVersionInfo &getDocInfo();
 
+	EIDMW_APL_API CByteArray readTokenData();
+
 	/**
 	 * Return rawdata from the card
 	 */
@@ -171,6 +173,7 @@ private:
 	APL_EIDCard &operator=(const APL_EIDCard &card); /**< Copy not allowed - not implemented */
 	void invalidateAddressSOD();
 
+	CByteArray m_cachedMultipassToken; /**< Cached multipass token used for re-reads */
 	CByteArray *m_cardinfosign;
 	APL_CardType m_cardType;
 	APL_CCXML_Doc *m_CCcustomDoc;	  /**< Pointer to the custom document */

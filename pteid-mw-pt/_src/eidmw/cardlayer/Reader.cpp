@@ -30,11 +30,14 @@
 #include "Log.h"
 #include "Config.h"
 // cardlayer headers
+#include "PteidCard.h"
 #include "Reader.h"
 #include "Card.h"
+#include "APDU.h"
 #include "ReaderDeviceInfo.h"
 
 #include "CardFactory.h"
+#include <openssl/types.h>
 
 namespace eIDMW {
 
@@ -264,8 +267,9 @@ bool CReader::Connect() {
 
 	m_poCard = CardConnect(m_csReader, m_poContext, NULL, m_isContactless);
 	if (m_poCard != NULL) {
-		if (m_isContactless)
+		if (m_isContactless || m_poCard->GetType() == tCardType::CARD_ICAO) {
 			m_poCard->createPace();
+		}
 
 		m_oPKCS15.SetCard(m_poCard);
 		m_oPinpad->Init(m_poCard->m_hCard);
@@ -409,11 +413,28 @@ void CReader::SelectApplication(const CByteArray &oAID) {
 	return m_poCard->SelectApplication(oAID);
 }
 
+void CReader::ResetApplication() {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->ResetApplication();
+}
+
 bool CReader::isCardContactless() const { return m_isContactless; }
 
 void CReader::initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType) {
 	m_poCard->initPaceAuthentication(secret, secretLen, secretType);
 }
+
+bool CReader::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
+	return m_poCard->initChipAuthentication(pkey, oid);
+}
+
+void CReader::openBACChannel(const CByteArray &mrz_info) {
+	reinterpret_cast<CPteidCard*>(m_poCard)->openBACChannel(mrz_info);
+}
+
+CByteArray CReader::readMultiPassToken() { return reinterpret_cast<CPteidCard*>(m_poCard)->readToken(); }
 
 CByteArray CReader::ReadFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen,
 							 bool bDoNotCache) {
@@ -562,6 +583,13 @@ CByteArray CReader::GetRandom(unsigned long ulLen) {
 }
 
 CByteArray CReader::SendAPDU(const CByteArray &oCmdAPDU) {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+
+	return m_poCard->SendAPDU(oCmdAPDU);
+}
+
+CByteArray CReader::SendAPDU(const APDU &oCmdAPDU) {
 	if (m_poCard == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
 

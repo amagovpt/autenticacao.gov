@@ -79,7 +79,7 @@ DWORD WINAPI CardAuthenticatePin(__in PCARD_DATA pCardData, __in LPWSTR pwszUser
 	if (pbPinInfo.PinType == ExternalPinType) {
 		dwReturn = PteidAuthenticateExternal(pCardData, pcAttemptsRemaining, FALSE, 0);
 	} else {
-		dwReturn = cal_auth_pin(pCardData, pbPin, cbPin, pcAttemptsRemaining, 0);
+		dwReturn = cal_auth_pin(pCardData, pbPin, cbPin, pcAttemptsRemaining, 0, card_type);
 	}
 
 	if (dwReturn != SCARD_S_SUCCESS) {
@@ -222,7 +222,7 @@ DWORD WINAPI CardAuthenticateEx(__in PCARD_DATA pCardData, __in PIN_ID PinId, __
 			PteidAuthenticateExternal(pCardData, pcAttemptsRemaining,
 									  (dwFlags & CARD_PIN_SILENT_CONTEXT) == CARD_PIN_SILENT_CONTEXT, specific_pin_id);
 	} else {
-		dwReturn = cal_auth_pin(pCardData, pbPinData, cbPinData, pcAttemptsRemaining, specific_pin_id);
+		dwReturn = cal_auth_pin(pCardData, pbPinData, cbPinData, pcAttemptsRemaining, specific_pin_id, card_type);
 	}
 
 	if (dwReturn != SCARD_S_SUCCESS) {

@@ -52,6 +52,11 @@ private:
 	std::string error_message;
 };
 
+#if !defined SWIG
+std::string CodeToString(long code);
+#endif
+
+
 /******************************************************************************/ /**
   * Exception class Release Needed (error code = EIDMW_ERR_RELEASE_NEEDED)
   *

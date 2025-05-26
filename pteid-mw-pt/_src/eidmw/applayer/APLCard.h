@@ -27,12 +27,23 @@
 #ifndef __SCCARDUTIL_H__
 #define __SCCARDUTIL_H__
 
-#include <string>
-#include "Export.h"
-#include "ByteArray.h"
-#include "P15Objects.h"
-#include "APLReader.h"
+#include <openssl/x509.h>
+#include <openssl/asn1t.h>
+#include <openssl/asn1.h>
+#include <openssl/err.h>
+#include <openssl/bio.h>
+
 #include "APLPublicKey.h"
+#include "APLReader.h"
+#include "ByteArray.h"
+#include "Export.h"
+#include "P15Objects.h"
+#include "PhotoPteid.h"
+#include "SODParser.h"
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include "eidErrors.h"
 
 #define BEGIN_CAL_OPERATION(obj)                                                                                       \
 	obj->CalLock();                                                                                                    \
@@ -72,9 +83,11 @@ enum APL_SignatureLevel { LEVEL_BASIC, LEVEL_TIMESTAMP, LEVEL_LT, LEVEL_LTV };
 
 enum APL_PACEAuthenticationType {
 	APL_PACE_CAN,
+	APL_PACE_MRZ,
 	APL_PACE_UNSUPPORTED,
 };
 
+class APDU;
 class CReader;
 class PDFSignature;
 class APL_CryptoFwk;
@@ -100,6 +113,8 @@ public:
 	 * Return rawdata from the card
 	 */
 	EIDMW_APL_API virtual const CByteArray &getRawData(APL_RawDataType type) = 0;
+
+	EIDMW_APL_API virtual CByteArray sendAPDU(const APDU &apdu);
 
 	EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray &cmd);
 
@@ -180,6 +195,7 @@ private:
 	friend bool APL_ReaderContext::connectCard(); /**< This method must access protected constructor */
 };
 
+class APDU;
 class APL_Pins;
 class APL_Certif;
 class APL_Certifs;
@@ -198,6 +214,8 @@ public:
 	  * Tell the card to select an application on the card
 	  */
 	EIDMW_APL_API void selectApplication(const CByteArray &applicationId) const;
+
+	EIDMW_APL_API virtual CByteArray sendAPDU(const APDU &apdu, APL_Pin *pin = NULL, const char *csPinCode = "");
 
 	EIDMW_APL_API virtual CByteArray sendAPDU(const CByteArray &cmd, APL_Pin *pin = NULL, const char *csPinCode = "");
 
@@ -309,6 +327,126 @@ protected:
 	std::string *m_tokenSerial;
 	std::string *m_tokenLabel;
 	std::string *m_appletVersion;
+};
+
+class IcaoDg1;
+class IcaoDg2;
+class IcaoDg3;
+class IcaoDg11;
+class PhotoPteid;
+enum DataGroupID { DG1 = 0x01, DG2, DG3, DG4, DG5, DG6, DG7, DG8, DG9, DG10, DG11, DG12, DG13, DG14, DG15, DG16 };
+enum class EIDMW_APL_API EIDMW_ReportType { Success, Error };
+
+struct EIDMW_Report {
+	unsigned int error_code = EIDMW_OK;
+	EIDMW_ReportType type = EIDMW_ReportType::Success;
+};
+
+struct EIDMW_ActiveAuthenticationReport : public EIDMW_Report {
+	CByteArray dg14;		   // Security Options file
+	CByteArray storedHashDg14; // Security Options file hash from SOD
+	CByteArray hashDg14;	   // Hash of current Security Options file
+
+	CByteArray dg15;		   // DG15 (Public Key)
+	CByteArray storedHashDg15; // DG15 file hash from SOD
+	CByteArray hashDg15;	   // Hash of current DG15
+
+	std::string oid; // Active Authentication algorithm OID
+};
+
+struct EIDMW_ChipAuthenticationReport : public EIDMW_Report {
+	CByteArray pubKey; // Public Key for Chip Authentication
+	std::string oid;   // Chip Authentication algorithm OID
+};
+
+struct EIDMW_SodReport : public EIDMW_Report {
+	CByteArray signer;
+};
+
+struct EIDMW_DataGroupReport : public EIDMW_Report {
+	CByteArray storedHash;
+	CByteArray computedHash;
+};
+
+class EIDMW_DocumentReport {
+public:
+	EIDMW_APL_API void setActiveAuthenticationReport(const EIDMW_ActiveAuthenticationReport &report);
+	EIDMW_APL_API const EIDMW_ActiveAuthenticationReport &getActiveAuthenticationReport() const;
+	EIDMW_APL_API void setChipAuthenticationReport(const EIDMW_ChipAuthenticationReport &report);
+	EIDMW_APL_API const EIDMW_ChipAuthenticationReport &getChipAuthenticationReport() const;
+	EIDMW_APL_API void setSodReport(const EIDMW_SodReport &report);
+	EIDMW_APL_API const EIDMW_SodReport &getSodReport() const;
+	EIDMW_APL_API void addDataGroupReport(DataGroupID id, const EIDMW_DataGroupReport &report);
+	EIDMW_APL_API const EIDMW_DataGroupReport &getDataGroupReport(DataGroupID id) const;
+
+	bool HasFailed() { return m_hasFailed; }
+
+	void setCard(APL_ICAO *card) { m_card = card; }
+
+private:
+	bool m_hasFailed = false;
+	mutable std::unordered_map<DataGroupID, EIDMW_DataGroupReport> m_dataGroupReports;
+	EIDMW_ActiveAuthenticationReport m_activeAuthenticationReport;
+	EIDMW_ChipAuthenticationReport m_chipAuthenticationReport;
+	EIDMW_SodReport m_sodReport;
+	APL_ICAO *m_card;
+};
+
+class APL_ICAO : public APL_SmartCard {
+public:
+	~APL_ICAO();
+
+	EIDMW_APL_API virtual std::vector<DataGroupID> getAvailableDatagroups();
+	EIDMW_APL_API virtual std::pair<EIDMW_DataGroupReport, CByteArray> readDatagroup(DataGroupID tag);
+	EIDMW_APL_API virtual IcaoDg1 *readDataGroup1();
+	EIDMW_APL_API virtual IcaoDg2 *readDataGroup2();
+	EIDMW_APL_API virtual IcaoDg3 *readDataGroup3();
+	EIDMW_APL_API virtual IcaoDg11 *readDataGroup11();
+
+	EIDMW_APL_API virtual void loadMasterList(const char *filePath);
+	EIDMW_APL_API virtual APL_CardType getType() const override;
+
+	virtual const CByteArray &getRawData(APL_RawDataType type) override;
+	virtual APLPublicKey *getRootCAPubKey() override;
+	virtual const char *getTokenSerialNumber() override;
+	virtual const char *getTokenLabel() override;
+
+	EIDMW_APL_API virtual const EIDMW_DocumentReport &getDocumentReport();
+	/* In a multi application card this is meant to leave the card ready to access other applications
+	   i.e. reset any SM session previously setup
+	   Important: Don't call any other member function after this!
+	 */
+	EIDMW_APL_API void resetCardState();
+
+private:
+	void initializeCard();
+	bool m_ready = false;
+
+	APL_ReaderContext *m_reader; /**< Pointer to CAL reader (came from constructor) */
+	std::unique_ptr<SODAttributes> m_SodAttributes;
+	std::unique_ptr<IcaoDg1> m_mrzDg1;
+	std::unique_ptr<IcaoDg2> m_faceDg2;
+	std::unique_ptr<IcaoDg3> m_fingersDg3;
+	std::unique_ptr<IcaoDg11> m_infoDg11;
+	EIDMW_DocumentReport m_reports;
+
+	static constexpr unsigned char MRTD_APPLICATION[] = {0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
+	static constexpr const char *SOD_PATH = "011D";
+	static const std::unordered_map<DataGroupID, std::string> DATAGROUP_PATHS;
+	static const std::vector<int> EXPECTED_TAGS;
+
+	EIDMW_SodReport verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod);
+	CByteArray readFile(const std::string &csPath) const;
+	void loadAvailableDataGroups();
+	bool verifySOD(DataGroupID tag, const CByteArray &data);
+	EIDMW_ActiveAuthenticationReport performActiveAuthentication();
+	EIDMW_ChipAuthenticationReport performChipAuthentication();
+
+protected:
+	APL_ICAO(APL_ReaderContext *reader);
+
+	friend APL_ICAO *APL_ReaderContext::getICAOCard();
+	friend bool APL_ReaderContext::connectCard();
 };
 
 } // namespace eIDMW

@@ -117,6 +117,21 @@
     <ClCompile Include="asn1_idfile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IcaoDg1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IcaoDg11.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IcaoDg2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IcaoDg14.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IcaoDg3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APLCard.h">
@@ -213,6 +228,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="APLCCXmlDoc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IcaoDg1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IcaoDg11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IcaoDg14.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IcaoDg2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IcaoDg2Defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IcaoDg3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

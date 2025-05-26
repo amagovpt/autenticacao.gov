@@ -372,11 +372,13 @@ PageServicesSignForm {
             }
             else if (error_code == GAPI.ET_CARD_CHANGED) {
                 bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_CHANGED")
-                propertyBusyIndicator.running = true
+                var hasOnlyIcao = gapi.hasOnlyICAO()
+                propertyBusyIndicator.running = !hasOnlyIcao
                 cardLoaded = true
                 signCertExpired = false
 
-                gapi.startGettingInfoFromSignCert();
+                if (!hasOnlyIcao)
+                    gapi.startGettingInfoFromSignCert();
                 //gapi.startCheckSignatureCertValidity();
             }
             else{
@@ -1357,7 +1359,8 @@ PageServicesSignForm {
     Component.onCompleted: {
         console.log("PageServicesSign onCompleted")
         propertyPageLoader.propertyBackupFromSignaturePage = false
-        propertyBusyIndicator.running = true
+        var hasOnlyIcao = gapi.hasOnlyICAO()
+        propertyBusyIndicator.running = !hasOnlyIcao
 
         //start signature from command line
         if (gapi.getShortcutFlag() == GAPI.ShortcutIdSign) {
@@ -1392,7 +1395,8 @@ PageServicesSignForm {
         propertyPDFPreview.propertyDragSigDateText.visible = gapi.getUseDate()
 
         signCertExpired = false //FIXME: this boolean is not needed
-        gapi.startGettingInfoFromSignCert();
+        if (!hasOnlyIcao)
+            gapi.startGettingInfoFromSignCert();
 
         console.log("End of onCompleted")
     }

@@ -47,318 +47,355 @@ long PTEID_Exception::GetError() const { return m_lError; }
 	update GetMessage function when more errors have been added or removed
 */
 const char *PTEID_Exception::GetMessage() {
+	if (!m_lError) {
+		error_message = "No error code was provided";
+	} else {
+		error_message = CodeToString(m_lError);
+	}
+
+	return error_message.c_str();
+}
+
+std::string CodeToString(long code) {
+	std::string error_message;
 
 #ifdef EIDMW_JAVA_WRAPPER
 	long mask_low_32bit = 0xFFFFFFFF;
 	// Clear the 32 MSB which can be set to 1 from a signed int to long conversion
-	m_lError &= mask_low_32bit;
+	code &= mask_low_32bit;
 #endif
 
 	std::string debughelp_msg = "See PTEID_*.log file for error details";
-	if (!m_lError) {
-		error_message = "No error code was provided";
-	} else {
-		switch (m_lError) {
+	switch (code) {
+	case EIDMW_OK:
+		error_message = "Success";
+		break;
 
-		// Results of calling the function with incorrect parameters
-		case EIDMW_ERR_PARAM_BAD:
-			error_message = "A function parameter has an unexpected value";
-			break;
-		case EIDMW_ERR_PARAM_RANGE:
-			error_message = "A function parameter exceeded the allowed range";
-			break;
-		case EIDMW_ERR_BAD_PATH:
-			error_message = "Bad file path (invalid characters, length no multiple of 4) ";
-			break;
-		case EIDMW_ERR_ALGO_BAD:
-			error_message = "Unknown/unsupported algorithm";
-			break;
-		case EIDMW_ERR_PIN_OPERATION:
-			error_message = "Invalid/unsupported PIN operation";
-			break;
-		case EIDMW_ERR_PIN_FORMAT:
-			error_message = "PIN not allowed for this card (invalid characters, too short/long)";
-			break;
-		case EIDMW_ERR_NOT_IMPLEMENTED:
-			error_message = "The function called is not implemented.";
-			break;
+	// Results of calling the function with incorrect parameters
+	case EIDMW_ERR_PARAM_BAD:
+		error_message = "A function parameter has an unexpected value";
+		break;
+	case EIDMW_ERR_PARAM_RANGE:
+		error_message = "A function parameter exceeded the allowed range";
+		break;
+	case EIDMW_ERR_BAD_PATH:
+		error_message = "Bad file path (invalid characters, length no multiple of 4) ";
+		break;
+	case EIDMW_ERR_ALGO_BAD:
+		error_message = "Unknown/unsupported algorithm";
+		break;
+	case EIDMW_ERR_PIN_OPERATION:
+		error_message = "Invalid/unsupported PIN operation";
+		break;
+	case EIDMW_ERR_PIN_FORMAT:
+		error_message = "PIN not allowed for this card (invalid characters, too short/long)";
+		break;
+	case EIDMW_ERR_NOT_IMPLEMENTED:
+		error_message = "The function called is not implemented.";
+		break;
 
-		// Card errors
-		case EIDMW_ERR_CARD:
-			error_message = "Generic card error";
-			break;
-		case EIDMW_ERR_NOT_AUTHENTICATED:
-			error_message = "Not Authenticated (no PIN specified)";
-			break;
-		case EIDMW_ERR_NOT_SUPPORTED:
-			error_message = "This command is not supported by this card";
-			break;
-		case EIDMW_ERR_PIN_BAD:
-			error_message = "PIN is incorrect";
-			break;
-		case EIDMW_ERR_PIN_BLOCKED:
-			error_message = "PIN is blocked";
-			break;
-		case EIDMW_ERR_NO_CARD:
-			error_message = "No card present or card has been removed";
-			break;
-		case EIDMW_ERR_BAD_P1P2:
-			error_message = "Bad parameter P1 or P2";
-			break;
-		case EIDMW_ERR_CMD_NOT_ALLOWED:
-			error_message = "Command not allowed";
-			break;
-		case EIDMW_ERR_FILE_NOT_FOUND:
-			error_message = "File not found";
-			break;
-		case EIDMW_ERR_APPLET_VERSION_NOT_FOUND:
-			error_message = "Unable to read applet version from the card";
-			break;
+	// Card errors
+	case EIDMW_ERR_CARD:
+		error_message = "Generic card error";
+		break;
+	case EIDMW_ERR_NOT_AUTHENTICATED:
+		error_message = "Not Authenticated (no PIN specified)";
+		break;
+	case EIDMW_ERR_NOT_SUPPORTED:
+		error_message = "This command is not supported by this card";
+		break;
+	case EIDMW_ERR_PIN_BAD:
+		error_message = "PIN is incorrect";
+		break;
+	case EIDMW_ERR_PIN_BLOCKED:
+		error_message = "PIN is blocked";
+		break;
+	case EIDMW_ERR_NO_CARD:
+		error_message = "No card present or card has been removed";
+		break;
+	case EIDMW_ERR_BAD_P1P2:
+		error_message = "Bad parameter P1 or P2";
+		break;
+	case EIDMW_ERR_CMD_NOT_ALLOWED:
+		error_message = "Command not allowed";
+		break;
+	case EIDMW_ERR_FILE_NOT_FOUND:
+		error_message = "File not found";
+		break;
+	case EIDMW_ERR_APPLET_VERSION_NOT_FOUND:
+		error_message = "Unable to read applet version from the card";
+		break;
 
-		// Reader errors
-		case EIDMW_ERR_CARD_COMM:
-			error_message = "Error communicating with the card";
-			break;
-		case EIDMW_ERR_NO_READER:
-			error_message = "No reader has been found";
-			break;
-		case EIDMW_ERR_PINPAD:
-			error_message = "The pinpad reader returned an error";
-			break;
-		case EIDMW_ERR_CANT_CONNECT:
-			error_message = "A card is present but unable to connect";
-			break;
-		case EIDMW_ERR_CARD_RESET:
-			error_message = "The card connection has been reset";
-			break;
-		case EIDMW_ERR_CARD_SHARING:
-			error_message = "The card can't be accessed because of other connections";
-			break;
-		case EIDMW_ERR_NOT_TRANSACTED:
-			error_message = "Can't end a transaction that wasn't started";
-			break;
+	// Reader errors
+	case EIDMW_ERR_CARD_COMM:
+		error_message = "Error communicating with the card";
+		break;
+	case EIDMW_ERR_NO_READER:
+		error_message = "No reader has been found";
+		break;
+	case EIDMW_ERR_PINPAD:
+		error_message = "The pinpad reader returned an error";
+		break;
+	case EIDMW_ERR_CANT_CONNECT:
+		error_message = "A card is present but unable to connect";
+		break;
+	case EIDMW_ERR_CARD_RESET:
+		error_message = "The card connection has been reset";
+		break;
+	case EIDMW_ERR_CARD_SHARING:
+		error_message = "The card can't be accessed because of other connections";
+		break;
+	case EIDMW_ERR_NOT_TRANSACTED:
+		error_message = "Can't end a transaction that wasn't started";
+		break;
 
-		// Internal errors
-		case EIDMW_ERR_LIMIT:
-			error_message = "An internal limit has been reached";
-			break;
-		case EIDMW_ERR_CHECK:
-			error_message = "An internal check failed";
-			break;
-		case EIDMW_ERR_UNKNOWN:
-			error_message = "An unknown error occurred";
-			break;
-		case EIDMW_PINPAD_ERR:
-			error_message = "The pinpad reader received a wrong/unknown value";
-			break;
-		case EIDMW_CANT_LOAD_LIB:
-			error_message = "Dynamic library couldn't be loaded (not found at the specified location)";
-			break;
-		case EIDMW_ERR_MEMORY:
-			error_message = "Memory error";
-			break;
-		case EIDMW_ERR_DELETE_CACHE:
-			error_message = "Couldn't delete cache file(s)";
-			break;
-		case EIDMW_CONF:
-			error_message = "Error getting or writing config data";
-			break;
-		case EIDMW_CACHE_TAMPERED:
-			error_message = "The cached files have been tampered with";
-			break;
+	// Internal errors
+	case EIDMW_ERR_LIMIT:
+		error_message = "An internal limit has been reached";
+		break;
+	case EIDMW_ERR_CHECK:
+		error_message = "An internal check failed";
+		break;
+	case EIDMW_ERR_UNKNOWN:
+		error_message = "An unknown error occurred";
+		break;
+	case EIDMW_PINPAD_ERR:
+		error_message = "The pinpad reader received a wrong/unknown value";
+		break;
+	case EIDMW_CANT_LOAD_LIB:
+		error_message = "Dynamic library couldn't be loaded (not found at the specified location)";
+		break;
+	case EIDMW_ERR_MEMORY:
+		error_message = "Memory error";
+		break;
+	case EIDMW_ERR_DELETE_CACHE:
+		error_message = "Couldn't delete cache file(s)";
+		break;
+	case EIDMW_CONF:
+		error_message = "Error getting or writing config data";
+		break;
+	case EIDMW_CACHE_TAMPERED:
+		error_message = "The cached files have been tampered with";
+		break;
 
-		// User errors/events
-		case EIDMW_ERR_PIN_CANCEL:
-			error_message = "User pressed Cancel in PIN dialog";
-			break;
-		case EIDMW_ERR_TIMEOUT:
-			error_message = "Pinpad timeout";
-			break;
-		case EIDMW_NEW_PINS_DIFFER:
-			error_message = "The new PINs that were entered differ";
-			break;
-		case EIDMW_WRONG_PIN_FORMAT:
-			error_message = "A PIN with invalid length or format was entered";
-			break;
-		case EIDMW_ERR_OP_CANCEL:
-			error_message = "User canceled the operation.";
-			break;
+	// User errors/events
+	case EIDMW_ERR_PIN_CANCEL:
+		error_message = "User pressed Cancel in PIN dialog";
+		break;
+	case EIDMW_ERR_TIMEOUT:
+		error_message = "Pinpad timeout";
+		break;
+	case EIDMW_NEW_PINS_DIFFER:
+		error_message = "The new PINs that were entered differ";
+		break;
+	case EIDMW_WRONG_PIN_FORMAT:
+		error_message = "A PIN with invalid length or format was entered";
+		break;
+	case EIDMW_ERR_OP_CANCEL:
+		error_message = "User canceled the operation.";
+		break;
 
-		// Parser errors
-		case EIDMW_WRONG_ASN1_FORMAT:
-			error_message = "Could not find expected elements in parsed ASN.1 vector";
-			break;
-		case EIDMW_XERCES_INIT_ERROR:
-			error_message = "Could not initialize Xerces-C library";
-			break;
+	// Parser errors
+	case EIDMW_WRONG_ASN1_FORMAT:
+		error_message = "Could not find expected elements in parsed ASN.1 vector";
+		break;
+	case EIDMW_XERCES_INIT_ERROR:
+		error_message = "Could not initialize Xerces-C library";
+		break;
 
-		// I/O errors
-		case EIDMW_FILE_NOT_OPENED:
-			error_message = "File could not be opened";
-			break;
-		case EIDMW_PERMISSION_DENIED:
-			error_message = "Search permission is denied for a component of the path prefix of path";
-			break;
-		case EIDMW_ERR_FILE_IO_ERROR:
-			error_message = "Error writing on the file";
-			break;
-		case EIDMW_ERR_INTR_PROCESS:
-			error_message = "Process was interrupted";
-			break;
-		case EIDMW_ERR_FILE_TOO_LONG:
-			error_message = "File name is too long";
-			break;
-		case EIDMW_ERR_FILE_OP_FL_SYSTEM:
-			error_message = "Too many files opened on the system";
-			break;
-		case EIDMW_ERR_FILE_OP_FL_PROCESS:
-			error_message = "Too many files opened in this process";
-			break;
-		case EIDMW_ERR_FILE_NO_SPC:
-			error_message = "Disk is full";
-			break;
-		case EIDMW_ERR_FILE_OP_NOT_PERM:
-			error_message = "Operation not permitted";
-			break;
-		case EIDMW_ERR_FILE_READ_ONLY:
-			error_message = "This is a read only file";
-			break;
-		case EIDMW_ERR_FILE_DEV:
-			error_message = "Can't move a file by renaming it";
-			break;
-		case EIDMW_INVALID_PATH:
-			error_message = "The path provided is invalid";
-			break;
-		case EIDMW_TOO_MANY_OPENED_FILES:
-			error_message = "Too many files are currently open in the system";
-			break;
-		case EIDMW_ERR_LOGGER_APPLEAVING:
-			error_message = "Call of the Logger after destruct time";
-			break;
-		case EIDMW_ERR_CARDTYPE_UNKNOWN:
-			error_message = "This card type is unknown";
-			break;
-		case EIDMW_ERR_RELEASE_NEEDED:
-			error_message = "No release of SDK object has been done before closing the application";
-			break;
-		case EIDMW_ERR_BAD_TRANSACTION:
-			error_message = "Illegal access to a resource protected by locks / transactions";
-			break;
+	// I/O errors
+	case EIDMW_FILE_NOT_OPENED:
+		error_message = "File could not be opened";
+		break;
+	case EIDMW_PERMISSION_DENIED:
+		error_message = "Search permission is denied for a component of the path prefix of path";
+		break;
+	case EIDMW_ERR_FILE_IO_ERROR:
+		error_message = "Error writing on the file";
+		break;
+	case EIDMW_ERR_INTR_PROCESS:
+		error_message = "Process was interrupted";
+		break;
+	case EIDMW_ERR_FILE_TOO_LONG:
+		error_message = "File name is too long";
+		break;
+	case EIDMW_ERR_FILE_OP_FL_SYSTEM:
+		error_message = "Too many files opened on the system";
+		break;
+	case EIDMW_ERR_FILE_OP_FL_PROCESS:
+		error_message = "Too many files opened in this process";
+		break;
+	case EIDMW_ERR_FILE_NO_SPC:
+		error_message = "Disk is full";
+		break;
+	case EIDMW_ERR_FILE_OP_NOT_PERM:
+		error_message = "Operation not permitted";
+		break;
+	case EIDMW_ERR_FILE_READ_ONLY:
+		error_message = "This is a read only file";
+		break;
+	case EIDMW_ERR_FILE_DEV:
+		error_message = "Can't move a file by renaming it";
+		break;
+	case EIDMW_INVALID_PATH:
+		error_message = "The path provided is invalid";
+		break;
+	case EIDMW_TOO_MANY_OPENED_FILES:
+		error_message = "Too many files are currently open in the system";
+		break;
+	case EIDMW_ERR_LOGGER_APPLEAVING:
+		error_message = "Call of the Logger after destruct time";
+		break;
+	case EIDMW_ERR_CARDTYPE_UNKNOWN:
+		error_message = "This card type is unknown";
+		break;
+	case EIDMW_ERR_RELEASE_NEEDED:
+		error_message = "No release of SDK object has been done before closing the application";
+		break;
+	case EIDMW_ERR_BAD_TRANSACTION:
+		error_message = "Illegal access to a resource protected by locks / transactions";
+		break;
 
-		// SOD related errors
-		case EIDMW_SOD_UNEXPECTED_VALUE:
-			error_message = "SOD Error: unexpected value";
-			break;
-		case EIDMW_SOD_UNEXPECTED_ASN1_TAG:
-			error_message = "SOD Error: unexpected ASN.1 tag";
-			break;
-		case EIDMW_SOD_UNEXPECTED_ALGO_OID:
-			error_message = "SOD Error: unexpected algorithm ID";
-			break;
-		case EIDMW_SOD_ERR_HASH_NO_MATCH_ID:
-			error_message = "SOD Error: inconsistent identity data";
-			break;
-		case EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS:
-			error_message = "SOD Error: inconsistent address file";
-			break;
-		case EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE:
-			error_message = "SOD Error: inconsistent picture data";
-			break;
-		case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
-			error_message = "SOD Error: inconsistent public key";
-			break;
-		case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
-			error_message = "SOD Error: invalid signature";
-			break;
-		case EIDMW_SOD_ERR_INVALID_PKCS7:
-			error_message = "SOD Error: invalid PKCS#7 object";
-			break;
+	// SOD related errors
+	case EIDMW_SOD_UNEXPECTED_VALUE:
+		error_message = "SOD Error: unexpected value";
+		break;
+	case EIDMW_SOD_UNEXPECTED_ASN1_TAG:
+		error_message = "SOD Error: unexpected ASN.1 tag";
+		break;
+	case EIDMW_SOD_UNEXPECTED_ALGO_OID:
+		error_message = "SOD Error: unexpected algorithm ID";
+		break;
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_ID:
+		error_message = "SOD Error: inconsistent identity data";
+		break;
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_ADDRESS:
+		error_message = "SOD Error: inconsistent address file";
+		break;
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_PICTURE:
+		error_message = "SOD Error: inconsistent picture data";
+		break;
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
+		error_message = "SOD Error: inconsistent public key";
+		break;
+	case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
+		error_message = "SOD Error: invalid signature";
+		break;
+	case EIDMW_SOD_ERR_INVALID_PKCS7:
+		error_message = "SOD Error: invalid PKCS#7 object";
+		break;
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
+		error_message = "SOD Error: inconsistent MRZ data";
+		break;
+	case EIDMW_SOD_ERR_GENERIC_VALIDATION:
+		error_message = "SOD Error: Unable to verify document security features";
+		break;
+	case EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER:
+		error_message = "SOD Error: Document signer certificate not trusted (CSCA not present in MasterList?)";
+		break;
+	case EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND:
+		error_message = "SOD Error: signer certificate missing";
+		break;
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG:
+		error_message = "SOD Error: inconsistent ICAO datagroup";
+		break;
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY:
+		error_message = "SOD Error: inconsistent security object";
+		break;
+	case EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION:
+		error_message = "SOD Error: active authentication failed";
+		break;
+	case EIDMW_SOD_ERR_NO_MASTERLIST:
+		error_message = "SOD Error: no masterlist file";
+		break;
 
-		// Errors related to CVC authentication and Secure Messaging
-		case EIDMW_ERR_CVC_GENERIC_ERROR:
-			error_message = "CVC Error: generic error";
-			break;
-		case EIDMW_ERR_CVC_PERMISSION_DENIED:
-			error_message = "CVC Error: permission denied";
-			break;
-		case EIDMW_ERR_CVC_PATH_NOT_FOUND:
-			error_message = "CVC Error: file not found";
-			break;
+	// Errors related to CVC authentication and Secure Messaging
+	case EIDMW_ERR_CVC_GENERIC_ERROR:
+		error_message = "CVC Error: generic error";
+		break;
+	case EIDMW_ERR_CVC_PERMISSION_DENIED:
+		error_message = "CVC Error: permission denied";
+		break;
+	case EIDMW_ERR_CVC_PATH_NOT_FOUND:
+		error_message = "CVC Error: file not found";
+		break;
 
-		case EIDMW_ERR_CERT_NOCRL:
-			error_message = "This Certificate has no CRL";
-			break;
-		case EIDMW_ERR_CERT_NOOCSP:
-			error_message = "This Certificate has no OCSP responder";
-			break;
-		case EIDMW_ERR_CERT_NOROOT:
-			error_message = "No root is found for the store or certificate";
-			break;
-		case EIDMW_ERR_USER_MUST_ANSWER:
-			error_message = "User did not yet allow or disallow to read the card";
-			break;
+	case EIDMW_ERR_CERT_NOCRL:
+		error_message = "This Certificate has no CRL";
+		break;
+	case EIDMW_ERR_CERT_NOOCSP:
+		error_message = "This Certificate has no OCSP responder";
+		break;
+	case EIDMW_ERR_CERT_NOROOT:
+		error_message = "No root is found for the store or certificate";
+		break;
+	case EIDMW_ERR_USER_MUST_ANSWER:
+		error_message = "User did not yet allow or disallow to read the card";
+		break;
 
-		// Signature related errors
-		case EIDMW_TIMESTAMP_ERROR:
-			error_message = "Timestamp error during signature";
-			break;
-		case EIDMW_LTV_ERROR:
-			error_message = "Error adding LTV to signature.";
-			break;
-		case EIDMW_PDF_INVALID_ERROR:
-			error_message = "Invalid PDF document";
-			break;
-		case EIDMW_PDF_UNSUPPORTED_ERROR:
-			error_message = "Unsupported PDF document";
-			break;
-		case EIDMW_PDF_INVALID_PAGE_ERROR:
-			error_message = "Invalid page on PDF document";
-			break;
-		case EIDMW_XADES_UNKNOWN_ERROR:
-			error_message = "XAdES error: unknown error";
-			break;
+	// Signature related errors
+	case EIDMW_TIMESTAMP_ERROR:
+		error_message = "Timestamp error during signature";
+		break;
+	case EIDMW_LTV_ERROR:
+		error_message = "Error adding LTV to signature.";
+		break;
+	case EIDMW_PDF_INVALID_ERROR:
+		error_message = "Invalid PDF document";
+		break;
+	case EIDMW_PDF_UNSUPPORTED_ERROR:
+		error_message = "Unsupported PDF document";
+		break;
+	case EIDMW_PDF_INVALID_PAGE_ERROR:
+		error_message = "Invalid page on PDF document";
+		break;
+	case EIDMW_XADES_UNKNOWN_ERROR:
+		error_message = "XAdES error: unknown error";
+		break;
 
-		case EIDMW_ERR_CMD_BAD_CREDENTIALS:
-			error_message = "CMD credentials are not correctly configured.";
-			break;
-		case EIDMW_ERR_CMD_CONNECTION:
-			error_message = "Connection to CMD services failed.";
-			break;
-		case EIDMW_ERR_CMD_INVALID_CODE:
-			error_message = "The PIN or security code introduced is incorrect.";
-			break;
-		case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
-			error_message = "The CMD account is expired or inactive.";
-			break;
-		case EIDMW_ERR_CMD_DOC_NUM:
-			error_message = "Exceeded the max number (100) of documents to sign with CMD.";
-			break;
-		// Remote address loading errors
-		case EIDMW_REMOTEADDR_CONNECTION_ERROR:
-			error_message = "Online Address: couldn't connect to service. " + debughelp_msg;
-			break;
-		case EIDMW_REMOTEADDR_SERVER_ERROR:
-			error_message = "Online Address: service generated an error!" + debughelp_msg;
-			break;
-		case EIDMW_REMOTEADDR_CONNECTION_TIMEOUT:
-			error_message = "Online Address: Timeout on address reading";
-			break;
-		case EIDMW_REMOTEADDR_SMARTCARD_ERROR:
-			error_message = "Online Address: error generated by pteid card! " + debughelp_msg;
-			break;
-		case EIDMW_REMOTEADDR_CERTIFICATE_ERROR:
-			error_message = "Online Address: domain name does not match the server's certificate";
-			break;
-		case EIDMW_REMOTEADDR_UNKNOWN_ERROR:
-			error_message = "Online Address: unexpected error! " + debughelp_msg;
-			break;
-		case EIDMW_PACE_ERR_BAD_TOKEN:
-			error_message = "The CAN introduced is incorrect.";
-			break;
-		default:
-			error_message = "Unmapped error: " + std::to_string(m_lError);
-			break;
-		}
+	case EIDMW_ERR_CMD_BAD_CREDENTIALS:
+		error_message = "CMD credentials are not correctly configured.";
+		break;
+	case EIDMW_ERR_CMD_CONNECTION:
+		error_message = "Connection to CMD services failed.";
+		break;
+	case EIDMW_ERR_CMD_INVALID_CODE:
+		error_message = "The PIN or security code introduced is incorrect.";
+		break;
+	case EIDMW_ERR_CMD_INACTIVE_ACCOUNT:
+		error_message = "The CMD account is expired or inactive.";
+		break;
+	case EIDMW_ERR_CMD_DOC_NUM:
+		error_message = "Exceeded the max number (100) of documents to sign with CMD.";
+		break;
+	// Remote address loading errors
+	case EIDMW_REMOTEADDR_CONNECTION_ERROR:
+		error_message = "Online Address: couldn't connect to service. " + debughelp_msg;
+		break;
+	case EIDMW_REMOTEADDR_SERVER_ERROR:
+		error_message = "Online Address: service generated an error!" + debughelp_msg;
+		break;
+	case EIDMW_REMOTEADDR_CONNECTION_TIMEOUT:
+		error_message = "Online Address: Timeout on address reading";
+		break;
+	case EIDMW_REMOTEADDR_SMARTCARD_ERROR:
+		error_message = "Online Address: error generated by pteid card! " + debughelp_msg;
+		break;
+	case EIDMW_REMOTEADDR_CERTIFICATE_ERROR:
+		error_message = "Online Address: domain name does not match the server's certificate";
+		break;
+	case EIDMW_REMOTEADDR_UNKNOWN_ERROR:
+		error_message = "Online Address: unexpected error! " + debughelp_msg;
+		break;
+	case EIDMW_PACE_ERR_BAD_TOKEN:
+		error_message = "PACE secret introduced is incorrect (CAN or MRZ)";
+		break;
+	case EIDMW_PACE_ERR_UNKNOWN:
+		error_message = "PACE authentication generic error";
+		break;
+	default:
+		error_message = "Unmapped error: " + std::to_string(code);
+		break;
 	}
 	return error_message.c_str();
 }
@@ -399,6 +436,13 @@ PTEID_Exception PTEID_Exception::THROWException(CMWException &e) {
 	case EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY:
 	case EIDMW_SOD_ERR_VERIFY_SOD_SIGN:
 	case EIDMW_SOD_ERR_INVALID_PKCS7:
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_MRZ:
+	case EIDMW_SOD_ERR_GENERIC_VALIDATION:
+	case EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER:
+	case EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND:
+	case EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY:
+	case EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION:
+	case EIDMW_SOD_ERR_NO_MASTERLIST:
 		throw PTEID_ExSOD(e.GetError());
 	case EIDMW_PACE_ERR_BAD_TOKEN:
 	case EIDMW_PACE_ERR_NOT_INITIALIZED:

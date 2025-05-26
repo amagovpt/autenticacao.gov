@@ -31,6 +31,7 @@
 #include <string>
 #include <vector>
 #include "Mutex.h"
+#include "APLCard.h"
 
 #include "Export.h"
 
@@ -44,12 +45,12 @@
 #undef OCSP_REQUEST
 #undef OCSP_RESPONSE
 #endif
-#include "APLCard.h"
 
 #include <openssl/evp.h>
 #include <openssl/ocsp.h>
 #include <openssl/ssl.h>
 #include <openssl/bio.h>
+#include <openssl/asn1t.h>
 
 namespace eIDMW {
 
@@ -93,6 +94,11 @@ struct tOcspCertID {
 	const CByteArray *serialNumber;
 };
 
+typedef struct CscaMasterList_st {
+	ASN1_INTEGER version;
+	STACK_OF(X509) * certList;
+} CscaMasterList;
+
 class CrlMemoryCache;
 
 void loadWindowsRootCertificates(X509_STORE *store);
@@ -109,9 +115,9 @@ EIDMW_APL_API unsigned int SHA256_Wrapper(unsigned char *data, unsigned long dat
 class APL_CryptoFwk {
 public:
 	/**
-	  * Destructor
-	  */
-	virtual ~APL_CryptoFwk(void) = 0;
+	 * Destructor
+	 */
+	virtual ~APL_CryptoFwk(void);
 
 	/**
 	  * Verify if the cert is the correct Pteid root
@@ -323,6 +329,30 @@ public:
 
 	void setActiveCard(APL_SmartCard *card) { m_card = card; }
 
+	void performActiveAuthentication(const ASN1_OBJECT *oid, const CByteArray &pubkey, APL_SmartCard *card = nullptr);
+
+	void loadMasterList(const char *filePath);
+
+	X509_STORE *getMasterListStore();
+
+	/** Returns a pair of status and sod contents.
+	 * Might fail to verify the validity and return an approriate status code,
+	 * but it will always return its contents.
+	 */
+	std::pair<long, CByteArray> getSodContents(const CByteArray &sod, X509_STORE *store);
+
+	X509_STORE *getMultipassStore();
+
+	/**
+	 * Verify if the data has the correct hash
+	 */
+	bool VerifyHash(const CByteArray &data, const CByteArray &hash, const EVP_MD *algorithm);
+
+	/**
+	 * Get the hash of the data
+	 */
+	bool GetHash(const CByteArray &data, const EVP_MD *algorithm, CByteArray *hash);
+
 protected:
 	/**
 	  * Constructor - used within "instance"
@@ -338,16 +368,6 @@ protected:
 	  * Convert digest algorithm
 	  */
 	const EVP_MD *ConvertAlgorithm(FWK_HashAlgo algo);
-
-	/**
-	  * Verify if the data has the correct hash
-	  */
-	bool VerifyHash(const CByteArray &data, const CByteArray &hash, const EVP_MD *algorithm);
-
-	/**
-	  * Get the hash of the data
-	  */
-	bool GetHash(const CByteArray &data, const EVP_MD *algorithm, CByteArray *hash);
 
 	/**
 	  * Verify if the certificate is signed by the issuer
@@ -440,7 +460,13 @@ protected:
 	  */
 	bool isCrlIssuer(X509_CRL *pX509_Crl, X509 *pX509_issuer);
 
+	void initMasterListStore(CscaMasterList *cml);
+
 	APL_SmartCard *m_card = NULL;
+
+	std::string m_MasterListPath = "";
+	X509_STORE *m_MasterListCertificate = nullptr;
+	X509_STORE *m_multipassStore = nullptr;
 
 	std::string m_proxy_host; /**< proxy host */
 	std::string m_proxy_port; /**< proxy port */
@@ -450,6 +476,9 @@ private:
 
 	APL_CryptoFwk(const APL_CryptoFwk &cryptofwk);			  /**< Copy not allowed - not implemented */
 	APL_CryptoFwk &operator=(const APL_CryptoFwk &cryptofwk); /**< Copy not allowed - not implemented */
+
+	OSSL_PROVIDER *m_LegacyProvider = nullptr;
+	OSSL_PROVIDER *m_DefaultProvider = nullptr;
 
 	void loadCertificatesToOcspStore(X509_STORE *store);
 	CrlMemoryCache *m_CrlMemoryCache;

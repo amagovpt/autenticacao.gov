@@ -25,8 +25,13 @@
  * http://www.gnu.org/licenses/.
 
 **************************************************************************** */
+#include "APLReader.h"
+#include "BacAuthentication.h"
+#include "PaceAuthentication.h"
 #include "APLCardPteid.h"
 #include "CardPteid.h"
+#include "IcaoDg14.h"
+#include "SODParser.h"
 #include "APLCertif.h"
 #include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
@@ -45,6 +50,7 @@
 
 #include <memory>
 #include <ctime>
+#include <future>
 
 namespace eIDMW {
 
@@ -354,6 +360,76 @@ APL_DocVersionInfo &APL_EIDCard::getDocInfo() {
 	}
 
 	return *m_docinfo;
+}
+
+CByteArray APL_EIDCard::readTokenData() {
+	if (m_cachedMultipassToken.Size() > 0) {
+		return m_cachedMultipassToken;
+	}
+
+	MWLOG_CTX(LEV_INFO, MOD_APL, "Reading token from MultiPass application");
+
+	try {
+		// Load all certificates and create x509 store
+		auto store =
+			AppLayer.getCryptoFwk()->getMultipassStore();
+
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Selecting multi-pass application");
+		selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
+
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Reading SOD file");
+		CByteArray sod_data;
+		auto ret = readFile("011D", sod_data, 0UL);
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Multi-pass SOD read size: %ld", sod_data.Size());
+
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Generating MRZ from the last 12 bytes of multi-pass SOD");
+		CByteArray sod_last12 = sod_data.GetBytes(sod_data.Size() - 12);
+		auto mrz_bytes = BacAuthentication::mrzFromBytes(sod_last12);
+
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Opening BAC channel");
+		getCalReader()->openBACChannel(mrz_bytes);
+
+		// Get SOD contents and its validation state
+		auto sod_contents = AppLayer.getCryptoFwk()->getSodContents(sod_data, store);
+		if (sod_contents.first != 0) {
+			MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to verify SOD validity with error: %x", sod_contents.first);
+		}
+
+		const std::vector<int> expected_tags = {13, 14, 15};
+		SODParser sodParser;
+		sodParser.ParseSodEncapsulatedContent(sod_contents.second, expected_tags);
+
+		auto dg14 = getCalReader()->ReadFile("010E");
+		if (!sodParser.getAttributes().validateHash(14, dg14)) {
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION, "DG 14 hash verification failed");
+		}
+
+		auto pkey = getChipAuthenticationKey(dg14);
+		auto oid_info = getChipAuthenticationOid(dg14);
+		auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);
+		if (!status) {
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Failed to upgrade to Chip Authentication");
+		}
+
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Reading multi-pass token");
+		CByteArray token = getCalReader()->readMultiPassToken();
+
+		// verify token hash
+		if (!sodParser.getAttributes().validateHash(13, token)) {
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_HASH_NO_MATCH_FILE,
+						  "Token (DG 13) hash verification failed");
+		}
+
+		if (token.Size() < 20 || token.GetByte(0) != 0x6D || token.GetByte(1) != 0x12 || token.GetByte(2) != 0xC0) {
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_MULTIPASS_ERR_INVALID_TOKEN, "Invalid token format");
+		}
+
+		m_cachedMultipassToken = token.GetBytes(4, token.GetByte(3));
+		return m_cachedMultipassToken;
+	} catch (CMWException &e) {
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Token Read Failed: %ld", e.GetError());
+		throw;
+	}
 }
 
 const CByteArray &APL_EIDCard::getRawData(APL_RawDataType type) {

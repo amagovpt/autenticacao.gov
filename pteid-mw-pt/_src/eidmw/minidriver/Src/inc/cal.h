@@ -12,7 +12,7 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey, PBYTE *ppbPubKey);
 DWORD cal_sign_data(PCARD_DATA pCardData, BYTE container_id, DWORD cbToBeSigned, PBYTE pbToBeSigned,
 					DWORD *pcbSignature, PBYTE *ppbSignature, BOOL pss_padding);
-DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAttemptsRemaining, BYTE pin_id);
+DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAttemptsRemaining, BYTE pin_id, BYTE card_type);
 
 #ifdef __cplusplus
 }

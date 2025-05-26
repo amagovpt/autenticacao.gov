@@ -32,7 +32,7 @@ PhotoPteid::PhotoPteid(CByteArray &_photo, CByteArray &_cbeff, CByteArray &_faci
 	photoPNG = NULL;
 }
 
-PhotoPteid::PhotoPteid(CByteArray &_photo) {
+PhotoPteid::PhotoPteid(const CByteArray &_photo) {
 	photoRAW = new CByteArray(_photo);
 	// TODO: these 4 fields should be parsed in APL_EidFile_Photo::MapFields
 	cbeff = new CByteArray();

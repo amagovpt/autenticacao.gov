@@ -26,6 +26,7 @@
 **************************************************************************** */
 #include "cryptoFramework.h"
 
+#include "APDU.h"
 #include "MWException.h"
 #include "eidErrors.h"
 #include "Util.h"
@@ -37,16 +38,22 @@
 
 #include "MiscUtil.h"
 #include "Thread.h"
+#include <openssl/provider.h>
+#include <openssl/rand.h>
+#include <openssl/types.h>
 
 #ifdef WIN32
 #include <wincrypt.h>
 #endif
 
+#include <openssl/cms.h>
 #include <openssl/evp.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 #include <openssl/err.h>
 #include <openssl/ocsp.h>
+#include <openssl/asn1.h>
+#include <openssl/asn1t.h>
 
 #include "xercesc/util/Base64.hpp"
 #include "xercesc/util/XMLString.hpp"
@@ -54,6 +61,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+
+#define MAX_LCLENGTH_PACE 223
 
 #define CRL_MEMORY_CACHE_SIZE 10
 
@@ -181,6 +190,9 @@ private:
 *** APL_CryptoFwk ***
 ***************** */
 APL_CryptoFwk::APL_CryptoFwk() {
+	m_LegacyProvider = OSSL_PROVIDER_load(NULL, "legacy");
+	m_DefaultProvider = OSSL_PROVIDER_load(NULL, "default");
+
 	m_proxy_host.clear();
 	m_proxy_port.clear();
 	m_proxy_pac.clear();
@@ -194,6 +206,17 @@ APL_CryptoFwk::APL_CryptoFwk() {
 APL_CryptoFwk::~APL_CryptoFwk(void) {
 	if (m_CrlMemoryCache)
 		delete m_CrlMemoryCache;
+
+	if (m_MasterListCertificate) {
+		X509_STORE_free(m_MasterListCertificate);
+	}
+
+	if (m_multipassStore) {
+		X509_STORE_free(m_multipassStore);
+	}
+
+	OSSL_PROVIDER_unload(m_LegacyProvider);
+	OSSL_PROVIDER_unload(m_DefaultProvider);
 }
 
 bool d2i_X509_Wrapper(X509 **pX509, const unsigned char *pucContent, int iContentSize) {
@@ -445,6 +468,8 @@ bool APL_CryptoFwk::VerifyCertSignature(X509 *pX509_Cert, X509 *pX509_Issuer) {
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
 	int verification = X509_verify(pX509_Cert, pKey);
+
+	EVP_PKEY_free(pKey);
 
 	return verification == 1;
 }
@@ -1292,6 +1317,440 @@ X509_CRL *APL_CryptoFwk::updateCRL(const CByteArray &crl, const CByteArray &delt
 	return CRL;
 }
 
+/* Active Authentication: RSA signature verification
+   This signature uses the unusual ISO-9796 padding algorithm
+ */
+void AA_RsaSignatureVerify(CByteArray &ifd_random, CByteArray &signature, EVP_PKEY *pubkey) {
+
+	size_t rec_len = signature.Size();
+	const EVP_MD *digest_type = nullptr;
+	CByteArray dataToHash;
+	int error_code = 0, padding_bytes = 0;
+	unsigned int hash_len = 0;
+	EVP_MD_CTX *mdctx = nullptr;
+	MWLOG(LEV_DEBUG, MOD_APL, "Verifying ISO-9796 RSA signature of size: %ld", signature.Size());
+	unsigned char *recovered_hash = nullptr;
+	unsigned char *recovered_out = (unsigned char *)OPENSSL_malloc(rec_len);
+	memset(recovered_out, 0, rec_len);
+
+	EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new(pubkey, NULL);
+
+	EVP_PKEY_verify_recover_init(ctx);
+	EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_NO_PADDING);
+
+	if (EVP_PKEY_verify_recover(ctx, recovered_out, &rec_len, signature.GetBytes(), signature.Size()) <= 0) {
+		unsigned long osslError = ERR_get_error();
+		MWLOG(LEV_WARN, MOD_APL, "Failed to verify RSA signature! openssl error: %s",
+			  ERR_error_string(osslError, NULL));
+
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+		goto cleanup;
+	}
+
+	if (recovered_out[0] != 0x6A) {
+		MWLOG(LEV_WARN, MOD_APL, "Unrecognized header field in RSA ISO-9796 signature: %02X", recovered_out[0]);
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+		goto cleanup;
+	}
+	/* Match the digest algorithm used in trailer bytes */
+	if (recovered_out[rec_len - 1] == 0xCC) {
+		switch (recovered_out[rec_len - 2]) {
+		case 0x34:
+			padding_bytes = rec_len - 35;
+			digest_type = EVP_sha256();
+			break;
+		case 0x36:
+			digest_type = EVP_sha384();
+			padding_bytes = rec_len - 51;
+			break;
+		case 0x35:
+			padding_bytes = rec_len - 67;
+			digest_type = EVP_sha512();
+			break;
+		case 0x38:
+			padding_bytes = rec_len - 31;
+			digest_type = EVP_sha224();
+			break;
+		default:
+			MWLOG(LEV_WARN, MOD_APL, "Unrecognized trailer field in RSA ISO-9796 signature!: %02X CC",
+				  recovered_out[rec_len - 2]);
+			error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+			goto cleanup;
+		}
+	} else if (recovered_out[rec_len - 1] == 0xBC) {
+		digest_type = EVP_sha1();
+		padding_bytes = rec_len - 22;
+	} else {
+		MWLOG(LEV_WARN, MOD_APL, "Unrecognized trailer field in RSA ISO-9796 signature!");
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+		goto cleanup;
+	}
+
+	// Hashed data is [ICC_Random + IFD_random]
+	// Skip the one-byte 0x6A header
+	dataToHash.Append(recovered_out + 1, padding_bytes);
+	dataToHash.Append(ifd_random);
+
+	unsigned char hash[EVP_MAX_MD_SIZE];
+
+	mdctx = EVP_MD_CTX_new();
+	if (!mdctx || EVP_DigestInit_ex(mdctx, digest_type, nullptr) <= 0 ||
+		EVP_DigestUpdate(mdctx, dataToHash.GetBytes(), dataToHash.Size()) <= 0 ||
+		EVP_DigestFinal_ex(mdctx, hash, &hash_len) <= 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to hash verification data!");
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+		goto cleanup;
+	}
+
+	recovered_hash = recovered_out + padding_bytes + 1;
+	if (memcmp(recovered_hash, hash, hash_len) != 0) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to verify AA signature using RSA key!");
+		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+	} else {
+		MWLOG(LEV_DEBUG, MOD_APL, "AA signature with RSA key verified successfully!");
+	}
+
+cleanup:
+	if (recovered_out)
+		OPENSSL_free(recovered_out);
+	if (ctx)
+		EVP_PKEY_CTX_free(ctx);
+
+	if (error_code != 0) {
+		throw CMWEXCEPTION(error_code);
+	}
+}
+
+void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CByteArray &pubkey, APL_SmartCard *card) {
+	MWLOG(LEV_DEBUG, MOD_APL, "Starting %s", __FUNCTION__);
+
+	if (card == nullptr) {
+		card = m_card;
+	}
+
+	bool failed = 0;
+	ECDSA_SIG *ec_sig = nullptr;
+	EVP_PKEY_CTX *ctx = nullptr;
+	EVP_MD_CTX *mdctx = nullptr;
+
+	EVP_PKEY *pkey = nullptr;
+	unsigned char *signature_bytes = nullptr;
+	unsigned char *der_signature = nullptr;
+	int signature_len = 0;
+	BIGNUM *r, *s;
+	size_t sig_point_size;
+	APDU internal_auth_apdu;
+	CByteArray data;
+	size_t data_size;
+	CByteArray signature;
+	CByteArray sw12;
+	int signature_size = -1;
+
+	const unsigned char *pubkey_buff = pubkey.GetBytes();
+
+	// get digest by previously created NID
+	auto nid = OBJ_obj2nid(oid);
+	EVP_MD *evp_md = (EVP_MD *)EVP_get_digestbynid(nid);
+	if (evp_md == nullptr) {
+		MWLOG(LEV_INFO, MOD_APL, "Failed to get digest by NID. Fallback to SHA256");
+		evp_md = (EVP_MD *)EVP_sha256();
+	}
+
+	pkey = d2i_PUBKEY(nullptr, (const unsigned char **)&pubkey_buff, pubkey.Size());
+	if (pkey == nullptr) {
+		char *dg15_str = byteArrayToHexString(pubkey_buff, pubkey.Size());
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to parse AA public key from card! Content found: %s", dg15_str);
+		free(dg15_str);
+		failed = true;
+		goto cleanup;
+	}
+
+	signature_size = EVP_PKEY_get_size(pkey);
+
+	// construct active authentication command
+	unsigned char data_to_sign[8];
+	RAND_bytes(data_to_sign, 8);
+	data_size = sizeof(data_to_sign);
+
+	data.Append(data_to_sign, data_size);
+
+	internal_auth_apdu.ins() = 0x88;
+	internal_auth_apdu.setData(data);
+	internal_auth_apdu.setLe(0x00);
+	internal_auth_apdu.forceExtended() = signature_size >= MAX_LCLENGTH_PACE;
+
+	// raw r,s point signature
+	signature = card->sendAPDU(internal_auth_apdu);
+	sw12 = signature.GetBytes(signature.Size() - 2);
+	if (sw12.GetByte(0) != 0x90 || sw12.GetByte(1) != 0x00) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to perform active authentication");
+		failed = true;
+		goto cleanup;
+	}
+
+	// We need to convert signature to DER format if AA public key is of type EC
+	if (EVP_PKEY_get_base_id(pkey) == EVP_PKEY_EC) {
+		// convert to DER signature object
+		sig_point_size = (signature.Size() - 2) / 2;
+		ec_sig = ECDSA_SIG_new();
+		r = BN_bin2bn(signature.GetBytes(), sig_point_size, nullptr);
+		s = BN_bin2bn(signature.GetBytes() + sig_point_size, sig_point_size, nullptr);
+		ECDSA_SIG_set0(ec_sig, r, s);
+		signature_len = i2d_ECDSA_SIG(ec_sig, &der_signature);
+		signature_bytes = der_signature;
+		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type ECDSA and size: %d",
+			  signature_len);
+
+		// hash the `to_sign` data
+		unsigned char hash[EVP_MAX_MD_SIZE];
+		unsigned int hash_len;
+		mdctx = EVP_MD_CTX_new();
+		if (!mdctx || EVP_DigestInit_ex(mdctx, evp_md, nullptr) <= 0 ||
+			EVP_DigestUpdate(mdctx, data_to_sign, data_size) <= 0 || EVP_DigestFinal_ex(mdctx, hash, &hash_len) <= 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to hash verification data");
+			failed = true;
+			goto cleanup;
+		}
+
+		// Create and initialize the verification context based on the public key
+		ctx = EVP_PKEY_CTX_new(pkey, NULL);
+		if (!ctx || EVP_PKEY_verify_init(ctx) <= 0 || EVP_PKEY_CTX_set_signature_md(ctx, evp_md) <= 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to create verification context");
+			failed = true;
+			goto cleanup;
+		}
+
+		// Perform the verification
+		if (EVP_PKEY_verify(ctx, signature_bytes, signature_len, (unsigned char *)&hash[0], hash_len) != 1) {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify active authentication signature!");
+			failed = true;
+			goto cleanup;
+		}
+	} else { /* RSA signature */
+		signature.Chop(2);
+		CByteArray ifd_random(data_to_sign, sizeof(data_to_sign));
+		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type RSA and size: %d",
+			  signature.Size());
+
+		AA_RsaSignatureVerify(ifd_random, signature, pkey);
+	}
+
+cleanup:
+	if (pkey)
+		EVP_PKEY_free(pkey);
+	if (ec_sig)
+		ECDSA_SIG_free(ec_sig);
+	if (der_signature)
+		OPENSSL_free(der_signature);
+	if (ctx)
+		EVP_PKEY_CTX_free(ctx);
+	if (mdctx)
+		EVP_MD_CTX_free(mdctx);
+	if (evp_md)
+		EVP_MD_free(evp_md);
+
+	// if should throw
+	if (failed) {
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
+	}
+}
+
+void printOpenSSLError(const char *context) {
+	unsigned long errCode;
+	const char *errString;
+	const char *errFile;
+	const char *errFunction;
+	int errLine;
+	errCode = ERR_get_error_all(&errFile, &errLine, &errFunction, NULL, NULL);
+	errString = ERR_error_string(errCode, NULL);
+	MWLOG(LEV_ERROR, MOD_APL, L"Error decoding %s! Detail: %s", context, errString);
+}
+
+ASN1_SEQUENCE(CscaMasterList) = {ASN1_SIMPLE(CscaMasterList, version, ASN1_INTEGER),
+								 ASN1_SET_OF(CscaMasterList, certList, X509)};
+ASN1_SEQUENCE_END(CscaMasterList);
+IMPLEMENT_ASN1_FUNCTIONS(CscaMasterList);
+
+void APL_CryptoFwk::loadMasterList(const char *filePath) {
+	if (m_MasterListPath.compare(filePath) == 0) {
+		return;
+	} else if (m_MasterListCertificate != nullptr) {
+		X509_STORE_free(m_MasterListCertificate);
+	}
+
+	unsigned char *der_buffer = NULL;
+	size_t der_len = read_binary_file(filePath, &der_buffer);
+
+	const unsigned char *p = der_buffer;
+	CMS_ContentInfo *cms = d2i_CMS_ContentInfo(NULL, &p, der_len);
+
+	static const char *masterListSN = "cscaMasterList";
+	static const char *masterListLN = "idIcaoCscaMasterList";
+	int masterlist_nid = OBJ_create("2.23.136.1.1.2", masterListSN, masterListLN);
+
+	if (cms == NULL) {
+		printOpenSSLError("CMS_ContentInfo");
+	} else {
+
+		BIO *bio_out = BIO_new(BIO_s_mem());
+		unsigned int flags = CMS_NO_SIGNER_CERT_VERIFY;
+
+		const ASN1_OBJECT *content_type = CMS_get0_eContentType(cms);
+
+		ASN1_OBJECT *expected_oid = OBJ_nid2obj(masterlist_nid);
+		if (OBJ_cmp(expected_oid, content_type) != 0) {
+			MWLOG(LEV_ERROR, MOD_APL, "ERROR: unexpected contentType OID in CMS structure!\n");
+		}
+
+		int ret = CMS_verify(cms, NULL, NULL, NULL, bio_out, flags);
+		if (ret == 1) {
+			const unsigned char *p_data;
+			long size = BIO_get_mem_data(bio_out, &p_data);
+
+			MWLOG(LEV_INFO, MOD_APL, "MasterList content: %ld bytes\n", size);
+
+			CscaMasterList *ml = d2i_CscaMasterList(NULL, &p_data, size);
+			if (ml) {
+				initMasterListStore(ml);
+			} else {
+				printOpenSSLError("CscaMasterList");
+			}
+
+			CscaMasterList_free(ml);
+		} else {
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify CMS SignedData structure!\n");
+			printOpenSSLError("");
+		}
+
+		BIO_free(bio_out);
+	}
+
+	free(der_buffer);
+	CMS_ContentInfo_free(cms);
+}
+
+X509_STORE *APL_CryptoFwk::getMasterListStore() { return m_MasterListCertificate; }
+
+std::pair<long, CByteArray> APL_CryptoFwk::getSodContents(const CByteArray &data, X509_STORE *store) {
+	long error_code = 0;
+	PKCS7 *p7 = nullptr;
+	char *error_msg = nullptr;
+	bool sod_verified = false;
+
+	ERR_load_crypto_strings();
+	OpenSSL_add_all_digests();
+
+	const unsigned char *temp = data.GetBytes();
+	size_t length = data.Size();
+	temp += 4; // Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
+
+	p7 = d2i_PKCS7(nullptr, &temp, length);
+	if (!p7) {
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to decode SOD PKCS7 object! Openssl errors:\n%s",
+			  error_msg != nullptr ? error_msg : "N/A");
+		free(error_msg);
+
+		// no data to return
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_INVALID_PKCS7);
+	}
+
+	BIO *out = BIO_new(BIO_s_mem());
+	/* Some document signing certificates may have wrong values in Extended Key Usage field which generates a "purpose"
+	   validation error. Set the cert verify parameters to have unrestricted purpose X509_PURPOSE_ANY
+	*/
+	X509_VERIFY_PARAM *verify_params = X509_STORE_get0_param(store);
+	X509_VERIFY_PARAM_set_purpose(verify_params, X509_PURPOSE_ANY);
+	X509_STORE_set1_param(store, verify_params);
+
+	sod_verified = PKCS7_verify(p7, nullptr, store, nullptr, out, 0) == 1;
+
+	// failed to verify SOD but we still need the contents
+	if (!sod_verified) {
+		// By default. In most cases, should be overwritten by the checks below
+		error_code = EIDMW_SOD_ERR_GENERIC_VALIDATION;
+
+		unsigned long err = ERR_peek_last_error();
+		int lib = ERR_GET_LIB(err);
+		int reason = ERR_GET_REASON(err);
+
+		error_msg = Openssl_errors_to_string();
+		MWLOG(LEV_ERROR, MOD_APL,
+			  "verifySodFileIntegrity:: Error validating SOD signature. OpenSSL errors (%d:%d):\n%s", lib, reason,
+			  error_msg ? error_msg : "N/A");
+		free(error_msg);
+
+		if ((lib == ERR_LIB_X509 && reason == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT) ||
+			(lib == ERR_LIB_PKCS7 && reason == PKCS7_R_CERTIFICATE_VERIFY_ERROR)) {
+			// signer isnt in the CSCA (untrusted)
+			error_code = EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER;
+		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNATURE_FAILURE) {
+			// signature is not valid
+			error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
+		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNER_CERTIFICATE_NOT_FOUND) {
+			// couldnt find signer
+			error_code = EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND;
+		}
+
+		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
+	}
+
+	unsigned char *p;
+	size_t size = BIO_get_mem_data(out, &p);
+	CByteArray out_data = CByteArray(p, size);
+
+	BIO_free_all(out);
+	PKCS7_free(p7);
+	return {error_code, out_data};
+}
+
+X509_STORE *APL_CryptoFwk::getMultipassStore() {
+	if (!m_multipassStore) {
+		m_multipassStore = X509_STORE_new();
+		APL_Certifs certs = APL_Certifs(true);
+		certs.initSODCAs();
+		for (unsigned long i = 0; i < certs.countSODCAs(); i++) {
+			APL_Certif *sod_ca = certs.getSODCA(i);
+			X509 *pX509 = NULL;
+			const unsigned char *p = sod_ca->getData().GetBytes();
+			pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
+			if (pX509) {
+				X509_STORE_add_cert(m_multipassStore, pX509);
+				X509_free(pX509);
+			}
+			MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
+		}
+
+		certs.clearSODCAs();
+	}
+
+	return m_multipassStore;
+}
+
+void APL_CryptoFwk::initMasterListStore(CscaMasterList *cml) {
+	if (cml == NULL || cml->certList == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, L"Invalid CscaMasterList or certList is empty.\n");
+		return;
+	}
+
+	X509_STORE *store = X509_STORE_new();
+
+	int num_certs = sk_X509_num(cml->certList);
+	BIO *bio_stdout = BIO_new_fp(stdout, BIO_NOCLOSE);
+	for (int i = 0; i < num_certs; i++) {
+		X509 *cert = sk_X509_value(cml->certList, i);
+		if (cert == NULL) {
+			MWLOG(LEV_ERROR, MOD_APL, L"Failed to retrieve certificate at index %d\n", i);
+			continue;
+		}
+
+		X509_STORE_add_cert(store, cert);
+	}
+	BIO_free(bio_stdout);
+
+	m_MasterListCertificate = store;
+}
+
 bool APL_CryptoFwk::GetOCSPCert(const CByteArray &ocspResponse, CByteArray &outCert) {
 	bool noCheckExtension = false;
 	const unsigned char *p = ocspResponse.GetBytes();
@@ -1339,7 +1798,9 @@ bool APL_CryptoFwk::getCertInfo(const CByteArray &cert, tCertifInfo &info, const
 
 	baTemp.ClearContents();
 	baTemp.Append(X509_get_serialNumber(pX509)->data, X509_get_serialNumber(pX509)->length);
-	info.serialNumber = byteArrayToHexString(baTemp.GetBytes(), baTemp.Size());
+	auto sn = byteArrayToHexString(baTemp.GetBytes(), baTemp.Size());
+	info.serialNumber = sn;
+	free(sn); // sn has been deep copied into std::string(const char*)
 
 	memset(szTemp, 0, sizeof(szTemp));
 	X509_NAME_get_text_by_NID(X509_get_subject_name(pX509), NID_commonName, szTemp, sizeof(szTemp));

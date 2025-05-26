@@ -112,10 +112,10 @@ public:
 	PhotoImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap) {}
 
 	QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
-	void setPixmap(QPixmap &pixmap) { p = pixmap; }
+	void setPixmap(const QString &id, QPixmap &pixmap) { p[id] = pixmap; }
 
 private:
-	QPixmap p;
+	std::map<QString, QPixmap> p;
 };
 
 struct PrintParams {
@@ -227,6 +227,7 @@ class GAPI : public QObject {
 #define TIMERREADERLIST 5000
 	Q_OBJECT
 	Q_PROPERTY(QMap<IDInfoKey, QString> m_data NOTIFY signalCardDataChanged)
+	Q_PROPERTY(QMap<ICAOInfoKey, QString> m_icaoData NOTIFY signalICAODataChanged)
 	Q_PROPERTY(QMap<AddressInfoKey, QString> m_addressData NOTIFY signalAddressLoaded)
 	Q_PROPERTY(QString persoData MEMBER m_persoData NOTIFY signalPersoDataLoaded)
 
@@ -255,6 +256,22 @@ public:
 		Father,
 		Mother,
 		AccidentalIndications
+	};
+
+	enum ICAOInfoKey {
+		DocumentCode,
+		IssuingState,
+		DocumentNumber,
+		OptionalDataLine1,
+		DateOfBirth,
+		Gender,
+		DateOfExpiry,
+		Nat,
+		OptionalDataLine2,
+		FullName,
+		IsPassport,
+		IsNameFromMRZ,
+		IsDgsSecured,
 	};
 
 	enum AddressInfoKey {
@@ -318,7 +335,7 @@ public:
 
 	enum PrintMessage { NoPrinterAvailable };
 
-	enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED };
+	enum eCustomEventType { ET_UNKNOWN, ET_CARD_CHANGED, ET_CARD_REMOVED};
 
 	enum AutoUpdateMessage {
 		GenericError,
@@ -374,7 +391,8 @@ public:
 		DoAddress,
 		GetAuthPin,
 		GetSignPin,
-		GetAddressPin
+		GetAddressPin,
+		ICAOData,
 	};
 
 	Q_ENUMS(ScapPdfSignResult)
@@ -382,6 +400,7 @@ public:
 	Q_ENUMS(RemoteAddressError)
 	Q_ENUMS(eCustomEventType)
 	Q_ENUMS(IDInfoKey)
+	Q_ENUMS(ICAOInfoKey)
 	Q_ENUMS(AddressInfoKey)
 	Q_ENUMS(UI_LANGUAGE)
 	Q_ENUMS(SignMessage)
@@ -428,6 +447,8 @@ public slots:
 
 	// Slots to Gui request values
 	QVariantList getRetReaderList(void);
+	bool hasOnlyICAO();
+	bool hasICAO();
 	int getReaderIndex(void);
 	void setReaderByUser(unsigned long setReaderIndex);
 	void resetReaderSelected(void) { selectedReaderIndex = -1; }
@@ -436,11 +457,14 @@ public slots:
 	bool isAddressLoaded() { return m_addressLoaded; }
 	void updateTranslatedStrings() { m_qml_engine->retranslate(); }
 	void startCardReading();
+	void startCardICAOReading();
 	void startGettingInfoFromSignCert();
 	void startCCSignatureCertCheck();
 	void startSavingCardPhoto(QString outputFile);
 	int getStringByteLength(const QString &text);
+	QString convertDate(const QString& date);
 	void finishLoadingCardData(PTEID_EIDCard *card);
+	void finishLoadingICAOCardData(ICAO_Card *card);
 	void finishLoadingSignCertData(PTEID_EIDCard *card);
 	void startReadingPersoNotes();
 	void startWritingPersoNotes(const QString &text);
@@ -524,7 +548,7 @@ public slots:
 
 	void startPACEAuthentication(QString pace_can, CardOperation op);
 
-	void performPACEWithCache(PTEID_EIDCard *card, CardOperation op);
+	void performPACEWithCache(CardOperation op);
 	void resetContactlessState() {
 		m_pace_auth_state = PaceDefault;
 		m_is_contactless = false;
@@ -546,6 +570,8 @@ public slots:
 
 	QString getCardActivation();
 	QString getDataCardIdentifyValue(GAPI::IDInfoKey key);
+	QString getDataICAOValue(GAPI::ICAOInfoKey key);
+
 	QString getAddressField(GAPI::AddressInfoKey key);
 
 	void setEventCallbacks(void);
@@ -558,6 +584,8 @@ public slots:
 	void setAppAsDlgParent(QObject *object, const QUrl &url);
 
 	void initTranslation();
+
+	QString loadCountryName(const QString &threeLetterCode, const QString &language);
 
 	QString getCachePath(void);
 	bool customSignImageExist(void);
@@ -608,6 +636,7 @@ signals:
 	void signalReaderContext();
 	void signalSetReaderComboIndex(long selected_reader);
 	void signalCardDataChanged();
+	void signalICAODataChanged();
 	void signalSignCertDataChanged(QString ownerName, QString NIC);
 	void signalSignCertExpired();
 	void signalSignCertSuspended();
@@ -631,6 +660,7 @@ signals:
 	void signalShowMessage(QString msg, QString urlLink);
 	void signalOpenFile();
 	void signalSignatureFinished();
+	void aboutToSignalCardChanged(const int error_code);
 	void signalCardChanged(const int error_code);
 	void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage, bool success);
 	void signalCertificatesChanged(const QVariantMap certificatesMap);
@@ -692,7 +722,9 @@ private:
 	bool LoadTranslationFile(QString NewLanguage);
 	void emitErrorSignal(const char *callerfunction, long errorCode, int index = -1);
 	void setDataCardIdentify(QMap<GAPI::IDInfoKey, QString> m_data);
+	void setDataCardICAO(QMap<ICAOInfoKey, QString>  m_icaoData);
 	void connectToCard();
+	void connectToICAOCard();
 	void getSCAPEntities();
 	void getSCAPCompanyAttributes(bool OAuth);
 
@@ -746,6 +778,7 @@ private:
 
 	// Data Card Identify map
 	QMap<GAPI::IDInfoKey, QString> m_data;
+	QMap<GAPI::ICAOInfoKey, QString>  m_icaoData;
 	QMap<GAPI::AddressInfoKey, QString> m_addressData;
 	// Don't free this!, we release ownership to the QMLEngine in buildImageProvider()
 	PhotoImageProvider *image_provider;
@@ -786,7 +819,8 @@ private:
 
 	WindowGeometry m_wndGeometry;
 	QWindow *m_mainWnd;
-
+	bool m_hasIcao = false;
+	bool m_hasOnlyIcao = false;
 	QString g_systemArchitecture;
 
 protected:

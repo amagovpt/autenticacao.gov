@@ -23,11 +23,15 @@
 
 **************************************************************************** */
 #include "Card.h"
+#include "ChipAuthentication.h"
 #include "Log.h"
 
 #include <limits.h>
 
 #include "PaceAuthentication.h"
+#include <memory>
+#include <openssl/types.h>
+#include <openssl/x509.h>
 
 namespace eIDMW {
 
@@ -299,14 +303,32 @@ CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE
 										 const void *param_structure) {
 	CByteArray result;
 	bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C || cleartext_next;
-	if (isAlreadySM && m_pace.get()) {
+	if (isAlreadySM && m_secureMessaging.get()) {
 		MWLOG(LEV_DEBUG, MOD_CAL, "This message is already secure and will not use PACE module! Message: %s",
 			  oCmdAPDU.ToString().c_str());
 	}
-	if (m_pace.get() && m_pace->isInitialized() && !isAlreadySM) {
-		result = m_pace->sendAPDU(oCmdAPDU, m_hCard, lRetVal, param_structure);
+	if (m_secureMessaging.get() && m_secureMessaging->isInitialized() && !isAlreadySM) {
+		result = m_secureMessaging->sendSecureAPDU(oCmdAPDU, lRetVal);
 	} else {
 		result = m_poContext->m_oPCSC.Transmit(m_hCard, oCmdAPDU, &lRetVal, param_structure);
+		cleartext_next = false;
+	}
+	return result;
+}
+
+CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal,
+										 const void *param_structure) {
+	bool isAlreadySM = apdu.cla() & 0x0C || cleartext_next;
+	CByteArray result;
+	if (isAlreadySM && m_secureMessaging.get()) {
+		MWLOG(LEV_DEBUG, MOD_CAL, "This message is already secure and will not use PACE module! Message: %s",
+			  apdu.ToByteArray().ToString().c_str());
+	}
+
+	if (m_secureMessaging.get() && m_secureMessaging->isInitialized() && !isAlreadySM) {
+		result = m_secureMessaging->sendSecureAPDU(apdu, lRetVal);
+	} else {
+		result = m_poContext->m_oPCSC.Transmit(m_hCard, apdu.ToByteArray(), &lRetVal, param_structure);
 		cleartext_next = false;
 	}
 	return result;
@@ -354,15 +376,61 @@ CByteArray CCard::SendAPDU(const CByteArray &oCmdAPDU) {
 	return oResp;
 }
 
-void CCard::createPace() { m_pace.reset(new PaceAuthentication(m_poContext)); }
+CByteArray CCard::SendAPDU(const APDU &apdu) {
+	CAutoLock oAutoLock(this);
+	long lRetVal = 0;
+	const void *protocol_struct = getProtocolStructure();
+	CByteArray oResp = handleSendAPDUSecurity(apdu, m_hCard, lRetVal, protocol_struct);
+
+	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) {
+		m_poContext->m_oPCSC.Recover(m_hCard, &m_ulLockCount);
+		// try again to select the applet
+		if (SelectApplet()) {
+			// try again, now that the card has been reset
+			oResp = handleSendAPDUSecurity(apdu, m_hCard, lRetVal, protocol_struct);
+		}
+	}
+
+	if (oResp.Size() == 2) {
+		// If SW1 = 0x61, then SW2 indicates the maximum value to be given to the
+		// short Le  field (length of extra/ data still available) in a GET RESPONSE.
+		if (oResp.GetByte(0) == 0x61) {
+			return SendAPDU(0xC0, 0x00, 0x00, oResp.GetByte(1)); // Get Response
+		}
+
+		return oResp;
+	}
+	return oResp;
+}
+
+void CCard::createPace() { m_secureMessaging.reset(new PaceAuthentication(m_hCard, m_poContext, m_comm_protocol)); }
 
 void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType) {
-	if (m_pace.get()) {
-		m_pace->setAuthentication(secret, secretLen, secretType);
-		m_pace->initPaceAuthentication(m_hCard, m_comm_protocol);
+	if (!dynamic_cast<PaceAuthentication *>(m_secureMessaging.get())) {
+		createPace();
+	}
+
+	if (auto pace = dynamic_cast<PaceAuthentication *>(m_secureMessaging.get())) {
+		pace->setAuthentication(secret, secretLen, secretType);
+		pace->initPaceAuthentication(m_hCard, m_comm_protocol);
 		// Missing steps in Contactless card construction
 		InitEncryptionKey();
 	}
+}
+
+bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
+	auto casm = std::make_unique<ChipAuthSecureMessaging>(m_hCard, m_poContext, m_comm_protocol);
+	auto status = casm->authenticate(m_secureMessaging.get(), pkey, oid);
+	if (!status) {
+		MWLOG_CTX(LEV_ERROR, MOD_CAL,
+				  "Failed to authenticate Chip Authentication. Skipping secure messaging upgrade...");
+		return status;
+	}
+
+	// swap secure messaging to new chip authentication
+	m_secureMessaging.reset();
+	m_secureMessaging = std::move(casm);
+	return status;
 }
 
 const void *CCard::getProtocolStructure() { return m_comm_protocol; }

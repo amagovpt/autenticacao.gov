@@ -191,7 +191,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_ZLIB_X64)\include;$(PTEID_DIR_LIBPNG_X64)\include;$(PTEID_DIR_OPENJPEG_X64)\include\openjpeg-2.4;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_ZLIB_X64)\include;$(PTEID_DIR_LIBPNG_X64)\include;$(PTEID_DIR_OPENJPEG_X64)\include\openjpeg-2.4;$(PTEID_DIR_LIBZIP_X64)\include;$(PTEID_DIR_OPEN_PACE)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS;CURL_STATICLIB;OPENSSL_SUPPRESS_DEPRECATED;OPJ_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -258,6 +258,11 @@
     <ClCompile Include="XercesUtils.cpp" />
     <ClCompile Include="RemoteAddress.cpp" />
     <ClCompile Include="RemoteAddressRequest.cpp" />
+    <ClCompile Include="IcaoDg1.cpp" />
+    <ClCompile Include="IcaoDg11.cpp" />
+    <ClCompile Include="IcaoDg2.cpp" />
+    <ClCompile Include="IcaoDg14.cpp" />
+    <ClCompile Include="IcaoDg3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APLCard.h" />
@@ -292,6 +297,12 @@
     <ClInclude Include="RemoteAddressRequest.h" />
     <ClInclude Include="TSAClient.h" />
     <ClInclude Include="XadesSignature.h" />
+    <ClInclude Include="IcaoDg1.h" />
+    <ClInclude Include="IcaoDg11.h" />
+    <ClInclude Include="IcaoDg14.h" />
+    <ClInclude Include="IcaoDg2.h" />
+    <ClInclude Include="IcaoDg2Defines.h" />
+    <ClInclude Include="IcaoDg3.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pteidapplayer.rc" />

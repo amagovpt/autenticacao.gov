@@ -188,8 +188,8 @@
     </Midl>
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>%PTEID_DIR_OPENSSL_X64%\include;../common;%PTEID_DIR_OPEN_PACE%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_CAL_EXPORT;OPENSSL_SUPPRESS_DEPRECATED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_OPENSSL_X64)\include;../common;$(PTEID_DIR_OPEN_PACE)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_CAL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
@@ -219,14 +219,17 @@
   <ItemGroup>
     <ClCompile Include="ACR83Pinpad.cpp" />
     <ClCompile Include="APDU.cpp" />
+    <ClCompile Include="BacAuthentication.cpp" />
     <ClCompile Include="Cache.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardFactory.cpp" />
     <ClCompile Include="CardLayer.cpp" />
     <ClCompile Include="CardReaderInfo.cpp" />
+    <ClCompile Include="ChipAuthentication.cpp" />
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="GempcPinpad.cpp" />
     <ClCompile Include="GenericPinpad.cpp" />
+    <ClCompile Include="IcaoCard.cpp" />
     <ClCompile Include="PaceAuthentication.cpp" />
     <ClCompile Include="PCSC.cpp" />
     <ClCompile Include="Pinpad.cpp" />
@@ -236,9 +239,11 @@
     <ClCompile Include="PteidCard.cpp" />
     <ClCompile Include="Reader.cpp" />
     <ClCompile Include="ReadersInfo.cpp" />
+    <ClCompile Include="SecureMessaging.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="UnknownCard.cpp" />
     <ClCompile Include="Win32ReaderInfo.cpp" />
+    <ClCompile Include="FciData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h" />
@@ -253,6 +258,7 @@
     <ClInclude Include="GempcPinpad.h" />
     <ClInclude Include="GenericPinpad.h" />
     <ClInclude Include="InternalConst.h" />
+    <ClInclude Include="IcaoCard.h" />
     <ClInclude Include="P15Objects.h" />
     <ClInclude Include="PaceAuthentication.h" />
     <ClInclude Include="PCSC.h" />
@@ -266,8 +272,10 @@
     <ClInclude Include="Reader.h" />
     <CustomBuild Include="ReadersInfo.h" />
     <ClInclude Include="ReaderDeviceInfo.h" />
+    <ClInclude Include="SecureMessaging.h" />
     <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="UnknownCard.h" />
+    <ClInclude Include="FciData.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\common\pteidcommon.2008.vcxproj">

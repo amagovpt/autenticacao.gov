@@ -36,6 +36,8 @@ PTEID_CardType ConvertCardType(APL_CardType eCardType) {
 		return PTEID_CARDTYPE_IAS101;
 	case APL_CARDTYPE_PTEID_IAS5:
 		return PTEID_CARDTYPE_IAS5;
+	case APL_CARDTYPE_ICAO:
+		return ICAO_CARDTYPE_MRTD;
 	default:
 		return PTEID_CARDTYPE_UNKNOWN;
 	}

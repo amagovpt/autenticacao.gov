@@ -28,8 +28,12 @@
 #include "Pinpad.h"
 #include "Hash.h"
 
+typedef struct evp_pkey_st EVP_PKEY;
+typedef struct asn1_object_st ASN1_OBJECT;
+
 namespace eIDMW {
 
+class APDU;
 class CCardLayer;
 class CCard;
 struct ReaderDeviceInfo;
@@ -105,10 +109,15 @@ public:
 	void Unlock();
 
 	void SelectApplication(const CByteArray &oAID);
+	void ResetApplication();
 
 	bool isCardContactless() const;
 
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
+	bool initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid);
+
+	void openBACChannel(const CByteArray& mrz_info);
+	CByteArray readMultiPassToken();
 
 	/* Read the file indicated by 'csPath'.
 	 * This path can be absolute, relative or empty
@@ -154,6 +163,8 @@ public:
 	CByteArray Sign(const tPrivKey &key, unsigned long paddingType, const CByteArray &oData);
 
 	CByteArray GetRandom(unsigned long ulLen);
+
+	CByteArray SendAPDU(const APDU &apdu);
 
 	CByteArray SendAPDU(const CByteArray &oCmdAPDU);
 

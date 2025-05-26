@@ -75,6 +75,18 @@
 
 %include "../applayer/CardPteidAddr.h"		//This file contains only define... It doesn't need any typemap
 
+%include "std_vector.i"
+
+namespace std {
+   %template(VectorBio) vector<eIDMW::PTEID_BiometricInfomation*>;
+   %template(VectorFaceInfo) vector<eIDMW::PTEID_FaceInfoData*>;
+   %template(VectorFtPt) vector<eIDMW::PTEID_FeaturePoint*>;
+   %template(VectorDataGroupID) vector<eIDMW::PTEID_DataGroupID>;
+
+   %template(VectorBiometricInfoFingerImage) vector<eIDMW::PTEID_BiometricInfoFingerImage*>;
+   %template(VectorBiometricInformationDG3) vector<eIDMW::PTEID_BiometricInfomationDg3*>;
+};
+
 #ifdef SWIGCSHARP	/********************** C# SPECIFICS *************************/
 
 %typemap(csbase) 	eIDMW::PTEID_Exception "System.ApplicationException";
@@ -1047,6 +1059,8 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 %javaexception("PTEID_Exception") isCardChanged		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCardType 		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getCard			JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getICAOCard		JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getMultiPassToken	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") getEIDCard		JAVA_CODE_THROW
 %javaexception("PTEID_Exception") BeginTransaction	JAVA_CODE_THROW
 %javaexception("PTEID_Exception") EndTransaction	JAVA_CODE_THROW
@@ -1314,6 +1328,13 @@ extern "C" SWIGEXPORT jlong JNICALL Java_pt_gov_cartaodecidadao_pteidlibJava_1Wr
 // class PTEID_SigningDeviceFactory
 //------------------------------------------------------------
 %javaexception("PTEID_Exception") getSigningDevice	   JAVA_CODE_THROW
+
+// class ICAO_Card
+%javaexception("PTEID_Exception") readDatagroupRaw    JAVA_CODE_THROW
+%javaexception("PTEID_Exception") readDataGroup1      JAVA_CODE_THROW
+%javaexception("PTEID_Exception") readDataGroup2      JAVA_CODE_THROW
+%javaexception("PTEID_Exception") readDataGroup3      JAVA_CODE_THROW
+%javaexception("PTEID_Exception") getAvailableDatagroups  JAVA_CODE_THROW
 
 ///////////////////////////////////////// SetEventCallback /////////////////////////////////////////////
 %typemap(ctype)	void (* callback)(long lRet, unsigned long ulState, void *pvRef) "long"

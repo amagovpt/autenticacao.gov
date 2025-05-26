@@ -5,7 +5,7 @@
  * Copyright (C) 2019 Caixa Magica Software.
  * Copyright (C) 2011 Vasco Silva - <vasco.silva@caixamagica.pt>
  * Copyright (C) 2012 lmcm - <lmcm@caixamagica.pt>
- * Copyright (C) 2012, 2017-2018 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2012, 2017-2024 André Guerreiro - <aguerreiro1985@gmail.com>
  * Copyright (C) 2019 Adriano Campos - <adrianoribeirocampos@gmail.com>
  *
  * This is free software; you can redistribute it and/or modify it
@@ -25,20 +25,27 @@
 /**
  * The CardConnect() function returns a pointer to a CCard object
  * (that should free()-ed when no longer used) that can be used
- * to communicate to a specific card.
+ * to communicate with a specific card.
  *
  */
 #include "CardFactory.h"
+#include "IcaoCard.h"
 #include "UnknownCard.h"
 #include "Log.h"
 #include "Cache.h"
 #include "Config.h"
 
 #include "PteidCard.h"
+
 #include <vector>
 #include <string>
 
 namespace eIDMW {
+
+/*
+  Card type detection function for use in modules where we are supplied with a SCARDHANDLE already created, e.g.
+  minidriver
+*/
 
 CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReader, CContext *poContext,
 				   GenericPinpad *poPinpad, bool &isContactLess) {
@@ -68,7 +75,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 
 		const auto selectAppId = [&](const unsigned char *oAID, unsigned long size) -> bool {
 			long lRetVal = 0;
-			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
+			unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
 			CByteArray oCmd(12);
 			oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
 			oCmd.Append((unsigned char)size);
@@ -163,15 +170,20 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 
 			const auto selectAppId = [&](const unsigned char *oAID, unsigned long size) -> bool {
 				long lRetVal = 0;
-				unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x00};
-				CByteArray oCmd(12);
-				oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
-				oCmd.Append((unsigned char)size);
-				oCmd.Append(oAID, size);
+				unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
+				CByteArray select_command(12);
+				select_command.Append(tucSelectApp, sizeof(tucSelectApp));
+				select_command.Append((unsigned char)size);
+				select_command.Append(oAID, size);
 
 				CByteArray oResp;
-				oResp = poContext->m_oPCSC.Transmit(hCard, oCmd, &lRetVal, param_structure);
-				return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
+				oResp = poContext->m_oPCSC.Transmit(hCard, select_command, &lRetVal, param_structure);
+				unsigned long ulRespLen = oResp.Size();
+				if (ulRespLen < 2)
+					return false;
+				unsigned long select_sw12 = 256 * oResp.GetByte(ulRespLen - 2) + oResp.GetByte(ulRespLen - 1);
+				// We only need to test for application presence
+				return (select_sw12 == 0x9000 || select_sw12 == 0x6982);
 			};
 
 			if (!isContactLess) {
@@ -198,6 +210,16 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 			}
 
 			CCache::LimitDiskCacheFiles(10);
+
+			if (poCard == nullptr) {
+				bool icaoStatus = selectAppId(ICAO_APPLET_MRTD, sizeof(ICAO_APPLET_MRTD));
+				if (icaoStatus) {
+					poCard = new CIcaoCard(hCard, poContext, poPinpad, param_structure);
+
+					// All ICAO cards are contactless
+					isContactLess = true;
+				}
+			}
 
 			// If no other CCard subclass could be found
 			if (poCard == NULL) {

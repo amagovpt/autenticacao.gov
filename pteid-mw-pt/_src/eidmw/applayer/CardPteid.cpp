@@ -25,7 +25,10 @@
 **************************************************************************** */
 
 #include "CardPteid.h"
+#include <Reader.h>
+#include "IcaoDg14.h"
 #include "Util.h"
+#include "aa_oids.h"
 #include "cryptoFwkPteid.h"
 #include "CardPteidDef.h"
 #include "CardFile.h"
@@ -40,6 +43,7 @@
 #include "SODParser.h"
 
 // C++ 11 header used for date parsing
+#include <openssl/rand.h>
 #include <regex>
 #include <ctime>
 
@@ -1723,24 +1727,70 @@ bool APL_EidFile_Sod::MapFields() {
 		valid_tags = PTEID_FILE_VALID_SOD_FILE_TAGS;
 
 	parser.ParseSodEncapsulatedContent(m_encapsulatedContent, valid_tags);
-	SODAttributes &attr = parser.getHashes();
+	SODAttributes &attr = parser.getAttributes();
 
 	// Hashes are sorted differently based on card type
 	if (card_type == APL_CARDTYPE_PTEID_IAS5) {
-		m_mrzHash.Append(attr.hashes[0]);
-		m_picHash.Append(attr.hashes[1]);
-		m_idHash.Append(attr.hashes[2]);
-		m_pkHash.Append(attr.hashes[4]);
+		m_mrzHash.Append(attr.get(PTEID_SOD_TAG_MRZ));
+		m_picHash.Append(attr.get(PTEID_SOD_TAG_PHOTO_V2));
+		m_idHash.Append(attr.get(PTEID_SOD_TAG_ID_V2));
+		m_secOptHash.Append(attr.get(PTEID_SOD_TAG_SECURITY));
+		m_pkHash.Append(attr.get(PTEID_SOD_TAG_PK_AA));
+
+		// Check if the card is contactless and perform active authentication
+		auto reader = m_card->getCalReader();
+		if (reader->isCardContactless()) {
+			performActiveAuthentication();
+		}
 	} else {
-		m_idHash.Append(attr.hashes[0]);
-		m_addressHash.Append(attr.hashes[1]);
-		m_picHash.Append(attr.hashes[2]);
-		m_pkHash.Append(attr.hashes[3]);
+		m_idHash.Append(attr.get(PTEID_SOD_TAG_ID));
+		m_addressHash.Append(attr.get(PTEID_SOD_TAG_ADDRESS));
+		m_picHash.Append(attr.get(PTEID_SOD_TAG_PHOTO));
+		m_pkHash.Append(attr.get(PTEID_SOD_TAG_PK));
 	}
 
 	m_mappedFields = true;
 
 	return true;
+}
+
+void APL_EidFile_Sod::performActiveAuthentication() {
+	MWLOG(LEV_DEBUG, MOD_APL, "Active Authentication for national data");
+
+	APL_SmartCard *card = dynamic_cast<APL_SmartCard *>(m_card);
+	card->selectApplication({PTEID_2_APPLET_NATIONAL_DATA, sizeof(PTEID_2_APPLET_NATIONAL_DATA)});
+
+	CByteArray secopt_file;
+	m_card->readFile(PTEID_FILE_SECURITY, secopt_file);
+
+	// verify hash of security file with hash in SOD
+	if (!m_cryptoFwk->VerifyHashSha256(secopt_file, m_secOptHash)) {
+		MWLOG(LEV_ERROR, MOD_APL, "Security option hash does not match with SOD");
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_SECURITY);
+	}
+
+	// read public key DG15
+	CByteArray pubkey_file;
+	m_card->readFile(PTEID_FILE_PUB_KEY_AA, pubkey_file);
+
+	// verify hash of public key with hash in SOD
+	if (!m_cryptoFwk->VerifyHashSha256(pubkey_file, m_pkHash)) {
+		MWLOG(LEV_ERROR, MOD_APL, "Public key hash does not match with SOD");
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_HASH_NO_MATCH_PUBLIC_KEY);
+	}
+
+	// read OID from security file
+	auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
+	if (obj == nullptr) {
+		MWLOG(LEV_ERROR, MOD_APL, "Failed to find active authentication algorithm OID in security options file!");
+		MWLOG(LEV_ERROR, MOD_APL, "DG14: %s", secopt_file.ToString(false, false).c_str());
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
+	}
+
+	// skip the first two bytes of the file (6F78)
+	auto pubkey = pubkey_file.GetBytes(2);
+
+	m_cryptoFwk->performActiveAuthentication(obj, pubkey);
 }
 
 const CByteArray &APL_EidFile_Sod::getMrzHash() {

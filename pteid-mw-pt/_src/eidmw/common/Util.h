@@ -25,11 +25,11 @@
 
 #include "Export.h"
 #include "ByteArray.h"
+#include "Log.h"
 
 #include <stdio.h>
 #include <stdarg.h>
 #include <cstring>
-#include <iostream>
 #include <string>
 #include <functional>
 
@@ -39,12 +39,29 @@
 
 namespace eIDMW {
 
+/**
+ * @brief Logs error and throws exception atomically
+ *
+ * @param lvl from tLevel
+ * @param mod from tModule
+ * @param err error code for exception
+ * @param fmt printf-style format string
+ * @param ... format arguments
+ */
+#define LOG_AND_THROW(lvl, mod, err, fmt, ...)                                                                         \
+	do {                                                                                                               \
+		MWLOG_CTX(lvl, mod, fmt, ##__VA_ARGS__);                                                                       \
+		throw CMWEXCEPTION(err);                                                                                       \
+	} while (0)
+
 //--- string conversion between std::wstring and std::string
 EIDMW_CMN_API std::wstring utilStringWiden(const std::string &in);
 EIDMW_CMN_API std::string utilStringNarrow(const std::wstring &in);
 #ifdef _WIN32
 EIDMW_CMN_API std::wstring windowsANSIToWideString(const std::string &in);
 #endif
+
+EIDMW_CMN_API uint64_t bigEndianBytesToLong(const uint8_t *bytes, size_t length);
 
 /**
  * Case insensitve search, csSearch should be in lower case.
@@ -59,6 +76,11 @@ EIDMW_CMN_API bool StartsWithCI(const char *csData, const char *csSearch);
  * if you need to use after the lifetime of the array, copy the value
  */
 EIDMW_CMN_API const unsigned char *findASN1Object(const CByteArray &array, long &size, long tag);
+
+EIDMW_CMN_API const unsigned char *findASN1Object(const unsigned char **array, long &size, long tag,
+												  const int &maxLength);
+
+EIDMW_CMN_API unsigned short readTwoBytes(const unsigned char *data);
 
 /**
  * Returns true is csSearch is present in csData.
@@ -112,3 +134,5 @@ EIDMW_CMN_API int fprintf_s(FILE *stream, const char *format, ...);
 EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr);
 
 #endif
+
+EIDMW_CMN_API size_t read_binary_file(const char *filename, unsigned char **outBuffer);

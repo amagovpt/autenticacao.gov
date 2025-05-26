@@ -1,93 +1,60 @@
 #!/usr/bin/env python3
-
 import sys
-sys.path.append("../GeneratedModule")
+sys.path.insert(1, "../GeneratedModule")
 import pteid
 
-def init():
-  # First of all you always have to initialize the sdk.
-  print("CC sdk example, starting...")
-  pteid.PTEID_ReaderSet.initSDK()
+def get_can():
+    """Get Card Access Number from user input"""
+    return input("Please enter CAN (Card Access Number): ")
 
-def release():
-  print("CC sdk example, releasing resources...")
-  # At the end, always release the sdk
-  pteid.PTEID_ReaderSet.releaseSDK()
+def test_pteid_wrapper():
+    """Test PTEID wrapper including PACE authentication"""
+    try:
+        print("Testing PTEID wrapper...")
+        
+        # Initialize the SDK
+        print("Initializing SDK...")
+        pteid.PTEID_ReaderSet.initSDK()
 
-def start():
-  # Obtain the instance of readerSet
-  readers = pteid.PTEID_ReaderSet.instance()
+        # Get reader instance
+        print("Getting reader set instance...")
+        readers = pteid.PTEID_ReaderSet.instance()
 
-  count = readers.readerCount()
-  print("Number of connected card readers to the system:", count)
+        # Get number of readers
+        reader_count = readers.readerCount()
+        print(f"Number of connected readers: {reader_count}")
 
-  # Check if we have connected smart card readers
-  if count:
-    devices_names = []
+        # List all readers and find one with a card
+        if reader_count > 0:
+            print("\nLooking for readers with cards...")
+            for i in range(reader_count):
+                reader_name = readers.getReaderName(i)
+                reader = readers.getReaderByName(reader_name)
+                print(f"Reader {i + 1}: {reader_name}")
+                
+                if reader.isCardPresent():
+                    print(f"Card found in reader: {reader_name}")
+                    token = reader.getMultiPassToken()
+                    print("Token: ", token.GetBytes())
+        else:
+            print("No readers found")
 
-    # Obtain the names of all connected readers
-    for idx in range(count):
-      print("Obtaining card name for index:", idx)
+        print("\nPTEID wrapper test completed successfully!")
+        return True
 
-      name = readers.getReaderName(idx)
-      devices_names.append(name)
+    except Exception as e:
+        print(f"Error testing PTEID wrapper: {str(e)}")
+        print(f"Error type: {type(e)}")
+        return False
 
-      print("Connected device:", name)
-
-    ctx_with_card = None
-    # try to find a smart card in one of the detected readers
-    for name in devices_names:
-      reader_ctx = readers.getReaderByName(name)
-      
-      if reader_ctx.isCardPresent():
-        print("The reader <", name, "> has a card in it.")
-       
-        ctx_with_card = reader_ctx
-        # found a card connected, don't look around in other readers
-        break
-
-    # Now check if we have a card to access we can keep going
-    if ctx_with_card:
-      card = ctx_with_card.getEIDCard()
-      card_id = card.getID()
-
-      dump_card_info(card_id)
-    else:
-      print("There's no card present in the reader, terminating...")
-
-def dump_card_info(id):
-  print("Card ID: ", id)
-  print("-------------------------------------------------------") 
-  print("deliveryEntity             ", id.getIssuingEntity())
-  print("country                    ", id.getCountry())
-  print("documentType               ", id.getDocumentType())
-  print("cardNumber                 ", id.getDocumentNumber())
-  print("cardNumberPAN              ", id.getDocumentPAN())
-  print("cardVersion                ", id.getDocumentVersion())
-  print("deliveryDate               ", id.getValidityBeginDate())
-  print("locale                     ", id.getLocalofRequest())
-  print("validityDate               ", id.getValidityEndDate())
-  print("name                       ", id.getSurname())
-  print("firstname                  ", id.getGivenName())
-  print("sex                        ", id.getGender())
-  print("nationality                ", id.getNationality())
-  print("birthDate                  ", id.getDateOfBirth())
-  print("height                     ", id.getHeight())
-  print("numBI                      ", id.getCivilianIdNumber())
-  print("nameFather                 ", id.getSurnameFather())
-  print("firstnameFather            ", id.getGivenNameFather())
-  print("nameMother                 ", id.getSurnameMother())
-  print("firstnameMother            ", id.getGivenNameMother())
-  print("numNIF                     ", id.getTaxNo())
-  print("numSS                      ", id.getSocialSecurityNumber())
-  print("numSNS                     ", id.getHealthNumber())
-  print("Accidental indications     ", id.getAccidentalIndications())
-  print("mrz1                       ", id.getMRZ1())
-  print("mrz2                       ", id.getMRZ2())
-  print("mrz3                       ", id.getMRZ3())
-  print("-------------------------------------------------------") 
+    finally:
+        # Always release SDK
+        print("\nReleasing SDK...")
+        try:
+            pteid.PTEID_ReaderSet.releaseSDK()
+        except Exception as e:
+            print(f"Error releasing SDK: {str(e)}")
 
 if __name__ == "__main__":
-  init()
-  start()
-  release()
+    success = test_pteid_wrapper()
+    sys.exit(0 if success else 1)

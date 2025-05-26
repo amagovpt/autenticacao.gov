@@ -58,11 +58,15 @@ HEADERS += \
            P15Objects.h \
            PCSC.h \
            GenericPinpad.h \
+           SecureMessaging.h \
+           ChipAuthentication.h \
            PaceAuthentication.h \
+           BacAuthentication.h \
            Pinpad.h \
            PKCS15.h \
            PKCS15Parser.h \
            PkiCard.h \
+           IcaoCard.h \
            Reader.h \
            ReadersInfo.h \
            ThreadPool.h \
@@ -71,7 +75,8 @@ HEADERS += \
            GempcPinpad.h \
            ACR83Pinpad.h \
            PteidCard.h \
-           CardReaderInfo.h
+           CardReaderInfo.h \
+           FciData.h
 
 SOURCES += \
            APDU.cpp \
@@ -82,17 +87,22 @@ SOURCES += \
            CardReaderInfo.cpp \
            Context.cpp \
            PCSC.cpp \
+           SecureMessaging.cpp \
+           ChipAuthentication.cpp \
            PaceAuthentication.cpp \
+           BacAuthentication.cpp \
            Pinpad.cpp \
            GenericPinpad.cpp \
            PKCS15.cpp \
            PKCS15Parser.cpp \
            PkiCard.cpp \
+           IcaoCard.cpp \
            Reader.cpp \
            ReadersInfo.cpp \
            ThreadPool.cpp \
            GempcPinpad.cpp \
            ACR83Pinpad.cpp \
            PteidCard.cpp \
-           UnknownCard.cpp
+           UnknownCard.cpp \
+           FciData.cpp
 

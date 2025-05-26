@@ -58,6 +58,8 @@
 
 #include <curl/curl.h>
 
+#include <algorithm>
+
 using namespace eIDMW;
 
 #define TRIES_LEFT_ERROR 1000
@@ -341,6 +343,46 @@ GAPI::GAPI(GUISettings &settings, QObject *parent) : QObject(parent), m_Settings
 	m_timerReaderList = new QTimer(this);
 	connect(m_timerReaderList, SIGNAL(timeout()), this, SLOT(updateReaderList()));
 	m_timerReaderList->start(TIMERREADERLIST);
+	connect(
+		this, &GAPI::aboutToSignalCardChanged, this,
+		[this](const int errorCode) {
+			if (errorCode == ET_CARD_REMOVED) {
+				m_hasIcao = false;
+				m_hasOnlyIcao = false;
+				return;
+			}
+			unsigned long ReaderCount = 0;
+			unsigned long ReaderIdx = 0;
+			unsigned long tempReaderIndex = 0;
+			PTEID_CardType cardType = PTEID_CARDTYPE_UNKNOWN;
+			try {
+				ReaderCount = ReaderSet.readerCount();
+				if (ReaderCount == 0) {
+					m_hasIcao = false;
+					m_hasOnlyIcao = false;
+				}
+				for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+					PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+					if (readerContext.isCardPresent()) {
+						tempReaderIndex = ReaderIdx;
+						break;
+					}
+				}
+
+				PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+				readerContext.getICAOCard();
+				cardType = readerContext.getCardType();
+				m_hasOnlyIcao = cardType == ICAO_CARDTYPE_MRTD;
+				m_hasIcao = ((cardType == PTEID_CARDTYPE_IAS5) &&
+							 readerContext.getCardContactInterface() == PTEID_CARD_CONTACTLESS) ||
+							m_hasOnlyIcao;
+			} catch (PTEID_Exception &err) {
+				qDebug() << "Not able to get card type! Error code: " << hex << err.GetError();
+				m_hasOnlyIcao = false;
+				m_hasIcao = false;
+			}
+		},
+		Qt::DirectConnection);
 
 	ScapCredentials scap_credentials = {SCAP_BASIC_AUTH_USERID, SCAP_BASIC_AUTH_PASSWORD, get_scap_app_id()};
 	m_scap_client = new ScapClient(scap_credentials);
@@ -354,6 +396,28 @@ void GAPI::initTranslation() {
 	if (LoadTranslationFile(CurrLng) == false) {
 		emit signalLanguageChangedError();
 	}
+}
+
+QString GAPI::loadCountryName(const QString &threeLetterCode, const QString &language) {
+	QString filePath = ":/country_codes.json";
+	QFile file;
+	QString useLanguage = language == "nl" ? "pt" : "en";
+	file.setFileName(filePath);
+	file.open(QIODevice::ReadOnly | QIODevice::Text);
+	QString val = file.readAll();
+	file.close();
+	QJsonDocument doc = QJsonDocument::fromJson(val.toUtf8());
+	QJsonObject jsonObj = doc.object();
+	QJsonValue threeLetterTranslation = jsonObj.value(threeLetterCode);
+	if (threeLetterTranslation == QJsonValue::Undefined)
+		return threeLetterCode;
+
+	QJsonObject threeLetterTranslationObj = threeLetterTranslation.toObject();
+	QJsonValue valueTranslated = threeLetterTranslationObj.value(useLanguage);
+	if(valueTranslated == QJsonValue::Undefined)
+		return threeLetterTranslationObj.value("en").toString();
+
+	return valueTranslated.toString();
 }
 
 bool GAPI::LoadTranslationFile(QString NewLanguage) {
@@ -411,12 +475,21 @@ WindowGeometry *GAPI::getWndGeometry() {
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) { return m_data[key]; }
 
+QString GAPI::getDataICAOValue(ICAOInfoKey key) { return m_icaoData[key];}
+
 void GAPI::setDataCardIdentify(QMap<IDInfoKey, QString> data) {
 
 	qDebug() << "C++: setDataCardIdentify ";
 
 	m_data = data;
 	emit signalCardDataChanged();
+}
+
+void GAPI::setDataCardICAO(QMap<ICAOInfoKey, QString>  data){
+	qDebug() << "C++: setDataCardICAO ";
+
+	m_icaoData = data;
+	emit signalICAODataChanged();
 }
 
 bool isExpiredDate(const char *strDate) {
@@ -475,7 +548,7 @@ void GAPI::handleRemoteAddressErrors(long errorCode) {
 
 void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int index) {
 	// The SOD-related error codes have values in a contiguous range
-	if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_INVALID_PKCS7) {
+	if (errorCode >= EIDMW_SOD_UNEXPECTED_VALUE && errorCode <= EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION) {
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "SOD exception! Error code (see strings in eidErrors.h): %08lx\n",
 				  errorCode);
 		emit signalCardAccessError(SodCardReadError);
@@ -673,7 +746,7 @@ void GAPI::getTriesLeftAuthPin() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doGetTriesLeftAuthPin);
 	} else {
-		performPACEWithCache(card, CardOperation::GetAuthPin);
+		performPACEWithCache(CardOperation::GetAuthPin);
 	}
 }
 unsigned int GAPI::doGetTriesLeftAuthPin() {
@@ -736,7 +809,7 @@ void GAPI::getTriesLeftSignPin() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doGetTriesLeftSignPin);
 	} else {
-		performPACEWithCache(card, CardOperation::GetAuthPin);
+		performPACEWithCache(CardOperation::GetAuthPin);
 	}
 }
 unsigned int GAPI::doGetTriesLeftSignPin() {
@@ -765,22 +838,57 @@ unsigned int GAPI::doGetTriesLeftSignPin() {
 }
 
 void GAPI::startPACEAuthentication(QString pace_can, CardOperation op) {
-
 	Concurrent::run(this, &GAPI::doStartPACEAuthentication, pace_can, op);
 }
 
 void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 
 	PTEID_EIDCard *card = NULL;
+	ICAO_Card *cardIcao = NULL;
 	BEGIN_TRY_CATCH
 
 	getCardInstance(card);
-	if (card == NULL)
-		return;
+	if (card == NULL) {
+		if (CardOperation::ICAOData) {
+			try {
+				unsigned long ReaderCount = ReaderSet.readerCount();
+				PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance Card Reader count =  %ld", ReaderCount);
+				unsigned long ReaderIdx = 0;
+				unsigned long tempReaderIndex = 0;
+				ReaderCount = ReaderSet.readerCount();
+				if (ReaderCount == 0) {
+					return;
+				}
+
+				for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+					PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+					if (readerContext.isCardPresent()) {
+						tempReaderIndex = ReaderIdx;
+						break;
+					}
+				}
+
+				PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+				PTEID_CardType cardType = readerContext.getCardType();
+				if (cardType != ICAO_CARDTYPE_MRTD)
+					return;
+
+				cardIcao = &readerContext.getICAOCard();
+
+			} catch (PTEID_Exception err) {
+				qDebug() << "Error while trying to create ICAO Card object! error: " << hex << err.GetError();
+			}
+		}
+	}
 
 	std::string can_str = pace_can.toStdString();
 	try {
-		card->initPaceAuthentication(can_str.c_str(), can_str.size(), PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+		if (card)
+			card->initPaceAuthentication(can_str.c_str(), can_str.size(),
+										 PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN);
+		else if (cardIcao)
+			cardIcao->initPaceAuthentication(can_str.c_str(), can_str.size(),
+											 PTEID_CardPaceSecretType::PTEID_CARD_SECRET_CAN); // or mrz
 		emit signalPaceSuccess();
 	} catch (PTEID_PACE_ERROR &e) {
 		PaceError err;
@@ -831,8 +939,10 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	case GetAddressPin:
 		getTriesLeftAddressPin();
 		break;
+	case ICAOData:
+		connectToICAOCard();
+		break;
 	}
-
 	END_TRY_CATCH
 }
 
@@ -843,7 +953,7 @@ void GAPI::verifyAddressPin(QString pin_value, bool forceVerify) {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doVerifyAddressPin, pin_value, forceVerify);
 	} else {
-		performPACEWithCache(card, CardOperation::DoAddress);
+		performPACEWithCache(CardOperation::DoAddress);
 	}
 }
 
@@ -886,7 +996,7 @@ void GAPI::getTriesLeftAddressPin() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doGetTriesLeftAddressPin);
 	} else {
-		performPACEWithCache(card, CardOperation::GetAuthPin);
+		performPACEWithCache(CardOperation::GetAuthPin);
 	}
 }
 unsigned int GAPI::doGetTriesLeftAddressPin() {
@@ -1300,22 +1410,22 @@ QString GAPI::getCardActivation() {
 }
 
 QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) {
-	if (id != "photo.png") {
+	if (p.count(id) == 0){
 		qDebug() << "PhotoImageProvider: wrong id requested - " << id;
 		return QPixmap();
 	}
 
 	if (!requestedSize.isValid()) {
-		if (requestedSize.height() > p.height() || requestedSize.width() > p.width()) {
+		if (requestedSize.height() > p[id].height() || requestedSize.width() > p[id].width()) {
 			qDebug() << "PhotoImageProvider: Invalid requestedSize - " << requestedSize;
 			return QPixmap();
 		}
 	}
 
-	size->setWidth(p.width());
-	size->setHeight(p.height());
+	size->setWidth(p[id].width());
+	size->setHeight(p[id].height());
 
-	return p;
+	return p[id];
 }
 
 void GAPI::startPrintPDF(QString outputFile, bool isBasicInfo, bool isAdditionalInfo, bool isAddress, bool isNotes,
@@ -2374,6 +2484,12 @@ void GAPI::startCardReading() {
 	QFuture<void> future = Concurrent::run(this, &GAPI::connectToCard);
 }
 
+void GAPI::startCardICAOReading() {
+	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "StartCardReading connectToICAOCard");
+	QFuture<void> future = Concurrent::run(this, &GAPI::connectToICAOCard);
+}
+
+
 void GAPI::startSavingCardPhoto(QString outputFile) {
 	QFuture<void> future = Concurrent::run(this, &GAPI::doSaveCardPhoto, outputFile);
 }
@@ -2997,6 +3113,8 @@ QVariantList GAPI::getRetReaderList() {
 	return list;
 }
 
+bool GAPI::hasOnlyICAO() { return m_hasOnlyIcao; }
+
 int GAPI::getReaderIndex(void) {
 	qDebug() << "GAPI::getReaderIndex!" << selectedReaderIndex;
 	if (selectedReaderIndex >= 0) {
@@ -3004,6 +3122,110 @@ int GAPI::getReaderIndex(void) {
 		return selectedReaderIndex;
 	}
 	return 0;
+}
+
+bool GAPI::hasICAO() { return m_hasIcao; }
+
+void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
+
+	if (card == NULL) {
+		qDebug() << "This ICAO card doesn't exist!";
+		return;
+	}
+
+	PTEID_ICAO_DG1 *dg = card->readDataGroup1();
+
+	if (dg == NULL) {
+		qDebug() << "Couldn't read data group 1!";
+		return;
+	}
+
+	qDebug() << "C++: loading ICAO Card Data";
+
+	QMap<ICAOInfoKey, QString> cardData;
+
+	bool statusDgs = dg->GetReport()->GetStatus() == 0 && card->GetDocumentReport()->GetSodReport()->GetStatus() == 0;
+	cardData[DocumentCode] = QString::fromUtf8(dg->documentCode());
+	cardData[IssuingState] = QString::fromUtf8(dg->issuingState());
+	QString optionalData;
+	if (dg->serialNumberCheckDigit() == -1) {
+		optionalData = dg->optionalDataLine1();
+	}
+
+	cardData[DocumentNumber] =
+		QString::fromUtf8(dg->documentNumber()) + (optionalData.size() > 0 ? " " + optionalData : "");
+	cardData[OptionalDataLine1] = QString::fromUtf8(dg->optionalDataLine1());
+	cardData[DateOfBirth] = convertDate(QString::fromUtf8(dg->dateOfBirth()));
+	cardData[Gender] = QString(QChar(dg->sex()));
+	cardData[DateOfExpiry] = convertDate(QString::fromUtf8(dg->dateOfExpiry()));
+	cardData[Nat] = QString::fromUtf8(dg->nationality());
+	cardData[OptionalDataLine2] = QString::fromUtf8(dg->optionalDataLine2());
+	cardData[FullName] =
+		QString::fromUtf8(dg->secondaryIdentifier()) + " " + QString::fromUtf8(dg->primaryIdentifier());
+	cardData[IsNameFromMRZ] = "True";
+	cardData[IsPassport] = QString::fromStdString(dg->isPassport() ? "True" : "False");
+
+	// Load the photo from PTEID_ICAO_DG2	
+	PTEID_ICAO_DG2* dg2 = card->readDataGroup2();
+	statusDgs = statusDgs && dg2->GetReport()->GetStatus() == 0;
+	if (!dg2->biometricInstances().empty()) {
+		qDebug() << "Trying to process DG2";
+		std::vector<PTEID_BiometricInfomation*> biometric_instances = dg2->biometricInstances();
+		PTEID_BiometricInfomation* instance = biometric_instances.at(0);
+		PTEID_FaceInfo* faceInfo = instance->faceInfo();
+		PTEID_FaceInfoData* faceInfoData = faceInfo->faceInfoData().at(0);
+		unsigned short image_data_type = faceInfoData->imgDataType();
+		qDebug() << "DG2 image data type: " << image_data_type;
+		QPixmap image_photo;
+		if (image_data_type == 1) {
+			// JPEG2000, which needs to be converted to PNG
+			PTEID_ByteArray photoRawData = faceInfoData->photoRawDataPNG();
+			image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "PNG");
+		}
+        else if (image_data_type == 0) {
+			// JPG
+			PTEID_ByteArray photoRawData = faceInfoData->photoRawData();
+			image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "JPG");
+		}
+		// Updates image provider
+		image_provider->setPixmap("photoICAO.png", image_photo);
+    }
+
+	auto availableDgs = card->getAvailableDatagroups();
+	auto it = std::find(availableDgs.begin(), availableDgs.end(), PTEID_DATA_GROUP_ID_DG11);
+	if (it != availableDgs.end()) {
+		try {
+			PTEID_ICAO_DG11 *dg11 = card->readDataGroup11();
+			statusDgs = statusDgs && dg11->GetReport()->GetStatus() == 0;
+			//All the DG11 tags are optional so we need to check for presence of fullname
+			if (dg11 != NULL && strlen(dg11->fullName()) > 0) {
+				cardData[FullName] = dg11->fullName();
+				cardData[IsNameFromMRZ] = "False";
+			}
+		} catch (PTEID_Exception &err) {
+			qDebug() << "Error while trying to read DG11! Error code: " << hex << err.GetError();
+		}
+	}
+
+	cardData[IsDgsSecured] = statusDgs ? "True" : "False";
+	setDataCardICAO(cardData);
+	if (!m_hasOnlyIcao) {
+		//Make the card ready to access other applications
+		card->resetCardState();
+		resetContactlessState();
+	}
+}
+
+QString GAPI::convertDate(const QString& date) {
+    if (date.length() != 6) {
+        return "Invalid date format";
+    }
+
+    QString year = date.mid(0, 2);  // YY
+    QString month = date.mid(2, 2); // MM
+    QString day = date.mid(4, 2);   // DD
+
+    return QString("%1-%2-%3").arg(day, month, year);
 }
 
 void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
@@ -3044,7 +3266,7 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
 	QPixmap image_photo;
 	image_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
 
-	image_provider->setPixmap(image_photo);
+	image_provider->setPixmap("photo.png",image_photo);
 
 	// All data loaded: we can emit the signal to QML
 	setDataCardIdentify(cardData);
@@ -3063,8 +3285,7 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
 	}
 }
 
-void GAPI::performPACEWithCache(PTEID_EIDCard *card, CardOperation op) {
-	Q_UNUSED(card);
+void GAPI::performPACEWithCache(CardOperation op) {
 	if (!m_Settings.getEnablePteidCANCache()) {
 		emit signalContactlessCANNeeded();
 		return;
@@ -3090,19 +3311,56 @@ void GAPI::connectToCard() {
 	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToCard");
 
 	BEGIN_TRY_CATCH
-
 	PTEID_EIDCard *card = NULL;
 	getCardInstance(card);
 	if (card == NULL)
 		return;
-
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		finishLoadingCardData(card);
 	} else {
-		performPACEWithCache(card, CardOperation::IdentityData);
+		performPACEWithCache(CardOperation::IdentityData);
 	}
 
 	END_TRY_CATCH
+}
+
+void GAPI::connectToICAOCard() {
+	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToICAOCard");
+	ICAO_Card* card = NULL;
+	unsigned long ReaderCount = ReaderSet.readerCount();
+	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance Card Reader count =  %ld", ReaderCount);
+	unsigned long ReaderIdx = 0;
+	unsigned long tempReaderIndex = 0;
+
+	if (ReaderCount == 0) {
+		emit signalCardAccessError(NoReaderFound);
+	}
+	
+	for(ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+		if (readerContext.isCardPresent()) {
+			tempReaderIndex = ReaderIdx;
+			break;
+		}
+	}
+
+	PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+	PTEID_CardType cardType = readerContext.getCardType();
+
+	if (cardType == ICAO_CARDTYPE_MRTD || cardType == PTEID_CARDTYPE_IAS5) {
+		card = &readerContext.getICAOCard();
+	}
+	if (card == NULL)
+		return;
+	std::string masterListFile =
+		utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/IcaoMasterList.ml";
+	card->loadMasterList(masterListFile.c_str());
+	if (m_pace_auth_state == PaceAuthenticated) {
+		finishLoadingICAOCardData(card);
+	} else {
+		performPACEWithCache(ICAOData);
+		return;
+	}
 }
 
 //****************************************************
@@ -3150,8 +3408,10 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 			// send an event to the main app to show the popup message
 			//------------------------------------
 			if (pCallBackData->getMainWnd()->returnReaderSelected() != -1) {
+				pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_CHANGED);
 				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
 			} else {
+				pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_REMOVED);
 				pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_REMOVED);
 			}
 			pCallBackData->getMainWnd()->setAddressLoaded(false);
@@ -3168,6 +3428,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 			//------------------------------------
 			// send an event to the main app to show the popup message
 			//------------------------------------
+			pCallBackData->getMainWnd()->aboutToSignalCardChanged(GAPI::ET_CARD_CHANGED);
 			pCallBackData->getMainWnd()->signalCardChanged(GAPI::ET_CARD_CHANGED);
 			pCallBackData->getMainWnd()->setAddressLoaded(false);
 			pCallBackData->getMainWnd()->resetReaderSelected();
@@ -3175,8 +3436,8 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 			//------------------------------------
 			// register certificates when needed
 			//------------------------------------
+			PTEID_CardType cardType = readerContext.getCardType();
 			if (pCallBackData->getMainWnd()->m_Settings.getRegCert()) {
-				PTEID_CardType cardType = readerContext.getCardType();
 				switch (cardType) {
 				case PTEID_CARDTYPE_IAS101:
 				case PTEID_CARDTYPE_IAS07:
@@ -3202,6 +3463,9 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 					}
 					break;
 				}
+				case ICAO_CARDTYPE_MRTD:
+					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback","ICAO CARD inserted");
+					break;
 				case PTEID_CARDTYPE_UNKNOWN:
 					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "unknown Card - skipping ImportCertificates()");
 					break;
@@ -3262,7 +3526,8 @@ void GAPI::setEventCallbacks(void) {
 			m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback, pCBData);
 			m_callBackData[readerName] = pCBData;
 		}
-	} catch (PTEID_Exception&)  {
+	} catch (PTEID_Exception &e) {
+		emit aboutToSignalCardChanged(ET_UNKNOWN);
 		emit signalCardChanged(ET_UNKNOWN);
 	}
 }
@@ -3456,7 +3721,7 @@ void GAPI::startfillCertificateList(void) {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::fillCertificateList);
 	} else {
-		performPACEWithCache(card, CardOperation::ReadCertDetails);
+		performPACEWithCache(CardOperation::ReadCertDetails);
 	}
 }
 
@@ -3537,7 +3802,7 @@ void GAPI::validateCertificates() {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		Concurrent::run(this, &GAPI::doValidateCertificates);
 	} else {
-		performPACEWithCache(card, CardOperation::ValidateCertificate);
+		performPACEWithCache(CardOperation::ValidateCertificate);
 	}
 }
 
@@ -3615,7 +3880,7 @@ void GAPI::getInfoFromSignCert(void) {
 	if (!m_is_contactless || m_pace_auth_state == PaceAuthenticated) {
 		finishLoadingSignCertData(card);
 	} else {
-		performPACEWithCache(card, CardOperation::SignCertificateData);
+		performPACEWithCache(CardOperation::SignCertificateData);
 	}
 
 	END_TRY_CATCH

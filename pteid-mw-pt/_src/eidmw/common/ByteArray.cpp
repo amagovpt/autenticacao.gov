@@ -43,6 +43,12 @@ namespace eIDMW {
 CByteArray::CByteArray(unsigned long ulCapacity)
 	: m_pucData(NULL), m_ulSize(0), m_ulCapacity(ulCapacity), m_bMallocError(false) {}
 
+CByteArray::CByteArray(size_t size, unsigned char value)
+	: m_pucData(NULL), m_ulSize(0), m_ulCapacity(size), m_bMallocError(false) {
+	Resize(size);
+	memset(m_pucData, value, size);
+}
+
 // copy mem into object
 CByteArray::CByteArray(const unsigned char *pucData, unsigned long ulSize, unsigned long ulCapacity) {
 	MakeArray(pucData, ulSize, ulCapacity);
@@ -375,6 +381,16 @@ std::string CByteArray::ToString(bool bAddSpace, bool bOneLine, unsigned long ul
 		return csRet;
 	}
 }
+
+std::string CByteArray::hexToString() const {
+	std::string result;
+	for (size_t i = 0; i < m_ulSize; ++i) {
+		result += static_cast<char>(m_pucData[i]);
+	}
+
+	return result;
+}
+
 // copy supplied memory into new allocated memory
 //?? capacity is not in steps of 10, but takes new data-len
 void CByteArray::MakeArray(const unsigned char *pucData, // returns allocated memory
@@ -402,6 +418,21 @@ void CByteArray::Replace(unsigned char ucByteSrc, unsigned char ucByteDest) {
 			*src = ucByteDest;
 		src++;
 	}
+}
+
+void CByteArray::Resize(unsigned long ulNewSize) {
+	if (m_bMallocError)
+		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
+
+	unsigned char *pNewData = static_cast<unsigned char *>(realloc(m_pucData, ulNewSize));
+	if (!pNewData && ulNewSize > 0) {
+		m_bMallocError = true;
+		throw CMWEXCEPTION(EIDMW_ERR_MEMORY);
+	}
+
+	m_pucData = pNewData;
+	m_ulSize = ulNewSize;
+	m_ulCapacity = ulNewSize;
 }
 
 } // namespace eIDMW
