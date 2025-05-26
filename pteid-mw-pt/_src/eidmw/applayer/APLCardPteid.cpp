@@ -1351,10 +1351,17 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 	json_str = build_json_ecdh2(kicc);
 
 	// Step 2 of the protocol
-	PostResponse resp2 = post_json_remoteaddress(url_endpoint_ecdh2.c_str(), json_str, cookie.c_str());
+	PostResponse resp2;
+	try {
+		resp2 = post_json_remoteaddress(url_endpoint_ecdh2.c_str(), json_str, cookie.c_str());
+		MWLOG(LEV_DEBUG, MOD_APL, "%s: 2nd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp2.http_code,
+			  resp2.http_response.c_str());
+	} catch (CMWException &e) {
+		if (sm_started)
+			breakSecureMessaging();
 
-	MWLOG(LEV_DEBUG, MOD_APL, "%s: 2nd POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp2.http_code,
-		  resp2.http_response.c_str());
+		throw e;
+	}
 
 	RA_ECDH2Response ecdh2_obj = parseECDH2Response(resp2.http_response.c_str());
 
@@ -1368,7 +1375,15 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 
 	json_str = build_json_mutualauth_1(resp_external_auth);
 	// Step 3 of the protocol
-	PostResponse resp3 = post_json_remoteaddress(url_endpoint_mutual_auth1.c_str(), json_str, cookie.c_str());
+	PostResponse resp3;
+	try {
+		resp3 = post_json_remoteaddress(url_endpoint_mutual_auth1.c_str(), json_str, cookie.c_str());
+	} catch (CMWException &e) {
+		if (sm_started)
+			breakSecureMessaging();
+
+		throw e;
+	}
 
 	std::optional<RA_MutualAuthResponse> mutualauth1_obj = parseMutualAuthResponse1(resp3.http_response.c_str());
 
@@ -1378,16 +1393,32 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 		handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
 	}
 
-	auto resp_internal_auth = mutual_authentication.remoteAddressStep3(mutualauth1_obj.value().signed_challenge_command,
-																	   mutualauth1_obj.value().internal_auth_commands,
-																	   mutualauth1_obj.value().pin_status_command);
+	std::vector<std::string> resp_internal_auth;
+	try {
+		resp_internal_auth = mutual_authentication.remoteAddressStep3(mutualauth1_obj.value().signed_challenge_command,
+																	  mutualauth1_obj.value().internal_auth_commands,
+																	  mutualauth1_obj.value().pin_status_command);
+	} catch (CMWException &e) {
+		if (sm_started)
+			breakSecureMessaging();
+
+		throw e;
+	}
 
 	json_str = build_json_mutualauth_2(resp_internal_auth);
 
 	// Step 4 of the protocol: returns address data if all goes well
-	PostResponse resp4 = post_json_remoteaddress(url_endpoint_mutual_auth2.c_str(), json_str, cookie.c_str());
-	MWLOG(LEV_DEBUG, MOD_APL, "%s: 4th POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp4.http_code,
-		  resp4.http_response.c_str());
+	PostResponse resp4;
+	try {
+		resp4 = post_json_remoteaddress(url_endpoint_mutual_auth2.c_str(), json_str, cookie.c_str());
+		MWLOG(LEV_DEBUG, MOD_APL, "%s: 4th POST. HTTP code: %ld Received data: %s", __FUNCTION__, resp4.http_code,
+			  resp4.http_response.c_str());
+	} catch (CMWException &e) {
+		if (sm_started)
+			breakSecureMessaging();
+
+		throw e;
+	}
 
 	exception_code = validateRemoteAddressData(resp4.http_response.c_str(), CC2_PROTOCOL);
 
