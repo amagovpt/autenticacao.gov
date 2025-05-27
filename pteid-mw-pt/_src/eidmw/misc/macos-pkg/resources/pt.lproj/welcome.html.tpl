@@ -6,12 +6,12 @@
 	</style>
 </head>
 <body>
-<h1>Bem-vindo ao instalador do Autenticação.gov 3.13.3</h2>
+<h1>Bem-vindo ao instalador do Autenticação.gov 3.14.0</h2>
 
-	<h2>Versão 3.13.3 - revisão GIT_REVISION</h2>
+	<h2>Versão 3.14.0 - revisão GIT_REVISION</h2>
 	<ul>
 	    <li>Suporte para Cartões de Cidadão com funcionalidade de leitura simplificada</li>
-	    <li>Melhorias na assinatura com Chave Móvel e atributos profissionais</li>
+	    <li>Leitura de dados de viagem de documentos segundo a norma ICAO Doc 9303</li>
 	   	</ul>
 </body>
 </html>
