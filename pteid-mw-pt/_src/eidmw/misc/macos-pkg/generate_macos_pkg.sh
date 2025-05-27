@@ -66,7 +66,8 @@ cp $EIDLIB_DIR/eidlibException.h     system-libs/include
 cp $EIDLIB_DIR/../common/eidErrors.h system-libs/include
 
 #Copy libraries and 3rd-party dependencies
-recreate_dir $LIB_BUNDLE_DIR
+recreate_dir $LIB_BUNDLE_DIR/ossl-modules
+
 copy_external_dylibs $LIB_BUNDLE_DIR
 cp -af $LIB_DIR/*.dylib $LIB_BUNDLE_DIR
 mkdir -p $LIB_BUNDLE_DIR/pteidlib_dotnet8/arm64

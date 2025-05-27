@@ -26,6 +26,8 @@ do
 	fi
 done
 
+codesign --force --verbose -s "$SIGNING_IDENTITY" --timestamp $DYLIB_DIR/ossl-modules/legacy.dylib
+
 #Sign libraries and frameworks in application bundle
 
 #Qt frameworks

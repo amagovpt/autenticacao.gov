@@ -190,6 +190,9 @@ private:
 *** APL_CryptoFwk ***
 ***************** */
 APL_CryptoFwk::APL_CryptoFwk() {
+#ifdef __APPLE__
+	OSSL_PROVIDER_set_default_search_path(NULL, "/usr/local/lib/ossl-modules/");
+#endif
 	m_LegacyProvider = OSSL_PROVIDER_load(NULL, "legacy");
 	m_DefaultProvider = OSSL_PROVIDER_load(NULL, "default");
 

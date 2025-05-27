@@ -28,6 +28,7 @@ function copy_external_dylibs {
 	echo "Copying External deps into $DESTDIR ..." 
 	cp -af $OPENSSL_PATH/libcrypto.3.dylib $DESTDIR
 	cp -af $OPENSSL_PATH/libssl.3.dylib $DESTDIR
+	cp -af $OPENSSL_PATH/ossl-modules/legacy.dylib $DESTDIR/ossl-modules/
 	cp -af $CURL_PATH/libcurl.4.dylib $DESTDIR
 	cp -af $XERCES_PATH/libxerces-c-3.2.dylib $DESTDIR
 	cp -af $XMLSECURITY_PATH/libxml-security-c.20.dylib $DESTDIR

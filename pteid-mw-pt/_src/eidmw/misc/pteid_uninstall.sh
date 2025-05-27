@@ -43,6 +43,9 @@ rm -rf /usr/local/lib/pteid_jni/
 #Dotnet 8 SDK
 rm -rf /usr/local/lib/pteidlib_dotnet8/
 
+#OpenSSL legacy provider
+rm -rf /usr/local/lib/ossl-modules/
+
 #pteid dialogs utility
 rm -rf /usr/local/bin/pteiddialogsQTsrv.app/
 
