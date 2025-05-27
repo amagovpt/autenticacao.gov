@@ -70,12 +70,19 @@ void CPkiCard::SelectApplication(const CByteArray &oAID) {
 	oCmd.Append(oAID.GetBytes(), oAID.Size());
 
 	CByteArray oResp = SendAPDU(oCmd);
-
-	if (getSW12(oResp) == 0x9000) {
+	unsigned long sw12 = getSW12(oResp);
+	if (sw12 == 0x9000) {
 		// If select application was a success, update the state
 		m_lastSelectedApplication = oAID;
-	} else {
+	} else if (sw12 == 0x6982) {
+		//eID and national data applications can't be selected without PACE session
+		throw CMWEXCEPTION(EIDMW_ERR_NOT_AUTHENTICATED);
+	}
+	else if (sw12 == 0x6A82) {
 		throw CMWEXCEPTION(EIDMW_ERR_FILE_NOT_FOUND);
+	}
+	else {
+		throw CMWEXCEPTION(EIDMW_ERR_CARD);
 	}
 }
 
