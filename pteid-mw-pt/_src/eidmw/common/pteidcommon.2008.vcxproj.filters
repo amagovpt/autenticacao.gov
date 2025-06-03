@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="libtomcrypt">
-      <UniqueIdentifier>{7bd84bcb-c1c8-49aa-a251-77ab27716a3e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ByteArray.cpp">
@@ -28,9 +25,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="datafile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Log.cpp">
@@ -54,18 +48,6 @@
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="libtomcrypt\sha1.c">
-      <Filter>libtomcrypt</Filter>
-    </ClCompile>
-    <ClCompile Include="libtomcrypt\sha256.c">
-      <Filter>libtomcrypt</Filter>
-    </ClCompile>
-    <ClCompile Include="libtomcrypt\sha384.c">
-      <Filter>libtomcrypt</Filter>
-    </ClCompile>
-    <ClCompile Include="libtomcrypt\sha512.c">
-      <Filter>libtomcrypt</Filter>
-    </ClCompile>
     <ClCompile Include="MyriadFontGlyphWidths.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,9 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Export.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Log.h">
@@ -115,18 +94,6 @@
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="libtomcrypt\tomcrypt_argchk.h">
-      <Filter>libtomcrypt</Filter>
-    </ClInclude>
-    <ClInclude Include="libtomcrypt\tomcrypt_cfg.h">
-      <Filter>libtomcrypt</Filter>
-    </ClInclude>
-    <ClInclude Include="libtomcrypt\tomcrypt_hash.h">
-      <Filter>libtomcrypt</Filter>
-    </ClInclude>
-    <ClInclude Include="libtomcrypt\tomcrypt_macros.h">
-      <Filter>libtomcrypt</Filter>
     </ClInclude>
     <ClInclude Include="MyriadFontGlyphWidths.h">
       <Filter>Header Files</Filter>

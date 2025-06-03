@@ -237,11 +237,6 @@
     <ClCompile Include="ConfigReg.cpp" />
     <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="datafile.cpp" />
-    <ClCompile Include="Hash.cpp" />
-    <ClCompile Include="libtomcrypt\sha1.c" />
-    <ClCompile Include="libtomcrypt\sha256.c" />
-    <ClCompile Include="libtomcrypt\sha384.c" />
-    <ClCompile Include="libtomcrypt\sha512.c" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogBase.cpp" />
     <ClCompile Include="Mutex.cpp" />
@@ -258,11 +253,6 @@
     <ClInclude Include="datafile.h" />
     <ClInclude Include="eidErrors.h" />
     <ClInclude Include="Export.h" />
-    <ClInclude Include="Hash.h" />
-    <ClInclude Include="libtomcrypt\tomcrypt_argchk.h" />
-    <ClInclude Include="libtomcrypt\tomcrypt_cfg.h" />
-    <ClInclude Include="libtomcrypt\tomcrypt_hash.h" />
-    <ClInclude Include="libtomcrypt\tomcrypt_macros.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LogBase.h" />
     <ClInclude Include="Mutex.h" />
