@@ -26,7 +26,6 @@
 
 #include "PKCS15.h"
 #include "Pinpad.h"
-#include "Hash.h"
 
 typedef struct evp_pkey_st EVP_PKEY;
 typedef struct asn1_object_st ASN1_OBJECT;

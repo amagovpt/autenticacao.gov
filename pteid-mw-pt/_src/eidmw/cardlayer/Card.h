@@ -34,7 +34,6 @@
 #include "InternalConst.h"
 #include "ByteArray.h"
 #include "MWException.h"
-#include "Hash.h"
 #include "PCSC.h"
 #include "Util.h"
 #include "GenericPinpad.h"

@@ -44,8 +44,8 @@ macx: LIBS += -liconv
 
 PROJECT_DIR = common
 
-DEPENDPATH += $${PROJECT_DIR} libtomcrypt Socket
-INCLUDEPATH += $${PROJECT_DIR} $${PROJECT_DIR}/libtomcrypt $${PROJECT_DIR}/Socket $${PCSC_INCLUDE_DIR}
+DEPENDPATH += $${PROJECT_DIR} Socket
+INCLUDEPATH += $${PROJECT_DIR} $${PROJECT_DIR}/Socket $${PCSC_INCLUDE_DIR}
 macx: INCLUDEPATH += $$DEPS_DIR/openssl-3/include
 
 public_headers.files = eidErrors.h
@@ -63,7 +63,6 @@ HEADERS += ByteArray.h \
            ThreadDefines.h \
            eidmwErrors.h \
            Export.h \
-           Hash.h \
            Log.h \
            LogBase.h \
            Mutex.h \
@@ -74,17 +73,12 @@ HEADERS += ByteArray.h \
            prefix.h \
            StringOps.h \
            MyriadFontGlyphWidths.h \
-           libtomcrypt/tomcrypt_argchk.h \
-           libtomcrypt/tomcrypt_cfg.h \
-           libtomcrypt/tomcrypt_hash.h \
-           libtomcrypt/tomcrypt_macros.h \
 
 SOURCES += ByteArray.cpp \
            ConfigCommon.cpp \
            Config.cpp \
            Crypto.cpp \
            datafile.cpp \
-           Hash.cpp \
            Log.cpp \
            LogBase.cpp \
            Mutex.cpp \
@@ -93,7 +87,3 @@ SOURCES += ByteArray.cpp \
            Util.cpp \
            StringOps.cpp \
            MyriadFontGlyphWidths.cpp \
-           libtomcrypt/sha1.c \
-           libtomcrypt/sha256.c \
-           libtomcrypt/sha384.c \
-           libtomcrypt/sha512.c

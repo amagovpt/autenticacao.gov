@@ -232,16 +232,29 @@ public:
 	}
 };
 
-class Sha256 : public MessageDigestCtx {
+class EIDMW_CMN_API Sha1 : public MessageDigestCtx {
+public:
+	static constexpr size_t DIGEST_SIZE = 20;
+	Sha1() : MessageDigestCtx("SHA1", DIGEST_SIZE) {}
+};
+
+class EIDMW_CMN_API Sha256 : public MessageDigestCtx {
 public:
 	static constexpr size_t DIGEST_SIZE = 32;
 	Sha256() : MessageDigestCtx("SHA256", DIGEST_SIZE) {}
 };
 
-class Sha1 : public MessageDigestCtx {
+
+class EIDMW_CMN_API Sha384 : public MessageDigestCtx {
 public:
-	static constexpr size_t DIGEST_SIZE = 20;
-	Sha1() : MessageDigestCtx("SHA1", DIGEST_SIZE) {}
+	static constexpr size_t DIGEST_SIZE = 48;
+	Sha384() : MessageDigestCtx("SHA384", DIGEST_SIZE) {}
+};
+
+class EIDMW_CMN_API Sha512 : public MessageDigestCtx {
+public:
+	static constexpr size_t DIGEST_SIZE = 64;
+	Sha512() : MessageDigestCtx("SHA512", DIGEST_SIZE) {}
 };
 
 /**

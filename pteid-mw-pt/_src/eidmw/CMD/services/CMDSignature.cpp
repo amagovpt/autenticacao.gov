@@ -16,7 +16,7 @@
 #include "cmdServices.h"
 #include "proxyinfo.h"
 #include "Util.h"
-#include "Hash.h"
+#include "Crypto.h"
 #include "eidErrors.h"
 #include "cmdSignatureClient.h"
 
@@ -239,8 +239,7 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin) {
 	} else {
 		if (m_computeHash) {
 			/* Calculate hash */
-			CHash hash;
-			hashByteArray = hash.Hash(tHashAlgo::ALGO_SHA256, m_array_handler);
+			hashByteArray = Crypto::MessageDigestCtx::hash<Crypto::Sha256>(m_array_handler);
 		} else {
 			hashByteArray = m_array_handler;
 		}

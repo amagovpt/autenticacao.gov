@@ -22,8 +22,8 @@
 
 **************************************************************************** */
 #include "ByteArray.h"
+#include "Crypto.h"
 #include "eidErrors.h"
-#include "Hash.h"
 #include "pteid_p11.h"
 #include "phash.h"
 
@@ -32,14 +32,15 @@ using namespace eIDMW;
 #define WHERE "hash_init()"
 int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size) {
 	int ret = CKR_OK;
-	CHash *oHash = new CHash();
-	tHashAlgo algo;
+
+	Crypto::MessageDigestCtx *oHash;
+	std::string algo;
 
 	switch (pMechanism->mechanism) {
 	case CKM_SHA_1:
 	case CKM_ECDSA_SHA1:
 	case CKM_SHA1_RSA_PKCS:
-		algo = ALGO_SHA1;
+		algo = "SHA1";
 		*size = 20;
 		break;
 
@@ -47,7 +48,7 @@ int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size
 	case CKM_ECDSA_SHA256:
 	case CKM_SHA256_RSA_PKCS:
 	case CKM_SHA256_RSA_PKCS_PSS:
-		algo = ALGO_SHA256;
+		algo = "SHA256";
 		*size = 32;
 		break;
 
@@ -55,7 +56,7 @@ int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size
 	case CKM_ECDSA_SHA384:
 	case CKM_SHA384_RSA_PKCS:
 	case CKM_SHA384_RSA_PKCS_PSS:
-		algo = ALGO_SHA384;
+		algo = "SHA384";
 		*size = 48;
 		break;
 
@@ -63,7 +64,7 @@ int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size
 	case CKM_ECDSA_SHA512:
 	case CKM_SHA512_RSA_PKCS:
 	case CKM_SHA512_RSA_PKCS_PSS:
-		algo = ALGO_SHA512;
+		algo = "SHA512";
 		*size = 64;
 		break;
 
@@ -72,7 +73,8 @@ int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size
 		goto cleanup;
 	}
 
-	oHash->Init(algo);
+	oHash = new Crypto::MessageDigestCtx(algo.c_str(), *size);
+	oHash->init();
 
 	*pphashinfo = oHash;
 	return ret;
@@ -86,10 +88,10 @@ cleanup:
 #define WHERE "hash_update()"
 int hash_update(void *phashinfo, char *p, unsigned long l) {
 	int ret = CKR_OK;
-	CHash *oHash = (CHash *)phashinfo;
+	auto oHash = (Crypto::MessageDigestCtx *)phashinfo;
 	CByteArray data((unsigned char *)p, l);
 
-	oHash->Update(data);
+	oHash->update(data.GetBytes(), data.Size());
 
 	return (ret);
 }
@@ -102,10 +104,10 @@ int hash_final(void *phashinfo, unsigned char *p, unsigned long *l) {
 	if (phashinfo == NULL)
 		return (CKR_FUNCTION_FAILED);
 
-	CHash *oHash = (CHash *)phashinfo;
+	auto oHash = (Crypto::MessageDigestCtx *)phashinfo;
 	CByteArray data;
 
-	data = oHash->GetHash();
+	data = oHash->final();
 
 	memcpy(p, data.GetBytes(), data.Size());
 
