@@ -25,6 +25,7 @@
 
 **************************************************************************** */
 
+#include <cassert>
 #include <openssl/ec.h>
 #include <openssl/err.h>
 #ifdef __GNUC__

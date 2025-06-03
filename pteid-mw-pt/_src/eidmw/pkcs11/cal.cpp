@@ -33,6 +33,7 @@
 #include "log.h"
 #include "cert.h"
 #include "Config.h"
+#include <cassert>
 #include <openssl/asn1.h>
 
 #ifndef WIN32

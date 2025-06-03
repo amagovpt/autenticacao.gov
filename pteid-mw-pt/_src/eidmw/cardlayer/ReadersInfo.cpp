@@ -23,6 +23,7 @@
 **************************************************************************** */
 #include "ReadersInfo.h"
 #include "PCSC.h"
+#include <cstring>
 
 namespace eIDMW {
 

@@ -31,6 +31,7 @@
 #include <regex>
 #include <algorithm>
 #include <cstdio>
+#include <cassert>
 
 // For the setSSO calls
 #include "CardLayer.h"

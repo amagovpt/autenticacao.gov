@@ -9,6 +9,7 @@
 ****************************************************************************-*/
 
 #include <algorithm>
+#include <cassert>
 #include "CMDSignature.h"
 #include "MiscUtil.h"
 #include "StringOps.h"

@@ -26,6 +26,7 @@
 #include "ChipAuthentication.h"
 #include "Log.h"
 
+#include <cassert>
 #include <limits.h>
 
 #include "PCSC.h"
