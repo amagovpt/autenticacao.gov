@@ -32,7 +32,10 @@
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #include <signal.h>
 
@@ -58,7 +61,7 @@
 std::string readableFilePath = "/usr/local/etc/pteidgui.conf";
 
 DlgDisplayPinpadInfoArguments *oInfoData = NULL;
-DlgCMDMessageArguments *oCmdMsgData = NULL;
+DlgCMDMessageArguments oCmdMsgData;
 dlgWndPinpadInfo *dlgInfo = NULL;
 QDialog *dlg = NULL;
 dlgWndAskCmd *c_dlg = nullptr;
@@ -95,8 +98,7 @@ void sigint_handler(int sig) {
 		c_dlg = nullptr;
 	}
 	if (oShMemory) {
-		oCmdMsgData->returnValue = DLG_OK;
-		oShMemory->Detach((void *)oCmdMsgData);
+		oCmdMsgData.returnValue = DLG_OK;
 		SharedMem::Delete(oShMemory->getID());
 		delete oShMemory;
 	}
@@ -174,6 +176,8 @@ QFont getLatoFont() {
 int main(int argc, char *argv[]) {
 	int iFunctionIndex = 0;
 	std::string readableFilePath;
+	int firstPipe;
+	int secondPipe;
 
 	Type_WndGeometry parentWndGeometry = {};
 
@@ -185,17 +189,18 @@ int main(int argc, char *argv[]) {
 	int iRet = DLG_CANCEL;
 
 	// parse the arguments according to the operation requested
-	MWLOG(LEV_INFO, MOD_DLG, L"  Running %s ...", argv[0]);
+	MWLOG(LEV_INFO, MOD_DLG, L"  Running %s ... first pipe: %s second pipe: %s", argv[0], argv[2], argv[3]);
 
 	if (argc > 2) {
 		iFunctionIndex = atoi(argv[1]);
-		readableFilePath = argv[2];
+		firstPipe = atoi(argv[2]);
+		secondPipe = atoi(argv[3]);
 
-		if (argc > 5) {
-			parentWndGeometry.x = atoi(argv[3]);
-			parentWndGeometry.y = atoi(argv[4]);
-			parentWndGeometry.width = atoi(argv[5]);
-			parentWndGeometry.height = atoi(argv[6]);
+		if (argc > 7) {
+			parentWndGeometry.x = atoi(argv[4]);
+			parentWndGeometry.y = atoi(argv[5]);
+			parentWndGeometry.width = atoi(argv[6]);
+			parentWndGeometry.height = atoi(argv[7]);
 		}
 
 	} else {
@@ -216,21 +221,21 @@ int main(int argc, char *argv[]) {
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		// attach to the segment and get a pointer
-		DlgAskPINArguments *oData = NULL;
+		DlgAskPINArguments oData;
 
-		SharedMem oShMemory;
-		oShMemory.Attach(sizeof(DlgAskPINArguments), readableFilePath.c_str(), (void **)&oData);
-		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_ASK_PIN with args: operation=> %d usage=> %d\n", oData->operation,
-			  oData->usage);
+		readAskPinArguments(firstPipe, (void*)&oData);
+
+		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_ASK_PIN with args: operation=> %d usage=> %d firstPipe: %d secondPipe: %d\n", oData.operation,
+			  oData.usage, firstPipe, secondPipe);
 
 		// do something
 		dlgWndAskPIN *dlg = NULL;
 		try {
-			QString PINName = getPinName(oData->usage, oData->pinName);
+			QString PINName = getPinName(oData.usage, oData.pinName);
 			QString Header;
-			switch (oData->operation) {
+			switch (oData.operation) {
 			case DLG_PIN_OP_VERIFY:
-				switch (oData->usage) {
+				switch (oData.usage) {
 				case DLG_PIN_AUTH:
 					Header = GETQSTRING_DLG(AuthenticateWith);
 					Header += " ";
@@ -262,39 +267,40 @@ int main(int argc, char *argv[]) {
 				Header += " ";
 				Header = GETQSTRING_DLG(Your);
 				Header += " \"";
-				if (wcslen(oData->pinName) == 0) {
-					Header += QString::fromWCharArray(oData->pinName);
+				if (wcslen(oData.pinName) == 0) {
+					Header += QString::fromWCharArray(oData.pinName);
 				} else {
 					Header += GETQSTRING_DLG(Pin);
 				}
 				Header += "\"\n";
 				break;
 			default:
-				oData->returnValue = DLG_BAD_PARAM;
-				oShMemory.Detach((void *)oData);
+				oData.returnValue = DLG_BAD_PARAM;
+				writeAskPinArguments(secondPipe, (void*)&oData);
 				return 0;
 				break;
 			}
 
 			dlg =
-				new dlgWndAskPIN(oData->pinInfo, oData->usage, Header, PINName, DlgGetKeyPad(), 0, &parentWndGeometry);
+				new dlgWndAskPIN(oData.pinInfo, oData.usage, Header, PINName, DlgGetKeyPad(), 0, &parentWndGeometry);
 			int retVal = dlg->exec();
+
 			if (retVal == QDialog::Accepted) {
-				wcscpy_s(oData->pin, sizeof(oData->pin) / sizeof(wchar_t), dlg->getPIN().c_str());
-				oData->returnValue = DLG_OK;
+				wcscpy_s(oData.pin, sizeof(oData.pin) / sizeof(wchar_t), dlg->getPIN().c_str());
+				oData.returnValue = DLG_OK;
 			} else // we'll consider as cancel
 			{
-				oData->returnValue = DLG_CANCEL;
+				oData.returnValue = DLG_CANCEL;
 			}
 			delete dlg;
 			dlg = NULL;
-			oShMemory.Detach((void *)oData);
+			writeAskPinArguments(secondPipe, (void*)&oData);
 			return 0;
 		} catch (...) {
 			if (dlg)
 				delete dlg;
-			oData->returnValue = DLG_ERR;
-			oShMemory.Detach((void *)oData);
+			oData.returnValue = DLG_ERR;
+			writeAskPinArguments(secondPipe, (void*)&oData);
 			return 0;
 		}
 
@@ -601,27 +607,27 @@ int main(int argc, char *argv[]) {
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		// attach to the segment and get a pointer
-		DlgAskInputCMDArguments *oData = NULL;
-		SharedMem oShMemory;
-		oShMemory.Attach(sizeof(DlgAskInputCMDArguments), readableFilePath.c_str(), (void **)&oData);
-		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_ASK_CMD_INPUT with args: isValidateOtp=%s length of inOutId=%ld",
-			  (oData->isValidateOtp ? "true" : "false"), wcslen(oData->inOutId));
+		DlgAskInputCMDArguments oData;
+		readAskInputCMDArguments(firstPipe, (void*)&oData);
 
-		bool askForId = oData->askForId || (wcslen(oData->inOutId) == 0);
-		c_dlg = nullptr;
+		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_ASK_CMD_INPUT with args: isValidateOtp=%s length of inOutId=%ld",
+			  (oData.isValidateOtp ? "true" : "false"), wcslen(oData.inOutId));
+
+		bool askForId = oData.askForId || (wcslen(oData.inOutId) == 0);
+		dlgWndAskCmd *dlg = NULL;
 		try {
-			size_t ulOutCodeBufferLen = sizeof(oData->Code) / sizeof(wchar_t);
-			if ((!oData->isValidateOtp && ulOutCodeBufferLen < 9) || (oData->isValidateOtp && ulOutCodeBufferLen < 7)) {
+			size_t ulOutCodeBufferLen = sizeof(oData.Code) / sizeof(wchar_t);
+			if ((!oData.isValidateOtp && ulOutCodeBufferLen < 9) || (oData.isValidateOtp && ulOutCodeBufferLen < 7)) {
 				MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_BAD_PARAM: buffer does not have enough size");
 				return DLG_BAD_PARAM;
 			}
 
 			QString sMessage;
 			std::wstring userName;
-			std::wstring userId = oData->inOutId;
+			std::wstring userId = oData.inOutId;
 
-			if (!oData->isValidateOtp) {
-				if (oData->operation == DlgCmdOperation::DLG_CMD_SIGNATURE) {
+			if (!oData.isValidateOtp) {
+				if (oData.operation == DlgCmdOperation::DLG_CMD_SIGNATURE) {
 					sMessage += GETQSTRING_DLG(Caution);
 					sMessage += " ";
 					sMessage += GETQSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
@@ -629,45 +635,43 @@ int main(int argc, char *argv[]) {
 
 				// userName.append(csUserName, ulUserNameBufferLen);
 			} else {
-				if (oData->operation == DlgCmdOperation::DLG_CMD_SIGNATURE) {
-					sMessage += GETQSTRING_DLG(YouAreAboutToMakeALegallyBindingElectronicWithCmd);
-				} else if (oData->operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE) {
+				if (oData.operation == DlgCmdOperation::DLG_CMD_SIGNATURE) {
+					sMessage += GETQSTRING_DLG(InsertOtpSignature);
+				} else if (oData.operation == DlgCmdOperation::DLG_CMD_GET_CERTIFICATE) {
 					sMessage += GETQSTRING_DLG(InsertOtpCert);
 				}
 			}
 
-			c_dlg = new dlgWndAskCmd(oData->operation, oData->isValidateOtp, sMessage, &userId, &userName,
-									 oData->callbackWasCalled, askForId, NULL, &parentWndGeometry);
+			dlg = new dlgWndAskCmd(oData.operation, oData.isValidateOtp, sMessage, &userId, &userName,
+								   oData.callbackWasCalled, askForId, NULL, &parentWndGeometry);
 
-			if (c_dlg->exec()) {
-				if (c_dlg->callCallback()) {
-					oData->returnValue = DLG_CALLBACK;
+			if (dlg->exec()) {
+				if (dlg->callCallback()) {
+					oData.returnValue = DLG_CALLBACK;
 				} else {
-					oData->returnValue = DLG_OK;
+					oData.returnValue = DLG_OK;
 				}
 
 				if (askForId) {
-					wcscpy_s(oData->inOutId, sizeof(oData->inOutId) / sizeof(wchar_t), c_dlg->getId().c_str());
+					wcscpy_s(oData.inOutId, sizeof(oData.inOutId) / sizeof(wchar_t), dlg->getId().c_str());
 				}
 
-				wcscpy_s(oData->Code, sizeof(oData->Code) / sizeof(wchar_t), c_dlg->getCode().c_str());
+				wcscpy_s(oData.Code, sizeof(oData.Code) / sizeof(wchar_t), dlg->getCode().c_str());
 
-				delete c_dlg;
-				c_dlg = nullptr;
-				oShMemory.Detach((void *)oData);
+				delete dlg;
+				dlg = NULL;				
+				writeAskInputCMDArguments(secondPipe, (void*)&oData);
 				return 0;
 			}
-			delete c_dlg;
-			c_dlg = nullptr;
 		} catch (...) {
 			if (dlg)
 				delete dlg;
-			oData->returnValue = DLG_ERR;
-			oShMemory.Detach((void *)oData);
+			oData.returnValue = DLG_ERR;
+			writeAskInputCMDArguments(secondPipe, (void*)&oData);
 			return 0;
 		}
-		oData->returnValue = DLG_CANCEL;
-		oShMemory.Detach((void *)oData);
+		oData.returnValue = DLG_CANCEL;
+		writeAskInputCMDArguments(secondPipe, (void*)&oData);
 		return 0;
 
 	} else if (iFunctionIndex == DLG_PICK_DEVICE) {
@@ -706,18 +710,16 @@ int main(int argc, char *argv[]) {
 		return 0;
 
 	} else if (iFunctionIndex == DLG_CMD_MSG) {
-		// Similar to PinpadInfo
-		oShMemory = new SharedMem();
-
-		if ((argc == 3) || (argc == 7)) {
+		if ((argc == 4) || (argc == 8)) {
+			readCMDMessageArguments(firstPipe, (void*)&oCmdMsgData);
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s called with DLG_CMD_MSG", argv[0]);
 
 			char csCommand[100];
-			sprintf(csCommand, "%s %s %s", argv[0], argv[1], argv[2]);
+			sprintf(csCommand, "%s %s %s %s", argv[0], argv[1], argv[2], argv[3]);
 			int len;
-			if (argc == 7) {
+			if (argc == 8) {
 				len = strlen(csCommand);
-				sprintf(&csCommand[len], " %s %s %s %s", argv[3], argv[4], argv[5], argv[6]);
+				sprintf(&csCommand[len], " %s %s %s %s", argv[4], argv[5], argv[6], argv[7]);
 			}
 			len = strlen(csCommand);
 			sprintf(&csCommand[len], " child");
@@ -741,8 +743,8 @@ int main(int argc, char *argv[]) {
 				// See __THE_PROCESS_HAS_FORKED_AND_YOU_CANNOT_USE_THIS_COREFOUNDATION_FUNCTIONALITY___YOU_MUST_EXEC__
 				int code = system(csCommand);
 				if (code != 0) {
-					MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::CallQTServer %s %s child : %s, returned code=%d", argv[1],
-						  argv[2], strerror(errno), code);
+					MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::CallQTServer %s %s child : %s, returned code=%d csCommand: %s", argv[2],
+						  argv[3], strerror(errno), code, csCommand);
 					exit(code);
 				}
 
@@ -764,27 +766,24 @@ int main(int argc, char *argv[]) {
 					}
 				}
 
-				oShMemory->Attach(sizeof(DlgCMDMessageArguments), readableFilePath.c_str(), (void **)&oCmdMsgData);
 
 				if (subpid == 0) {
 					MWLOG(LEV_ERROR, MOD_DLG, L"  %s failed to find child process ID", argv[0]);
-					oCmdMsgData->returnValue = DLG_ERR;
+					oCmdMsgData.returnValue = DLG_ERR;
+					writeCMDMessageArguments(secondPipe, (void*)&oCmdMsgData);
 				} else {
 					MWLOG(LEV_DEBUG, MOD_DLG, L"  %s find child process with PID %ld", argv[0], subpid);
-					oCmdMsgData->tRunningProcess = subpid;
-					oCmdMsgData->returnValue = DLG_OK;
+					oCmdMsgData.tRunningProcess = subpid;
+					oCmdMsgData.returnValue = DLG_OK;
+					writeCMDMessageArguments(secondPipe, (void*)&oCmdMsgData);
 				}
-
-				// wait(NULL);
-
-				oShMemory->Detach((void *)oCmdMsgData);
-
 				return 0;
 			}
 		} else {
 			// attach to the segment and get a pointer
-			oShMemory->Attach(sizeof(DlgCMDMessageArguments), readableFilePath.c_str(), (void **)&oCmdMsgData);
-			MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_CMD_MSG");
+			MWLOG(LEV_DEBUG, MOD_DLG, L"Running before read DLG_CMD_MSG firstPipe: %d", firstPipe);
+			readCMDMessageArguments(firstPipe, (void*)&oCmdMsgData);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"Running after read cmd message DLG_CMD_MSG");
 
 			QApplication a(argc, argv);
 			a.setFont(getLatoFont());
@@ -792,10 +791,10 @@ int main(int argc, char *argv[]) {
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QApplication created", argv[0]);
 
 			try {
-				QString message = QString::fromWCharArray(oCmdMsgData->message);
-				DlgCmdMsgType type = oCmdMsgData->type;
+				QString message = QString::fromWCharArray(oCmdMsgData.message);
+				DlgCmdMsgType type = oCmdMsgData.type;
 
-				dlg = new dlgWndCmdMsg(oCmdMsgData->operation, type, message, oCmdMsgData->cmdMsgCollectorIndex, NULL,
+				dlg = new dlgWndCmdMsg(oCmdMsgData.operation, type, message, oCmdMsgData.cmdMsgCollectorIndex, NULL,
 									   &parentWndGeometry);
 
 				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndCmdMsg created", argv[0]);
@@ -805,10 +804,7 @@ int main(int argc, char *argv[]) {
 					dlg = NULL;
 				}
 
-				oCmdMsgData->returnValue = (res == QDialog::Rejected ? DLG_CANCEL : DLG_OK);
-				oShMemory->Detach((void *)oCmdMsgData);
-				SharedMem::Delete(oShMemory->getID());
-				delete oShMemory;
+				oCmdMsgData.returnValue = (res == QDialog::Rejected ? DLG_CANCEL : DLG_OK);
 				return 0;
 
 			} catch (...) {
@@ -818,13 +814,9 @@ int main(int argc, char *argv[]) {
 					dlg = NULL;
 				}
 
-				oCmdMsgData->returnValue = DLG_ERR;
-				oShMemory->Detach((void *)oCmdMsgData);
-				delete oShMemory;
-				// SharedMem::Delete(oShMemory.getID());
+				oCmdMsgData.returnValue = DLG_ERR;
 				return 0;
 			}
-			delete oShMemory;
 			return 0;
 		}
 	}

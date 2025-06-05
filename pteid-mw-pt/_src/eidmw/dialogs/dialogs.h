@@ -325,6 +325,9 @@ struct DlgAskPINArguments {
 	DlgRet returnValue;
 };
 
+void writeAskPinArguments(int fd, void *arg);
+void readAskPinArguments(int fd, void *arg);
+
 struct DlgAskPINsArguments {
 	DlgPinOperation operation;
 	DlgPinUsage usage;
@@ -354,6 +357,9 @@ struct DlgDisplayPinpadInfoArguments {
 	DlgRet returnValue;
 };
 
+void writeAskInputCMDArguments(int fd, void *arg);
+void readAskInputCMDArguments(int fd, void *arg);
+
 struct DlgAskInputCMDArguments {
 	wchar_t inOutId[50] = {0};
 	DlgCmdOperation operation;
@@ -368,6 +374,9 @@ struct DlgPickDeviceArguments {
 	DlgDevice outDevice;
 	DlgRet returnValue;
 };
+
+void writeCMDMessageArguments(int fd, void *arg);
+void readCMDMessageArguments(int fd, void *arg);
 
 struct DlgCMDMessageArguments {
 	wchar_t message[50] = {0};
@@ -391,16 +400,16 @@ struct WndGeometry {
 	int height;
 };
 typedef struct WndGeometry Type_WndGeometry;
+typedef void (*readArgument)(int, void *);
+typedef void (*writeArgument)(int, void *);
 
- void InitializeRand();
- std::string RandomFileName();
- std::string CreateRandomFile();
- void DeleteFile(const char *csFilename);
- void CallQTServer(    const DlgFunctionIndex index
-                    ,  const char *csFilename
-                    , void *wndGeometry = 0 );
- void CallQTServerInput(    const DlgFunctionIndex index
-                    ,  const char *csFilename);
+void InitializeRand();
+std::string RandomFileName();
+std::string CreateRandomFile();
+void DeleteFile(const char *csFilename);
+void CallQTServer(const DlgFunctionIndex index, const char *csFilename, void *wndGeometry = 0);
+void CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc, writeArgument writeFunc, void *args, bool processStore = false,
+					  void *wndGeometry = 0);
 
 DLGS_EXPORT bool getWndCenterPos(Type_WndGeometry *pWndGeometry, int desktop_width, int desktop_height, int wnd_width,
 								 int wnd_height, Type_WndGeometry *outWndGeometry);

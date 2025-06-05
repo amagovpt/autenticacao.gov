@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "errno.h"
@@ -66,49 +67,200 @@ static bool g_bSystemCallsFail = false;
  ************************/
 
 // TODO: Add Keypad possibility in DlgAskPin(s)
+void eIDMW::writeAskPinArguments(int fd, void *arg) {
+	char *buffer;
+	char *initBuffer;
+	DlgAskPINArguments *pinArg = (DlgAskPINArguments *)(arg);
+	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->pinInfo) +
+			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) + sizeof(pinArg->returnValue);
+
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+	memcpy(buffer, &pinArg->operation, sizeof(pinArg->operation));
+	buffer += sizeof(pinArg->operation);
+	memcpy(buffer, &pinArg->usage, sizeof(pinArg->usage));
+	buffer += sizeof(pinArg->usage);
+	memcpy(buffer, &pinArg->pinName, 50 * sizeof(wchar_t));
+	buffer += 50 * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pinInfo, sizeof(pinArg->pinInfo));
+	buffer += sizeof(pinArg->pinInfo);
+	memcpy(buffer, &pinArg->pin, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
+	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
+	write(fd, initBuffer, len);
+	free(initBuffer);
+}
+
+void eIDMW::readAskPinArguments(int fd, void *arg) {
+	char *buffer;
+	char *initBuffer;
+	DlgAskPINArguments *pinArg = (DlgAskPINArguments *)(arg);
+	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + (50 * sizeof(wchar_t)) + sizeof(pinArg->pinInfo) +
+			  ((PIN_MAX_LENGTH + 1) * sizeof(wchar_t)) + sizeof(pinArg->returnValue);
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+
+	memcpy(&pinArg->operation, buffer, sizeof(pinArg->operation));
+	buffer += sizeof(pinArg->operation);
+	memcpy(&pinArg->usage, buffer, sizeof(pinArg->usage));
+	buffer += sizeof(pinArg->usage);
+	memcpy(&pinArg->pinName, buffer, 50 * sizeof(wchar_t));
+	buffer += 50 * sizeof(wchar_t);
+	memcpy(&pinArg->pinInfo, buffer, sizeof(pinArg->pinInfo));
+	buffer += sizeof(pinArg->pinInfo);
+	memcpy(&pinArg->pin, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
+	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(&pinArg->returnValue, buffer, sizeof(pinArg->returnValue));
+	free(initBuffer);
+}
+
+void eIDMW::writeAskInputCMDArguments(int fd, void *arg) {
+	char *buffer;
+	char *initBuffer;
+	DlgAskInputCMDArguments *cmdArg = (DlgAskInputCMDArguments *)(arg);
+
+	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->isValidateOtp) +
+			  sizeof(cmdArg->callbackWasCalled) + ((PIN_MAX_LENGTH + 1) * sizeof(wchar_t)) + sizeof(cmdArg->askForId) +
+			  sizeof(cmdArg->returnValue);
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+
+	memcpy(buffer, &cmdArg->inOutId, sizeof(wchar_t) * 50);
+	buffer += sizeof(wchar_t) * 50;
+	memcpy(buffer, &cmdArg->operation, sizeof(cmdArg->operation));
+	buffer += sizeof(cmdArg->operation);
+
+	memcpy(buffer, &cmdArg->isValidateOtp, sizeof(cmdArg->isValidateOtp));
+	buffer += sizeof(cmdArg->isValidateOtp);
+
+	memcpy(buffer, &cmdArg->callbackWasCalled, sizeof(cmdArg->callbackWasCalled));
+	buffer += sizeof(cmdArg->callbackWasCalled);
+
+	memcpy(buffer, &cmdArg->Code, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
+	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+
+	memcpy(buffer, &cmdArg->askForId, sizeof(cmdArg->askForId));
+	buffer += sizeof(cmdArg->askForId);
+
+	memcpy(buffer, &cmdArg->returnValue, sizeof(cmdArg->returnValue));
+
+	write(fd, initBuffer, len);
+	free(initBuffer);
+}
+
+void eIDMW::readAskInputCMDArguments(int fd, void *arg) {
+	char *buffer;
+	char *initBuffer;
+	DlgAskInputCMDArguments *cmdArg = (DlgAskInputCMDArguments *)(arg);
+
+	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->isValidateOtp) +
+			  sizeof(cmdArg->callbackWasCalled) + ((PIN_MAX_LENGTH + 1) * sizeof(wchar_t)) + sizeof(cmdArg->askForId) +
+			  sizeof(cmdArg->returnValue);
+	buffer = (char *)malloc(len);
+	read(fd, buffer, len);
+	initBuffer = buffer;
+
+	memcpy(&cmdArg->inOutId, buffer, sizeof(wchar_t) * 50);
+	buffer += sizeof(wchar_t) * 50;
+	memcpy(&cmdArg->operation, buffer, sizeof(cmdArg->operation));
+	buffer += sizeof(cmdArg->operation);
+
+	memcpy(&cmdArg->isValidateOtp, buffer, sizeof(cmdArg->isValidateOtp));
+	buffer += sizeof(cmdArg->isValidateOtp);
+
+	memcpy(&cmdArg->callbackWasCalled, buffer, sizeof(cmdArg->callbackWasCalled));
+	buffer += sizeof(cmdArg->callbackWasCalled);
+
+	memcpy(&cmdArg->Code, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
+	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+
+	memcpy(&cmdArg->askForId, buffer, sizeof(cmdArg->askForId));
+	buffer += sizeof(cmdArg->askForId);
+
+	memcpy(&cmdArg->returnValue, buffer, sizeof(cmdArg->returnValue));
+
+	free(initBuffer);
+}
+
+void eIDMW::writeCMDMessageArguments(int fd, void *arg) {
+	char *buffer;
+	char *initBuffer;
+	DlgCMDMessageArguments *cmdArg = (DlgCMDMessageArguments *)(arg);
+
+	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->type) + sizeof(cmdArg->returnValue) +
+			  sizeof(cmdArg->cmdMsgCollectorIndex) + sizeof(cmdArg->tRunningProcess);
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+	memcpy(buffer, &cmdArg->message, sizeof(wchar_t) * 50);
+	buffer += sizeof(wchar_t) * 50;
+	memcpy(buffer, &cmdArg->operation, sizeof(cmdArg->operation));
+	buffer += sizeof(cmdArg->operation);
+	memcpy(buffer, &cmdArg->type, sizeof(cmdArg->type));
+	buffer += sizeof(cmdArg->type);
+	memcpy(buffer, &cmdArg->returnValue, sizeof(cmdArg->returnValue));
+	buffer += sizeof(cmdArg->returnValue);
+	memcpy(buffer, &cmdArg->cmdMsgCollectorIndex, sizeof(cmdArg->cmdMsgCollectorIndex));
+	buffer += sizeof(cmdArg->cmdMsgCollectorIndex);
+	memcpy(buffer, &cmdArg->tRunningProcess, sizeof(cmdArg->tRunningProcess));
+
+	write(fd, initBuffer, len);
+	free(initBuffer);
+}
+
+void eIDMW::readCMDMessageArguments(int fd, void *arg) {
+	char *buffer;
+	char *initBuffer;
+	DlgCMDMessageArguments *cmdArg = (DlgCMDMessageArguments *)(arg);
+	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->type) + sizeof(cmdArg->returnValue) +
+			  sizeof(cmdArg->cmdMsgCollectorIndex) + sizeof(cmdArg->tRunningProcess);
+	buffer = (char *)malloc(len);
+	read(fd, buffer, len);
+	initBuffer = buffer;
+
+	memcpy(&cmdArg->message, buffer, sizeof(wchar_t) * 50);
+	buffer += sizeof(wchar_t) * 50;
+	memcpy(&cmdArg->operation, buffer, sizeof(cmdArg->operation));
+	buffer += sizeof(cmdArg->operation);
+	memcpy(&cmdArg->type, buffer, sizeof(cmdArg->type));
+	buffer += sizeof(cmdArg->type);
+	memcpy(&cmdArg->returnValue, buffer, sizeof(cmdArg->returnValue));
+	buffer += sizeof(cmdArg->returnValue);
+	memcpy(&cmdArg->cmdMsgCollectorIndex, buffer, sizeof(cmdArg->cmdMsgCollectorIndex));
+	buffer += sizeof(cmdArg->cmdMsgCollectorIndex);
+	memcpy(&cmdArg->tRunningProcess, buffer, sizeof(cmdArg->tRunningProcess));
+
+}
+
 DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation, DlgPinUsage usage, const wchar_t *wsPinName,
 									DlgPinInfo pinInfo, wchar_t *wsPin, unsigned long ulPinBufferLen,
 									void *wndGeometry) {
 	DlgRet lRet = DLG_CANCEL;
 
-	DlgAskPINArguments *oData;
-	SharedMem oShMemory;
-	std::string csReadableFilePath;
+	DlgAskPINArguments oData;
+	char msg[] = "Hello from parent";
 
 	try {
-		csReadableFilePath = CreateRandomFile();
+		oData.operation = operation;
+		oData.usage = usage;
+		wcscpy_s(oData.pinName, sizeof(oData.pinName) / sizeof(wchar_t), wsPinName);
+		oData.pinInfo = pinInfo;
+		wcscpy_s(oData.pin, sizeof(oData.pin) / sizeof(wchar_t), wsPin);
 
-		// creating the shared memory segment
-		// attach oData
-		oShMemory.Attach(sizeof(DlgAskPINArguments), csReadableFilePath.c_str(), (void **)&oData);
-
-		// collect the arguments into the struct placed
-		// on the shared memory segment
-		oData->operation = operation;
-		oData->usage = usage;
-		wcscpy_s(oData->pinName, sizeof(oData->pinName) / sizeof(wchar_t), wsPinName);
-		oData->pinInfo = pinInfo;
-		wcscpy_s(oData->pin, sizeof(oData->pin) / sizeof(wchar_t), wsPin);
-
-		CallQTServer(DLG_ASK_PIN, csReadableFilePath.c_str(), wndGeometry);
-		lRet = oData->returnValue;
+		//int fd1 = open("/tmp/pin1", O_WRONLY);
+		//write(fd1, msg, strlen(msg) + 1);
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgAskPin print debug before call qt");
+		CallQTServerPipe(DLG_ASK_PIN, readAskPinArguments, writeAskPinArguments, (void *)&oData, wndGeometry);
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgAskPin print debug after call qt");
+		lRet = oData.returnValue;
 
 		if (lRet == DLG_OK) {
-			wcscpy_s(wsPin, ulPinBufferLen, oData->pin);
+			wcscpy_s(wsPin, ulPinBufferLen, oData.pin);
 		}
 
 		// detach from the segment
-		oShMemory.Detach(oData);
 
 		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 	} catch (...) {
-
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 
 		return DLG_ERR;
 	}
@@ -357,66 +509,41 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgAskInputCMD called");
 	DlgRet lRet = DLG_CANCEL;
 
-	DlgAskInputCMDArguments *oData;
-	SharedMem oShMemory;
-	std::string csReadableFilePath;
+	DlgAskInputCMDArguments oData;
 
 	try {
-		csReadableFilePath = CreateRandomFile();
-
-		// creating the shared memory segment
-		// attach oData
-		oShMemory.Attach(sizeof(DlgAskInputCMDArguments), csReadableFilePath.c_str(), (void **)&oData);
-
-		// collect the arguments into the struct placed
-		// on the shared memory segment
-		oData->isValidateOtp = isValidateOtp;
-		oData->operation = operation;
-		oData->askForId = ulOutIdLen != 0;
+		oData.isValidateOtp = isValidateOtp;
+		oData.operation = operation;
+		oData.askForId = ulOutIdLen != 0;
 
 		if (isValidateOtp) {
-			wcsncpy(oData->inOutId, csInOutId, sizeof(oData->inOutId) / sizeof(wchar_t));
+			wcsncpy(oData.inOutId, csInOutId, sizeof(oData.inOutId) / sizeof(wchar_t));
 		} else {
 			// Cached mobile number for CMD PIN dialog
-			wcsncpy(oData->inOutId, csInOutId, ulOutIdLen);
+			wcsncpy(oData.inOutId, csInOutId, ulOutIdLen);
 		}
 
-		// CallQTServer(DLG_ASK_CMD_INPUT,csReadableFilePath.c_str(), NULL);
-		CallQTServerInput(DLG_ASK_CMD_INPUT, csReadableFilePath.c_str());
-		lRet = oData->returnValue;
+		CallQTServerPipe(DLG_ASK_CMD_INPUT, readAskInputCMDArguments, writeAskInputCMDArguments, (void *)&oData);
+		lRet = oData.returnValue;
 
 		/* If the callback button to send the sms was pressed, call callback and reopen the dialog.
 		  callbackWasCalled in oData is set to true to disable the button. */
-		if (oData->returnValue == DLG_CALLBACK) {
+		if (oData.returnValue == DLG_CALLBACK) {
 			(*fSendSmsCallback)();
-			oData->callbackWasCalled = true;
-			// Reset to a safe default, in case the subprocess is killed (biometric success)
-			oData->returnValue = DLG_CANCEL;
-			// CallQTServer(DLG_ASK_CMD_INPUT,csReadableFilePath.c_str(), NULL );
-			CallQTServerInput(DLG_ASK_CMD_INPUT, csReadableFilePath.c_str());
-			lRet = oData->returnValue;
+			oData.callbackWasCalled = true;
+			oData.returnValue = DLG_CANCEL;
+			CallQTServerPipe(DLG_ASK_CMD_INPUT, readAskInputCMDArguments, writeAskInputCMDArguments, (void *)&oData);
+			lRet = oData.returnValue;
 		}
 
 		if (lRet == DLG_OK) {
 			if (!isValidateOtp) {
-				wcscpy_s(csInOutId, ulOutIdLen, oData->inOutId);
+				wcscpy_s(csInOutId, ulOutIdLen, oData.inOutId);
 			}
 
-			wcscpy_s(csOutCode, ulOutCodeBufferLen, oData->Code);
+			wcscpy_s(csOutCode, ulOutCodeBufferLen, oData.Code);
 		}
-
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 	} catch (...) {
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
-
 		return DLG_ERR;
 	}
 	return lRet;
@@ -477,29 +604,19 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgCMDMessage called");
 	DlgRet lRet = DLG_CANCEL;
 
-	DlgCMDMessageArguments *oCmdMessageData;
-	SharedMem oShMemory;
-	std::string csReadableFilePath;
+	DlgCMDMessageArguments oCmdMessageData;
 
 	try {
-		csReadableFilePath = CreateRandomFile();
+		oCmdMessageData.type = type;
+		oCmdMessageData.operation = operation;
+		wcscpy_s(oCmdMessageData.message, sizeof(oCmdMessageData.message) / sizeof(wchar_t), message);
+		oCmdMessageData.cmdMsgCollectorIndex = ++dlgCMDMsgCollectorIndex;
 
-		// creating the shared memory segment
-		// attach oCmdMessageData
-		oShMemory.Attach(sizeof(DlgCMDMessageArguments), csReadableFilePath.c_str(), (void **)&oCmdMessageData);
-
-		oCmdMessageData->type = type;
-		oCmdMessageData->operation = operation;
-		wcscpy_s(oCmdMessageData->message, sizeof(oCmdMessageData->message) / sizeof(wchar_t), message);
-		oCmdMessageData->cmdMsgCollectorIndex = ++dlgCMDMsgCollectorIndex;
-
-		CallQTServer(DLG_CMD_MSG, csReadableFilePath.c_str(), NULL);
+		CallQTServerPipe(DLG_CMD_MSG, readCMDMessageArguments, writeCMDMessageArguments, (void*)&oCmdMessageData, true);
 
 		DlgRunningProc *ptRunningProc = new DlgRunningProc();
-		ptRunningProc->iSharedMemSegmentID = oShMemory.getID();
-		ptRunningProc->csRandomFilename = csReadableFilePath;
 
-		ptRunningProc->tRunningProcess = oCmdMessageData->tRunningProcess;
+		ptRunningProc->tRunningProcess = oCmdMessageData.tRunningProcess;
 
 		dlgCMDMsgCollector[dlgCMDMsgCollectorIndex] = ptRunningProc;
 
@@ -522,26 +639,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 		dlgCMDMsgCollector[dlgCMDMsgCollectorIndex] = NULL;
 		dlgCMDMsgCollector.erase(dlgCMDMsgCollectorIndex);
 
-		lRet = oCmdMessageData->returnValue;
-
-		// detach from the segment
-		oShMemory.Detach(oCmdMessageData);
-		oCmdMessageData = NULL;
-
-		// delete the random file
-		// DeleteFile(csReadableFilePath.c_str());
-		if (access(csReadableFilePath.c_str(), F_OK) != -1) {
-			// delete the random file
-			DeleteFile(csReadableFilePath.c_str());
-		}
-
+		lRet = oCmdMessageData.returnValue;
 	} catch (...) {
-		// detach from the segment
-		oShMemory.Detach(oCmdMessageData);
-		oCmdMessageData = NULL;
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 
 		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage failed");
 
@@ -655,6 +754,48 @@ void eIDMW::DeleteFile(const char *csFilename) {
 	}
 }
 
+void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc, writeArgument writeFunc, void *args, bool processStore,
+							 void *wndGeometry) {
+	Type_WndGeometry *pWndGeometry = (Type_WndGeometry *)wndGeometry;
+
+	std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
+#ifdef __APPLE__
+	csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/pteiddialogsQTsrv";
+#endif
+
+	int pipe1[2]; // parent -> child
+	int pipe2[2]; // child -> parent
+
+	pipe(pipe1);
+	pipe(pipe2);
+	pid_t pid = fork();
+	if (pid == 0) {
+		char indexBuff[2];
+		char pipe1Buff[10];
+		char pipe2Buff[10];
+		snprintf(indexBuff, sizeof(indexBuff), "%i", index);
+
+		snprintf(pipe1Buff, sizeof(pipe1Buff), "%d", pipe1[0]);
+		snprintf(pipe2Buff, sizeof(pipe2Buff), "%d", pipe2[1]);
+
+		execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
+
+		exit(1);
+	} else {
+		current_dlg_pid = pid;
+		writeFunc(pipe1[1], args);
+		readFunc(pipe2[0], args);
+		if(processStore) {
+			writeFunc(pipe1[1], args);
+		}
+		close(pipe1[0]);
+		close(pipe1[1]);
+		close(pipe2[0]);
+		close(pipe2[1]);
+		current_dlg_pid = 0;
+	}
+}
+
 void eIDMW::CallQTServer(const DlgFunctionIndex index, const char *csFilename, void *wndGeometry) {
 	char csCommand[150];
 	Type_WndGeometry *pWndGeometry = (Type_WndGeometry *)wndGeometry;
@@ -682,36 +823,6 @@ void eIDMW::CallQTServer(const DlgFunctionIndex index, const char *csFilename, v
 	}
 	return;
 }
-
-void eIDMW::CallQTServerInput(const DlgFunctionIndex index, const char *csFilename) {
-
-	char csPath[150];
-	std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
-#ifdef __APPLE__
-	csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/";
-#endif
-
-	sprintf(csPath, "%s/%s", csServerPath.c_str(), csServerName.c_str());
-
-	std::vector<const char *> argv;
-	argv.push_back(csServerName.c_str());
-	argv.push_back(std::to_string(index).c_str());
-	argv.push_back(csFilename);
-	argv.push_back(NULL);
-
-	int pid = fork();
-	if (pid == 0) {
-		// Execs the process
-		execv(csPath, const_cast<char *const *>(argv.data()));
-	} else {
-		current_dlg_pid = pid;
-		// Waits for the execv to end;
-		wait(NULL);
-		current_dlg_pid = 0;
-	}
-	return;
-}
-
 bool eIDMW::getWndCenterPos(Type_WndGeometry *pWndGeometry, int desktop_width, int desktop_height, int wnd_width,
 							int wnd_height, Type_WndGeometry *outWndGeometry) {
 
