@@ -849,7 +849,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 
 	getCardInstance(card);
 	if (card == NULL) {
-		if (CardOperation::ICAOData) {
+		if (op == CardOperation::ICAOData) {
 			try {
 				unsigned long ReaderCount = ReaderSet.readerCount();
 				PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance Card Reader count =  %ld", ReaderCount);
