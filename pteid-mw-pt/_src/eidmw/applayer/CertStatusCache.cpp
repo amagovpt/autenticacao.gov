@@ -165,21 +165,6 @@ APL_CertStatusCache::~APL_CertStatusCache(void) {
 	MWLOG(LEV_INFO, MOD_APL, L"Delete CertStatusCache object");
 }
 
-/*
-void APL_CertStatusCache::Init(unsigned long ulMaxNbrLine, unsigned long ulNormalDelay, unsigned long ulWaitDelay,
-							   std::string cachefilename) {
-	m_ulMaxNbrLine = ulMaxNbrLine;
-
-	if (ulNormalDelay > 0)
-		m_ulNormalDelay = ulNormalDelay;
-
-	if (ulWaitDelay > 0)
-		m_ulWaitDelay = ulWaitDelay;
-
-	if (cachefilename != "")
-		m_cachefilename = cachefilename;
-} */
-
 // Get the certificate status
 CSC_Status APL_CertStatusCache::getCertStatus(unsigned long ulUniqueID, const CSC_Validation validationType,
 											  APL_Certifs *certStore, bool useCache, bool validateChain) {
