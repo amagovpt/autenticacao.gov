@@ -138,7 +138,11 @@ APL_CertStatusCache::APL_CertStatusCache(APL_CryptoFwk *cryptoFwk) {
 	m_cryptoFwk = cryptoFwk;
 
 	APL_Config conf_file(CConfig::EIDMW_CONFIG_PARAM_CERTCACHE_CACHEFILE);
+#ifdef _WIN32
+	m_cachefilename = conf_file.getWString();
+#else 
 	m_cachefilename = conf_file.getString();
+#endif
 
 	APL_Config conf_NbrLine(CConfig::EIDMW_CONFIG_PARAM_CERTCACHE_LINENUMB);
 	m_ulMaxNbrLine = conf_NbrLine.getLong();
@@ -161,6 +165,7 @@ APL_CertStatusCache::~APL_CertStatusCache(void) {
 	MWLOG(LEV_INFO, MOD_APL, L"Delete CertStatusCache object");
 }
 
+/*
 void APL_CertStatusCache::Init(unsigned long ulMaxNbrLine, unsigned long ulNormalDelay, unsigned long ulWaitDelay,
 							   std::string cachefilename) {
 	m_ulMaxNbrLine = ulMaxNbrLine;
@@ -173,7 +178,7 @@ void APL_CertStatusCache::Init(unsigned long ulMaxNbrLine, unsigned long ulNorma
 
 	if (cachefilename != "")
 		m_cachefilename = cachefilename;
-}
+} */
 
 // Get the certificate status
 CSC_Status APL_CertStatusCache::getCertStatus(unsigned long ulUniqueID, const CSC_Validation validationType,
@@ -397,7 +402,7 @@ bool APL_CertStatusCache::loadFile() {
 	iLoop = 0;
 	do {
 #ifdef WIN32
-		err = fopen_s(&m_f, m_cachefilename.c_str(), "r");
+		err = _wfopen_s(&m_f, m_cachefilename.c_str(), L"r");
 #else
 		m_f = fopen(m_cachefilename.c_str(), "r");
 		if (m_f == NULL)
@@ -423,8 +428,8 @@ bool APL_CertStatusCache::loadFile() {
 	if (m_f == NULL) {
 		err = 0;
 #ifdef WIN32
-		err = fopen_s(&m_f, m_cachefilename.c_str(), "w");
-		SetFileAttributesA(m_cachefilename.c_str(), FILE_ATTRIBUTE_HIDDEN);
+		err = _wfopen_s(&m_f, m_cachefilename.c_str(), L"w");
+		SetFileAttributesW(m_cachefilename.c_str(), FILE_ATTRIBUTE_HIDDEN);
 #else
 		m_f = fopen(m_cachefilename.c_str(), "w");
 		if (m_f == NULL)
@@ -475,12 +480,12 @@ bool APL_CertStatusCache::writeFile() {
 		err = 0;
 
 		// As the file is set with hidden attribute, we need to remove it before open it in write mode
-		if (0 != remove(m_cachefilename.c_str()))
+		if (0 != _wremove(m_cachefilename.c_str()))
 			err = errno;
 
 		// If the remove succeeded or the file does not exist, we open it in write mode
 		if (err == 0 || err == ENOENT)
-			err = fopen_s(&m_f, m_cachefilename.c_str(), "w");
+			err = _wfopen_s(&m_f, m_cachefilename.c_str(), L"w");
 
 		// If this is an unknown error, we quit
 		if (err != 0 && err != EACCES && err != ENOENT)
@@ -498,7 +503,7 @@ bool APL_CertStatusCache::writeFile() {
 		return false; // Added for unit testing
 	}
 	_lock_file(m_f);
-	SetFileAttributesA(m_cachefilename.c_str(), FILE_ATTRIBUTE_HIDDEN);
+	SetFileAttributesW(m_cachefilename.c_str(), FILE_ATTRIBUTE_HIDDEN);
 #else
 	m_f = freopen(m_cachefilename.c_str(), "w", m_f);
 	if (m_f == NULL)

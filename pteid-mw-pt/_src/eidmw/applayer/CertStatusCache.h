@@ -193,16 +193,6 @@ public:
 	virtual ~APL_CertStatusCache(void);
 
 	/**
-	  * To initialise : 
-	  *		- the max number of line in the file (Default = CSC_MAX_LINE_NUMBER)
-	  *		- the delay for line validity (Default = CSC_MAX_VALIDITY_SECOND)
-	  *		- the delay for wait line validity (Default = CSC_MAX_WAITVALIDITY_SECOND)
-	  *		- the file name (Default = comes from config)
-	  */
-	void Init(unsigned long ulMaxNbrLine, unsigned long ulNormalDelay = 0, unsigned long ulWaitDelay = 0,
-			  std::string cachefilename = "");
-
-	/**
 	  * Return the Status of a certificate
 	  *
 	  * - First look in the cache if the status is there and still valid 
@@ -319,8 +309,13 @@ private:
 	CMutex m_Mutex; /**< Mutex for exclusive access */
 
 	APL_CryptoFwk *m_cryptoFwk; /**< Pointer to the crypto framework */
-
-	std::string m_cachefilename;   /**< The name of the cache file */
+	
+	/* Full path of the cache file */
+#ifdef _WIN32
+	std::wstring m_cachefilename;
+#else
+	std::string m_cachefilename;   
+#endif
 	unsigned long m_ulMaxNbrLine;  /**< The maximum number of line that the file can contain */
 	unsigned long m_ulNormalDelay; /**< The delay of lines validity in the cache  */
 	unsigned long
