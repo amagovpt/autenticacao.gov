@@ -139,11 +139,7 @@ void OAuthAttributes::showReturnPage(QTcpSocket *conn, bool tokenSuccess) {
 		pagePath.append("/AutenticacaoGov_failed.html");
 	}
 
-#ifdef WIN32
-	QFile inputFile(QString::fromLatin1(pagePath.c_str()));
-#else
 	QFile inputFile(pagePath.c_str());
-#endif
 	if (inputFile.open(QIODevice::ReadOnly)) {
 		conn->write("HTTP/1.0 200 OK\r\n");
 		conn->write("Content-Type: text/html; charset=\"utf-8\"\r\n\r\n");
