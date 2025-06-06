@@ -98,6 +98,7 @@ void eIDMW::readAskPinArguments(int fd, void *arg) {
 	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + (50 * sizeof(wchar_t)) + sizeof(pinArg->pinInfo) +
 			  ((PIN_MAX_LENGTH + 1) * sizeof(wchar_t)) + sizeof(pinArg->returnValue);
 	buffer = (char *)malloc(len);
+	read(fd, buffer, len);
 	initBuffer = buffer;
 
 	memcpy(&pinArg->operation, buffer, sizeof(pinArg->operation));
@@ -111,6 +112,110 @@ void eIDMW::readAskPinArguments(int fd, void *arg) {
 	memcpy(&pinArg->pin, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
 	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
 	memcpy(&pinArg->returnValue, buffer, sizeof(pinArg->returnValue));
+	free(initBuffer);
+}
+
+void eIDMW::writeAskPinsArguments(int fd, void *arg)
+{
+	char *buffer;
+	char *initBuffer;
+	DlgAskPINsArguments *pinArg = (DlgAskPINsArguments *)(arg);
+	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->pin1Info) +
+			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) +  sizeof(pinArg->pin2Info) +
+			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) + sizeof(pinArg->returnValue);
+
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+	memcpy(buffer, &pinArg->operation, sizeof(pinArg->operation));
+	buffer += sizeof(pinArg->operation);
+	memcpy(buffer, &pinArg->usage, sizeof(pinArg->usage));
+	buffer += sizeof(pinArg->usage);
+	memcpy(buffer, &pinArg->pinName, 50 * sizeof(wchar_t));
+	buffer += 50 * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pin1Info, sizeof(pinArg->pin1Info));
+	buffer += sizeof(pinArg->pin1Info);
+	memcpy(buffer, &pinArg->pin1, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
+	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pin2Info, sizeof(pinArg->pin2Info));
+	buffer += sizeof(pinArg->pin2Info);
+	memcpy(buffer, &pinArg->pin2, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
+	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
+
+	write(fd, initBuffer, len);
+	free(initBuffer);
+}
+
+void eIDMW::readAskPinsArguments(int fd, void *arg) {
+	char *buffer;
+	char *initBuffer;
+	DlgAskPINsArguments *pinArg = (DlgAskPINsArguments *)(arg);
+	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->pin1Info) +
+			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) +  sizeof(pinArg->pin2Info) +
+			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) + sizeof(pinArg->returnValue);
+	buffer = (char *)malloc(len);
+	read(fd, buffer, len);
+	initBuffer = buffer;
+
+	memcpy(&pinArg->operation, buffer, sizeof(pinArg->operation));
+	buffer += sizeof(pinArg->operation);
+	memcpy(&pinArg->usage, buffer, sizeof(pinArg->usage));
+	buffer += sizeof(pinArg->usage);
+	memcpy(&pinArg->pinName, buffer, 50 * sizeof(wchar_t));
+	buffer += 50 * sizeof(wchar_t);
+	memcpy(&pinArg->pin1Info, buffer, sizeof(pinArg->pin1Info));
+	buffer += sizeof(pinArg->pin1Info);
+	memcpy(&pinArg->pin1, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
+	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(&pinArg->pin2Info, buffer, sizeof(pinArg->pin2Info));
+	buffer += sizeof(pinArg->pin2Info);
+	memcpy(&pinArg->pin2, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
+	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(&pinArg->returnValue, buffer, sizeof(pinArg->returnValue));
+
+	free(initBuffer);
+}
+
+void eIDMW::writeBadPinArguments(int fd, void *arg)
+{
+	char *buffer;
+	char *initBuffer;
+	DlgBadPinArguments *pinArg = (DlgBadPinArguments *)(arg);
+	int len = sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->ulRemainingTries) + sizeof(pinArg->returnValue);
+
+	buffer = (char *)malloc(len);
+	read(fd, buffer, len);
+	initBuffer = buffer;
+
+	memcpy(&pinArg->usage, buffer, sizeof(pinArg->usage));
+	buffer += sizeof(pinArg->usage);
+	memcpy(&pinArg->pinName, buffer, 50 * sizeof(wchar_t));
+	buffer += 50 * sizeof(wchar_t);
+	memcpy(&pinArg->ulRemainingTries, buffer, sizeof(pinArg->ulRemainingTries));
+	buffer += sizeof(pinArg->ulRemainingTries);
+	memcpy(&pinArg->returnValue, buffer, sizeof(pinArg->returnValue));
+
+	free(initBuffer);
+}
+void eIDMW::readBadPinArguments(int fd, void *arg)
+{
+	char *buffer;
+	char *initBuffer;
+	DlgBadPinArguments *pinArg = (DlgBadPinArguments *)(arg);
+	int len = sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->ulRemainingTries) + sizeof(pinArg->returnValue);
+
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+
+	memcpy(buffer, &pinArg->usage, sizeof(pinArg->usage));
+	buffer += sizeof(pinArg->usage);
+	memcpy(buffer, &pinArg->pinName, 50 * sizeof(wchar_t));
+	buffer += 50 * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->ulRemainingTries, sizeof(pinArg->ulRemainingTries));
+	buffer += sizeof(pinArg->ulRemainingTries);
+	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
+
+	write(fd, initBuffer, len);
 	free(initBuffer);
 }
 
@@ -247,7 +352,6 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation, DlgPinUsage usage
 	DlgRet lRet = DLG_CANCEL;
 
 	DlgAskPINArguments oData;
-	char msg[] = "Hello from parent";
 
 	try {
 		oData.operation = operation;
@@ -256,8 +360,6 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation, DlgPinUsage usage
 		oData.pinInfo = pinInfo;
 		wcscpy_s(oData.pin, sizeof(oData.pin) / sizeof(wchar_t), wsPin);
 
-		//int fd1 = open("/tmp/pin1", O_WRONLY);
-		//write(fd1, msg, strlen(msg) + 1);
 		MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgAskPin print debug before call qt");
 		CallQTServerPipe(DLG_ASK_PIN, readAskPinArguments, writeAskPinArguments, (void *)&oData, wndGeometry);
 		MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgAskPin print debug after call qt");
@@ -284,47 +386,25 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPins(DlgPinOperation operation, DlgPinUsage usag
 
 	DlgRet lRet = DLG_CANCEL;
 
-	DlgAskPINsArguments *oData;
-	SharedMem oShMemory;
-	std::string csReadableFilePath;
+	DlgAskPINsArguments oData;
 
 	try {
-		csReadableFilePath = CreateRandomFile();
-
-		// creating the shared memory segment
-		// attach oData
-		oShMemory.Attach(sizeof(DlgAskPINsArguments), csReadableFilePath.c_str(), (void **)&oData);
-
-		// collect the arguments into the struct placed
-		// on the shared memory segment
-		oData->operation = operation;
-		oData->usage = usage;
-		wcscpy_s(oData->pinName, sizeof(oData->pinName) / sizeof(wchar_t), wsPinName);
-		oData->pin1Info = pin1Info;
-		oData->pin2Info = pin2Info;
-		wcscpy_s(oData->pin1, sizeof(oData->pin1) / sizeof(wchar_t), wsPin1);
-		wcscpy_s(oData->pin2, sizeof(oData->pin2) / sizeof(wchar_t), wsPin2);
-
-		CallQTServer(DLG_ASK_PINS, csReadableFilePath.c_str(), wndGeometry);
-		lRet = oData->returnValue;
+		oData.operation = operation;
+		oData.usage = usage;
+		wcscpy_s(oData.pinName, sizeof(oData.pinName) / sizeof(wchar_t), wsPinName);
+		oData.pin1Info = pin1Info;
+		oData.pin2Info = pin2Info;
+		wcscpy_s(oData.pin1, sizeof(oData.pin1) / sizeof(wchar_t), wsPin1);
+		wcscpy_s(oData.pin2, sizeof(oData.pin2) / sizeof(wchar_t), wsPin2);
+		CallQTServerPipe(DLG_ASK_PINS, readAskPinsArguments, writeAskPinsArguments, (void *)&oData, wndGeometry);
+		lRet = oData.returnValue;
 
 		if (lRet == DLG_OK) {
-			wcscpy_s(wsPin1, ulPin1BufferLen, oData->pin1);
-			wcscpy_s(wsPin2, ulPin2BufferLen, oData->pin2);
+			wcscpy_s(wsPin1, ulPin1BufferLen, oData.pin1);
+			wcscpy_s(wsPin2, ulPin2BufferLen, oData.pin2);
 		}
 
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 	} catch (...) {
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
-
 		return DLG_ERR;
 	}
 	return lRet;
@@ -334,39 +414,16 @@ DLGS_EXPORT DlgRet eIDMW::DlgBadPin(DlgPinUsage usage, const wchar_t *wsPinName,
 									void *wndGeometry) {
 	DlgRet lRet = DLG_CANCEL;
 
-	DlgBadPinArguments *oData;
-	SharedMem oShMemory;
-	std::string csReadableFilePath;
+	DlgBadPinArguments oData;
 
 	try {
+		oData.usage = usage;
+		wcscpy_s(oData.pinName, sizeof(oData.pinName) / sizeof(wchar_t), wsPinName);
+		oData.ulRemainingTries = ulRemainingTries;
+		CallQTServerPipe(DLG_BAD_PIN, readBadPinArguments, writeBadPinArguments, (void *)&oData, wndGeometry);
+		lRet = oData.returnValue;
 
-		csReadableFilePath = CreateRandomFile();
-
-		// creating the shared memory segment
-		// attach oData
-
-		oShMemory.Attach(sizeof(DlgBadPinArguments), csReadableFilePath.c_str(), (void **)&oData);
-
-		// collect the arguments into the struct placed
-		// on the shared memory segment
-		oData->usage = usage;
-		wcscpy_s(oData->pinName, sizeof(oData->pinName) / sizeof(wchar_t), wsPinName);
-		oData->ulRemainingTries = ulRemainingTries;
-
-		CallQTServer(DLG_BAD_PIN, csReadableFilePath.c_str(), wndGeometry);
-		lRet = oData->returnValue;
-
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 	} catch (...) {
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 
 		return DLG_ERR;
 	}
@@ -810,14 +867,14 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 		char indexBuff[2];
 		char pipe1Buff[10];
 		char pipe2Buff[10];
-		snprintf(indexBuff, sizeof(indexBuff), "%i", index);
+		snprintf(indexBuff, sizeof(indexBuff), "%d", index);
 
 		snprintf(pipe1Buff, sizeof(pipe1Buff), "%d", pipe1[0]);
 		snprintf(pipe2Buff, sizeof(pipe2Buff), "%d", pipe2[1]);
 
 		execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
 
-		exit(1);
+		exit(0);
 	} else {
 		current_dlg_pid = pid;
 		writeFunc(pipe1[1], args);

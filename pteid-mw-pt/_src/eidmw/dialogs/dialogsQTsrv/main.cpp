@@ -300,18 +300,16 @@ int main(int argc, char *argv[]) {
 		a.setFont(getLatoFont());
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
-		// attach to the segment and get a pointer
-		DlgAskPINsArguments *oData = NULL;
-		SharedMem oShMemory;
-		oShMemory.Attach(sizeof(DlgAskPINsArguments), readableFilePath.c_str(), (void **)&oData);
-		MWLOG(LEV_ERROR, MOD_DLG, L"Running DLG_ASK_PINS with args: operation=> %d usage=> %d\n", oData->operation,
-			  oData->usage);
+		DlgAskPINsArguments oData;
+		readAskPinArguments(firstPipe, (void*)&oData);
+		MWLOG(LEV_ERROR, MOD_DLG, L"Running DLG_ASK_PINS with args: operation=> %d usage=> %d\n", oData.operation,
+			  oData.usage);
 
 		dlgWndAskPINs *dlg = NULL;
 		try {
 			QString Header;
-			QString tr_pin = getPinName(oData->usage, oData->pinName);
-			switch (oData->operation) {
+			QString tr_pin = getPinName(oData.usage, oData.pinName);
+			switch (oData.operation) {
 			case DLG_PIN_OP_CHANGE:
 				Header = GETQSTRING_DLG(Change);
 				Header += " ";
@@ -324,19 +322,19 @@ int main(int argc, char *argv[]) {
 				tr_pin = GETQSTRING_DLG(Puk);
 				break;
 			default:
-				oData->returnValue = DLG_BAD_PARAM;
-				oShMemory.Detach((void *)oData);
+				oData.returnValue = DLG_BAD_PARAM;
+				writeAskPinArguments(secondPipe, (void*)&oData);
 				return 0;
 			}
-			dlg = new dlgWndAskPINs(oData->pin1Info, oData->pin2Info, Header, tr_pin, DlgGetKeyPad(), 0,
+			dlg = new dlgWndAskPINs(oData.pin1Info, oData.pin2Info, Header, tr_pin, DlgGetKeyPad(), 0,
 									&parentWndGeometry);
 			if (dlg->exec()) {
-				wcscpy_s(oData->pin1, sizeof(oData->pin1) / sizeof(wchar_t), dlg->getPIN1().c_str());
-				wcscpy_s(oData->pin2, sizeof(oData->pin2) / sizeof(wchar_t), dlg->getPIN2().c_str());
+				wcscpy_s(oData.pin1, sizeof(oData.pin1) / sizeof(wchar_t), dlg->getPIN1().c_str());
+				wcscpy_s(oData.pin2, sizeof(oData.pin2) / sizeof(wchar_t), dlg->getPIN2().c_str());
 				delete dlg;
 				dlg = NULL;
-				oData->returnValue = DLG_OK;
-				oShMemory.Detach((void *)oData);
+				oData.returnValue = DLG_OK;
+				writeAskPinArguments(secondPipe, (void*)&oData);
 				return 0;
 			}
 			delete dlg;
@@ -344,12 +342,12 @@ int main(int argc, char *argv[]) {
 		} catch (...) {
 			if (dlg)
 				delete dlg;
-			oData->returnValue = DLG_ERR;
-			oShMemory.Detach((void *)oData);
+			oData.returnValue = DLG_ERR;
+			writeAskPinArguments(secondPipe, (void*)&oData);
 			return 0;
 		}
-		oData->returnValue = DLG_CANCEL;
-		oShMemory.Detach((void *)oData);
+		oData.returnValue = DLG_CANCEL;
+		writeAskPinArguments(secondPipe, (void*)&oData);
 		return 0;
 
 	} else if (iFunctionIndex == DLG_BAD_PIN) {
@@ -358,27 +356,25 @@ int main(int argc, char *argv[]) {
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		// attach to the segment and get a pointer
-		DlgBadPinArguments *oData = NULL;
-		SharedMem oShMemory;
-		oShMemory.Attach(sizeof(DlgBadPinArguments), readableFilePath.c_str(), (void **)&oData);
+		DlgBadPinArguments oData;
+		readBadPinArguments(firstPipe, (void*)&oData);
 
 		dlgWndBadPIN *dlg = NULL;
 		try {
 			QString PINName;
-			PINName = getPinName(oData->usage, oData->pinName);
-			dlg = new dlgWndBadPIN(PINName, oData->ulRemainingTries, 0, &parentWndGeometry);
+			PINName = getPinName(oData.usage, oData.pinName);
+			dlg = new dlgWndBadPIN(PINName, oData.ulRemainingTries, 0, &parentWndGeometry);
 			if (dlg->exec()) {
 				delete dlg;
 				dlg = NULL;
 
 				eIDMW::DlgRet dlgResult = DLG_RETRY;
-				if (oData->ulRemainingTries == 0) {
+				if (oData.ulRemainingTries == 0) {
 					dlgResult = DLG_OK;
 				}
 
-				oData->returnValue = dlgResult;
-				oShMemory.Detach((void *)oData);
-
+				oData.returnValue = dlgResult;
+				writeBadPinArguments(secondPipe, (void*)&oData);
 				return 0;
 			}
 			delete dlg;
@@ -387,14 +383,14 @@ int main(int argc, char *argv[]) {
 			if (dlg)
 				delete dlg;
 
-			oData->returnValue = DLG_ERR;
-			oShMemory.Detach((void *)oData);
+			oData.returnValue = DLG_ERR;
+			writeBadPinArguments(secondPipe, (void*)&oData);
 
 			return 0;
 		}
 
-		oData->returnValue = DLG_CANCEL;
-		oShMemory.Detach((void *)oData);
+		oData.returnValue = DLG_CANCEL;
+		writeBadPinArguments(secondPipe, (void*)&oData);
 		return 0;
 
 	} else if (iFunctionIndex == DLG_DISPLAY_PINPAD_INFO) {

@@ -339,12 +339,18 @@ struct DlgAskPINsArguments {
 	DlgRet returnValue;
 };
 
+void writeAskPinsArguments(int fd, void *arg);
+void readAskPinsArguments(int fd, void *arg);
+
 struct DlgBadPinArguments {
 	DlgPinUsage usage;
 	wchar_t pinName[50];
 	unsigned long long ulRemainingTries;
 	DlgRet returnValue;
 };
+
+void writeBadPinArguments(int fd, void *arg);
+void readBadPinArguments(int fd, void *arg);
 
 struct DlgDisplayPinpadInfoArguments {
 	DlgPinOperation operation;
