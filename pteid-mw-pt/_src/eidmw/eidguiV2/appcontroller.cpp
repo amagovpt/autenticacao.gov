@@ -580,11 +580,7 @@ QString AppController::getFontFile(QString font) {
 		return "";
 	}
 
-#ifdef WIN32
-	return QString::fromLatin1(fontFile.c_str());
-#else
 	return QString::fromStdString(fontFile);
-#endif
 }
 
 // This function should be called before instantiating a QApplication

@@ -369,11 +369,8 @@ public:
 
 		{
 			eIDMW::PTEID_Config config(eIDMW::PTEID_PARAM_GENERAL_PTEID_CACHEDIR);
-#ifdef WIN32
-			m_pteid_cachedir = QString::fromLatin1(config.getString());
-#else
-			m_pteid_cachedir = config.getString();
-#endif
+
+			m_pteid_cachedir = QString::fromUtf8(config.getString());
 		}
 
 		//----------------------------------------------------------

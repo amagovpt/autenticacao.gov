@@ -33,12 +33,7 @@ namespace eIDMW {
 ScapSettings::ScapSettings() {
 	{
 		PTEID_Config config(PTEID_PARAM_GENERAL_CACHEDIR);
-#ifdef WIN32
-		QString cacheDir = QString::fromLatin1(config.getString());
-#else
-		QString cacheDir = config.getString();
-#endif
-		m_cache_dir = cacheDir;
+		m_cache_dir = QString::fromUtf8(config.getString());
 	}
 	{
 		PTEID_Config config(PTEID_PARAM_GENERAL_SCAP_HOST);

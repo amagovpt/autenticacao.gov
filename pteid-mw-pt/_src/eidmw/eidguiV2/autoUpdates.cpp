@@ -669,11 +669,9 @@ void AutoUpdates::chooseCertificates(cJSON *certs_json) {
 		file_name_temp.append("/");
 		file_name_temp.append(cert_json->string);
 
-#ifdef WIN32
-		QDir dir(QString::fromLatin1(certs_dir_str.c_str()));
-#else
+
 		QDir dir(QString::fromStdString(certs_dir_str));
-#endif
+
 		if (!dir.exists()) {
 			PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "AutoUpdates::chooseCertificates: Certs dir does not exist! %s",
 					  certs_dir.getString());
@@ -688,13 +686,9 @@ void AutoUpdates::chooseCertificates(cJSON *certs_json) {
 			m_app_controller->signalAutoUpdateFail(GAPI::AutoUpdateCerts, GAPI::InstallFailed);
 			return;
 		}
-#ifdef WIN32
-		if (QFile::exists(QString::fromLatin1(file_name_temp.c_str())) &&
-			validateHash(QString::fromLatin1(file_name_temp.c_str()), QString::fromStdString(cert_json->valuestring))) {
-#else
+
 		if (QFile::exists(QString::fromStdString(file_name_temp)) &&
 			validateHash(QString::fromStdString(file_name_temp), QString::fromStdString(cert_json->valuestring))) {
-#endif
 			qDebug() << "Cert exists: " << QString::fromUtf8(file_name_temp.c_str());
 		} else {
 			PTEID_LOG(PTEID_LOG_LEVEL_CRITICAL, "eidgui",
@@ -977,11 +971,7 @@ void AutoUpdates::installCertsUpdate(const QStringList &certs) {
 	PTEID_Config config(PTEID_PARAM_GENERAL_CERTS_DIR);
 	std::string certs_dir_std = config.getString();
 
-#ifdef WIN32
-	QString certs_dir_str = QString::fromLatin1(certs_dir_std.c_str());
-#else
 	QString certs_dir_str = QString::fromStdString(certs_dir_std);
-#endif
 
 	bool bUpdateCertsSuccess = false;
 
