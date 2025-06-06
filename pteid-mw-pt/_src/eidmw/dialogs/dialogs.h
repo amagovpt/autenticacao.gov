@@ -391,6 +391,7 @@ struct DlgRunningProc {
 	int iSharedMemSegmentID;
 	std::string csRandomFilename;
 	pid_t tRunningProcess;
+	int *pipe2;
 };
 
 struct WndGeometry {
@@ -408,7 +409,7 @@ std::string RandomFileName();
 std::string CreateRandomFile();
 void DeleteFile(const char *csFilename);
 void CallQTServer(const DlgFunctionIndex index, const char *csFilename, void *wndGeometry = 0);
-void CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc, writeArgument writeFunc, void *args, bool processStore = false,
+void CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc, writeArgument writeFunc, void *args,
 					  void *wndGeometry = 0);
 
 DLGS_EXPORT bool getWndCenterPos(Type_WndGeometry *pWndGeometry, int desktop_width, int desktop_height, int wnd_width,

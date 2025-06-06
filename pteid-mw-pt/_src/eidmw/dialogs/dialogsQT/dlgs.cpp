@@ -214,7 +214,17 @@ void eIDMW::readCMDMessageArguments(int fd, void *arg) {
 	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->type) + sizeof(cmdArg->returnValue) +
 			  sizeof(cmdArg->cmdMsgCollectorIndex) + sizeof(cmdArg->tRunningProcess);
 	buffer = (char *)malloc(len);
-	read(fd, buffer, len);
+	int sizeRead = read(fd, buffer, len);
+	if(sizeRead == -1) {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"eIDMW:: Error when waiting to read");
+		free(buffer);
+		return;
+	}
+	else if(sizeRead == 1) {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"eIDMW:: Close read");
+		free(buffer);
+		return;
+	}
 	initBuffer = buffer;
 
 	memcpy(&cmdArg->message, buffer, sizeof(wchar_t) * 50);
@@ -606,44 +616,68 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 
 	DlgCMDMessageArguments oCmdMessageData;
 
+	int pipe1[2]; // parent -> child
+	int pipe2[2]; // child -> parent
 	try {
 		oCmdMessageData.type = type;
 		oCmdMessageData.operation = operation;
 		wcscpy_s(oCmdMessageData.message, sizeof(oCmdMessageData.message) / sizeof(wchar_t), message);
 		oCmdMessageData.cmdMsgCollectorIndex = ++dlgCMDMsgCollectorIndex;
 
-		CallQTServerPipe(DLG_CMD_MSG, readCMDMessageArguments, writeCMDMessageArguments, (void*)&oCmdMessageData, true);
+		std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
+#ifdef __APPLE__
+		csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/pteiddialogsQTsrv";
+#endif
 
-		DlgRunningProc *ptRunningProc = new DlgRunningProc();
+		pipe(pipe1);
+		pipe(pipe2);
+		pid_t pid = fork();
+		if (pid == 0) {
+			char indexBuff[2];
+			char pipe1Buff[10];
+			char pipe2Buff[10];
+			snprintf(indexBuff, sizeof(indexBuff), "%d", DLG_CMD_MSG);
 
-		ptRunningProc->tRunningProcess = oCmdMessageData.tRunningProcess;
+			snprintf(pipe1Buff, sizeof(pipe1Buff), "%d", pipe1[0]);
+			snprintf(pipe2Buff, sizeof(pipe2Buff), "%d", pipe2[1]);
 
-		dlgCMDMsgCollector[dlgCMDMsgCollectorIndex] = ptRunningProc;
+			execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
 
-		if (pulHandle)
-			*pulHandle = dlgCMDMsgCollectorIndex;
+			exit(0);
+		} else {
+			oCmdMessageData.tRunningProcess = pid;
+			writeCMDMessageArguments(pipe1[1], (void*)&oCmdMessageData);
 
-		/* Wait for dialog process to die. It is not direct child so waitpid does not work.
-		Timeout after 1 minute.*/
-		for (size_t i = 0; i < 600; i++) {
-			CThread::SleepMillisecs(100);
-			// Check if process is running. If no (kill fails), break;
-			if (kill(ptRunningProc->tRunningProcess, 0)) {
-				break;
-			}
+
+			DlgRunningProc *ptRunningProc = new DlgRunningProc();
+
+			ptRunningProc->tRunningProcess = oCmdMessageData.tRunningProcess;
+			ptRunningProc->pipe2 = pipe2;
+
+			dlgCMDMsgCollector[dlgCMDMsgCollectorIndex] = ptRunningProc;
+
+			if (pulHandle)
+				*pulHandle = dlgCMDMsgCollectorIndex;
+
+			readCMDMessageArguments(pipe2[0], (void*)&oCmdMessageData);
+
+			delete ptRunningProc;
+			dlgCMDMsgCollector[dlgCMDMsgCollectorIndex] = NULL;
+			dlgCMDMsgCollector.erase(dlgCMDMsgCollectorIndex);
+
+			lRet = oCmdMessageData.returnValue;
+			close(pipe1[0]);
+			close(pipe1[1]);
+			close(pipe2[0]);
+			close(pipe2[1]);
 		}
-
-		// delete the map entry
-
-		delete ptRunningProc;
-		dlgCMDMsgCollector[dlgCMDMsgCollectorIndex] = NULL;
-		dlgCMDMsgCollector.erase(dlgCMDMsgCollectorIndex);
-
-		lRet = oCmdMessageData.returnValue;
 	} catch (...) {
 
 		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage failed");
-
+		close(pipe1[0]);
+		close(pipe1[1]);
+		close(pipe2[0]);
+		close(pipe2[1]);
 		return DLG_ERR;
 	}
 
@@ -661,8 +695,8 @@ DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle) {
 		// and send SIGTERM if so
 		if (!kill(pIt->second->tRunningProcess, 0)) {
 
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgCloseCMDMessage :  sending kill signal to process %d",
-				  pIt->second->tRunningProcess);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgCloseCMDMessage :  sending kill signal to process %d pipe2 : %d",
+				  pIt->second->tRunningProcess, pIt->second->pipe2[1]);
 
 			if (kill(pIt->second->tRunningProcess, SIGINT)) {
 
@@ -670,6 +704,9 @@ DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle) {
 					  pIt->second->tRunningProcess, strerror(errno));
 
 				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+			}
+			else {
+				write(pIt->second->pipe2[1], "1", 1);
 			}
 
 		} else {
@@ -754,7 +791,7 @@ void eIDMW::DeleteFile(const char *csFilename) {
 	}
 }
 
-void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc, writeArgument writeFunc, void *args, bool processStore,
+void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc, writeArgument writeFunc, void *args,
 							 void *wndGeometry) {
 	Type_WndGeometry *pWndGeometry = (Type_WndGeometry *)wndGeometry;
 
@@ -785,9 +822,6 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 		current_dlg_pid = pid;
 		writeFunc(pipe1[1], args);
 		readFunc(pipe2[0], args);
-		if(processStore) {
-			writeFunc(pipe1[1], args);
-		}
 		close(pipe1[0]);
 		close(pipe1[1]);
 		close(pipe2[0]);

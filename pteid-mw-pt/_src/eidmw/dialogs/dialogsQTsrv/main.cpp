@@ -93,15 +93,6 @@ void sigint_handler(int sig) {
 			delete dlg;
 		}
 	}
-	if (c_dlg) {
-		delete c_dlg;
-		c_dlg = nullptr;
-	}
-	if (oShMemory) {
-		oCmdMsgData.returnValue = DLG_OK;
-		SharedMem::Delete(oShMemory->getID());
-		delete oShMemory;
-	}
 	exit(0);
 	dlg = NULL;
 }
@@ -710,80 +701,9 @@ int main(int argc, char *argv[]) {
 		return 0;
 
 	} else if (iFunctionIndex == DLG_CMD_MSG) {
-		if ((argc == 4) || (argc == 8)) {
-			readCMDMessageArguments(firstPipe, (void*)&oCmdMsgData);
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s called with DLG_CMD_MSG", argv[0]);
-
-			char csCommand[100];
-			sprintf(csCommand, "%s %s %s %s", argv[0], argv[1], argv[2], argv[3]);
-			int len;
-			if (argc == 8) {
-				len = strlen(csCommand);
-				sprintf(&csCommand[len], " %s %s %s %s", argv[4], argv[5], argv[6], argv[7]);
-			}
-			len = strlen(csCommand);
-			sprintf(&csCommand[len], " child");
-
-			// spawn a child process
-			signal(SIGCHLD, SIG_IGN);
-			pid_t pid = fork();
-
-			if (pid == -1) {
-				MWLOG(LEV_ERROR, MOD_DLG, L"  %s fork : %s ", argv[0], strerror(errno));
-				exit(DLG_ERR);
-			}
-
-			if (pid == 0) {
-				//
-				// fork process
-				//
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s fork process started", argv[0]);
-
-				// Due to Mac Leopard constraint, we start another QtServer
-				// See __THE_PROCESS_HAS_FORKED_AND_YOU_CANNOT_USE_THIS_COREFOUNDATION_FUNCTIONALITY___YOU_MUST_EXEC__
-				int code = system(csCommand);
-				if (code != 0) {
-					MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::CallQTServer %s %s child : %s, returned code=%d csCommand: %s", argv[2],
-						  argv[3], strerror(errno), code, csCommand);
-					exit(code);
-				}
-
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s fork system() return", argv[0]);
-
-				return 0;
-			} else {
-				//
-				// parent process
-				//
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s started fork process with ID %d", argv[0], pid);
-
-				pid_t subpid = 0;
-
-				for (int i = 0; i < 10; i++) {
-					CThread::SleepMillisecs(100); // Wait for the child process to start
-					if (0 != (subpid = getPidFromParentid(pid, csCommand))) {
-						break;
-					}
-				}
-
-
-				if (subpid == 0) {
-					MWLOG(LEV_ERROR, MOD_DLG, L"  %s failed to find child process ID", argv[0]);
-					oCmdMsgData.returnValue = DLG_ERR;
-					writeCMDMessageArguments(secondPipe, (void*)&oCmdMsgData);
-				} else {
-					MWLOG(LEV_DEBUG, MOD_DLG, L"  %s find child process with PID %ld", argv[0], subpid);
-					oCmdMsgData.tRunningProcess = subpid;
-					oCmdMsgData.returnValue = DLG_OK;
-					writeCMDMessageArguments(secondPipe, (void*)&oCmdMsgData);
-				}
-				return 0;
-			}
-		} else {
 			// attach to the segment and get a pointer
-			MWLOG(LEV_DEBUG, MOD_DLG, L"Running before read DLG_CMD_MSG firstPipe: %d", firstPipe);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_CMD_MSG");
 			readCMDMessageArguments(firstPipe, (void*)&oCmdMsgData);
-			MWLOG(LEV_DEBUG, MOD_DLG, L"Running after read cmd message DLG_CMD_MSG");
 
 			QApplication a(argc, argv);
 			a.setFont(getLatoFont());
@@ -805,6 +725,7 @@ int main(int argc, char *argv[]) {
 				}
 
 				oCmdMsgData.returnValue = (res == QDialog::Rejected ? DLG_CANCEL : DLG_OK);
+				writeAskPinArguments(secondPipe, (void*)&oCmdMsgData);
 				return 0;
 
 			} catch (...) {
@@ -815,10 +736,10 @@ int main(int argc, char *argv[]) {
 				}
 
 				oCmdMsgData.returnValue = DLG_ERR;
+				writeAskPinArguments(secondPipe, (void*)&oCmdMsgData);
 				return 0;
 			}
-			return 0;
-		}
+		return 0;
 	}
 
 	return iRet;
