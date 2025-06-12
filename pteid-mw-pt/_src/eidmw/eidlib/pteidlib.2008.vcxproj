@@ -233,7 +233,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </Command>
     </CustomBuild>
-    <ClInclude Include="eidlibcompat.h" />
     <ClInclude Include="eidlibdefines.h" />
     <ClInclude Include="eidlibException.h" />
     <ClInclude Include="InternalUtil.h" />

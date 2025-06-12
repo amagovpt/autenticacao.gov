@@ -94,7 +94,6 @@ SOURCES += ../eidlib/InternalUtil.cpp
 SOURCES += ../eidlib/eidlibxades.cpp
 
 HEADERS += ../eidlib/eidlib.h
-HEADERS += ../eidlib/eidlibcompat.h
 HEADERS += ../eidlib/eidlibdefines.h
 HEADERS += ../eidlib/eidlibException.h
 HEADERS += ../eidlib/InternalUtil.h

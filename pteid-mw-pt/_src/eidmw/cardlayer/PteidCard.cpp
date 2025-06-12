@@ -380,7 +380,7 @@ namespace eIDMW {
 				if (pszPuk != NULL)
 					puk_str = pszPuk;
 
-				bOK = PinCmd(strlen(pszPuk) == 8 && (unblockFlags & UNBLOCK_FLAG_PUK_MERGE) == 0 ? PIN_OP_RESET_NO_PUK
+				bOK = PinCmd(strlen(pszPuk) == 8 && (unblockFlags & _UNBLOCK_FLAG_PUK_MERGE) == 0 ? PIN_OP_RESET_NO_PUK
 					: PIN_OP_RESET,
 					pin, puk_str, pin_str, triesLeft, NULL, true, NULL, unblockFlags);
 			}

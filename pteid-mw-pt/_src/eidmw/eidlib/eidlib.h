@@ -37,7 +37,6 @@
 #ifndef _WIN32
 #include <stdint.h>
 #endif
-#include "eidlibcompat.h"
 #include "eidlibdefines.h"
 
 namespace eIDMW {
@@ -1521,8 +1520,6 @@ private:
 	bool persoNotesDirty;
 
 	friend PTEID_Card & PTEID_ReaderContext::getCard(); /**< For internal use : This method must access protected constructor */
-	friend PTEIDSDK_API long ::PTEID_CVC_Init(const unsigned char *pucCert, int iCertLen, unsigned char *pucChallenge,
-											  int iChallengeLen);
 };
 
 /**
@@ -1918,6 +1915,10 @@ public:
 	/** PIN reference value for the address PIN. It can be used as parameter for @ref PTEID_Pins::getPinByPinRef() */
 	static const unsigned long ADDR_PIN = 131;
 
+	/** Flags available for @ref PTEID_Pin::unlockPin */
+	static const int UNBLOCK_FLAG_NEW_PIN = 1;
+	static const int UNBLOCK_FLAG_PUK_MERGE = 2;
+
 	PTEIDSDK_API virtual ~PTEID_Pin(); /**< Destructor */
 
 	PTEIDSDK_API unsigned long getIndex();					 /**< Get the index of the pin */
@@ -2219,14 +2220,6 @@ PTEIDSDK_API void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const
 PTEIDSDK_API void PTEID_GetProxyFromPac(const char *pacFile, const char *url, std::string *proxy_host,
 										std::string *proxy_port);
 #endif
-
-PTEIDSDK_API void setCompatReaderContext(eIDMW::PTEID_ReaderContext *ctx);
-
-PTEIDSDK_API eIDMW::PTEID_ByteArray PTEID_CVC_Init(eIDMW::PTEID_ByteArray cvc_cert);
-
-PTEIDSDK_API void PTEID_CVC_Authenticate(eIDMW::PTEID_ByteArray cvc_cert);
-
-PTEIDSDK_API eIDMW::PTEID_ByteArray PTEID_CVC_ReadFile(eIDMW::PTEID_ByteArray fileID);
 
 } // Namespace eIDMW
 

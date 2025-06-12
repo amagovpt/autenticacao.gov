@@ -17,7 +17,7 @@ INSTALLS += target
 
 QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
 
-public_headers.files = eidlib.h eidlibcompat.h eidlibdefines.h eidlibException.h
+public_headers.files = eidlib.h eidlibdefines.h eidlibException.h
 public_headers.path = $${INSTALL_DIR_INCLUDE}
 
 INSTALLS += public_headers

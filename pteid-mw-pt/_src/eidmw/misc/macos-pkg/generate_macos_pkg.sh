@@ -60,7 +60,6 @@ sed "s/GIT_REVISION/$git_revision/" resources/en.lproj/welcome.html.tpl > resour
 #Copy eidlib header files - this forms the C++ SDK along the libpteidlib.dylib
 recreate_dir system-libs/include
 cp $EIDLIB_DIR/eidlib.h              system-libs/include
-cp $EIDLIB_DIR/eidlibcompat.h        system-libs/include
 cp $EIDLIB_DIR/eidlibdefines.h       system-libs/include
 cp $EIDLIB_DIR/eidlibException.h     system-libs/include
 cp $EIDLIB_DIR/../common/eidErrors.h system-libs/include
