@@ -343,7 +343,6 @@ void CReader::setNextAPDUClearText() {
 	return m_poCard->setNextAPDUClearText();
 }
 
-/*TODO: Is this really needed?    */
 bool CReader::IsPinpadReader() { return m_oPinpad->UsePinpad(); }
 
 tCardType CReader::GetCardType() {

@@ -185,7 +185,6 @@ bool CPkiCard::PinCmd(tPinOperation operation, const tPin &Pin, const std::strin
 					  unsigned long &ulRemaining, const tPrivKey *pKey, bool bShowDlg, void *wndGeometry,
 					  unsigned long unblockFlags) {
 
-	// TODO (DEV-CC2): make this work for cc2.0
 	if (this->GetType() == CARD_PTEID_IAS5)
 		SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
 
