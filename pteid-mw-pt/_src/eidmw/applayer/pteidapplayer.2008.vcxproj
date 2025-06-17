@@ -123,7 +123,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_ZLIB)\include;$(PTEID_DIR_LIBPNG)\include;$(PTEID_DIR_OPENJPEG)\include\openjpeg-2.4;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\common;..\dialogs;..\eidlib;..\pteid-poppler;..\cardlayer;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_CURL)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_ZLIB)\include;$(PTEID_DIR_LIBPNG)\include;$(PTEID_DIR_OPENJPEG)\include\openjpeg-2.4;$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_OPEN_PACE)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EIDMW_APPLAYER_EXPORTS;_CRT_SECURE_NO_WARNINGS;OPENSSL_SUPPRESS_DEPRECATED;CURL_STATICLIB;OPJ_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />

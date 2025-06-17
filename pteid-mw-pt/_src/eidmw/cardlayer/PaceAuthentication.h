@@ -17,7 +17,7 @@ struct OID_INFO {
 	int nid;
 	const char *short_name;
 
-	bool is_valid();
+	EIDMW_CAL_API bool is_valid();
 };
 
 // Wrappers around OpenPace NIDs for Applayer
