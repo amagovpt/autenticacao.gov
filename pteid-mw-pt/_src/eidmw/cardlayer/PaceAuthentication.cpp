@@ -363,6 +363,40 @@ OID_INFO get_oid_info(int nid) {
 	return info;
 }
 
+bool OID_INFO::is_valid() {
+	// verify nid
+	if (nid == NID_undef) {
+		return 0;
+	}
+
+	const char *ln = OBJ_nid2ln(nid);
+	const char *sn = OBJ_nid2sn(nid);
+	if (!ln && !sn) {
+		return 0;
+	}
+
+	// verify object
+	if (object) {
+		int obj_nid = OBJ_obj2nid(object);
+		if (obj_nid != nid && obj_nid != NID_undef) {
+			return false;
+		}
+	}
+
+	// verify short name
+	if (short_name) {
+		if (strlen(short_name) == 0) {
+			return 0;
+		}
+
+		if (strcmp(short_name, "UNDEF") == 0) {
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
 // Wrappers around OpenPace NIDs for Applayer
 OID_INFO get_id_CA_ECDH_3DES_CBC_CBC() { return get_oid_info(NID_id_CA_ECDH_3DES_CBC_CBC); }
 OID_INFO get_id_CA_ECDH_AES_CBC_CMAC_128() { return get_oid_info(NID_id_CA_ECDH_AES_CBC_CMAC_128); }

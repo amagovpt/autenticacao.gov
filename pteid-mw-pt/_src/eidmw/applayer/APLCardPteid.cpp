@@ -406,6 +406,11 @@ CByteArray APL_EIDCard::readTokenData() {
 
 		auto pkey = getChipAuthenticationKey(dg14);
 		auto oid_info = getChipAuthenticationOid(dg14);
+		if (!oid_info.is_valid()) {
+			MWLOG_CTX(LEV_ERROR, MOD_APL, "Got invalid OID_INFO from dg14");
+			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+		}
+
 		auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);
 		if (!status) {
 			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Failed to upgrade to Chip Authentication");

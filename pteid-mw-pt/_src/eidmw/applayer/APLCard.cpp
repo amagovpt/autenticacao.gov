@@ -1024,6 +1024,11 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 	report.pubKey = CByteArray(buffer, len);
 
 	auto oid_info = getChipAuthenticationOid(dg14);
+	if (!oid_info.is_valid()) {
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Got invalid OID_INFO from dg14");
+		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	}
+
 	report.oid = oid_info.short_name;
 
 	auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);

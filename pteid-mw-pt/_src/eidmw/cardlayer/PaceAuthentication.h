@@ -16,6 +16,8 @@ struct OID_INFO {
 	ASN1_OBJECT *object;
 	int nid;
 	const char *short_name;
+
+	bool is_valid();
 };
 
 // Wrappers around OpenPace NIDs for Applayer
