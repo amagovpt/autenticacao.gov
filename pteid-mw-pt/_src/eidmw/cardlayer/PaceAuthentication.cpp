@@ -366,13 +366,13 @@ OID_INFO get_oid_info(int nid) {
 bool OID_INFO::is_valid() {
 	// verify nid
 	if (nid == NID_undef) {
-		return 0;
+		return false;
 	}
 
 	const char *ln = OBJ_nid2ln(nid);
 	const char *sn = OBJ_nid2sn(nid);
 	if (!ln && !sn) {
-		return 0;
+		return false;
 	}
 
 	// verify object
@@ -386,15 +386,15 @@ bool OID_INFO::is_valid() {
 	// verify short name
 	if (short_name) {
 		if (strlen(short_name) == 0) {
-			return 0;
+			return false;
 		}
 
 		if (strcmp(short_name, "UNDEF") == 0) {
-			return 0;
+			return false;
 		}
 	}
 
-	return 1;
+	return true;
 }
 
 // Wrappers around OpenPace NIDs for Applayer
