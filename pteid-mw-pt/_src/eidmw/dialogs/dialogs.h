@@ -301,13 +301,6 @@ DLGS_EXPORT void SetApplicationWindow(HWND app);
 #endif
 
 #ifndef WIN32
-/**
- * Close the all the open pinpad info dialogs
- */
-DLGS_EXPORT void DlgCloseAllPinpadInfo();
-#endif
-
-#ifndef WIN32
 /************************************************************************************
  * Helper structs and functions
  ************************************************************************************/
@@ -363,6 +356,9 @@ struct DlgDisplayPinpadInfoArguments {
 	DlgRet returnValue;
 };
 
+void writeDisplayPinpadInfoArguments(int fd, void *arg);
+void readDisplayPinpadInfoArguments(int fd, void *arg);
+
 void writeAskInputCMDArguments(int fd, void *arg);
 void readAskInputCMDArguments(int fd, void *arg);
 
@@ -375,6 +371,9 @@ struct DlgAskInputCMDArguments {
 	bool askForId;
 	DlgRet returnValue;
 };
+
+void writeDlgPickDeviceArguments(int fd, void *arg);
+void readDlgPickDeviceArguments(int fd, void *arg);
 
 struct DlgPickDeviceArguments {
 	DlgDevice outDevice;
@@ -394,8 +393,6 @@ struct DlgCMDMessageArguments {
 };
 
 struct DlgRunningProc {
-	int iSharedMemSegmentID;
-	std::string csRandomFilename;
 	pid_t tRunningProcess;
 	int *pipe2;
 };

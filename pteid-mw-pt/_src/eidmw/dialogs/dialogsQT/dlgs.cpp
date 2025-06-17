@@ -176,7 +176,7 @@ void eIDMW::readAskPinsArguments(int fd, void *arg) {
 	free(initBuffer);
 }
 
-void eIDMW::writeBadPinArguments(int fd, void *arg)
+void eIDMW::readBadPinArguments(int fd, void *arg)
 {
 	char *buffer;
 	char *initBuffer;
@@ -197,7 +197,7 @@ void eIDMW::writeBadPinArguments(int fd, void *arg)
 
 	free(initBuffer);
 }
-void eIDMW::readBadPinArguments(int fd, void *arg)
+void eIDMW::writeBadPinArguments(int fd, void *arg)
 {
 	char *buffer;
 	char *initBuffer;
@@ -216,6 +216,77 @@ void eIDMW::readBadPinArguments(int fd, void *arg)
 	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
 
 	write(fd, initBuffer, len);
+	free(initBuffer);
+}
+
+void eIDMW::writeDisplayPinpadInfoArguments(int fd, void *arg)
+{
+	char *buffer;
+	char *initBuffer;
+	DlgDisplayPinpadInfoArguments *pinPadInfo = (DlgDisplayPinpadInfoArguments *)(arg);
+	int len = sizeof(pinPadInfo->operation) + 100 * sizeof(wchar_t) + sizeof(pinPadInfo->usage)
+			  + 50 * sizeof(wchar_t) + 200 * sizeof(wchar_t) + sizeof(pinPadInfo->infoCollectorIndex) +
+			  sizeof(pinPadInfo->tRunningProcess) + sizeof(pinPadInfo->returnValue);
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+	memcpy(buffer, &pinPadInfo->operation, sizeof(pinPadInfo->operation));
+	buffer += sizeof(pinPadInfo->operation);
+	memcpy(buffer, &pinPadInfo->reader, 100 * sizeof(wchar_t));
+	buffer += 100 * sizeof(wchar_t);
+	memcpy(buffer, &pinPadInfo->usage, sizeof(pinPadInfo->usage));
+	buffer += sizeof(pinPadInfo->usage);
+	memcpy(buffer, &pinPadInfo->pinName, 50 * sizeof(wchar_t));
+	buffer += 50 * sizeof(wchar_t);
+	memcpy(buffer, &pinPadInfo->message, 200 * sizeof(wchar_t));
+	buffer += 200 * sizeof(wchar_t);
+	memcpy(buffer, &pinPadInfo->infoCollectorIndex, sizeof(pinPadInfo->infoCollectorIndex));
+	buffer += sizeof(pinPadInfo->infoCollectorIndex);
+	memcpy(buffer, &pinPadInfo->tRunningProcess, sizeof(pinPadInfo->tRunningProcess));
+	buffer += sizeof(pinPadInfo->tRunningProcess);
+	memcpy(buffer, &pinPadInfo->returnValue, sizeof(pinPadInfo->returnValue));
+
+	write(fd, initBuffer, len);
+	free(initBuffer);
+}
+
+void eIDMW::readDisplayPinpadInfoArguments(int fd, void *arg)
+{
+	char *buffer;
+	char *initBuffer;
+	DlgDisplayPinpadInfoArguments *pinPadInfo = (DlgDisplayPinpadInfoArguments *)(arg);
+	int len = sizeof(pinPadInfo->operation) + 100 * sizeof(wchar_t) + sizeof(pinPadInfo->usage)
+			  + 50 * sizeof(wchar_t) + 200 * sizeof(wchar_t) + sizeof(pinPadInfo->infoCollectorIndex) +
+			  sizeof(pinPadInfo->tRunningProcess) + sizeof(pinPadInfo->returnValue);
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+	int sizeRead = read(fd, buffer, len);
+	if(sizeRead == -1) {
+		MWLOG(LEV_ERROR, MOD_DLG, L"eIDMW:: Error when waiting to read");
+		free(buffer);
+		return;
+	}
+	else if(sizeRead == 1) {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"eIDMW:: Close read");
+		free(buffer);
+		return;
+	}
+
+	memcpy(&pinPadInfo->operation, buffer, sizeof(pinPadInfo->operation));
+	buffer += sizeof(pinPadInfo->operation);
+	memcpy(&pinPadInfo->reader, buffer, 100 * sizeof(wchar_t));
+	buffer += 100 * sizeof(wchar_t);
+	memcpy(&pinPadInfo->usage, buffer, sizeof(pinPadInfo->usage));
+	buffer += sizeof(pinPadInfo->usage);
+	memcpy(&pinPadInfo->pinName, buffer, 50 * sizeof(wchar_t));
+	buffer += 50 * sizeof(wchar_t);
+	memcpy(&pinPadInfo->message, buffer, 200 * sizeof(wchar_t));
+	buffer += 200 * sizeof(wchar_t);
+	memcpy(&pinPadInfo->infoCollectorIndex, buffer, sizeof(pinPadInfo->infoCollectorIndex));
+	buffer += sizeof(pinPadInfo->infoCollectorIndex);
+	memcpy(&pinPadInfo->tRunningProcess, buffer, sizeof(pinPadInfo->tRunningProcess));
+	buffer += sizeof(pinPadInfo->tRunningProcess);
+	memcpy(&pinPadInfo->returnValue, buffer, sizeof(pinPadInfo->returnValue));
+
 	free(initBuffer);
 }
 
@@ -312,6 +383,36 @@ void eIDMW::writeCMDMessageArguments(int fd, void *arg) {
 	free(initBuffer);
 }
 
+void eIDMW::writeDlgPickDeviceArguments(int fd, void *arg)
+{
+	char *buffer;
+	char *initBuffer;
+	DlgPickDeviceArguments *dlgArg = (DlgPickDeviceArguments *)(arg);
+	int len = sizeof(dlgArg->outDevice) + sizeof(dlgArg->returnValue);
+	buffer = (char *)malloc(len);
+	initBuffer = buffer;
+	memcpy(buffer, &dlgArg->outDevice, sizeof(dlgArg->outDevice));
+	buffer += sizeof(dlgArg->outDevice);
+	memcpy(buffer, &dlgArg->returnValue, sizeof(dlgArg->returnValue));
+	write(fd, initBuffer, len);
+	free(initBuffer);
+}
+
+void eIDMW::readDlgPickDeviceArguments(int fd, void *arg)
+{
+	char *buffer;
+	char *initBuffer;
+	DlgPickDeviceArguments *dlgArg = (DlgPickDeviceArguments *)(arg);
+	int len = sizeof(dlgArg->outDevice) + sizeof(dlgArg->returnValue);
+	buffer = (char *)malloc(len);
+	read(fd, buffer, len);
+	initBuffer = buffer;
+	memcpy(&dlgArg->outDevice, buffer, sizeof(dlgArg->outDevice));
+	buffer += sizeof(dlgArg->outDevice);
+	memcpy(&dlgArg->returnValue, buffer, sizeof(dlgArg->returnValue));
+	free(initBuffer);
+}
+
 void eIDMW::readCMDMessageArguments(int fd, void *arg) {
 	char *buffer;
 	char *initBuffer;
@@ -343,7 +444,7 @@ void eIDMW::readCMDMessageArguments(int fd, void *arg) {
 	memcpy(&cmdArg->cmdMsgCollectorIndex, buffer, sizeof(cmdArg->cmdMsgCollectorIndex));
 	buffer += sizeof(cmdArg->cmdMsgCollectorIndex);
 	memcpy(&cmdArg->tRunningProcess, buffer, sizeof(cmdArg->tRunningProcess));
-
+	free(initBuffer);
 }
 
 DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation, DlgPinUsage usage, const wchar_t *wsPinName,
@@ -435,58 +536,84 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 											   unsigned long *pulHandle, void *wndGeometry) {
 	DlgRet lRet = DLG_CANCEL;
 
-	DlgDisplayPinpadInfoArguments *oData;
-	SharedMem oShMemory;
-	std::string csReadableFilePath;
+	DlgDisplayPinpadInfoArguments oData;
+	int pipe1[2]; // parent -> child
+	int pipe2[2]; // child -> parent
 
 	try {
 		MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo called");
-		csReadableFilePath = CreateRandomFile();
 
-		oShMemory.Attach(sizeof(DlgDisplayPinpadInfoArguments), csReadableFilePath.c_str(), (void **)&oData);
 
-		// collect the arguments into the struct placed
-		// on the shared memory segment
+		oData.operation = operation;
+		wcscpy_s(oData.reader, sizeof(oData.reader) / sizeof(wchar_t), wsReader);
+		oData.usage = usage;
+		wcscpy_s(oData.pinName, sizeof(oData.pinName) / sizeof(wchar_t), wsPinName);
+		wcscpy_s(oData.message, sizeof(oData.message) / sizeof(wchar_t), wsMessage);
+		oData.infoCollectorIndex = ++dlgPinPadInfoCollectorIndex;
 
-		oData->operation = operation;
-		wcscpy_s(oData->reader, sizeof(oData->reader) / sizeof(wchar_t), wsReader);
-		oData->usage = usage;
-		wcscpy_s(oData->pinName, sizeof(oData->pinName) / sizeof(wchar_t), wsPinName);
-		wcscpy_s(oData->message, sizeof(oData->message) / sizeof(wchar_t), wsMessage);
-		oData->infoCollectorIndex = ++dlgPinPadInfoCollectorIndex;
+		pipe(pipe1);
+		pipe(pipe2);
+		pid_t pid = fork();
+		if (pid == 0) {
+			char indexBuff[2];
+			char pipe1Buff[10];
+			char pipe2Buff[10];
+			std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
+#ifdef __APPLE__
+			csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/pteiddialogsQTsrv";
+#endif
+			snprintf(indexBuff, sizeof(indexBuff), "%d", DLG_DISPLAY_PINPAD_INFO);
 
-		CallQTServer(DLG_DISPLAY_PINPAD_INFO, csReadableFilePath.c_str(), wndGeometry);
-		lRet = oData->returnValue;
+			snprintf(pipe1Buff, sizeof(pipe1Buff), "%d", pipe1[0]);
+			snprintf(pipe2Buff, sizeof(pipe2Buff), "%d", pipe2[1]);
 
-		if (lRet != DLG_OK) {
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+			execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
+
+			exit(0);
+
 		}
+		else {
+			oData.tRunningProcess = pid;
+			writeDisplayPinpadInfoArguments(pipe1[1], (void*)&oData);
+			DlgRunningProc *ptRunningProc = new DlgRunningProc();
+
+			ptRunningProc->tRunningProcess = oData.tRunningProcess;
+			ptRunningProc->pipe2 = pipe2;
+
+			dlgPinPadInfoCollector[dlgPinPadInfoCollectorIndex] = ptRunningProc;
+
+			if (pulHandle)
+				*pulHandle = dlgPinPadInfoCollectorIndex;
+
+			readDisplayPinpadInfoArguments(pipe2[0], (void*)&oData);
+
+			delete ptRunningProc;
+			dlgPinPadInfoCollector[dlgPinPadInfoCollectorIndex] = NULL;
+			dlgPinPadInfoCollector.erase(dlgPinPadInfoCollectorIndex);
+
+			lRet = oData.returnValue;
+			close(pipe1[0]);
+			close(pipe1[1]);
+			close(pipe2[0]);
+			close(pipe2[1]);
+
+			if (lRet != DLG_OK) {
+				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+			}
+		}
+
 
 		// for the killing need to store:
 		// - the shared memory area to be released (unique with the filename?)
 		// - the child process ID
 		// - the handle (because the user will use it)
 
-		DlgRunningProc *ptRunningProc = new DlgRunningProc();
-		ptRunningProc->iSharedMemSegmentID = oShMemory.getID();
-		ptRunningProc->csRandomFilename = csReadableFilePath;
-
-		ptRunningProc->tRunningProcess = oData->tRunningProcess;
-
-		dlgPinPadInfoCollector[dlgPinPadInfoCollectorIndex] = ptRunningProc;
-
-		if (pulHandle)
-			*pulHandle = dlgPinPadInfoCollectorIndex;
-
-		oShMemory.Detach(oData);
 	} catch (...) {
-
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
-
 		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo failed");
+		close(pipe1[0]);
+		close(pipe1[1]);
+		close(pipe2[0]);
+		close(pipe2[1]);
 
 		return DLG_ERR;
 	}
@@ -513,60 +640,16 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo(unsigned long ulHandle) {
 
 				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 			}
+			else {
+				write(pIt->second->pipe2[1], "1", 1);
+			}
 
 		} else {
 			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal 0 to proc %d : Error %s ",
 				  pIt->second->tRunningProcess, strerror(errno));
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
-
-		// delete the random file
-		DeleteFile(pIt->second->csRandomFilename.c_str());
-
-		// delete the map entry
-
-		delete pIt->second;
-		pIt->second = NULL;
-		dlgPinPadInfoCollector.erase(pIt);
-
-		// memory is cleaned up in the child process
 	}
-}
-
-DLGS_EXPORT void eIDMW::DlgCloseAllPinpadInfo() {
-
-	// check if we have this handle
-	for (std::map<unsigned long, DlgRunningProc *>::iterator pIt = dlgPinPadInfoCollector.begin();
-		 pIt != dlgPinPadInfoCollector.end(); ++pIt) {
-
-		// check if the process is still running
-		// and send SIGTERM if so
-		if (!kill(pIt->second->tRunningProcess, 0)) {
-
-			MWLOG(LEV_INFO, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo :  sending kill signal to process %d\n",
-				  pIt->second->tRunningProcess);
-
-			if (kill(pIt->second->tRunningProcess, SIGINT)) {
-				MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal SIGINT to proc %d : %s ",
-					  pIt->second->tRunningProcess, strerror(errno));
-				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-			}
-		} else {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseAllPinpadInfo sent signal 0 to proc %d : %s ",
-				  pIt->second->tRunningProcess, strerror(errno));
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-		}
-
-		// delete the random file
-		DeleteFile(pIt->second->csRandomFilename.c_str());
-
-		delete pIt->second;
-		pIt->second = NULL;
-
-		// memory is cleaned up in the child process
-	}
-	// delete the map
-	dlgPinPadInfoCollector.clear();
 }
 
 DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValidateOtp, wchar_t *csOutCode,
@@ -620,35 +703,16 @@ DLGS_EXPORT DlgRet eIDMW::DlgPickDevice(DlgDevice *outDevice) {
 	MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgPickDevice called");
 	DlgRet lRet = DLG_CANCEL;
 
-	DlgPickDeviceArguments *oData;
-	SharedMem oShMemory;
-	std::string csReadableFilePath;
+	DlgPickDeviceArguments oData;
 
 	try {
-		csReadableFilePath = CreateRandomFile();
-
-		// creating the shared memory segment
-		// attach oData
-		oShMemory.Attach(sizeof(DlgPickDeviceArguments), csReadableFilePath.c_str(), (void **)&oData);
-
-		CallQTServer(DLG_PICK_DEVICE, csReadableFilePath.c_str(), NULL);
-		lRet = oData->returnValue;
-
+		CallQTServerPipe(DLG_PICK_DEVICE, readDlgPickDeviceArguments, writeDlgPickDeviceArguments, (void *)&oData);
+		lRet = oData.returnValue;
 		if (lRet == DLG_OK) {
-			*outDevice = oData->outDevice;
+			*outDevice = oData.outDevice;
 		}
 
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 	} catch (...) {
-		// detach from the segment
-		oShMemory.Detach(oData);
-
-		// delete the random file
-		DeleteFile(csReadableFilePath.c_str());
 
 		return DLG_ERR;
 	}

@@ -60,7 +60,7 @@
 
 std::string readableFilePath = "/usr/local/etc/pteidgui.conf";
 
-DlgDisplayPinpadInfoArguments *oInfoData = NULL;
+DlgDisplayPinpadInfoArguments oInfoData;
 DlgCMDMessageArguments oCmdMsgData;
 dlgWndPinpadInfo *dlgInfo = NULL;
 QDialog *dlg = NULL;
@@ -301,7 +301,7 @@ int main(int argc, char *argv[]) {
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
 
 		DlgAskPINsArguments oData;
-		readAskPinArguments(firstPipe, (void*)&oData);
+		readAskPinsArguments(firstPipe, (void*)&oData);
 		MWLOG(LEV_ERROR, MOD_DLG, L"Running DLG_ASK_PINS with args: operation=> %d usage=> %d\n", oData.operation,
 			  oData.usage);
 
@@ -323,7 +323,7 @@ int main(int argc, char *argv[]) {
 				break;
 			default:
 				oData.returnValue = DLG_BAD_PARAM;
-				writeAskPinArguments(secondPipe, (void*)&oData);
+				writeAskPinsArguments(secondPipe, (void*)&oData);
 				return 0;
 			}
 			dlg = new dlgWndAskPINs(oData.pin1Info, oData.pin2Info, Header, tr_pin, DlgGetKeyPad(), 0,
@@ -334,7 +334,7 @@ int main(int argc, char *argv[]) {
 				delete dlg;
 				dlg = NULL;
 				oData.returnValue = DLG_OK;
-				writeAskPinArguments(secondPipe, (void*)&oData);
+				writeAskPinsArguments(secondPipe, (void*)&oData);
 				return 0;
 			}
 			delete dlg;
@@ -343,11 +343,11 @@ int main(int argc, char *argv[]) {
 			if (dlg)
 				delete dlg;
 			oData.returnValue = DLG_ERR;
-			writeAskPinArguments(secondPipe, (void*)&oData);
+			writeAskPinsArguments(secondPipe, (void*)&oData);
 			return 0;
 		}
 		oData.returnValue = DLG_CANCEL;
-		writeAskPinArguments(secondPipe, (void*)&oData);
+		writeAskPinsArguments(secondPipe, (void*)&oData);
 		return 0;
 
 	} else if (iFunctionIndex == DLG_BAD_PIN) {
@@ -401,192 +401,115 @@ int main(int argc, char *argv[]) {
 		// 2b. The main process get the child pid and write it into the share memory and then quit
 		// 3. The Child process show the dialog
 
-		SharedMem oShMemory;
+		//
+		// child process
+		//
+		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_DISPLAY_PINPAD_INFO");
+		readDisplayPinpadInfoArguments(firstPipe, (void*)&oInfoData);
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process started (pin=%ls, usage=%ld, operation=%ld)", argv[0],
+			  oInfoData.pinName, oInfoData.usage, oInfoData.operation);
 
-		if ((argc == 3) || (argc == 7)) {
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s called with DLG_DISPLAY_PINPAD_INFO", argv[0]);
+		QApplication a(argc, argv);
+		a.setFont(getLatoFont());
+		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+		MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QApplication created", argv[0]);
 
-			char csCommand[100];
-			sprintf(csCommand, "%s %s %s", argv[0], argv[1], argv[2]);
-			int len;
-			if (argc == 7) {
-				len = strlen(csCommand);
-				sprintf(&csCommand[len], " %s %s %s %s", argv[3], argv[4], argv[5], argv[6]);
-			}
-			len = strlen(csCommand);
-			sprintf(&csCommand[len], " child");
 
-			// spawn a child process
-			signal(SIGCHLD, SIG_IGN);
-			pid_t pid = fork();
+		try {
+			QString qsReader = QString::fromWCharArray(oInfoData.reader);
+			QString qsPinName = QString::fromWCharArray(oInfoData.pinName);
+			QString qsMessage = QString::fromWCharArray(oInfoData.message);
 
-			if (pid == -1) {
-				MWLOG(LEV_ERROR, MOD_DLG, L"  %s fork : %s ", argv[0], strerror(errno));
-				exit(DLG_ERR);
-			}
+			QString PINName;
+			PINName = getPinName(oInfoData.usage, oInfoData.pinName);
 
-			if (pid == 0) {
-				//
-				// fork process
-				//
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s fork process started", argv[0]);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : pin name set", argv[0]);
 
-				// Due to Mac Leopard constraint, we start another QtServer
-				// See __THE_PROCESS_HAS_FORKED_AND_YOU_CANNOT_USE_THIS_COREFOUNDATION_FUNCTIONALITY___YOU_MUST_EXEC__
-				int code = system(csCommand);
-				if (code != 0) {
-					MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServer %s %s child : %s ", argv[1], argv[2],
-						  strerror(errno));
-					exit(DLG_ERR);
-				}
-
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s fork system() return", argv[0]);
-
-				return 0;
-			} else {
-				//
-				// parent process
-				//
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s started fork process with ID %d", argv[0], pid);
-
-				pid_t subpid = 0;
-
-				for (int i = 0; i < 10; i++) {
-					CThread::SleepMillisecs(100); // Wait for the child process to start
-					if (0 != (subpid = getPidFromParentid(pid, csCommand))) {
-						break;
+			if (qsMessage.isEmpty()) {
+				switch (oInfoData.operation) {
+				case DLG_PIN_OP_VERIFY:
+					qsMessage = GETQSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
+					break;
+				case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
+					qsMessage = GETQSTRING_DLG(PleaseEnterYourPukOnThePinpadReader);
+					qsMessage += ", ";
+					qsMessage = GETQSTRING_DLG(ToUnblock);
+					qsMessage += " ";
+					qsMessage += GETQSTRING_DLG(Your);
+					qsMessage += " \"";
+					if (!qsPinName.isEmpty()) {
+						qsMessage += qsPinName;
+					} else {
+						qsMessage += GETQSTRING_DLG(Pin);
 					}
+					qsMessage += "\"\n";
+					break;
+				case DLG_PIN_OP_CHANGE:
+					qsMessage += GETQSTRING_DLG(EnterOldNewVerify);
+					qsMessage += "\n";
+					break;
+				case DLG_PIN_OP_UNBLOCK_CHANGE:
+					qsMessage = GETQSTRING_DLG(UnlockDialogInstructions);
+					break;
+				case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
+					qsMessage = GETQSTRING_DLG(UnlockWithoutPUKInstructions);
+					break;
+				default:
+					oInfoData.returnValue = DLG_BAD_PARAM;
+					MWLOG(LEV_ERROR, MOD_DLG, L"  %s child process : Bad param", argv[0]);
+					writeDisplayPinpadInfoArguments(secondPipe, (void*)&oInfoData);
+					return 0;
+					break;
 				}
-
-				oShMemory.Attach(sizeof(DlgDisplayPinpadInfoArguments), readableFilePath.c_str(), (void **)&oInfoData);
-
-				if (subpid == 0) {
-					MWLOG(LEV_ERROR, MOD_DLG, L"  %s failed to find child process ID", argv[0]);
-					oInfoData->returnValue = DLG_ERR;
-				} else {
-					MWLOG(LEV_DEBUG, MOD_DLG, L"  %s find child process with PID %ld", argv[0], subpid);
-					oInfoData->tRunningProcess = subpid;
-					oInfoData->returnValue = DLG_OK;
-				}
-
-				oShMemory.Detach((void *)oInfoData);
-
-				return 0;
 			}
-		} else {
-			//
-			// child process
-			//
-			oShMemory.Attach(sizeof(DlgDisplayPinpadInfoArguments), readableFilePath.c_str(), (void **)&oInfoData);
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process started (pin=%ls, usage=%ld, operation=%ld)", argv[0],
-				  oInfoData->pinName, oInfoData->usage, oInfoData->operation);
 
-			QApplication a(argc, argv);
-			a.setFont(getLatoFont());
-			a.setWindowIcon(QIcon(":/images/appicon.ico"));
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QApplication created", argv[0]);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : qsMessage set", argv[0]);
 
-			// attach to the segment and get a pointer
+			dlg = new QDialog();
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QDialog created", argv[0]);
 
-			try {
-				QString qsReader = QString::fromWCharArray(oInfoData->reader);
-				QString qsPinName = QString::fromWCharArray(oInfoData->pinName);
-				QString qsMessage = QString::fromWCharArray(oInfoData->message);
+			DlgPinOperation operation = oInfoData.operation;
+			unsigned long infoCollectorIndex = oInfoData.infoCollectorIndex;
 
-				QString PINName;
-				PINName = getPinName(oInfoData->usage, oInfoData->pinName);
+			dlgInfo = new dlgWndPinpadInfo(infoCollectorIndex, operation, qsReader, PINName, qsMessage, dlg,
+										   &parentWndGeometry);
 
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : pin name set", argv[0]);
+			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndPinpadInfo created", argv[0]);
+			dlg->show();
+			dlg->raise();
+			dlg->exec();
 
-				if (qsMessage.isEmpty()) {
-					switch (oInfoData->operation) {
-					case DLG_PIN_OP_VERIFY:
-						qsMessage = GETQSTRING_DLG(PleaseEnterYourPinOnThePinpadReader);
-						break;
-					case DLG_PIN_OP_UNBLOCK_NO_CHANGE:
-						qsMessage = GETQSTRING_DLG(PleaseEnterYourPukOnThePinpadReader);
-						qsMessage += ", ";
-						qsMessage = GETQSTRING_DLG(ToUnblock);
-						qsMessage += " ";
-						qsMessage += GETQSTRING_DLG(Your);
-						qsMessage += " \"";
-						if (!qsPinName.isEmpty()) {
-							qsMessage += qsPinName;
-						} else {
-							qsMessage += GETQSTRING_DLG(Pin);
-						}
-						qsMessage += "\"\n";
-						break;
-					case DLG_PIN_OP_CHANGE:
-						qsMessage += GETQSTRING_DLG(EnterOldNewVerify);
-						qsMessage += "\n";
-						break;
-					case DLG_PIN_OP_UNBLOCK_CHANGE:
-						qsMessage = GETQSTRING_DLG(UnlockDialogInstructions);
-						break;
-					case DLG_PIN_OP_UNBLOCK_CHANGE_NO_PUK:
-						qsMessage = GETQSTRING_DLG(UnlockWithoutPUKInstructions);
-						break;
-					default:
-						oInfoData->returnValue = DLG_BAD_PARAM;
-						oShMemory.Detach((void *)oInfoData);
-						MWLOG(LEV_ERROR, MOD_DLG, L"  %s child process : Bad param", argv[0]);
-						return 0;
-						break;
-					}
-				}
-
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : qsMessage set", argv[0]);
-
-				dlg = new QDialog();
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QDialog created", argv[0]);
-
-				DlgPinOperation operation = oInfoData->operation;
-				unsigned long infoCollectorIndex = oInfoData->infoCollectorIndex;
-
-				// we do not need the shared memory area anymore
-				oShMemory.Detach((void *)oInfoData);
-				SharedMem::Delete(oShMemory.getID());
-
-				dlgInfo = new dlgWndPinpadInfo(infoCollectorIndex, operation, qsReader, PINName, qsMessage, dlg,
-											   &parentWndGeometry);
-
-				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndPinpadInfo created", argv[0]);
-				dlg->show();
-				dlg->raise();
-				dlg->exec();
-
-				if (dlgInfo) {
-					delete dlgInfo;
-					dlgInfo = NULL;
-				}
-
-				if (dlg) {
-					delete dlg;
-					dlg = NULL;
-				}
-
-				return 0;
-			} catch (...) {
-				MWLOG(LEV_ERROR, MOD_DLG, L"  %s child process failed", argv[0]);
-
-				if (dlgInfo) {
-					delete dlgInfo;
-					dlgInfo = NULL;
-				}
-
-				if (dlg) {
-					delete dlg;
-					dlg = NULL;
-				}
-
-				oInfoData->returnValue = DLG_ERR;
-				oShMemory.Detach((void *)oInfoData);
-				SharedMem::Delete(oShMemory.getID());
-
-				return 0;
+			if (dlgInfo) {
+				delete dlgInfo;
+				dlgInfo = NULL;
 			}
+
+			if (dlg) {
+				delete dlg;
+				dlg = NULL;
+			}
+
+			oInfoData.returnValue = DLG_OK;
+			writeDisplayPinpadInfoArguments(secondPipe, (void*)&oInfoData);
+			return 0;
+		} catch (...) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  %s child process failed", argv[0]);
+
+			if (dlgInfo) {
+				delete dlgInfo;
+				dlgInfo = NULL;
+			}
+
+			if (dlg) {
+				delete dlg;
+				dlg = NULL;
+			}
+
+			oInfoData.returnValue = DLG_ERR;
+			writeDisplayPinpadInfoArguments(secondPipe, (void*)&oInfoData);
+			return 0;
 		}
+
 		return 0;
 	} else if (iFunctionIndex == DLG_ASK_CMD_INPUT) {
 		QApplication a(argc, argv);
@@ -662,25 +585,24 @@ int main(int argc, char *argv[]) {
 		return 0;
 
 	} else if (iFunctionIndex == DLG_PICK_DEVICE) {
+		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_PICK_DEVICE");
+		DlgPickDeviceArguments oData;
+
+		readDlgPickDeviceArguments(firstPipe, (void*)&oData);
+
 		QApplication a(argc, argv);
 		a.setFont(getLatoFont());
 		a.setWindowIcon(QIcon(":/images/appicon.ico"));
-
-		// attach to the segment and get a pointer
-		DlgPickDeviceArguments *oData = NULL;
-		SharedMem oShMemory;
-		oShMemory.Attach(sizeof(DlgPickDeviceArguments), readableFilePath.c_str(), (void **)&oData);
-		MWLOG(LEV_DEBUG, MOD_DLG, L"Running DLG_PICK_DEVICE");
 
 		dlgWndPickDevice *dlg = NULL;
 		try {
 			dlg = new dlgWndPickDevice(NULL, &parentWndGeometry);
 			if (dlg->exec()) {
-				oData->outDevice = dlg->getOutDevice();
-				oData->returnValue = DLG_OK;
+				oData.outDevice = dlg->getOutDevice();
+				oData.returnValue = DLG_OK;
 				delete dlg;
 				dlg = NULL;
-				oShMemory.Detach((void *)oData);
+				writeDlgPickDeviceArguments(secondPipe, (void*)&oData);
 				return 0;
 			}
 			delete dlg;
@@ -688,12 +610,12 @@ int main(int argc, char *argv[]) {
 		} catch (...) {
 			if (dlg)
 				delete dlg;
-			oData->returnValue = DLG_ERR;
-			oShMemory.Detach((void *)oData);
+			oData.returnValue = DLG_ERR;
+			writeDlgPickDeviceArguments(secondPipe, (void*)&oData);
 			return 0;
 		}
-		oData->returnValue = DLG_CANCEL;
-		oShMemory.Detach((void *)oData);
+		oData.returnValue = DLG_CANCEL;
+		writeDlgPickDeviceArguments(secondPipe, (void*)&oData);
 		return 0;
 
 	} else if (iFunctionIndex == DLG_CMD_MSG) {
