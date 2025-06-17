@@ -248,12 +248,14 @@
   <ItemGroup>
     <ClInclude Include="ACR83Pinpad.h" />
     <ClInclude Include="APDU.h" />
+    <ClInclude Include="BacAuthentication.h" />
     <ClInclude Include="Cache.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardFactory.h" />
     <ClInclude Include="CardLayer.h" />
     <ClInclude Include="CardLayerConst.h" />
     <ClInclude Include="CardReaderInfo.h" />
+    <ClInclude Include="ChipAuthentication.h" />
     <ClInclude Include="Context.h" />
     <ClInclude Include="GempcPinpad.h" />
     <ClInclude Include="GenericPinpad.h" />

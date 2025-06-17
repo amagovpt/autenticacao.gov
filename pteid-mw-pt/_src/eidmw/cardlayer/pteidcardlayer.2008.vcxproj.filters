@@ -185,6 +185,12 @@
     <ClInclude Include="SecureMessaging.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BacAuthentication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChipAuthentication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="ReadersInfo.h">
