@@ -643,6 +643,60 @@ void GAPI::getAddressFile() {
 	END_TRY_CATCH
 }
 
+void GAPI::doSaveIcaoCardPhoto(const QString &outputFile) {
+	ICAO_Card *card = NULL;
+
+	unsigned long ReaderCount = ReaderSet.readerCount();
+	unsigned long ReaderIdx = 0;
+	unsigned long tempReaderIndex = 0;
+
+	if (ReaderCount == 0) {
+		emit signalCardAccessError(NoReaderFound);
+	}
+
+	for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
+		if (readerContext.isCardPresent()) {
+			tempReaderIndex = ReaderIdx;
+			break;
+		}
+	}
+
+	PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(tempReaderIndex);
+	PTEID_CardType cardType = readerContext.getCardType();
+
+	if (cardType == ICAO_CARDTYPE_MRTD || cardType == PTEID_CARDTYPE_IAS5) {
+		card = &readerContext.getICAOCard();
+	}
+	if (card == NULL)
+		return;
+
+	PTEID_ICAO_DG2 *dg2 = card->readDataGroup2();
+	if (dg2->biometricInstances().empty())
+		return;
+
+	qDebug() << "Processing data group 2 to get photo";
+	std::vector<PTEID_BiometricInfomation *> biometric_instances = dg2->biometricInstances();
+	PTEID_BiometricInfomation *instance = biometric_instances.at(0);
+	PTEID_FaceInfo *faceInfo = instance->faceInfo();
+	PTEID_FaceInfoData *faceInfoData = faceInfo->faceInfoData().at(0);
+	unsigned short image_data_type = faceInfoData->imgDataType();
+	qDebug() << "DG2 image data type: " << image_data_type;
+
+	QImage image_photo;
+	if (image_data_type == 1) {
+		// JPEG2000, which needs to be converted to PNG
+		PTEID_ByteArray photoRawData = faceInfoData->photoRawDataPNG();
+		image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "PNG");
+	} else if (image_data_type == 0) {
+		// JPG
+		PTEID_ByteArray photoRawData = faceInfoData->photoRawData();
+		image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "JPG");
+	}
+	bool success = image_photo.save(outputFile);
+	emit signalSaveCardPhotoFinished(success);
+}
+
 void GAPI::doSaveCardPhoto(QString outputFile) {
 	PTEID_EIDCard *card = NULL;
 	getCardInstance(card);
@@ -2492,6 +2546,10 @@ void GAPI::startCardICAOReading() {
 
 void GAPI::startSavingCardPhoto(QString outputFile) {
 	QFuture<void> future = Concurrent::run(this, &GAPI::doSaveCardPhoto, outputFile);
+}
+
+void GAPI::startSavingIcaoCardPhoto(const QString &outputFile) {
+	QFuture<void> future = Concurrent::run(this, &GAPI::doSaveIcaoCardPhoto, outputFile);
 }
 
 void GAPI::startWritingPersoNotes(const QString &text) {

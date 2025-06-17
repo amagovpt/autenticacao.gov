@@ -461,6 +461,7 @@ public slots:
 	void startGettingInfoFromSignCert();
 	void startCCSignatureCertCheck();
 	void startSavingCardPhoto(QString outputFile);
+	void startSavingIcaoCardPhoto(const QString &outputFile);
 	int getStringByteLength(const QString &text);
 	QString convertDate(const QString& date);
 	void finishLoadingCardData(PTEID_EIDCard *card);
@@ -739,6 +740,7 @@ private:
 	void getPersoDataFile();
 	void setPersoDataFile(const QString &text);
 	void doSaveCardPhoto(QString outputFile);
+	void doSaveIcaoCardPhoto(const QString &outputFile);
 	void getAddressFile();
 	void doSignPDF(SignParams &params);
 	bool doSignPrintPDF(QString &file_to_sign, QString &outputsign, bool isTimestamp, bool isLtv);

@@ -337,7 +337,7 @@ PageCardICAOForm {
             console.log("Saving photo to: " + outputFile)
 
             var file = decodeURIComponent(Functions.stripFilePrefix(outputFile))
-            gapi.startSavingCardPhoto(file)
+            gapi.startSavingIcaoCardPhoto(file)
         }
     }
 
