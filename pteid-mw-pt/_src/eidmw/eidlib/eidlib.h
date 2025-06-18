@@ -497,6 +497,17 @@ public:
 
 	PTEIDSDK_API ICAO_Card &getICAOCard();
 
+	/**
+     * Read the Multipass token information from the card present in the reader
+     *
+     * This token is a free access unique value, not related to personal citizen data.
+     * Its purpose is to be used in some physical access control scenarios.
+     * This is the only useful information available on IAS v5 cards without access control on contactless interface.
+     *
+     * The implementation uses Passive and Chip Authentication mechanisms defined in ICAO Doc 9303 Part 11 to counter the risk of receiving untrusted or cloned information.
+     *
+     * @return A PTEID_ByteArray object containing the Multipass token which is a 16-byte value
+     */ 
 	PTEIDSDK_API PTEID_ByteArray getMultiPassToken();
 
 	/**
