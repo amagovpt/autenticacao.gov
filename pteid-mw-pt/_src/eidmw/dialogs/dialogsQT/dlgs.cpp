@@ -561,6 +561,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 			std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
 #ifdef __APPLE__
 			csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/pteiddialogsQTsrv";
+#else
+			csServerPath += csServerName;
 #endif
 			snprintf(indexBuff, sizeof(indexBuff), "%d", DLG_DISPLAY_PINPAD_INFO);
 
@@ -748,6 +750,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 		std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
 #ifdef __APPLE__
 		csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/pteiddialogsQTsrv";
+#else
+		csServerPath += csServerName;
 #endif
 
 		pipe(pipe1);
@@ -919,6 +923,8 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 	std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
 #ifdef __APPLE__
 	csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/pteiddialogsQTsrv";
+#else
+	csServerPath += csServerName;
 #endif
 
 	int pipe1[2]; // parent -> child
