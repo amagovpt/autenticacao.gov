@@ -202,6 +202,7 @@ public:
 	void EndTransaction(PTEID_CardHandle hCard) override;
 
 private:
+	long CallbackToInternalError(PTEID_CallbackResult callbackResult);
 	PTEID_CardInterfaceCallbacks callbacks = {};
 };
 

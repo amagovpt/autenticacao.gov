@@ -531,18 +531,55 @@ ExternalCardInterface::~ExternalCardInterface() {
 	// Nothing to clean up
 }
 
+long ExternalCardInterface::CallbackToInternalError(PTEID_CallbackResult callbackResult) {
+    switch (callbackResult) {
+        case PTEID_CALLBACK_OK:
+            return EIDMW_OK;
+        case PTEID_CALLBACK_ERR_INVALID_PARAM:
+            return EIDMW_ERR_PARAM_BAD;
+        case PTEID_CALLBACK_ERR_NO_CARD:
+            return EIDMW_ERR_NO_CARD;
+        case PTEID_CALLBACK_ERR_COMM_ERROR:
+            return EIDMW_ERR_CARD_COMM;
+        case PTEID_CALLBACK_ERR_NO_READER:
+            return EIDMW_ERR_NO_READER;
+        case PTEID_CALLBACK_ERR_TIMEOUT:
+            return EIDMW_ERR_TIMEOUT;
+        case PTEID_CALLBACK_ERR_ACCESS_DENIED:
+            return EIDMW_ERR_CARD_SHARING;
+        case PTEID_CALLBACK_ERR_NOT_SUPPORTED:
+            return EIDMW_ERR_NOT_SUPPORTED;
+        case PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL:
+            return EIDMW_ERR_PARAM_RANGE;
+        case PTEID_CALLBACK_ERR_CARD_REMOVED:
+            return EIDMW_ERR_NO_CARD;
+        case PTEID_CALLBACK_ERR_UNRESPONSIVE:
+            return EIDMW_ERR_CANT_CONNECT;
+        case PTEID_CALLBACK_ERR_GENERIC:
+        default:
+            return EIDMW_ERR_CARD;
+    }
+}
+
 void ExternalCardInterface::EstablishContext() {
 	if (callbacks.establishContext == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
-	callbacks.establishContext(callbacks.context);
+
+	auto result = callbacks.establishContext(callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 }
 
 void ExternalCardInterface::ReleaseContext() {
 	if (callbacks.releaseContext == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
-	callbacks.releaseContext(callbacks.context);
+	auto result = callbacks.releaseContext(callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 }
 
 CByteArray ExternalCardInterface::ListReaders() {
@@ -553,7 +590,10 @@ CByteArray ExternalCardInterface::ListReaders() {
 	unsigned char buffer[1024];
 	unsigned long bufferSize = sizeof(buffer);
 
-	callbacks.listReaders(buffer, &bufferSize, callbacks.context);
+	auto result = callbacks.listReaders(buffer, &bufferSize, callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 
 	return CByteArray(buffer, bufferSize);
 }
@@ -568,7 +608,16 @@ bool ExternalCardInterface::Status(const std::string &csReader) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	return callbacks.cardPresentInReader(csReader.c_str(), callbacks.context) != 0;
+	auto result = callbacks.cardPresentInReader(csReader.c_str(), callbacks.context) != 0;
+	if (result == PTEID_CALLBACK_OK) {
+		return true;
+	}
+
+	if (result == PTEID_CALLBACK_ERR_NO_CARD) {
+		return false;
+	}
+
+	throw CMWEXCEPTION(CallbackToInternalError(result));
 }
 
 std::pair<PTEID_CardHandle, PTEID_CardProtocol> ExternalCardInterface::Connect(const std::string &csReader,
@@ -581,13 +630,12 @@ std::pair<PTEID_CardHandle, PTEID_CardProtocol> ExternalCardInterface::Connect(c
 	PTEID_CardHandle outHandle = 0;
 	PTEID_CardProtocol outProtocol = {};
 
-	bool success = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, callbacks.context);
-
-	if (success) {
-		return std::make_pair(outHandle, outProtocol);
-	} else {
-		throw CMWEXCEPTION(EIDMW_ERR_CARD);
+	auto result = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}
+
+	return std::make_pair(outHandle, outProtocol);
 }
 
 void ExternalCardInterface::Disconnect(PTEID_CardHandle hCard, tDisconnectMode) {
@@ -595,7 +643,10 @@ void ExternalCardInterface::Disconnect(PTEID_CardHandle hCard, tDisconnectMode) 
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	callbacks.disconnect(hCard, callbacks.context);
+	auto result = callbacks.disconnect(hCard, callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 }
 
 CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
@@ -607,8 +658,11 @@ CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteAr
 	unsigned char responseBuffer[APDU_BUF_LEN];
 	unsigned long respBufferSize = sizeof(responseBuffer);
 
-	callbacks.transmit(hCard, oCmdAPDU.GetBytes(), oCmdAPDU.Size(), responseBuffer, &respBufferSize, plRetVal, pSendPci,
+	auto result = callbacks.transmit(hCard, oCmdAPDU.GetBytes(), oCmdAPDU.Size(), responseBuffer, &respBufferSize, plRetVal, pSendPci,
 					   pRecvPci, callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 
 	return CByteArray(responseBuffer, respBufferSize);
 }
@@ -618,7 +672,10 @@ void ExternalCardInterface::Recover(PTEID_CardHandle hCard, unsigned long *pulLo
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	callbacks.recover(hCard, pulLockCount, callbacks.context);
+	auto result = callbacks.recover(hCard, pulLockCount, callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 }
 
 CByteArray ExternalCardInterface::Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
@@ -634,13 +691,16 @@ CByteArray ExternalCardInterface::Control(PTEID_CardHandle hCard, unsigned long 
 
 	unsigned long respBufferSize = ulMaxResponseSize;
 
-	callbacks.control(hCard, ulControl, oCmd.GetBytes(), oCmd.Size(), respBuffer, &respBufferSize, ulMaxResponseSize,
+	auto result = callbacks.control(hCard, ulControl, oCmd.GetBytes(), oCmd.Size(), respBuffer, &respBufferSize, ulMaxResponseSize,
 					  callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 
-	CByteArray result(respBuffer, respBufferSize);
+	CByteArray res(respBuffer, respBufferSize);
 	delete[] respBuffer;
 
-	return result;
+	return res;
 }
 
 void ExternalCardInterface::BeginTransaction(PTEID_CardHandle hCard) {
@@ -648,7 +708,10 @@ void ExternalCardInterface::BeginTransaction(PTEID_CardHandle hCard) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	callbacks.beginTransaction(hCard, callbacks.context);
+	auto result = callbacks.beginTransaction(hCard, callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 }
 
 void ExternalCardInterface::EndTransaction(PTEID_CardHandle hCard) {
@@ -656,7 +719,10 @@ void ExternalCardInterface::EndTransaction(PTEID_CardHandle hCard) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	callbacks.endTransaction(hCard, callbacks.context);
+	auto result = callbacks.endTransaction(hCard, callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 }
 
 std::pair<bool, CByteArray> ExternalCardInterface::StatusWithATR(PTEID_CardHandle hCard) {
@@ -667,9 +733,12 @@ std::pair<bool, CByteArray> ExternalCardInterface::StatusWithATR(PTEID_CardHandl
 	unsigned char buffer[64];
 	unsigned long bufferSize = sizeof(buffer);
 
-	bool status = callbacks.statusWithATR(hCard, buffer, &bufferSize, callbacks.context);
+	auto result = callbacks.statusWithATR(hCard, buffer, &bufferSize, callbacks.context);
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
+	}
 
-	return std::make_pair(status, (status) ? CByteArray(buffer, bufferSize) : CByteArray());
+	return std::make_pair(true, CByteArray(buffer, bufferSize));
 }
 
 } // namespace eIDMW
