@@ -550,8 +550,18 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 		wcscpy_s(oData.message, sizeof(oData.message) / sizeof(wchar_t), wsMessage);
 		oData.infoCollectorIndex = ++dlgPinPadInfoCollectorIndex;
 
-		pipe(pipe1);
-		pipe(pipe2);
+		int firstPipeResult = pipe(pipe1);
+		if (firstPipeResult == -1) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the first pipe error: %s",
+				  strerror(errno));
+			return DLG_ERR;
+		}
+		int secondPipeResult = pipe(pipe2);
+		if (secondPipeResult == -1) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the second pipe error: %s",
+				  strerror(errno));
+			return DLG_ERR;
+		}
 		pid_t pid = fork();
 		if (pid == 0) {
 			char indexBuff[2];
@@ -753,8 +763,18 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 		csServerPath += csServerName;
 #endif
 
-		pipe(pipe1);
-		pipe(pipe2);
+		int firstPipeResult = pipe(pipe1);
+		if (firstPipeResult == -1) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the first pipe error: %s",
+				  strerror(errno));
+			return DLG_ERR;
+		}
+		int secondPipeResult = pipe(pipe2);
+		if (secondPipeResult == -1) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the second pipe error: %s",
+				  strerror(errno));
+			return DLG_ERR;
+		}
 		pid_t pid = fork();
 		if (pid == 0) {
 			char indexBuff[2];
@@ -872,8 +892,18 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 	int pipe1[2]; // parent -> child
 	int pipe2[2]; // child -> parent
 
-	pipe(pipe1);
-	pipe(pipe2);
+	int firstPipeResult = pipe(pipe1);
+	if (firstPipeResult == -1) {
+		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the first pipe error: %s",
+			  strerror(errno));
+		return;
+	}
+	int secondPipeResult = pipe(pipe2);
+	if (secondPipeResult == -1) {
+		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the second pipe error: %s",
+			  strerror(errno));
+		return;
+	}
 	pid_t pid = fork();
 	if (pid == 0) {
 		char indexBuff[2];
