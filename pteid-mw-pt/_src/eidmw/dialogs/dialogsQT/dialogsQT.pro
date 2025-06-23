@@ -48,14 +48,12 @@ macx: LIBS += -L../../lib -l$${COMMONLIB}
 # Input
 HEADERS +=  ../dialogs.h \
            ../langUtil.h \
-           ../language.h \
-	   SharedMem.h
+           ../language.h
 
 FORMS +=
 
 SOURCES += dlgs.cpp \
-           ../langUtil.cpp \
-	   SharedMem.cpp
+           ../langUtil.cpp
 
 
 QMAKE_EXTRA_TARGETS += language

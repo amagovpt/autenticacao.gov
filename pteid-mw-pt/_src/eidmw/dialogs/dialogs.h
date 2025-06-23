@@ -407,10 +407,6 @@ typedef struct WndGeometry Type_WndGeometry;
 typedef void (*readArgument)(int, void *);
 typedef void (*writeArgument)(int, void *);
 
-void InitializeRand();
-std::string RandomFileName();
-std::string CreateRandomFile();
-void DeleteFile(const char *csFilename);
 void CallQTServer(const DlgFunctionIndex index, const char *csFilename, void *wndGeometry = 0);
 void CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc, writeArgument writeFunc, void *args,
 					  void *wndGeometry = 0);

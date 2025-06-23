@@ -35,7 +35,6 @@
 #include "../dialogs.h"
 #include "../langUtil.h"
 
-#include "SharedMem.h"
 #include <map>
 
 #include "Log.h"
@@ -858,63 +857,6 @@ DLGS_EXPORT void eIDMW::DlgCloseAskInputCMD() {
 /***************************
  *       Helper Functions
  ***************************/
-
-void eIDMW::InitializeRand() {
-	if (bRandInitialized)
-		return;
-	srand(time(NULL));
-	bRandInitialized = true;
-	return;
-}
-
-std::string eIDMW::RandomFileName() {
-
-	InitializeRand();
-
-	// start the filename with a dot, so that it is not visible with a normal 'ls'
-	std::string randomFileName = "/tmp/.file_";
-	char rndmString[13];
-	sprintf(rndmString, "%012d", rand());
-
-	randomFileName += rndmString;
-
-	return randomFileName;
-}
-
-std::string eIDMW::CreateRandomFile() {
-
-	std::string csFilePath = RandomFileName();
-	// create this file
-	char csCommand[100];
-	sprintf(csCommand, "touch %s", csFilePath.c_str());
-	if (system(csCommand) != 0) {
-		// If this lib is used by acroread, all system() calls
-		// seems to return -1 for some reason, even if the
-		// call was successfull.
-		FILE *test = fopen(csFilePath.c_str(), "r");
-		if (test) {
-			fclose(test);
-			g_bSystemCallsFail = true;
-			MWLOG(LEV_WARN, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)", csFilePath.c_str(), strerror(errno),
-				  errno);
-		} else {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CreateRandomFile %s : %s (%d)", csFilePath.c_str(), strerror(errno),
-				  errno);
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-		}
-	}
-	return csFilePath;
-}
-
-void eIDMW::DeleteFile(const char *csFilename) {
-	char csCommand[100];
-	sprintf(csCommand, " [ -e %s ] && rm %s", csFilename, csFilename);
-	if (system(csCommand) != 0) {
-		MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR, MOD_DLG, L"  eIDMW::DeleteFile %s : %s ", csFilename,
-			  strerror(errno));
-		// throw CMWEXCEPTION(EIDMW_ERR_SYSTEM);
-	}
-}
 
 void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc, writeArgument writeFunc, void *args,
 							 void *wndGeometry) {

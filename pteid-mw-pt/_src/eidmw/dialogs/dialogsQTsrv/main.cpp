@@ -48,7 +48,6 @@
 #include "dlgWndAskCmd.h"
 #include "dlgWndPickDevice.h"
 #include "dlgWndCmdMsg.h"
-#include "SharedMem.h"
 #include "errno.h"
 
 #include "../../common/Thread.h"
@@ -64,8 +63,6 @@ DlgDisplayPinpadInfoArguments oInfoData;
 DlgCMDMessageArguments oCmdMsgData;
 dlgWndPinpadInfo *dlgInfo = NULL;
 QDialog *dlg = NULL;
-dlgWndAskCmd *c_dlg = nullptr;
-SharedMem *oShMemory = NULL;
 
 pid_t getPidFromParentid(pid_t parentid, const char *CommandLineToFind);
 
