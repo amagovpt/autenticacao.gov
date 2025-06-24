@@ -608,16 +608,13 @@ bool ExternalCardInterface::Status(const std::string &csReader) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	auto result = callbacks.cardPresentInReader(csReader.c_str(), callbacks.context) != 0;
-	if (result == PTEID_CALLBACK_OK) {
-		return true;
+	bool cardPresent;
+	auto result = callbacks.cardPresentInReader(csReader.c_str(), callbacks.context, &cardPresent) != 0;
+	if (result != PTEID_CALLBACK_OK) {
+		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}
-
-	if (result == PTEID_CALLBACK_ERR_NO_CARD) {
-		return false;
-	}
-
-	throw CMWEXCEPTION(CallbackToInternalError(result));
+	
+	return cardPresent;
 }
 
 std::pair<PTEID_CardHandle, PTEID_CardProtocol> ExternalCardInterface::Connect(const std::string &csReader,

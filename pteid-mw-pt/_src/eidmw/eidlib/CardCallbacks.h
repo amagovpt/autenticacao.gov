@@ -77,7 +77,7 @@ typedef PTEID_CallbackResult (*PTEID_ListReadersFn)(unsigned char *buffer, unsig
  * @param context Pointer to the context
  * @return OK if card is present
  */
-typedef PTEID_CallbackResult (*PTEID_CardPresentInReaderFn)(const char *csReader, void *context);
+typedef PTEID_CallbackResult (*PTEID_CardPresentInReaderFn)(const char *csReader, void *context, bool *cardPresent);
 
 /**
  * Function to get reader status with ATR
