@@ -70,8 +70,7 @@ void eIDMW::writeAskPinArguments(int fd, void *arg) {
 	char *buffer;
 	char *initBuffer;
 	DlgAskPINArguments *pinArg = (DlgAskPINArguments *)(arg);
-	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->pinInfo) +
-			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) + sizeof(pinArg->returnValue);
+	int len = sizeof(DlgAskPINArguments);
 
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
@@ -94,8 +93,7 @@ void eIDMW::readAskPinArguments(int fd, void *arg) {
 	char *buffer;
 	char *initBuffer;
 	DlgAskPINArguments *pinArg = (DlgAskPINArguments *)(arg);
-	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + (50 * sizeof(wchar_t)) + sizeof(pinArg->pinInfo) +
-			  ((PIN_MAX_LENGTH + 1) * sizeof(wchar_t)) + sizeof(pinArg->returnValue);
+	int len = sizeof(DlgAskPINArguments);
 	buffer = (char *)malloc(len);
 	read(fd, buffer, len);
 	initBuffer = buffer;
@@ -119,10 +117,7 @@ void eIDMW::writeAskPinsArguments(int fd, void *arg)
 	char *buffer;
 	char *initBuffer;
 	DlgAskPINsArguments *pinArg = (DlgAskPINsArguments *)(arg);
-	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->pin1Info) +
-			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) +  sizeof(pinArg->pin2Info) +
-			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) + sizeof(pinArg->returnValue);
-
+	int len = sizeof(DlgAskPINsArguments);
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
 	memcpy(buffer, &pinArg->operation, sizeof(pinArg->operation));
@@ -149,9 +144,7 @@ void eIDMW::readAskPinsArguments(int fd, void *arg) {
 	char *buffer;
 	char *initBuffer;
 	DlgAskPINsArguments *pinArg = (DlgAskPINsArguments *)(arg);
-	int len = sizeof(pinArg->operation) + sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->pin1Info) +
-			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) +  sizeof(pinArg->pin2Info) +
-			  (PIN_MAX_LENGTH + 1) * sizeof(wchar_t) + sizeof(pinArg->returnValue);
+	int len = sizeof(DlgAskPINsArguments);
 	buffer = (char *)malloc(len);
 	read(fd, buffer, len);
 	initBuffer = buffer;
@@ -180,7 +173,7 @@ void eIDMW::readBadPinArguments(int fd, void *arg)
 	char *buffer;
 	char *initBuffer;
 	DlgBadPinArguments *pinArg = (DlgBadPinArguments *)(arg);
-	int len = sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->ulRemainingTries) + sizeof(pinArg->returnValue);
+	int len = sizeof(DlgBadPinArguments);
 
 	buffer = (char *)malloc(len);
 	read(fd, buffer, len);
@@ -201,7 +194,7 @@ void eIDMW::writeBadPinArguments(int fd, void *arg)
 	char *buffer;
 	char *initBuffer;
 	DlgBadPinArguments *pinArg = (DlgBadPinArguments *)(arg);
-	int len = sizeof(pinArg->usage) + 50 * sizeof(wchar_t) + sizeof(pinArg->ulRemainingTries) + sizeof(pinArg->returnValue);
+	int len = sizeof(DlgBadPinArguments);
 
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
@@ -223,9 +216,7 @@ void eIDMW::writeDisplayPinpadInfoArguments(int fd, void *arg)
 	char *buffer;
 	char *initBuffer;
 	DlgDisplayPinpadInfoArguments *pinPadInfo = (DlgDisplayPinpadInfoArguments *)(arg);
-	int len = sizeof(pinPadInfo->operation) + 100 * sizeof(wchar_t) + sizeof(pinPadInfo->usage)
-			  + 50 * sizeof(wchar_t) + 200 * sizeof(wchar_t) + sizeof(pinPadInfo->infoCollectorIndex) +
-			  sizeof(pinPadInfo->tRunningProcess) + sizeof(pinPadInfo->returnValue);
+	int len = sizeof(DlgDisplayPinpadInfoArguments);
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
 	memcpy(buffer, &pinPadInfo->operation, sizeof(pinPadInfo->operation));
@@ -253,9 +244,7 @@ void eIDMW::readDisplayPinpadInfoArguments(int fd, void *arg)
 	char *buffer;
 	char *initBuffer;
 	DlgDisplayPinpadInfoArguments *pinPadInfo = (DlgDisplayPinpadInfoArguments *)(arg);
-	int len = sizeof(pinPadInfo->operation) + 100 * sizeof(wchar_t) + sizeof(pinPadInfo->usage)
-			  + 50 * sizeof(wchar_t) + 200 * sizeof(wchar_t) + sizeof(pinPadInfo->infoCollectorIndex) +
-			  sizeof(pinPadInfo->tRunningProcess) + sizeof(pinPadInfo->returnValue);
+	int len = sizeof(DlgDisplayPinpadInfoArguments);
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
 	int sizeRead = read(fd, buffer, len);
@@ -294,10 +283,7 @@ void eIDMW::writeAskInputCMDArguments(int fd, void *arg) {
 	char *buffer;
 	char *initBuffer;
 	DlgAskInputCMDArguments *cmdArg = (DlgAskInputCMDArguments *)(arg);
-
-	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->isValidateOtp) +
-			  sizeof(cmdArg->callbackWasCalled) + ((PIN_MAX_LENGTH + 1) * sizeof(wchar_t)) + sizeof(cmdArg->askForId) +
-			  sizeof(cmdArg->returnValue);
+	int len = sizeof(DlgAskInputCMDArguments);
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
 
@@ -328,10 +314,7 @@ void eIDMW::readAskInputCMDArguments(int fd, void *arg) {
 	char *buffer;
 	char *initBuffer;
 	DlgAskInputCMDArguments *cmdArg = (DlgAskInputCMDArguments *)(arg);
-
-	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->isValidateOtp) +
-			  sizeof(cmdArg->callbackWasCalled) + ((PIN_MAX_LENGTH + 1) * sizeof(wchar_t)) + sizeof(cmdArg->askForId) +
-			  sizeof(cmdArg->returnValue);
+	int len = sizeof(DlgAskInputCMDArguments);
 	buffer = (char *)malloc(len);
 	read(fd, buffer, len);
 	initBuffer = buffer;
@@ -362,9 +345,7 @@ void eIDMW::writeCMDMessageArguments(int fd, void *arg) {
 	char *buffer;
 	char *initBuffer;
 	DlgCMDMessageArguments *cmdArg = (DlgCMDMessageArguments *)(arg);
-
-	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->type) + sizeof(cmdArg->returnValue) +
-			  sizeof(cmdArg->cmdMsgCollectorIndex) + sizeof(cmdArg->tRunningProcess);
+	int len = sizeof(DlgCMDMessageArguments);
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
 	memcpy(buffer, &cmdArg->message, sizeof(wchar_t) * 50);
@@ -388,7 +369,7 @@ void eIDMW::writeDlgPickDeviceArguments(int fd, void *arg)
 	char *buffer;
 	char *initBuffer;
 	DlgPickDeviceArguments *dlgArg = (DlgPickDeviceArguments *)(arg);
-	int len = sizeof(dlgArg->outDevice) + sizeof(dlgArg->returnValue);
+	int len = sizeof(DlgPickDeviceArguments);
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
 	memcpy(buffer, &dlgArg->outDevice, sizeof(dlgArg->outDevice));
@@ -403,7 +384,7 @@ void eIDMW::readDlgPickDeviceArguments(int fd, void *arg)
 	char *buffer;
 	char *initBuffer;
 	DlgPickDeviceArguments *dlgArg = (DlgPickDeviceArguments *)(arg);
-	int len = sizeof(dlgArg->outDevice) + sizeof(dlgArg->returnValue);
+	int len = sizeof(DlgPickDeviceArguments);
 	buffer = (char *)malloc(len);
 	read(fd, buffer, len);
 	initBuffer = buffer;
@@ -417,8 +398,7 @@ void eIDMW::readCMDMessageArguments(int fd, void *arg) {
 	char *buffer;
 	char *initBuffer;
 	DlgCMDMessageArguments *cmdArg = (DlgCMDMessageArguments *)(arg);
-	int len = (sizeof(wchar_t) * 50) + sizeof(cmdArg->operation) + sizeof(cmdArg->type) + sizeof(cmdArg->returnValue) +
-			  sizeof(cmdArg->cmdMsgCollectorIndex) + sizeof(cmdArg->tRunningProcess);
+	int len = sizeof(DlgCMDMessageArguments);
 	buffer = (char *)malloc(len);
 	int sizeRead = read(fd, buffer, len);
 	if(sizeRead == -1) {
