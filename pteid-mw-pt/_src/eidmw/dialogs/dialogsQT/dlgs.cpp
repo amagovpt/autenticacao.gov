@@ -266,6 +266,7 @@ void eIDMW::readDisplayPinpadInfoArguments(int fd, void *arg)
 	}
 	else if(sizeRead == 1) {
 		MWLOG(LEV_DEBUG, MOD_DLG, L"eIDMW:: Close read");
+		pinPadInfo->returnValue = DLG_OK;
 		free(buffer);
 		return;
 	}
@@ -427,6 +428,7 @@ void eIDMW::readCMDMessageArguments(int fd, void *arg) {
 	}
 	else if(sizeRead == 1) {
 		MWLOG(LEV_DEBUG, MOD_DLG, L"eIDMW:: Close read");
+		cmdArg->returnValue = DLG_OK;
 		free(buffer);
 		return;
 	}
@@ -552,13 +554,13 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 
 		int firstPipeResult = pipe(pipe1);
 		if (firstPipeResult == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the first pipe error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo Failed to launch the first pipe error: %s",
 				  strerror(errno));
 			return DLG_ERR;
 		}
 		int secondPipeResult = pipe(pipe2);
 		if (secondPipeResult == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the second pipe error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo Failed to launch the second pipe error: %s",
 				  strerror(errno));
 			return DLG_ERR;
 		}
@@ -578,10 +580,19 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 			snprintf(pipe1Buff, sizeof(pipe1Buff), "%d", pipe1[0]);
 			snprintf(pipe2Buff, sizeof(pipe2Buff), "%d", pipe2[1]);
 
-			execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
-
+			int resultExec = execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
+			if(resultExec == -1) {
+				MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo Failed to execute dialog executable error: %s",
+					  strerror(errno));
+				exit(-1);
+			}
 			exit(0);
 
+		}
+		else if(pid == -1) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo Failed to create a new process error: %s",
+				  strerror(errno));
+			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
 		else {
 			oData.tRunningProcess = pid;
@@ -765,13 +776,13 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 
 		int firstPipeResult = pipe(pipe1);
 		if (firstPipeResult == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the first pipe error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage Failed to launch the first pipe error: %s",
 				  strerror(errno));
 			return DLG_ERR;
 		}
 		int secondPipeResult = pipe(pipe2);
 		if (secondPipeResult == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the second pipe error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage Failed to launch the second pipe error: %s",
 				  strerror(errno));
 			return DLG_ERR;
 		}
@@ -785,10 +796,20 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 			snprintf(pipe1Buff, sizeof(pipe1Buff), "%d", pipe1[0]);
 			snprintf(pipe2Buff, sizeof(pipe2Buff), "%d", pipe2[1]);
 
-			execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
-
+			int resultExec = execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
+			if(resultExec == -1) {
+				MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage Failed to execute dialog executable error: %s",
+					  strerror(errno));
+				exit(-1);
+			}
 			exit(0);
-		} else {
+		}
+		else if(pid == -1) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage Failed to create a new process error: %s",
+				  strerror(errno));
+			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+		}
+		else {
 			oCmdMessageData.tRunningProcess = pid;
 			writeCMDMessageArguments(pipe1[1], (void*)&oCmdMessageData);
 
@@ -914,9 +935,21 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 		snprintf(pipe1Buff, sizeof(pipe1Buff), "%d", pipe1[0]);
 		snprintf(pipe2Buff, sizeof(pipe2Buff), "%d", pipe2[1]);
 
-		execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
+		int resultExec = execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
+		if(resultExec == -1) {
+			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to execute dialog executable error: %s",
+				  strerror(errno));
+			exit(-1);
+		}
 
 		exit(0);
+	} else if (pid == -1) {
+		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to create a new process error: %s",
+			  strerror(errno));
+		close(pipe1[0]);
+		close(pipe1[1]);
+		close(pipe2[0]);
+		close(pipe2[1]);
 	} else {
 		current_dlg_pid = pid;
 		writeFunc(pipe1[1], args);
