@@ -260,12 +260,12 @@ void eIDMW::readDisplayPinpadInfoArguments(int fd, void *arg)
 	initBuffer = buffer;
 	int sizeRead = read(fd, buffer, len);
 	if(sizeRead == -1) {
-		MWLOG(LEV_ERROR, MOD_DLG, L"eIDMW:: Error when waiting to read");
+		MWLOG(LEV_ERROR, MOD_DLG, "eIDMW:: Error when waiting to read");
 		free(buffer);
 		return;
 	}
 	else if(sizeRead == 1) {
-		MWLOG(LEV_DEBUG, MOD_DLG, L"eIDMW:: Close read");
+		MWLOG(LEV_DEBUG, MOD_DLG, "eIDMW:: Close read");
 		pinPadInfo->returnValue = DLG_OK;
 		free(buffer);
 		return;
@@ -422,12 +422,12 @@ void eIDMW::readCMDMessageArguments(int fd, void *arg) {
 	buffer = (char *)malloc(len);
 	int sizeRead = read(fd, buffer, len);
 	if(sizeRead == -1) {
-		MWLOG(LEV_DEBUG, MOD_DLG, L"eIDMW:: Error when waiting to read");
+		MWLOG(LEV_DEBUG, MOD_DLG, "%s Error when waiting to read", __FUNCTION__);
 		free(buffer);
 		return;
 	}
 	else if(sizeRead == 1) {
-		MWLOG(LEV_DEBUG, MOD_DLG, L"eIDMW:: Close read");
+		MWLOG(LEV_DEBUG, MOD_DLG, "%s Close read", __FUNCTION__);
 		cmdArg->returnValue = DLG_OK;
 		free(buffer);
 		return;
@@ -462,9 +462,9 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation, DlgPinUsage usage
 		oData.pinInfo = pinInfo;
 		wcscpy_s(oData.pin, sizeof(oData.pin) / sizeof(wchar_t), wsPin);
 
-		MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgAskPin print debug before call qt");
+		MWLOG(LEV_DEBUG, MOD_DLG, "eIDMW::DlgAskPin print debug before call qt");
 		CallQTServerPipe(DLG_ASK_PIN, readAskPinArguments, writeAskPinArguments, (void *)&oData, wndGeometry);
-		MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgAskPin print debug after call qt");
+		MWLOG(LEV_DEBUG, MOD_DLG, "eIDMW::DlgAskPin print debug after call qt");
 		lRet = oData.returnValue;
 
 		if (lRet == DLG_OK) {
@@ -542,7 +542,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 	int pipe2[2]; // child -> parent
 
 	try {
-		MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo called");
+		MWLOG(LEV_DEBUG, MOD_DLG, "  eIDMW::DlgDisplayPinpadInfo called");
 
 
 		oData.operation = operation;
@@ -554,13 +554,13 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 
 		int firstPipeResult = pipe(pipe1);
 		if (firstPipeResult == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo Failed to launch the first pipe error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgDisplayPinpadInfo Failed to open the first pipe error: %s",
 				  strerror(errno));
 			return DLG_ERR;
 		}
 		int secondPipeResult = pipe(pipe2);
 		if (secondPipeResult == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo Failed to launch the second pipe error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgDisplayPinpadInfo Failed to open the second pipe error: %s",
 				  strerror(errno));
 			return DLG_ERR;
 		}
@@ -582,7 +582,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 
 			int resultExec = execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
 			if(resultExec == -1) {
-				MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo Failed to execute dialog executable error: %s",
+				MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgDisplayPinpadInfo Failed to execute dialog executable error: %s",
 					  strerror(errno));
 				exit(-1);
 			}
@@ -590,7 +590,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 
 		}
 		else if(pid == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo Failed to create a new process error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgDisplayPinpadInfo Failed to create a new process error: %s",
 				  strerror(errno));
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
@@ -631,7 +631,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 		// - the handle (because the user will use it)
 
 	} catch (...) {
-		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgDisplayPinpadInfo failed");
+		MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgDisplayPinpadInfo failed");
 		close(pipe1[0]);
 		close(pipe1[1]);
 		close(pipe2[0]);
@@ -652,12 +652,12 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo(unsigned long ulHandle) {
 		// and send SIGTERM if so
 		if (!kill(pIt->second->tRunningProcess, 0)) {
 
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo :  sending kill signal to process %d",
+			MWLOG(LEV_DEBUG, MOD_DLG, "  eIDMW::DlgClosePinpadInfo :  sending kill signal to process %d",
 				  pIt->second->tRunningProcess);
 
 			if (kill(pIt->second->tRunningProcess, SIGINT)) {
 
-				MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal SIGINT to proc %d Error: %s ",
+				MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgClosePinpadInfo sent signal SIGINT to proc %d Error: %s ",
 					  pIt->second->tRunningProcess, strerror(errno));
 
 				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
@@ -667,7 +667,7 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo(unsigned long ulHandle) {
 			}
 
 		} else {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgClosePinpadInfo sent signal 0 to proc %d : Error %s ",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgClosePinpadInfo sent signal 0 to proc %d : Error %s ",
 				  pIt->second->tRunningProcess, strerror(errno));
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
@@ -678,7 +678,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 										 unsigned long ulOutCodeBufferLen, wchar_t *csInOutId, unsigned long ulOutIdLen,
 										 const wchar_t *csUserName, unsigned long ulUserNameBufferLen,
 										 std::function<void(void)> *fSendSmsCallback) {
-	MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgAskInputCMD called");
+	MWLOG(LEV_DEBUG, MOD_DLG, "  eIDMW::DlgAskInputCMD called");
 	DlgRet lRet = DLG_CANCEL;
 
 	DlgAskInputCMDArguments oData;
@@ -722,7 +722,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 }
 
 DLGS_EXPORT DlgRet eIDMW::DlgPickDevice(DlgDevice *outDevice) {
-	MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgPickDevice called");
+	MWLOG(LEV_DEBUG, MOD_DLG, "  eIDMW::DlgPickDevice called");
 	DlgRet lRet = DLG_CANCEL;
 
 	DlgPickDeviceArguments oData;
@@ -754,7 +754,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 
 DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType type, const wchar_t *message,
 										unsigned long *pulHandle) {
-	MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgCMDMessage called");
+	MWLOG(LEV_DEBUG, MOD_DLG, "  eIDMW::DlgCMDMessage called");
 	DlgRet lRet = DLG_CANCEL;
 
 	DlgCMDMessageArguments oCmdMessageData;
@@ -776,13 +776,13 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 
 		int firstPipeResult = pipe(pipe1);
 		if (firstPipeResult == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage Failed to launch the first pipe error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage Failed to open the first pipe error: %s",
 				  strerror(errno));
 			return DLG_ERR;
 		}
 		int secondPipeResult = pipe(pipe2);
 		if (secondPipeResult == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage Failed to launch the second pipe error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage Failed to open the second pipe error: %s",
 				  strerror(errno));
 			return DLG_ERR;
 		}
@@ -798,14 +798,14 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 
 			int resultExec = execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
 			if(resultExec == -1) {
-				MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage Failed to execute dialog executable error: %s",
+				MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage Failed to execute dialog executable error: %s",
 					  strerror(errno));
 				exit(-1);
 			}
 			exit(0);
 		}
 		else if(pid == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage Failed to create a new process error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage Failed to create a new process error: %s",
 				  strerror(errno));
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
@@ -838,7 +838,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 		}
 	} catch (...) {
 
-		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCMDMessage failed");
+		MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage failed");
 		close(pipe1[0]);
 		close(pipe1[1]);
 		close(pipe2[0]);
@@ -850,7 +850,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 }
 
 DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle) {
-	MWLOG(LEV_DEBUG, MOD_DLG, L"DlgCloseCMDMessage() called: handle=%lu", ulHandle);
+	MWLOG(LEV_DEBUG, MOD_DLG, "DlgCloseCMDMessage() called: handle=%lu", ulHandle);
 	// check if we have this handle
 	std::map<unsigned long, DlgRunningProc *>::iterator pIt = dlgCMDMsgCollector.find(ulHandle);
 
@@ -860,12 +860,12 @@ DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle) {
 		// and send SIGTERM if so
 		if (!kill(pIt->second->tRunningProcess, 0)) {
 
-			MWLOG(LEV_DEBUG, MOD_DLG, L"  eIDMW::DlgCloseCMDMessage :  sending kill signal to process %d pipe2 : %d",
+			MWLOG(LEV_DEBUG, MOD_DLG, "  eIDMW::DlgCloseCMDMessage :  sending kill signal to process %d pipe2 : %d",
 				  pIt->second->tRunningProcess, pIt->second->pipe2[1]);
 
 			if (kill(pIt->second->tRunningProcess, SIGINT)) {
 
-				MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseCMDMessage sent signal SIGINT to proc %d Error: %s ",
+				MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCloseCMDMessage sent signal SIGINT to proc %d Error: %s ",
 					  pIt->second->tRunningProcess, strerror(errno));
 
 				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
@@ -875,7 +875,7 @@ DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle) {
 			}
 
 		} else {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::DlgCloseCMDMessage sent signal 0 to proc %d : Error %s ",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCloseCMDMessage sent signal 0 to proc %d : Error %s ",
 				  pIt->second->tRunningProcess, strerror(errno));
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 		}
@@ -915,13 +915,13 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 
 	int firstPipeResult = pipe(pipe1);
 	if (firstPipeResult == -1) {
-		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the first pipe error: %s",
+		MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServerPipe Failed to launch the first pipe error: %s",
 			  strerror(errno));
 		return;
 	}
 	int secondPipeResult = pipe(pipe2);
 	if (secondPipeResult == -1) {
-		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to launch the second pipe error: %s",
+		MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServerPipe Failed to launch the second pipe error: %s",
 			  strerror(errno));
 		return;
 	}
@@ -937,14 +937,14 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 
 		int resultExec = execl(csServerPath.c_str(), csServerPath.c_str(), indexBuff, pipe1Buff, pipe2Buff, NULL);
 		if(resultExec == -1) {
-			MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to execute dialog executable error: %s",
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServerPipe Failed to execute dialog executable error: %s",
 				  strerror(errno));
 			exit(-1);
 		}
 
 		exit(0);
 	} else if (pid == -1) {
-		MWLOG(LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServerPipe Failed to create a new process error: %s",
+		MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServerPipe Failed to create a new process error: %s",
 			  strerror(errno));
 		close(pipe1[0]);
 		close(pipe1[1]);
@@ -982,7 +982,7 @@ void eIDMW::CallQTServer(const DlgFunctionIndex index, const char *csFilename, v
 
 	int code = system(csCommand);
 	if (code != 0) {
-		MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServer %i %s : %s ", index,
+		MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServer %i %s : %s ", index,
 			  csFilename, strerror(errno));
 		if (!g_bSystemCallsFail)
 			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
