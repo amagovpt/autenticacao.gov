@@ -78,12 +78,12 @@ void eIDMW::writeAskPinArguments(int fd, void *arg) {
 	buffer += sizeof(pinArg->operation);
 	memcpy(buffer, &pinArg->usage, sizeof(pinArg->usage));
 	buffer += sizeof(pinArg->usage);
-	memcpy(buffer, &pinArg->pinName, 50 * sizeof(wchar_t));
-	buffer += 50 * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pinName, sizeof(pinArg->pinName));
+	buffer += sizeof(pinArg->pinName);
 	memcpy(buffer, &pinArg->pinInfo, sizeof(pinArg->pinInfo));
 	buffer += sizeof(pinArg->pinInfo);
-	memcpy(buffer, &pinArg->pin, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
-	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pin, sizeof(pinArg->pin));
+	buffer += sizeof(pinArg->pin);
 	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
 	write(fd, initBuffer, len);
 	free(initBuffer);
@@ -102,12 +102,12 @@ void eIDMW::readAskPinArguments(int fd, void *arg) {
 	buffer += sizeof(pinArg->operation);
 	memcpy(&pinArg->usage, buffer, sizeof(pinArg->usage));
 	buffer += sizeof(pinArg->usage);
-	memcpy(&pinArg->pinName, buffer, 50 * sizeof(wchar_t));
-	buffer += 50 * sizeof(wchar_t);
+	memcpy(&pinArg->pinName, buffer, sizeof(pinArg->pinName));
+	buffer += sizeof(pinArg->pinName);
 	memcpy(&pinArg->pinInfo, buffer, sizeof(pinArg->pinInfo));
 	buffer += sizeof(pinArg->pinInfo);
-	memcpy(&pinArg->pin, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
-	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(&pinArg->pin, buffer, sizeof(pinArg->pin));
+	buffer += sizeof(pinArg->pin);
 	memcpy(&pinArg->returnValue, buffer, sizeof(pinArg->returnValue));
 	free(initBuffer);
 }
@@ -124,16 +124,16 @@ void eIDMW::writeAskPinsArguments(int fd, void *arg)
 	buffer += sizeof(pinArg->operation);
 	memcpy(buffer, &pinArg->usage, sizeof(pinArg->usage));
 	buffer += sizeof(pinArg->usage);
-	memcpy(buffer, &pinArg->pinName, 50 * sizeof(wchar_t));
-	buffer += 50 * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pinName, sizeof(pinArg->pinName));
+	buffer += sizeof(pinArg->pinName);
 	memcpy(buffer, &pinArg->pin1Info, sizeof(pinArg->pin1Info));
 	buffer += sizeof(pinArg->pin1Info);
-	memcpy(buffer, &pinArg->pin1, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
-	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pin1, sizeof(pinArg->pin1));
+	buffer += sizeof(pinArg->pin1);
 	memcpy(buffer, &pinArg->pin2Info, sizeof(pinArg->pin2Info));
 	buffer += sizeof(pinArg->pin2Info);
-	memcpy(buffer, &pinArg->pin2, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
-	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pin2, sizeof(pinArg->pin2));
+	buffer += sizeof(pinArg->pin2);
 	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
 
 	write(fd, initBuffer, len);
@@ -153,16 +153,16 @@ void eIDMW::readAskPinsArguments(int fd, void *arg) {
 	buffer += sizeof(pinArg->operation);
 	memcpy(&pinArg->usage, buffer, sizeof(pinArg->usage));
 	buffer += sizeof(pinArg->usage);
-	memcpy(&pinArg->pinName, buffer, 50 * sizeof(wchar_t));
-	buffer += 50 * sizeof(wchar_t);
+	memcpy(&pinArg->pinName, buffer, sizeof(pinArg->pinName));
+	buffer += sizeof(pinArg->pinName);
 	memcpy(&pinArg->pin1Info, buffer, sizeof(pinArg->pin1Info));
 	buffer += sizeof(pinArg->pin1Info);
-	memcpy(&pinArg->pin1, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
-	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(&pinArg->pin1, buffer, sizeof(pinArg->pin1));
+	buffer += sizeof(pinArg->pin1);
 	memcpy(&pinArg->pin2Info, buffer, sizeof(pinArg->pin2Info));
 	buffer += sizeof(pinArg->pin2Info);
-	memcpy(&pinArg->pin2, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
-	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(&pinArg->pin2, buffer, sizeof(pinArg->pin2));
+	buffer += sizeof(pinArg->pin2);
 	memcpy(&pinArg->returnValue, buffer, sizeof(pinArg->returnValue));
 
 	free(initBuffer);
@@ -181,8 +181,8 @@ void eIDMW::readBadPinArguments(int fd, void *arg)
 
 	memcpy(&pinArg->usage, buffer, sizeof(pinArg->usage));
 	buffer += sizeof(pinArg->usage);
-	memcpy(&pinArg->pinName, buffer, 50 * sizeof(wchar_t));
-	buffer += 50 * sizeof(wchar_t);
+	memcpy(&pinArg->pinName, buffer, sizeof(pinArg->pinName));
+	buffer += sizeof(pinArg->pinName);
 	memcpy(&pinArg->ulRemainingTries, buffer, sizeof(pinArg->ulRemainingTries));
 	buffer += sizeof(pinArg->ulRemainingTries);
 	memcpy(&pinArg->returnValue, buffer, sizeof(pinArg->returnValue));
@@ -201,8 +201,8 @@ void eIDMW::writeBadPinArguments(int fd, void *arg)
 
 	memcpy(buffer, &pinArg->usage, sizeof(pinArg->usage));
 	buffer += sizeof(pinArg->usage);
-	memcpy(buffer, &pinArg->pinName, 50 * sizeof(wchar_t));
-	buffer += 50 * sizeof(wchar_t);
+	memcpy(buffer, &pinArg->pinName, sizeof(pinArg->pinName));
+	buffer += sizeof(pinArg->pinName);
 	memcpy(buffer, &pinArg->ulRemainingTries, sizeof(pinArg->ulRemainingTries));
 	buffer += sizeof(pinArg->ulRemainingTries);
 	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
@@ -221,14 +221,14 @@ void eIDMW::writeDisplayPinpadInfoArguments(int fd, void *arg)
 	initBuffer = buffer;
 	memcpy(buffer, &pinPadInfo->operation, sizeof(pinPadInfo->operation));
 	buffer += sizeof(pinPadInfo->operation);
-	memcpy(buffer, &pinPadInfo->reader, 100 * sizeof(wchar_t));
-	buffer += 100 * sizeof(wchar_t);
+	memcpy(buffer, &pinPadInfo->reader, sizeof(pinPadInfo->reader));
+	buffer += sizeof(pinPadInfo->reader);
 	memcpy(buffer, &pinPadInfo->usage, sizeof(pinPadInfo->usage));
 	buffer += sizeof(pinPadInfo->usage);
-	memcpy(buffer, &pinPadInfo->pinName, 50 * sizeof(wchar_t));
-	buffer += 50 * sizeof(wchar_t);
-	memcpy(buffer, &pinPadInfo->message, 200 * sizeof(wchar_t));
-	buffer += 200 * sizeof(wchar_t);
+	memcpy(buffer, &pinPadInfo->pinName, sizeof(pinPadInfo->pinName));
+	buffer += sizeof(pinPadInfo->pinName);
+	memcpy(buffer, &pinPadInfo->message, sizeof(pinPadInfo->message));
+	buffer += sizeof(pinPadInfo->message);
 	memcpy(buffer, &pinPadInfo->infoCollectorIndex, sizeof(pinPadInfo->infoCollectorIndex));
 	buffer += sizeof(pinPadInfo->infoCollectorIndex);
 	memcpy(buffer, &pinPadInfo->tRunningProcess, sizeof(pinPadInfo->tRunningProcess));
@@ -262,14 +262,14 @@ void eIDMW::readDisplayPinpadInfoArguments(int fd, void *arg)
 
 	memcpy(&pinPadInfo->operation, buffer, sizeof(pinPadInfo->operation));
 	buffer += sizeof(pinPadInfo->operation);
-	memcpy(&pinPadInfo->reader, buffer, 100 * sizeof(wchar_t));
-	buffer += 100 * sizeof(wchar_t);
+	memcpy(&pinPadInfo->reader, buffer, sizeof(pinPadInfo->reader));
+	buffer += sizeof(pinPadInfo->reader);
 	memcpy(&pinPadInfo->usage, buffer, sizeof(pinPadInfo->usage));
 	buffer += sizeof(pinPadInfo->usage);
-	memcpy(&pinPadInfo->pinName, buffer, 50 * sizeof(wchar_t));
-	buffer += 50 * sizeof(wchar_t);
-	memcpy(&pinPadInfo->message, buffer, 200 * sizeof(wchar_t));
-	buffer += 200 * sizeof(wchar_t);
+	memcpy(&pinPadInfo->pinName, buffer, sizeof(pinPadInfo->pinName));
+	buffer += sizeof(pinPadInfo->pinName);
+	memcpy(&pinPadInfo->message, buffer, sizeof(pinPadInfo->message));
+	buffer += sizeof(pinPadInfo->message);
 	memcpy(&pinPadInfo->infoCollectorIndex, buffer, sizeof(pinPadInfo->infoCollectorIndex));
 	buffer += sizeof(pinPadInfo->infoCollectorIndex);
 	memcpy(&pinPadInfo->tRunningProcess, buffer, sizeof(pinPadInfo->tRunningProcess));
@@ -287,8 +287,8 @@ void eIDMW::writeAskInputCMDArguments(int fd, void *arg) {
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
 
-	memcpy(buffer, &cmdArg->inOutId, sizeof(wchar_t) * 50);
-	buffer += sizeof(wchar_t) * 50;
+	memcpy(buffer, &cmdArg->inOutId, sizeof(cmdArg->inOutId));
+	buffer += sizeof(cmdArg->inOutId);
 	memcpy(buffer, &cmdArg->operation, sizeof(cmdArg->operation));
 	buffer += sizeof(cmdArg->operation);
 
@@ -298,9 +298,8 @@ void eIDMW::writeAskInputCMDArguments(int fd, void *arg) {
 	memcpy(buffer, &cmdArg->callbackWasCalled, sizeof(cmdArg->callbackWasCalled));
 	buffer += sizeof(cmdArg->callbackWasCalled);
 
-	memcpy(buffer, &cmdArg->Code, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
-	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
-
+	memcpy(buffer, &cmdArg->Code, sizeof(cmdArg->Code));
+	buffer += sizeof(cmdArg->Code);
 	memcpy(buffer, &cmdArg->askForId, sizeof(cmdArg->askForId));
 	buffer += sizeof(cmdArg->askForId);
 
@@ -319,8 +318,8 @@ void eIDMW::readAskInputCMDArguments(int fd, void *arg) {
 	read(fd, buffer, len);
 	initBuffer = buffer;
 
-	memcpy(&cmdArg->inOutId, buffer, sizeof(wchar_t) * 50);
-	buffer += sizeof(wchar_t) * 50;
+	memcpy(&cmdArg->inOutId, buffer, sizeof(cmdArg->inOutId));
+	buffer += sizeof(cmdArg->inOutId);
 	memcpy(&cmdArg->operation, buffer, sizeof(cmdArg->operation));
 	buffer += sizeof(cmdArg->operation);
 
@@ -330,8 +329,8 @@ void eIDMW::readAskInputCMDArguments(int fd, void *arg) {
 	memcpy(&cmdArg->callbackWasCalled, buffer, sizeof(cmdArg->callbackWasCalled));
 	buffer += sizeof(cmdArg->callbackWasCalled);
 
-	memcpy(&cmdArg->Code, buffer, (PIN_MAX_LENGTH + 1) * sizeof(wchar_t));
-	buffer += (PIN_MAX_LENGTH + 1) * sizeof(wchar_t);
+	memcpy(&cmdArg->Code, buffer, sizeof(cmdArg->Code));
+	buffer += sizeof(cmdArg->Code);
 
 	memcpy(&cmdArg->askForId, buffer, sizeof(cmdArg->askForId));
 	buffer += sizeof(cmdArg->askForId);
@@ -348,8 +347,8 @@ void eIDMW::writeCMDMessageArguments(int fd, void *arg) {
 	int len = sizeof(DlgCMDMessageArguments);
 	buffer = (char *)malloc(len);
 	initBuffer = buffer;
-	memcpy(buffer, &cmdArg->message, sizeof(wchar_t) * 50);
-	buffer += sizeof(wchar_t) * 50;
+	memcpy(buffer, &cmdArg->message, sizeof(cmdArg->message));
+	buffer += sizeof(cmdArg->message);
 	memcpy(buffer, &cmdArg->operation, sizeof(cmdArg->operation));
 	buffer += sizeof(cmdArg->operation);
 	memcpy(buffer, &cmdArg->type, sizeof(cmdArg->type));
@@ -414,8 +413,8 @@ void eIDMW::readCMDMessageArguments(int fd, void *arg) {
 	}
 	initBuffer = buffer;
 
-	memcpy(&cmdArg->message, buffer, sizeof(wchar_t) * 50);
-	buffer += sizeof(wchar_t) * 50;
+	memcpy(&cmdArg->message, buffer, sizeof(cmdArg->message));
+	buffer += sizeof(cmdArg->message);
 	memcpy(&cmdArg->operation, buffer, sizeof(cmdArg->operation));
 	buffer += sizeof(cmdArg->operation);
 	memcpy(&cmdArg->type, buffer, sizeof(cmdArg->type));
