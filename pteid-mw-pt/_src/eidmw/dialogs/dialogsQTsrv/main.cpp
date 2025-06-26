@@ -164,8 +164,8 @@ QFont getLatoFont() {
 int main(int argc, char *argv[]) {
 	int iFunctionIndex = 0;
 	std::string readableFilePath;
-	int firstPipe;
-	int secondPipe;
+	int firstPipe = 0;
+	int secondPipe = 0;
 
 	Type_WndGeometry parentWndGeometry = {};
 
@@ -177,12 +177,17 @@ int main(int argc, char *argv[]) {
 	int iRet = DLG_CANCEL;
 
 	// parse the arguments according to the operation requested
-	MWLOG(LEV_INFO, MOD_DLG, L"  Running %s ... first pipe: %s second pipe: %s", argv[0], argv[2], argv[3]);
 
-	if (argc > 2) {
+	if (argc > 3) {
 		iFunctionIndex = atoi(argv[1]);
 		firstPipe = atoi(argv[2]);
 		secondPipe = atoi(argv[3]);
+		if (firstPipe <= 0 || secondPipe <= 0) {
+			MWLOG(LEV_ERROR, MOD_DLG, "Invalid pipe FD arguments! (%s, %s)", argv[2], argv[3]);
+			exit(DLG_ERR);
+		}
+
+		MWLOG(LEV_INFO, MOD_DLG, "  Running pteiddialogsQTsrv with functionID: %d first pipe FD: %d second pipe FD: %d", iFunctionIndex, firstPipe, secondPipe);
 
 		if (argc > 7) {
 			parentWndGeometry.x = atoi(argv[4]);
