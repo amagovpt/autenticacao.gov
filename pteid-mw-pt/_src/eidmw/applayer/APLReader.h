@@ -24,7 +24,6 @@
 **************************************************************************** */
 #pragma once
 
-#include <CardCallbacks.h>
 #ifndef __SCREADERUTIL_H__
 #define __SCREADERUTIL_H__
 
@@ -35,6 +34,12 @@
 #include "ByteArray.h"
 #include "CardLayerConst.h"
 #include <memory>
+
+#ifndef WIN32
+#include <CardCallbacks.h>
+#else
+#include "../eidlib/CardCallbacks.h"
+#endif
 
 namespace eIDMW {
 
