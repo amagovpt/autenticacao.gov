@@ -132,7 +132,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_XERCES)\include;$(PTEID_XMLSECURITY)\include;$(PTEID_DIR_OPENSSL)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;..\..\eidlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -204,7 +204,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PTEID_DIR_LIBZIP_X64)\include;$(PTEID_DIR_XERCES_X64)\include;$(PTEID_XMLSECURITY_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;..\..\common;..\..\applayer;..\..\cardlayer;..\..\dialogs;..\..\eidlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/wd4251 /wd4275 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>

@@ -33,13 +33,8 @@
 #include "Mutex.h"
 #include "ByteArray.h"
 #include "CardLayerConst.h"
+#include "CardCallbacks.h"
 #include <memory>
-
-#ifndef WIN32
-#include <CardCallbacks.h>
-#else
-#include "../eidlib/CardCallbacks.h"
-#endif
 
 namespace eIDMW {
 
