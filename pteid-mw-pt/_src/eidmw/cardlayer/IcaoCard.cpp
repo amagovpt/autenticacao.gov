@@ -55,6 +55,30 @@ bool CIcaoCard::ShouldSelectApplet(unsigned char ins, unsigned long ulSW12) {
 
 bool CIcaoCard::SelectApplet() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
+CByteArray CIcaoCard::ReadUncachedFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen) {
+	const int MAX_BLOCK_READ_LENGTH = 223;
+	CByteArray currentBuffer;
+	SelectFile(csPath, true);
+	int offsetChange = MAX_BLOCK_READ_LENGTH;
+	while (offsetChange == MAX_BLOCK_READ_LENGTH) {
+		CByteArray response = ReadBinary(ulOffset, MAX_BLOCK_READ_LENGTH);
+		unsigned long ulSW12 = getSW12(response);
+
+		offsetChange = response.Size() - 2;
+		ulOffset += offsetChange;
+		currentBuffer.Append(response.GetBytes(), offsetChange);
+		if (ulSW12 != 0x9000) {
+			MWLOG(LEV_ERROR, MOD_CAL, L"Error while reading ICAO file %ls ulsw12: 0x%lx",
+				  utilStringWiden(csPath).c_str(), ulSW12);
+			break;
+		}
+	}
+
+	MWLOG(LEV_INFO, MOD_CAL, L"Read ICAO file %ls (%lu bytes) from card", utilStringWiden(csPath).c_str(),
+		  currentBuffer.Size());
+	return currentBuffer;
+}
+
 void CIcaoCard::showPinDialog(tPinOperation operation, const tPin &Pin, std::string &csPin1, std::string &csPin2,
 							  const tPrivKey *pKey, void *wndGeometry) {
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);

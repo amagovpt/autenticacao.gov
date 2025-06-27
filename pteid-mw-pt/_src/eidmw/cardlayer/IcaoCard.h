@@ -32,6 +32,8 @@ protected:
 	virtual bool ShouldSelectApplet(unsigned char ins, unsigned long ulSW12);
 	virtual tFileInfo SelectFile(const std::string &csPath, bool bReturnFileInfo = false) override;
 	virtual bool SelectApplet();
+	virtual CByteArray ReadUncachedFile(const std::string &csPath, unsigned long ulOffset = 0,
+										unsigned long ulMaxLen = FULL_FILE);
 
 	virtual void showPinDialog(tPinOperation operation, const tPin &Pin, std::string &csPin1, std::string &csPin2,
 							   const tPrivKey *pKey, void *wndGeometry = 0);
