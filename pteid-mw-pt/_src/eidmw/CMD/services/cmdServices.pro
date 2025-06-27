@@ -33,7 +33,7 @@ LIBS += -L./../../lib \
         -lssl \
         -lcrypto
         
-INCLUDEPATH += . ../../common ../../applayer ../../cardlayer ../../dialogs
+INCLUDEPATH += . ../../common ../../applayer ../../cardlayer ../../dialogs ../../eidlib
 macx:INCLUDEPATH += $$DEPS_DIR/openssl-3/include
 
 unix: DEFINES += __UNIX__ WITH_OPENSSL OPENSSL_SUPPRESS_DEPRECATED
