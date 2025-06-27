@@ -58,7 +58,7 @@ bool CIcaoCard::SelectApplet() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 CByteArray CIcaoCard::ReadUncachedFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen) {
 	const int MAX_BLOCK_READ_LENGTH = 223;
 	CByteArray currentBuffer;
-	SelectFile(csPath, true);
+	SelectFile(csPath, false);
 	int offsetChange = MAX_BLOCK_READ_LENGTH;
 	while (offsetChange == MAX_BLOCK_READ_LENGTH) {
 		CByteArray response = ReadBinary(ulOffset, MAX_BLOCK_READ_LENGTH);
@@ -67,14 +67,19 @@ CByteArray CIcaoCard::ReadUncachedFile(const std::string &csPath, unsigned long 
 		offsetChange = response.Size() - 2;
 		ulOffset += offsetChange;
 		currentBuffer.Append(response.GetBytes(), offsetChange);
-		if (ulSW12 != 0x9000) {
-			MWLOG(LEV_ERROR, MOD_CAL, L"Error while reading ICAO file %ls ulsw12: 0x%lx",
-				  utilStringWiden(csPath).c_str(), ulSW12);
+		if (ulSW12 == 0x6282 || ulSW12 == 0x6B00) {
+			MWLOG(LEV_DEBUG, MOD_CAL, "Reading loop finished for ICAO file %s with SW12: %lx",
+				  csPath.c_str(), ulSW12);
+			break;
+		}
+		else if (ulSW12 != 0x9000) {
+			MWLOG(LEV_ERROR, MOD_CAL, "Error while reading ICAO file %s ulsw12: 0x%lx",
+				  csPath.c_str(), ulSW12);
 			break;
 		}
 	}
 
-	MWLOG(LEV_INFO, MOD_CAL, L"Read ICAO file %ls (%lu bytes) from card", utilStringWiden(csPath).c_str(),
+	MWLOG(LEV_INFO, MOD_CAL, "Read ICAO file %s (%lu bytes) from card", csPath.c_str(),
 		  currentBuffer.Size());
 	return currentBuffer;
 }
