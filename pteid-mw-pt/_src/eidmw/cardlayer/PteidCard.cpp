@@ -708,7 +708,7 @@ namespace eIDMW {
 					// Regularly call SCardStatus()
 					MWLOG(LEV_DEBUG, MOD_CAL,
 						L"Starting KeepAliveThread to keep transaction while waiting for user PIN input");
-					eIDMW::KeepAliveThread keepAlive(&(m_poContext->m_oCardInterface), m_hCard);
+					eIDMW::KeepAliveThread keepAlive(m_poContext->m_oCardInterface.get(), m_hCard);
 					keepAlive.Start();
 #endif
 
