@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+/* Error codes that shall be returned by the Card reader callback functions */
+
 /** Operation completed successfully */
 #define PTEID_CALLBACK_OK                    0x00000000
 
@@ -17,26 +19,23 @@
 /** Reader not found or not available */
 #define PTEID_CALLBACK_ERR_NO_READER         0xe1d00304
 
-/** Operation timed out */
-#define PTEID_CALLBACK_ERR_TIMEOUT           0xe1d00305
-
 /** Access denied or sharing violation */
-#define PTEID_CALLBACK_ERR_ACCESS_DENIED     0xe1d00306
+#define PTEID_CALLBACK_ERR_ACCESS_DENIED     0xe1d00305
 
-/** Operation not supported by this implementation */
-#define PTEID_CALLBACK_ERR_NOT_SUPPORTED     0xe1d00307
+/** Operation not supported by this card reader implementation */
+#define PTEID_CALLBACK_ERR_NOT_SUPPORTED     0xe1d00306
 
 /** Insufficient buffer size */
-#define PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL  0xe1d00308
+#define PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL  0xe1d00307
 
 /** Card was removed during operation */
-#define PTEID_CALLBACK_ERR_CARD_REMOVED      0xe1d00309
+#define PTEID_CALLBACK_ERR_CARD_REMOVED      0xe1d00308
 
 /** Card or reader is unresponsive */
-#define PTEID_CALLBACK_ERR_UNRESPONSIVE      0xe1d0030A
+#define PTEID_CALLBACK_ERR_UNRESPONSIVE      0xe1d00309
 
 /** Generic callback implementation error */
-#define PTEID_CALLBACK_ERR_GENERIC           0xe1d003FF
+#define PTEID_CALLBACK_ERR_GENERIC           0xe1d003ff
 
 typedef uint32_t PTEID_CardHandle;
 typedef uint32_t PTEID_CallbackResult;
@@ -125,7 +124,7 @@ typedef PTEID_CallbackResult (*PTEID_TransmitFn)(PTEID_CardHandle handle, const 
 								 const void *pSendPci, void *pRecvPci, void *context);
 
 /**
- * Function to recover a card
+ * Function to recover a card connection
  * @param handle Card handle
  * @param pulLockCount Pointer to receive lock count
  * @param context Pointer to the context
@@ -133,7 +132,7 @@ typedef PTEID_CallbackResult (*PTEID_TransmitFn)(PTEID_CardHandle handle, const 
 typedef PTEID_CallbackResult (*PTEID_RecoverFn)(PTEID_CardHandle handle, unsigned long *pulLockCount, void *context);
 
 /**
- * Function to control a card
+ * Function to use a reader-specific function specified through control code
  * @param handle Card handle
  * @param ulControl Control code
  * @param cmdData Command data

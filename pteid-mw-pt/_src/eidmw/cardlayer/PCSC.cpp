@@ -543,8 +543,6 @@ long ExternalCardInterface::CallbackToInternalError(PTEID_CallbackResult callbac
             return EIDMW_ERR_CARD_COMM;
         case PTEID_CALLBACK_ERR_NO_READER:
             return EIDMW_ERR_NO_READER;
-        case PTEID_CALLBACK_ERR_TIMEOUT:
-            return EIDMW_ERR_TIMEOUT;
         case PTEID_CALLBACK_ERR_ACCESS_DENIED:
             return EIDMW_ERR_CARD_SHARING;
         case PTEID_CALLBACK_ERR_NOT_SUPPORTED:
