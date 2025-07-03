@@ -250,7 +250,7 @@ std::pair<bool, CByteArray> CPCSC::StatusWithATR(PTEID_CardHandle hCard) {
 		MWLOG(LEV_DEBUG, MOD_CAL, L" SCardStatus(0x%0x): 0x%0x", handle, lRet);
 	}
 
-	if (SCARD_S_SUCCESS != lRet)
+	if (lRet != SCARD_S_SUCCESS && lRet != SCARD_W_REMOVED_CARD)
 		throw CMWEXCEPTION(PcscToErr(lRet));
 
 	return std::make_pair(SCARD_S_SUCCESS == lRet,
