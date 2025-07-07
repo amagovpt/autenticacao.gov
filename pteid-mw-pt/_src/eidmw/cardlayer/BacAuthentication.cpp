@@ -251,7 +251,7 @@ CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const 
 	if (macInput.Size() % MAC_KEYSIZE != 0) {
 		LOG_AND_THROW(LEV_ERROR, MOD_CAL, EIDMW_ERR_BAC_NOT_INITIALIZED,
 					  "%s: Input data is not multiple of cipher block size "
-					  "(MAC_KEYSIZE: $ld)",
+					  "(MAC_KEYSIZE: %ld)",
 					  __FUNCTION__, MAC_KEYSIZE);
 	}
 
