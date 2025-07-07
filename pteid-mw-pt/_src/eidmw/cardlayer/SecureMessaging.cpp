@@ -171,10 +171,6 @@ CByteArray SecureMessaging::decryptAPDUResponse(const CByteArray &encryptedRespo
 		CByteArray inputToDecrypt = CByteArray(encryptedData.Size() - (isOdd ? 0 : 1), 0);
 		memcpy(inputToDecrypt.GetBytes(), &encryptedData.GetBytes()[isOdd ? 0 : 1], inputToDecrypt.Size());
 
-		if (inputToDecrypt.Size() % 16 != 0) {
-			inputToDecrypt = addPadding(inputToDecrypt);
-		}
-
 		decrypted = decryptData(inputToDecrypt);
 		decrypted = removePadding(decrypted);
 	}
