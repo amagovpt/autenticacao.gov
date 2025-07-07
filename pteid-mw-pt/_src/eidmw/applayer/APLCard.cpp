@@ -143,6 +143,12 @@ void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_
 	END_CAL_OPERATION(m_reader)
 }
 
+void APL_Card::initBACAuthentication(const char *mrz_info) {
+	BEGIN_CAL_OPERATION(m_reader)
+	m_reader->getCalReader()->initBACAuthentication(mrz_info);
+	END_CAL_OPERATION(m_reader)
+}
+
 CByteArray APL_Card::sendAPDU(const CByteArray &cmd) {
 
 	CByteArray out;
@@ -818,7 +824,7 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	size_t length = data.Size();
 	temp += 4; // Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
 
-	p7 = d2i_PKCS7(nullptr, &temp, length);
+	p7 = d2i_PKCS7(nullptr, &temp, length-4);
 	if (!p7) {
 		error_msg = Openssl_errors_to_string();
 		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to decode SOD PKCS7 object! Openssl errors:\n%s",

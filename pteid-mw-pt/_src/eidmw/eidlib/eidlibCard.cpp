@@ -967,6 +967,13 @@ void ICAO_Card::initPaceAuthentication(const char *secret, size_t length, PTEID_
 	END_TRY_CATCH
 }
 
+void ICAO_Card::initBACAuthentication(const char *mrz_info) {
+	BEGIN_TRY_CATCH
+	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
+	pcard->initBACAuthentication(mrz_info);
+	END_TRY_CATCH
+}
+
 PTEID_RawDataGroup *ICAO_Card::readDatagroupRaw(PTEID_DataGroupID tag) {
 	PTEID_RawDataGroup *out = nullptr;
 

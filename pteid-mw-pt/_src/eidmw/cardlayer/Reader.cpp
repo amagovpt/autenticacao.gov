@@ -425,6 +425,10 @@ void CReader::initPaceAuthentication(const char *secret, size_t secretLen, PaceS
 	m_poCard->initPaceAuthentication(secret, secretLen, secretType);
 }
 
+void CReader::initBACAuthentication(const char *mrz_info) {
+	m_poCard->initBACAuthentication(mrz_info);
+}
+
 bool CReader::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	return m_poCard->initChipAuthentication(pkey, oid);
 }

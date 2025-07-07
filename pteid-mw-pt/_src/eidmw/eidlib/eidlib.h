@@ -1130,6 +1130,10 @@ public:
 	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length,
 													 PTEID_CardPaceSecretType secretType);
 
+	/* @param: mrz_info must contain the full MRZInfo needed for BAC authentication:
+	           i.e. document number + date of birth + expiry date, all 3 fields including their respective check digits */
+	PTEIDSDK_API virtual void initBACAuthentication(const char *mrz_info);
+
 	/**
 	 * Read raw data from datagroup specified in @tag parameter
 	 */

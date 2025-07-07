@@ -30,6 +30,7 @@
 
 #include "PCSC.h"
 #include "PaceAuthentication.h"
+#include "BacAuthentication.h"
 #include <memory>
 #include <openssl/types.h>
 #include <openssl/x509.h>
@@ -415,6 +416,14 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
 		// Missing steps in Contactless card construction
 		InitEncryptionKey();
 	}
+}
+
+void CCard::initBACAuthentication(const char * mrz_info) {
+	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext, m_comm_protocol);
+	CByteArray mrz_data(mrz_info);
+	bac->authenticate(mrz_data);
+
+	m_secureMessaging = std::move(bac);
 }
 
 bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {

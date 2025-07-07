@@ -124,6 +124,7 @@ public:
 
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 	bool initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid);
+	void initBACAuthentication(const char * mrz_info);
 
 	const void *getProtocolStructure();
 	const void setNextAPDUClearText() { cleartext_next = true; }
