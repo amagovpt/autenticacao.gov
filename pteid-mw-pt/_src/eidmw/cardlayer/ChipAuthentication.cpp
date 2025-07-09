@@ -19,6 +19,7 @@
 **************************************************************************** */
 
 #include "ChipAuthentication.h"
+#include "PaceAuthentication.h"
 #include "Log.h"
 #include "Crypto.h"
 #include "SecureMessaging.h"
@@ -165,6 +166,16 @@ ChipAuthSecureMessaging::~ChipAuthSecureMessaging() {
 	EAC_CTX_clear_free(m_ctx);
 }
 
+bool ChipAuthSecureMessaging::is_ecdh_algorithm(ASN1_OBJECT *oid) {
+	OID_INFO oid1 = get_id_CA_ECDH_3DES_CBC_CBC();
+	OID_INFO oid2 = get_id_CA_ECDH_AES_CBC_CMAC_128();
+	OID_INFO oid3 = get_id_CA_ECDH_AES_CBC_CMAC_192();
+	OID_INFO oid4 = get_id_CA_ECDH_AES_CBC_CMAC_256();
+
+	return OBJ_cmp(oid1.object, oid) == 0 || OBJ_cmp(oid2.object, oid) == 0 ||
+	       OBJ_cmp(oid3.object, oid) == 0 || OBJ_cmp(oid4.object, oid) == 0;
+}
+
 bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	bool status = true;
 	long ret_value = 0;
@@ -183,8 +194,14 @@ bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, 
 
 	// Step 4 Variables
 	BUF_MEM *shared_secret = nullptr;
+	if (!is_ecdh_algorithm(oid)) {
+		//Chip Authentication is only supported for ECDH algorithms
+		return false;
+	}
 	CAParams params = getCAParams(oid);
 	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication OID: %s ", __FUNCTION__, OBJ_nid2sn(params.nid));
+
+
 
 	// 1. Set security environment for chip authentication
 	{

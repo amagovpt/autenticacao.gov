@@ -51,6 +51,7 @@ protected:
 	virtual void incrementSSC() override;
 
 private:
+	bool is_ecdh_algorithm(ASN1_OBJECT *oid);
 	void initEACContext(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
 						const CAParams &params);
 

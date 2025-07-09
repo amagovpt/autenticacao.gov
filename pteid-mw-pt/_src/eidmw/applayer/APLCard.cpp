@@ -1021,11 +1021,17 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 	EIDMW_ChipAuthenticationReport report;
 
 	// Chip authentication is performed after Active Authentication.
-	// No need to re-verify dg14 hashes as it was already performed during the previous AA step
+	// No need to re-verify DG14 hash as it was already performed during the previous AA step
 	auto dg14 = readFile(DATAGROUP_PATHS.at(DG14));
 
 	auto pkey = getChipAuthenticationKey(dg14);
 	unsigned char *buffer = nullptr;
+	if (!pkey) {
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to parse CA public key from DG14! Mechanism not available");
+		report.type = EIDMW_ReportType::Error;
+		report.error_code = EIDMW_ERR_CHIP_AUTHENTICATION;
+		return report;
+	}
 	int len = i2d_PublicKey(pkey, &buffer);
 	report.pubKey = CByteArray(buffer, len);
 
@@ -1040,6 +1046,7 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 	auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);
 	if (!status) {
 		report.type = EIDMW_ReportType::Error;
+		report.error_code = EIDMW_ERR_CHIP_AUTHENTICATION;
 	}
 
 	return report;

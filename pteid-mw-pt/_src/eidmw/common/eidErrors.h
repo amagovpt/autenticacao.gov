@@ -318,4 +318,6 @@
 #define EIDMW_ERR_BAC_3DES 0xe1d11005
 #define EIDMW_ERR_BAC_CRYPTO_ERROR 0xe1d11006 // Generic BAC crypto operations error. Check logs for more details.
 
+#define EIDMW_ERR_CHIP_AUTHENTICATION 0xe1d11007
+
 #define EIDMW_MULTIPASS_ERR_INVALID_TOKEN 0xe1d0200
