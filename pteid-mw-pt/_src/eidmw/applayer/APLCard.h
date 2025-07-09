@@ -443,6 +443,7 @@ private:
 	bool verifySOD(DataGroupID tag, const CByteArray &data);
 	EIDMW_ActiveAuthenticationReport performActiveAuthentication();
 	EIDMW_ChipAuthenticationReport performChipAuthentication();
+	void addDocsignerToReport(EIDMW_SodReport &report, X509 *docsigner);
 
 protected:
 	APL_ICAO(APL_ReaderContext *reader);

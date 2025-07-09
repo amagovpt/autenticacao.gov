@@ -804,6 +804,87 @@ void logFullSODFile(const CByteArray &sod_data) {
 	free(sod_hex);
 }
 
+int docsigner_verify_callback(int preverify_ok, X509_STORE_CTX *ctx) {
+	int err = X509_STORE_CTX_get_error(ctx);
+
+	//ICAO 9303-part 12 requires explicit domain parameters
+	if (err == X509_V_ERR_EC_KEY_EXPLICIT_PARAMS) {
+		return 1;
+	} else {
+		return preverify_ok;
+	}
+}
+
+/* Apply workaround for signer_info bug present in some passport SODs
+   Wrong DN of Issuer in signer_info element of SOD
+   Documented in 2017 presentation titled "E-Passport validation: A practical experience"
+   by R. Rajeshkumar delivered in ICAO TRIP regional seminar
+   
+   Also return pointer to the document signer certificate for seperate validation
+*/
+X509 *change_signer_info(PKCS7 *p7) {
+
+	STACK_OF(X509) *certs = NULL;
+	STACK_OF(PKCS7_SIGNER_INFO) * signer_info;
+	X509 *docsigner_cert = NULL;
+
+	// Find out where the certs stack is located
+	int nid = OBJ_obj2nid(p7->type);
+	if (nid == NID_pkcs7_signed) {
+		certs = p7->d.sign->cert;
+		signer_info = p7->d.sign->signer_info;
+	} else {
+		MWLOG(LEV_DEBUG, MOD_APL, "PKCS7 structure in EF.SOD is not of expected type pkcs7_signed!");
+		return NULL;
+	}
+
+	X509_NAME *x509_issuer = NULL;
+
+	if (sk_X509_num(certs) != 1) {
+		MWLOG(LEV_DEBUG, MOD_APL, "PKCS7 structure in SOD should contain 1 certificate!");
+		return NULL;
+	}
+	docsigner_cert = sk_X509_value(certs, 0);
+	x509_issuer = X509_get_issuer_name(docsigner_cert);
+
+	for (int i = 0; signer_info && i < sk_PKCS7_SIGNER_INFO_num(signer_info); i++) {
+		PKCS7_SIGNER_INFO *sinfo = sk_PKCS7_SIGNER_INFO_value(signer_info, i);
+		PKCS7_ISSUER_AND_SERIAL *issuer_and_serial = sinfo->issuer_and_serial;
+		if (issuer_and_serial != NULL && x509_issuer != NULL) {
+			issuer_and_serial->issuer = x509_issuer;
+			MWLOG(LEV_DEBUG, MOD_APL, "Changing issuer DN in signer_info...");
+			break;
+		}
+	}
+
+	return docsigner_cert;
+}
+
+int verify_docsigner(X509 *docsigner, X509_STORE *store) {
+	X509_STORE_CTX *ctx = NULL;
+	// Create the context
+	ctx = X509_STORE_CTX_new();
+	X509_STORE_CTX_init(ctx, store, docsigner, NULL);
+	X509_STORE_CTX_set_verify_cb(ctx, docsigner_verify_callback);
+
+	// Perform the verification
+	int ret = X509_verify_cert(ctx);
+	if (ret != 1) {
+		int err = X509_STORE_CTX_get_error(ctx);
+		MWLOG(LEV_INFO, MOD_APL, "Document signer verification failed: %s", X509_verify_cert_error_string(err));
+	}
+	return ret;
+}
+
+void APL_ICAO::addDocsignerToReport(EIDMW_SodReport &report, X509 *docsigner) {
+	unsigned char *der = nullptr;
+	int len = i2d_X509(docsigner, &der);
+	if (len > 0) {
+		report.signer = CByteArray(der, len);
+		OPENSSL_free(der);
+	}
+}
+
 EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod) {
 	EIDMW_SodReport report;
 
@@ -824,7 +905,7 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	size_t length = data.Size();
 	temp += 4; // Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
 
-	p7 = d2i_PKCS7(nullptr, &temp, length-4);
+	p7 = d2i_PKCS7(nullptr, &temp, length - 4);
 	if (!p7) {
 		error_msg = Openssl_errors_to_string();
 		MWLOG(LEV_ERROR, MOD_APL, "APL_ICAO: Failed to decode SOD PKCS7 object! Openssl errors:\n%s",
@@ -836,14 +917,18 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	}
 
 	BIO *out = BIO_new(BIO_s_mem());
-	/* Some document signing certificates may have wrong values in Extended Key Usage field which generates a "purpose"
-	   validation error. Set the cert verify parameters to have unrestricted purpose X509_PURPOSE_ANY
-	*/
-	X509_VERIFY_PARAM *verify_params = X509_STORE_get0_param(csca_store);
-	X509_VERIFY_PARAM_set_purpose(verify_params, X509_PURPOSE_ANY);
-	X509_STORE_set1_param(csca_store, verify_params);
 
-	sod_verified = PKCS7_verify(p7, nullptr, csca_store, nullptr, out, 0) == 1;
+	X509 *docsigner = change_signer_info(p7);
+	// PKCS7_NOVERIFY flag because we later verify the document signer
+	sod_verified = PKCS7_verify(p7, NULL, NULL, NULL, out, PKCS7_NOVERIFY) == 1;
+
+	if (sod_verified && docsigner != NULL) {
+		if (!verify_docsigner(docsigner, csca_store)) {
+			addDocsignerToReport(report, docsigner);
+			report.type = EIDMW_ReportType::Error;
+			report.error_code = EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER;
+		}
+	}
 
 	// failed to verify SOD but we still need the contents
 	if (!sod_verified) {
@@ -862,33 +947,21 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 			  error_msg ? error_msg : "N/A");
 		free(error_msg);
 
-		if ((lib == ERR_LIB_X509 && reason == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT) ||
-			(lib == ERR_LIB_PKCS7 && reason == PKCS7_R_CERTIFICATE_VERIFY_ERROR)) {
-			// signer isnt in the CSCA (untrusted)
-			report.error_code = EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER;
-		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNATURE_FAILURE) {
-			// signature is not valid
+		if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNATURE_FAILURE) {
+			// Signature is not valid
 			report.error_code = EIDMW_SOD_ERR_VERIFY_SOD_SIGN;
 		} else if (lib == ERR_LIB_PKCS7 && reason == PKCS7_R_SIGNER_CERTIFICATE_NOT_FOUND) {
-			// couldnt find signer
+			// Can't find signer certificate
 			report.error_code = EIDMW_SOD_ERR_SIGNER_CERT_NOT_FOUND;
 		}
 
 		PKCS7_verify(p7, nullptr, nullptr, nullptr, out, PKCS7_NOVERIFY | PKCS7_NOSIGS);
 
-		// Get signer for debug purposes
-		STACK_OF(X509) *signers = PKCS7_get0_signers(p7, nullptr, 0);
-		if (sk_X509_num(signers) > 0) {
-			X509 *signer = sk_X509_value(signers, 0);
-			unsigned char *der = nullptr;
-			int len = i2d_X509(signer, &der);
-			if (len > 0) {
-				report.signer = CByteArray(der, len);
-				OPENSSL_free(der);
-			}
+		// Store docsigner for debug purposes
+		if (docsigner != NULL) {
+			addDocsignerToReport(report, docsigner);
 		}
 
-		sk_X509_free(signers);
 	}
 
 	unsigned char *p;
