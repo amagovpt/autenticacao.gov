@@ -189,6 +189,7 @@ protected:
 	APL_ReaderContext *m_reader;	   /**< Pointer to CAL reader (came from constructor) */
 
 	CMutex m_Mutex; /**< Mutex */
+	bool m_pace_performed;
 
 private:
 	APL_Card(const APL_Card &card);			   /**< Copy not allowed - not implemented */

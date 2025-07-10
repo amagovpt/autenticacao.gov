@@ -65,6 +65,7 @@ APL_Card::APL_Card(APL_ReaderContext *reader) {
 		m_cryptoFwk = AppLayer.getCryptoFwk();
 
 	m_reader = reader;
+	m_pace_performed = false;
 }
 
 APL_Card::~APL_Card() {}
@@ -141,6 +142,8 @@ void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_
 	m_reader->getCalReader()->initPaceAuthentication(secret, secretLen, paceSecretType);
 	m_reader->getCalReader()->ResetApplication();
 	END_CAL_OPERATION(m_reader)
+
+	m_pace_performed = true;
 }
 
 void APL_Card::initBACAuthentication(const char *mrz_info) {
@@ -672,7 +675,10 @@ void APL_ICAO::resetCardState() {
 void APL_ICAO::initializeCard() {
 	m_ready = true;
 
-	selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
+	//MRTD application must be selected after PACE because Card.Access was read from the MasterFile
+	if (m_pace_performed) {
+	   selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)}); 
+	}
 	loadAvailableDataGroups();
 
 	m_reports.setCard(this);
@@ -708,7 +714,6 @@ std::pair<EIDMW_DataGroupReport, CByteArray> APL_ICAO::readDatagroup(DataGroupID
 	}
 
 	BEGIN_CAL_OPERATION(m_reader) {
-		m_reader->getCalReader()->SelectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 		out = readFile(DATAGROUP_PATHS.at(tag));
 	}
 	END_CAL_OPERATION(m_reader);
@@ -718,7 +723,7 @@ std::pair<EIDMW_DataGroupReport, CByteArray> APL_ICAO::readDatagroup(DataGroupID
 	AppLayer.getCryptoFwk()->GetHash(out, m_SodAttributes->getHashFunction(), &report.computedHash);
 	report.type = EIDMW_ReportType::Success;
 
-	// verify sod
+	// verify datagroup hash in SOD
 	auto sod = verifySOD(tag, out);
 	if (!sod) {
 		report.error_code = EIDMW_SOD_ERR_HASH_NO_MATCH_ICAO_DG;
