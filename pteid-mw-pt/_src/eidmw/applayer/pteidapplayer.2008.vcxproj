@@ -248,7 +248,6 @@
     <ClCompile Include="PhotoPteid.cpp" />
     <ClCompile Include="proxyinfo.cpp" />
     <ClCompile Include="MutualAuthentication.cpp" />
-    <ClCompile Include="SecurityContext.cpp" />
     <ClCompile Include="SigContainer.cpp" />
     <ClCompile Include="sign-pkcs7.cpp" />
     <ClCompile Include="SODParser.cpp" />

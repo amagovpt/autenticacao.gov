@@ -46,7 +46,6 @@
 #include "PDFSignature.h"
 #include "PhotoPteid.h"
 #include "SSLConnection.h"
-#include "SecurityContext.h"
 #include "Util.h"
 #include "dialogs.h"
 #include <sstream>

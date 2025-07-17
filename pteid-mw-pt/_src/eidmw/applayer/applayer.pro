@@ -98,7 +98,6 @@ HEADERS += \
 	cryptoFwkPteid.h \
 	APLCardPteid.h   \
 	PhotoPteid.h \
-	SecurityContext.h  \
 	APLPublicKey.h \
 	SigContainer.h \
 	XadesSignature.h \
@@ -142,7 +141,6 @@ SOURCES += \
 	SODParser.cpp \
 	SSLConnection.cpp \
 	TSAClient.cpp \
-	SecurityContext.cpp \
 	sign-pkcs7.cpp \
 	cJSON.c \
 	PKIFetcher.cpp \

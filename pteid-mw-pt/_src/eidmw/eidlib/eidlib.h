@@ -1488,8 +1488,6 @@ private:
 	friend class PTEID_Card;
 };
 
-class SecurityContext;
-
 class SSLConnection;
 
 /**
