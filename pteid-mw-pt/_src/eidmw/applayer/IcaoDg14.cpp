@@ -95,7 +95,8 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 	auto security_infos = decodeDg14Data(dg14_file);
 
 	ASN1_OBJECT *oid_ret = nullptr;
-	CByteArray oid = {CHIP_AUTHENTICATION_PUBKEY_OID};
+	const size_t OID1_LEN = strlen(CA_ECDH_PUBKEY_OID);
+	const size_t OID2_LEN = strlen(CA_DH_PUBKEY_OID);
 
 	size_t security_infos_n = sk_SecurityInfo_num(security_infos->infos);
 	for (size_t i = 0; i < security_infos_n; i++) {
@@ -105,7 +106,8 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 		char obj_buff[255];
 		OBJ_obj2txt(obj_buff, sizeof(obj_buff), info->protocol, 1);
 
-		if (memcmp(obj_buff, oid.GetBytes(), oid.Size()) == 0) {
+		if (memcmp(obj_buff, CA_ECDH_PUBKEY_OID, OID1_LEN) == 0 || 
+			   memcmp(obj_buff, CA_DH_PUBKEY_OID, OID2_LEN) == 0) {
 			// create evp key from required data sequence
 			if (info->requiredData->type == V_ASN1_SEQUENCE) {
 				size_t len = ASN1_STRING_length(info->requiredData->value.sequence);

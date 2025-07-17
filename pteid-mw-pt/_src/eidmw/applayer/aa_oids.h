@@ -3,7 +3,8 @@
 namespace eIDMW {
 
 static const char *SECURITY_OPTION_ALGORITHM_OID = "2.23.136.1.1.5";
-static const char *CHIP_AUTHENTICATION_PUBKEY_OID = "0.4.0.127.0.7.2.2.1.2";
+static const char *CA_DH_PUBKEY_OID =   "0.4.0.127.0.7.2.2.1.1";
+static const char *CA_ECDH_PUBKEY_OID = "0.4.0.127.0.7.2.2.1.2";
 
 // Security Options algorithms used in Active Authentication feature
 const static unsigned int BSI_OID_LEN = 12;

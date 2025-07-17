@@ -1110,8 +1110,17 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 		report.error_code = EIDMW_ERR_CHIP_AUTHENTICATION;
 		return report;
 	}
-	int len = i2d_PublicKey(pkey, &buffer);
-	report.pubKey = CByteArray(buffer, len);
+	
+	int pubkey_len = 0;
+	if (EVP_PKEY_get_id(pkey) == EVP_PKEY_DH) {
+		pubkey_len = i2d_PUBKEY(pkey, &buffer);
+	}
+	else {
+		pubkey_len = i2d_PublicKey(pkey, &buffer);
+	}
+
+	if (pubkey_len > 0)
+		report.pubKey = CByteArray(buffer, pubkey_len);
 
 	auto oid_info = getChipAuthenticationOid(dg14);
 	if (!oid_info.is_valid()) {

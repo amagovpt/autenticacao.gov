@@ -2,6 +2,7 @@
 
  * eID Middleware Project.
  * Copyright (C) 2025 Daniel Dron - <daniel.dron@caixamagica.pt>
+ * Copyright (C) 2025 André Guerreiro - <aguerreiro1985@gmail.com>>
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License version
@@ -27,6 +28,7 @@
 #include <openssl/buffer.h>
 #include <openssl/ec.h>
 #include <openssl/evp.h>
+#include <openssl/err.h>
 #include <openssl/objects.h>
 #include <eac/objects.h>
 #include <openssl/types.h>
@@ -64,54 +66,54 @@ CAParams getCAParams(const ASN1_OBJECT *oid) {
 	return params;
 }
 
-BUF_MEM *computeSharedSecret(EVP_PKEY *eph_pkey, EVP_PKEY *chip_pkey) {
-	BUF_MEM *shared_secret = NULL;
-	EC_KEY *ecdh = NULL;
-	EC_KEY *chip_ec = NULL;
-	const EC_GROUP *group = NULL;
-	const EC_POINT *chip_pub_point = NULL;
+BUF_MEM *computeSharedSecret(EVP_PKEY *icc_pubkey, EVP_PKEY *ifd_key) {
+	EVP_PKEY_CTX *ctx = NULL;
+	BUF_MEM *shared_secret = BUF_MEM_new();
+	size_t skeylen = 0;
 
-	ecdh = EVP_PKEY_get1_EC_KEY(eph_pkey);
-	if (!ecdh) {
-		return NULL;
+	ctx = EVP_PKEY_CTX_new(ifd_key, NULL);
+	if (!ctx) {
+		MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to allocate EVP_PKEY_CTX: %ld", __FUNCTION__, ERR_get_error());
+		goto cleanup;
+	}
+	if (EVP_PKEY_derive_init(ctx) <= 0) {
+		MWLOG(LEV_ERROR, MOD_CAL, "%s: Error returned by EVP_PKEY_derive_init(): %ld", __FUNCTION__, ERR_get_error());
+		goto cleanup;
+	}
+	if (EVP_PKEY_derive_set_peer(ctx, icc_pubkey) <= 0) {
+		MWLOG(LEV_ERROR, MOD_CAL, "%s: Error returned by EVP_PKEY_derive_set_peer: %ld", __FUNCTION__, ERR_get_error());
+		goto cleanup;
 	}
 
-	group = EC_KEY_get0_group(ecdh);
-	if (!group) {
-		goto err;
+	/* Determine shared secret buffer length */
+	if (EVP_PKEY_derive(ctx, NULL, &skeylen) <= 0) {
+		char *error_str = ERR_error_string(ERR_peek_last_error(), NULL);
+		MWLOG(LEV_ERROR, MOD_CAL, "%s: EVP_PKEY_derive failed (1): %s", __FUNCTION__, error_str);
+		goto cleanup;
 	}
 
-	chip_ec = EVP_PKEY_get1_EC_KEY(chip_pkey);
-	if (!chip_ec) {
-		goto err;
-	}
-	chip_pub_point = EC_KEY_get0_public_key(chip_ec);
+	shared_secret->length = skeylen;
+	shared_secret->data = (char *)OPENSSL_malloc(skeylen);
+	shared_secret->max = skeylen;
 
-	shared_secret = BUF_MEM_new();
-	shared_secret->length = ECDSA_size(ecdh);
-	shared_secret->data = (char *)OPENSSL_malloc(shared_secret->length);
-	shared_secret->max = shared_secret->length;
-
-	// K = KA(SKPCD, PKPICC, DPICC)
-	shared_secret->length = ECDH_compute_key(shared_secret->data, shared_secret->length, chip_pub_point, ecdh, NULL);
-	if (shared_secret->length <= 0) {
-		goto err;
+	if (EVP_PKEY_derive(ctx, (unsigned char *)shared_secret->data, &skeylen) <= 0) {
+		const char *file = NULL;
+		int line = 0;
+		char *error_str = ERR_error_string(ERR_peek_last_error_line(&file, &line), NULL);
+		MWLOG(LEV_ERROR, MOD_CAL, "%s: EVP_PKEY_derive failed (2): %s in (%s:%d)", __FUNCTION__, error_str, file, line);
+		goto cleanup;
 	}
 
-	EC_KEY_free(ecdh);
-	EC_KEY_free(chip_ec);
+cleanup:
+	if (ctx) {
+		EVP_PKEY_CTX_free(ctx);
+	}
 	return shared_secret;
-
-err:
-	if (shared_secret)
-		BUF_MEM_free(shared_secret);
-	if (ecdh)
-		EC_KEY_free(ecdh);
-	if (chip_ec)
-		EC_KEY_free(chip_ec);
-	return NULL;
 }
 
+/**
+ * TODO: use key_length parameter
+ */
 bool deriveSessionKeys(const unsigned char *shared_secret, size_t secret_len, const EVP_MD *md, size_t key_length,
 					   unsigned char *ks_enc, unsigned char *ks_mac) {
 	EVP_MD_CTX *mdctx = NULL;
@@ -160,54 +162,83 @@ cleanup:
 }
 
 ChipAuthSecureMessaging::ChipAuthSecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
-	: SecureMessaging(hCard, poContext, paramStructure) {}
+	: SecureMessaging(hCard, poContext, paramStructure) {
+	m_ctx = nullptr;
+}
 
 ChipAuthSecureMessaging::~ChipAuthSecureMessaging() {
-	EAC_CTX_clear_free(m_ctx);
+	if (m_ctx) {
+		EAC_CTX_clear_free(m_ctx);
+	}
 }
 
-bool ChipAuthSecureMessaging::is_ecdh_algorithm(ASN1_OBJECT *oid) {
+CByteArray encodeBERTLVObject(unsigned char tag, const CByteArray &data) {
+	CByteArray ber_object;
+	ber_object.Append(tag);
+	unsigned long data_l = data.Size();
+	if (data_l < 128) {
+		ber_object.Append((unsigned char)data_l);
+	}
+	else if (data_l < 256) {
+		ber_object.Append(0x81);
+		ber_object.Append((unsigned char)data_l);
+	}
+	else if (data.Size() < 65535) {
+		ber_object.Append(0x82);
+		unsigned char length_msb = (data_l & 0xFF00) >> 8;
+		unsigned char length_lsb = data_l & 0xFF;
+		ber_object.Append(length_msb);
+		ber_object.Append(length_lsb);
+	}
+	ber_object.Append(data);
+
+	return ber_object;
+}
+
+CByteArray buildMSEKetAPDU(unsigned char *pubkey, size_t pubkey_len) {
+
+	CByteArray apdu_kat;
+	apdu_kat.Append(0x00);
+	apdu_kat.Append(0x22);
+	apdu_kat.Append(0x41);
+	apdu_kat.Append(0xA6);
+
+	//Ephemeral public key tag
+	CByteArray data = encodeBERTLVObject(0x91, CByteArray(pubkey, pubkey_len));
+
+	apdu_kat.Append(data.Size());
+	apdu_kat.Append(data);
+
+	return apdu_kat;
+}
+
+bool ChipAuthSecureMessaging::sendIFDPublicKey(SecureMessaging *sm, EVP_PKEY *ifd_key, ASN1_OBJECT *oid) {
 	OID_INFO oid1 = get_id_CA_ECDH_3DES_CBC_CBC();
-	OID_INFO oid2 = get_id_CA_ECDH_AES_CBC_CMAC_128();
-	OID_INFO oid3 = get_id_CA_ECDH_AES_CBC_CMAC_192();
-	OID_INFO oid4 = get_id_CA_ECDH_AES_CBC_CMAC_256();
-
-	return OBJ_cmp(oid1.object, oid) == 0 || OBJ_cmp(oid2.object, oid) == 0 ||
-	       OBJ_cmp(oid3.object, oid) == 0 || OBJ_cmp(oid4.object, oid) == 0;
-}
-
-bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid) {
+	OID_INFO oid2 = get_id_CA_DH_3DES_CBC_CBC();
 	bool status = true;
 	long ret_value = 0;
-
-	// Step 2 Variables
-	int key_type = 0;
-	int key_size = 0;
-	EC_KEY *ec_key = nullptr;
-	EC_KEY *eph_key = nullptr;
-	EVP_PKEY *eph_pkey = nullptr;
-
-	CByteArray enc, mac;
-
-	// Step 3 Variables
-	unsigned char *eph_pubkey_buf = NULL;
-
-	// Step 4 Variables
-	BUF_MEM *shared_secret = nullptr;
-	if (!is_ecdh_algorithm(oid)) {
-		//Chip Authentication is only supported for ECDH algorithms
-		return false;
+	unsigned char *pubkey;
+	size_t pubkey_len = EVP_PKEY_get1_encoded_public_key(ifd_key, &pubkey);
+	if (pubkey_len == 0) {
+		status = false;
+		goto cleanup;
 	}
-	CAParams params = getCAParams(oid);
-	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication OID: %s ", __FUNCTION__, OBJ_nid2sn(params.nid));
 
-
-
-	// 1. Set security environment for chip authentication
-	{
+	//Send Public key using MSE-SET KAT if CA OID contains 3DES for Secure Messaging
+	if (OBJ_cmp(oid1.object, oid) == 0 || OBJ_cmp(oid2.object, oid) == 0) {
+		auto resp_apdu = sm->sendSecureAPDU(buildMSEKetAPDU(pubkey, pubkey_len), ret_value);
+		unsigned short sw12 = 256 * resp_apdu.GetByte(resp_apdu.Size() - 2) + resp_apdu.GetByte(resp_apdu.Size() - 1);
+		status = (sw12 == 0x9000);
+		if (!status) {
+			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed MSE:SET KAT command. Response: 0x%x", __FUNCTION__, sw12);
+		}
+	} else {
+		/*
+		 For Chip Authentication with AES options use the 2 MSE-SET + General Authenticate variant */
 		unsigned char der_oid[20];
 		unsigned char *p = der_oid;
 		unsigned int der_len = i2d_ASN1_OBJECT(oid, &p);
+		//Skip ASN.1 tag and length bytes because the chip only needs the raw value
 		CByteArray oid_data = CByteArray(der_oid + 2, der_len - 2);
 
 		CByteArray apdu_mse;
@@ -215,64 +246,24 @@ bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, 
 		apdu_mse.Append(0x22);
 		apdu_mse.Append(0x41);
 		apdu_mse.Append(0xA4);
-		apdu_mse.Append(2 + der_len);
+		apdu_mse.Append(2 + oid_data.Size());
 		apdu_mse.Append(0x80);
-		apdu_mse.Append(0x0A);
+		apdu_mse.Append(0x0A); //CA OIDs have constant size of 10 bytes
 		apdu_mse.Append(oid_data);
+
 		auto res = sm->sendSecureAPDU(apdu_mse, ret_value);
+
 		if (res.GetByte(0) != 0x90 || res.GetByte(1) != 0x00) {
-			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed MSE-SET apdu 0x%x", __FUNCTION__, res.GetBytes());
+			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed MSE:SET AT for CA OID!", __FUNCTION__);
 			status = false;
 			goto cleanup;
 		}
 		MWLOG(LEV_DEBUG, MOD_CAL, "%s: MSE-SET: Success", __FUNCTION__);
-	}
 
-	// 2. Generate ephemeral key-pair
-	{
-		key_type = EVP_PKEY_base_id(pkey);
-		key_size = EVP_PKEY_bits(pkey);
-		ec_key = (EC_KEY *)EVP_PKEY_get0_EC_KEY(pkey);
-		if (!ec_key) {
-			MWLOG(LEV_ERROR, MOD_CAL, "%s: Could not retrieve EC key from dg14 pkey", __FUNCTION__);
-			status = false;
-			goto cleanup;
-		}
+		// Encoded Ephemeral public key
+		CByteArray eepk = encodeBERTLVObject(0x80, CByteArray(pubkey, pubkey_len));
 
-		eph_key = EC_KEY_new_by_curve_name(EC_GROUP_get_curve_name(EC_KEY_get0_group(ec_key)));
-		if (!eph_key || !EC_KEY_generate_key(eph_key)) {
-			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to generate ephemeral keys", __FUNCTION__);
-			status = false;
-			goto cleanup;
-		}
-
-		eph_pkey = EVP_PKEY_new();
-		if (!eph_pkey || !EVP_PKEY_assign_EC_KEY(eph_pkey, eph_key)) {
-			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to assign ephemeral key", __FUNCTION__);
-			status = false;
-			goto cleanup;
-		}
-
-		MWLOG(LEV_DEBUG, MOD_CAL, "%s: Ephemeral key-pair generation: Success", __FUNCTION__);
-	}
-
-	// 3. Send public key to card
-	{
-		// Convert ephemeral public key to octet string
-		size_t eph_pubkey_len = 0;
-		eph_pubkey_len =
-			EC_KEY_key2buf(EVP_PKEY_get0_EC_KEY(eph_pkey), POINT_CONVERSION_UNCOMPRESSED, &eph_pubkey_buf, NULL);
-
-		// Encoded ephemeral public key
-		CByteArray eepk;
-		eepk.Append(0x80);
-		eepk.Append(eph_pubkey_len);
-		eepk.Append(CByteArray(eph_pubkey_buf, eph_pubkey_len));
-
-		CByteArray data;
-		data.Append(0x7C);
-		data.Append(eepk.Size());
-		data.Append(eepk);
+		CByteArray data = encodeBERTLVObject(0x7C, eepk);
 
 		CByteArray apdu_gen_auth;
 		apdu_gen_auth.Append(0x00);
@@ -283,26 +274,7 @@ bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, 
 		apdu_gen_auth.Append(data);
 		apdu_gen_auth.Append(0x00);
 
-		CByteArray dyn;
-		dyn.Append(0x80);
-		dyn.Append(eph_pubkey_len);
-		dyn.Append(CByteArray(eph_pubkey_buf, eph_pubkey_len));
-
-		CByteArray input;
-		input.Append(0x7C);
-		input.Append(dyn.Size());
-		input.Append(dyn);
-
-		CByteArray apdu_kat;
-		apdu_kat.Append(0x00);
-		apdu_kat.Append(0x86);
-		apdu_kat.Append(0x00);
-		apdu_kat.Append(0x00);
-		apdu_kat.Append(input.Size());
-		apdu_kat.Append(input);
-		apdu_kat.Append(0x00);
-
-		auto res = sm->sendSecureAPDU(apdu_kat, ret_value);
+		res = sm->sendSecureAPDU(apdu_gen_auth, ret_value);
 		if (res.GetByte(0) != 0x7C || res.GetByte(1) != 0x00 || res.GetByte(res.Size() - 2) != 0x90 ||
 			res.GetByte(res.Size() - 1) != 0x00) {
 			MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed General Authentication step", __FUNCTION__);
@@ -313,8 +285,42 @@ bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, 
 		MWLOG(LEV_DEBUG, MOD_CAL, "%s: General Authentication step: Success", __FUNCTION__);
 	}
 
-	// 4. Compute shared secret
-	shared_secret = computeSharedSecret(eph_pkey, pkey);
+cleanup:
+	if (pubkey) {
+		OPENSSL_free(pubkey);
+	}
+	return status;
+}
+
+bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *icc_pubkey, ASN1_OBJECT *oid) {
+	bool status = true;
+
+	EVP_PKEY_CTX *gctx = nullptr;
+	EVP_PKEY *ifd_key = NULL;
+	CByteArray enc, mac;
+
+	BUF_MEM *shared_secret = nullptr;
+
+	CAParams params = getCAParams(oid);
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication OID: %s ", __FUNCTION__, OBJ_nid2sn(params.nid));
+
+	gctx = EVP_PKEY_CTX_new_from_pkey(NULL, icc_pubkey, NULL);
+
+	// 1. Generate ephemeral DH/ECDH key from parameters in icc_pubkey
+	EVP_PKEY_keygen_init(gctx);
+	if (EVP_PKEY_generate(gctx, &ifd_key) <= 0) {
+		MWLOG(LEV_INFO, MOD_CAL, "%s: Failed to generate privateKey: %s", __FUNCTION__,
+			  ERR_error_string(ERR_peek_last_error(), NULL));
+	}
+
+	// 2. Send IFD public key to card
+	if (!sendIFDPublicKey(sm, ifd_key, oid)) {
+		status = false;
+		goto cleanup;
+	}
+
+	// 3. Compute shared secret
+	shared_secret = computeSharedSecret(icc_pubkey, ifd_key);
 	if (!shared_secret || shared_secret->length <= 0) {
 		MWLOG(LEV_ERROR, MOD_CAL, "%s: Failed to generate shared secret", __FUNCTION__);
 		status = false;
@@ -322,7 +328,7 @@ bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, 
 	}
 	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Shared Secret step: Success", __FUNCTION__);
 
-	// 5. Derive session keys (enc & mac)
+	// 4. Derive session keys (enc & mac)
 	unsigned char ks_enc[32]; // Max size possible
 	unsigned char ks_mac[32];
 	if (!deriveSessionKeys((unsigned char *)shared_secret->data, shared_secret->length, params.kdf_md, params.key_size,
@@ -333,20 +339,20 @@ bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *pkey, 
 	}
 	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Session Keys derivation step: Success", __FUNCTION__);
 
-	// 6. Use keys for secure messaging
+	// 5. Use keys for secure messaging
 	enc = CByteArray(ks_enc, params.key_size);
 	mac = CByteArray(ks_mac, params.key_size);
 
-	initEACContext(eph_pkey, shared_secret, enc, mac, params);
+	initEACContext(ifd_key, shared_secret, enc, mac, params);
 	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication: Success", __FUNCTION__);
 
 	m_authenticated = true;
 
 cleanup:
-	if (pkey)
-		EVP_PKEY_free(pkey);
-	if (eph_pubkey_buf)
-		free(eph_pubkey_buf);
+	if (icc_pubkey)
+		EVP_PKEY_free(icc_pubkey);
+	if (gctx)
+		EVP_PKEY_CTX_free(gctx);
 
 	return status;
 }

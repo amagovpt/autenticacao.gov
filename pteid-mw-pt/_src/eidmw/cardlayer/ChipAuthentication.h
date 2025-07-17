@@ -49,9 +49,9 @@ protected:
 	virtual CByteArray addPadding(const CByteArray &data) override;
 	virtual CByteArray removePadding(const CByteArray &data) override;
 	virtual void incrementSSC() override;
+	bool sendIFDPublicKey(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid);
 
 private:
-	bool is_ecdh_algorithm(ASN1_OBJECT *oid);
 	void initEACContext(EVP_PKEY *eph_pkey, BUF_MEM *shared_secret, CByteArray enc, CByteArray mac,
 						const CAParams &params);
 

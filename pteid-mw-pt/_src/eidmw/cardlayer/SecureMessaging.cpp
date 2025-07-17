@@ -75,7 +75,11 @@ CByteArray SecureMessaging::sendSecureAPDU(const CByteArray &apdu, long &retValu
 		uint8_t lcg = encryptedData.Size() + (isInsOdd ? 0 : 1);
 
 		CByteArray cryptogram;
+		//TLV-encoding of cryptogram
 		cryptogram.Append(isInsOdd ? TcgOdd : Tcg);
+		if (lcg >= 128) {
+			cryptogram.Append(0x81);
+		}
 		cryptogram.Append(lcg);
 		if (!isInsOdd)
 			cryptogram.Append(paddingIndicator);

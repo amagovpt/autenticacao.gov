@@ -39,7 +39,7 @@ INCLUDEPATH += $${PCSC_INCLUDE_DIR}
 macx: INCLUDEPATH += $$DEPS_DIR/openssl-3/include
 macx: INCLUDEPATH += $$DEPS_DIR/openpace/include
 
-DEFINES += EIDMW_CAL_EXPORT
+DEFINES += EIDMW_CAL_EXPORT 
 
 unix:!macx:  DEFINES += __UNIX__
 
