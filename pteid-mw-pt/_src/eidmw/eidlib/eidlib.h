@@ -39,7 +39,10 @@
 #include <stdint.h>
 #endif
 #include "eidlibdefines.h"
+
+#if !defined SWIG
 #include "CardCallbacks.h"
+#endif
 
 namespace eIDMW {
 
@@ -335,7 +338,9 @@ public:
 	 * @param bManageTestCard If false other applications (ex. gui) take that into their scope
 	 **/
 	PTEIDSDK_API static void initSDK(bool bManageTestCard = false);
+#if !defined SWIG
 	PTEIDSDK_API static void initSDKWithCallbacks(const PTEID_CardInterfaceCallbacks &callbacks, bool bManageTestCard = false);
+#endif
 	PTEIDSDK_API static void releaseSDK(); /**< Release the SDK */
 
 	PTEIDSDK_API virtual ~PTEID_ReaderSet(); /**< Destructor */
