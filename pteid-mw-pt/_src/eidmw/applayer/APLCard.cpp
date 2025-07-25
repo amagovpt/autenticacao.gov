@@ -856,7 +856,8 @@ X509 *change_signer_info(PKCS7 *p7) {
 		PKCS7_SIGNER_INFO *sinfo = sk_PKCS7_SIGNER_INFO_value(signer_info, i);
 		PKCS7_ISSUER_AND_SERIAL *issuer_and_serial = sinfo->issuer_and_serial;
 		if (issuer_and_serial != NULL && x509_issuer != NULL) {
-			issuer_and_serial->issuer = x509_issuer;
+			X509_NAME_free(issuer_and_serial->issuer);
+			issuer_and_serial->issuer = X509_NAME_dup(x509_issuer);
 			MWLOG(LEV_DEBUG, MOD_APL, "Changing issuer DN in signer_info...");
 			break;
 		}
