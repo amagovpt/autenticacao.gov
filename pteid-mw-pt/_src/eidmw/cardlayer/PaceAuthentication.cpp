@@ -85,7 +85,7 @@ public:
 		MWLOG(LEV_DEBUG, MOD_CAL, "Selected PACE algorithm name: %s NID: %d", protocol_name, protocol_nid);
 	}
 
-	void initAuthentication(SCARDHANDLE &hCard, const void *param_structure) {
+	void initAuthentication(PTEID_CardHandle &hCard, const void *param_structure) {
 		std::lock_guard<std::mutex> guard(m_mutex);
 		BUF_MEM *mappingData = NULL, *cardMappingData = NULL, *pubkey = NULL, *cardPubKey = NULL;
 		BUF_MEM *token = NULL, *cardToken = NULL;
@@ -308,14 +308,14 @@ private:
 	std::mutex m_mutex;
 };
 
-PaceAuthentication::PaceAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
+PaceAuthentication::PaceAuthentication(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure)
 	: SecureMessaging(hCard, poContext, paramStructure), m_impl(new PaceAuthenticationImpl(poContext)) {
 	EAC_init();
 }
 
 PaceAuthentication::~PaceAuthentication() {}
 
-void PaceAuthentication::initPaceAuthentication(SCARDHANDLE &hCard, const void *param_structure) {
+void PaceAuthentication::initPaceAuthentication(PTEID_CardHandle &hCard, const void *param_structure) {
 	m_impl->initAuthentication(hCard, param_structure);
 	m_authenticated = true;
 }

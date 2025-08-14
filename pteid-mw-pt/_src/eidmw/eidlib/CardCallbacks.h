@@ -37,7 +37,22 @@
 /** Generic callback implementation error */
 #define PTEID_CALLBACK_ERR_GENERIC           0xe1d003ff
 
-typedef uint32_t PTEID_CardHandle;
+struct PTEID_CardHandle {
+	uint32_t handle;
+
+	PTEID_CardHandle() = default;
+	PTEID_CardHandle(const PTEID_CardHandle &) = default;
+	PTEID_CardHandle &operator=(const PTEID_CardHandle &) = default;
+
+	bool operator==(const PTEID_CardHandle &other) const { return handle == other.handle; }
+};
+
+namespace std {
+template <> struct hash<PTEID_CardHandle> {
+	std::size_t operator()(const PTEID_CardHandle &key) const noexcept { return std::hash<uint32_t>{}(key.handle); }
+};
+} // namespace std
+
 typedef uint32_t PTEID_CallbackResult;
 
 enum class PTEID_CardProtocol {

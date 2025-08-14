@@ -37,16 +37,16 @@
 
 namespace eIDMW {
 
-CCard::CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad)
+CCard::CCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad)
 	: m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad), m_oCache(poContext), m_cardType(CARD_UNKNOWN),
 	  m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(NULL), m_askPinOnSign(true) {}
 
 CCard::~CCard(void) { Disconnect(DISCONNECT_RESET_CARD); }
 
 void CCard::Disconnect(tDisconnectMode disconnectMode) {
-	if (m_hCard != 0) {
-		SCARDHANDLE hTemp = m_hCard;
-		m_hCard = 0;
+	if (m_hCard.handle != 0) {
+		PTEID_CardHandle hTemp = m_hCard;
+		m_hCard = {0};
 		m_poContext->m_oCardInterface->Disconnect(hTemp, disconnectMode);
 	}
 }
@@ -99,6 +99,13 @@ void CCard::Unlock() {
 		if (m_ulLockCount == 0)
 			m_poContext->m_oCardInterface->EndTransaction(m_hCard);
 	}
+}
+
+void CCard::UpdateHandle(PTEID_CardHandle hCard) {
+	this->m_hCard = hCard;
+
+	if (this->m_secureMessaging)
+		this->m_secureMessaging->UpdateHandle(hCard);
 }
 
 void CCard::ResetApplication() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
@@ -299,8 +306,7 @@ CByteArray CCard::Sign(const tPrivKey &key, const tPin &Pin, unsigned long algo,
 
 CByteArray CCard::GetRandom(unsigned long ulLen) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
-CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal,
-										 const void *param_structure) {
+CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, const void *param_structure) {
 	CByteArray result;
 	bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C || cleartext_next;
 	if (isAlreadySM && m_secureMessaging.get()) {
@@ -316,8 +322,7 @@ CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE
 	return result;
 }
 
-CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal,
-										 const void *param_structure) {
+CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, const void *param_structure) {
 	bool isAlreadySM = apdu.cla() & 0x0C || cleartext_next;
 	CByteArray result;
 	if (isAlreadySM && m_secureMessaging.get()) {
@@ -341,14 +346,14 @@ CByteArray CCard::SendAPDU(const CByteArray &oCmdAPDU) {
 	const void *protocol_struct = getProtocolStructure();
 	CByteArray oResp;
 
-	oResp = handleSendAPDUSecurity(oCmdAPDU, m_hCard, lRetVal, protocol_struct);
+	oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol_struct);
 
 	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) {
 		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
 		// try again to select the applet
 		if (SelectApplet()) {
 			// try again, now that the card has been reset
-			oResp = handleSendAPDUSecurity(oCmdAPDU, m_hCard, lRetVal, protocol_struct);
+			oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol_struct);
 		}
 	}
 
@@ -380,14 +385,14 @@ CByteArray CCard::SendAPDU(const APDU &apdu) {
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
 	const void *protocol_struct = getProtocolStructure();
-	CByteArray oResp = handleSendAPDUSecurity(apdu, m_hCard, lRetVal, protocol_struct);
+	CByteArray oResp = handleSendAPDUSecurity(apdu, lRetVal, protocol_struct);
 
 	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) {
 		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
 		// try again to select the applet
 		if (SelectApplet()) {
 			// try again, now that the card has been reset
-			oResp = handleSendAPDUSecurity(apdu, m_hCard, lRetVal, protocol_struct);
+			oResp = handleSendAPDUSecurity(apdu, lRetVal, protocol_struct);
 		}
 	}
 
@@ -509,9 +514,9 @@ unsigned long CCard::getSW12(const CByteArray &oRespAPDU, unsigned long ulExpect
 
 ////////////////////////////////////////////////////////////////:
 
-CAutoLock::CAutoLock(CCard *poCard) : m_poCard(poCard), m_poCardInterface(NULL), m_hCard(0) { m_poCard->Lock(); }
+CAutoLock::CAutoLock(CCard *poCard) : m_poCard(poCard), m_poCardInterface(NULL), m_hCard({0}) { m_poCard->Lock(); }
 
-CAutoLock::CAutoLock(CardInterface *poCardInterface, SCARDHANDLE hCard)
+CAutoLock::CAutoLock(CardInterface *poCardInterface, PTEID_CardHandle hCard)
 	: m_poCard(NULL), m_poCardInterface(poCardInterface), m_hCard(hCard) {
 	poCardInterface->BeginTransaction(hCard);
 }

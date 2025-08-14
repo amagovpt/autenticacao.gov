@@ -197,7 +197,7 @@ private:
 	CReader(const CReader &oReader);
 	CReader &operator=(const CReader &oReader);
 
-	void readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, int ioctl_get_features);
+	void readerDeviceInfo(PTEID_CardHandle hCard, ReaderDeviceInfo *deviceInfo, int ioctl_get_features);
 
 	bool m_bIgnoreRemoval;
 	std::string m_csReader;

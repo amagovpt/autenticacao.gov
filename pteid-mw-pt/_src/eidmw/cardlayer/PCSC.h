@@ -122,6 +122,9 @@ public:
 
 	void ReleaseContext() override;
 
+	PTEID_CardHandle RegisterHandle(SCARDHANDLE hCard);
+	SCARDHANDLE GetPcscHandleFrom(PTEID_CardHandle pteidHandle);
+
 	/**
 	 * We can't return a string because the output is a "multistring",
 	 * which means a multiple strings separated by a 0x00 and ended
@@ -169,6 +172,8 @@ private:
 
 	unsigned long m_ulCardTxDelay; // delay before each transmission to a smartcard; in millie-seconds, default 1
 
+	uint32_t m_lastHandle = 0;
+	std::unordered_map<SCARDHANDLE, PTEID_CardHandle> m_reverse_handles;
 	std::unordered_map<PTEID_CardHandle, SCARDHANDLE> m_handles;
 };
 

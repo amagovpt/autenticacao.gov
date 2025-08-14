@@ -51,6 +51,8 @@
 #include <iostream>
 #include <vector>
 
+#include "CardCallbacks.h";
+
 namespace eIDMW {
 class CContext;
 
@@ -61,7 +63,7 @@ public:
 	// Warning: This ctor shouldn't be used, it's just a workaround for a convoluted Pinpad detection process
 	GenericPinpad() { m_ulLangCode = 0x0409; }
 
-	GenericPinpad(CContext *poContext, SCARDHANDLE hCard, const std::string &csReader);
+	GenericPinpad(CContext *poContext, PTEID_CardHandle hCard, const std::string &csReader);
 
 	virtual CByteArray PinCmd(tPinOperation operation, const tPin &pin, unsigned char ucPinType,
 							  const CByteArray &oAPDU, unsigned long &ulRemaining, void *wndGeometry = 0);
@@ -97,7 +99,7 @@ protected:
 							   const CByteArray &oAPDU, unsigned long &ulRemaining, void *wndGeometry = 0);
 
 	CContext *m_poContext;
-	SCARDHANDLE m_hCard;
+	PTEID_CardHandle m_hCard;
 	std::string m_csReader;
 	unsigned short m_usReaderFirmVers;
 	bool m_bUsePinpadLib;

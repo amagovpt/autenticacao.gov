@@ -56,7 +56,7 @@ public:
 	using MrzInfo = CByteArray;
 	EIDMW_CAL_API static MrzInfo mrzFromBytes(const CByteArray &data);
 
-	BacAuthentication(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure);
+	BacAuthentication(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure);
 
 	/**
 	 * @brief Establishes the BAC secure channel with the card

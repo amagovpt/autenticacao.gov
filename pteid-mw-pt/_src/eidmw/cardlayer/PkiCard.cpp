@@ -38,7 +38,7 @@
 
 namespace eIDMW {
 
-CPkiCard::CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad)
+CPkiCard::CPkiCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad)
 	: CCard(hCard, poContext, poPinpad) {
 	m_ucCLA = 0;
 	m_selectAppletMode = DONT_SELECT_APPLET;

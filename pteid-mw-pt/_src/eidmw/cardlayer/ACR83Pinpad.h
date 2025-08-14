@@ -39,7 +39,7 @@ namespace eIDMW {
 
 class ACR83Pinpad : public GenericPinpad {
 public:
-	ACR83Pinpad(CContext *poContext, SCARDHANDLE hCard, const std::string &csReader)
+	ACR83Pinpad(CContext *poContext, PTEID_CardHandle hCard, const std::string &csReader)
 		: GenericPinpad(poContext, hCard, csReader) {};
 
 	virtual CByteArray PinCmd(tPinOperation operation, const tPin &pin, unsigned char ucPinType,

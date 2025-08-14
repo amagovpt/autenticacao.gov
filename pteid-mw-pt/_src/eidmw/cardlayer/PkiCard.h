@@ -39,7 +39,7 @@ namespace eIDMW {
 class PaceAuthentication;
 class CPkiCard : public CCard {
 public:
-	CPkiCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
+	CPkiCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad);
 	virtual ~CPkiCard(void);
 
 	virtual tCardType GetType() = 0;

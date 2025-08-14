@@ -42,11 +42,13 @@ struct CAParams;
  */
 class SecureMessaging {
 public:
-	SecureMessaging(SCARDHANDLE hCard, CContext *poContext, const void *paramStructure)
+	SecureMessaging(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure)
 		: m_card(hCard), m_context(poContext), m_param(paramStructure), m_authenticated(false) {
 		EAC_init();
 	}
 	virtual ~SecureMessaging() = default;
+
+	void UpdateHandle(PTEID_CardHandle hCard) { this->m_card = hCard; }
 
 	virtual bool isInitialized() { return m_authenticated; };
 
@@ -79,7 +81,7 @@ protected:
 	virtual CByteArray sendAPDU(const CByteArray &apdu, long &retValue);
 	CByteArray decryptAPDUResponse(const CByteArray &encryptedResponse);
 
-	SCARDHANDLE m_card = {0};
+	PTEID_CardHandle m_card = {0};
 	const void *m_param = {0};
 	CContext *m_context = {0};
 

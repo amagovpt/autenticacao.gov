@@ -40,7 +40,7 @@ namespace eIDMW {
 
 class GemPcPinpad : public GenericPinpad {
 public:
-	GemPcPinpad(CContext *poContext, SCARDHANDLE hCard, const std::string &csReader)
+	GemPcPinpad(CContext *poContext, PTEID_CardHandle hCard, const std::string &csReader)
 		: GenericPinpad(poContext, hCard, csReader) {};
 
 	virtual CByteArray PinCmd(tPinOperation operation, const tPin &pin, unsigned char ucPinType,

@@ -6,7 +6,7 @@ namespace eIDMW {
 
 class CIcaoCard : public CPkiCard {
 public:
-	CIcaoCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol);
+	CIcaoCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol);
 	~CIcaoCard(void);
 
 	virtual tCardType GetType();

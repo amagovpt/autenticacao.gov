@@ -31,9 +31,9 @@ namespace eIDMW {
 
 class CUnknownCard : public CCard {
 public:
-	static bool IsUnknownCard(SCARDHANDLE hCard, CContext *poContext, CByteArray &oData);
+	static bool IsUnknownCard(PTEID_CardHandle hCard, CContext *poContext, CByteArray &oData);
 
-	CUnknownCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const CByteArray &oData);
+	CUnknownCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad, const CByteArray &oData);
 	~CUnknownCard(void);
 
 	virtual CByteArray ReadUncachedFile(const std::string &csPath, unsigned long ulOffset = 0,

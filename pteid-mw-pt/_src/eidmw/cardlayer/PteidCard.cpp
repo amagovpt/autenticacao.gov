@@ -52,10 +52,10 @@ static const std::string TRACEFILE = "3F000003";
 
 namespace eIDMW {
 
-	static bool PteidCardSelectApplet(CContext *poContext, SCARDHANDLE hCard, const void *protocol_struct,
-		SecureMessaging *secureMessaging) {
+	static bool PteidCardSelectApplet(CContext *poContext, PTEID_CardHandle hCard, const void *protocol_struct,
+									  SecureMessaging *secureMessaging) {
 		long lRetVal = 0;
-		unsigned char tucSelectApp[] = { 0x00, 0xA4, 0x04, 0x0C };
+		unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
 		CByteArray oCmd(sizeof(PTEID_1_APPLET_AID) + 5);
 		oCmd.Append(tucSelectApp, sizeof(tucSelectApp));
 		oCmd.Append((unsigned char)sizeof(PTEID_1_APPLET_AID));
@@ -64,15 +64,14 @@ namespace eIDMW {
 		CByteArray oResp;
 		if (auto pace = dynamic_cast<PaceAuthentication *>(secureMessaging)) {
 			oResp = pace->sendSecureAPDU(oCmd, lRetVal);
-		}
-		else {
+		} else {
 			oResp = poContext->m_oCardInterface->Transmit(hCard, oCmd, &lRetVal, protocol_struct);
 		}
 		return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 	}
 
-	CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, SCARDHANDLE hCard, CContext *poContext,
-		GenericPinpad *poPinpad, const void *protocol_struct) {
+	CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID_CardHandle hCard, CContext *poContext,
+								GenericPinpad *poPinpad, const void *protocol_struct) {
 
 		CCard *poCard = NULL;
 
@@ -95,20 +94,18 @@ namespace eIDMW {
 				// 	MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
 				// }
 			}
-		}
-		catch (CMWException &e) {
+		} catch (CMWException &e) {
 			MWLOG(LEV_ERROR, MOD_CAL, "Exception in card object creation! Error code: %0x on %s:%ld", e.GetError(),
-				e.GetFile().c_str(), e.GetLine());
-		}
-		catch (const std::exception &e) {
+				  e.GetFile().c_str(), e.GetLine());
+		} catch (const std::exception &e) {
 			MWLOG(LEV_ERROR, MOD_CAL, "Std::exception in card object creation! Msg: %s", e.what());
 		}
 
 		return poCard;
 	}
 
-	CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad,
-		tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol)
+	CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad,
+							tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol)
 		: CPkiCard(hCard, poContext, poPinpad) {
 		switch (ulVersion) {
 		case 1:
@@ -127,8 +124,8 @@ namespace eIDMW {
 		ReadSerialNumber();
 	}
 
-	/* Constructor for IASv5 cards in CL mode */
-	CPteidCard::CPteidCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol)
+		/* Constructor for IASv5 cards in CL mode */
+	CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol)
 		: CPkiCard(hCard, poContext, poPinpad) {
 
 		setProtocol(protocol);

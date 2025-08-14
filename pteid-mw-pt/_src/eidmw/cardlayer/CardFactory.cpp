@@ -59,8 +59,22 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 
 	strReader = csReader.c_str();
 
+	PTEID_CardHandle handle = {0};
 	if (hCard) {
-		CByteArray atr = poContext->m_oCardInterface->StatusWithATR(hCard).second;
+		if (auto pcsc = dynamic_cast<CPCSC *>(poContext->m_oCardInterface.get())) {
+			handle = pcsc->RegisterHandle(hCard);
+		} else {
+			// We do not support this type of card connect with card callbacks
+			MWLOG_CTX(LEV_ERROR, MOD_CAL,
+					  "CardConnect with card handle while card callbacks are setup is not allowed.");
+			throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+		}
+
+		if (auto pcsc = dynamic_cast<CPCSC *>(poContext->m_oCardInterface.get())) {
+			pcsc->RegisterHandle(hCard);
+		}
+
+		CByteArray atr = poContext->m_oCardInterface->StatusWithATR(handle).second;
 		CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
 		isContactLess = atr.Equals(atrContactLessCard);
 
@@ -82,7 +96,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 			oCmd.Append(oAID, size);
 
 			CByteArray oResp;
-			oResp = poContext->m_oCardInterface->Transmit(hCard, oCmd, &lRetVal, paramStructure);
+			oResp = poContext->m_oCardInterface->Transmit(handle, oCmd, &lRetVal, paramStructure);
 			return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 		};
 
@@ -98,19 +112,19 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 
 			long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
 
-			poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, paramStructure);
+			poCard = PteidCardGetInstance(appletVersion, strReader, handle, poContext, poPinpad, paramStructure);
 			if (cacheEnabled)
 				poCard->InitEncryptionKey();
 		} else {
 			appletVersion = 3;
-			poCard = new CPteidCard(hCard, poContext, poPinpad, paramStructure);
+			poCard = new CPteidCard(handle, poContext, poPinpad, paramStructure);
 		}
 
 		CCache::LimitDiskCacheFiles(10);
 
 		// If no other CCard subclass could be found
 		if (poCard == NULL) {
-			poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
+			poCard = new CUnknownCard(handle, poContext, poPinpad, CByteArray());
 		}
 
 		poCard->setProtocol(paramStructure);
@@ -131,13 +145,13 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 		CThread::SleepMillisecs(poContext->m_ulConnectionDelay);
 
 	// Try if we can connect to the card via a normal SCardConnect()
-	SCARDHANDLE hCard = 0;
-	std::pair<SCARDHANDLE, PTEID_CardProtocol> ret;
+	PTEID_CardHandle hCard = {0};
+	std::pair<PTEID_CardHandle, PTEID_CardProtocol> ret;
 	try {
 		ret = poContext->m_oCardInterface->Connect(csReader);
 		hCard = ret.first;
 
-		if (hCard == 0) {
+		if (hCard.handle == 0) {
 			goto done;
 		}
 	} catch (CMWException &e) {
@@ -146,12 +160,12 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 		if (e.GetError() != (long)EIDMW_ERR_CANT_CONNECT && e.GetError() != (long)EIDMW_ERR_CARD_COMM)
 			throw;
 		lErrCode = e.GetError();
-		hCard = 0;
+		hCard.handle = 0;
 	}
 
 	strReader = csReader.c_str();
 
-	if (hCard != 0) {
+	if (hCard.handle != 0) {
 		if (poCard == NULL) {
 			CByteArray atr = poContext->m_oCardInterface->StatusWithATR(hCard).second;
 			CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
@@ -228,7 +242,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 
 			poCard->setProtocol(param_structure);
 
-			hCard = 0;
+			hCard = {0};
 		}
 	} else {
 		isContactLess = false;

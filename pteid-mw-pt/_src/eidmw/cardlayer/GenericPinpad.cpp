@@ -33,7 +33,7 @@
 
 namespace eIDMW {
 
-GenericPinpad::GenericPinpad(CContext *poContext, SCARDHANDLE hCard, const std::string &csReader)
+GenericPinpad::GenericPinpad(CContext *poContext, PTEID_CardHandle hCard, const std::string &csReader)
 	: m_poContext(poContext), m_csReader(csReader), m_hCard(hCard) {
 	// USB LANGID for English (US): it should work for all readers
 	// TODO: we should query the reader for supported languages and then select PT_pt or PT_br

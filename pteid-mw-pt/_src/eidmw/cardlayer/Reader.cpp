@@ -198,11 +198,10 @@ static void parse_reader_device_properties(unsigned char *bRecvBuffer, unsigned 
 	}
 }
 
-void CReader::readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, int ioctl_get_properties_tlv) {
+void CReader::readerDeviceInfo(PTEID_CardHandle hCard, ReaderDeviceInfo *deviceInfo, int ioctl_get_properties_tlv) {
 	// No input data for this reader command
 	CByteArray oCmd;
 	try {
-
 		CByteArray resp = m_poContext->m_oCardInterface->Control(hCard, ioctl_get_properties_tlv, oCmd);
 		parse_reader_device_properties(resp.GetBytes(), resp.Size(), &deviceInfo->vendorID, &deviceInfo->productID);
 	} catch (const CMWException &e) {
@@ -212,15 +211,22 @@ void CReader::readerDeviceInfo(SCARDHANDLE hCard, ReaderDeviceInfo *deviceInfo, 
 }
 
 void CReader::UseHandle(SCARDHANDLE hCard) {
+	PTEID_CardHandle handle = {0};
+
+	// find the corresponding PTEID_CardHandle
+	if (auto pcsc = dynamic_cast<CPCSC *>(m_poContext->m_oCardInterface.get())) {
+		handle = pcsc->RegisterHandle(hCard);
+	}
+
 	if (m_poCard) {
 		// reset last application incase card was reset
 		m_poCard->ResetApplication();
 
-		m_poCard->m_hCard = hCard;
+		m_poCard->UpdateHandle(handle);
 	}
 
 	if (m_oPinpad)
-		m_oPinpad->Init(hCard);
+		m_oPinpad->Init(handle);
 }
 
 bool CReader::Connect(SCARDHANDLE hCard, DWORD protocol) {
@@ -229,8 +235,13 @@ bool CReader::Connect(SCARDHANDLE hCard, DWORD protocol) {
 		if (m_isContactless)
 			m_poCard->createPace();
 
+		PTEID_CardHandle handle = {0};
+		if (auto pcsc = dynamic_cast<CPCSC *>(m_poContext->m_oCardInterface.get())) {
+			handle = pcsc->RegisterHandle(hCard);
+		}
+
 		m_oPKCS15.SetCard(m_poCard);
-		m_oPinpad->Init(m_poCard->m_hCard);
+		m_oPinpad->Init(handle);
 		CConfig config;
 		long pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
 		if (pinpadEnabled == 1 && m_oPinpad->UsePinpad()) {
@@ -272,7 +283,9 @@ bool CReader::Connect() {
 		}
 
 		m_oPKCS15.SetCard(m_poCard);
-		m_oPinpad->Init(m_poCard->m_hCard);
+		if (auto pcsc = dynamic_cast<CPCSC *>(m_poContext->m_oCardInterface.get())) {
+			m_oPinpad->Init(m_poCard->m_hCard);
+		}
 		CConfig config;
 		long pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
 		if (pinpadEnabled == 1 && m_oPinpad->UsePinpad()) {

@@ -47,7 +47,7 @@ public:
 	CPinpad(CContext *poContext, const std::string &csReader);
 
 	bool UsePinpad();
-	void Init(SCARDHANDLE hCard);
+	void Init(PTEID_CardHandle hCard);
 	int getTlvPropertiesIoctl() { return m_ioctlTlvProperties; }
 	GenericPinpad *getPinpadHandler();
 
@@ -58,7 +58,7 @@ protected:
 	void GetFeatureList();
 
 	CContext *m_poContext;
-	SCARDHANDLE m_hCard;
+	PTEID_CardHandle m_hCard;
 	std::string m_csReader;
 
 	bool m_bCanVerifyUnlock; // Can do operations with 1 PIN

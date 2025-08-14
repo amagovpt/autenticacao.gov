@@ -47,7 +47,7 @@ namespace eIDMW {
 class APDU;
 class EIDMW_CAL_API CCard {
 public:
-	CCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad);
+	CCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad);
 	virtual ~CCard(void);
 
 	/** Find out which card is present and return the appropriate subclass */
@@ -70,6 +70,8 @@ public:
 
 	virtual void Lock();
 	virtual void Unlock();
+
+	void UpdateHandle(PTEID_CardHandle hCard);
 
 	virtual void ResetApplication();
 	virtual void SelectApplication(const CByteArray &oAID);
@@ -131,7 +133,7 @@ public:
 
 	void setProtocol(const void *protocol_struct) { m_comm_protocol = protocol_struct; }
 
-	SCARDHANDLE m_hCard;
+	PTEID_CardHandle m_hCard;
 
 protected:
 	virtual bool SelectApplet();
@@ -167,9 +169,8 @@ private:
 	// No copies allowed
 	CCard(const CCard &oCard);
 	CCard &operator=(const CCard &oCard);
-	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, SCARDHANDLE &hCard, long &lRetVal,
-									  const void *param_structure);
-	CByteArray handleSendAPDUSecurity(const APDU &apdu, SCARDHANDLE &hCard, long &lRetVal, const void *param_structure);
+	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, const void *param_structure);
+	CByteArray handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, const void *param_structure);
 };
 
 class CAutoLock {
@@ -180,14 +181,14 @@ public:
 	 *  the CAutoLock(CCard *poCard) ctor; so make sure this
 	 *  object gets out of scope before making a new one for
 	 *  the same card handle! */
-	CAutoLock(CardInterface *poCardInterface, SCARDHANDLE hCard);
+	CAutoLock(CardInterface *poCardInterface, PTEID_CardHandle hCard);
 
 	~CAutoLock();
 
 private:
 	CCard *m_poCard;
 	CardInterface *m_poCardInterface;
-	SCARDHANDLE m_hCard;
+	PTEID_CardHandle m_hCard;
 };
 
 } // namespace eIDMW

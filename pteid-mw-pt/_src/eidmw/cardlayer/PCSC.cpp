@@ -84,6 +84,27 @@ void CPCSC::ReleaseContext() {
 	}
 }
 
+PTEID_CardHandle CPCSC::RegisterHandle(SCARDHANDLE hCard) {
+	// check if already exists
+	if (m_reverse_handles.find(hCard) != m_reverse_handles.end()) {
+		return m_reverse_handles[hCard];
+	}
+
+	PTEID_CardHandle handle = {this->m_lastHandle++};
+	m_handles.insert({handle, hCard});
+	m_reverse_handles.insert({hCard, handle});
+
+	return handle;
+}
+
+SCARDHANDLE CPCSC::GetPcscHandleFrom(PTEID_CardHandle pteidHandle) {
+	if (m_handles.find(pteidHandle) != m_handles.end()) {
+		return m_handles[pteidHandle];
+	}
+
+	throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+}
+
 CByteArray CPCSC::ListReaders() {
 	char csReaders[1024];
 	DWORD dwReadersLen = sizeof(csReaders);
@@ -218,14 +239,17 @@ std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string
 		//CThread::SleepMillisecs(200);
 	} */
 
-	PTEID_CardHandle handle = static_cast<PTEID_CardHandle>(hCard);
-	m_handles.insert({handle, hCard});
-
-	return std::make_pair(hCard, pcscProtocolToPteid(dwActiveProtocol));
+	auto handle = this->RegisterHandle(hCard);
+	return std::make_pair(handle, pcscProtocolToPteid(dwActiveProtocol));
 }
 
 void CPCSC::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
-	auto handle = m_handles[hCard];
+	auto handle = this->GetPcscHandleFrom(hCard);
+
+	// Remove both handles
+	m_reverse_handles.erase(handle);
+	m_handles.erase(hCard);
+
 	DWORD dwDisposition = disconnectMode == DISCONNECT_RESET_CARD ? SCARD_RESET_CARD : SCARD_LEAVE_CARD;
 
 	LONG lRet = SCardDisconnect(handle, dwDisposition);
@@ -622,7 +646,7 @@ std::pair<PTEID_CardHandle, PTEID_CardProtocol> ExternalCardInterface::Connect(c
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
 
-	PTEID_CardHandle outHandle = 0;
+	PTEID_CardHandle outHandle = {0};
 	PTEID_CardProtocol outProtocol = {};
 
 	auto result = callbacks.connect(csReader.c_str(), &outHandle, &outProtocol, callbacks.context);

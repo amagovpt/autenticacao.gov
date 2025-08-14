@@ -24,12 +24,13 @@
 
 namespace eIDMW {
 
-bool CUnknownCard::IsUnknownCard(SCARDHANDLE hCard, CContext *poContext, CByteArray &oData) {
+bool CUnknownCard::IsUnknownCard(PTEID_CardHandle hCard, CContext *poContext, CByteArray &oData) {
 	// This function shouldn't be called.
 	return true;
 }
 
-CUnknownCard::CUnknownCard(SCARDHANDLE hCard, CContext *poContext, GenericPinpad *poPinpad, const CByteArray &oData)
+CUnknownCard::CUnknownCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad,
+						   const CByteArray &oData)
 	: CCard(hCard, poContext, poPinpad) {}
 
 CUnknownCard::~CUnknownCard(void) {}

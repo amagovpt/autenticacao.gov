@@ -170,7 +170,12 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation, const tPin &pin, unsigne
 	CByteArray atr = m_poContext->m_oCardInterface->StatusWithATR(m_hCard).second;
 
 #ifdef WIN32 // Can't get this to work on Linux :(
-	rv = loadStrings(m_hCard, ucPinType, operation);
+	if (auto pcsc = dynamic_cast<CPCSC *>(m_poContext->m_oCardInterface.get())) {
+		auto handle = pcsc->GetPcscHandleFrom(m_hCard);
+		rv = loadStrings(handle, ucPinType, operation);
+	} else {
+		throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+	}
 #endif
 
 	// For IAS cards we need to VerifyPIN before Modify

@@ -57,7 +57,7 @@ GenericPinpad *CPinpad::getPinpadHandler() {
 	return pinpad_handler;
 }
 
-void CPinpad::Init(SCARDHANDLE hCard) { m_hCard = hCard; }
+void CPinpad::Init(PTEID_CardHandle hCard) { m_hCard = hCard; }
 
 bool CPinpad::UsePinpad() {
 	GetFeatureList();
