@@ -51,7 +51,7 @@
 #include <iostream>
 #include <vector>
 
-#include "CardCallbacks.h";
+#include "CardCallbacks.h"
 
 namespace eIDMW {
 class CContext;
@@ -82,8 +82,6 @@ protected:
 				 const std::string &csReader, PinpadDialogThread **pinpadDlgThreads, void *wndGeometry = 0);
 	/** To close the dialog opened by PinCmd() */
 	void CloseDlg(PinpadDialogThread *pinpadDlgThread);
-
-	unsigned long GetLanguage();
 
 	unsigned char ToFormatString(const tPin &pin);
 	unsigned char ToPinBlockString(const tPin &pin);
