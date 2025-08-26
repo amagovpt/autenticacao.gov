@@ -37,6 +37,9 @@
 /** Generic callback implementation error */
 #define PTEID_CALLBACK_ERR_GENERIC           0xe1d003ff
 
+#ifdef __cplusplus
+#include <functional>
+
 struct PTEID_CardHandle {
 	uint32_t handle;
 
@@ -52,6 +55,9 @@ template <> struct hash<PTEID_CardHandle> {
 	std::size_t operator()(const PTEID_CardHandle &key) const noexcept { return std::hash<uint32_t>{}(key.handle); }
 };
 } // namespace std
+#else
+typedef uint32_t PTEID_CardHandle;
+#endif
 
 typedef uint32_t PTEID_CallbackResult;
 
