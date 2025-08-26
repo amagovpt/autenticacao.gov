@@ -37,6 +37,7 @@ Takes care of
 #include "../eidlib/CardCallbacks.h"
 
 #include <cstdint>
+#include <queue>
 #include <unordered_map>
 #include <utility>
 
@@ -173,6 +174,7 @@ private:
 	unsigned long m_ulCardTxDelay; // delay before each transmission to a smartcard; in millie-seconds, default 1
 
 	uint32_t m_lastHandle = 0;
+	std::queue<uint32_t> m_freeHandles = {};
 	std::unordered_map<SCARDHANDLE, PTEID_CardHandle> m_reverse_handles;
 	std::unordered_map<PTEID_CardHandle, SCARDHANDLE> m_handles;
 };
