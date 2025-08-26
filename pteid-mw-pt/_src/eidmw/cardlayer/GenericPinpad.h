@@ -51,7 +51,7 @@
 #include <iostream>
 #include <vector>
 
-#include "CardCallbacks.h"
+#include "../eidlib/CardCallbacks.h"
 
 namespace eIDMW {
 class CContext;
