@@ -145,13 +145,13 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 		CThread::SleepMillisecs(poContext->m_ulConnectionDelay);
 
 	// Try if we can connect to the card via a normal SCardConnect()
-	PTEID_CardHandle hCard = {0};
+	PTEID_CardHandle hCard = {PTEID_INVALID_HANDLE};
 	std::pair<PTEID_CardHandle, PTEID_CardProtocol> ret;
 	try {
 		ret = poContext->m_oCardInterface->Connect(csReader);
 		hCard = ret.first;
 
-		if (hCard.handle == 0) {
+		if (hCard == PTEID_INVALID_HANDLE) {
 			goto done;
 		}
 	} catch (CMWException &e) {
@@ -160,12 +160,12 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinp
 		if (e.GetError() != (long)EIDMW_ERR_CANT_CONNECT && e.GetError() != (long)EIDMW_ERR_CARD_COMM)
 			throw;
 		lErrCode = e.GetError();
-		hCard.handle = 0;
+		hCard = PTEID_INVALID_HANDLE;
 	}
 
 	strReader = csReader.c_str();
 
-	if (hCard.handle != 0) {
+	if (hCard != PTEID_INVALID_HANDLE) {
 		if (poCard == NULL) {
 			CByteArray atr = poContext->m_oCardInterface->StatusWithATR(hCard).second;
 			CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));

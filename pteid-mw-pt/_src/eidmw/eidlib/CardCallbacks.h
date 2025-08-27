@@ -48,6 +48,7 @@ struct PTEID_CardHandle {
 	PTEID_CardHandle &operator=(const PTEID_CardHandle &) = default;
 
 	bool operator==(const PTEID_CardHandle &other) const { return handle == other.handle; }
+	bool operator!=(const PTEID_CardHandle &other) const { return !(*this == other); }
 };
 
 namespace std {
@@ -55,8 +56,11 @@ template <> struct hash<PTEID_CardHandle> {
 	std::size_t operator()(const PTEID_CardHandle &key) const noexcept { return std::hash<uint32_t>{}(key.handle); }
 };
 } // namespace std
+
+constexpr PTEID_CardHandle PTEID_INVALID_HANDLE = {static_cast<uint32_t>(-1)};
 #else
 typedef uint32_t PTEID_CardHandle;
+const PTEID_CardHandle PTEID_INVALID_HANDLE = -1;
 #endif
 
 typedef uint32_t PTEID_CallbackResult;

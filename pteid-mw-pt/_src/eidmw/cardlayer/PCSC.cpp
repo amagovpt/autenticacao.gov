@@ -97,7 +97,7 @@ PTEID_CardHandle CPCSC::RegisterHandle(SCARDHANDLE hCard) {
 		handle = {m_freeHandles.back()};
 		m_freeHandles.pop();
 	} else {
-		handle = {this->m_lastHandle++};
+		handle = {this->m_lastHandle.handle++};
 	}
 
 	m_handles.insert({handle, hCard});
@@ -260,7 +260,7 @@ void CPCSC::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
 	m_handles.erase(hCard);
 
 	// save freed handle
-	m_freeHandles.push(hCard.handle);
+	m_freeHandles.push(hCard);
 
 	DWORD dwDisposition = disconnectMode == DISCONNECT_RESET_CARD ? SCARD_RESET_CARD : SCARD_LEAVE_CARD;
 

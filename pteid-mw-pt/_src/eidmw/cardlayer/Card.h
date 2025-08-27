@@ -133,7 +133,7 @@ public:
 
 	void setProtocol(const void *protocol_struct) { m_comm_protocol = protocol_struct; }
 
-	PTEID_CardHandle m_hCard;
+	PTEID_CardHandle m_hCard = PTEID_INVALID_HANDLE;
 
 protected:
 	virtual bool SelectApplet();
