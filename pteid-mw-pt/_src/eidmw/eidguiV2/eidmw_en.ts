@@ -1580,7 +1580,7 @@
     </message>
     <message>
         <source>STR_HELP_DEV_AGENCY</source>
-        <translation>(Agência para a Modernização Administrativa, IP e Instituto dos Registos e do Notariado, IP)</translation>
+        <translation>(Agência para a Reforma Tecnológica do Estado, IP e Instituto dos Registos e do Notariado, IP)</translation>
     </message>
     <message>
         <source>STR_HELP_APP_VERSION</source>
