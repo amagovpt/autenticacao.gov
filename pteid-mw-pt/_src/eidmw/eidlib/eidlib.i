@@ -76,8 +76,6 @@
 %include "../applayer/CardPteidAddr.h"		//This file contains only define... It doesn't need any typemap
 
 
-%include "CardCallbacks.h"
-
 %include "std_vector.i"
 
 namespace std {
