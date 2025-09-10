@@ -46,10 +46,13 @@ struct PTEID_CardHandle {
 	PTEID_CardHandle() = default;
 	PTEID_CardHandle(const PTEID_CardHandle &) = default;
 	PTEID_CardHandle &operator=(const PTEID_CardHandle &) = default;
-
+	
 	bool operator==(const PTEID_CardHandle &other) const { return handle == other.handle; }
 	bool operator!=(const PTEID_CardHandle &other) const { return !(*this == other); }
+	bool operator<(const PTEID_CardHandle &other) const { return handle < other.handle; }
 };
+
+	
 
 namespace std {
 template <> struct hash<PTEID_CardHandle> {
