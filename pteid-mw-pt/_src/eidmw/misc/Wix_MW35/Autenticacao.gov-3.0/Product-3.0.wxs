@@ -148,6 +148,7 @@
         <File Id="eidlibdefines.h" Name="eidlibdefines.h" Source="..\..\..\eidlib\eidlibdefines.h"/>
         <File Id="eidlibException.h" Name="eidlibException.h" Source="..\..\..\eidlib\eidlibException.h"/>
         <File Id="eidErrors.h" Name="eidErrors.h" Source="..\..\..\common\eidErrors.h" />
+        <File Id="CardCallbacks.h" Name="CardCallbacks.h" Source="..\..\..\eidlib\CardCallbacks.h"/>
         <File Id="README_cpp.txt" Name="README.txt" Source="..\..\..\eidlib\README.txt"/>
       </Component>
     </DirectoryRef>
