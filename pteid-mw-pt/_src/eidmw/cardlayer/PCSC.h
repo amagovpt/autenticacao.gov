@@ -99,7 +99,7 @@ public:
 	virtual void EndTransaction(PTEID_CardHandle hCard) = 0;
 
 	virtual std::pair<PTEID_CardHandle, PTEID_CardProtocol>
-	Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+	Connect(const std::string &csReader,
 			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) = 0;
 	virtual void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) = 0;
 
@@ -140,7 +140,7 @@ public:
 	bool Status(const std::string &csReader) override;
 
 	std::pair<PTEID_CardHandle, PTEID_CardProtocol>
-	Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+	Connect(const std::string &csReader,
 			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) override;
 	void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) override;
 
@@ -195,7 +195,7 @@ public:
 	std::pair<bool, CByteArray> StatusWithATR(PTEID_CardHandle hCard) override;
 
 	std::pair<PTEID_CardHandle, PTEID_CardProtocol>
-	Connect(const std::string &csReader, unsigned long ulShareMode = SCARD_SHARE_SHARED,
+	Connect(const std::string &csReader,
 			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) override;
 	void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) override;
 

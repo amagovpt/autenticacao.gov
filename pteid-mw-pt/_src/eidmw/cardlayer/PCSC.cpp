@@ -225,13 +225,13 @@ bool CPCSC::Status(const std::string &csReader) {
 	return (xReaderState.dwEventState & SCARD_STATE_PRESENT) == SCARD_STATE_PRESENT;
 }
 
-std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
+std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string &csReader,
 															   unsigned long ulPreferredProtocols) {
 	DWORD dwActiveProtocol;
 	SCARDHANDLE hCard = 0;
 
 	LONG lRet =
-		SCardConnect(m_hContext, csReader.c_str(), ulShareMode, ulPreferredProtocols, &hCard, &dwActiveProtocol);
+		SCardConnect(m_hContext, csReader.c_str(), SCARD_SHARE_SHARED, ulPreferredProtocols, &hCard, &dwActiveProtocol);
 
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardConnect(%ls): 0x%0x", utilStringWiden(csReader).c_str(), lRet);
 
@@ -568,31 +568,31 @@ ExternalCardInterface::~ExternalCardInterface() {
 }
 
 long ExternalCardInterface::CallbackToInternalError(PTEID_CallbackResult callbackResult) {
-    switch (callbackResult) {
-        case PTEID_CALLBACK_OK:
-            return EIDMW_OK;
-        case PTEID_CALLBACK_ERR_INVALID_PARAM:
-            return EIDMW_ERR_PARAM_BAD;
-        case PTEID_CALLBACK_ERR_NO_CARD:
-            return EIDMW_ERR_NO_CARD;
-        case PTEID_CALLBACK_ERR_COMM_ERROR:
-            return EIDMW_ERR_CARD_COMM;
-        case PTEID_CALLBACK_ERR_NO_READER:
-            return EIDMW_ERR_NO_READER;
-        case PTEID_CALLBACK_ERR_ACCESS_DENIED:
-            return EIDMW_ERR_CARD_SHARING;
-        case PTEID_CALLBACK_ERR_NOT_SUPPORTED:
-            return EIDMW_ERR_NOT_SUPPORTED;
-        case PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL:
-            return EIDMW_ERR_PARAM_RANGE;
-        case PTEID_CALLBACK_ERR_CARD_REMOVED:
-            return EIDMW_ERR_NO_CARD;
-        case PTEID_CALLBACK_ERR_UNRESPONSIVE:
-            return EIDMW_ERR_CANT_CONNECT;
-        case PTEID_CALLBACK_ERR_GENERIC:
-        default:
-            return EIDMW_ERR_CARD;
-    }
+	switch (callbackResult) {
+	case PTEID_CALLBACK_OK:
+		return EIDMW_OK;
+	case PTEID_CALLBACK_ERR_INVALID_PARAM:
+		return EIDMW_ERR_PARAM_BAD;
+	case PTEID_CALLBACK_ERR_NO_CARD:
+		return EIDMW_ERR_NO_CARD;
+	case PTEID_CALLBACK_ERR_COMM_ERROR:
+		return EIDMW_ERR_CARD_COMM;
+	case PTEID_CALLBACK_ERR_NO_READER:
+		return EIDMW_ERR_NO_READER;
+	case PTEID_CALLBACK_ERR_ACCESS_DENIED:
+		return EIDMW_ERR_CARD_SHARING;
+	case PTEID_CALLBACK_ERR_NOT_SUPPORTED:
+		return EIDMW_ERR_NOT_SUPPORTED;
+	case PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL:
+		return EIDMW_ERR_PARAM_RANGE;
+	case PTEID_CALLBACK_ERR_CARD_REMOVED:
+		return EIDMW_ERR_NO_CARD;
+	case PTEID_CALLBACK_ERR_UNRESPONSIVE:
+		return EIDMW_ERR_CANT_CONNECT;
+	case PTEID_CALLBACK_ERR_GENERIC:
+	default:
+		return EIDMW_ERR_CARD;
+	}
 }
 
 void ExternalCardInterface::EstablishContext() {
@@ -647,12 +647,11 @@ bool ExternalCardInterface::Status(const std::string &csReader) {
 	if (result != PTEID_CALLBACK_OK) {
 		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}
-	
+
 	return cardPresent;
 }
 
 std::pair<PTEID_CardHandle, PTEID_CardProtocol> ExternalCardInterface::Connect(const std::string &csReader,
-																			   unsigned long ulShareMode,
 																			   unsigned long ulPreferredProtocols) {
 	if (callbacks.connect == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
@@ -689,8 +688,8 @@ CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteAr
 	unsigned char responseBuffer[APDU_BUF_LEN];
 	unsigned long respBufferSize = sizeof(responseBuffer);
 
-	auto result = callbacks.transmit(hCard, oCmdAPDU.GetBytes(), oCmdAPDU.Size(), responseBuffer, &respBufferSize, plRetVal, pSendPci,
-					   pRecvPci, callbacks.context);
+	auto result = callbacks.transmit(hCard, oCmdAPDU.GetBytes(), oCmdAPDU.Size(), responseBuffer, &respBufferSize,
+									 plRetVal, pSendPci, pRecvPci, callbacks.context);
 	if (result != PTEID_CALLBACK_OK) {
 		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}
@@ -722,8 +721,8 @@ CByteArray ExternalCardInterface::Control(PTEID_CardHandle hCard, unsigned long 
 
 	unsigned long respBufferSize = ulMaxResponseSize;
 
-	auto result = callbacks.control(hCard, ulControl, oCmd.GetBytes(), oCmd.Size(), respBuffer, &respBufferSize, ulMaxResponseSize,
-					  callbacks.context);
+	auto result = callbacks.control(hCard, ulControl, oCmd.GetBytes(), oCmd.Size(), respBuffer, &respBufferSize,
+									ulMaxResponseSize, callbacks.context);
 	if (result != PTEID_CALLBACK_OK) {
 		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}
