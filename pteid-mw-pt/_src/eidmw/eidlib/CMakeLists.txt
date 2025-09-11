@@ -9,10 +9,14 @@ include_directories(../applayer)
 include_directories(../cardlayer)
 include_directories(../dialogs)
 
-set(sources eidlibCmdClient.cpp eidlibCard.cpp eidlibCrypto.cpp eidlibDoc.cpp eidlibException.cpp 
-            eidlibReader.cpp eidlibSignDevFactory.cpp eidlibxades.cpp InternalUtil.cpp 
-            eidlibdefines.h eidlibException.h InternalUtil.h)
+add_library(${PROJECT_NAME} SHARED ${PTEID_LIB}.rc)
 
+target_sources(${PTEID_LIB}
+    PUBLIC eidlibCmdClient.cpp eidlibCard.cpp eidlibCrypto.cpp eidlibDoc.cpp eidlibException.cpp
+    eidlibReader.cpp eidlibSignDevFactory.cpp eidlibxades.cpp InternalUtil.cpp
 
-add_library(${PROJECT_NAME} SHARED ${sources} ${PTEID_LIB}.rc)
+    PUBLIC FILE_SET HEADERS
+    BASE_DIRS FILES CardCallbacks.h eidlibdefines.h eidlibException.h eidlib.h
+)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PTEID_COMMON} ${PTEID_APPLAYER} ${PTEID_CMDSERVICES})
