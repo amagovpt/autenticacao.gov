@@ -91,8 +91,6 @@ DG2 * decodeDg2(const CByteArray &biometricData) {
 	return processedDg2Data;
 }
 
-unsigned short readTwoBytes(const unsigned char *data) { return (data[0] << 8) | data[1]; }
-
 IcaoDg2::IcaoDg2(const CByteArray &arrayDg2) {
 	DG2 *decoded = decodeDg2(arrayDg2);
 	if (decoded == NULL) {
