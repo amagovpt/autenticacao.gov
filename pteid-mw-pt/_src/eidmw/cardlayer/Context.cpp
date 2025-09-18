@@ -46,5 +46,6 @@ CContext::CContext(const PTEID_CardInterfaceCallbacks &callbacks) {
 	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
 
 	m_oCardInterface = std::make_unique<ExternalCardInterface>(&callbacks);
+	m_oThreadPool.SetCardInterface(m_oCardInterface.get());
 }
 } // namespace eIDMW
