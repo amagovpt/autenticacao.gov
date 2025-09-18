@@ -339,7 +339,7 @@ try_again:
 	LONG lRet =
 		SCardTransmit(handle, pioSendPci, oCmdAPDU.GetBytes(), (DWORD)oCmdAPDU.Size(), NULL, tucRecv, &dwRecvLen);
 
-	*plRetVal = lRet;
+	*plRetVal = PcscToErr(lRet);
 	if (SCARD_S_SUCCESS != lRet) {
 #ifdef __APPLE__
 		if (SCARD_E_SHARING_VIOLATION == lRet && iRetryCount < 3) {

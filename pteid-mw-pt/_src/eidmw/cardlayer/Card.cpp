@@ -348,7 +348,7 @@ CByteArray CCard::SendAPDU(const CByteArray &oCmdAPDU) {
 
 	oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol_struct);
 
-	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) {
+	if (lRetVal == EIDMW_ERR_CARD_COMM || lRetVal == EIDMW_ERR_NOT_TRANSACTED) {
 		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
 		// try again to select the applet
 		if (SelectApplet()) {
@@ -387,7 +387,7 @@ CByteArray CCard::SendAPDU(const APDU &apdu) {
 	const void *protocol_struct = getProtocolStructure();
 	CByteArray oResp = handleSendAPDUSecurity(apdu, lRetVal, protocol_struct);
 
-	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) {
+	if (lRetVal == EIDMW_ERR_CARD_COMM || lRetVal == EIDMW_ERR_NOT_TRANSACTED) {
 		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
 		// try again to select the applet
 		if (SelectApplet()) {
