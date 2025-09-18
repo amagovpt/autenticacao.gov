@@ -129,10 +129,10 @@ public:
 	bool initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid);
 	void initBACAuthentication(const char *mrz_info);
 
-	const void *getProtocolStructure();
+	PTEID_CardProtocol getProtocolStructure();
 	const void setNextAPDUClearText() { cleartext_next = true; }
 
-	void setProtocol(const void *protocol_struct) { m_comm_protocol = protocol_struct; }
+	void setProtocol(PTEID_CardProtocol protocol_struct) { m_comm_protocol = protocol_struct; }
 
 	PTEID_CardHandle m_hCard = PTEID_INVALID_HANDLE;
 
@@ -163,15 +163,15 @@ protected:
 
 	bool m_askPinOnSign;
 
-	const void *m_comm_protocol;
+	PTEID_CardProtocol m_comm_protocol;
 	std::unique_ptr<SecureMessaging> m_secureMessaging{};
 
 private:
 	// No copies allowed
 	CCard(const CCard &oCard);
 	CCard &operator=(const CCard &oCard);
-	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, const void *param_structure);
-	CByteArray handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, const void *param_structure);
+	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, PTEID_CardProtocol protocol);
+	CByteArray handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, PTEID_CardProtocol protocol);
 };
 
 class CAutoLock {

@@ -1,7 +1,7 @@
 #include "IcaoCard.h"
 
 namespace eIDMW {
-CIcaoCard::CIcaoCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad, const void *protocol)
+CIcaoCard::CIcaoCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad, PTEID_CardProtocol protocol)
 	: CPkiCard(hCard, poContext, poPinpad) {
 
 	setProtocol(protocol);

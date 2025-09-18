@@ -39,7 +39,8 @@ namespace eIDMW {
 
 CCard::CCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad)
 	: m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad), m_oCache(poContext), m_cardType(CARD_UNKNOWN),
-	  m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(NULL), m_askPinOnSign(true) {}
+	  m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(PTEID_CardProtocol::ANY),
+	  m_askPinOnSign(true) {}
 
 CCard::~CCard(void) { Disconnect(DISCONNECT_RESET_CARD); }
 
@@ -306,7 +307,7 @@ CByteArray CCard::Sign(const tPrivKey &key, const tPin &Pin, unsigned long algo,
 
 CByteArray CCard::GetRandom(unsigned long ulLen) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
-CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, const void *param_structure) {
+CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, PTEID_CardProtocol protocol) {
 	CByteArray result;
 	bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C || cleartext_next;
 	if (isAlreadySM && m_secureMessaging.get()) {
@@ -316,13 +317,13 @@ CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetV
 	if (m_secureMessaging.get() && m_secureMessaging->isInitialized() && !isAlreadySM) {
 		result = m_secureMessaging->sendSecureAPDU(oCmdAPDU, lRetVal);
 	} else {
-		result = m_poContext->m_oCardInterface->Transmit(m_hCard, oCmdAPDU, &lRetVal, param_structure);
+		result = m_poContext->m_oCardInterface->Transmit(m_hCard, oCmdAPDU, &lRetVal, protocol);
 		cleartext_next = false;
 	}
 	return result;
 }
 
-CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, const void *param_structure) {
+CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, PTEID_CardProtocol protocol) {
 	bool isAlreadySM = apdu.cla() & 0x0C || cleartext_next;
 	CByteArray result;
 	if (isAlreadySM && m_secureMessaging.get()) {
@@ -333,7 +334,7 @@ CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, const 
 	if (m_secureMessaging.get() && m_secureMessaging->isInitialized() && !isAlreadySM) {
 		result = m_secureMessaging->sendSecureAPDU(apdu, lRetVal);
 	} else {
-		result = m_poContext->m_oCardInterface->Transmit(m_hCard, apdu.ToByteArray(), &lRetVal, param_structure);
+		result = m_poContext->m_oCardInterface->Transmit(m_hCard, apdu.ToByteArray(), &lRetVal, protocol);
 		cleartext_next = false;
 	}
 	return result;
@@ -343,17 +344,17 @@ CByteArray CCard::SendAPDU(const CByteArray &oCmdAPDU) {
 
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
-	const void *protocol_struct = getProtocolStructure();
+	auto protocol = getProtocolStructure();
 	CByteArray oResp;
 
-	oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol_struct);
+	oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol);
 
 	if (lRetVal == EIDMW_ERR_CARD_COMM || lRetVal == EIDMW_ERR_NOT_TRANSACTED) {
 		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
 		// try again to select the applet
 		if (SelectApplet()) {
 			// try again, now that the card has been reset
-			oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol_struct);
+			oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol);
 		}
 	}
 
@@ -384,7 +385,7 @@ CByteArray CCard::SendAPDU(const CByteArray &oCmdAPDU) {
 CByteArray CCard::SendAPDU(const APDU &apdu) {
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
-	const void *protocol_struct = getProtocolStructure();
+	PTEID_CardProtocol protocol_struct = getProtocolStructure();
 	CByteArray oResp = handleSendAPDUSecurity(apdu, lRetVal, protocol_struct);
 
 	if (lRetVal == EIDMW_ERR_CARD_COMM || lRetVal == EIDMW_ERR_NOT_TRANSACTED) {
@@ -446,7 +447,7 @@ bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	return status;
 }
 
-const void *CCard::getProtocolStructure() { return m_comm_protocol; }
+PTEID_CardProtocol CCard::getProtocolStructure() { return m_comm_protocol; }
 
 CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2, unsigned long ulOutLen) {
 

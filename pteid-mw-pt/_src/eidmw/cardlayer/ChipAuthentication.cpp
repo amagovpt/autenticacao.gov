@@ -162,8 +162,8 @@ cleanup:
 }
 
 ChipAuthSecureMessaging::ChipAuthSecureMessaging(PTEID_CardHandle hCard, CContext *poContext,
-												 const void *paramStructure)
-	: SecureMessaging(hCard, poContext, paramStructure) {
+												 PTEID_CardProtocol protocol)
+	: SecureMessaging(hCard, poContext, protocol) {
 	m_ctx = nullptr;
 }
 
@@ -179,12 +179,10 @@ CByteArray encodeBERTLVObject(unsigned char tag, const CByteArray &data) {
 	unsigned long data_l = data.Size();
 	if (data_l < 128) {
 		ber_object.Append((unsigned char)data_l);
-	}
-	else if (data_l < 256) {
+	} else if (data_l < 256) {
 		ber_object.Append(0x81);
 		ber_object.Append((unsigned char)data_l);
-	}
-	else if (data.Size() < 65535) {
+	} else if (data.Size() < 65535) {
 		ber_object.Append(0x82);
 		unsigned char length_msb = (data_l & 0xFF00) >> 8;
 		unsigned char length_lsb = data_l & 0xFF;

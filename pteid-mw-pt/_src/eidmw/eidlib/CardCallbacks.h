@@ -5,37 +5,37 @@
 /* Error codes that shall be returned by the Card reader callback functions */
 
 /** Operation completed successfully */
-#define PTEID_CALLBACK_OK                    0x00000000
+#define PTEID_CALLBACK_OK 0x00000000
 
 /** Invalid parameter passed to callback */
-#define PTEID_CALLBACK_ERR_INVALID_PARAM     0xe1d00301
+#define PTEID_CALLBACK_ERR_INVALID_PARAM 0xe1d00301
 
 /** No card present in reader */
-#define PTEID_CALLBACK_ERR_NO_CARD           0xe1d00302
+#define PTEID_CALLBACK_ERR_NO_CARD 0xe1d00302
 
 /** Communication error with card or reader */
-#define PTEID_CALLBACK_ERR_COMM_ERROR        0xe1d00303
+#define PTEID_CALLBACK_ERR_COMM_ERROR 0xe1d00303
 
 /** Reader not found or not available */
-#define PTEID_CALLBACK_ERR_NO_READER         0xe1d00304
+#define PTEID_CALLBACK_ERR_NO_READER 0xe1d00304
 
 /** Access denied or sharing violation */
-#define PTEID_CALLBACK_ERR_ACCESS_DENIED     0xe1d00305
+#define PTEID_CALLBACK_ERR_ACCESS_DENIED 0xe1d00305
 
 /** Operation not supported by this card reader implementation */
-#define PTEID_CALLBACK_ERR_NOT_SUPPORTED     0xe1d00306
+#define PTEID_CALLBACK_ERR_NOT_SUPPORTED 0xe1d00306
 
 /** Insufficient buffer size */
-#define PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL  0xe1d00307
+#define PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL 0xe1d00307
 
 /** Card was removed during operation */
-#define PTEID_CALLBACK_ERR_CARD_REMOVED      0xe1d00308
+#define PTEID_CALLBACK_ERR_CARD_REMOVED 0xe1d00308
 
 /** Card or reader is unresponsive */
-#define PTEID_CALLBACK_ERR_UNRESPONSIVE      0xe1d00309
+#define PTEID_CALLBACK_ERR_UNRESPONSIVE 0xe1d00309
 
 /** Generic callback implementation error */
-#define PTEID_CALLBACK_ERR_GENERIC           0xe1d003ff
+#define PTEID_CALLBACK_ERR_GENERIC 0xe1d003ff
 
 #ifdef __cplusplus
 #include <functional>
@@ -46,13 +46,11 @@ struct PTEID_CardHandle {
 	PTEID_CardHandle() = default;
 	PTEID_CardHandle(const PTEID_CardHandle &) = default;
 	PTEID_CardHandle &operator=(const PTEID_CardHandle &) = default;
-	
+
 	bool operator==(const PTEID_CardHandle &other) const { return handle == other.handle; }
 	bool operator!=(const PTEID_CardHandle &other) const { return !(*this == other); }
 	bool operator<(const PTEID_CardHandle &other) const { return handle < other.handle; }
 };
-
-	
 
 namespace std {
 template <> struct hash<PTEID_CardHandle> {
@@ -69,8 +67,9 @@ const PTEID_CardHandle PTEID_INVALID_HANDLE = -1;
 typedef uint32_t PTEID_CallbackResult;
 
 enum class PTEID_CardProtocol {
-	T0, /**< T=0 active protocol. */
-	T1	/**< T=1 active protocol. */
+	T0,	 /**< T=0 active protocol. */
+	T1,	 /**< T=1 active protocol. */
+	ANY, /**< T=0 | T=1 active protocol */
 };
 
 /**
@@ -114,8 +113,8 @@ typedef PTEID_CallbackResult (*PTEID_CardPresentInReaderFn)(const char *csReader
  * @param context Pointer to the context
  * @return OK if success
  */
-typedef PTEID_CallbackResult (*PTEID_StatusWithATRFn)(PTEID_CardHandle handle, unsigned char *buffer, unsigned long *bufferSize,
-									  void *context);
+typedef PTEID_CallbackResult (*PTEID_StatusWithATRFn)(PTEID_CardHandle handle, unsigned char *buffer,
+													  unsigned long *bufferSize, void *context);
 
 /**
  * Function to connect to a card
@@ -125,8 +124,8 @@ typedef PTEID_CallbackResult (*PTEID_StatusWithATRFn)(PTEID_CardHandle handle, u
  * @param context Pointer to the context
  * @return OK if success
  */
-typedef PTEID_CallbackResult (*PTEID_ConnectFn)(const char *csReader, PTEID_CardHandle *outHandle, PTEID_CardProtocol *outProtocol,
-								void *context);
+typedef PTEID_CallbackResult (*PTEID_ConnectFn)(const char *csReader, PTEID_CardHandle *outHandle,
+												PTEID_CardProtocol *outProtocol, void *context);
 
 /**
  * Function to disconnect from a card
@@ -147,9 +146,10 @@ typedef PTEID_CallbackResult (*PTEID_DisconnectFn)(PTEID_CardHandle handle, void
  * @param pRecvPci Receive protocol control information
  * @param context Pointer to the context
  */
-typedef PTEID_CallbackResult (*PTEID_TransmitFn)(PTEID_CardHandle handle, const unsigned char *cmdData, unsigned long cmdLength,
-								 unsigned char *responseBuffer, unsigned long *respBufferSize, long *plRetVal,
-								 const void *pSendPci, void *pRecvPci, void *context);
+typedef PTEID_CallbackResult (*PTEID_TransmitFn)(PTEID_CardHandle handle, const unsigned char *cmdData,
+												 unsigned long cmdLength, unsigned char *responseBuffer,
+												 unsigned long *respBufferSize, long *plRetVal,
+												 PTEID_CardProtocol protocol, void *context);
 
 /**
  * Function to recover a card connection
@@ -170,9 +170,10 @@ typedef PTEID_CallbackResult (*PTEID_RecoverFn)(PTEID_CardHandle handle, unsigne
  * @param ulMaxResponseSize Maximum response size
  * @param context Pointer to the context
  */
-typedef PTEID_CallbackResult (*PTEID_ControlFn)(PTEID_CardHandle handle, unsigned long ulControl, const unsigned char *cmdData,
-								unsigned long cmdLength, unsigned char *respBuffer, unsigned long *respBufferSize,
-								unsigned long ulMaxResponseSize, void *context);
+typedef PTEID_CallbackResult (*PTEID_ControlFn)(PTEID_CardHandle handle, unsigned long ulControl,
+												const unsigned char *cmdData, unsigned long cmdLength,
+												unsigned char *respBuffer, unsigned long *respBufferSize,
+												unsigned long ulMaxResponseSize, void *context);
 
 /**
  * Function to begin a transaction

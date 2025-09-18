@@ -306,8 +306,8 @@ std::pair<bool, CByteArray> CPCSC::StatusWithATR(PTEID_CardHandle hCard) {
 						  (SCARD_S_SUCCESS == lRet) ? CByteArray(tucATR, dwATRLen) : CByteArray());
 }
 
-CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal, const void *pSendPci,
-						   void *pRecvPci) {
+CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal,
+						   PTEID_CardProtocol protocol) {
 	auto handle = m_handles[hCard];
 	CByteArray oCmdAPDU(inputAPDU);
 
@@ -318,11 +318,19 @@ CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, 
 	unsigned char ucINS = oCmdAPDU.Size() >= 4 ? oCmdAPDU.GetByte(1) : 0;
 	unsigned long ulLen = ucINS == 0xA4 || ucINS == 0x22 ? 0xFFFFFFFF : 5;
 
-	if (pSendPci == NULL) {
+	// const SCARD_IO_REQUEST *pioSendPci = (const SCARD_IO_REQUEST *)pSendPci;
+	const SCARD_IO_REQUEST *pioSendPci = nullptr;
+	switch (protocol) {
+	case PTEID_CardProtocol::T0:
+		pioSendPci = SCARD_PCI_T0;
+		break;
+	case PTEID_CardProtocol::T1:
+		pioSendPci = SCARD_PCI_T1;
+		break;
+	case PTEID_CardProtocol::ANY:
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+		break;
 	}
-
-	const SCARD_IO_REQUEST *pioSendPci = (const SCARD_IO_REQUEST *)pSendPci;
 	// SCARD_IO_REQUEST *pioRecvPci = (pRecvPci != NULL) ? (SCARD_IO_REQUEST*) pRecvPci : &m_ioRecvPci;
 
 	// DEBUG
@@ -691,7 +699,7 @@ void ExternalCardInterface::Disconnect(PTEID_CardHandle hCard, tDisconnectMode) 
 }
 
 CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
-										   const void *pSendPci, void *pRecvPci) {
+										   PTEID_CardProtocol protocol) {
 	if (callbacks.transmit == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -700,7 +708,7 @@ CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteAr
 	unsigned long respBufferSize = sizeof(responseBuffer);
 
 	auto result = callbacks.transmit(hCard, oCmdAPDU.GetBytes(), oCmdAPDU.Size(), responseBuffer, &respBufferSize,
-									 plRetVal, pSendPci, pRecvPci, callbacks.context);
+									 plRetVal, protocol, callbacks.context);
 	if (result != PTEID_CALLBACK_OK) {
 		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}

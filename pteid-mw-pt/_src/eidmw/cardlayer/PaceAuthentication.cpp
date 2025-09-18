@@ -85,7 +85,7 @@ public:
 		MWLOG(LEV_DEBUG, MOD_CAL, "Selected PACE algorithm name: %s NID: %d", protocol_name, protocol_nid);
 	}
 
-	void initAuthentication(PTEID_CardHandle &hCard, const void *param_structure) {
+	void initAuthentication(PTEID_CardHandle &hCard, PTEID_CardProtocol param_structure) {
 		std::lock_guard<std::mutex> guard(m_mutex);
 		BUF_MEM *mappingData = NULL, *cardMappingData = NULL, *pubkey = NULL, *cardPubKey = NULL;
 		BUF_MEM *token = NULL, *cardToken = NULL;
@@ -174,12 +174,12 @@ public:
 
 		sendMapData.Append(authEncrypt, sizeof(authEncrypt));
 		assert((mappingData->length + 4) <= UCHAR_MAX);
-		sendMapData.Append((unsigned char) (mappingData->length + 4));
+		sendMapData.Append((unsigned char)(mappingData->length + 4));
 		sendMapData.Append(0x7C);
-		sendMapData.Append((unsigned char) mappingData->length + 2);
+		sendMapData.Append((unsigned char)mappingData->length + 2);
 		sendMapData.Append(0x81);
-		sendMapData.Append((unsigned char) mappingData->length);
-		sendMapData.Append(reinterpret_cast<unsigned char *>(mappingData->data), (unsigned long) mappingData->length);
+		sendMapData.Append((unsigned char)mappingData->length);
+		sendMapData.Append(reinterpret_cast<unsigned char *>(mappingData->data), (unsigned long)mappingData->length);
 		sendMapData.Append(0x00);
 
 		responseMappingData = m_context->m_oCardInterface->Transmit(hCard, sendMapData, &fileReturn, param_structure);
@@ -194,12 +194,12 @@ public:
 
 		sendEphePubKey.Append(authEncrypt, sizeof(authEncrypt));
 		assert((pubkey->length + 4) <= UCHAR_MAX);
-		sendEphePubKey.Append((unsigned char) pubkey->length + 4);
+		sendEphePubKey.Append((unsigned char)pubkey->length + 4);
 		sendEphePubKey.Append(0x7C);
-		sendEphePubKey.Append((unsigned char) pubkey->length + 2);
+		sendEphePubKey.Append((unsigned char)pubkey->length + 2);
 		sendEphePubKey.Append(0x83);
-		sendEphePubKey.Append((unsigned char) pubkey->length);
-		sendEphePubKey.Append(reinterpret_cast<unsigned char *>(pubkey->data), (unsigned long) pubkey->length);
+		sendEphePubKey.Append((unsigned char)pubkey->length);
+		sendEphePubKey.Append(reinterpret_cast<unsigned char *>(pubkey->data), (unsigned long)pubkey->length);
 		sendEphePubKey.Append(0x00);
 
 		responseEphePubKey = m_context->m_oCardInterface->Transmit(hCard, sendEphePubKey, &fileReturn, param_structure);
@@ -216,7 +216,7 @@ public:
 
 		verifyToken.Append(finalAuth, sizeof(finalAuth));
 		assert(token->length <= ULONG_MAX);
-		verifyToken.Append(reinterpret_cast<unsigned char *>(token->data), (unsigned long) token->length);
+		verifyToken.Append(reinterpret_cast<unsigned char *>(token->data), (unsigned long)token->length);
 		verifyToken.Append(0x00);
 
 		responseverifyToken = m_context->m_oCardInterface->Transmit(hCard, verifyToken, &fileReturn, param_structure);
@@ -308,15 +308,15 @@ private:
 	std::mutex m_mutex;
 };
 
-PaceAuthentication::PaceAuthentication(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure)
-	: SecureMessaging(hCard, poContext, paramStructure), m_impl(new PaceAuthenticationImpl(poContext)) {
+PaceAuthentication::PaceAuthentication(PTEID_CardHandle hCard, CContext *poContext, PTEID_CardProtocol protocol)
+	: SecureMessaging(hCard, poContext, protocol), m_impl(new PaceAuthenticationImpl(poContext)) {
 	EAC_init();
 }
 
 PaceAuthentication::~PaceAuthentication() {}
 
-void PaceAuthentication::initPaceAuthentication(PTEID_CardHandle &hCard, const void *param_structure) {
-	m_impl->initAuthentication(hCard, param_structure);
+void PaceAuthentication::initPaceAuthentication(PTEID_CardHandle &hCard, PTEID_CardProtocol protocol) {
+	m_impl->initAuthentication(hCard, protocol);
 	m_authenticated = true;
 }
 

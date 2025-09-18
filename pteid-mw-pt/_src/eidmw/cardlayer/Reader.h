@@ -30,6 +30,7 @@
 
 #if __USE_PCSC__ == 1
 #include "Pinpad.h"
+#include "pcsclite.h"
 #endif
 
 typedef struct evp_pkey_st EVP_PKEY;

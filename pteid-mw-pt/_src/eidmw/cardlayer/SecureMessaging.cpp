@@ -42,7 +42,7 @@ CByteArray SecureMessaging::sendSecureAPDU(const APDU &apdu, long &retValue) {
 }
 
 CByteArray SecureMessaging::sendAPDU(const CByteArray &apdu, long &retValue) {
-	return m_context->m_oCardInterface->Transmit(m_card, apdu, &retValue, m_param);
+	return m_context->m_oCardInterface->Transmit(m_card, apdu, &retValue, m_protocol);
 }
 
 CByteArray SecureMessaging::sendSecureAPDU(const CByteArray &apdu, long &retValue) {

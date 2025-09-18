@@ -107,7 +107,7 @@ public:
 	virtual void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) = 0;
 
 	virtual CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
-								const void *pSendPci = NULL, void *pRecvPci = NULL) = 0;
+								PTEID_CardProtocol protocol) = 0;
 	virtual void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) = 0;
 	virtual CByteArray Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 							   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) = 0;
@@ -154,8 +154,8 @@ public:
 	 */
 	// bool Status(PTEID_CardHandle hCard) override;
 
-	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,
-						void *pRecvPci = NULL) override;
+	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
+						PTEID_CardProtocol protocol) override;
 	void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) override;
 	CByteArray Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 					   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) override;
@@ -202,8 +202,8 @@ public:
 	Connect(const std::string &csReader, PTEID_CardProtocol preferredProtocols = PTEID_CardProtocol::ANY) override;
 	void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) override;
 
-	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,
-						void *pRecvPci = NULL) override;
+	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
+						PTEID_CardProtocol protocol) override;
 	void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) override;
 	CByteArray Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 					   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) override;
