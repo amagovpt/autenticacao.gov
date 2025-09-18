@@ -135,7 +135,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 	return poCard;
 }
 
-CCard *CardConnect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad, bool &isContactLess) {
+CCard *CardConnect(const std::string &csReader, CContext *poContext, PinpadInterface *poPinpad, bool &isContactLess) {
 	CCard *poCard = NULL;
 	long lErrCode = EIDMW_ERR_CHECK; // should never be returned
 	const char *strReader = NULL;

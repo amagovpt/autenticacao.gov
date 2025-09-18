@@ -29,7 +29,7 @@ bool CUnknownCard::IsUnknownCard(PTEID_CardHandle hCard, CContext *poContext, CB
 	return true;
 }
 
-CUnknownCard::CUnknownCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad,
+CUnknownCard::CUnknownCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad,
 						   const CByteArray &oData)
 	: CCard(hCard, poContext, poPinpad) {}
 

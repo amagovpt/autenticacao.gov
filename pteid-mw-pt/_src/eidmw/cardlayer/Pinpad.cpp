@@ -24,10 +24,13 @@
 **************************************************************************** */
 #include "Pinpad.h"
 #include "Context.h"
+
+#if __USE_PCSC__ == 1
 #include "pinpad2.h"
 #include "GempcPinpad.h"
 #include "GenericPinpad.h"
 #include "ACR83Pinpad.h"
+#endif
 
 #include "Log.h"
 #include "Util.h"
@@ -42,7 +45,8 @@ CPinpad::CPinpad(CContext *poContext, const std::string &csReader) {
 }
 
 // Factory method for Pinpad Implementations, detection is based on reader name
-GenericPinpad *CPinpad::getPinpadHandler() {
+#if __USE_PCSC__ == 1
+PinpadInterface *CPinpad::getPinpadHandler() {
 	GenericPinpad *pinpad_handler = NULL;
 
 	if (strstr(m_csReader.c_str(), "GemPC Pinpad") != NULL || strstr(m_csReader.c_str(), "GemPCPinpad") != NULL)
@@ -56,6 +60,9 @@ GenericPinpad *CPinpad::getPinpadHandler() {
 
 	return pinpad_handler;
 }
+#else
+PinpadInterface *CPinpad::getPinpadHandler() { return new PinpadInterface(); }
+#endif
 
 void CPinpad::Init(PTEID_CardHandle hCard) { m_hCard = hCard; }
 
@@ -86,6 +93,7 @@ CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray &oCm
 		ioctl = 256 * (256 * ((256 * feature[2]) + feature[3]) + feature[4]) + feature[5];
 
 void CPinpad::GetFeatureList() {
+#if __USE_PCSC__ == 1
 	m_bCanVerifyUnlock = false;
 	m_bCanChangeUnlock = false;
 	int properties_in_tlv_ioctl = 0;
@@ -122,6 +130,9 @@ void CPinpad::GetFeatureList() {
 		// by this reader -> nothing to do
 		e.GetError();
 	}
+#else
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+#endif
 }
 
 } // namespace eIDMW

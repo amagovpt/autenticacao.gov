@@ -35,9 +35,11 @@
 #ifndef PINPAD_H
 #define PINPAD_H
 
-#include "GenericPinpad.h"
 #include "P15Objects.h"
 #include "InternalConst.h"
+#include "Export.h"
+#include "PinpadInterface.h"
+#include "../eidlib/CardCallbacks.h"
 
 namespace eIDMW {
 class CContext;
@@ -49,7 +51,7 @@ public:
 	bool UsePinpad();
 	void Init(PTEID_CardHandle hCard);
 	int getTlvPropertiesIoctl() { return m_ioctlTlvProperties; }
-	GenericPinpad *getPinpadHandler();
+	PinpadInterface *getPinpadHandler();
 
 protected:
 	CByteArray PinpadControl(unsigned long ulControl, const CByteArray &oCmd, tPinOperation operation,

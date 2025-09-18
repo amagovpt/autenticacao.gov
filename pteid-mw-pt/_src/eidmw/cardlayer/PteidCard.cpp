@@ -71,7 +71,7 @@ namespace eIDMW {
 	}
 
 	CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID_CardHandle hCard, CContext *poContext,
-								GenericPinpad *poPinpad, const void *protocol_struct) {
+								PinpadInterface *poPinpad, const void *protocol_struct) {
 
 		CCard *poCard = NULL;
 
@@ -104,7 +104,7 @@ namespace eIDMW {
 		return poCard;
 	}
 
-	CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad,
+	CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad,
 							tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol)
 		: CPkiCard(hCard, poContext, poPinpad) {
 		switch (ulVersion) {
@@ -125,7 +125,7 @@ namespace eIDMW {
 	}
 
 		/* Constructor for IASv5 cards in CL mode */
-	CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol)
+	CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad, const void *protocol)
 		: CPkiCard(hCard, poContext, poPinpad) {
 
 		setProtocol(protocol);

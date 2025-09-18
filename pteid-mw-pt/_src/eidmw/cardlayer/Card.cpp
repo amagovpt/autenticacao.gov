@@ -37,7 +37,7 @@
 
 namespace eIDMW {
 
-CCard::CCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad)
+CCard::CCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad)
 	: m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad), m_oCache(poContext), m_cardType(CARD_UNKNOWN),
 	  m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(NULL), m_askPinOnSign(true) {}
 
@@ -423,7 +423,7 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
 	}
 }
 
-void CCard::initBACAuthentication(const char * mrz_info) {
+void CCard::initBACAuthentication(const char *mrz_info) {
 	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext, m_comm_protocol);
 	CByteArray mrz_data(mrz_info);
 	bac->authenticate(mrz_data);

@@ -25,8 +25,12 @@
 #pragma once
 
 #include "PKCS15.h"
-#include "Pinpad.h"
 #include "Hash.h"
+#include "../eidlib/CardCallbacks.h"
+
+#if __USE_PCSC__ == 1
+#include "Pinpad.h"
+#endif
 
 typedef struct evp_pkey_st EVP_PKEY;
 typedef struct asn1_object_st ASN1_OBJECT;
@@ -36,6 +40,7 @@ namespace eIDMW {
 class APDU;
 class CCardLayer;
 class CCard;
+class CPinpad;
 struct ReaderDeviceInfo;
 
 class EIDMW_CAL_API CReader {

@@ -36,7 +36,7 @@
 namespace eIDMW {
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID_CardHandle hCard, CContext *poContext,
-							GenericPinpad *poPinpad, const void *protocol_struct);
+							PinpadInterface *poPinpad, const void *protocol_struct);
 
 // Workaround needed for Windows 8 and later: With the do-nothing call to SCardStatus() in PCSC::Status()
 // we make sure the transaction has activity so that Windows doesn't kill it
@@ -58,10 +58,10 @@ private:
 
 class CPteidCard : public CPkiCard {
 public:
-	CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad, tSelectAppletMode selectAppletMode,
+	CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad, tSelectAppletMode selectAppletMode,
 			   unsigned long ulVersion, const void *protocol);
 
-	CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol);
+	CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad, const void *protocol);
 	~CPteidCard(void);
 
 	virtual tCardType GetType();

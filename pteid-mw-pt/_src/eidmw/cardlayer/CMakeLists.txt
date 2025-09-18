@@ -7,14 +7,14 @@ include_directories(../common)
 include_directories(${OPENSSL_INCLUDE_DIR})
 include_directories(${LIB_ROOT_FOLDER}/openpace/${ARCH}/include)
 
-set(sources APDU.cpp Cache.cpp Card.cpp CardFactory.cpp CardLayer.cpp CardReaderInfo.cpp Context.cpp 
-    PCSC.cpp PaceAuthentication.cpp PKCS15.cpp PKCS15Parser.cpp PkiCard.cpp 
+set(sources APDU.cpp Cache.cpp Card.cpp CardFactory.cpp CardLayer.cpp CardReaderInfo.cpp Context.cpp
+    PCSC.cpp PaceAuthentication.cpp PKCS15.cpp PKCS15Parser.cpp PkiCard.cpp
     Reader.cpp ReadersInfo.cpp ThreadPool.cpp PteidCard.cpp UnknownCard.cpp
     IcaoCard.cpp SecureMessaging.cpp BacAuthentication.cpp ChipAuthentication.cpp FciData.cpp
-    APDU.h Cache.h Card.h CardFactory.h CardLayer.h CardLayerConst.h Context.h InternalConst.h 
-	 P15Objects.h PCSC.h PaceAuthentication.h PKCS15.h PKCS15Parser.h
+    APDU.h Cache.h Card.h CardFactory.h CardLayer.h CardLayerConst.h Context.h InternalConst.h
+    P15Objects.h PCSC.h PaceAuthentication.h PKCS15.h PKCS15Parser.h
     PkiCard.h Reader.h ReadersInfo.h ThreadPool.h UnknownCard.h PteidCard.h CardReaderInfo.h
-    IcaoCard.h SecureMessaging.h BacAuthentication.h ChipAuthentication.h FciData.h)
+    IcaoCard.h SecureMessaging.h BacAuthentication.h ChipAuthentication.h FciData.h PinpadInterface.h Pinpad.h Pinpad.cpp)
 
 add_library(${PROJECT_NAME} SHARED ${sources} ${PROJECT_NAME}.rc)
 
@@ -26,8 +26,8 @@ if(USE_PCSC)
 
     # add pinpad related files
     list(APPEND sources
-        GenericPinpad.h Pinpad.h pinpad2.h GempcPinpad.h ACR83pinpad.h
-        Pinpad.cpp GenericPinpad.cpp GempcPinpad.cpp ACR83Pinpad.cpp)
+        GenericPinpad.h pinpad2.h GempcPinpad.h ACR83pinpad.h
+        GenericPinpad.cpp GempcPinpad.cpp ACR83Pinpad.cpp)
 
     target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/PCSC)
     target_link_libraries(${PROJECT_NAME} PRIVATE pcsclite)
@@ -36,4 +36,3 @@ else()
     message(STATUS "PCSC support: DISABLED")
     message(WARNING "Note: Pinpad and minidriver features will not be available")
 endif()
-
