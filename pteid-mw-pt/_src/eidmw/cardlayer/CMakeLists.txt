@@ -16,23 +16,23 @@ set(sources APDU.cpp Cache.cpp Card.cpp CardFactory.cpp CardLayer.cpp CardReader
     PkiCard.h Reader.h ReadersInfo.h ThreadPool.h UnknownCard.h PteidCard.h CardReaderInfo.h
     IcaoCard.h SecureMessaging.h BacAuthentication.h ChipAuthentication.h FciData.h PinpadInterface.h Pinpad.h Pinpad.cpp)
 
-add_library(${PROJECT_NAME} SHARED ${sources} ${PROJECT_NAME}.rc)
-
-target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENSSL_CRYPTO_LIBRARY} ${PTEID_COMMON} eac)
-
 if(USE_PCSC)
     message(STATUS "PCSC support: ENABLED")
     add_compile_definitions(${PROJECT_NAME} PRIVATE __USE_PCSC__=1)
 
     # add pinpad related files
     list(APPEND sources
-        GenericPinpad.h pinpad2.h GempcPinpad.h ACR83pinpad.h
+        GenericPinpad.h pinpad2.h GempcPinpad.h ACR83Pinpad.h
         GenericPinpad.cpp GempcPinpad.cpp ACR83Pinpad.cpp)
-
-    target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/PCSC)
-    target_link_libraries(${PROJECT_NAME} PRIVATE pcsclite)
 else()
-    add_compile_definitions(${PROJECT_NAME} PRIVATE __USE_PCSC__=0)
     message(STATUS "PCSC support: DISABLED")
     message(WARNING "Note: Pinpad and minidriver features will not be available")
+endif()
+
+add_library(${PROJECT_NAME} SHARED ${sources} ${PROJECT_NAME}.rc)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENSSL_CRYPTO_LIBRARY} ${PTEID_COMMON} eac)
+if(USE_PCSC)
+    target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/PCSC)
+    target_link_libraries(${PROJECT_NAME} PRIVATE pcsclite)
 endif()
