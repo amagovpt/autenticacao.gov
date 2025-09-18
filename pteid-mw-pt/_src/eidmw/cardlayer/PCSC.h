@@ -35,16 +35,17 @@ Takes care of
 #include "CardLayerConst.h"
 #include "InternalConst.h"
 #include "../eidlib/CardCallbacks.h"
+#include "Reader.h"
 
 #include <cstdint>
 #include <queue>
 #include <unordered_map>
 #include <utility>
 
+#if __USE_PCSC__ == 1
 #ifndef WIN32
 #include <PCSC/winscard.h>
 #include <PCSC/wintypes.h>
-#include "Reader.h"
 
 #ifndef SCARD_READERSTATE_A
 #define SCARD_READERSTATE_A SCARD_READERSTATE
@@ -59,6 +60,7 @@ Takes care of
 #endif
 #else
 #include <winscard.h>
+#endif
 #endif
 
 #define IOCTL_SMARTCARD_SET_CARD_TYPE SCARD_CTL_CODE(2060)
@@ -89,6 +91,8 @@ public:
 	virtual void EstablishContext() = 0;
 	virtual void ReleaseContext() = 0;
 
+	virtual ~CardInterface() = default;
+
 	virtual CByteArray ListReaders() = 0;
 
 	virtual bool GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount) = 0;
@@ -99,8 +103,7 @@ public:
 	virtual void EndTransaction(PTEID_CardHandle hCard) = 0;
 
 	virtual std::pair<PTEID_CardHandle, PTEID_CardProtocol>
-	Connect(const std::string &csReader,
-			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) = 0;
+	Connect(const std::string &csReader, PTEID_CardProtocol preferredProtocols = PTEID_CardProtocol::ANY) = 0;
 	virtual void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) = 0;
 
 	virtual CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
@@ -114,10 +117,11 @@ public:
 private:
 };
 
+#if __USE_PCSC__ == 1
 class EIDMW_CAL_API CPCSC : public CardInterface {
 public:
 	CPCSC(void);
-	~CPCSC(void);
+	virtual ~CPCSC(void);
 
 	void EstablishContext() override;
 
@@ -140,8 +144,7 @@ public:
 	bool Status(const std::string &csReader) override;
 
 	std::pair<PTEID_CardHandle, PTEID_CardProtocol>
-	Connect(const std::string &csReader,
-			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) override;
+	Connect(const std::string &csReader, PTEID_CardProtocol preferredProtocols = PTEID_CardProtocol::ANY) override;
 	void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) override;
 
 	/**
@@ -178,11 +181,12 @@ private:
 	std::unordered_map<SCARDHANDLE, PTEID_CardHandle> m_reverse_handles;
 	std::unordered_map<PTEID_CardHandle, SCARDHANDLE> m_handles;
 };
+#endif
 
 class EIDMW_CAL_API ExternalCardInterface : public CardInterface {
 public:
 	ExternalCardInterface(const PTEID_CardInterfaceCallbacks *callbacks);
-	~ExternalCardInterface();
+	virtual ~ExternalCardInterface() = default;
 
 	void EstablishContext() override;
 
@@ -195,8 +199,7 @@ public:
 	std::pair<bool, CByteArray> StatusWithATR(PTEID_CardHandle hCard) override;
 
 	std::pair<PTEID_CardHandle, PTEID_CardProtocol>
-	Connect(const std::string &csReader,
-			unsigned long ulPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1) override;
+	Connect(const std::string &csReader, PTEID_CardProtocol preferredProtocols = PTEID_CardProtocol::ANY) override;
 	void Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) override;
 
 	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal, const void *pSendPci = NULL,

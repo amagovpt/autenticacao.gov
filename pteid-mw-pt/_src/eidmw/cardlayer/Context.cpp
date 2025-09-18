@@ -31,7 +31,10 @@ CContext::CContext() {
 
 	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
 
+	// if not using PCSC we are not going to initialize card interface by default
+#if __USE_PCSC__ == 1
 	m_oCardInterface = std::make_unique<CPCSC>();
+#endif
 }
 
 CContext::~CContext() {
@@ -45,6 +48,7 @@ CContext::CContext(const PTEID_CardInterfaceCallbacks &callbacks) {
 
 	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
 
+	m_oCardInterface.reset(nullptr);
 	m_oCardInterface = std::make_unique<ExternalCardInterface>(&callbacks);
 	m_oThreadPool.SetCardInterface(m_oCardInterface.get());
 }

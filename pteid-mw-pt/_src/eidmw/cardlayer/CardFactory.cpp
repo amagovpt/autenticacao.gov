@@ -47,6 +47,7 @@ namespace eIDMW {
   minidriver
 */
 
+#if __USE_PCSC__ == 1
 CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReader, CContext *poContext,
 				   GenericPinpad *poPinpad, bool &isContactLess) {
 	CCard *poCard = NULL;
@@ -134,6 +135,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 
 	return poCard;
 }
+#endif
 
 CCard *CardConnect(const std::string &csReader, CContext *poContext, PinpadInterface *poPinpad, bool &isContactLess) {
 	CCard *poCard = NULL;

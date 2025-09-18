@@ -43,6 +43,7 @@
 
 namespace eIDMW {
 
+#if __USE_PCSC__ == 1
 PTEID_CardProtocol pcscProtocolToPteid(DWORD protocol) {
 	switch (protocol) {
 	case SCARD_PROTOCOL_T0:
@@ -226,12 +227,24 @@ bool CPCSC::Status(const std::string &csReader) {
 }
 
 std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string &csReader,
-															   unsigned long ulPreferredProtocols) {
+															   PTEID_CardProtocol preferredProtocols) {
 	DWORD dwActiveProtocol;
 	SCARDHANDLE hCard = 0;
 
-	LONG lRet =
-		SCardConnect(m_hContext, csReader.c_str(), SCARD_SHARE_SHARED, ulPreferredProtocols, &hCard, &dwActiveProtocol);
+	auto protocol = 0;
+	switch (preferredProtocols) {
+	case PTEID_CardProtocol::T0:
+		protocol = SCARD_PROTOCOL_T0;
+		break;
+	case PTEID_CardProtocol::T1:
+		protocol = SCARD_PROTOCOL_T1;
+		break;
+	case PTEID_CardProtocol::ANY:
+		protocol = SCARD_PROTOCOL_ANY;
+		break;
+	};
+
+	LONG lRet = SCardConnect(m_hContext, csReader.c_str(), SCARD_SHARE_SHARED, protocol, &hCard, &dwActiveProtocol);
 
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardConnect(%ls): 0x%0x", utilStringWiden(csReader).c_str(), lRet);
 
@@ -554,6 +567,7 @@ long CPCSC::PcscToErr(unsigned long lPcscErr) {
 
 	return lRet;
 }
+#endif
 
 ExternalCardInterface::ExternalCardInterface(const PTEID_CardInterfaceCallbacks *callbacks) {
 	if (callbacks != nullptr) {
@@ -561,10 +575,6 @@ ExternalCardInterface::ExternalCardInterface(const PTEID_CardInterfaceCallbacks 
 	} else {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
-}
-
-ExternalCardInterface::~ExternalCardInterface() {
-	// Nothing to clean up
 }
 
 long ExternalCardInterface::CallbackToInternalError(PTEID_CallbackResult callbackResult) {
@@ -652,7 +662,8 @@ bool ExternalCardInterface::Status(const std::string &csReader) {
 }
 
 std::pair<PTEID_CardHandle, PTEID_CardProtocol> ExternalCardInterface::Connect(const std::string &csReader,
-																			   unsigned long ulPreferredProtocols) {
+																			   PTEID_CardProtocol preferredProtocols) {
+
 	if (callbacks.connect == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}

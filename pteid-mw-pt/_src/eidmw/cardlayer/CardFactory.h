@@ -30,8 +30,11 @@ namespace eIDMW {
 CCard *CardConnect(const std::string &csReader, CContext *poContext,
                    PinpadInterface *poPinpad, bool &isContactLess);
 
-CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReader, CContext *poContext,
-				   GenericPinpad *poPinpad, bool &isContactLess);
+#if __USE_PCSC__ == 1
+CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol,
+                   const std::string &csReader, CContext *poContext,
+                   GenericPinpad *poPinpad, bool &isContactLess);
+#endif
 
 } // namespace eIDMW
 
