@@ -18,7 +18,7 @@ set(sources APDU.cpp Cache.cpp Card.cpp CardFactory.cpp CardLayer.cpp CardReader
 
 if(USE_PCSC)
     message(STATUS "PCSC support: ENABLED")
-    add_compile_definitions(${PROJECT_NAME} PRIVATE __USE_PCSC__=1)
+    add_compile_definitions(${PROJECT_NAME} PRIVATE __USE_PCSC__)
 
     # add pinpad related files
     list(APPEND sources

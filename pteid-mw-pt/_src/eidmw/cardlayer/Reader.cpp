@@ -211,7 +211,7 @@ void CReader::readerDeviceInfo(PTEID_CardHandle hCard, ReaderDeviceInfo *deviceI
 	}
 }
 
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 void CReader::UseHandle(SCARDHANDLE hCard) {
 	PTEID_CardHandle handle = {0};
 
@@ -286,7 +286,7 @@ bool CReader::Connect() {
 		}
 
 		m_oPKCS15.SetCard(m_poCard);
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 		if (auto pcsc = dynamic_cast<CPCSC *>(m_poContext->m_oCardInterface.get())) {
 			m_oPinpad->Init(m_poCard->m_hCard);
 		}

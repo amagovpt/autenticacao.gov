@@ -42,7 +42,7 @@ Takes care of
 #include <unordered_map>
 #include <utility>
 
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 #ifndef WIN32
 #include <PCSC/winscard.h>
 #include <PCSC/wintypes.h>
@@ -117,7 +117,7 @@ public:
 private:
 };
 
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 class EIDMW_CAL_API CPCSC : public CardInterface {
 public:
 	CPCSC(void);

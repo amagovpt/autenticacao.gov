@@ -28,7 +28,7 @@
 #include "Hash.h"
 #include "../eidlib/CardCallbacks.h"
 
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 #include "Pinpad.h"
 #include "pcsclite.h"
 #endif
@@ -86,7 +86,7 @@ public:
 	 */
 	bool Connect();
 
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 	bool Connect(SCARDHANDLE hCard, DWORD protocol);
 	void UseHandle(SCARDHANDLE hCard);
 #endif

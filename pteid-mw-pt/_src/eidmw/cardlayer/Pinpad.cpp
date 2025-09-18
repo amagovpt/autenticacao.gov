@@ -25,7 +25,7 @@
 #include "Pinpad.h"
 #include "Context.h"
 
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 #include "pinpad2.h"
 #include "GempcPinpad.h"
 #include "GenericPinpad.h"
@@ -45,7 +45,7 @@ CPinpad::CPinpad(CContext *poContext, const std::string &csReader) {
 }
 
 // Factory method for Pinpad Implementations, detection is based on reader name
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 PinpadInterface *CPinpad::getPinpadHandler() {
 	GenericPinpad *pinpad_handler = NULL;
 
@@ -93,7 +93,7 @@ CByteArray CPinpad::PinpadControl(unsigned long ulControl, const CByteArray &oCm
 		ioctl = 256 * (256 * ((256 * feature[2]) + feature[3]) + feature[4]) + feature[5];
 
 void CPinpad::GetFeatureList() {
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 	m_bCanVerifyUnlock = false;
 	m_bCanChangeUnlock = false;
 	int properties_in_tlv_ioctl = 0;

@@ -43,7 +43,7 @@
 
 namespace eIDMW {
 
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 PTEID_CardProtocol pcscProtocolToPteid(DWORD protocol) {
 	switch (protocol) {
 	case SCARD_PROTOCOL_T0:

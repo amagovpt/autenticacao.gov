@@ -32,7 +32,7 @@ CContext::CContext() {
 	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
 
 	// if not using PCSC we are not going to initialize card interface by default
-#if __USE_PCSC__ == 1
+#ifdef __USE_PCSC__
 	m_oCardInterface = std::make_unique<CPCSC>();
 #endif
 }
