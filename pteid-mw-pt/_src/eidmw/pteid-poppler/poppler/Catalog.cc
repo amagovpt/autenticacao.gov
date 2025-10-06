@@ -367,11 +367,6 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
         setSigFlags(&local_acroForm, 3);
     }
 
-    Object o1;
-    o1.initNull();
-    //Remove NeedApperances field if present
-    local_acroForm.dictSet("NeedAppearances", &o1);
-
     local_acroForm.dictLookup("Fields", &fields_array);
     //Some malformed documents can have AcroForm without Fields
     if (!fields_array.isArray()) {
@@ -406,8 +401,6 @@ void Catalog::addSigFieldToAcroForm(Ref *sig_ref, Ref *refFirstPage)
     if (acroForm_ref.isRef())
     {
         xref->setModifiedObject(&local_acroForm, acroForm_ref.getRef());
-        fprintf(stderr, "AcroForm is an indirect object so we'll just update it...\n");
-
     }
 
     else
