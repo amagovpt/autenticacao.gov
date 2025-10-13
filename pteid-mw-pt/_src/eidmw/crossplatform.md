@@ -16,6 +16,11 @@ This is how to configure openssl for arm64:
 This way we configure openssl build system to compile using arm64 compiler and install itself (with `sudo make install`) in `/usr/aarch64-linux-gnu`.
 All dependencies should be installed on the same sysroot.
 
+## PCSC
+To compile the project without PCSC as a dependency, the flag USE_PCSC (`-DUSE_PCSC=<bool>`) can be set during cmake configuration. This will also disable some other features such as pinpad support.
+
+
+
 
 ## CMake
 
@@ -44,7 +49,7 @@ This toolchain file should be saved and passed as a cmake parameter when configu
     mkdir build-arm64
     cd build-arm64
 
-    cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-arm64.cmake ..
+    cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-arm64.cmake -DUSE_PCSC=false ..
 
 To compile then simply run:
 
