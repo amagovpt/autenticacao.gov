@@ -50,5 +50,5 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENSSL_CRYPTO_LIBRARY})
 
 install(FILES eidErrors.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION include
 )

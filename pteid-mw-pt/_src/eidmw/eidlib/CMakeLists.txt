@@ -25,5 +25,5 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PTEID_COMMON} ${PTEID_APPLAYER} ${PTEID_CMDSERVICES})
 
 install(FILES CardCallbacks.h eidlibdefines.h eidlibException.h eidlib.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION include
 )

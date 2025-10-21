@@ -12,6 +12,7 @@ include_directories(../../common)
 include_directories(../../applayer)
 include_directories(../../cardlayer)
 include_directories(../../dialogs)
+include_directories(../../eidlib)
 
 set(sources cmdCertificates.cpp cmdSignatureClient.cpp cmdServices.cpp CMDSignature.cpp credentials.cpp soapC.cpp 
                 soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp stdsoap2.cpp
