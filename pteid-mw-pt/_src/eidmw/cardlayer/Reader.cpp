@@ -286,13 +286,15 @@ bool CReader::Connect() {
 		}
 
 		m_oPKCS15.SetCard(m_poCard);
+
+		long pinpadEnabled = false;
 #ifdef __USE_PCSC__
 		if (auto pcsc = dynamic_cast<CPCSC *>(m_poContext->m_oCardInterface.get())) {
 			m_oPinpad->Init(m_poCard->m_hCard);
 		}
-#endif
 		CConfig config;
-		long pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
+		pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
+#endif
 		if (pinpadEnabled == 1 && m_oPinpad->UsePinpad()) {
 			MWLOG(LEV_DEBUG, MOD_CAL, L"Using Pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
 			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler());
