@@ -43,7 +43,6 @@
 #endif
 
 #ifndef WIN32
-#include "PCSC/wintypes.h"
 #include "sys/stat.h"
 #include "Util.h"
 
