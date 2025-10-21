@@ -9,14 +9,21 @@ include_directories(../applayer)
 include_directories(../cardlayer)
 include_directories(../dialogs)
 
-add_library(${PROJECT_NAME} SHARED ${PTEID_LIB}.rc)
-
-target_sources(${PTEID_LIB}
-    PUBLIC eidlibCmdClient.cpp eidlibCard.cpp eidlibCrypto.cpp eidlibDoc.cpp eidlibException.cpp
-    eidlibReader.cpp eidlibSignDevFactory.cpp eidlibxades.cpp InternalUtil.cpp
-
-    PUBLIC FILE_SET HEADERS
-    BASE_DIRS FILES CardCallbacks.h eidlibdefines.h eidlibException.h eidlib.h
+add_library(${PROJECT_NAME} SHARED
+    ${PTEID_LIB}.rc
+    eidlibCmdClient.cpp
+    eidlibCard.cpp
+    eidlibCrypto.cpp
+    eidlibDoc.cpp
+    eidlibException.cpp
+    eidlibReader.cpp
+    eidlibSignDevFactory.cpp
+    eidlibxades.cpp
+    InternalUtil.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PTEID_COMMON} ${PTEID_APPLAYER} ${PTEID_CMDSERVICES})
+
+install(FILES CardCallbacks.h eidlibdefines.h eidlibException.h eidlib.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
