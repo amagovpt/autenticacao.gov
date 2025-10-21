@@ -52,4 +52,16 @@ CContext::CContext(const PTEID_CardInterfaceCallbacks &callbacks) {
 	m_oCardInterface = std::make_unique<ExternalCardInterface>(&callbacks);
 	m_oThreadPool.SetCardInterface(m_oCardInterface.get());
 }
+
+void CContext::setProtocol(PTEID_CardHandle hCard, PTEID_CardProtocol protocol) { m_protocols[hCard] = protocol; }
+
+PTEID_CardProtocol CContext::getProtocol(PTEID_CardHandle hCard) {
+	auto it = m_protocols.find(hCard);
+	if (it != m_protocols.end()) {
+		return it->second;
+	}
+	return PTEID_CardProtocol::ANY;
+}
+
+void CContext::removeProtocol(PTEID_CardHandle hCard) { m_protocols.erase(hCard); }
 } // namespace eIDMW

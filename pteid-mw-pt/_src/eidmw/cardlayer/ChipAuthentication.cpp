@@ -161,9 +161,8 @@ cleanup:
 	return ret;
 }
 
-ChipAuthSecureMessaging::ChipAuthSecureMessaging(PTEID_CardHandle hCard, CContext *poContext,
-												 PTEID_CardProtocol protocol)
-	: SecureMessaging(hCard, poContext, protocol) {
+ChipAuthSecureMessaging::ChipAuthSecureMessaging(PTEID_CardHandle hCard, CContext *poContext)
+	: SecureMessaging(hCard, poContext) {
 	m_ctx = nullptr;
 }
 

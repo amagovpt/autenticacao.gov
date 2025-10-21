@@ -132,8 +132,6 @@ public:
 	PTEID_CardProtocol getProtocolStructure();
 	const void setNextAPDUClearText() { cleartext_next = true; }
 
-	void setProtocol(PTEID_CardProtocol protocol_struct) { m_comm_protocol = protocol_struct; }
-
 	PTEID_CardHandle m_hCard = PTEID_INVALID_HANDLE;
 
 protected:
@@ -163,15 +161,14 @@ protected:
 
 	bool m_askPinOnSign;
 
-	PTEID_CardProtocol m_comm_protocol;
 	std::unique_ptr<SecureMessaging> m_secureMessaging{};
 
 private:
 	// No copies allowed
 	CCard(const CCard &oCard);
 	CCard &operator=(const CCard &oCard);
-	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, PTEID_CardProtocol protocol);
-	CByteArray handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, PTEID_CardProtocol protocol);
+	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal);
+	CByteArray handleSendAPDUSecurity(const APDU &apdu, long &lRetVal);
 };
 
 class CAutoLock {

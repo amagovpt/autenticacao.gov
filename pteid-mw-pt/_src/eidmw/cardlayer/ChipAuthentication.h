@@ -38,7 +38,7 @@ struct CAParams {
 
 class ChipAuthSecureMessaging : public SecureMessaging {
 public:
-	ChipAuthSecureMessaging(PTEID_CardHandle hCard, CContext *poContext, PTEID_CardProtocol protocol);
+	ChipAuthSecureMessaging(PTEID_CardHandle hCard, CContext *poContext);
 	virtual ~ChipAuthSecureMessaging() override;
 	bool authenticate(SecureMessaging *sm, EVP_PKEY *pkey, ASN1_OBJECT *oid);
 

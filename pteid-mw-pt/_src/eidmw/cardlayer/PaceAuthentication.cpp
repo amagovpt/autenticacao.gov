@@ -308,15 +308,15 @@ private:
 	std::mutex m_mutex;
 };
 
-PaceAuthentication::PaceAuthentication(PTEID_CardHandle hCard, CContext *poContext, PTEID_CardProtocol protocol)
-	: SecureMessaging(hCard, poContext, protocol), m_impl(new PaceAuthenticationImpl(poContext)) {
+PaceAuthentication::PaceAuthentication(PTEID_CardHandle hCard, CContext *poContext)
+	: SecureMessaging(hCard, poContext), m_impl(new PaceAuthenticationImpl(poContext)) {
 	EAC_init();
 }
 
 PaceAuthentication::~PaceAuthentication() {}
 
-void PaceAuthentication::initPaceAuthentication(PTEID_CardHandle &hCard, PTEID_CardProtocol protocol) {
-	m_impl->initAuthentication(hCard, protocol);
+void PaceAuthentication::initPaceAuthentication(PTEID_CardHandle &hCard) {
+	m_impl->initAuthentication(hCard, m_context->getProtocol(hCard));
 	m_authenticated = true;
 }
 

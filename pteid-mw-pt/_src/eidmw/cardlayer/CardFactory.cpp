@@ -113,12 +113,12 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 
 			long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
 
-			poCard = PteidCardGetInstance(appletVersion, strReader, handle, poContext, poPinpad, paramStructure);
+			poCard = PteidCardGetInstance(appletVersion, strReader, handle, poContext, poPinpad);
 			if (cacheEnabled)
 				poCard->InitEncryptionKey();
 		} else {
 			appletVersion = 3;
-			poCard = new CPteidCard(handle, poContext, poPinpad, paramStructure);
+			poCard = new CPteidCard(handle, poContext, poPinpad);
 		}
 
 		CCache::LimitDiskCacheFiles(10);
@@ -128,7 +128,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 			poCard = new CUnknownCard(handle, poContext, poPinpad, CByteArray());
 		}
 
-		poCard->setProtocol(paramStructure);
+		poContext->setProtocol(handle, paramStructure);
 	} else {
 		throw CMWEXCEPTION(lErrCode);
 	}
@@ -211,13 +211,13 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, PinpadInter
 				if (appletVersion > 0) {
 					long cacheEnabled = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHE_ENABLED);
 
-					poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad, protocol);
+					poCard = PteidCardGetInstance(appletVersion, strReader, hCard, poContext, poPinpad);
 					if (cacheEnabled)
 						poCard->InitEncryptionKey();
 				}
 			} else {
 				appletVersion = 3;
-				poCard = new CPteidCard(hCard, poContext, poPinpad, protocol);
+				poCard = new CPteidCard(hCard, poContext, poPinpad);
 			}
 
 			CCache::LimitDiskCacheFiles(10);
@@ -225,7 +225,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, PinpadInter
 			if (poCard == nullptr) {
 				bool icaoStatus = selectAppId(ICAO_APPLET_MRTD, sizeof(ICAO_APPLET_MRTD));
 				if (icaoStatus) {
-					poCard = new CIcaoCard(hCard, poContext, poPinpad, protocol);
+					poCard = new CIcaoCard(hCard, poContext, poPinpad);
 
 					// All ICAO cards are contactless
 					isContactLess = true;
@@ -237,7 +237,7 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, PinpadInter
 				poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
 			}
 
-			poCard->setProtocol(protocol);
+			poContext->setProtocol(hCard, protocol);
 
 			hCard = {0};
 		}

@@ -43,8 +43,8 @@ using namespace Crypto;
 
 #define MAC_LEN 8
 
-BacAuthentication::BacAuthentication(PTEID_CardHandle hCard, CContext *poContext, PTEID_CardProtocol protocol)
-	: SecureMessaging(hCard, poContext, protocol) {}
+BacAuthentication::BacAuthentication(PTEID_CardHandle hCard, CContext *poContext)
+	: SecureMessaging(hCard, poContext) {}
 
 void BacAuthentication::authenticate(const CByteArray &mrzInfo) {
 

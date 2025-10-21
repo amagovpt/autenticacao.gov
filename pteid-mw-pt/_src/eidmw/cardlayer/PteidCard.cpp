@@ -71,7 +71,7 @@ static bool PteidCardSelectApplet(CContext *poContext, PTEID_CardHandle hCard, P
 }
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID_CardHandle hCard, CContext *poContext,
-							PinpadInterface *poPinpad, PTEID_CardProtocol protocol) {
+							PinpadInterface *poPinpad) {
 
 	CCard *poCard = NULL;
 
@@ -80,7 +80,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID
 		{
 			CAutoLock oAutLock(poContext->m_oCardInterface.get(), hCard);
 
-			poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol);
+			poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion);
 			MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
 
 			// NOTE: PteidCardSelectAppllet does not support V5 cards
@@ -105,7 +105,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID
 }
 
 CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad,
-					   tSelectAppletMode selectAppletMode, unsigned long ulVersion, PTEID_CardProtocol protocol)
+					   tSelectAppletMode selectAppletMode, unsigned long ulVersion)
 	: CPkiCard(hCard, poContext, poPinpad) {
 	switch (ulVersion) {
 	case 1:
@@ -118,18 +118,15 @@ CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterf
 		m_cardType = CARD_PTEID_IAS5;
 		break;
 	}
-	setProtocol(protocol);
 	m_ucCLA = 0x00;
 
 	ReadSerialNumber();
 }
 
 /* Constructor for IASv5 cards in CL mode */
-CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad,
-					   PTEID_CardProtocol protocol)
+CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad)
 	: CPkiCard(hCard, poContext, poPinpad) {
 
-	setProtocol(protocol);
 	m_cardType = CARD_PTEID_IAS5;
 }
 
@@ -852,7 +849,7 @@ void CPteidCard::InitEncryptionKey() {
 }
 
 void CPteidCard::openBACChannel(const CByteArray &mrzInfo) {
-	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext, m_comm_protocol);
+	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext);
 	bac->authenticate(mrzInfo);
 
 	m_secureMessaging = std::move(bac);

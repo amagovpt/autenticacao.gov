@@ -42,8 +42,8 @@ struct CAParams;
  */
 class SecureMessaging {
 public:
-	SecureMessaging(PTEID_CardHandle hCard, CContext *poContext, PTEID_CardProtocol protocol)
-		: m_card(hCard), m_context(poContext), m_protocol(protocol), m_authenticated(false) {
+	SecureMessaging(PTEID_CardHandle hCard, CContext *poContext)
+		: m_card(hCard), m_context(poContext), m_authenticated(false) {
 		EAC_init();
 	}
 	virtual ~SecureMessaging() = default;
@@ -82,7 +82,6 @@ protected:
 	CByteArray decryptAPDUResponse(const CByteArray &encryptedResponse);
 
 	PTEID_CardHandle m_card = {0};
-	PTEID_CardProtocol m_protocol = PTEID_CardProtocol::ANY;
 	CContext *m_context = {0};
 
 	bool m_authenticated = false;
