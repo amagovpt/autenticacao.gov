@@ -34,6 +34,7 @@ CContext::CContext() {
 	// if not using PCSC we are not going to initialize card interface by default
 #ifdef __USE_PCSC__
 	m_oCardInterface = std::make_unique<CPCSC>();
+	m_oThreadPool.SetCardInterface(m_oCardInterface.get());
 #endif
 }
 
