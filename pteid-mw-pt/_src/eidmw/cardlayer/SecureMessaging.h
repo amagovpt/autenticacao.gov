@@ -23,7 +23,6 @@
 #include "ByteArray.h"
 #include "Context.h"
 #include "APDU.h"
-#include <eac/eac.h>
 
 namespace eIDMW {
 
@@ -42,10 +41,7 @@ struct CAParams;
  */
 class SecureMessaging {
 public:
-	SecureMessaging(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure)
-		: m_card(hCard), m_context(poContext), m_param(paramStructure), m_authenticated(false) {
-		EAC_init();
-	}
+	SecureMessaging(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure);
 	virtual ~SecureMessaging() = default;
 
 	void UpdateHandle(PTEID_CardHandle hCard) { this->m_card = hCard; }

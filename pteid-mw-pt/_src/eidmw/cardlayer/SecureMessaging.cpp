@@ -26,6 +26,7 @@
 #include <fcntl.h>
 #include <openssl/asn1.h>
 #include <openssl/types.h>
+#include <eac/eac.h>
 
 namespace eIDMW {
 
@@ -36,6 +37,11 @@ const unsigned char Tle = 0x97;
 const unsigned char paddingIndicator = 0x01;
 
 const unsigned char controlByte = 0x0C;
+
+SecureMessaging::SecureMessaging(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure)
+	: m_card(hCard), m_context(poContext), m_param(paramStructure), m_authenticated(false) {
+	EAC_init();
+}
 
 CByteArray SecureMessaging::sendSecureAPDU(const APDU &apdu, long &retValue) {
 	return sendSecureAPDU(apdu.ToByteArray(), retValue);
