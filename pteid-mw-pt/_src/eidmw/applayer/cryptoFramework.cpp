@@ -1762,19 +1762,16 @@ bool APL_CryptoFwk::GetOCSPCert(const CByteArray &ocspResponse, CByteArray &outC
 	if (resp != NULL) {
 		OCSP_BASICRESP *basicResp = OCSP_response_get1_basic(resp);
 		if (basicResp != NULL) {
-			const STACK_OF(X509) *certs = OCSP_resp_get0_certs(basicResp);
-			for (int i = 0; certs && i < sk_X509_num(certs); i++) {
-				X509 *cert = sk_X509_value(certs, i);
+			X509 *cert = NULL;
+			OCSP_resp_get0_signer(basicResp, &cert, NULL);
+			// Check for presence of the "OCSP No-Check" extension from the beginning
+			int index = X509_get_ext_by_NID(cert, NID_id_pkix_OCSP_noCheck, -1);
+			noCheckExtension = (index != -1);
 
-				// Check for presence of the "OCSP No-Check" extension from the beginning
-				int index = X509_get_ext_by_NID(cert, NID_id_pkix_OCSP_noCheck, -1);
-				noCheckExtension = (index != -1);
+			unsigned char *data = NULL;
+			int len = X509_to_DER(cert, &data);
 
-				unsigned char *data = NULL;
-				int len = X509_to_DER(cert, &data);
-
-				outCert.Append(data, len);
-			}
+			outCert.Append(data, len);
 		}
 		OCSP_RESPONSE_free(resp);
 
