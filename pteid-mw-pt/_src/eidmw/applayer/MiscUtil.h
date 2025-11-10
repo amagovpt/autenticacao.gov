@@ -88,6 +88,7 @@ EIDMW_APL_API void Base64Decode(const char *array, unsigned int inlen, unsigned 
 // Hex string encoding for binary data
 char *byteArrayToHexString(const unsigned char *data, unsigned long array_len);
 void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len);
+char *asn1IntegerToHexString(const ASN1_INTEGER *serial);
 
 // Common type between 2/3 different cpp files
 typedef struct _hashed_file_ {

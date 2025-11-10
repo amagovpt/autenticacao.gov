@@ -532,6 +532,26 @@ void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
 	*pos = '\0';
 }
 
+char *asn1IntegerToHexString(const ASN1_INTEGER *serial) {
+	if (!serial) {
+		return _strdup("NULL");
+	}
+
+	BIGNUM *bn = ASN1_INTEGER_to_BN(serial, NULL);
+	if (!bn) {
+		return _strdup("INVALID");
+	}
+
+	char *hex = BN_bn2hex(bn);
+	BN_free(bn);
+
+	if (!hex) {
+		return _strdup("ERROR");
+	}
+
+	return hex;
+}
+
 /*****************************************************************************************
 ------------------------------------ CTimestampUtil ---------------------------------------
 *****************************************************************************************/

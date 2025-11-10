@@ -100,6 +100,10 @@ CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
+	
+	// Follow HTTP redirects (302, 301, etc.) for CRL/OCSP endpoints
+	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+	curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5L);
 
 	if (pac_proxy_host.size() > 0 && pac_proxy_port.size() > 0) {
 		curl_easy_setopt(curl, CURLOPT_PROXY, pac_proxy_host.c_str());

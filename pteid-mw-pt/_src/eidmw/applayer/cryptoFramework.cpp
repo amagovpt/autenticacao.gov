@@ -710,8 +710,8 @@ inline int getSocketError() {
 }
 
 void APL_CryptoFwk::loadCertificatesToOcspStore(X509_STORE *store) {
-	auto add_certif_to_store = [store](APL_Certif * cert) {
-		X509 * pX509 = NULL;
+	auto add_certif_to_store = [store](APL_Certif *cert) {
+		X509 *pX509 = NULL;
 		const CByteArray &ba = cert->getData();
 		const unsigned char *p_data = ba.GetBytes();
 
@@ -724,8 +724,7 @@ void APL_CryptoFwk::loadCertificatesToOcspStore(X509_STORE *store) {
 		for (unsigned long i = 0; i < pcard->getCertificates()->countSODCAs(); i++) {
 			add_certif_to_store(pcard->getCertificates()->getSODCA(i));
 		}
-	}
-	else {
+	} else {
 		//APL_Certifs instance without card, used for CMD certificates
 		APL_Certifs eidstore;
 		
@@ -831,7 +830,8 @@ FWK_CertifStatus APL_CryptoFwk::GetOCSPResponse(const char *pUrlResponder, OCSP_
 			fprintf(stderr, "OCSP: Adding proxy auth header!\n");
 			std::string proxy_cleartext = std::string(proxy_user_value) + ":" + proxy_pwd.getString();
 			assert(proxy_cleartext.size() <= LONG_MAX);
-			char *auth_token = Base64Encode((const unsigned char *)proxy_cleartext.c_str(), (long) proxy_cleartext.size());
+			char *auth_token =
+				Base64Encode((const unsigned char *)proxy_cleartext.c_str(), (long)proxy_cleartext.size());
 			std::string header_value = std::string("basic ") + auth_token;
 			OCSP_REQ_CTX_add1_header(ctx, "Proxy-Authorization", header_value.c_str());
 			free(auth_token);
@@ -1869,6 +1869,95 @@ X509_CRL *APL_CryptoFwk::getX509CRL(const CByteArray &crl) {
 	GetHash(crl, EVP_sha1(), &baHash);
 
 	return m_CrlMemoryCache->getX509CRL(crl, baHash);
+}
+
+X509 *APL_CryptoFwk::FindIssuerInStore(X509 *cert, X509_STORE *store) {
+	if (!cert || !store) {
+		return nullptr;
+	}
+
+	X509_STORE_CTX *ctx = X509_STORE_CTX_new();
+	if (!ctx) {
+		return nullptr;
+	}
+
+	X509_STORE_CTX_init(ctx, store, cert, NULL);
+
+	X509 *issuer = nullptr;
+	int ret = X509_STORE_CTX_get1_issuer(&issuer, ctx, cert);
+
+	X509_STORE_CTX_free(ctx);
+
+	if (ret == 1 && issuer != nullptr) {
+		return issuer;
+	}
+
+	return nullptr;
+}
+
+long APL_CryptoFwk::ValidateCertificateWithCRL(const CByteArray &cert, const CByteArray &issuer) {
+	MWLOG(LEV_INFO, MOD_APL, "Checking CRL revocation status for certificate");
+
+	CByteArray crl_data;
+	if (!GetCrlData(cert, crl_data)) {
+		LOG_AND_THROW(LEV_WARN, MOD_APL, EIDMW_SOD_ERR_DOC_SIGNER_CRL_FETCH, "Failed to fetch CRL for certificate.");
+	}
+
+	if (!isCrlValid(crl_data, issuer)) {
+		LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_DOC_SIGNER_NO_CRL,
+					  "CRL validation failed: CRL is not valid or not from correct issuer");
+	}
+
+	X509_CRL *crl = getX509CRL(crl_data);
+	if (!crl) {
+		LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_DOC_SIGNER_NO_CRL, "Failed to parse CRL data");
+	}
+
+	ASN1_INTEGER *serial = getCertSerialNumber(cert);
+	if (!serial) {
+		LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_GENERIC_VALIDATION,
+					  "Failed to get serial number from certificate");
+	}
+
+	// log debug information
+	{
+		char *cert_serial_hex = asn1IntegerToHexString(serial);
+		MWLOG(LEV_DEBUG, MOD_APL, "=== CRL Validation Details ===");
+		MWLOG(LEV_DEBUG, MOD_APL, "Certificate Serial: %s", cert_serial_hex);
+		free(cert_serial_hex);
+
+		X509_NAME *crl_issuer = X509_CRL_get_issuer(crl);
+		char issuer_name[256] = {0};
+		X509_NAME_oneline(crl_issuer, issuer_name, sizeof(issuer_name));
+		MWLOG(LEV_DEBUG, MOD_APL, "CRL Issuer: %s", issuer_name);
+
+		STACK_OF(X509_REVOKED) *revoked_list = X509_CRL_get_REVOKED(crl);
+		if (revoked_list) {
+			int num_revoked = sk_X509_REVOKED_num(revoked_list);
+			MWLOG(LEV_DEBUG, MOD_APL, "CRL contains %d revoked certificate(s)", num_revoked);
+		} else {
+			MWLOG(LEV_DEBUG, MOD_APL, "CRL contains 0 revoked certificates");
+		}
+		MWLOG(LEV_DEBUG, MOD_APL, "==============================");
+	}
+
+	// finally, perform CRL validation
+	FWK_CertifStatus status = CRLValidation(serial, crl);
+
+	switch (status) {
+	case FWK_CERTIF_STATUS_VALID:
+		MWLOG(LEV_INFO, MOD_APL, "Certificate is not revoked (CRL check passed)");
+		return 0;
+	case FWK_CERTIF_STATUS_REVOKED:
+		MWLOG(LEV_ERROR, MOD_APL, "Certificate is REVOKED according to CRL");
+		return EIDMW_SOD_ERR_DOC_SIGNER_REVOKED;
+	case FWK_CERTIF_STATUS_SUSPENDED:
+		MWLOG(LEV_ERROR, MOD_APL, "Certificate is SUSPENDED according to CRL");
+		return EIDMW_SOD_ERR_DOC_SIGNER_REVOKED;
+	default:
+		LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_GENERIC_VALIDATION,
+					  "CRL validation returned unexpected status: %d", status);
+	}
 }
 
 void loadWindowsRootCertificates(X509_STORE *store) {

@@ -879,6 +879,8 @@ int verify_docsigner(X509 *docsigner, X509_STORE *store) {
 		int err = X509_STORE_CTX_get_error(ctx);
 		MWLOG(LEV_INFO, MOD_APL, "Document signer verification failed: %s", X509_verify_cert_error_string(err));
 	}
+
+	X509_STORE_CTX_free(ctx);
 	return ret;
 }
 
@@ -933,6 +935,39 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 			addDocsignerToReport(report, docsigner);
 			report.type = EIDMW_ReportType::Error;
 			report.error_code = EIDMW_SOD_ERR_UNTRUSTED_DOC_SIGNER;
+		} else {
+			auto cryptoFwk = AppLayer.getCryptoFwk();
+			X509 *issuer = cryptoFwk->FindIssuerInStore(docsigner, csca_store);
+			if (issuer != nullptr) {
+				unsigned char *docsigner_der = nullptr;
+				int docsigner_len = i2d_X509(docsigner, &docsigner_der);
+				CByteArray cert_data(docsigner_der, docsigner_len);
+				OPENSSL_free(docsigner_der);
+
+				unsigned char *issuer_der = nullptr;
+				int issuer_len = i2d_X509(issuer, &issuer_der);
+				CByteArray issuer_data(issuer_der, issuer_len);
+				OPENSSL_free(issuer_der);
+
+				X509_free(issuer);
+
+				X509_NAME *subject = X509_get_subject_name(docsigner);
+				char subject_name[256] = {0};
+				X509_NAME_oneline(subject, subject_name, sizeof(subject_name));
+				MWLOG(LEV_DEBUG, MOD_APL, "Document Signer Subject: %s", subject_name);
+
+				long crl_result = cryptoFwk->ValidateCertificateWithCRL(cert_data, issuer_data);
+
+				if (crl_result != 0) {
+					// CRL check failed
+					addDocsignerToReport(report, docsigner);
+					report.type = EIDMW_ReportType::Error;
+					report.error_code = crl_result;
+				}
+			} else {
+				MWLOG(LEV_WARN, MOD_APL, "Could not find issuer certificate for CRL validation. "
+					  "Skipping CRL check for document signer.");
+			}
 		}
 	}
 

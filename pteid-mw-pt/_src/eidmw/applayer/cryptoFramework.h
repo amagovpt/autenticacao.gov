@@ -267,6 +267,22 @@ public:
 	bool GetCrlData(const CByteArray &cert, CByteArray &outCrl);
 
 	/**
+	  * Validate a certificate against CRL (revocation check)
+	  * @param cert The certificate to validate
+	  * @param issuer The issuer certificate
+	  * @return 0 on success (not revoked), error code otherwise
+	  */
+	long ValidateCertificateWithCRL(const CByteArray &cert, const CByteArray &issuer);
+
+	/**
+	  * Find issuer certificate in X509_STORE
+	  * @param cert The certificate whose issuer to find
+	  * @param store The X509_STORE containing potential issuers
+	  * @return Issuer certificate (caller must free with X509_free) or nullptr
+	  */
+	X509 *FindIssuerInStore(X509 *cert, X509_STORE *store);
+
+	/**
 	  * Return the Url of the OCSP responder
 	  * The char * buffer is created and must be destroy by the caller
 	  */
