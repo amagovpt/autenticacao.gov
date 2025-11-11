@@ -1900,23 +1900,25 @@ long APL_CryptoFwk::ValidateCertificateWithCRL(const CByteArray &cert, const CBy
 
 	CByteArray crl_data;
 	if (!GetCrlData(cert, crl_data)) {
-		LOG_AND_THROW(LEV_WARN, MOD_APL, EIDMW_SOD_ERR_DOC_SIGNER_CRL_FETCH, "Failed to fetch CRL for certificate.");
+		MWLOG_CTX(LEV_WARN, MOD_APL, "Failed to fetch CRL for certificate.");
+		return EIDMW_SOD_ERR_DOC_SIGNER_CRL_FETCH;
 	}
 
 	if (!isCrlValid(crl_data, issuer)) {
-		LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_DOC_SIGNER_NO_CRL,
-					  "CRL validation failed: CRL is not valid or not from correct issuer");
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "CRL validation failed: CRL is not valid or not from correct issuer");
+		return EIDMW_SOD_ERR_DOC_SIGNER_NO_CRL;
 	}
 
 	X509_CRL *crl = getX509CRL(crl_data);
 	if (!crl) {
-		LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_DOC_SIGNER_NO_CRL, "Failed to parse CRL data");
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to parse CRL data");
+		return EIDMW_SOD_ERR_DOC_SIGNER_NO_CRL;
 	}
 
 	ASN1_INTEGER *serial = getCertSerialNumber(cert);
 	if (!serial) {
-		LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_GENERIC_VALIDATION,
-					  "Failed to get serial number from certificate");
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to get serial number from certificate");
+		return EIDMW_SOD_ERR_GENERIC_VALIDATION;
 	}
 
 	// log debug information
@@ -1955,8 +1957,8 @@ long APL_CryptoFwk::ValidateCertificateWithCRL(const CByteArray &cert, const CBy
 		MWLOG(LEV_ERROR, MOD_APL, "Certificate is SUSPENDED according to CRL");
 		return EIDMW_SOD_ERR_DOC_SIGNER_REVOKED;
 	default:
-		LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_GENERIC_VALIDATION,
-					  "CRL validation returned unexpected status: %d", status);
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "CRL validation returned unexpected status: %d", status);
+		return EIDMW_SOD_ERR_GENERIC_VALIDATION;
 	}
 }
 
