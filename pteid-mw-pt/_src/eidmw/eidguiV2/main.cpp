@@ -237,7 +237,7 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext &context, con
 
 	QString message = src_file.isEmpty() ? msg : QString("%1:%2 - %3").arg(src_file).arg(context.line).arg(msg);
 
-	PTEID_LOG(msgLvl, "QT-messages", message.toStdString().c_str());
+	PTEID_LOG(msgLvl, "QT-messages", "%s", message.toStdString().c_str());
 }
 
 int main(int argc, char *argv[]) {
