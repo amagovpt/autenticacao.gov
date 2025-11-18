@@ -227,11 +227,11 @@ int CMDSignatureClient::SignPDF(PDFSignature &pdf_sig, const char *location, con
 		ret = cmdSignature.signOpen(cmd_proxyinfo, location, reason, outfile_path, mobileCache);
 		handleErrorCode(ret, false);
 
+		pdf_sig.setExternCertificate(cmdSignature.m_certificates.front());
 		ret = cmdSignature.signClose();
 		handleErrorCode(ret, true);
 
 		updateCertificateCache(&(cmdSignature.m_certificates));
-		pdf_sig.setExternCertificate(cmdSignature.m_certificates.front());
 
 		for (PDFSignature *sig : pdfSignatures) {
 			delete sig;
