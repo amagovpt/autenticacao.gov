@@ -134,25 +134,10 @@ CByteArray GenericPinpad::PinCmd(tPinOperation operation, const tPin &pin, unsig
 		oResp = PinCmd2(operation, pin, ucPinType, oAPDU, ulRemaining, wndGeometry);
 
 	if (oResp.Size() != 2) {
-		MWLOG(LEV_ERROR, MOD_CAL, L"pinpad reader returned %ls\n", oResp.ToWString().c_str());
+		MWLOG(LEV_ERROR, MOD_CAL, "Pinpad reader returned: %s", oResp.ToString().c_str());
 		return EIDMW_ERR_UNKNOWN; // should never happen
 	}
 
-	/* moved to PkiCard
-	const unsigned char *pucSW12 = oResp.GetBytes();
-	if (pucSW12[0] == 0x64 && pucSW12[1] == 0x00)
-		throw CMWEXCEPTION(EIDMW_ERR_TIMEOUT);
-	if (pucSW12[0] == 0x64 && pucSW12[1] == 0x01)
-		throw CMWEXCEPTION(EIDMW_ERR_PIN_CANCEL);
-	if (pucSW12[0] == 0x64 && pucSW12[1] == 0x02)
-		throw CMWEXCEPTION(EIDMW_NEW_PINS_DIFFER);
-	if (pucSW12[0] == 0x64 && pucSW12[1] == 0x03)
-		throw CMWEXCEPTION(EIDMW_WRONG_PIN_FORMAT);
-	if (pucSW12[0] == 0x6B && pucSW12[1] == 0x80){
-		throw CMWEXCEPTION(EIDMW_PINPAD_ERR);
-
-	}
-	*/
 	return oResp;
 }
 
