@@ -198,7 +198,7 @@ static CByteArray hashFile(const char *filename, EVP_MD_CTX *digest_state) {
 
 	if (sb.st_mode & S_IFDIR) {
 		// it's a directory
-		MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::hashFile: The path provided is a directory");
+		MWLOG(LEV_ERROR, MOD_APL, "XadesSignature::hashFile: The path provided is a directory");
 		return CByteArray();
 	}
 
@@ -208,7 +208,8 @@ static CByteArray hashFile(const char *filename, EVP_MD_CTX *digest_state) {
 	FILE *fp = fopen(filename, "rb");
 #endif
 	if (!fp) {
-		MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::hashFile: Error opening file");
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Error opening file: %d", __FUNCTION__, errno);
+		MWLOG(LEV_ERROR, MOD_APL, "%s: native filename: %s", __FUNCTION__, filename);
 		return CByteArray();
 	}
 
@@ -222,7 +223,7 @@ static CByteArray hashFile(const char *filename, EVP_MD_CTX *digest_state) {
 	do {
 		size_t read = fread(buffer, 1, BUFSIZE, fp);
 		if (ferror(fp)) {
-			MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::hashFile: Failed while reading file");
+			MWLOG(LEV_ERROR, MOD_APL, "XadesSignature::hashFile: Failed to read file!");
 			return CByteArray();
 		}
 		EVP_DigestUpdate(mdctx, buffer, read);
@@ -565,7 +566,7 @@ static void addCertificateChain(DSIGKeyInfoX509 *keyInfo, APL_Certifs *certs) {
 			break;
 		}
 
-		MWLOG(LEV_DEBUG, MOD_APL, "XadesSignature: addCertificateChain() Loading cert: %s", issuer->getOwnerName());
+		MWLOG(LEV_DEBUG, MOD_APL, "XadesSignature: addCertificateChain() Loading cert type: %d", issuer->getType());
 		certif = issuer;
 	}
 }
@@ -868,8 +869,6 @@ CByteArray &XadesSignature::sign(const char **paths, unsigned int pathCount, zip
 			const char *path = unique_paths[i]->c_str();
 			// Create a reference to the external file
 			DSIGReference *ref = sig->createReference(createURI(path), DSIGConstants::s_unicodeStrURISHA256);
-
-			MWLOG(LEV_DEBUG, MOD_APL, "SignXades(): Hashing file %s", path);
 
 			CByteArray fileHash;
 			if (container) {
