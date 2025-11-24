@@ -371,8 +371,7 @@ CByteArray APL_EIDCard::readTokenData() {
 
 	try {
 		// Load all certificates and create x509 store
-		auto store =
-			AppLayer.getCryptoFwk()->getMultipassStore();
+		auto store = AppLayer.getCryptoFwk()->getMultipassStore();
 
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Selecting multi-pass application");
 		selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
@@ -407,8 +406,7 @@ CByteArray APL_EIDCard::readTokenData() {
 		auto pkey = getChipAuthenticationKey(dg14);
 		auto oid_info = getChipAuthenticationOid(dg14);
 		if (!oid_info.is_valid()) {
-			MWLOG_CTX(LEV_ERROR, MOD_APL, "Got invalid OID_INFO from dg14");
-			throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_ERR_CHECK, "Got invalid OID_INFO from dg14");
 		}
 
 		auto status = getCalReader()->initChipAuthentication(pkey, oid_info.object);
@@ -538,7 +536,7 @@ APLPublicKey *APL_EIDCard::getRootCAPubKey() {
 
 		const unsigned long EC_PUBKEY_OFFSET = 10;
 
-		switch(m_reader->getCardType()) {
+		switch (m_reader->getCardType()) {
 
 		case APL_CARDTYPE_PTEID_IAS101:
 			modulus = out.GetBytes(PTEIDNG_FIELD_ROOTCA_PK_POS_MODULUS_IAS101, PTEIDNG_FIELD_ROOTCA_PK_LEN_MODULUS);
@@ -558,9 +556,8 @@ APLPublicKey *APL_EIDCard::getRootCAPubKey() {
 
 		if (ec_pubkey.Size() > 0) {
 			m_RootCAPubKey = new APLPublicKey(ec_pubkey);
-		}
-		else {
-			m_RootCAPubKey = new APLPublicKey(modulus,exponent);
+		} else {
+			m_RootCAPubKey = new APLPublicKey(modulus, exponent);
 		}
 	}
 
