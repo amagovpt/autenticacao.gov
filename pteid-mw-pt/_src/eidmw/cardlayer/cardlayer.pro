@@ -41,6 +41,10 @@ macx: INCLUDEPATH += $$DEPS_DIR/openpace/include
 
 DEFINES += EIDMW_CAL_EXPORT 
 
+### For now we hardcode __USE_PCSC__
+### If you want to compile the middleware without PCSC included, use cmake build system
+DEFINES += __USE_PCSC__
+ 
 unix:!macx:  DEFINES += __UNIX__
 
 

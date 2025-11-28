@@ -30,6 +30,7 @@
 #include "Log.h"
 #include "Config.h"
 // cardlayer headers
+#include "Pinpad.h"
 #include "PteidCard.h"
 #include "Reader.h"
 #include "Card.h"
@@ -210,6 +211,7 @@ void CReader::readerDeviceInfo(PTEID_CardHandle hCard, ReaderDeviceInfo *deviceI
 	}
 }
 
+#ifdef __USE_PCSC__
 void CReader::UseHandle(SCARDHANDLE hCard) {
 	PTEID_CardHandle handle = {0};
 
@@ -271,6 +273,7 @@ bool CReader::Connect(SCARDHANDLE hCard, DWORD protocol) {
 
 	return true;
 }
+#endif
 
 bool CReader::Connect() {
 	if (m_poCard != NULL)
@@ -283,11 +286,15 @@ bool CReader::Connect() {
 		}
 
 		m_oPKCS15.SetCard(m_poCard);
+
+		long pinpadEnabled = false;
+#ifdef __USE_PCSC__
 		if (auto pcsc = dynamic_cast<CPCSC *>(m_poContext->m_oCardInterface.get())) {
 			m_oPinpad->Init(m_poCard->m_hCard);
 		}
 		CConfig config;
-		long pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
+		pinpadEnabled = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PINPAD_ENABLED);
+#endif
 		if (pinpadEnabled == 1 && m_oPinpad->UsePinpad()) {
 			MWLOG(LEV_DEBUG, MOD_CAL, L"Using Pinpad reader. pinpadEnabled=%ld", pinpadEnabled);
 			m_poCard->setPinpadHandler(m_oPinpad->getPinpadHandler());
@@ -438,19 +445,19 @@ void CReader::initPaceAuthentication(const char *secret, size_t secretLen, PaceS
 	m_poCard->initPaceAuthentication(secret, secretLen, secretType);
 }
 
-void CReader::initBACAuthentication(const char *mrz_info) {
-	m_poCard->initBACAuthentication(mrz_info);
-}
+void CReader::initBACAuthentication(const char *mrz_info) { m_poCard->initBACAuthentication(mrz_info); }
 
 bool CReader::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	return m_poCard->initChipAuthentication(pkey, oid);
 }
 
+void CReader::resetSecureMessaging() { m_poCard->resetSecureMessaging(); }
+
 void CReader::openBACChannel(const CByteArray &mrz_info) {
-	reinterpret_cast<CPteidCard*>(m_poCard)->openBACChannel(mrz_info);
+	reinterpret_cast<CPteidCard *>(m_poCard)->openBACChannel(mrz_info);
 }
 
-CByteArray CReader::readMultiPassToken() { return reinterpret_cast<CPteidCard*>(m_poCard)->readToken(); }
+CByteArray CReader::readMultiPassToken() { return reinterpret_cast<CPteidCard *>(m_poCard)->readToken(); }
 
 CByteArray CReader::ReadFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen,
 							 bool bDoNotCache) {

@@ -33,10 +33,10 @@ EIDMW_CAL_API OID_INFO get_id_CA_DH_AES_CBC_CMAC_256();
 class PaceAuthenticationImpl;
 class EIDMW_CAL_API PaceAuthentication : public SecureMessaging {
 public:
-	PaceAuthentication(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure);
+	PaceAuthentication(PTEID_CardHandle hCard, CContext *poContext);
 	~PaceAuthentication();
 
-	void initPaceAuthentication(PTEID_CardHandle &hCard, const void *param_structure);
+	void initPaceAuthentication(PTEID_CardHandle &hCard);
 	void setAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 
 protected:

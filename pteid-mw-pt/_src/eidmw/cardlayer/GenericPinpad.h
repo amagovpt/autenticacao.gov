@@ -41,6 +41,7 @@
 #include "../dialogs/dialogs.h"
 #include "ByteArray.h"
 #include "Thread.h"
+#include "PinpadInterface.h"
 
 #ifndef WIN32
 #include <PCSC/winscard.h>
@@ -58,7 +59,7 @@ class CContext;
 
 class PinpadDialogThread;
 
-class EIDMW_CAL_API GenericPinpad {
+class EIDMW_CAL_API GenericPinpad : public PinpadInterface {
 public:
 	// Warning: This ctor shouldn't be used, it's just a workaround for a convoluted Pinpad detection process
 	GenericPinpad() { m_ulLangCode = 0x0409; }

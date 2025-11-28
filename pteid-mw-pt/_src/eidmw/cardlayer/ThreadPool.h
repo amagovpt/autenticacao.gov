@@ -29,16 +29,15 @@
 
 #include <map>
 #include <string>
+#include <optional>
 
 namespace eIDMW {
 
 /** Thread class to handle a callback */
 class EIDMW_CAL_API CEventCallbackThread : public CThread {
 public:
-	CEventCallbackThread();
-
-	CEventCallbackThread(const std::string &csReader, void (*callback)(long lRet, unsigned long ulState, void *pvRef),
-						 void *pvRef);
+	CEventCallbackThread(const std::string &csReader, CardInterface &cardInterface,
+						 void (*callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef);
 
 	void Run();
 
@@ -53,6 +52,7 @@ private:
 	unsigned long m_ulCurrentState;
 	bool m_bRunning;
 	void *m_pvRef;
+	CardInterface &m_cardInterface;
 };
 
 ////////////////////////////////////////////////////////////////
@@ -71,9 +71,12 @@ public:
 
 	void FinishThreads();
 
+	void SetCardInterface(CardInterface *cardInterface);
+
 private:
 	unsigned long m_ulCurrentHandle;
 	CMutex m_mutex;
+	std::optional<CardInterface *> m_cardInterface = std::nullopt;
 
 #ifdef WIN32
 // See http://groups.google.com/group/microsoft.public.vc.stl/msg/c4dfeb8987d7b8f0

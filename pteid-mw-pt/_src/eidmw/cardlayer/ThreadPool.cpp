@@ -20,6 +20,7 @@
 
 **************************************************************************** */
 #include "ThreadPool.h"
+#include "Log.h"
 
 using namespace eIDMW;
 
@@ -27,11 +28,9 @@ static bool g_bStop = true;
 
 #define MAX_THREAD_WAIT_LOOP 100
 
-CEventCallbackThread::CEventCallbackThread() {}
-
-CEventCallbackThread::CEventCallbackThread(const std::string &csReader,
-										   void (*callback)(long lRet, unsigned long ulState, void *pvRef),
-										   void *pvRef) {
+CEventCallbackThread::CEventCallbackThread(const std::string &csReader, CardInterface &cardInterface,
+										   void (*callback)(long lRet, unsigned long ulState, void *pvRef), void *pvRef)
+	: m_cardInterface(cardInterface) {
 	m_bStop = false;
 	m_bRunning = false;
 	m_csReader = csReader;
@@ -47,10 +46,9 @@ void CEventCallbackThread::Run() {
 	tReaderInfo tInfo = {m_csReader, m_ulCurrentState, 0};
 
 	try {
-		CPCSC t_pcsc_context;
-		t_pcsc_context.EstablishContext();
+		m_cardInterface.EstablishContext();
 		while (!g_bStop && !m_bStop) {
-			bool bChanged = t_pcsc_context.GetStatusChange(10, &tInfo, 1);
+			bool bChanged = m_cardInterface.GetStatusChange(10, &tInfo, 1);
 			if (g_bStop || m_bStop)
 				break;
 			else if (bChanged)
@@ -87,22 +85,32 @@ CThreadPool::~CThreadPool() { g_bStop = true; }
 CEventCallbackThread &CThreadPool::NewThread(const std::string &csReader,
 											 void (*callback)(long lRet, unsigned long ulState, void *pvRef),
 											 unsigned long &ulHandle, void *pvRef) {
+// if PCSC is disabled, m_cardInterface must have been initialized to an instance
+#if __USE_PCSC__ == 0
+	if (!m_cardInterface.has_value() || m_cardInterface.value() == nullptr) {
+		MWLOG_CTX(LEV_ERROR, MOD_CAL, "Can not create CEventCallbackThread without a defined card interface.");
+		throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
+	}
+#endif
+
 	CAutoMutex oAutoMutex(&m_mutex);
 
+	CardInterface &cardInterface = *m_cardInterface.value();
+
 	m_ulCurrentHandle++;
-
-	m_pool[m_ulCurrentHandle] = CEventCallbackThread(csReader, callback, pvRef);
-
 	ulHandle = m_ulCurrentHandle;
 
-	return m_pool[m_ulCurrentHandle];
+	auto [it, inserted] =
+		m_pool.emplace(m_ulCurrentHandle, CEventCallbackThread(csReader, cardInterface, callback, pvRef));
+
+	return it->second;
 }
 
 void CThreadPool::RemoveThread(unsigned long ulHandle) {
 	CAutoMutex oAutoMutex(&m_mutex);
 
 	// Signal the EventCallbackThread to stop
-	CEventCallbackThread &oEventCallbackThread = m_pool[ulHandle];
+	CEventCallbackThread &oEventCallbackThread = m_pool.find(ulHandle)->second;
 	oEventCallbackThread.Stop();
 
 	/* Remove all EventCallbackThreads that have stopped,
@@ -158,4 +166,13 @@ void CThreadPool::FinishThreads() {
 	}
 
 	m_mutex.Lock();
+}
+
+void CThreadPool::SetCardInterface(CardInterface *cardInterface) {
+	if (cardInterface == nullptr) {
+		MWLOG_CTX(LEV_ERROR, MOD_CAL, "Invalid card interface pointer");
+		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+	}
+
+	this->m_cardInterface = std::make_optional(cardInterface);
 }

@@ -38,8 +38,8 @@ const unsigned char paddingIndicator = 0x01;
 
 const unsigned char controlByte = 0x0C;
 
-SecureMessaging::SecureMessaging(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure)
-	: m_card(hCard), m_context(poContext), m_param(paramStructure), m_authenticated(false) {
+SecureMessaging::SecureMessaging(PTEID_CardHandle hCard, CContext *poContext)
+	: m_card(hCard), m_context(poContext), m_authenticated(false) {
 	EAC_init();
 }
 
@@ -48,7 +48,7 @@ CByteArray SecureMessaging::sendSecureAPDU(const APDU &apdu, long &retValue) {
 }
 
 CByteArray SecureMessaging::sendAPDU(const CByteArray &apdu, long &retValue) {
-	return m_context->m_oCardInterface->Transmit(m_card, apdu, &retValue, m_param);
+	return m_context->m_oCardInterface->Transmit(m_card, apdu, &retValue, m_context->getProtocol(m_card));
 }
 
 CByteArray SecureMessaging::sendSecureAPDU(const CByteArray &apdu, long &retValue) {

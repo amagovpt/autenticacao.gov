@@ -43,8 +43,8 @@ using namespace Crypto;
 
 #define MAC_LEN 8
 
-BacAuthentication::BacAuthentication(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure)
-	: SecureMessaging(hCard, poContext, paramStructure) {}
+BacAuthentication::BacAuthentication(PTEID_CardHandle hCard, CContext *poContext)
+	: SecureMessaging(hCard, poContext) {}
 
 void BacAuthentication::authenticate(const CByteArray &mrzInfo) {
 
@@ -264,7 +264,7 @@ CByteArray BacAuthentication::retailMacWithPadding(const CByteArray &key, const 
 	memcpy(msg.get(), macInput.GetBytes(), macInput.Size());
 	memcpy(msg.get() + macInput.Size(), padding, sizeof(padding));
 
-	return BlockCipherCtx::retailMac(key, {msg.get(), (unsigned long) inputLen});
+	return BlockCipherCtx::retailMac(key, {msg.get(), (unsigned long)inputLen});
 }
 
 /**

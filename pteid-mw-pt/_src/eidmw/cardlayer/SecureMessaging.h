@@ -41,7 +41,7 @@ struct CAParams;
  */
 class SecureMessaging {
 public:
-	SecureMessaging(PTEID_CardHandle hCard, CContext *poContext, const void *paramStructure);
+	SecureMessaging(PTEID_CardHandle hCard, CContext *poContext);
 	virtual ~SecureMessaging() = default;
 
 	void UpdateHandle(PTEID_CardHandle hCard) { this->m_card = hCard; }
@@ -78,7 +78,6 @@ protected:
 	CByteArray decryptAPDUResponse(const CByteArray &encryptedResponse);
 
 	PTEID_CardHandle m_card = {0};
-	const void *m_param = {0};
 	CContext *m_context = {0};
 
 	bool m_authenticated = false;

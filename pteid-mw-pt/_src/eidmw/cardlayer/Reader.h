@@ -25,7 +25,12 @@
 #pragma once
 
 #include "PKCS15.h"
+#include "../eidlib/CardCallbacks.h"
+
+#ifdef __USE_PCSC__
 #include "Pinpad.h"
+#include "pcsclite.h"
+#endif
 
 typedef struct evp_pkey_st EVP_PKEY;
 typedef struct asn1_object_st ASN1_OBJECT;
@@ -35,6 +40,7 @@ namespace eIDMW {
 class APDU;
 class CCardLayer;
 class CCard;
+class CPinpad;
 struct ReaderDeviceInfo;
 
 class EIDMW_CAL_API CReader {
@@ -78,8 +84,11 @@ public:
 	 * any of the other functions below.
 	 */
 	bool Connect();
+
+#ifdef __USE_PCSC__
 	bool Connect(SCARDHANDLE hCard, DWORD protocol);
 	void UseHandle(SCARDHANDLE hCard);
+#endif
 
 	/** Disconnect from the card; it's safe to call this function multiple times */
 	void Disconnect(tDisconnectMode disconnectMode = DISCONNECT_LEAVE_CARD);
@@ -115,8 +124,9 @@ public:
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 	bool initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid);
 	void initBACAuthentication(const char *mrz_info);
+	void resetSecureMessaging();
 
-	void openBACChannel(const CByteArray& mrz_info);
+	void openBACChannel(const CByteArray &mrz_info);
 	CByteArray readMultiPassToken();
 
 	/* Read the file indicated by 'csPath'.

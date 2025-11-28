@@ -43,6 +43,7 @@
 
 namespace eIDMW {
 
+#ifdef __USE_PCSC__
 PTEID_CardProtocol pcscProtocolToPteid(DWORD protocol) {
 	switch (protocol) {
 	case SCARD_PROTOCOL_T0:
@@ -225,13 +226,25 @@ bool CPCSC::Status(const std::string &csReader) {
 	return (xReaderState.dwEventState & SCARD_STATE_PRESENT) == SCARD_STATE_PRESENT;
 }
 
-std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string &csReader, unsigned long ulShareMode,
-															   unsigned long ulPreferredProtocols) {
+std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string &csReader,
+															   PTEID_CardProtocol preferredProtocols) {
 	DWORD dwActiveProtocol;
 	SCARDHANDLE hCard = 0;
 
-	LONG lRet =
-		SCardConnect(m_hContext, csReader.c_str(), ulShareMode, ulPreferredProtocols, &hCard, &dwActiveProtocol);
+	auto protocol = 0;
+	switch (preferredProtocols) {
+	case PTEID_CardProtocol::T0:
+		protocol = SCARD_PROTOCOL_T0;
+		break;
+	case PTEID_CardProtocol::T1:
+		protocol = SCARD_PROTOCOL_T1;
+		break;
+	case PTEID_CardProtocol::ANY:
+		protocol = SCARD_PROTOCOL_ANY;
+		break;
+	};
+
+	LONG lRet = SCardConnect(m_hContext, csReader.c_str(), SCARD_SHARE_SHARED, protocol, &hCard, &dwActiveProtocol);
 
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardConnect(%ls): 0x%0x", utilStringWiden(csReader).c_str(), lRet);
 
@@ -293,8 +306,8 @@ std::pair<bool, CByteArray> CPCSC::StatusWithATR(PTEID_CardHandle hCard) {
 						  (SCARD_S_SUCCESS == lRet) ? CByteArray(tucATR, dwATRLen) : CByteArray());
 }
 
-CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal, const void *pSendPci,
-						   void *pRecvPci) {
+CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal,
+						   PTEID_CardProtocol protocol) {
 	auto handle = m_handles[hCard];
 	CByteArray oCmdAPDU(inputAPDU);
 
@@ -305,11 +318,19 @@ CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, 
 	unsigned char ucINS = oCmdAPDU.Size() >= 4 ? oCmdAPDU.GetByte(1) : 0;
 	unsigned long ulLen = ucINS == 0xA4 || ucINS == 0x22 ? 0xFFFFFFFF : 5;
 
-	if (pSendPci == NULL) {
+	// const SCARD_IO_REQUEST *pioSendPci = (const SCARD_IO_REQUEST *)pSendPci;
+	const SCARD_IO_REQUEST *pioSendPci = nullptr;
+	switch (protocol) {
+	case PTEID_CardProtocol::T0:
+		pioSendPci = SCARD_PCI_T0;
+		break;
+	case PTEID_CardProtocol::T1:
+		pioSendPci = SCARD_PCI_T1;
+		break;
+	case PTEID_CardProtocol::ANY:
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
+		break;
 	}
-
-	const SCARD_IO_REQUEST *pioSendPci = (const SCARD_IO_REQUEST *)pSendPci;
 	// SCARD_IO_REQUEST *pioRecvPci = (pRecvPci != NULL) ? (SCARD_IO_REQUEST*) pRecvPci : &m_ioRecvPci;
 
 	// DEBUG
@@ -339,7 +360,7 @@ try_again:
 	LONG lRet =
 		SCardTransmit(handle, pioSendPci, oCmdAPDU.GetBytes(), (DWORD)oCmdAPDU.Size(), NULL, tucRecv, &dwRecvLen);
 
-	*plRetVal = lRet;
+	*plRetVal = PcscToErr(lRet);
 	if (SCARD_S_SUCCESS != lRet) {
 #ifdef __APPLE__
 		if (SCARD_E_SHARING_VIOLATION == lRet && iRetryCount < 3) {
@@ -466,48 +487,6 @@ void CPCSC::EndTransaction(PTEID_CardHandle hCard) {
 		MWLOG(LEV_DEBUG, MOD_CAL, L"Smart card removed when performing SCardEndTransaction!");
 }
 
-long CardInterface::SW12ToErr(unsigned long ulSW12) {
-	long lRet = EIDMW_ERR_CARD;
-
-	switch (ulSW12) {
-	case 0x9000:
-		lRet = EIDMW_OK;
-		break;
-	case 0x6400:
-		lRet = EIDMW_ERR_TIMEOUT;
-		break;
-	case 0x6401:
-		lRet = EIDMW_ERR_PIN_CANCEL;
-		break;
-	case 0x6402:
-		lRet = EIDMW_NEW_PINS_DIFFER;
-		break;
-	case 0x6403:
-		lRet = EIDMW_WRONG_PIN_FORMAT;
-		break;
-	case 0x6982:
-		lRet = EIDMW_ERR_NOT_AUTHENTICATED;
-		break;
-	case 0x6B00:
-		lRet = EIDMW_ERR_BAD_P1P2;
-		break;
-	case 0x6A86:
-		lRet = EIDMW_ERR_BAD_P1P2;
-		break;
-	case 0x6986:
-		lRet = EIDMW_ERR_CMD_NOT_ALLOWED;
-		break;
-	case 0x6A82:
-		lRet = EIDMW_ERR_FILE_NOT_FOUND;
-		break;
-	case 0x6B80:
-		lRet = EIDMW_PINPAD_ERR;
-		break;
-	}
-
-	return lRet;
-}
-
 long CPCSC::PcscToErr(unsigned long lPcscErr) {
 	long lRet = EIDMW_ERR_CARD;
 
@@ -554,6 +533,49 @@ long CPCSC::PcscToErr(unsigned long lPcscErr) {
 
 	return lRet;
 }
+#endif
+
+long CardInterface::SW12ToErr(unsigned long ulSW12) {
+	long lRet = EIDMW_ERR_CARD;
+
+	switch (ulSW12) {
+	case 0x9000:
+		lRet = EIDMW_OK;
+		break;
+	case 0x6400:
+		lRet = EIDMW_ERR_TIMEOUT;
+		break;
+	case 0x6401:
+		lRet = EIDMW_ERR_PIN_CANCEL;
+		break;
+	case 0x6402:
+		lRet = EIDMW_NEW_PINS_DIFFER;
+		break;
+	case 0x6403:
+		lRet = EIDMW_WRONG_PIN_FORMAT;
+		break;
+	case 0x6982:
+		lRet = EIDMW_ERR_NOT_AUTHENTICATED;
+		break;
+	case 0x6B00:
+		lRet = EIDMW_ERR_BAD_P1P2;
+		break;
+	case 0x6A86:
+		lRet = EIDMW_ERR_BAD_P1P2;
+		break;
+	case 0x6986:
+		lRet = EIDMW_ERR_CMD_NOT_ALLOWED;
+		break;
+	case 0x6A82:
+		lRet = EIDMW_ERR_FILE_NOT_FOUND;
+		break;
+	case 0x6B80:
+		lRet = EIDMW_PINPAD_ERR;
+		break;
+	}
+
+	return lRet;
+}
 
 ExternalCardInterface::ExternalCardInterface(const PTEID_CardInterfaceCallbacks *callbacks) {
 	if (callbacks != nullptr) {
@@ -563,36 +585,32 @@ ExternalCardInterface::ExternalCardInterface(const PTEID_CardInterfaceCallbacks 
 	}
 }
 
-ExternalCardInterface::~ExternalCardInterface() {
-	// Nothing to clean up
-}
-
 long ExternalCardInterface::CallbackToInternalError(PTEID_CallbackResult callbackResult) {
-    switch (callbackResult) {
-        case PTEID_CALLBACK_OK:
-            return EIDMW_OK;
-        case PTEID_CALLBACK_ERR_INVALID_PARAM:
-            return EIDMW_ERR_PARAM_BAD;
-        case PTEID_CALLBACK_ERR_NO_CARD:
-            return EIDMW_ERR_NO_CARD;
-        case PTEID_CALLBACK_ERR_COMM_ERROR:
-            return EIDMW_ERR_CARD_COMM;
-        case PTEID_CALLBACK_ERR_NO_READER:
-            return EIDMW_ERR_NO_READER;
-        case PTEID_CALLBACK_ERR_ACCESS_DENIED:
-            return EIDMW_ERR_CARD_SHARING;
-        case PTEID_CALLBACK_ERR_NOT_SUPPORTED:
-            return EIDMW_ERR_NOT_SUPPORTED;
-        case PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL:
-            return EIDMW_ERR_PARAM_RANGE;
-        case PTEID_CALLBACK_ERR_CARD_REMOVED:
-            return EIDMW_ERR_NO_CARD;
-        case PTEID_CALLBACK_ERR_UNRESPONSIVE:
-            return EIDMW_ERR_CANT_CONNECT;
-        case PTEID_CALLBACK_ERR_GENERIC:
-        default:
-            return EIDMW_ERR_CARD;
-    }
+	switch (callbackResult) {
+	case PTEID_CALLBACK_OK:
+		return EIDMW_OK;
+	case PTEID_CALLBACK_ERR_INVALID_PARAM:
+		return EIDMW_ERR_PARAM_BAD;
+	case PTEID_CALLBACK_ERR_NO_CARD:
+		return EIDMW_ERR_NO_CARD;
+	case PTEID_CALLBACK_ERR_COMM_ERROR:
+		return EIDMW_ERR_CARD_COMM;
+	case PTEID_CALLBACK_ERR_NO_READER:
+		return EIDMW_ERR_NO_READER;
+	case PTEID_CALLBACK_ERR_ACCESS_DENIED:
+		return EIDMW_ERR_CARD_SHARING;
+	case PTEID_CALLBACK_ERR_NOT_SUPPORTED:
+		return EIDMW_ERR_NOT_SUPPORTED;
+	case PTEID_CALLBACK_ERR_BUFFER_TOO_SMALL:
+		return EIDMW_ERR_PARAM_RANGE;
+	case PTEID_CALLBACK_ERR_CARD_REMOVED:
+		return EIDMW_ERR_NO_CARD;
+	case PTEID_CALLBACK_ERR_UNRESPONSIVE:
+		return EIDMW_ERR_CANT_CONNECT;
+	case PTEID_CALLBACK_ERR_GENERIC:
+	default:
+		return EIDMW_ERR_CARD;
+	}
 }
 
 void ExternalCardInterface::EstablishContext() {
@@ -647,13 +665,13 @@ bool ExternalCardInterface::Status(const std::string &csReader) {
 	if (result != PTEID_CALLBACK_OK) {
 		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}
-	
+
 	return cardPresent;
 }
 
 std::pair<PTEID_CardHandle, PTEID_CardProtocol> ExternalCardInterface::Connect(const std::string &csReader,
-																			   unsigned long ulShareMode,
-																			   unsigned long ulPreferredProtocols) {
+																			   PTEID_CardProtocol preferredProtocols) {
+
 	if (callbacks.connect == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -681,7 +699,7 @@ void ExternalCardInterface::Disconnect(PTEID_CardHandle hCard, tDisconnectMode) 
 }
 
 CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
-										   const void *pSendPci, void *pRecvPci) {
+										   PTEID_CardProtocol protocol) {
 	if (callbacks.transmit == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}
@@ -689,8 +707,8 @@ CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteAr
 	unsigned char responseBuffer[APDU_BUF_LEN];
 	unsigned long respBufferSize = sizeof(responseBuffer);
 
-	auto result = callbacks.transmit(hCard, oCmdAPDU.GetBytes(), oCmdAPDU.Size(), responseBuffer, &respBufferSize, plRetVal, pSendPci,
-					   pRecvPci, callbacks.context);
+	auto result = callbacks.transmit(hCard, oCmdAPDU.GetBytes(), oCmdAPDU.Size(), responseBuffer, &respBufferSize,
+									 plRetVal, protocol, callbacks.context);
 	if (result != PTEID_CALLBACK_OK) {
 		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}
@@ -722,8 +740,8 @@ CByteArray ExternalCardInterface::Control(PTEID_CardHandle hCard, unsigned long 
 
 	unsigned long respBufferSize = ulMaxResponseSize;
 
-	auto result = callbacks.control(hCard, ulControl, oCmd.GetBytes(), oCmd.Size(), respBuffer, &respBufferSize, ulMaxResponseSize,
-					  callbacks.context);
+	auto result = callbacks.control(hCard, ulControl, oCmd.GetBytes(), oCmd.Size(), respBuffer, &respBufferSize,
+									ulMaxResponseSize, callbacks.context);
 	if (result != PTEID_CALLBACK_OK) {
 		throw CMWEXCEPTION(CallbackToInternalError(result));
 	}

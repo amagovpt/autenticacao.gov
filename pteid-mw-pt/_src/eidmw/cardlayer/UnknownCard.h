@@ -33,7 +33,7 @@ class CUnknownCard : public CCard {
 public:
 	static bool IsUnknownCard(PTEID_CardHandle hCard, CContext *poContext, CByteArray &oData);
 
-	CUnknownCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad, const CByteArray &oData);
+	CUnknownCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad, const CByteArray &oData);
 	~CUnknownCard(void);
 
 	virtual CByteArray ReadUncachedFile(const std::string &csPath, unsigned long ulOffset = 0,

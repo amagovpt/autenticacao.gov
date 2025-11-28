@@ -53,7 +53,7 @@ static const std::string TRACEFILE = "3F000003";
 
 namespace eIDMW {
 
-static bool PteidCardSelectApplet(CContext *poContext, PTEID_CardHandle hCard, const void *protocol_struct,
+static bool PteidCardSelectApplet(CContext *poContext, PTEID_CardHandle hCard, PTEID_CardProtocol protocol,
 								  SecureMessaging *secureMessaging) {
 	long lRetVal = 0;
 	unsigned char tucSelectApp[] = {0x00, 0xA4, 0x04, 0x0C};
@@ -66,13 +66,13 @@ static bool PteidCardSelectApplet(CContext *poContext, PTEID_CardHandle hCard, c
 	if (auto pace = dynamic_cast<PaceAuthentication *>(secureMessaging)) {
 		oResp = pace->sendSecureAPDU(oCmd, lRetVal);
 	} else {
-		oResp = poContext->m_oCardInterface->Transmit(hCard, oCmd, &lRetVal, protocol_struct);
+		oResp = poContext->m_oCardInterface->Transmit(hCard, oCmd, &lRetVal, protocol);
 	}
 	return (oResp.Size() == 2 && (oResp.GetByte(0) == 0x61 || oResp.GetByte(0) == 0x90));
 }
 
 CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID_CardHandle hCard, CContext *poContext,
-							GenericPinpad *poPinpad, const void *protocol_struct) {
+							PinpadInterface *poPinpad) {
 
 	CCard *poCard = NULL;
 
@@ -81,7 +81,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID
 		{
 			CAutoLock oAutLock(poContext->m_oCardInterface.get(), hCard);
 
-			poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion, protocol_struct);
+			poCard = new CPteidCard(hCard, poContext, poPinpad, ALW_SELECT_APPLET, ulVersion);
 			MWLOG(LEV_DEBUG, MOD_CAL, "Creating new card instance: %p", poCard);
 
 			// NOTE: PteidCardSelectAppllet does not support V5 cards
@@ -105,8 +105,8 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID
 	return poCard;
 }
 
-CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad,
-					   tSelectAppletMode selectAppletMode, unsigned long ulVersion, const void *protocol)
+CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad,
+					   tSelectAppletMode selectAppletMode, unsigned long ulVersion)
 	: CPkiCard(hCard, poContext, poPinpad) {
 	switch (ulVersion) {
 	case 1:
@@ -119,17 +119,15 @@ CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpa
 		m_cardType = CARD_PTEID_IAS5;
 		break;
 	}
-	setProtocol(protocol);
 	m_ucCLA = 0x00;
 
 	ReadSerialNumber();
 }
 
 /* Constructor for IASv5 cards in CL mode */
-CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad, const void *protocol)
+CPteidCard::CPteidCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad)
 	: CPkiCard(hCard, poContext, poPinpad) {
 
-	setProtocol(protocol);
 	m_cardType = CARD_PTEID_IAS5;
 }
 
@@ -852,7 +850,9 @@ void CPteidCard::InitEncryptionKey() {
 }
 
 void CPteidCard::openBACChannel(const CByteArray &mrzInfo) {
-	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext, m_comm_protocol);
+	resetSecureMessaging();
+
+	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext);
 	bac->authenticate(mrzInfo);
 
 	m_secureMessaging = std::move(bac);

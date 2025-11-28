@@ -373,6 +373,14 @@ CByteArray APL_EIDCard::readTokenData() {
 		// Load all certificates and create x509 store
 		auto store = AppLayer.getCryptoFwk()->getMultipassStore();
 
+		// Reset secure messaging state before reading multipass application.
+		// The card might be in PACE secure messaging mode if, for example,
+		// national data was read from a contactless card using PACE right before
+		// attempting to read the multipass token. We need to reset to non-secure messaging
+		// mode to successfully select and read the multipass application/SOD file.
+		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Resetting secure messaging before reading multipass SOD");
+		getCalReader()->resetSecureMessaging();
+
 		MWLOG_CTX(LEV_DEBUG, MOD_APL, "Selecting multi-pass application");
 		selectApplication({MULTIPASS_APPLET, sizeof(MULTIPASS_APPLET)});
 
@@ -391,7 +399,8 @@ CByteArray APL_EIDCard::readTokenData() {
 		// Get SOD contents and its validation state
 		auto sod_contents = AppLayer.getCryptoFwk()->getSodContents(sod_data, store);
 		if (sod_contents.first != 0) {
-			MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to verify SOD validity with error: %x", sod_contents.first);
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION,
+						  "Failed to verify SOD validity with error: %lx", sod_contents.first);
 		}
 
 		const std::vector<int> expected_tags = {13, 14, 15};
@@ -430,8 +439,7 @@ CByteArray APL_EIDCard::readTokenData() {
 		m_cachedMultipassToken = token.GetBytes(4, token.GetByte(3));
 		return m_cachedMultipassToken;
 	} catch (CMWException &e) {
-		MWLOG_CTX(LEV_ERROR, MOD_APL, "Token Read Failed: %ld", e.GetError());
-		throw;
+		LOG_AND_THROW(LEV_ERROR, MOD_APL, e.GetError(), "Token Read Failed: %ld", e.GetError());
 	}
 }
 

@@ -38,9 +38,9 @@
 
 namespace eIDMW {
 
-CCard::CCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad)
+CCard::CCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad)
 	: m_hCard(hCard), m_poContext(poContext), m_poPinpad(poPinpad), m_oCache(poContext), m_cardType(CARD_UNKNOWN),
-	  m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_comm_protocol(NULL), m_askPinOnSign(true) {}
+	  m_ulLockCount(0), m_bSerialNrString(false), cleartext_next(false), m_askPinOnSign(true) {}
 
 CCard::~CCard(void) { Disconnect(DISCONNECT_RESET_CARD); }
 
@@ -307,7 +307,7 @@ CByteArray CCard::Sign(const tPrivKey &key, const tPin &Pin, unsigned long algo,
 
 CByteArray CCard::GetRandom(unsigned long ulLen) { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
 
-CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, const void *param_structure) {
+CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal) {
 	CByteArray result;
 	bool isAlreadySM = oCmdAPDU.GetByte(0) & 0x0C || cleartext_next;
 	if (isAlreadySM && m_secureMessaging.get()) {
@@ -317,13 +317,14 @@ CByteArray CCard::handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetV
 	if (m_secureMessaging.get() && m_secureMessaging->isInitialized() && !isAlreadySM) {
 		result = m_secureMessaging->sendSecureAPDU(oCmdAPDU, lRetVal);
 	} else {
-		result = m_poContext->m_oCardInterface->Transmit(m_hCard, oCmdAPDU, &lRetVal, param_structure);
+		result =
+			m_poContext->m_oCardInterface->Transmit(m_hCard, oCmdAPDU, &lRetVal, m_poContext->getProtocol(m_hCard));
 		cleartext_next = false;
 	}
 	return result;
 }
 
-CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, const void *param_structure) {
+CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, long &lRetVal) {
 	bool isAlreadySM = apdu.cla() & 0x0C || cleartext_next;
 	CByteArray result;
 	if (isAlreadySM && m_secureMessaging.get()) {
@@ -334,7 +335,8 @@ CByteArray CCard::handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, const 
 	if (m_secureMessaging.get() && m_secureMessaging->isInitialized() && !isAlreadySM) {
 		result = m_secureMessaging->sendSecureAPDU(apdu, lRetVal);
 	} else {
-		result = m_poContext->m_oCardInterface->Transmit(m_hCard, apdu.ToByteArray(), &lRetVal, param_structure);
+		result = m_poContext->m_oCardInterface->Transmit(m_hCard, apdu.ToByteArray(), &lRetVal,
+														 m_poContext->getProtocol(m_hCard));
 		cleartext_next = false;
 	}
 	return result;
@@ -344,17 +346,16 @@ CByteArray CCard::SendAPDU(const CByteArray &oCmdAPDU) {
 
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
-	const void *protocol_struct = getProtocolStructure();
 	CByteArray oResp;
 
-	oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol_struct);
+	oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal);
 
-	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) {
+	if (lRetVal == EIDMW_ERR_CARD_COMM || lRetVal == EIDMW_ERR_NOT_TRANSACTED) {
 		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
 		// try again to select the applet
 		if (SelectApplet()) {
 			// try again, now that the card has been reset
-			oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal, protocol_struct);
+			oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal);
 		}
 	}
 
@@ -385,15 +386,14 @@ CByteArray CCard::SendAPDU(const CByteArray &oCmdAPDU) {
 CByteArray CCard::SendAPDU(const APDU &apdu) {
 	CAutoLock oAutoLock(this);
 	long lRetVal = 0;
-	const void *protocol_struct = getProtocolStructure();
-	CByteArray oResp = handleSendAPDUSecurity(apdu, lRetVal, protocol_struct);
+	CByteArray oResp = handleSendAPDUSecurity(apdu, lRetVal);
 
-	if (lRetVal == SCARD_E_COMM_DATA_LOST || lRetVal == SCARD_E_NOT_TRANSACTED) {
+	if (lRetVal == EIDMW_ERR_CARD_COMM || lRetVal == EIDMW_ERR_NOT_TRANSACTED) {
 		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
 		// try again to select the applet
 		if (SelectApplet()) {
 			// try again, now that the card has been reset
-			oResp = handleSendAPDUSecurity(apdu, lRetVal, protocol_struct);
+			oResp = handleSendAPDUSecurity(apdu, lRetVal);
 		}
 	}
 
@@ -409,7 +409,7 @@ CByteArray CCard::SendAPDU(const APDU &apdu) {
 	return oResp;
 }
 
-void CCard::createPace() { m_secureMessaging.reset(new PaceAuthentication(m_hCard, m_poContext, m_comm_protocol)); }
+void CCard::createPace() { m_secureMessaging.reset(new PaceAuthentication(m_hCard, m_poContext)); }
 
 void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType) {
 	if (!dynamic_cast<PaceAuthentication *>(m_secureMessaging.get())) {
@@ -418,14 +418,14 @@ void CCard::initPaceAuthentication(const char *secret, size_t secretLen, PaceSec
 
 	if (auto pace = dynamic_cast<PaceAuthentication *>(m_secureMessaging.get())) {
 		pace->setAuthentication(secret, secretLen, secretType);
-		pace->initPaceAuthentication(m_hCard, m_comm_protocol);
+		pace->initPaceAuthentication(m_hCard);
 		// Missing steps in Contactless card construction
 		InitEncryptionKey();
 	}
 }
 
-void CCard::initBACAuthentication(const char * mrz_info) {
-	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext, m_comm_protocol);
+void CCard::initBACAuthentication(const char *mrz_info) {
+	auto bac = std::make_unique<BacAuthentication>(m_hCard, m_poContext);
 	CByteArray mrz_data(mrz_info);
 	bac->authenticate(mrz_data);
 
@@ -433,7 +433,7 @@ void CCard::initBACAuthentication(const char * mrz_info) {
 }
 
 bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
-	auto casm = std::make_unique<ChipAuthSecureMessaging>(m_hCard, m_poContext, m_comm_protocol);
+	auto casm = std::make_unique<ChipAuthSecureMessaging>(m_hCard, m_poContext);
 	auto status = casm->authenticate(m_secureMessaging.get(), pkey, oid);
 	if (!status) {
 		MWLOG_CTX(LEV_ERROR, MOD_CAL,
@@ -447,7 +447,23 @@ bool CCard::initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid) {
 	return status;
 }
 
-const void *CCard::getProtocolStructure() { return m_comm_protocol; }
+void CCard::resetSecureMessaging() {
+	if (m_secureMessaging.get()) {
+		MWLOG_CTX(LEV_DEBUG, MOD_CAL, "Resetting secure messaging");
+
+		m_secureMessaging.reset();
+
+		// send dummy select application APDU to break secure messaging on the card
+		unsigned char apdu[] = {0x00, 0xA4, 0x02, 0x00, 0x02, 0xAB, 0xCD};
+		SendAPDU({apdu, sizeof(apdu)});
+	} else {
+		MWLOG_CTX(LEV_DEBUG, MOD_CAL, "No secure messaging enabled to reset");
+	}
+
+	ResetApplication();
+}
+
+PTEID_CardProtocol CCard::getProtocolStructure() { return m_poContext->getProtocol(m_hCard); }
 
 CByteArray CCard::SendAPDU(unsigned char ucINS, unsigned char ucP1, unsigned char ucP2, unsigned long ulOutLen) {
 

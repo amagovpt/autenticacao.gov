@@ -35,22 +35,23 @@
 #include "ByteArray.h"
 #include "MWException.h"
 #include "PCSC.h"
+#include "PinpadInterface.h"
 #include "Util.h"
-#include "GenericPinpad.h"
 #include "../dialogs/dialogs.h"
 #include "PaceAuthentication.h"
 
 #include <memory>
 
 namespace eIDMW {
+
 class APDU;
 class EIDMW_CAL_API CCard {
 public:
-	CCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad);
+	CCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad);
 	virtual ~CCard(void);
 
 	/** Find out which card is present and return the appropriate subclass */
-	static CCard *Connect(const std::string &csReader, CContext *poContext, GenericPinpad *poPinpad);
+	static CCard *Connect(const std::string &csReader, CContext *poContext, PinpadInterface *poPinpad);
 
 	virtual void Disconnect(tDisconnectMode disconnectMode = DISCONNECT_LEAVE_CARD);
 
@@ -119,18 +120,17 @@ public:
 	virtual void InitEncryptionKey() = 0;
 	virtual void ReadSerialNumber() = 0;
 
-	virtual void setPinpadHandler(GenericPinpad *pinpad) { m_poPinpad = pinpad; }
+	virtual void setPinpadHandler(PinpadInterface *pinpad) { m_poPinpad = pinpad; }
 
 	void createPace();
 
 	void initPaceAuthentication(const char *secret, size_t secretLen, PaceSecretType secretType);
 	bool initChipAuthentication(EVP_PKEY *pkey, ASN1_OBJECT *oid);
-	void initBACAuthentication(const char * mrz_info);
+	void initBACAuthentication(const char *mrz_info);
+	void resetSecureMessaging();
 
-	const void *getProtocolStructure();
+	PTEID_CardProtocol getProtocolStructure();
 	const void setNextAPDUClearText() { cleartext_next = true; }
-
-	void setProtocol(const void *protocol_struct) { m_comm_protocol = protocol_struct; }
 
 	PTEID_CardHandle m_hCard = PTEID_INVALID_HANDLE;
 
@@ -148,7 +148,7 @@ protected:
 	virtual unsigned long getSW12(const CByteArray &oRespAPDU, unsigned long ulExpected = 0);
 
 	CContext *m_poContext;
-	GenericPinpad *m_poPinpad;
+	PinpadInterface *m_poPinpad;
 	CCache m_oCache;
 	tCardType m_cardType;
 	unsigned long m_ulLockCount;
@@ -161,15 +161,14 @@ protected:
 
 	bool m_askPinOnSign;
 
-	const void *m_comm_protocol;
 	std::unique_ptr<SecureMessaging> m_secureMessaging{};
 
 private:
 	// No copies allowed
 	CCard(const CCard &oCard);
 	CCard &operator=(const CCard &oCard);
-	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal, const void *param_structure);
-	CByteArray handleSendAPDUSecurity(const APDU &apdu, long &lRetVal, const void *param_structure);
+	CByteArray handleSendAPDUSecurity(const CByteArray &oCmdAPDU, long &lRetVal);
+	CByteArray handleSendAPDUSecurity(const APDU &apdu, long &lRetVal);
 };
 
 class CAutoLock {

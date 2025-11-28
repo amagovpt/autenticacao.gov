@@ -30,7 +30,6 @@
 #include "PkiCard.h"
 #include "Log.h"
 #include "Thread.h"
-#include "pinpad2.h"
 #include "FciData.h"
 
 #include <algorithm>
@@ -38,7 +37,7 @@
 
 namespace eIDMW {
 
-CPkiCard::CPkiCard(PTEID_CardHandle hCard, CContext *poContext, GenericPinpad *poPinpad)
+CPkiCard::CPkiCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad)
 	: CCard(hCard, poContext, poPinpad) {
 	m_ucCLA = 0;
 	m_selectAppletMode = DONT_SELECT_APPLET;
@@ -77,11 +76,9 @@ void CPkiCard::SelectApplication(const CByteArray &oAID) {
 	} else if (sw12 == 0x6982) {
 		//eID and national data applications can't be selected without PACE session
 		throw CMWEXCEPTION(EIDMW_ERR_NOT_AUTHENTICATED);
-	}
-	else if (sw12 == 0x6A82) {
+	} else if (sw12 == 0x6A82) {
 		throw CMWEXCEPTION(EIDMW_ERR_FILE_NOT_FOUND);
-	}
-	else {
+	} else {
 		throw CMWEXCEPTION(EIDMW_ERR_CARD);
 	}
 }
@@ -488,7 +485,6 @@ CByteArray CPkiCard::GetRandom(unsigned long ulLen) {
 
 	return oRandom;
 }
-
 
 tFileInfo CPkiCard::SelectFile(const std::string &csPath, const unsigned char *oAID, bool bReturnFileInfo) {
 	auto ulPathLen = static_cast<unsigned long>(csPath.size());
