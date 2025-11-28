@@ -240,7 +240,11 @@ std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string
 		protocol = SCARD_PROTOCOL_T1;
 		break;
 	case PTEID_CardProtocol::ANY:
+#ifdef _WIN32
+		protocol = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
+#else
 		protocol = SCARD_PROTOCOL_ANY;
+#endif
 		break;
 	};
 

@@ -29,7 +29,7 @@
 
 #ifdef __USE_PCSC__
 #include "Pinpad.h"
-#include "pcsclite.h"
+#include <winscard.h>
 #endif
 
 typedef struct evp_pkey_st EVP_PKEY;
