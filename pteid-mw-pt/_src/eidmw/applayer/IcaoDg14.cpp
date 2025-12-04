@@ -56,7 +56,7 @@ SecurityInfos *decodeDg14Data(const CByteArray &data) {
 		int errLine;
 		errCode = ERR_get_error_line_data(&errFile, &errLine, NULL, NULL);
 		errString = ERR_error_string(errCode, NULL);
-		MWLOG(LEV_ERROR, MOD_APL, "%s: openssl error: %s generated in %s line %d", errString, errFile, errLine);
+		MWLOG(LEV_ERROR, MOD_APL, "%s: openssl error: %s generated in %s line %d", __FUNCTION__, errString, errFile, errLine);
 	} else {
 		MWLOG(LEV_DEBUG, MOD_APL, "%s: The decoder consumed %ld bytes", __FUNCTION__, asn1_data - data_copy.GetBytes());
 	}
