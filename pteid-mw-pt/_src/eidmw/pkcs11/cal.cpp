@@ -440,7 +440,7 @@ CK_RV cal_get_mechanism_list(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE_PTR pMechanismL
 #define WHERE "cal_is_mechanism_supported"
 CK_RV cal_is_mechanism_supported(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE mechanism) {
 	CK_RV ret = CKR_OK;
-	BOOL supported_algorithm = FALSE;
+	bool supported_algorithm = false;
 	CK_ULONG count = 0;
 
 	cal_get_mechanism_list(hSlot, NULL, &count);
@@ -456,7 +456,7 @@ CK_RV cal_is_mechanism_supported(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE mechanism) 
 
 	for (unsigned int i = 0; i < count; i++) {
 		if (pMechanismList[i] == mechanism) {
-			supported_algorithm = TRUE;
+			supported_algorithm = false;
 			break;
 		}
 	}
