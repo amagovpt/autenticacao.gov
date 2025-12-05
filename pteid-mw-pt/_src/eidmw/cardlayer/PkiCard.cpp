@@ -439,11 +439,6 @@ bad_pin:
 	// If PIN command OK and no SSO, then state that we have now
 	// verified this PIN, this info is needed in the Sign() method
 	if (bRet) {
-		/*bool bFound = false;
-		for (size_t i = 0; i < m_verifiedPINs.size() && !bFound; i++)
-			bFound = (m_verifiedPINs[i] == Pin.ulID);
-		if (!bFound)
-			m_verifiedPINs.push_back(Pin.ulID); */
 		m_verifiedPINs[Pin.ulID] = *pcsPin1; // Caching PIN
 	}
 

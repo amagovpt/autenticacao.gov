@@ -60,11 +60,11 @@ void CCard::setSSO(bool value) {
 	m_poContext->m_bSSO = value;
 	if (!value) {
 		// Zero-out currently stored PINs
-		for (size_t i = 0; i < m_verifiedPINs.size(); i++) {
-			assert(i <= UINT_MAX);
-			std::string &pin = m_verifiedPINs[(unsigned int)i];
+		for (auto &kv: m_verifiedPINs) {
+			std::string &pin = kv.second;
 			std::fill(pin.begin(), pin.end(), 0);
 		}
+		m_verifiedPINs.clear();
 	}
 }
 
