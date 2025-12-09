@@ -456,7 +456,7 @@ CK_RV cal_is_mechanism_supported(CK_SLOT_ID hSlot, CK_MECHANISM_TYPE mechanism) 
 
 	for (unsigned int i = 0; i < count; i++) {
 		if (pMechanismList[i] == mechanism) {
-			supported_algorithm = false;
+			supported_algorithm = true;
 			break;
 		}
 	}
