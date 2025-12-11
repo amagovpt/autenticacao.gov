@@ -44,6 +44,10 @@ QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
 unix:!macx: QMAKE_CXXFLAGS += -fPIC
 
+macx {
+  QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
+}
+
 isEmpty(PKG_NAME){	
 ## By default build for Portugal
   PKG_NAME=pteid
