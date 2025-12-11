@@ -65,8 +65,6 @@ Takes care of
 
 #define IOCTL_SMARTCARD_SET_CARD_TYPE SCARD_CTL_CODE(2060)
 
-// #include <winscard.h>
-
 namespace eIDMW {
 
 // Copied from PCSC
