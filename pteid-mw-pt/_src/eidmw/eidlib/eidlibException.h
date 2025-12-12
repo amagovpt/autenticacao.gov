@@ -29,6 +29,7 @@
 
 #include <string>
 #include "eidlibdefines.h"
+#include "eidErrors.h"
 
 namespace eIDMW {
 
@@ -53,7 +54,7 @@ private:
 };
 
 #if !defined SWIG
-std::string CodeToString(long code);
+std::string CodeToString(ErrorCode code);
 #endif
 
 
