@@ -30,6 +30,12 @@
 
 #pragma once
 
+#include <cstdint>
+
+namespace eIDMW {
+    using ErrorCode = uint32_t;
+}
+
 #define EIDMW_OK 0
 
 // Results of calling the function with incorrect parameters */

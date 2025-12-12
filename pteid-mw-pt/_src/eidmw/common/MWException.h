@@ -25,6 +25,7 @@
 
 #include "Export.h"
 #include "ByteArray.h"
+#include "eidErrors.h"
 
 #include <exception>
 #include <iostream>
@@ -39,7 +40,7 @@ public:
 	~CMWException() throw() {};
 	virtual const char *what() throw();
 
-	long GetError() const { return m_lError; };
+	ErrorCode GetError() const { return m_lError; };
 	std::string GetFile() const { return m_sFile; };
 	long GetLine() const { return m_lLine; };
 

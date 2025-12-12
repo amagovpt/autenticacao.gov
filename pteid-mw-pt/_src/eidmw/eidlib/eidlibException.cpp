@@ -56,7 +56,7 @@ const char *PTEID_Exception::GetMessage() {
 	return error_message.c_str();
 }
 
-std::string CodeToString(long code) {
+std::string CodeToString(ErrorCode code) {
 	std::string error_message;
 
 #ifdef EIDMW_JAVA_WRAPPER
