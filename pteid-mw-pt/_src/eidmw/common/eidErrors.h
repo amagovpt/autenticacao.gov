@@ -33,7 +33,14 @@
 #include <cstdint>
 
 namespace eIDMW {
+    // ErrorCode type definition:
+    // - Linux 32-bit: use uint32_t to fix sign/width conversion errors on 32-bit system
+    // - All other platforms: use long for backwards compatibility with existing API
+#if defined(__linux__) && !defined(__LP64__)
     using ErrorCode = uint32_t;
+#else
+    using ErrorCode = long;
+#endif
 }
 
 #define EIDMW_OK 0
