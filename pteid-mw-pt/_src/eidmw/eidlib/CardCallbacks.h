@@ -41,11 +41,10 @@
 #include <functional>
 
 struct PTEID_CardHandle {
-	uint32_t handle;
+	uint32_t handle{};
 
-	PTEID_CardHandle() = default;
-	PTEID_CardHandle(const PTEID_CardHandle &) = default;
-	PTEID_CardHandle &operator=(const PTEID_CardHandle &) = default;
+	constexpr PTEID_CardHandle() = default;
+	constexpr PTEID_CardHandle(uint32_t h) : handle(h) {}
 
 	bool operator==(const PTEID_CardHandle &other) const { return handle == other.handle; }
 	bool operator!=(const PTEID_CardHandle &other) const { return !(*this == other); }
@@ -58,7 +57,7 @@ template <> struct hash<PTEID_CardHandle> {
 };
 } // namespace std
 
-constexpr PTEID_CardHandle PTEID_INVALID_HANDLE = {static_cast<uint32_t>(-1)};
+constexpr PTEID_CardHandle PTEID_INVALID_HANDLE{UINT32_MAX};
 #else
 typedef uint32_t PTEID_CardHandle;
 const PTEID_CardHandle PTEID_INVALID_HANDLE = -1;
