@@ -41,7 +41,7 @@
 #include <functional>
 
 struct PTEID_CardHandle {
-	uint32_t handle{};
+	uint32_t handle{UINT32_MAX};
 
 	constexpr PTEID_CardHandle() = default;
 	constexpr PTEID_CardHandle(uint32_t h) : handle(h) {}
