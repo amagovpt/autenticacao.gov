@@ -232,7 +232,7 @@ Stream *Parser::makeStream(Object *dict, Guchar *fileKey,
       pos = pos - 1;
       lexer->lookCharLastValueCached = Lexer::LOOK_VALUE_NOT_CACHED;
   }
-  if (unlikely(pos > LONG_LONG_MAX - length)) {
+  if (unlikely(pos > UINT_MAX - length)) {
       return nullptr;
   }
   lexer->setPos(pos + length);
