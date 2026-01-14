@@ -154,6 +154,8 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, PinpadInter
 		hCard = ret.first;
 		protocol = ret.second;
 
+		poContext->setProtocol(hCard, protocol);
+
 		if (hCard == PTEID_INVALID_HANDLE) {
 			goto done;
 		}
@@ -236,8 +238,6 @@ CCard *CardConnect(const std::string &csReader, CContext *poContext, PinpadInter
 			if (poCard == NULL) {
 				poCard = new CUnknownCard(hCard, poContext, poPinpad, CByteArray());
 			}
-
-			poContext->setProtocol(hCard, protocol);
 
 			hCard = {0};
 		}
