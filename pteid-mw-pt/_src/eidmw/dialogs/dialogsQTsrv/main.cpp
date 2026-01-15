@@ -103,6 +103,32 @@ bool DlgGetKeyPad() {
 	return g_UseKeyPad;
 }
 
+void *parentWatchDog(void* arg) {
+	pid_t parentPid = (pid_t)(intptr_t)arg;
+	while (1) {
+		if (getppid() != parentPid) {
+			MWLOG(LEV_WARN, MOD_DLG, "Watchdog thread didn't detect client process: %d current parent: %d", parentPid, getppid());
+			if (dlgInfo)
+				delete dlgInfo;
+			dlgInfo = NULL;
+
+			if (dlg) {
+				dlgWndCmdMsg *ptr = dynamic_cast<dlgWndCmdMsg *>(dlg);
+				if (ptr) {
+					// dlgWndCmdMsg
+					ptr->close();
+				} else {
+					// pinpad
+					delete dlg;
+				}
+			}
+			exit(0);
+			dlg = NULL;
+		}
+		usleep(100000); // 100 ms
+	}
+}
+
 /*
  * Translate Pin names to english from their native labels
  * present on the in-card objects
@@ -167,7 +193,11 @@ int main(int argc, char *argv[]) {
 	int firstPipe = 0;
 	int secondPipe = 0;
 
-	Type_WndGeometry parentWndGeometry = {};
+	pthread_t watchdog;
+	pthread_create(&watchdog, NULL, parentWatchDog, (void*)(intptr_t)getppid());
+	pthread_detach(watchdog);
+
+	Type_WndGeometry parentWndGeometry;
 
 	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
 		MWLOG(LEV_ERROR, MOD_DLG, L"  %s setup of signal handler : %s ", argv[0], strerror(errno));
