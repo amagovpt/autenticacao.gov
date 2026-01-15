@@ -1403,6 +1403,10 @@ void PDFDoc::saveIncrementalUpdate (OutStream* outStr)
     outStr->put(c);
   }
   str->close();
+  //If file doesn't terminate with EOL add one to comply with PDF/A requirements for the
+  //first object in the incremental update section
+  outStr->put('\r');
+  outStr->put('\n');
 
   uxref = new XRef();
   uxref->add(0, 65535, 0, gFalse);
