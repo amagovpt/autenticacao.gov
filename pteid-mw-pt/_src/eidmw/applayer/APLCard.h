@@ -137,8 +137,6 @@ public:
 
 	EIDMW_APL_API void SignASiC(const char *path, APL_SignatureLevel level);
 
-	EIDMW_APL_API bool ChangeCapPin(const char *new_pin);
-
 	/* PDF Signature */
 
 	EIDMW_APL_API int SignPDF(PDFSignature *pdf_sig, const char *location, const char *reason,
