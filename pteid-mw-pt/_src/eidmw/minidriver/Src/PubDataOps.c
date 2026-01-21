@@ -230,6 +230,7 @@ DWORD WINAPI CardReadFile(__in PCARD_DATA pCardData, __in LPSTR pszDirectoryName
 					}
 				} else if (card_type == IAS_V5_CARD) {
 					// NIST P-256 keys
+					// TODO: improve this detection based on actual card content (EF.PrKDF)
 					keySize = 256;
 					LogTrace(LOGTYPE_DEBUG, WHERE, "Found ECDSA key of size: %d", keySize);
 				}

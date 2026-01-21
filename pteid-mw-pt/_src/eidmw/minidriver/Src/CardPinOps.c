@@ -173,20 +173,13 @@ DWORD WINAPI CardAuthenticateEx(__in PCARD_DATA pCardData, __in PIN_ID PinId, __
 								__in DWORD cbPinData, __deref_out_bcount_opt(*pcbSessionPin) PBYTE *ppbSessionPin,
 								__out_opt PDWORD pcbSessionPin, __out_opt PDWORD pcAttemptsRemaining) {
 
-	/*
-	__in                 PCARD_DATA  pCardData,
-	__in                 LPWSTR      pwszUserId,
-	__in_bcount(cbPin)   PBYTE       pbPin,
-	__in                 DWORD       cbPin,
-	__out_opt            PDWORD      pcAttemptsRemaining
-
-	*/
 	DWORD dwReturn = SCARD_S_SUCCESS;
 	PIN_INFO pbPinInfo;
 	DWORD dwDataLen;
 	BYTE specific_pin_id;
 
 	LogTrace(LOGTYPE_INFO, WHERE, "Enter API...");
+	LogTrace(LOGTYPE_INFO, WHERE, "Card handle: %llu PinID: %u dwFlags: %04x", pCardData->hScard, PinId, dwFlags);
 
 	/********************/
 	/* Check Parameters */
@@ -228,6 +221,9 @@ DWORD WINAPI CardAuthenticateEx(__in PCARD_DATA pCardData, __in PIN_ID PinId, __
 	if (dwReturn != SCARD_S_SUCCESS) {
 		LogTrace(LOGTYPE_ERROR, WHERE, "Logon: [0x%02X]", dwReturn);
 		CLEANUP(dwReturn);
+	}
+	else {
+		LogTrace(LOGTYPE_INFO, WHERE, "Logon success!");
 	}
 
 cleanup:

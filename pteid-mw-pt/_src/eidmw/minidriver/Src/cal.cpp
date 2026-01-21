@@ -5,6 +5,7 @@
 #include "Config.h"
 #include <memory>
 
+
 using namespace eIDMW;
 
 std::unique_ptr<CCardLayer> oCardLayer;
@@ -96,10 +97,11 @@ DWORD cal_init(PCARD_DATA pCardData, const char *reader_name, DWORD protocol_) {
 	return SCARD_S_SUCCESS;
 }
 
+
 DWORD cal_read_cert(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PBYTE *ppbCertif) {
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
-		reader.UseHandle(pCardData->hScard);
+		reader.UseHandle(pCardData->hScard, protocol);
 
 		const auto cert = reader.GetCert(dwCertSpec - 1);
 		if (reader.GetCardType() == CARD_PTEID_IAS5)
@@ -120,7 +122,7 @@ DWORD cal_read_cert(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbCertif, PB
 DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerialNumber, PDWORD pdwSerialNumber) {
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
-		reader.UseHandle(pCardData->hScard);
+		reader.UseHandle(pCardData->hScard, protocol);
 
 		DWORD len = 0;
 		const auto vendor = static_cast<VENDOR_SPECIFIC *>(pCardData->pvVendorSpecific);
@@ -148,7 +150,7 @@ DWORD cal_get_card_sn(PCARD_DATA pCardData, PBYTE pbSerialNumber, DWORD cbSerial
 DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey, PBYTE *ppbPubKey) {
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
-		reader.UseHandle(pCardData->hScard);
+		reader.UseHandle(pCardData->hScard, protocol);
 		if (reader.GetCardType() == CARD_PTEID_IAS5)
 			reader.SelectApplication({PTEID_2_APPLET_EID, sizeof(PTEID_2_APPLET_EID)});
 
@@ -185,7 +187,7 @@ DWORD cal_read_pub_key(PCARD_DATA pCardData, DWORD dwCertSpec, DWORD *pcbPubKey,
 DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAttemptsRemaining, BYTE pin_id, BYTE card_type) {
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
-		reader.UseHandle(pCardData->hScard);
+		reader.UseHandle(pCardData->hScard, protocol);
 
 		// Reset pace authentication if contactless
 		if (reader.isCardContactless()) {
@@ -228,7 +230,7 @@ DWORD cal_sign_data(PCARD_DATA pCardData, BYTE container_id, DWORD cbToBeSigned,
 					DWORD *pcbSignature, PBYTE *ppbSignature, BOOL pss_padding) {
 	auto &reader = oCardLayer->getReader(readerName);
 	try {
-		reader.UseHandle(pCardData->hScard);
+		reader.UseHandle(pCardData->hScard, protocol);
 
 		const auto pkey = reader.GetPrivKey(container_id);
 		auto signed_data = reader.Sign(pkey, pss_padding ? SIGN_ALGO_RSA_PSS : 0, {pbToBeSigned, cbToBeSigned});
