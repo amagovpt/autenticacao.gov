@@ -212,13 +212,14 @@ void CReader::readerDeviceInfo(PTEID_CardHandle hCard, ReaderDeviceInfo *deviceI
 }
 
 #ifdef __USE_PCSC__
-void CReader::UseHandle(SCARDHANDLE hCard) {
+void CReader::UseHandle(SCARDHANDLE hCard, DWORD protocol) {
 	PTEID_CardHandle handle = {0};
 
 	// find the corresponding PTEID_CardHandle
 	if (auto pcsc = dynamic_cast<CPCSC *>(m_poContext->m_oCardInterface.get())) {
 		handle = pcsc->RegisterHandle(hCard);
 	}
+	m_poContext->setProtocol(handle, protocol == SCARD_PROTOCOL_T1 ? PTEID_CardProtocol::T1 : PTEID_CardProtocol::T0);
 
 	if (m_poCard) {
 		// reset last application incase card was reset

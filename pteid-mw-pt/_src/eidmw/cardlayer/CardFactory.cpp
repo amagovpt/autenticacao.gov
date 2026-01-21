@@ -69,6 +69,7 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 	if (hCard) {
 		if (auto pcsc = dynamic_cast<CPCSC *>(poContext->m_oCardInterface.get())) {
 			handle = pcsc->RegisterHandle(hCard);
+			poContext->setProtocol(handle, paramStructure);
 		} else {
 			// We do not support this type of card connect with card callbacks
 			MWLOG_CTX(LEV_ERROR, MOD_CAL,
@@ -128,7 +129,6 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 			poCard = new CUnknownCard(handle, poContext, poPinpad, CByteArray());
 		}
 
-		poContext->setProtocol(handle, paramStructure);
 	} else {
 		throw CMWEXCEPTION(lErrCode);
 	}

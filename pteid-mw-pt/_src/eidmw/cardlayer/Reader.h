@@ -92,7 +92,7 @@ public:
 
 #ifdef __USE_PCSC__
 	bool Connect(SCARDHANDLE hCard, DWORD protocol);
-	void UseHandle(SCARDHANDLE hCard);
+	void UseHandle(SCARDHANDLE hCard, DWORD protocol);
 #endif
 
 	/** Disconnect from the card; it's safe to call this function multiple times */
