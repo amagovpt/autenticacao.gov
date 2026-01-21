@@ -77,10 +77,6 @@ CCard *CardConnect(SCARDHANDLE hCard, DWORD protocol, const std::string &csReade
 			throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 		}
 
-		if (auto pcsc = dynamic_cast<CPCSC *>(poContext->m_oCardInterface.get())) {
-			pcsc->RegisterHandle(hCard);
-		}
-
 		CByteArray atr = poContext->m_oCardInterface->StatusWithATR(handle).second;
 		CByteArray atrContactLessCard(PTEID_CONTACTLESS_ATR, sizeof(PTEID_CONTACTLESS_ATR));
 		isContactLess = atr.Equals(atrContactLessCard);
