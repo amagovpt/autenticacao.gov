@@ -27,8 +27,17 @@
 
 #define LOGTYPE_NONE 666
 
-extern void LogInit(void);
-extern void LogTrace(int info, const char *pWhere, const char *format, ...);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-extern void LogDumpHex(int iStreamLg, unsigned char *pa_cStream);
-extern void LogDumpBin(char *fileName, int iStreamLg, unsigned char *pa_cStream);
+	extern void LogInit(void);
+	extern void LogTrace(int info, const char *pWhere, const char *format, ...);
+
+	extern void LogDumpHex(int iStreamLg, unsigned char *pa_cStream);
+	extern void LogDumpBin(char *fileName, int iStreamLg, unsigned char *pa_cStream);
+
+#ifdef __cplusplus
+   }
+#endif
+
