@@ -208,6 +208,10 @@ DWORD cal_auth_pin(PCARD_DATA pCardData, PBYTE pbPin, DWORD cbPin, PDWORD pcAtte
 		unsigned long ulRemaining = 0;
 		const auto res = reader.PinCmd(PIN_OP_VERIFY, tpin, pin, "", ulRemaining);
 
+		if (pcAttemptsRemaining != NULL) {
+			*pcAttemptsRemaining = ulRemaining;
+		}
+
 		if (ulRemaining == 0)
 			return SCARD_W_CHV_BLOCKED;
 
