@@ -597,6 +597,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 			close(pipe1[1]);
 			close(pipe2[0]);
 			close(pipe2[1]);
+			wait(NULL);
 
 			if (lRet != DLG_OK) {
 				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
@@ -814,6 +815,7 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 			close(pipe1[1]);
 			close(pipe2[0]);
 			close(pipe2[1]);
+			wait(NULL);
 		}
 	} catch (...) {
 
