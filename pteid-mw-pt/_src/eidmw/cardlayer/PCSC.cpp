@@ -272,6 +272,14 @@ std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string
 void CPCSC::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
 	auto handle = this->GetPcscHandleFrom(hCard);
 
+	// Disconnect must happen before m_handles and m_reverse_handles are updated,
+	// as another thread might call ::Connect() getting the yet to be disconnected handle
+
+	DWORD dwDisposition = disconnectMode == DISCONNECT_RESET_CARD ? SCARD_RESET_CARD : SCARD_LEAVE_CARD;
+
+	LONG lRet = SCardDisconnect(handle, dwDisposition);
+	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardDisconnect(0x%0x): 0x%0x ; mode: %d", handle, lRet, dwDisposition);
+
 	// Remove both handles
 	m_reverse_handles.erase(handle);
 	m_handles.erase(hCard);
@@ -279,16 +287,12 @@ void CPCSC::Disconnect(PTEID_CardHandle hCard, tDisconnectMode disconnectMode) {
 	// save freed handle
 	m_freeHandles.push(hCard);
 
-	DWORD dwDisposition = disconnectMode == DISCONNECT_RESET_CARD ? SCARD_RESET_CARD : SCARD_LEAVE_CARD;
-
-	LONG lRet = SCardDisconnect(handle, dwDisposition);
-	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardDisconnect(0x%0x): 0x%0x ; mode: %d", handle, lRet, dwDisposition);
 	if (SCARD_S_SUCCESS != lRet)
 		throw CMWEXCEPTION(PcscToErr(lRet));
 }
 
 std::pair<bool, CByteArray> CPCSC::StatusWithATR(PTEID_CardHandle hCard) {
-	auto handle = m_handles[hCard];
+	auto handle = this->GetPcscHandleFrom(hCard);
 	DWORD dwReaderLen = 0;
 	DWORD dwState, dwProtocol;
 	unsigned char tucATR[64];
@@ -312,7 +316,7 @@ std::pair<bool, CByteArray> CPCSC::StatusWithATR(PTEID_CardHandle hCard) {
 
 CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, long *plRetVal,
 						   PTEID_CardProtocol protocol) {
-	auto handle = m_handles[hCard];
+	auto handle = this->GetPcscHandleFrom(hCard);
 	CByteArray oCmdAPDU(inputAPDU);
 
 	unsigned char tucRecv[APDU_BUF_LEN];
@@ -393,7 +397,7 @@ try_again:
 }
 
 void CPCSC::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) {
-	auto handle = m_handles[hCard];
+	auto handle = this->GetPcscHandleFrom(hCard);
 	// try to recover when the card is not responding (properly) anymore
 
 	DWORD ap = 0;
@@ -427,7 +431,7 @@ void CPCSC::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) {
 
 CByteArray CPCSC::Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 						  unsigned long ulMaxResponseSize) {
-	auto handle = m_handles[hCard];
+	auto handle = this->GetPcscHandleFrom(hCard);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardControl(ctrl=0x%0x, %ls)", ulControl,
 		  oCmd.ToWString(true, true, 0, 5).c_str());
 
@@ -473,7 +477,7 @@ CByteArray CPCSC::Control(PTEID_CardHandle hCard, unsigned long ulControl, const
 }
 
 void CPCSC::BeginTransaction(PTEID_CardHandle hCard) {
-	auto handle = m_handles[hCard];
+	auto handle = this->GetPcscHandleFrom(hCard);
 	LONG lRet = SCardBeginTransaction(handle);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardBeginTransaction(0x%0x): 0x%0x", hCard, lRet);
 	if (SCARD_S_SUCCESS != lRet)
@@ -481,7 +485,7 @@ void CPCSC::BeginTransaction(PTEID_CardHandle hCard) {
 }
 
 void CPCSC::EndTransaction(PTEID_CardHandle hCard) {
-	auto handle = m_handles[hCard];
+	auto handle = this->GetPcscHandleFrom(hCard);
 	LONG lRet = SCardEndTransaction(handle, SCARD_LEAVE_CARD);
 	MWLOG(LEV_DEBUG, MOD_CAL, L"    SCardEndTransaction(0x%0x): 0x%0x", handle, lRet);
 
