@@ -77,9 +77,9 @@ ASN1_SEQUENCE(DG11) = {
 } ASN1_SEQUENCE_END(DG11);
 
 IMPLEMENT_ASN1_FUNCTIONS(DG11);
-DG11 *decodeDg11(const CByteArray &biometricData) {
-	CByteArray process(biometricData);
-	if (biometricData.Size() == 0) {
+DG11 *decodeDg11(const CByteArray &dg11_data) {
+	CByteArray process(dg11_data);
+	if (dg11_data.Size() == 0) {
 		MWLOG(LEV_ERROR, MOD_APL, "%s: Empty data array on Data group 11!", __FUNCTION__);
 		return NULL;
 	}
@@ -124,11 +124,14 @@ void trimSpaces(std::string &str) {
 			  str.end());
 }
 
-void getNameIdentifiers(ASN1_STRING *asn1String, std::string &fullname) {
+void getFullnameIdentifiers(ASN1_STRING *dg11_string, std::string &fullname) {
 	CByteArray arrayHelper;
 	std::string primaryIdentifier;
 	std::string secondaryIdentifier;
-	arrayHelper.Append(asn1String->data, asn1String->length);
+	if (dg11_string == NULL) {
+		return;
+	}
+	arrayHelper.Append(dg11_string->data, dg11_string->length);
 	std::string line = arrayHelper.hexToString();
 	size_t dividerIdentifiers = line.find("<<");
 	if (dividerIdentifiers != std::string::npos) {
@@ -158,7 +161,7 @@ IcaoDg11::IcaoDg11(const CByteArray &information) {
 		m_listOfTags.Append(processedDg11->list_of_tags_present->data, processedDg11->list_of_tags_present->length);
 	}
 	m_numberOfOtherNames = -1;
-	getNameIdentifiers(processedDg11->full_name, m_fullName);
+	getFullnameIdentifiers(processedDg11->full_name, m_fullName);
 	copyToString(m_personalNumber, processedDg11->personal_number, true);
 	copyToString(m_fullDateOfBirth, processedDg11->full_date_of_birth);
 	copyToString(m_placeOfBirth, processedDg11->place_of_birth, true);
