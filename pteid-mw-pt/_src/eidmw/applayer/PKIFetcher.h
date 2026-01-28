@@ -11,7 +11,7 @@
 namespace eIDMW {
 class PKIFetcher {
 public:
-	CByteArray fetch_PKI_file(const char *url);
+	CByteArray fetch_PKI_file(const char *url, long *resp_http_code);
 
 private:
 	static size_t curl_write_data(char *, size_t, size_t, void *);

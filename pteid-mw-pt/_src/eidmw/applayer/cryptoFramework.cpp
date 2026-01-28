@@ -1225,9 +1225,10 @@ bool APL_CryptoFwk::GetCrlData(const CByteArray &cert, CByteArray &outCrl) {
 	}
 
 	PKIFetcher crlFetcher;
-	outCrl = crlFetcher.fetch_PKI_file(url.c_str());
+	long http_code = 0;
+	outCrl = crlFetcher.fetch_PKI_file(url.c_str(), &http_code);
 
-	if (outCrl.Size() == 0) {
+	if (outCrl.Size() == 0 || http_code != 200) {
 		MWLOG(LEV_ERROR, MOD_APL,
 			  "Network error fetching CRL from %s or empty response. "
 			  "Revocation info is incomplete!",

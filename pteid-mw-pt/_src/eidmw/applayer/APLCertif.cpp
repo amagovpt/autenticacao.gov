@@ -723,11 +723,12 @@ APL_Certif *APL_Certifs::downloadCAIssuerCertificate(const APL_Certif *cert) {
 		return NULL;
 
 	PKIFetcher pkiFetcher;
+	long http_code = 0;
 	MWLOG(LEV_DEBUG, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: Trying to download issuer certificate url: %s",
 		  caIssuerUrl.c_str());
 	CByteArray issuer_cert_data;
-	issuer_cert_data = pkiFetcher.fetch_PKI_file(caIssuerUrl.c_str());
-	if (issuer_cert_data.Size() == 0) {
+	issuer_cert_data = pkiFetcher.fetch_PKI_file(caIssuerUrl.c_str(), &http_code);
+	if (issuer_cert_data.Size() == 0 || http_code != 200) {
 		issuer_cert_data = EmptyByteArray;
 		MWLOG(LEV_ERROR, MOD_APL, "APL_Cert::downloadCAIssuerCertificate: Unable to download issuer certificate");
 		return NULL;
@@ -1308,14 +1309,14 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload) {
 // Get data from the file and make the verification
 APL_CrlStatus APL_Crl::getData(CByteArray &data, std::string &crl_uri) {
 	PKIFetcher crl_fetcher;
+	long http_code = 0;
 	APL_CrlStatus eRetStatus = APL_CRL_STATUS_ERROR;
 	// Can be changed to update with delta CRL
-	data = crl_fetcher.fetch_PKI_file(crl_uri.c_str());
+	data = crl_fetcher.fetch_PKI_file(crl_uri.c_str(), &http_code);
 
-	// If ok, we get the info, unless we return an empty bytearray
-	if (data.Size() == 0) {
+	if (data.Size() == 0 || http_code != 200) {
 		data = EmptyByteArray;
-		MWLOG(LEV_DEBUG, MOD_APL, L"APL_Crl::getData: Returning an empty array");
+		MWLOG(LEV_DEBUG, MOD_APL, "APL_Crl::getData: Returning an empty array");
 		eRetStatus = APL_CRL_STATUS_CONNECT;
 	} else
 		eRetStatus = APL_CRL_STATUS_VALID;

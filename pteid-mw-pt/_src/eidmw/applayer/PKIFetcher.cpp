@@ -32,7 +32,7 @@ size_t PKIFetcher::curl_write_data(char *ptr, size_t size, size_t nmemb, void *s
 }
 
 #ifdef WIN32
-CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
+CByteArray PKIFetcher::fetch_PKI_file(const char *url, long * resp_http_code) {
 	CByteArray certData;
 	DWORD dwTimeout = 20 * 1000;
 	CRYPT_BLOB_ARRAY *file_ctx = NULL;
@@ -48,6 +48,10 @@ CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 				  "PKIFetcher: unexpected number of objects on the array: %d objects! This should never happen...",
 				  file_ctx->cBlob);
 		} else {
+			//Hack: CryptRetrieveObjectByUrl doesn't return http status code, it's a higher-level API than curl
+			if (resp_http_code) {
+				*resp_http_code = 200;
+			}
 			MWLOG(LEV_DEBUG, MOD_APL, "Successfully fetched %d bytes of file", file_ctx->rgBlob->cbData);
 			certData.Append(file_ctx->rgBlob->pbData, file_ctx->rgBlob->cbData);
 		}
@@ -57,7 +61,7 @@ CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 }
 
 #else
-CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
+CByteArray PKIFetcher::fetch_PKI_file(const char *url, long * resp_http_code) {
 	CURL *curl;
 	CURLcode res;
 	char error_buf[CURL_ERROR_SIZE] = { 0 };
@@ -142,6 +146,9 @@ CByteArray PKIFetcher::fetch_PKI_file(const char *url) {
 			MWLOG(LEV_DEBUG, MOD_APL, "PKI file download succeeded.");
 		} else {
 			MWLOG(LEV_ERROR, MOD_APL, "PKI file download failed! HTTP status code: %ld", http_code);
+		}
+		if (resp_http_code) {
+			*resp_http_code = http_code;
 		}
 	}
 
