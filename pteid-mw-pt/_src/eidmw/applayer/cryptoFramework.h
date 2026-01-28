@@ -173,7 +173,7 @@ public:
 	/**
 	  * Check if the crl is valid
 	  * 
-	  * - First check if the isssuer is ok
+	  * - First check if the issuer is ok
 	  * - Then verify the validity date
 	  */
 	bool isCrlValid(const CByteArray &crl, const CByteArray &issuer);

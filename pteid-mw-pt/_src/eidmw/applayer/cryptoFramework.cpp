@@ -162,7 +162,7 @@ public:
 				iOlder = i;
 		}
 
-		MWLOG(LEV_DEBUG, MOD_SSL, L"Add element in CrlMemoryCach");
+		MWLOG(LEV_DEBUG, MOD_SSL, L"Add element in CrlMemoryCache");
 		// find the index to replace
 		for (; i < CRL_MEMORY_CACHE_SIZE; i++) {
 			if (m_CrlMemoryArray[i].getOlderTS(timeStamp))
@@ -365,14 +365,18 @@ bool APL_CryptoFwk::isCrlValid(const CByteArray &crl, const CByteArray &issuer) 
 	X509 *pX509_Issuer = NULL;
 
 	// Convert crl into pX509_Crl
-	if (NULL == (pX509_Crl = getX509CRL(crl)))
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	if (NULL == (pX509_Crl = getX509CRL(crl))) {
+		MWLOG(LEV_WARN, MOD_APL, "%s: Failed to decode CRL from DER data!", __FUNCTION__);
+		return false;
+	}
 
 	// Convert issuer into pX509_Issuer
 	pucIssuer = issuer.GetBytes();
 
-	if (!d2i_X509_Wrapper(&pX509_Issuer, pucIssuer, issuer.Size()))
-		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
+	if (!d2i_X509_Wrapper(&pX509_Issuer, pucIssuer, issuer.Size())) {
+		MWLOG(LEV_WARN, MOD_APL, "%s: Failed to decode issuer certificate from DER data!", __FUNCTION__);
+		return false;
+	}
 
 	bOk = isCrlIssuer(pX509_Crl, pX509_Issuer);
 
