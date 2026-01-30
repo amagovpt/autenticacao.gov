@@ -101,3 +101,6 @@ crl_unit_test/output.txt
 # QT Creator
 ###################
 /.qtc_clangd/
+
+# Usual build directory for CMake
+build
