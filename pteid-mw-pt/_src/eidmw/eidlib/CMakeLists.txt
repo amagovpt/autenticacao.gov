@@ -22,8 +22,18 @@ add_library(${PROJECT_NAME} SHARED
     InternalUtil.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${PTEID_COMMON} ${PTEID_APPLAYER} ${PTEID_CMDSERVICES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PTEID_COMMON} ${PTEID_APPLAYER})
+
+if (PTEID_MULTIPASS_SDK)
+    add_compile_definitions(${PROJECT_NAME} PTEID_MULTIPASS_SDK)
+    target_compile_options(${PROJECT_NAME} PRIVATE -fvisibility=hidden -ffunction-sections -fdata-sections)
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${PTEID_COMMON} ${PTEID_CMDSERVICES})
+endif()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PTEID_COMMON} ${PTEID_APPLAYER})
+
+target_link_options(${PROJECT_NAME} PRIVATE -Wl,--gc-sections)
 
 install(FILES CardCallbacks.h eidlibdefines.h eidlibException.h eidlib.h
-        DESTINATION include
-)
+        DESTINATION include)

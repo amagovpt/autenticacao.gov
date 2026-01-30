@@ -38,15 +38,15 @@ class CMWException;
 /******************************************************************************/ /**
   * Base class for the PTEID SDK Exceptions
   *********************************************************************************/
-class PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_Exception(long lError); /**< Constructor - Need error code that comes from eidErrors.h */
-	PTEIDSDK_API virtual ~PTEID_Exception();   /**< Destructor */
+	 PTEID_Exception(long lError); /**< Constructor - Need error code that comes from eidErrors.h */
+	 virtual ~PTEID_Exception();   /**< Destructor */
 
-	PTEIDSDK_API long GetError() const;	   /**< Return the error code */
-	PTEIDSDK_API const char *GetMessage(); /**< Returns the error message based on the error code */
+	 long GetError() const;	   /**< Return the error code */
+	 const char *GetMessage(); /**< Returns the error message based on the error code */
 
-	NOEXPORT_PTEIDSDK static PTEID_Exception THROWException(CMWException &e);
+	 static PTEID_Exception THROWException(CMWException &e);
 
 private:
 	long m_lError; /**< Error code of the exception (see eidErrors.h)*/
@@ -63,10 +63,10 @@ std::string CodeToString(ErrorCode code);
   *
   *	Throw when the application close without calling the PTEID_RealeaseSDK
   *********************************************************************************/
-class PTEID_ExReleaseNeeded : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExReleaseNeeded : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExReleaseNeeded();		   /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExReleaseNeeded(); /**< Destructor */
+	 PTEID_ExReleaseNeeded();		   /**< Constructor */
+	 virtual ~PTEID_ExReleaseNeeded(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -74,8 +74,8 @@ public:
   *********************************************************************************/
 class PTEID_ExUnknown : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExUnknown();			 /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExUnknown(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExUnknown();			 /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExUnknown(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -86,8 +86,8 @@ public:
   *********************************************************************************/
 class PTEID_ExFileTypeUnknown : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExFileTypeUnknown();			 /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExFileTypeUnknown(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExFileTypeUnknown();			 /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExFileTypeUnknown(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -102,8 +102,8 @@ public:
   *********************************************************************************/
 class PTEID_ExParamRange : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExParamRange();			/**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExParamRange(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExParamRange();			/**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExParamRange(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -114,8 +114,8 @@ public:
   *********************************************************************************/
 class PTEID_ExCmdNotAllowed : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExCmdNotAllowed();		   /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCmdNotAllowed(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExCmdNotAllowed();		   /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCmdNotAllowed(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -125,8 +125,8 @@ public:
   *********************************************************************************/
 class PTEID_ExCmdNotSupported : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExCmdNotSupported();			 /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCmdNotSupported(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExCmdNotSupported();			 /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCmdNotSupported(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -139,8 +139,8 @@ public:
   *********************************************************************************/
 class PTEID_ExNoCardPresent : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExNoCardPresent();		   /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExNoCardPresent(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExNoCardPresent();		   /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExNoCardPresent(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -151,8 +151,8 @@ public:
   *********************************************************************************/
 class PTEID_ExCardTypeUnknown : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExCardTypeUnknown();			 /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCardTypeUnknown(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExCardTypeUnknown();			 /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCardTypeUnknown(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -163,8 +163,8 @@ public:
   *********************************************************************************/
 class PTEID_ExCertNoRoot : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExCertNoRoot();			/**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCertNoRoot(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExCertNoRoot();			/**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCertNoRoot(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -175,8 +175,8 @@ public:
   *********************************************************************************/
 class PTEID_ExBadUsage : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExBadUsage();		  /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExBadUsage(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExBadUsage();		  /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExBadUsage(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -188,8 +188,8 @@ public:
   *********************************************************************************/
 class PTEID_ExBadTransaction : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExBadTransaction();			/**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExBadTransaction(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExBadTransaction();			/**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExBadTransaction(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -198,10 +198,10 @@ public:
   *	Throw when the reader set is empty
   * Used in : - PTEID_Object::checkContextStillOk()
   *********************************************************************************/
-class PTEID_ExNoReader : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExNoReader : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExNoReader();		  /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExNoReader(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExNoReader();		  /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExNoReader(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -219,8 +219,8 @@ public:
  *********************************************************************************/
 class PTEID_ExSOD : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExSOD(long lError); /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExSOD();   /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExSOD(long lError); /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExSOD();   /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -239,8 +239,8 @@ public:
   *********************************************************************************/
 class PTEID_ExBatchSignatureFailed : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExBatchSignatureFailed(long lError, unsigned int failedIndex); /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExBatchSignatureFailed();							  /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExBatchSignatureFailed(long lError, unsigned int failedIndex); /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExBatchSignatureFailed();							  /**< Destructor */
 
 	unsigned int GetFailedSignatureIndex() const {
 		return m_failedSignatureIndex;
@@ -253,38 +253,38 @@ private:
 //DEPRECATED EXCEPTION Classes: not currently used
 class PTEID_ExCardBadType : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExCardBadType();			 /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCardBadType(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExCardBadType();			 /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCardBadType(); /**< Destructor */
 };
 
 class PTEID_ExReaderSetChanged : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExReaderSetChanged();		  /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExReaderSetChanged(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExReaderSetChanged();		  /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExReaderSetChanged(); /**< Destructor */
 };
 
 class PTEID_ExCardChanged : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExCardChanged();			 /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCardChanged(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExCardChanged();			 /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCardChanged(); /**< Destructor */
 };
 
 class PTEID_ExCertNoIssuer : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExCertNoIssuer();		  /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExCertNoIssuer(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExCertNoIssuer();		  /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCertNoIssuer(); /**< Destructor */
 };
 
 class PTEID_ExDocTypeUnknown : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_ExDocTypeUnknown();			/**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_ExDocTypeUnknown(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ExDocTypeUnknown();			/**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExDocTypeUnknown(); /**< Destructor */
 };
 
 class PTEID_PACE_ERROR : public PTEID_Exception {
 public:
-	PTEIDSDK_API PTEID_PACE_ERROR(long lError); /**< Constructor */
-	PTEIDSDK_API virtual ~PTEID_PACE_ERROR();	/**< Destructor */
+	PTEIDSDK_MULTIPASS_API PTEID_PACE_ERROR(long lError); /**< Constructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_PACE_ERROR();	/**< Destructor */
 };
 
 } // namespace eIDMW

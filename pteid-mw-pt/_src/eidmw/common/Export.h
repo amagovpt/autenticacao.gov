@@ -22,9 +22,6 @@
 **************************************************************************** */
 #pragma once
 
-#ifndef EXPORT_H
-#define EXPORT_H
-
 #ifdef WIN32
 
 #ifdef EIDMW_CMN_EXPORT
@@ -41,18 +38,23 @@
 
 #ifdef EIDMW_APPLAYER_EXPORTS
 #define EIDMW_APL_API __declspec(dllexport)
+#define EIDMW_MULTIPASS_API __declspec(dllexport)
 #else
 #define EIDMW_APL_API __declspec(dllimport)
+#define EIDMW_MULTIPASS_API __declspec(dllimport)
 #endif
 
 #else
 
-#define EIDMW_CMN_API
+	#define EIDMW_CMN_API
+	#define EIDMW_CAL_API
 
-#define EIDMW_CAL_API
+	#ifndef PTEID_MULTIPASS_SDK
+		#define EIDMW_APL_API __attribute__((visibility("default")))
+	#else
+		#define EIDMW_APL_API
+	#endif
 
-#define EIDMW_APL_API __attribute__((visibility("default")))
-
-#endif
+	#define EIDMW_MULTIPASS_API __attribute__((visibility("default")))
 
 #endif

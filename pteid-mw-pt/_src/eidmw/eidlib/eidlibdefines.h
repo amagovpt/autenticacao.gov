@@ -29,16 +29,24 @@
 #define __EIDLIB_DEFINES_H__
 
 #ifndef SWIG
+
 #ifdef WIN32
 #ifdef EIDMW_EIDLIB_WRAPPER
 #define PTEIDSDK_API
 #elif EIDMW_EIDLIB_EXPORTS
-#define PTEIDSDK_API __declspec(dllexport)
+#define PTEIDSDK_API           __declspec(dllexport)
+#define PTEIDSDK_MULTIPASS_API __declspec(dllexport)
 #else
-#define PTEIDSDK_API __declspec(dllimport)
+#define PTEIDSDK_API           __declspec(dllimport)
+#define PTEIDSDK_MULTIPASS_API __declspec(dllimport)
 #endif
 #else
-#define PTEIDSDK_API
+	#ifdef PTEID_MULTIPASS_SDK 
+		#define PTEIDSDK_API
+	#else
+		#define PTEIDSDK_API __attribute__((visibility("default")))
+	#endif
+	#define PTEIDSDK_MULTIPASS_API __attribute__((visibility("default")))
 #endif
 
 #define NOEXPORT_PTEIDSDK

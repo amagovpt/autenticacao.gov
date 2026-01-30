@@ -31,7 +31,7 @@ endif()
 
 add_library(${PROJECT_NAME} SHARED ${sources} ${PROJECT_NAME}.rc)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENSSL_CRYPTO_LIBRARY} ${PTEID_COMMON} eac)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENSSL_CRYPTO_LIBRARY} ${PTEID_COMMON} ${PTEID_DIALOGSQT} eac)
 if(USE_PCSC)
     target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/PCSC)
     target_link_libraries(${PROJECT_NAME} PRIVATE pcsclite)

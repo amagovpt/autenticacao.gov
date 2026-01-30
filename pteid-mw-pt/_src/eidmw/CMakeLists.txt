@@ -34,20 +34,27 @@ set(PTEID_POPPLER "${PTEID_PREFIX}-poppler")
 set(PTEID_CMDSERVICES "cmdServices")
 set(PTEID_DIALOGSQT "${PTEID_PREFIX}dialogsQT")
 
+option(PTEID_MULTIPASS_SDK "Enable Multipass mini SDK" OFF)
+
 add_subdirectory(common)
 add_subdirectory(cardlayer)
 add_subdirectory(applayer)
 add_subdirectory(eidlib)
-add_subdirectory(pteid-poppler)
-add_subdirectory(CMD/services)
 add_subdirectory(dialogs/dialogsQT)
+
 
 install(TARGETS ${PTEID_COMMON} DESTINATION lib FILE_SET HEADERS DESTINATION include)
 install(TARGETS ${PTEID_CARDLAYER} DESTINATION lib)
 install(TARGETS ${PTEID_APPLAYER} DESTINATION lib)
 install(TARGETS ${PTEID_LIB} DESTINATION lib FILE_SET HEADERS DESTINATION include)
-install(TARGETS ${PTEID_POPPLER} DESTINATION lib)
-install(TARGETS ${PTEID_CMDSERVICES} DESTINATION lib)
 install(TARGETS ${PTEID_DIALOGSQT} DESTINATION lib)
+
+if (NOT PTEID_MULTIPASS_SDK)
+	add_subdirectory(pteid-poppler)
+	add_subdirectory(CMD/services)
+	install(TARGETS ${PTEID_POPPLER} DESTINATION lib)
+	install(TARGETS ${PTEID_CMDSERVICES} DESTINATION lib)
+endif()
+
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/misc/certs/ DESTINATION /usr/local/share/certs)

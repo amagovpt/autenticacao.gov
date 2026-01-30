@@ -76,7 +76,7 @@ public:
 	 *
 	 * Destroy all the pointer create (files, docs,...)
 	 */
-	EIDMW_APL_API virtual ~APL_EIDCard();
+	PTEIDSDK_MULTIPASS_API virtual ~APL_EIDCard();
 
 	/**
 	 * Return the type of the card (APL_CARDTYPE_EID_IAS*)
@@ -129,7 +129,7 @@ public:
 	 */
 	EIDMW_APL_API APL_DocVersionInfo &getDocInfo();
 
-	EIDMW_APL_API CByteArray readTokenData();
+	PTEIDSDK_MULTIPASS_API CByteArray readTokenData();
 
 	/**
 	 * Return rawdata from the card
@@ -155,8 +155,7 @@ public:
 	const char *getTokenSerialNumber();		   /**< Return the token serial number (pkcs15 parse) (NOT EXPORTED) */
 	const char *getTokenLabel();			   /**< Return the token label (pkcs15 parse) (NOT EXPORTED) */
 	const char *getAppletVersion();
-	APLPublicKey *
-	getRootCAPubKey(); /**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
+	APLPublicKey * getRootCAPubKey(); /**< Get the CVC CA public key that this card uses to verify the CVC key (NOT EXPORTED)*/
 	EIDMW_APL_API bool isActive();
 	EIDMW_APL_API bool Activate(const char *pinCode, CByteArray &BCDDate,
 								bool blockActivationPIN); /**< Activate the pteid card */

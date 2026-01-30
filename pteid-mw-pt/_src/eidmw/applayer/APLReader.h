@@ -88,42 +88,42 @@ public:
 	/**
 	  * Return the singleton object (create it at first use)
 	  */
-	EIDMW_APL_API static CAppLayer &instance(const PTEID_CardInterfaceCallbacks *callbacks = nullptr);
+	EIDMW_MULTIPASS_API static CAppLayer &instance(const PTEID_CardInterfaceCallbacks *callbacks = nullptr);
 
 	/**
 	  * Init the applayer
 	  */
-	EIDMW_APL_API static void init(const PTEID_CardInterfaceCallbacks *callbacks, bool bAskForTestCard = false);
+	EIDMW_MULTIPASS_API static void init(const PTEID_CardInterfaceCallbacks *callbacks, bool bAskForTestCard = false);
 
 	/**
 	  * Release the whole applayer
 	  */
-	EIDMW_APL_API static void release();
+	EIDMW_MULTIPASS_API static void release();
 
 	/**
 	  * Release the readers (Needed if isReadersChanged)
 	  */
-	EIDMW_APL_API void releaseReaders();
+	EIDMW_MULTIPASS_API void releaseReaders();
 
 	/**
 	  * Return true if readers has been added or removed
 	  */
-	EIDMW_APL_API bool isReadersChanged() const;
+	EIDMW_MULTIPASS_API bool isReadersChanged() const;
 
 	/**
 	  * Return the internal context id
 	  */
-	EIDMW_APL_API unsigned long getContextId(bool bForceRefresh = false);
+	EIDMW_MULTIPASS_API unsigned long getContextId(bool bForceRefresh = false);
 
 	/**
 	  * Return reader list from the cardlayer
 	  */
-	EIDMW_APL_API const char *const *readerList(bool bForceRefresh = false);
+	EIDMW_MULTIPASS_API const char *const *readerList(bool bForceRefresh = false);
 
 	/**
 	  * Return the number of reader
 	  */
-	EIDMW_APL_API unsigned long readerCount(bool bForceRefresh = false);
+	EIDMW_MULTIPASS_API unsigned long readerCount(bool bForceRefresh = false);
 
 	/**
 	  * Return a reader object by its name
@@ -132,7 +132,7 @@ public:
 	  *			Yes => create the object and add to the vector
 	  *			No => throw an exception EIDMW_ERR_NO_READER
 	  */
-	EIDMW_APL_API APL_ReaderContext &getReader(const char *readerName);
+	EIDMW_MULTIPASS_API APL_ReaderContext &getReader(const char *readerName);
 
 	/**
 	  * Return a reader object by its index
@@ -140,31 +140,31 @@ public:
 	  *		The call the getReader by name
 	  *	Throw an exception EIDMW_ERR_PARAM_RANGE if index out of range
 	  */
-	EIDMW_APL_API APL_ReaderContext &getReader(unsigned long ulIndex);
+	EIDMW_MULTIPASS_API APL_ReaderContext &getReader(unsigned long ulIndex);
 
 	/**
 	  * Return the first readercontext with a card
 	  *		If no card is present, return the firs reader.
 	  *		If no reader exist, throw an exception EIDMW_ERR_NO_READER
 	  */
-	EIDMW_APL_API APL_ReaderContext &getReader();
+	EIDMW_MULTIPASS_API APL_ReaderContext &getReader();
 
 	/**
 	  * Return the reader containing the card with this SN
 	  *		If no card with this SN is found, throw an exception EIDMW_ERR_PARAM_RANGE
 	  */
-	EIDMW_APL_API APL_ReaderContext &getReaderByCardSN(const char *cardSerialNumber);
+	EIDMW_MULTIPASS_API APL_ReaderContext &getReaderByCardSN(const char *cardSerialNumber);
 
 	/**
 	  * Return the reader name by its index
 	  *	Throw an exception EIDMW_ERR_PARAM_RANGE if index out of range
 	  */
-	EIDMW_APL_API const char *getReaderName(unsigned long ulIndex);
+	EIDMW_MULTIPASS_API const char *getReaderName(unsigned long ulIndex);
 
 	/** 
 	  * Flush the CAL cache 
 	  */
-	EIDMW_APL_API bool flushCache() const;
+	EIDMW_MULTIPASS_API bool flushCache() const;
 
 	/**
 	  * Return the cardlayer object
@@ -283,17 +283,17 @@ public:
 	  * Construct using Raw data for Eid
 	  *		No reader are connected (m_reader=NULL)
 	  */
-	EIDMW_APL_API APL_ReaderContext(const APL_RawData_Eid &data);
+	EIDMW_MULTIPASS_API APL_ReaderContext(const APL_RawData_Eid &data);
 
 	/**
 	  * Destructor
 	  */
-	EIDMW_APL_API ~APL_ReaderContext();
+	EIDMW_MULTIPASS_API ~APL_ReaderContext();
 
 	/**
 	  * Return the name of the reader
 	  */
-	EIDMW_APL_API const char *getName();
+	EIDMW_MULTIPASS_API const char *getName();
 
 	/**
 	  * Instanciated the m_card object
@@ -311,7 +311,7 @@ public:
 	  * return true if the external status is 
 	  *		CARD_STILL_PRESENT, CARD_INSERTED, CARD_OTHER
 	  */
-	EIDMW_APL_API bool isCardPresent();
+	EIDMW_MULTIPASS_API bool isCardPresent();
 
 	/**
 	  * Check if the card has been changed until the last id we get
@@ -326,20 +326,20 @@ public:
 	/**
 	  * Return the internal card id of the current connected card (0 if no card is present)
 	  */
-	EIDMW_APL_API unsigned long getCardId();
+	EIDMW_MULTIPASS_API unsigned long getCardId();
 
 	/**
 	  * Return the type of the card
 	  *		Connect to the card if the status has changed 
 	  *		If no card is present, return PTEID_CARDTYPE_UNKNOWN
 	  */
-	EIDMW_APL_API APL_CardType getCardType();
+	EIDMW_MULTIPASS_API APL_CardType getCardType();
 
 	/**
 	  * Get the card in the reader whatever is type
 	  * If there is no card in the reader NULL is return
 	  */
-	EIDMW_APL_API APL_Card *getCard();
+	EIDMW_MULTIPASS_API APL_Card *getCard();
 
 	/**
       * Get the card in the reader whatever is type

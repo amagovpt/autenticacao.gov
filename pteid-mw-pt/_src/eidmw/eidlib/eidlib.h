@@ -169,8 +169,8 @@ class CByteArray;
  */
 class PTEID_ByteArray : public PTEID_Object {
 public:
-	PTEIDSDK_API PTEID_ByteArray();									/**< Default constructor */
-	PTEIDSDK_API PTEID_ByteArray(const PTEID_ByteArray &bytearray); /**< Copy constructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ByteArray();									/**< Default constructor */
+	PTEIDSDK_MULTIPASS_API PTEID_ByteArray(const PTEID_ByteArray &bytearray); /**< Copy constructor */
 
 	/**
 	 * Constructor - initialize a byte array with an array of unsigned char.
@@ -178,9 +178,9 @@ public:
 	 * @param pucData is the byte array
 	 * @param ulSize is the size of the array
 	 **/
-	PTEIDSDK_API PTEID_ByteArray(const unsigned char *pucData, unsigned long ulSize);
+	PTEIDSDK_MULTIPASS_API PTEID_ByteArray(const unsigned char *pucData, unsigned long ulSize);
 
-	PTEIDSDK_API virtual ~PTEID_ByteArray(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ByteArray(); /**< Destructor */
 
 	/**
 	 * Append data to the byte array.
@@ -188,33 +188,33 @@ public:
 	 * @param pucData is the byte array
 	 * @param ulSize is the size of the array
 	 **/
-	PTEIDSDK_API void Append(const unsigned char *pucData, unsigned long ulSize);
+	PTEIDSDK_MULTIPASS_API void Append(const unsigned char *pucData, unsigned long ulSize);
 
 	/**
 	 * Append data to the byte array.
 	 */
-	PTEIDSDK_API void Append(const PTEID_ByteArray &data);
+	PTEIDSDK_MULTIPASS_API void Append(const PTEID_ByteArray &data);
 
 	/**
 	 * Remove the data from the byte array.
 	 */
-	PTEIDSDK_API void Clear();
+	PTEIDSDK_MULTIPASS_API void Clear();
 
 	/**
 	 * Return true if the content of data is the same as this.
 	 */
-	PTEIDSDK_API bool Equals(const PTEID_ByteArray &data) const;
+	PTEIDSDK_MULTIPASS_API bool Equals(const PTEID_ByteArray &data) const;
 
 	/**
 	 * Return the number of bytes in the array.
 	 */
-	PTEIDSDK_API unsigned long Size() const;
+	PTEIDSDK_MULTIPASS_API unsigned long Size() const;
 
 	/**
 	 * Return the array of bytes in the object.
 	 * If Size() == 0, then NULL is returned.
 	 */
-	PTEIDSDK_API const unsigned char *GetBytes() const;
+	PTEIDSDK_MULTIPASS_API const unsigned char *GetBytes() const;
 
 	/**
 	 * Get a string from buffer at ulOffset position and with ulLen size.
@@ -224,12 +224,12 @@ public:
 	/**
 	 * Writing the binary content to a file.
 	 */
-	PTEIDSDK_API bool writeToFile(const char *csFilePath);
+	PTEIDSDK_MULTIPASS_API bool writeToFile(const char *csFilePath);
 
 	/**
 	 * Copy content of bytearray.
 	 */
-	PTEIDSDK_API PTEID_ByteArray &operator=(const PTEID_ByteArray &bytearray);
+	PTEIDSDK_MULTIPASS_API PTEID_ByteArray &operator=(const PTEID_ByteArray &bytearray);
 
 #if !defined SWIG
 	/**
@@ -329,7 +329,7 @@ class APL_ReaderContext;
  */
 class PTEID_ReaderSet : public PTEID_Object {
 public:
-	PTEIDSDK_API static PTEID_ReaderSet &instance(); /**< Return the singleton object (create it at first use) */
+	PTEIDSDK_MULTIPASS_API static PTEID_ReaderSet &instance(); /**< Return the singleton object (create it at first use) */
 
 	/**
 	 * Init the SDK (Optional).
@@ -337,13 +337,13 @@ public:
 	 *API).
 	 * @param bManageTestCard If false other applications (ex. gui) take that into their scope
 	 **/
-	PTEIDSDK_API static void initSDK(bool bManageTestCard = false);
+	PTEIDSDK_MULTIPASS_API static void initSDK(bool bManageTestCard = false);
 #if !defined SWIG
-	PTEIDSDK_API static void initSDKWithCallbacks(const PTEID_CardInterfaceCallbacks &callbacks, bool bManageTestCard = false);
+	PTEIDSDK_MULTIPASS_API static void initSDKWithCallbacks(const PTEID_CardInterfaceCallbacks &callbacks, bool bManageTestCard = false);
 #endif
-	PTEIDSDK_API static void releaseSDK(); /**< Release the SDK */
+	PTEIDSDK_MULTIPASS_API static void releaseSDK(); /**< Release the SDK */
 
-	PTEIDSDK_API virtual ~PTEID_ReaderSet(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ReaderSet(); /**< Destructor */
 
 	/**
 	 * Release the readers (Useful if readers had changed).
@@ -352,12 +352,12 @@ public:
 	 * @param bAllReference	PUT THIS PARAMETER TO TRUE IS THREAD UNSAFE.
 	 * @param bAllReference	You have to be sure that you will not use any old reference/pointer after this release
 	 */
-	PTEIDSDK_API void releaseReaders(bool bAllReference = false);
+	PTEIDSDK_MULTIPASS_API void releaseReaders(bool bAllReference = false);
 
 	/**
 	 * Return true if readers has been added or removed
 	 */
-	PTEIDSDK_API bool isReadersChanged() const;
+	PTEIDSDK_MULTIPASS_API bool isReadersChanged() const;
 
 	/**
 	 * Get the list of the reader.
@@ -368,44 +368,44 @@ public:
 	 *
 	 * @param bForceRefresh force the reconnection to the lower layer to see if reader list have changed
 	 **/
-	PTEIDSDK_API const char *const *readerList(bool bForceRefresh = false);
+	PTEIDSDK_MULTIPASS_API const char *const *readerList(bool bForceRefresh = false);
 
 	/**
 	 * Return the first readercontext with a card.
 	 *		If no card is present, return the firs reader.
 	 *		If no reader exist, throw an exception PTEID_ExNoReader.
 	 **/
-	PTEIDSDK_API PTEID_ReaderContext &getReader();
+	PTEIDSDK_MULTIPASS_API PTEID_ReaderContext &getReader();
 
 	/**
 	 * Get the reader by its name.
 	 */
-	PTEIDSDK_API PTEID_ReaderContext &getReaderByName(const char *readerName);
+	PTEIDSDK_MULTIPASS_API PTEID_ReaderContext &getReaderByName(const char *readerName);
 
 	/**
 	 * Return the number of card readers connected to the computer.
 	 *
 	 * @param bForceRefresh force the reconnection to the lower layer to see if reader list have changed
 	 **/
-	PTEIDSDK_API unsigned long readerCount(bool bForceRefresh = false);
+	PTEIDSDK_MULTIPASS_API unsigned long readerCount(bool bForceRefresh = false);
 
 	/**
 	 * Get the name of the reader by its Index.
 	 * Throw PTEID_ExParamRange exception if the index is out of range.
 	 **/
-	PTEIDSDK_API const char *getReaderName(unsigned long ulIndex);
+	PTEIDSDK_MULTIPASS_API const char *getReaderName(unsigned long ulIndex);
 
 	/**
 	 * Get the reader by its Index.
 	 * Throw PTEID_ExParamRange exception if the index is out of range.
 	 **/
-	PTEIDSDK_API PTEID_ReaderContext &getReaderByNum(unsigned long ulIndex);
+	PTEIDSDK_MULTIPASS_API PTEID_ReaderContext &getReaderByNum(unsigned long ulIndex);
 
 	/**
 	 * Return the reader containing the card with this SN.
 	 *		If no card with this SN is found, throw an exception PTEID_ExParamRange.
 	 **/
-	PTEIDSDK_API PTEID_ReaderContext &getReaderByCardSerialNumber(const char *cardSerialNumber);
+	PTEIDSDK_MULTIPASS_API PTEID_ReaderContext &getReaderByCardSerialNumber(const char *cardSerialNumber);
 
 	/**
 	 * Flush the cached files.
@@ -417,7 +417,7 @@ public:
 	/**
 	 * For internal use - Not exported
 	 */
-	NOEXPORT_PTEIDSDK PTEID_ReaderContext &getReader(APL_ReaderContext *pAplReader);
+	PTEIDSDK_MULTIPASS_API PTEID_ReaderContext &getReader(APL_ReaderContext *pAplReader);
 
 private:
 	PTEID_ReaderSet(); /**< For internal use : Constructor */
@@ -441,17 +441,17 @@ class ICAO_Card;
  */
 class PTEID_ReaderContext : public PTEID_Object {
 public:
-	PTEIDSDK_API virtual ~PTEID_ReaderContext(); /**< Destructor */
+	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ReaderContext(); /**< Destructor */
 
 	/**
 	 * Return the name of the reader.
 	 */
-	PTEIDSDK_API const char *getName();
+	PTEIDSDK_MULTIPASS_API const char *getName();
 
 	/**
 	 * Return true if a card is present and false otherwise.
 	 */
-	PTEIDSDK_API bool isCardPresent();
+	PTEIDSDK_MULTIPASS_API bool isCardPresent();
 
 	PTEIDSDK_API bool isPinpad();
 
@@ -516,7 +516,7 @@ public:
      *
      * @return A PTEID_ByteArray object containing the Multipass token which is a 16-byte value
      */ 
-	PTEIDSDK_API PTEID_ByteArray getMultiPassToken();
+	PTEIDSDK_MULTIPASS_API PTEID_ByteArray getMultiPassToken();
 
 	/**
 	 * Specify a callback function to be called each time a
@@ -2218,13 +2218,11 @@ public:
 	PTEIDSDK_API const char *getString(); /**< Return the string value (Throw exception for numerical parameter) */
 	PTEIDSDK_API long getLong();		  /**< Return the numerical value (Throw exception for string parameter) */
 
-	PTEIDSDK_API void
-	setString(const char *csValue); /**< Set the string value (Throw exception for numerical parameter) */
-	PTEIDSDK_API void
-	DeleteKeysByPrefix(); /**< Reset the strings with some prefix (Throw exception for numerical parameter) */
+	PTEIDSDK_API void setString(const char *csValue); /**< Set the string value (Throw exception for numerical parameter) */
+	PTEIDSDK_API void DeleteKeysByPrefix(); /**< Reset the strings with some prefix (Throw exception for numerical parameter) */
 	PTEIDSDK_API unsigned int CountKeysByPrefix(); /**< Count keys with some prefix */
 	PTEIDSDK_API void setLong(long lValue); /**< Set the numerical value (Throw exception for string parameter) */
-	PTEIDSDK_API static void SetTestMode(bool bTestMode); /**< Set the test mode */
+	PTEIDSDK_MULTIPASS_API static void SetTestMode(bool bTestMode); /**< Set the test mode */
 
 private:
 	PTEID_Config(const PTEID_Config &config);			 /**< Copy not allowed - not implemented */
