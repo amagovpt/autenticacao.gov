@@ -147,7 +147,7 @@ static void addManifest(zip_t *asic, const char **paths, int path_count) {
 	}
 	zip_int64_t index;
 
-	XMLPlatformUtils::Initialize();
+	XMLPlatformUtils::Initialize("pt_PT");
 
 	XMLCh *manifest_prefix = XMLString::transcode("manifest");
 	XMLCh *default_mime = XMLString::transcode("application/octet-stream");

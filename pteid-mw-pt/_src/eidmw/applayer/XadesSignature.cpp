@@ -88,6 +88,7 @@
 #include <openssl/pem.h>
 #include <openssl/bio.h>
 #include <openssl/err.h>
+#include <openssl/rand.h>
 #include <openssl/pkcs7.h>
 
 // stat
@@ -130,7 +131,7 @@ static XMLCh s_Id[] = {chLatin_I, chLatin_d, chNull};
 
 static void initXMLUtils() {
 	try {
-		XMLPlatformUtils::Initialize();
+		XMLPlatformUtils::Initialize("pt_PT");
 		XSECPlatformUtils::Initialise();
 	} catch (const XMLException &e) {
 		MWLOG(LEV_ERROR, MOD_APL, L"Error during initialisation of Xerces. Error Message: %s", e.getMessage());
@@ -282,13 +283,13 @@ static std::basic_string<XMLCh> generateNodeID() {
 	id_buffer.append(XMLString::transcode("xades-"));
 
 #if _XSEC_VERSION_FULL >= 20000L
-	// Inline implementation of generateId() from xml-security-c 1.7
 	unsigned char b[128] = {0};
 	XMLCh id[258] = {0};
-	unsigned int toGen = 20;
+	int toGen = 20;
 
-	if (XSECPlatformUtils::g_cryptoProvider->getRandom(b, toGen) != toGen) {
-		throw XSECException(XSECException::CryptoProviderError, "generateNodeID - could not obtain enough random");
+	if (RAND_bytes(b, toGen) != 1) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: RAND_bytes entropy source failed or is not available!", __FUNCTION__);
+		throw CMWEXCEPTION(EIDMW_XADES_UNKNOWN_ERROR);
 	}
 
 	unsigned int i;
@@ -841,15 +842,15 @@ CByteArray &XadesSignature::sign(const char **paths, unsigned int pathCount, zip
 	DOMDocument *doc =
 		impl->createDocument(XMLString::transcode(ASIC_NAMESPACE), XMLString::transcode("XAdESSignatures"), NULL);
 	const XMLCh *algorithm_uri = m_pcard != NULL && m_pcard->getType() == APL_CARDTYPE_PTEID_IAS5
-									 ? DSIGConstants::s_unicodeStrURIECDSA_SHA256
-									 : DSIGConstants::s_unicodeStrURIRSA_SHA256;
+									 ? XMLString::transcode("http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256")
+									 : XMLString::transcode("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256");
 
 	try {
 		// Create a signature object
 		sig = prov.newSignature();
 
 		// Use it to create a blank signature DOM structure from the doc
-		DOMElement *sigNode = sig->createBlankSignature(doc, DSIGConstants::s_unicodeStrURIEXC_C14N_NOC, algorithm_uri);
+		DOMElement *sigNode = sig->createBlankSignature(doc, XMLString::transcode("http://www.w3.org/2001/10/xml-exc-c14n#"), algorithm_uri);
 
 		// Add Id attribute to signature
 		sigNode->setAttribute(s_Id, (XMLCh *)signature_id.c_str());
@@ -868,7 +869,7 @@ CByteArray &XadesSignature::sign(const char **paths, unsigned int pathCount, zip
 		for (unsigned int i = 0; i != pathCount; i++) {
 			const char *path = unique_paths[i]->c_str();
 			// Create a reference to the external file
-			DSIGReference *ref = sig->createReference(createURI(path), DSIGConstants::s_unicodeStrURISHA256);
+			DSIGReference *ref = sig->createReference(createURI(path), XMLString::transcode("http://www.w3.org/2001/04/xmlenc#sha256"));
 
 			CByteArray fileHash;
 			if (container) {
@@ -902,7 +903,7 @@ CByteArray &XadesSignature::sign(const char **paths, unsigned int pathCount, zip
 		}
 
 		DSIGReference *ref_signed_props =
-			sig->createReference(createSignedPropertiesURI().c_str(), DSIGConstants::s_unicodeStrURISHA256);
+			sig->createReference(createSignedPropertiesURI().c_str(), XMLString::transcode("http://www.w3.org/2001/04/xmlenc#sha256"));
 		ref_signed_props->setType(XMLString::transcode("http://uri.etsi.org/01903#SignedProperties"));
 
 		XMLByte signedPropertiesHash[SHA256_LEN];
