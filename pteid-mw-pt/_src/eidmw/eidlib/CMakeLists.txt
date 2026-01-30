@@ -24,6 +24,8 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PTEID_COMMON} ${PTEID_APPLAYER})
 
+target_include_directories(${PROJECT_NAME} PRIVATE ${OPENSSL_INCLUDE_DIR})
+
 if (PTEID_MULTIPASS_SDK)
     add_compile_definitions(${PROJECT_NAME} PTEID_MULTIPASS_SDK)
     target_compile_options(${PROJECT_NAME} PRIVATE -fvisibility=hidden -ffunction-sections -fdata-sections)
