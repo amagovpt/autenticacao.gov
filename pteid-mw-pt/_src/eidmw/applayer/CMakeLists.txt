@@ -41,6 +41,8 @@ endif()
 target_compile_options(${PROJECT_NAME} PRIVATE -fvisibility=hidden -ffunction-sections -fdata-sections)
 target_link_options(${PROJECT_NAME} PRIVATE -Wl,--gc-sections)
 
-target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/PCSC)
+if(USE_PCSC)
+   target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/PCSC)
+endif()
 
 
