@@ -35,18 +35,18 @@ namespace eIDMW {
 
 class CMWException;
 
+NOEXPORT_PTEIDSDK void THROWException(CMWException &e);
+
 /******************************************************************************/ /**
   * Base class for the PTEID SDK Exceptions
   *********************************************************************************/
 class PTEIDSDK_MULTIPASS_API PTEID_Exception {
 public:
-	 PTEID_Exception(long lError); /**< Constructor - Need error code that comes from eidErrors.h */
-	 virtual ~PTEID_Exception();   /**< Destructor */
+	PTEID_Exception(long lError); /**< Constructor - Need error code that comes from eidErrors.h */
+	virtual ~PTEID_Exception();   /**< Destructor */
 
-	 long GetError() const;	   /**< Return the error code */
-	 const char *GetMessage(); /**< Returns the error message based on the error code */
-
-	 static PTEID_Exception THROWException(CMWException &e);
+	long GetError() const;	   /**< Return the error code */
+	const char *GetMessage(); /**< Returns the error message based on the error code */
 
 private:
 	long m_lError; /**< Error code of the exception (see eidErrors.h)*/
@@ -61,7 +61,7 @@ std::string CodeToString(ErrorCode code);
 /******************************************************************************/ /**
   * Exception class Release Needed (error code = EIDMW_ERR_RELEASE_NEEDED)
   *
-  *	Throw when the application close without calling the PTEID_RealeaseSDK
+  *	Throw when the application close without calling PTEID_ReleaseSDK
   *********************************************************************************/
 class PTEIDSDK_MULTIPASS_API PTEID_ExReleaseNeeded : public PTEID_Exception {
 public:
@@ -72,10 +72,10 @@ public:
 /******************************************************************************/ /**
   * Exception class Release Needed (error code = EIDMW_ERR_UNKNOWN)
   *********************************************************************************/
-class PTEID_ExUnknown : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExUnknown : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExUnknown();			 /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExUnknown(); /**< Destructor */
+	 PTEID_ExUnknown();			 /**< Constructor */
+	 virtual ~PTEID_ExUnknown(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -84,10 +84,10 @@ public:
   *	Throw when the Raw Data type doesn't exist for this card
   * Used in : - PTEID_Card::getRawData(PTEID_RawDataType type)
   *********************************************************************************/
-class PTEID_ExFileTypeUnknown : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExFileTypeUnknown : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExFileTypeUnknown();			 /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExFileTypeUnknown(); /**< Destructor */
+	 PTEID_ExFileTypeUnknown();			 /**< Constructor */
+	 virtual ~PTEID_ExFileTypeUnknown(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -100,10 +100,10 @@ public:
   *           - PTEID_Certificates::getCertByNumber(unsigned long ulIndex)
   *           - PTEID_Pins::getPinByNumber(unsigned long ulIndex)
   *********************************************************************************/
-class PTEID_ExParamRange : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExParamRange : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExParamRange();			/**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExParamRange(); /**< Destructor */
+	 PTEID_ExParamRange();			/**< Constructor */
+	 virtual ~PTEID_ExParamRange(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -114,8 +114,8 @@ public:
   *********************************************************************************/
 class PTEID_ExCmdNotAllowed : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExCmdNotAllowed();		   /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCmdNotAllowed(); /**< Destructor */
+	PTEID_ExCmdNotAllowed();		   /**< Constructor */
+	virtual ~PTEID_ExCmdNotAllowed(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -123,10 +123,10 @@ public:
   *
   *	Throw when the command asked is not supported by the card
   *********************************************************************************/
-class PTEID_ExCmdNotSupported : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExCmdNotSupported : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExCmdNotSupported();			 /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCmdNotSupported(); /**< Destructor */
+	 PTEID_ExCmdNotSupported();			 /**< Constructor */
+	 virtual ~PTEID_ExCmdNotSupported(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -137,10 +137,10 @@ public:
   *           - PTEID_ReaderContext::getCard()
   *           - PTEID_ReaderContext::getEIDCard()
   *********************************************************************************/
-class PTEID_ExNoCardPresent : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExNoCardPresent : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExNoCardPresent();		   /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExNoCardPresent(); /**< Destructor */
+	 PTEID_ExNoCardPresent();		   /**< Constructor */
+	 virtual ~PTEID_ExNoCardPresent(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -149,10 +149,10 @@ public:
   *	Throw when the card type is not supported
   * Used in : - PTEID_ReaderContext::getCard()
   *********************************************************************************/
-class PTEID_ExCardTypeUnknown : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExCardTypeUnknown : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExCardTypeUnknown();			 /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCardTypeUnknown(); /**< Destructor */
+	 PTEID_ExCardTypeUnknown();			 /**< Constructor */
+	 virtual ~PTEID_ExCardTypeUnknown(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -161,10 +161,10 @@ public:
   *	Throw when ask for the Root
   * Used in : - PTEID_Certificate::getRoot()
   *********************************************************************************/
-class PTEID_ExCertNoRoot : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExCertNoRoot : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExCertNoRoot();			/**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExCertNoRoot(); /**< Destructor */
+	PTEID_ExCertNoRoot();			/**< Constructor */
+	virtual ~PTEID_ExCertNoRoot(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -173,10 +173,10 @@ public:
   *	Throw when a class/function is not used correctly
   * Used in : - PTEID_Crl class
   *********************************************************************************/
-class PTEID_ExBadUsage : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExBadUsage : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExBadUsage();		  /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExBadUsage(); /**< Destructor */
+	 PTEID_ExBadUsage();		  /**< Constructor */
+	 virtual ~PTEID_ExBadUsage(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -186,10 +186,10 @@ public:
   * Used in : - PTEID_ReaderContext::Lock()
   *			  - PTEID_ReaderContext::Unlock()
   *********************************************************************************/
-class PTEID_ExBadTransaction : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExBadTransaction : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExBadTransaction();			/**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExBadTransaction(); /**< Destructor */
+	 PTEID_ExBadTransaction();			/**< Constructor */
+	 virtual ~PTEID_ExBadTransaction(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -200,8 +200,8 @@ public:
   *********************************************************************************/
 class PTEIDSDK_MULTIPASS_API PTEID_ExNoReader : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExNoReader();		  /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExNoReader(); /**< Destructor */
+	 PTEID_ExNoReader();		  /**< Constructor */
+	 virtual ~PTEID_ExNoReader(); /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -217,10 +217,10 @@ public:
  *
  *	Throw when the SOD is not correct
  *********************************************************************************/
-class PTEID_ExSOD : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExSOD : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExSOD(long lError); /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExSOD();   /**< Destructor */
+	PTEID_ExSOD(long lError); /**< Constructor */
+	virtual ~PTEID_ExSOD();   /**< Destructor */
 };
 
 /******************************************************************************/ /**
@@ -237,10 +237,10 @@ public:
   *
   * Use GetFailedSignatureIndex() to know which of the signatures(from the batch) failed.
   *********************************************************************************/
-class PTEID_ExBatchSignatureFailed : public PTEID_Exception {
+class PTEIDSDK_MULTIPASS_API PTEID_ExBatchSignatureFailed : public PTEID_Exception {
 public:
-	PTEIDSDK_MULTIPASS_API PTEID_ExBatchSignatureFailed(long lError, unsigned int failedIndex); /**< Constructor */
-	PTEIDSDK_MULTIPASS_API virtual ~PTEID_ExBatchSignatureFailed();							  /**< Destructor */
+	 PTEID_ExBatchSignatureFailed(long lError, unsigned int failedIndex); /**< Constructor */
+	 virtual ~PTEID_ExBatchSignatureFailed();							  /**< Destructor */
 
 	unsigned int GetFailedSignatureIndex() const {
 		return m_failedSignatureIndex;

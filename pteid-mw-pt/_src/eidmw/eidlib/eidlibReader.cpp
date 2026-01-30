@@ -117,7 +117,7 @@ void PTEID_Object::checkContextStillOk() const {
 	try {
 		contextid = AppLayer.getContextId();
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 
 	if (contextid != m_context->contextid) {
@@ -136,7 +136,7 @@ void PTEID_Object::checkContextStillOk() const {
 	try {
 		cardid = m_context->reader->getCardId();
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 
 	if (cardid != m_context->cardid) {
@@ -284,7 +284,7 @@ void PTEID_ReaderSet::initSDK(bool bManageTestCard) {
 	try {
 		CAppLayer::init(nullptr, bManageTestCard);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -292,7 +292,7 @@ void PTEID_ReaderSet::initSDKWithCallbacks(const PTEID_CardInterfaceCallbacks &c
 	try {
 		CAppLayer::init(&callbacks, bManageTestCard);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -308,7 +308,7 @@ void PTEID_ReaderSet::releaseSDK() {
 
 		CAppLayer::release();
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -1018,7 +1018,7 @@ const char *PTEID_Config::getString() {
 
 		return pimpl->getString();
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -1028,7 +1028,7 @@ long PTEID_Config::getLong() {
 
 		return pimpl->getLong();
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -1038,7 +1038,7 @@ void PTEID_Config::setString(const char *csValue) {
 
 		return pimpl->setString(csValue, false);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -1048,7 +1048,7 @@ void PTEID_Config::DeleteKeysByPrefix() {
 
 		return pimpl->DeleteKeysByPrefix(false);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -1058,7 +1058,7 @@ unsigned int PTEID_Config::CountKeysByPrefix() {
 
 		return pimpl->CountKeysByPrefix(false);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -1068,7 +1068,7 @@ void PTEID_Config::setLong(long lValue) {
 
 		return pimpl->setLong(lValue, false);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -1076,7 +1076,7 @@ void PTEID_Config::SetTestMode(bool bTestMode) {
 	try {
 		CConfig::SetTestMode(bTestMode);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 
@@ -1099,7 +1099,7 @@ void PTEID_LOG(PTEID_LogLevel level, const char *module_name, const char *format
 
 		va_end(args);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 } // namespace eIDMW

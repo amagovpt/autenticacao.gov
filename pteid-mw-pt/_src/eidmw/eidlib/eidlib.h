@@ -417,7 +417,7 @@ public:
 	/**
 	 * For internal use - Not exported
 	 */
-	PTEIDSDK_MULTIPASS_API PTEID_ReaderContext &getReader(APL_ReaderContext *pAplReader);
+	NOEXPORT_PTEIDSDK PTEID_ReaderContext &getReader(APL_ReaderContext *pAplReader);
 
 private:
 	PTEID_ReaderSet(); /**< For internal use : Constructor */

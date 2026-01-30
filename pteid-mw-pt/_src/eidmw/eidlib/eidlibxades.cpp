@@ -127,7 +127,7 @@ long PTEID_ASICContainer::countInputFiles() {
 			SigContainer *container = (SigContainer *)m_impl;
 			m_files = container->listInputFiles();
 		} catch (CMWException &e) {
-			throw PTEID_Exception::THROWException(e);
+			THROWException(e);
 		}
 	}
 	assert(m_files.size() <= LONG_MAX);
@@ -143,7 +143,7 @@ const char *PTEID_ASICContainer::getInputFile(long file_n) {
 			m_files = container->listInputFiles();
 
 		} catch (CMWException &e) {
-			throw PTEID_Exception::THROWException(e);
+			THROWException(e);
 		}
 	}
 
@@ -155,7 +155,7 @@ void PTEID_ASICContainer::extract(const char *filename, const char *out_dir) {
 		SigContainer *container = (SigContainer *)m_impl;
 		container->extract(filename, out_dir);
 	} catch (CMWException &e) {
-		throw PTEID_Exception::THROWException(e);
+		THROWException(e);
 	}
 }
 

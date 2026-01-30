@@ -50,6 +50,7 @@
 
 //Define to avoid swig to create definition for NOEXPORT_PTEIDSDK methods
 #define PTEIDSDK_API
+#define PTEIDSDK_MULTIPASS_API
 #define NOEXPORT_PTEIDSDK SLASH(/)
 #define SLASH(s) /##s
 

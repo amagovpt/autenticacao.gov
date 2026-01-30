@@ -400,7 +400,7 @@ std::string CodeToString(ErrorCode code) {
 	return error_message.c_str();
 }
 
-PTEID_Exception PTEID_Exception::THROWException(CMWException &e) {
+void THROWException(CMWException &e) {
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidlib", "PTEID_Exception generated from %s:%ld error code: %08x",
 			  e.GetFile().c_str(), e.GetLine(), e.GetError());
 

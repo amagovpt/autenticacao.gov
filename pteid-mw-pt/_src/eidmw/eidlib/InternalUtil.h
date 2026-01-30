@@ -67,7 +67,7 @@
 		e.GetError();                                                                                                  \
 		if (m_context->mutex)                                                                                          \
 			m_context->mutex->Unlock();                                                                                \
-		throw PTEID_Exception::THROWException(e);                                                                      \
+		THROWException(e);                                                                      \
 	}                                                                                                                  \
 	catch (...) {                                                                                                      \
 		if (m_context->mutex)                                                                                          \
