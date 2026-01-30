@@ -54,6 +54,7 @@
 #include <openssl/ocsp.h>
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
+#include <openssl/rand.h>
 
 #include "xercesc/util/Base64.hpp"
 #include "xercesc/util/XMLString.hpp"
