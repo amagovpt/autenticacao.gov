@@ -30,7 +30,7 @@
 
 #ifndef SWIG
 
-#ifdef WIN32
+#ifdef _WIN32
 #ifdef EIDMW_EIDLIB_WRAPPER
 #define PTEIDSDK_API
 #define PTEIDSDK_MULTIPASS_API
