@@ -118,6 +118,22 @@ const char *GAPI::telemetryActionToString(TelemetryAction action) {
 	}
 }
 
+const char *GAPI::cardTypeToString(PTEID_CardType cardType) {
+	switch (cardType) {
+	case PTEID_CARDTYPE_IAS07:
+		return "ias07";
+	case PTEID_CARDTYPE_IAS101:
+		return "ias101";
+	case PTEID_CARDTYPE_IAS5:
+		return "ias5";
+	case ICAO_CARDTYPE_MRTD:
+		return "icao_mrtd";
+	case PTEID_CARDTYPE_UNKNOWN:
+	default:
+		return "unknown";
+	}
+}
+
 #ifdef __APPLE__
 // Uses sysctl to find if the process is being translated by Rosetta
 int processIsTranslated() {
@@ -235,6 +251,27 @@ void GAPI::doUpdateTelemetry(TelemetryAction action) {
 		url += telemetryActionToString(action);
 		url += "?tel_id=";
 		url += m_Settings.getTelemetryId();
+
+		// Add card type to telemetry URL
+		if (action == TelemetryAction::SignCC || action == TelemetryAction::SignCCScap) {
+			PTEID_CardType cardType = PTEID_CARDTYPE_UNKNOWN;
+			try {
+				PTEID_EIDCard *card = NULL;
+				getCardInstance(card);
+				cardType = card->getType();
+			} catch (PTEID_Exception &err) {
+				qDebug() << "Unable to get card type for telemetry. Error code:" << err.GetError();
+			}
+
+			url += "&card_type=";
+			url += cardTypeToString(cardType);
+
+			if (cardType == PTEID_CARDTYPE_IAS5) {
+				url += "&interface=";
+				url += m_is_contactless ? "CL" : "C";
+			}
+		}
+
 		std::string url_std_string = url.toStdString();
 		curl_easy_setopt(curl, CURLOPT_URL, url_std_string.c_str());
 

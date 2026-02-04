@@ -438,6 +438,7 @@ public slots:
 	void enableTelemetry();
 	void disableTelemetry();
 	const char *telemetryActionToString(TelemetryAction action);
+	const char *cardTypeToString(PTEID_CardType cardType);
 	static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 
 	bool isMacOSApplicationFolder() const;
