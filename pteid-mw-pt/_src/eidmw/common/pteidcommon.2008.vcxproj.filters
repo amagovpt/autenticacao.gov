@@ -101,6 +101,9 @@
     <ClInclude Include="Crypto.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OSUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pteidcommon.rc">

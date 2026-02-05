@@ -28,9 +28,12 @@
 
 #include <time.h>
 #include <errno.h>
+#include <cstring>
+#include <string>
 #include "Thread.h"
 #include "Config.h"
 #include "Util.h"
+#include "OSUtil.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -220,7 +223,7 @@ void CLogger::initFromConfig() {
 	}
 #endif
 	long lGroup = config.GetLong(CConfig::EIDMW_CONFIG_PARAM_LOGGING_GROUP);
-
+	initAppName();
 	init(wcsLogDir.c_str(), wcsPrefix.c_str(), lFileSize, lFileNbr, maxLevel, (lGroup ? true : false));
 }
 
@@ -238,7 +241,7 @@ CLog &CLogger::getLogW(const wchar_t *group) {
 
 	if (!find) {
 		CLog *log =
-			new CLog(m_directory.c_str(), m_prefix.c_str(), group, m_filesize, m_filenr, m_maxlevel, m_groupinnewfile);
+			new CLog(m_directory.c_str(), m_prefix.c_str(), group, m_filesize, m_filenr, m_maxlevel, m_groupinnewfile, m_appname);
 		m_logStore.push_back(log);
 		return *log;
 	}
@@ -356,7 +359,7 @@ long CLog::m_sopenfailed = 0;
 
 // PRIVATE: Default constructor
 CLog::CLog(const wchar_t *directory, const wchar_t *prefix, const wchar_t *group, long filesize, long filenr,
-		   tLOG_Level maxlevel, bool groupinnewfile) {
+		   tLOG_Level maxlevel, bool groupinnewfile, std::string &app_name) {
 	m_f = NULL;
 	m_directory = directory;
 	m_prefix = prefix;
@@ -366,6 +369,12 @@ CLog::CLog(const wchar_t *directory, const wchar_t *prefix, const wchar_t *group
 	m_maxlevel = maxlevel;
 	m_groupinnewfile = groupinnewfile;
 	m_openfailed = 0;
+	m_appname = app_name;
+#ifdef WIN32
+	m_wappname = windowsANSIToWideString(app_name);
+#else
+	m_wappname = utilStringWiden(app_name);
+#endif
 }
 
 // Copy constructor
@@ -382,6 +391,8 @@ CLog &CLog::operator=(const CLog &log) {
 		m_maxlevel = log.m_maxlevel;
 		m_groupinnewfile = log.m_groupinnewfile;
 		m_openfailed = log.m_openfailed;
+		m_appname = log.m_appname;
+		m_wappname = log.m_wappname;
 	}
 	return *this;
 }
@@ -752,6 +763,32 @@ void getProcessExecutableName(char *buffer, size_t sizeOfBuffer) {
 }
 #endif
 
+void CLogger::initAppName() {
+	/* Get the full path of the executable file that started this process */
+	char app_path[512] = { 0 };
+	char * baseName = app_path;
+
+#ifdef WIN32
+	DWORD baseNamseSize = 0;
+	baseNamseSize = GetModuleFileNameA(NULL, app_path, sizeof(app_path));
+	if (baseNamseSize == 0) {
+		strcpy(app_path, "Unknown name");
+	}
+#elif __linux__
+	getProcessExecutableName(app_path, sizeof(app_path));
+#elif __APPLE__
+	uint32_t buf_len = sizeof(app_path);
+	_NSGetExecutablePath(baseName, &buf_len);
+#endif
+
+	//Find last directory separator and set baseName to the next character
+	char * last_separator = strrchr(app_path, PATH_SEP_CHAR);
+	if (last_separator)
+		baseName = last_separator + 1;
+	m_appname = baseName;
+}
+
+
 // ATTENTION : Design for use with macro
 //             Must be follow by writeLineMessage to close the file
 // Write to log the first part of the line
@@ -767,27 +804,7 @@ bool CLog::writeLineHeaderW(tLOG_Level level, const int line, const wchar_t *fil
 
 	std::wstring timestamp;
 	getLocalTimeW(timestamp);
-
-	/* Get the full path of the executable file that started this process */
-#ifdef WIN32
-	wchar_t baseName[512];
-	memset(baseName, 0, sizeof(baseName));
-	DWORD baseNamseSize = 0;
-	baseNamseSize = GetModuleFileNameW(NULL, baseName, sizeof(baseName));
-	if (baseNamseSize == 0) {
-		lstrcpy(baseName, L"Unknown name");
-	}
-#elif __linux__
-	char baseName[512];
-	memset(baseName, 0, sizeof(baseName));
-	getProcessExecutableName(baseName, sizeof(baseName));
-#elif __APPLE__
-	uint32_t buf_len = PATH_MAX;
-	char baseName[buf_len];
-	memset(baseName, 0, sizeof(baseName));
-	_NSGetExecutablePath(baseName, &buf_len);
-
-#endif
+	const wchar_t * baseName = m_wappname.c_str();
 
 	if (lPreviousOpenFailed > 0) {
 		if (isFileMixingGroups()) {
@@ -802,18 +819,18 @@ bool CLog::writeLineHeaderW(tLOG_Level level, const int line, const wchar_t *fil
 
 	if (isFileMixingGroups()) {
 		if (line > 0 && wcslen(file) > 0)
-			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(),
+			fwprintf_s(m_f, L"%ls - %ls - %ld|%ld - %ls - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(),
 					   CThread::getCurrentPid(), CThread::getCurrentThreadId(), m_group.c_str(), getLevel(level), file,
 					   line);
 		else
-			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(),
+			fwprintf_s(m_f, L"%ls - %ls - %ld|%ld - %ls - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(),
 					   CThread::getCurrentThreadId(), m_group.c_str(), getLevel(level));
 	} else {
 		if (line > 0 && wcslen(file) > 0)
-			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(),
+			fwprintf_s(m_f, L"%ls - %ls - %ld|%ld - %ls -'%ls'-line=%d: ", baseName, timestamp.c_str(),
 					   CThread::getCurrentPid(), CThread::getCurrentThreadId(), getLevel(level), file, line);
 		else
-			fwprintf_s(m_f, L"%s - %ls - %ld|%ld - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(),
+			fwprintf_s(m_f, L"%ls - %ls - %ld|%ld - %ls: ", baseName, timestamp.c_str(), CThread::getCurrentPid(),
 					   CThread::getCurrentThreadId(), getLevel(level));
 	}
 
@@ -832,27 +849,7 @@ bool CLog::writeLineHeaderA(tLOG_Level level_in, const int line, const char *fil
 
 	std::string timestamp;
 	getLocalTimeA(timestamp);
-
-	/* Get the full path of the executable file that started this process */
-
-#ifdef WIN32
-	char baseName[512];
-	memset(baseName, 0, sizeof(baseName));
-	DWORD baseNamseSize = 0;
-	baseNamseSize = GetModuleFileNameA(NULL, baseName, sizeof(baseName));
-	if (baseNamseSize == 0) {
-		strcpy(baseName, "Unknown name");
-	}
-#elif __linux__
-	char baseName[512];
-	memset(baseName, 0, sizeof(baseName));
-	getProcessExecutableName(baseName, sizeof(baseName));
-#elif __APPLE__
-	uint32_t buf_len = PATH_MAX;
-	char baseName[buf_len];
-	memset(baseName, 0, sizeof(baseName));
-	_NSGetExecutablePath(baseName, &buf_len);
-#endif
+	const char * baseName = m_appname.c_str();
 
 	if (lPreviousOpenFailed > 0) {
 		if (isFileMixingGroups()) {

@@ -139,8 +139,11 @@ public:
 	EIDMW_CMN_API void write(tLOG_Level level, const int line, const char *file, const char *format, ...);
 	EIDMW_CMN_API void getFileFromStdErr(std::wstring &filename);
 
+
 private:
+	void initAppName();
 	static std::unique_ptr<CLogger> m_instance;
+
 	static bool m_bApplicationLeaving;
 
 	std::wstring m_directory;
@@ -149,6 +152,7 @@ private:
 	long m_filenr;
 	tLOG_Level m_maxlevel;
 	bool m_groupinnewfile;
+	std::string m_appname;
 
 	std::vector<CLog *> m_logStore;
 };
@@ -159,7 +163,7 @@ public:
 
 private:
 	CLog(const wchar_t *directory, const wchar_t *prefix, const wchar_t *group, long filesize, long filenr,
-		 tLOG_Level minlevel, bool groupinnewfile);
+		 tLOG_Level minlevel, bool groupinnewfile, std::string &app_name);
 	CLog(const CLog &log);
 	CLog &operator=(const CLog &);
 
@@ -232,6 +236,9 @@ private:
 	bool m_groupinnewfile;
 	long m_openfailed;
 	static long m_sopenfailed;
+	
+	std::string  m_appname;
+	std::wstring m_wappname;
 
 	FILE *m_f;
 

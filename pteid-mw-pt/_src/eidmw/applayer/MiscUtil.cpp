@@ -62,6 +62,7 @@
 #include "Log.h"
 #include "eidErrors.h"
 #include "ByteArray.h"
+#include "OSUtil.h"
 
 #define STR_BEGIN_CERTIFICATE "-----BEGIN CERTIFICATE-----"
 #define STR_END_CERTIFICATE "-----END CERTIFICATE-----"
@@ -611,17 +612,10 @@ std::string CPathUtil::getWorkingDir() {
 	return strDirectory;
 }
 
-#ifdef WIN32
-#define PATH_SEP_STR "\\"
-#define PATH_SEP_CHAR '\\'
-#else
-#define PATH_SEP_STR "/"
-#define PATH_SEP_CHAR '/'
-#endif
 
 // TODO: what happens if filename entry in zip contains slashes ??
 FILE *CPathUtil::openFileForWriting(const char *out_dir, const char *filename) {
-	std::string file_path = std::string(out_dir) + PATH_SEP_STR + filename;
+	std::string file_path = std::string(out_dir) + PATH_SEP + filename;
 #ifdef WIN32
 	std::wstring w_file_path = utilStringWiden(file_path);
 	FILE *fp_out = _wfopen(w_file_path.c_str(), L"wb");
@@ -705,7 +699,7 @@ void CPathUtil::checkDir(const char *dirIn) {
 
 	fprintf(stderr, "checkDir() was called with %s\n", dirIn);
 
-	std::string directory = std::string(dirIn) + PATH_SEP_STR;
+	std::string directory = std::string(dirIn) + PATH_SEP;
 #ifdef WIN32
 	DWORD dwError = 0;
 	DWORD dwAttr = GetFileAttributesA(directory.c_str());
@@ -835,11 +829,6 @@ std::string CPathUtil::remove_ext_from_basename(const char *base) {
 	}
 }
 
-#ifdef WIN32
-#define PATH_SEP "\\"
-#else
-#define PATH_SEP "/"
-#endif
 void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::string *> &filenames,
 										  const char *suffix) {
 	std::vector<std::pair<std::string, int>> filenames_counter;

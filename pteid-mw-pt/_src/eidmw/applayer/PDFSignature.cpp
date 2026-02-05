@@ -22,6 +22,7 @@
 #include "CardPteidDef.h"
 #include "Log.h"
 #include "Util.h"
+#include "OSUtil.h"
 #include "APLConfig.h"
 #include "cryptoFwkPteid.h"
 #ifdef WIN32
@@ -370,11 +371,6 @@ char *PDFSignature::getOccupiedSectors(int page) {
 		return "";
 }
 
-#ifdef WIN32
-#define PATH_SEP "\\"
-#else
-#define PATH_SEP "/"
-#endif
 std::string PDFSignature::generateFinalPath(const char *output_dir, const char *path) {
 	fprintf(stderr, "%s Outdir: %s path: %s\n", __FUNCTION__, output_dir, path);
 	char *pdf_filename = Basename((char *)path);

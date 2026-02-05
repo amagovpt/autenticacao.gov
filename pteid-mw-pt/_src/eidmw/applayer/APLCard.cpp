@@ -38,6 +38,7 @@
 #include "IcaoDg2.h"
 #include "IcaoDg3.h"
 #include "Log.h"
+#include "OSUtil.h"
 #include "MiscUtil.h"
 #include "PDFSignature.h"
 #include "PaceAuthentication.h"
@@ -224,11 +225,6 @@ CByteArray &APL_Card::SignXades(const char **paths, unsigned int n_paths, const 
 	return signature;
 }
 
-#ifdef WIN32
-#define PATH_SEP "\\"
-#else
-#define PATH_SEP "/"
-#endif
 
 char *generateFinalPath(const char *output_dir, const char *path) {
 

@@ -258,6 +258,7 @@
     <ClInclude Include="Mutex.h" />
     <ClInclude Include="MWException.h" />
     <ClInclude Include="MyriadFontGlyphWidths.h" />
+    <ClInclude Include="OSUtil.h" />
     <ClInclude Include="StringOps.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadDefines.h" />
