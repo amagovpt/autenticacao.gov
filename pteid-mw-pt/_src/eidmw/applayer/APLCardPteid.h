@@ -76,7 +76,7 @@ public:
 	 *
 	 * Destroy all the pointer create (files, docs,...)
 	 */
-	PTEIDSDK_MULTIPASS_API virtual ~APL_EIDCard();
+	EIDMW_MULTIPASS_API virtual ~APL_EIDCard();
 
 	/**
 	 * Return the type of the card (APL_CARDTYPE_EID_IAS*)
@@ -129,7 +129,7 @@ public:
 	 */
 	EIDMW_APL_API APL_DocVersionInfo &getDocInfo();
 
-	PTEIDSDK_MULTIPASS_API CByteArray readTokenData();
+	EIDMW_MULTIPASS_API CByteArray readTokenData();
 
 	/**
 	 * Return rawdata from the card
