@@ -253,7 +253,8 @@ void GAPI::doUpdateTelemetry(TelemetryAction action) {
 		url += m_Settings.getTelemetryId();
 
 		// Add card type to telemetry URL
-		if (action == TelemetryAction::SignCC || action == TelemetryAction::SignCCScap) {
+		if (action == TelemetryAction::SignCC || action == TelemetryAction::SignCCScap ||
+			action == TelemetryAction::PrintPDF) {
 			PTEID_CardType cardType = PTEID_CARDTYPE_UNKNOWN;
 			try {
 				PTEID_EIDCard *card = NULL;
