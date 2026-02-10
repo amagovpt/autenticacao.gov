@@ -182,8 +182,8 @@ DEFINE_LANG_STR(ActivateOrManageCMD) = {L"Click to activate or manage your Chave
 										L"Clique para ativar ou gerir a assinatura da sua Chave Móvel Digital", L"",
 										L""};
 DEFINE_LANG_STR(AutenticationGovApp) = { L"Autenticação.gov App", L"App Autenticação.gov", L"", L"" };
-DEFINE_LANG_STR(BiometricAppInfo) = {L"With the mobile app Autenticação.gov, you can use the reading of your biometric data to confirm the signature.", L"Utilizando os seus dados biométricos na aplicação móvel Autenticacao.Gov." ,  L"", L"" };
-DEFINE_LANG_STR(ChoiceCMD) = { L"You have two ways to validate your signature:", L"Poderá confirmar esta assinatura de duas maneiras:", L"", L"" };
+DEFINE_LANG_STR(BiometricAppInfo) = {L"With the mobile app gov.pt, you can use the reading of your biometric data to confirm the signature.", L"Utilizando os seus dados biométricos na aplicação móvel gov.pt." ,  L"", L"" };
+DEFINE_LANG_STR(ChoiceCMD) = { L"You have two ways to validate your signature:", L"Poderá confirmar esta assinatura de duas formas:", L"", L"" };
 DEFINE_LANG_STR(IfNotReceived) = {L"If you didn't receive the code press:", L"Caso não tenha recebido, clique em:", L"", L""};
 
 #define GETSTRING_DLG(code) LANG_STR_##code[CLang::GetLang()]
