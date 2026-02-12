@@ -671,7 +671,6 @@ void eIDMW::CallQTServer(const DlgFunctionIndex index, const char *csFilename, v
 				pWndGeometry->height);
 	}
 
-	std::cout << csCommand << std::endl;
 	int code = system(csCommand);
 	if (code != 0) {
 		MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR, MOD_DLG, L"  eIDMW::CallQTServer %i %s : %s ", index,
