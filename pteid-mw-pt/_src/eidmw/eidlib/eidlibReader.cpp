@@ -743,6 +743,15 @@ void PTEID_ReaderContext::EndTransaction() {
 	END_TRY_CATCH
 }
 
+void PTEID_ReaderContext::Recover() {
+	BEGIN_TRY_CATCH
+
+	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
+	pimpl->Recover();
+
+	END_TRY_CATCH
+}
+
 bool PTEID_ReaderContext::isPinpad() {
 	bool out = false;
 	BEGIN_TRY_CATCH

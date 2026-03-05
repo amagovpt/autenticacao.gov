@@ -161,6 +161,7 @@ public:
 
 	EIDMW_APL_API void initPaceAuthentication(const char *secret, size_t secretLen,
 											  APL_PACEAuthenticationType secretType);
+	EIDMW_APL_API void resetPaceAuthentication();
 
 	EIDMW_APL_API void initBACAuthentication(const char *mrz_info);
 

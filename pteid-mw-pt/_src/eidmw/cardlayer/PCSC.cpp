@@ -396,7 +396,7 @@ try_again:
 	return CByteArray(tucRecv, (unsigned long)dwRecvLen);
 }
 
-void CPCSC::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) {
+void CPCSC::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount, PTEID_CardProtocol protocolPteid) {
 	auto handle = this->GetPcscHandleFrom(hCard);
 	// try to recover when the card is not responding (properly) anymore
 
@@ -404,13 +404,30 @@ void CPCSC::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) {
 	int i = 0;
 	LONG lRet = SCARD_F_INTERNAL_ERROR;
 
+	auto protocol = 0;
+	switch (protocolPteid) {
+	case PTEID_CardProtocol::T0:
+		protocol = SCARD_PROTOCOL_T0;
+		break;
+	case PTEID_CardProtocol::T1:
+		protocol = SCARD_PROTOCOL_T1;
+		break;
+	case PTEID_CardProtocol::ANY:
+#ifdef _WIN32
+		protocol = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
+#else
+		protocol = SCARD_PROTOCOL_ANY;
+#endif
+		break;
+	};
+
 	MWLOG(LEV_WARN, MOD_CAL, L"Card is not responding properly, trying to recover...");
 
 	for (i = 0; (i < 10) && (lRet != SCARD_S_SUCCESS); i++) {
 		if (i != 0)
 			CThread::SleepMillisecs(100);
 
-		lRet = SCardReconnect(handle, SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0, SCARD_RESET_CARD, &ap);
+		lRet = SCardReconnect(handle, SCARD_SHARE_SHARED, protocol, SCARD_RESET_CARD, &ap);
 		if (lRet != SCARD_S_SUCCESS) {
 			MWLOG(LEV_DEBUG, MOD_CAL, L"        [%d] SCardReconnect errorcode: [0x%02X]", i, lRet);
 			continue;
@@ -724,7 +741,7 @@ CByteArray ExternalCardInterface::Transmit(PTEID_CardHandle hCard, const CByteAr
 	return CByteArray(responseBuffer, respBufferSize);
 }
 
-void ExternalCardInterface::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) {
+void ExternalCardInterface::Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount, PTEID_CardProtocol protocol) {
 	if (callbacks.recover == nullptr) {
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
 	}

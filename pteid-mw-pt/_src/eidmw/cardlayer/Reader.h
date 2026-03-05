@@ -183,6 +183,8 @@ public:
 
 	CByteArray SendAPDU(const CByteArray &oCmdAPDU);
 
+	void Recover();
+
 	//--- P15 functions
 	unsigned long PinCount();
 	/** ulIndex ranges from 0 to PinCount() - 1 */

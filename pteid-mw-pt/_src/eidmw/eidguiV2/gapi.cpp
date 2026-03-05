@@ -544,7 +544,11 @@ bool isExpiredDate(const char *strDate) {
 
 QString GAPI::getAddressField(AddressInfoKey key) { return m_addressData[key]; }
 
-#define BEGIN_TRY_CATCH try {
+#define BEGIN_TRY_CATCH                                                                                                \
+	bool __retry_on_card_reset = false;                                                                                \
+	do {                                                                                                               \
+		__retry_on_card_reset = false;                                                                                 \
+		try {
 
 #define END_TRY_CATCH                                                                                                  \
 	}                                                                                                                  \
@@ -561,8 +565,27 @@ QString GAPI::getAddressField(AddressInfoKey key) { return m_addressData[key]; }
 		emitErrorSignal(__FUNCTION__, e.GetError(), e.GetFailedSignatureIndex());                                      \
 	}                                                                                                                  \
 	catch (PTEID_Exception & e) {                                                                                      \
-		emitErrorSignal(__FUNCTION__, e.GetError());                                                                   \
-	}
+		if (e.GetError() == EIDMW_ERR_CARD_RESET) {                                                                    \
+			PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",                                                          \
+					  "CARD RESET detected in %s, attempting recovery and retry", __FUNCTION__);                       \
+			m_pace_auth_state = PaceDefault;                                                                           \
+			unsigned long ReaderIdx = 0;                                                                               \
+			auto ReaderCount = ReaderSet.readerCount();                                                                \
+			for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {                                                \
+				PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);                              \
+				try {                                                                                                  \
+					readerContext.Recover();                                                                           \
+				} catch (...) {                                                                                        \
+				}                                                                                                      \
+			}                                                                                                          \
+			__retry_on_card_reset = true;                                                                              \
+		} else {                                                                                                       \
+			emitErrorSignal(__FUNCTION__, e.GetError());                                                               \
+		}                                                                                                              \
+	}                                                                                                                  \
+	}                                                                                                                  \
+	while (__retry_on_card_reset)                                                                                      \
+		;
 
 void GAPI::handleRemoteAddressErrors(long errorCode) {
 	if (errorCode == EIDMW_REMOTEADDR_CONNECTION_ERROR) {
@@ -830,6 +853,7 @@ unsigned int GAPI::doVerifyAuthPin(QString pin_value) {
 }
 
 void GAPI::getTriesLeftAuthPin() {
+	BEGIN_TRY_CATCH
 	PTEID_EIDCard *card = NULL;
 	getCardInstance(card);
 	if (card == NULL)
@@ -840,6 +864,7 @@ void GAPI::getTriesLeftAuthPin() {
 	} else {
 		performPACEWithCache(CardOperation::GetAuthPin);
 	}
+	END_TRY_CATCH
 }
 unsigned int GAPI::doGetTriesLeftAuthPin() {
 	unsigned long tries_left = TRIES_LEFT_ERROR;
@@ -3087,6 +3112,12 @@ void GAPI::getCardInstance(PTEID_EIDCard *&new_card) {
 				} catch (PTEID_Exception &e) {
 					unsigned long err = e.GetError();
 					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "Failed to check is Card Present 0x%08x\n", err);
+
+					// Special exception case for reset cards
+					// This needs to be re-thrown to allow PACE recovery
+					if (e.GetError() == EIDMW_ERR_CARD_RESET) {
+						throw e;
+					}
 				}
 			}
 			// Test if Card Reader was previously selected
@@ -3168,6 +3199,9 @@ void GAPI::getCardInstance(PTEID_EIDCard *&new_card) {
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance failed with error code 0x%08x", e.GetError());
 		emit signalCardAccessError(CardUnknownError);
 	} catch (PTEID_Exception &e) {
+		if (e.GetError() == EIDMW_ERR_CARD_RESET) {
+			throw e;
+		}
 		PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance failed with error code 0x%08x", e.GetError());
 		emit signalCardAccessError(CardUnknownError);
 	}
@@ -3421,6 +3455,8 @@ void GAPI::connectToCard() {
 }
 
 void GAPI::connectToICAOCard() {
+	BEGIN_TRY_CATCH
+
 	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToICAOCard");
 	ICAO_Card* card = NULL;
 	unsigned long ReaderCount = ReaderSet.readerCount();
@@ -3457,6 +3493,8 @@ void GAPI::connectToICAOCard() {
 		performPACEWithCache(ICAOData);
 		return;
 	}
+
+	END_TRY_CATCH
 }
 
 //****************************************************
@@ -3889,6 +3927,7 @@ void GAPI::fillCertificateList(void) {
 }
 
 void GAPI::validateCertificates() {
+	BEGIN_TRY_CATCH
 	PTEID_EIDCard *card = NULL;
 	getCardInstance(card);
 
@@ -3900,6 +3939,8 @@ void GAPI::validateCertificates() {
 	} else {
 		performPACEWithCache(CardOperation::ValidateCertificate);
 	}
+
+	END_TRY_CATCH
 }
 
 void GAPI::doValidateCertificates() {

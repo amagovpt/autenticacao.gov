@@ -373,6 +373,8 @@ public:
 	EIDMW_APL_API void BeginTransaction(); /**< Begin a transaction */
 	EIDMW_APL_API void EndTransaction();   /**< End the transaction */
 
+	EIDMW_APL_API void Recover(); /**< Recover the card when it's not responding properly */
+
 	void CalLock();	  /**< Lock the reader for exclusive atomic access */
 	void CalUnlock(); /**< Unlock the reader */
 

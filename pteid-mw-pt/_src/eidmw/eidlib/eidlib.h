@@ -536,6 +536,12 @@ public:
 	PTEIDSDK_API void BeginTransaction(); /**< Begin a transaction with the reader */
 	PTEIDSDK_API void EndTransaction();	  /**< End the transaction */
 
+	/**
+	 * Recover the card when it's not responding properly anymore.
+	 * This method attempts to reset the card connection and restore communication.
+	 **/
+	PTEIDSDK_API void Recover();
+
 private:
 	PTEID_ReaderContext(const PTEID_ReaderContext &reader);			   /**< Copy not allowed - not implemented */
 	PTEID_ReaderContext &operator=(const PTEID_ReaderContext &reader); /**< Copy not allowed - not implemented */

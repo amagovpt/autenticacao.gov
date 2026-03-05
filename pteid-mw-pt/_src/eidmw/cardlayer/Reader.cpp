@@ -620,6 +620,16 @@ CByteArray CReader::SendAPDU(const APDU &oCmdAPDU) {
 	return m_poCard->SendAPDU(oCmdAPDU);
 }
 
+void CReader::Recover() {
+	if (m_poCard == NULL) {
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+	}
+
+	m_poContext->m_oCardInterface->Recover(m_poCard->m_hCard, &m_poCard->m_ulLockCount,
+										   m_poContext->getProtocol(m_poCard->m_hCard));
+	resetSecureMessaging();
+}
+
 unsigned long CReader::PinCount() {
 	if (m_poCard == NULL)
 		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);

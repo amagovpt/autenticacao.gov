@@ -106,7 +106,7 @@ public:
 
 	virtual CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
 								PTEID_CardProtocol protocol) = 0;
-	virtual void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) = 0;
+	virtual void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount, PTEID_CardProtocol protocol) = 0;
 	virtual CByteArray Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 							   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) = 0;
 
@@ -154,7 +154,7 @@ public:
 
 	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
 						PTEID_CardProtocol protocol) override;
-	void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) override;
+	void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount, PTEID_CardProtocol protocol) override;
 	CByteArray Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 					   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) override;
 
@@ -202,7 +202,7 @@ public:
 
 	CByteArray Transmit(PTEID_CardHandle hCard, const CByteArray &oCmdAPDU, long *plRetVal,
 						PTEID_CardProtocol protocol) override;
-	void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount) override;
+	void Recover(PTEID_CardHandle hCard, unsigned long *pulLockCount, PTEID_CardProtocol protocol) override;
 	CByteArray Control(PTEID_CardHandle hCard, unsigned long ulControl, const CByteArray &oCmd,
 					   unsigned long ulMaxResponseSize = CTRL_BUF_LEN) override;
 

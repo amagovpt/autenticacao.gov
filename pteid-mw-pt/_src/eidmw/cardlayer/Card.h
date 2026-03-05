@@ -163,6 +163,7 @@ protected:
 
 	std::unique_ptr<SecureMessaging> m_secureMessaging{};
 
+	friend class CReader; // Allow CReader to access m_ulLockCount for Recover()
 private:
 	// No copies allowed
 	CCard(const CCard &oCard);

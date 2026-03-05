@@ -351,7 +351,7 @@ CByteArray CCard::SendAPDU(const CByteArray &oCmdAPDU) {
 	oResp = handleSendAPDUSecurity(oCmdAPDU, lRetVal);
 
 	if (lRetVal == EIDMW_ERR_CARD_COMM || lRetVal == EIDMW_ERR_NOT_TRANSACTED) {
-		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
+		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount, m_poContext->getProtocol(m_hCard));
 		// try again to select the applet
 		if (SelectApplet()) {
 			// try again, now that the card has been reset
@@ -389,7 +389,7 @@ CByteArray CCard::SendAPDU(const APDU &apdu) {
 	CByteArray oResp = handleSendAPDUSecurity(apdu, lRetVal);
 
 	if (lRetVal == EIDMW_ERR_CARD_COMM || lRetVal == EIDMW_ERR_NOT_TRANSACTED) {
-		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount);
+		m_poContext->m_oCardInterface->Recover(m_hCard, &m_ulLockCount, m_poContext->getProtocol(m_hCard));
 		// try again to select the applet
 		if (SelectApplet()) {
 			// try again, now that the card has been reset

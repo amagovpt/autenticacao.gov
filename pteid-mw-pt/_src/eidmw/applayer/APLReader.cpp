@@ -321,6 +321,13 @@ void APL_ReaderContext::EndTransaction() {
 	m_transaction_mutex.Unlock();
 }
 
+void APL_ReaderContext::Recover() {
+	if (m_calreader == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_READER);
+
+	m_calreader->Recover();
+}
+
 void APL_ReaderContext::CalLock() {
 	if (m_cal_lock)
 		throw CMWEXCEPTION(EIDMW_ERR_BAD_TRANSACTION);

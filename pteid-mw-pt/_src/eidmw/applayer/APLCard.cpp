@@ -147,6 +147,15 @@ void APL_Card::initPaceAuthentication(const char *secret, size_t secretLen, APL_
 	m_pace_performed = true;
 }
 
+void APL_Card::resetPaceAuthentication() {
+	BEGIN_CAL_OPERATION(m_reader)
+
+	m_reader->getCalReader()->resetSecureMessaging();
+
+	END_CAL_OPERATION(m_reader)
+	m_pace_performed = false;
+}
+
 void APL_Card::initBACAuthentication(const char *mrz_info) {
 	BEGIN_CAL_OPERATION(m_reader)
 	m_reader->getCalReader()->initBACAuthentication(mrz_info);
