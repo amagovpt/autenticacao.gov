@@ -892,6 +892,9 @@ void FoFiType1C::convertToType0(char *psName, int *codeMap, int nCodes,
       }
     }
 
+    if (fd >= nFDs)
+	    continue;
+
     // font dictionary (unencrypted section)
     (*outputFunc)(outputStream, "16 dict begin\n", 14);
     (*outputFunc)(outputStream, "/FontName /", 11);
