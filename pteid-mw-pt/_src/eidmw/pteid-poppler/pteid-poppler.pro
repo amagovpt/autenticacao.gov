@@ -69,10 +69,4 @@ SOURCES += poppler/Array.cc \
 	goo/GooList.cc   \
 	goo/gstrtod.cc   \
 	goo/GooString.cc   \
-	goo/GooTimer.cc   \
-	fofi/FoFiBase.cc   \
-	fofi/FoFiEncodings.cc   \
-	fofi/FoFiIdentifier.cc   \
-	fofi/FoFiTrueType.cc   \
-	fofi/FoFiType1.cc   \
-	fofi/FoFiType1C.cc
+	goo/GooTimer.cc
