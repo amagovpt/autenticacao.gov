@@ -1755,8 +1755,9 @@ int CCITTFaxStream::lookChar() {
       for (i = 0; codingLine[i] < columns; ++i) {
 	refLine[i] = codingLine[i];
       }
-      refLine[i++] = columns;
-      refLine[i] = columns;
+      for (; i < columns + 2; ++i) {
+	refLine[i] = columns;
+      }
       codingLine[0] = 0;
       a0i = 0;
       b1i = 0;
