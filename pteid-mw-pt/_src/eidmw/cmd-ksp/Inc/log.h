@@ -33,7 +33,6 @@
 		sprintf(buf, "%s() - ", __FUNCTION__);                                                                         \
 		sprintf(&buf[strlen(buf)], format, __VA_ARGS__);                                                               \
 		MWLOG(level, mod, buf);                                                                                        \
-		printf("%s\n", buf);                                                                                           \
 	}
 #define MWLOG_ERR(buf, format, ...) _LOG_(buf, LEV_ERROR, MOD_KSP, format, __VA_ARGS__)
 #define MWLOG_WARN(buf, format, ...) _LOG_(buf, LEV_WARN, MOD_KSP, format, __VA_ARGS__)
