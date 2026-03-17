@@ -519,21 +519,21 @@ void CAppLayer::initializeAAContext() {
 
 		ASN1_OBJECT *oid = d2i_ASN1_OBJECT(nullptr, &bsiOID, len);
 		if (oid == nullptr) {
-			MWLOG(LEV_ERROR, MOD_APL, L"Failed to create ASN1 object for %s", LN);
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to create ASN1 object for %s", LN);
 			return;
 		}
 
 		char oid_str[256];
 		int ret = OBJ_obj2txt(oid_str, sizeof(oid_str), oid, 1);
 		if (ret < 0) {
-			MWLOG(LEV_ERROR, MOD_APL, L"Failed to convert ASN1 object to text for %s", LN);
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to convert ASN1 object to text for %s", LN);
 			ASN1_OBJECT_free(oid);
 			return;
 		}
 
 		auto created_nid = OBJ_create(oid_str, SN, LN);
 		if (created_nid == NID_undef) {
-			MWLOG(LEV_ERROR, MOD_APL, L"Failed to create NID for %s", LN);
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to create NID for %s", LN);
 		}
 
 		ASN1_OBJECT_free(oid);

@@ -1572,7 +1572,7 @@ void printOpenSSLError(const char *context) {
 	int errLine;
 	errCode = ERR_get_error_all(&errFile, &errLine, &errFunction, NULL, NULL);
 	errString = ERR_error_string(errCode, NULL);
-	MWLOG(LEV_ERROR, MOD_APL, L"Error decoding %s! Detail: %s", context, errString);
+	MWLOG(LEV_ERROR, MOD_APL, "Error decoding %s! Detail: %s", context, errString);
 }
 
 ASN1_SEQUENCE(CscaMasterList) = {ASN1_SIMPLE(CscaMasterList, version, ASN1_INTEGER),
@@ -1608,7 +1608,7 @@ void APL_CryptoFwk::loadMasterList(const char *filePath) {
 
 		ASN1_OBJECT *expected_oid = OBJ_nid2obj(masterlist_nid);
 		if (OBJ_cmp(expected_oid, content_type) != 0) {
-			MWLOG(LEV_ERROR, MOD_APL, "ERROR: unexpected contentType OID in CMS structure!\n");
+			MWLOG(LEV_ERROR, MOD_APL, "ERROR: unexpected contentType OID in CMS structure!");
 		}
 
 		int ret = CMS_verify(cms, NULL, NULL, NULL, bio_out, flags);
@@ -1616,7 +1616,7 @@ void APL_CryptoFwk::loadMasterList(const char *filePath) {
 			const unsigned char *p_data;
 			long size = BIO_get_mem_data(bio_out, &p_data);
 
-			MWLOG(LEV_INFO, MOD_APL, "MasterList content: %ld bytes\n", size);
+			MWLOG(LEV_INFO, MOD_APL, "MasterList content: %ld bytes", size);
 
 			CscaMasterList *ml = d2i_CscaMasterList(NULL, &p_data, size);
 			if (ml) {
@@ -1627,7 +1627,7 @@ void APL_CryptoFwk::loadMasterList(const char *filePath) {
 
 			CscaMasterList_free(ml);
 		} else {
-			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify CMS SignedData structure!\n");
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to verify CMS SignedData structure!");
 			printOpenSSLError("");
 		}
 
@@ -1738,7 +1738,7 @@ X509_STORE *APL_CryptoFwk::getMultipassStore() {
 
 void APL_CryptoFwk::initMasterListStore(CscaMasterList *cml) {
 	if (cml == NULL || cml->certList == NULL) {
-		MWLOG(LEV_ERROR, MOD_APL, L"Invalid CscaMasterList or certList is empty.\n");
+		MWLOG(LEV_ERROR, MOD_APL, "Invalid CscaMasterList or certList is empty.");
 		return;
 	}
 
@@ -1749,7 +1749,7 @@ void APL_CryptoFwk::initMasterListStore(CscaMasterList *cml) {
 	for (int i = 0; i < num_certs; i++) {
 		X509 *cert = sk_X509_value(cml->certList, i);
 		if (cert == NULL) {
-			MWLOG(LEV_ERROR, MOD_APL, L"Failed to retrieve certificate at index %d\n", i);
+			MWLOG(LEV_ERROR, MOD_APL, "Failed to retrieve certificate at index %d", i);
 			continue;
 		}
 
