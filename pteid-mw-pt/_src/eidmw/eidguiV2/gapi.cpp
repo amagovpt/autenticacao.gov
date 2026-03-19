@@ -620,6 +620,9 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
 	} else if (errorCode == EIDMW_PERMISSION_DENIED) {
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Permission denied error in %s", caller_function);
 		emit signalPdfSignFail(SignFilePermissionFailed, index);
+	} else if (errorCode == EIDMW_FILE_NOT_OPENED) {
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Failed to write output file in %s: file is already open in another application", caller_function);
+		emit signalPdfSignFail(SignFilePermissionFailed, index);
 	} else if (errorCode == EIDMW_PDF_INVALID_ERROR) {
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "PDF invalid error in %s", caller_function);
 		emit signalPdfSignFail(PDFFileInvalid, index);
@@ -1236,6 +1239,7 @@ void GAPI::showSignCMDDialog(long error_code) {
 		message = tr("STR_CMD_INACTIVE_SERVICE");
 		break;
 	case EIDMW_PERMISSION_DENIED:
+	case EIDMW_FILE_NOT_OPENED:
 		message = tr("STR_SIGN_FILE_PERMISSION_FAIL");
 		break;
 	case EIDMW_TIMESTAMP_ERROR:
