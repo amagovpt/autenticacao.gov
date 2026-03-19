@@ -468,18 +468,15 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 
 			delete dlgCMDAsk;
 			dlgCMDAsk = NULL;
-			MWLOG(LEV_DEBUG, MOD_DLG, L" DELETED DLG");
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  --> DlgAskCMD() returns DLG_OK");
 			return DLG_OK;
 		}
 		delete dlgCMDAsk;
 		dlgCMDAsk = NULL;
-		MWLOG(LEV_DEBUG, MOD_DLG, L" DELETED DLG");
 	} catch (...) {
 		if (dlgCMDAsk) {
 			delete dlgCMDAsk;
 			dlgCMDAsk = NULL;
-			MWLOG(LEV_DEBUG, MOD_DLG, L" DELETED DLG");
 		}
 		MWLOG(LEV_ERROR, MOD_DLG, L"  --> DlgAskCMD() returns DLG_ERR");
 		return DLG_ERR;
