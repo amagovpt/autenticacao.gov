@@ -884,7 +884,7 @@ int CMDServices::checkSignatureDocumentPoolingResponse(_ns2__SignDocumentPooling
 	}
 
 	if (IS_SOAP_ERROR(statusCode)) {
-		MWLOG_ERR("Error Status Code");
+		MWLOG_DEBUG("Error Status Code: %d", statusCode);
 		return statusCode;
 	}
 
@@ -1266,13 +1266,12 @@ int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::vector<CByteArray *>
 	}
 
 	// Creates a request name to use for the logs
-	MWLOG(LEV_DEBUG, MOD_CMD, L"Requesting SignatureDocumentPooling endpoint");
+	MWLOG(LEV_DEBUG, MOD_CMD, "Requesting SignatureDocumentPooling endpoint");
 	// If isOTP is true, then a ValidateOTP SOAP request will be sent. If isOTP is false, then a
 	// signatureDocumentPooling SOAP request will be sent.
 	int ret = signatureDocumentPooling(proxyInfo, &sign, &signLen);
-	// Verifies the request's return
 	if (ret != ERR_NONE) {
-		MWLOG_ERR("SignatureDocumentPooling failed");
+		MWLOG_DEBUG("Signature with biometric validation: not ready yet");
 		return ret;
 	}
 
