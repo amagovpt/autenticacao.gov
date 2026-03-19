@@ -538,7 +538,13 @@ CMDPoolingThread::CMDPoolingThread(CMDSignature *signature) {
 void CMDPoolingThread::Run() {
 	while (m_return != ERR_NONE && m_wasCancelled == false) {
 		CThread::SleepMillisecs(1000);
-		m_return = m_signature->signDocumentPooling();
+		try {
+			m_return = m_signature->signDocumentPooling();
+		} catch (CMWException &e) {
+			MWLOG_ERR("CMDPoolingThread: signDocumentPooling threw exception: %08x", e.GetError());
+			m_return = e.GetError();
+			break;
+		}
 	}
 	if (m_wasCancelled == false) {
 		DlgCloseAskInputCMD();

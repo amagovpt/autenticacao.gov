@@ -533,6 +533,10 @@ int CMDSignature::signClose() {
 		if (poolingThread.getReturn() == ERR_NONE) {
 			return poolingThread.getReturn();
 		}
+		int poolingRet = poolingThread.getReturn();
+		if (poolingRet != ERR_ADDR_USER_BASE) {
+			throw CMWEXCEPTION(poolingRet);
+		}
 		return ERR_OP_CANCELLED;
 	} else if (ret != ERR_NONE) {
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
