@@ -13,7 +13,6 @@
       "BaltimoreCyberTrustRoot.der":"16af57a9f676b0ab126095aa5ebadef22ab31119d644ac95cd4b93dbf3f26aeb",
       "GlobalChambersignRoot-2008.der":"136335439334a7698016a0d324de72284e079d7b5220bb8fbd747816eebebaca",
       "Usertrust_RSA_Certification_Authority.der":"e793c9b02fd8aa13e21c31228accb08119643b749c898964b1746d46c3d4cbd2",
-      "DigicertRoot.der": "4348a0e9444c78cb265e058d5e8944b4d84f9662bd26db257f8934a443c70161",
-      "cacerts.pem":"7563b29f62bcf979950e57dea0e59587122f998e2d6d1451baf0a9730390f1b8"
+      "DigicertRoot.der": "4348a0e9444c78cb265e058d5e8944b4d84f9662bd26db257f8934a443c70161"
    }
 }
