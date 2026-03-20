@@ -90,7 +90,7 @@ void sigint_handler(int sig) {
 			delete dlg;
 		}
 	}
-	exit(0);
+	QCoreApplication::quit();
 	dlg = NULL;
 }
 
@@ -122,7 +122,7 @@ void *parentWatchDog(void* arg) {
 					delete dlg;
 				}
 			}
-			exit(0);
+			QCoreApplication::quit();
 			dlg = NULL;
 		}
 		usleep(100000); // 100 ms
