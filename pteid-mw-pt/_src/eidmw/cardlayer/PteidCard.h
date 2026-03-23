@@ -46,7 +46,7 @@ public:
 		m_poCardInterface = poCardInterface;
 	}
 
-	~KeepAliveThread() { RequestStop(); }
+	~KeepAliveThread() { Stop(); }
 
 	void Run();
 
