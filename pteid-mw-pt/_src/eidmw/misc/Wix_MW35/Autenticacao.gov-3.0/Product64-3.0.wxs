@@ -183,6 +183,12 @@
       <Component Id="SubCASignature0019" Guid="{2EB0B93E-D4FC-488F-8DA7-FB1C0D1F8D02}">
         <File Source="..\..\certs\CC_Asc0019.der" />
       </Component>
+      <Component Id="SubCAAuth0020" Guid="{64F6B722-58B7-4DFD-BBE3-E64F4A1AF1A0}">
+        <File Source="..\..\certs\CC_Auc0020.der" />
+      </Component>
+      <Component Id="SubCASignature0020" Guid="{AD7CA0A0-5024-471D-961A-7B1431FC0A5D}">
+        <File Source="..\..\certs\CC_Asc0020.der" />
+      </Component>
 			
 	  </DirectoryRef>
 
@@ -538,7 +544,9 @@
 				<ComponentRef Id="SectigoRootCert"/>
 				<ComponentRef Id="DigicertRootCert"/>
 				<ComponentRef Id="SubCAAuth0019"/>
+        <ComponentRef Id="SubCAAuth0020"/>
 				<ComponentRef Id="SubCASignature0019"/>
+        <ComponentRef Id="SubCASignature0020"/>
 				<ComponentRef Id="CrlDir"/>
 				<ComponentRef Id="HttpDir"/>
 
