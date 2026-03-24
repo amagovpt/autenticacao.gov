@@ -59,6 +59,7 @@
 #include <curl/curl.h>
 
 #include <algorithm>
+#include <atomic>
 
 using namespace eIDMW;
 
@@ -66,7 +67,7 @@ using namespace eIDMW;
 #define TRIES_LEFT_MAX 3
 
 static bool g_cleaningCallback = false;
-static int g_runningCallback = 0;
+std::atomic<int> g_runningCallback = 0;
 
 /*
 	GAPI - Graphic Application Programming Interface
