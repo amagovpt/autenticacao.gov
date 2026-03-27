@@ -12,6 +12,13 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
+%if 0%{?fedora} >= 43
+%global java_ver 25
+%else
+%global java_ver 21
+%endif
+
+%global __brp_check_rpaths %{nil}
 
 #Disable suse-specific checks: there is no way to disable just the lib64 check
 %if 0%{?suse_version}
@@ -20,22 +27,30 @@
 %endif
 %endif
 
-%define git_revision git20230328
-%define app_version 3.10.1
-
 Name:           pteid-mw
-BuildRequires:  pcsc-lite-devel make
+License:        GPLv2+
+Group:          System/Libraries
+Version:        3.14.0
+Release:        1%{?dist}
+Summary:        Portuguese eID middleware
+Url:            https://github.com/amagovpt/autenticacao.gov
+Vendor:         Portuguese Government
+Source0:        https://github.com/amagovpt/autenticacao.gov/archive/v%{version}/autenticacao.gov-%{version}.tar.gz
+Patch4:         0004-add-pt.gov.autenticacao.appdata.xml.patch
+Patch5:         C23.patch
+
+BuildRequires:  pcsc-lite-devel
+BuildRequires:  make
 BuildRequires:  swig >= 4.0.0
 BuildRequires:  libzip-devel
 BuildRequires:  openjpeg2-devel
-Requires:       pcsc-lite curl lato-fonts polkit
+BuildRequires:  eac-devel
 
-
-%if 0%{?suse_version}
-BuildRequires:  libcurl-devel libxerces-c-devel libopenssl-1_1-devel
-
-Requires: pcsc-ccid xerces-c libqt5-qtquickcontrols libqt5-qtgraphicaleffects
-%endif
+Requires:       pcsc-lite
+Requires:       curl
+Requires(post): /usr/bin/gtk-update-icon-cache
+Requires(postun): /usr/bin/gtk-update-icon-cache
+Conflicts:  cartao_de_cidadao
 
 %if 0%{?suse_version}
 BuildRequires:  java-11-openjdk-devel
@@ -46,175 +61,133 @@ BuildRequires:  libqt5-qtdeclarative-devel
 BuildRequires:  libqt5-qtquickcontrols2
 BuildRequires:  libQt5QuickControls2-devel
 BuildRequires:  libQt5Gui-private-headers-devel
-# Make sure that we don't run the OpenSUSE brp scripts - we don't comply with a lot of the checks...
-BuildRequires:	-brp-check-suse
-BuildRequires:	-post-build-checks
-BuildRequires:	-rpmlint
-
 BuildRequires:  libxml-security-c-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libxerces-c-devel
+BuildRequires:  libopenssl-devel
+BuildRequires:  update-desktop-files
+BuildRequires:  unzip
+Requires: pcsc-ccid
+Requires: xerces-c
+Requires: libqt5-qtquickcontrols
+Requires: libqt5-qtgraphicaleffects
 %endif
 
-%if 0%{?fedora} || 0%{?centos_ver}
-BuildRequires:  java-11-openjdk-devel
-Requires:       poppler-qt5
-Requires:       pcsc-lite-ccid
-Requires:       qt5-qtquickcontrols
-Requires:       qt5-qtquickcontrols2
-
+%if 0%{?fedora} || 0%{?rhel}
+BuildRequires:  java-%{java_ver}-openjdk-devel
 BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtbase-private-devel
 BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  qt5-qtquickcontrols2-devel
 BuildRequires:  qt5-qttools-devel
-BuildRequires:  qt5-qtquickcontrols
-BuildRequires:  qt5-qtquickcontrols2
-
 BuildRequires:  libpng-devel
 BuildRequires:  cjson-devel
-
 BuildRequires:  xml-security-c-devel
 BuildRequires:  poppler-qt5-devel
-BuildRequires:  gcc gcc-c++ xerces-c-devel
-BuildRequires:  qt-devel curl-devel
-
-BuildRequires:  openssl-devel
-
+BuildRequires:  gcc-c++
+BuildRequires:  cairo-devel
+BuildRequires:  curl-devel > 7.62.0
+BuildRequires:  openssl-devel > 3.2
+BuildRequires:  desktop-file-utils
+BuildRequires:  pcsc-lite-ccid
+BuildRequires:  xerces-c-devel
+Requires:       poppler-qt5
+Requires:       pcsc-lite-ccid
+Requires:       hicolor-icon-theme
 %endif
-
-Conflicts:  cartao_de_cidadao
-
-License:        GPLv2+
-Group:          System/Libraries
-Version:        %{app_version}.%{git_revision}
-Release:        1
-Summary:        Portuguese eID middleware
-Url:            https://github.com/amagovpt/autenticacao.gov
-Vendor:         Portuguese Government
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Source0:        pteid-mw_%{app_version}-%{git_revision}.tar.xz
-Source1:        pteid-mw-gui.desktop
-Source2:        pteid-scalable.svg
-
-%if 0%{?suse_version}
-BuildRequires:  update-desktop-files
-%endif
-
-Requires(post): /usr/bin/gtk-update-icon-cache
-Requires(postun): /usr/bin/gtk-update-icon-cache
 
 %description
  The Autenticação.Gov package provides a utility application (eidguiV2), a set of
  libraries and a PKCS#11 module to use the Portuguese Identity Card
  (Cartão de Cidadão) and Chave Móvel Digital in order to authenticate securely
  in certain websites and sign documents.
+
+%package devel
+Summary: Development files
+%description devel
+This package contains the development files.
+
 %prep
-%setup -q -n pteid-mw_%{app_version}-%{git_revision}
+%autosetup -p1 -n autenticacao.gov-%{version}
+
+# move pteid-mw-pt/_src/eidmw/ to root
+cd ..
+mv autenticacao.gov-%{version}/pteid-mw-pt/_src/eidmw .
+rm -rf autenticacao.gov-%{version}
+mv eidmw autenticacao.gov-%{version}
+cd autenticacao.gov-%{version}
+sed -i "s/java-11-openjdk-amd64/java-%{java_ver}-openjdk/" eidlibJava_Wrapper/eidlibJava_Wrapper.pro
+sed -i "s/release 8/release %{java_ver}/" eidlibJava_Wrapper/eidlibJava_Wrapper.pro
+# create dirs that git doesn't
+#mkdir lib jar
+mkdir -p eidlibJava/class
+
+#fix file permissions
+find CMD -perm -o=x -type f -exec chmod 644 {} ';'
+find applayer -perm -o=x -type f -exec chmod 644 {} ';'
+find cardlayer -perm -o=x -type f -exec chmod 644 {} ';'
+find misc -perm -o=x -type f -exec chmod 644 {} ';'
+find eidguiV2 -perm -o=x -type f -exec chmod 644 {} ';'
 
 
 %build
 %if 0%{?suse_version}
 %ifarch x86_64
 #./configure --lib+=-L/usr/lib64
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib64/jvm/java-11-openjdk-11/include/ /usr/lib64/jvm/java-11-openjdk-11/include/linux/" pteid-mw.pro
+qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib64/jvm/java-21-openjdk-21/include/ /usr/lib64/jvm/java-21-openjdk-21/include/linux/" pteid-mw.pro
 %else
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-11-openjdk-11/include/ /usr/lib/jvm/java-11-openjdk-11/include/linux/" pteid-mw.pro
+qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-21-openjdk-21/include/ /usr/lib/jvm/java-21-openjdk-21/include/linux/" pteid-mw.pro
 %endif
 %endif
 
-%if 0%{?fedora} || 0%{?centos_ver}
-qmake-qt5 "PREFIX_DIR += /usr/local" "INCLUDEPATH += /usr/lib/jvm/java-11-openjdk/include/ /usr/lib/jvm/java-11-openjdk/include/linux/" pteid-mw.pro
+%if 0%{?fedora} || 0%{?rhel}
+%{qmake_qt5} PKG_NAME=pteid CONFIG+=release PREFIX_DIR="/usr/local" INCLUDEPATH+="/usr/lib/jvm/java-%{java_ver}-openjdk/include/ /usr/lib/jvm/java-%{java_ver}-openjdk/include/linux/" pteid-mw.pro
 %endif
 
-make %{?jobs:-j%jobs}
+%make_build
 
 %install
 
 #install libs
 mkdir -p $RPM_BUILD_ROOT/usr/local/lib/
-install -m 755 -p lib/libpteidcommon.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidcommon.so.2.0.0
-install -m 755 -p lib/libpteiddialogsQT.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteiddialogsQT.so.2.0.0
-install -m 755 -p lib/libpteidcardlayer.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidcardlayer.so.2.0.0
-install -m 755 -p lib/libpteidpkcs11.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidpkcs11.so.2.0.0
-install -m 755 -p lib/libpteidapplayer.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidapplayer.so.2.0.0
-install -m 755 -p lib/libpteidlib.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidlib.so.2.0.0
-install -m 755 -p lib/libpteidlibj.so.2.0.0 $RPM_BUILD_ROOT/usr/local/lib/libpteidlibj.so.2.0.0
-install -m 755 -p lib/libCMDServices.so.1.0.0 $RPM_BUILD_ROOT/usr/local/lib/libCMDServices.so.1.0.0
+%make_install INSTALL_ROOT=$RPM_BUILD_ROOT
 
-#install header files
-mkdir -p $RPM_BUILD_ROOT/usr/local/include
-install -m 644 eidlib/eidlib.h $RPM_BUILD_ROOT/usr/local/include/
-install -m 644 eidlib/eidlibcompat.h $RPM_BUILD_ROOT/usr/local/include/
-install -m 644 eidlib/eidlibdefines.h $RPM_BUILD_ROOT/usr/local/include/
-install -m 644 eidlib/eidlibException.h $RPM_BUILD_ROOT/usr/local/include/
-install -m 644 common/eidErrors.h $RPM_BUILD_ROOT/usr/local/include/
-mkdir -p $RPM_BUILD_ROOT/usr/local/share/certs/
-install -m 755 -p misc/certs/*.der $RPM_BUILD_ROOT/usr/local/share/certs/
-install -m 755 -p misc/certs/*.pem $RPM_BUILD_ROOT/usr/local/share/certs/
-
-mkdir -p $RPM_BUILD_ROOT/usr/local/share/pteid-mw/www/
-install -m 755 -p misc/web/*.html $RPM_BUILD_ROOT/usr/local/share/pteid-mw/www/
-
-mkdir -p $RPM_BUILD_ROOT/usr/local/lib/pteid_jni/
-install -m 755 -p jar/pteidlibj.jar $RPM_BUILD_ROOT/usr/local/lib/pteid_jni/
-
-mkdir -p $RPM_BUILD_ROOT/usr/local/bin/
-install -m 755 eidguiV2/eidguiV2 $RPM_BUILD_ROOT/usr/local/bin/eidguiV2
-
-install -m 755 -p bin/pteiddialogsQTsrv $RPM_BUILD_ROOT/usr/local/bin/pteiddialogsQTsrv
-install -m 644 -p eidguiV2/eidmw_en.qm $RPM_BUILD_ROOT/usr/local/bin/
-install -m 644 -p eidguiV2/eidmw_nl.qm $RPM_BUILD_ROOT/usr/local/bin/
-
-mkdir -p $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
-install -m 644 -p eidguiV2/fonts/myriad/MyriadPro-Regular.otf $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
-install -m 644 -p eidguiV2/fonts/myriad/MyriadPro-Bold.otf $RPM_BUILD_ROOT/usr/local/share/pteid-mw/fonts/
+mkdir -p $RPM_BUILD_ROOT%{_jnidir}/
+install -m 755 -p jar/pteidlibj.jar $RPM_BUILD_ROOT%{_jnidir}/
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/applications
-install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/usr/share/applications
+install -m 644 debian/pteid-mw-gui.desktop $RPM_BUILD_ROOT/usr/share/applications
 
 mkdir -p $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/apps/
-install -m 644 -p %{SOURCE2} $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/apps/
+install -m 644 -p debian/pteid-scalable.svg $RPM_BUILD_ROOT/usr/share/icons/hicolor/scalable/apps/
+
+mkdir -p $RPM_BUILD_ROOT/usr/share/pixmaps
+install -m 644 -p debian/pteid-signature.png $RPM_BUILD_ROOT/usr/share/pixmaps
+
+mkdir -p $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/mimetypes/
+ln -s -f ../../../../pixmaps/pteid-signature.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/mimetypes/application-x-signedcc.png
+ln -s -f ../../../../pixmaps/pteid-signature.png $RPM_BUILD_ROOT/usr/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-x-signedcc.png
+
+mkdir -p $RPM_BUILD_ROOT/etc/ld.so.conf.d/
+echo "/usr/local/lib" > $RPM_BUILD_ROOT/etc/ld.so.conf.d/pteid.conf
+%if 0%{?fedora} || 0%{?rhel}
+desktop-file-validate %{buildroot}%{_datadir}/applications/pteid-mw-gui.desktop
+%endif
 
 %if 0%{?suse_version}
  %suse_update_desktop_file -i pteid-mw-gui Office Presentation
   export NO_BRP_CHECK_RPATH=true
 %endif
-%clean
-rm -rf $RPM_BUILD_ROOT
+
 
 %post
-ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so
-ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so.2
-ln -s -f /usr/local/lib/libpteidcommon.so.2.0.0 /usr/local/lib/libpteidcommon.so.2.0
-ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so
-ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so.2
-ln -s -f /usr/local/lib/libpteiddialogsQT.so.2.0.0 /usr/local/lib/libpteiddialogsQT.so.2.0
-ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so
-ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so.2
-ln -s -f /usr/local/lib/libpteidcardlayer.so.2.0.0 /usr/local/lib/libpteidcardlayer.so.2.0
-ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so
-ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so.2
-ln -s -f /usr/local/lib/libpteidpkcs11.so.2.0.0 /usr/local/lib/libpteidpkcs11.so.2.0
-ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so
-ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so.2
-ln -s -f /usr/local/lib/libpteidapplayer.so.2.0.0 /usr/local/lib/libpteidapplayer.so.2.0
-ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so
-ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2
-ln -s -f /usr/local/lib/libpteidlib.so.2.0.0 /usr/local/lib/libpteidlib.so.2.0
-ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so
-ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so.1
-ln -s -f /usr/local/lib/libCMDServices.so.1.0.0 /usr/local/lib/libCMDServices.so.1.0
-
-%if 0%{?fedora} || 0%{?centos_version}
-# BLURP: Add usr local to ldconf
-
-echo "/usr/local/lib" > /etc/ld.so.conf.d/pteid.conf
+%if 0%{?fedora} || 0%{?rhel}
 # MDV still uses old pcscd services
 if [ -x /etc/init.d/pcscd ]
 then
   /etc/init.d/pcscd restart
 fi
 
-%if 0%{?fedora} >= 16
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 8
 systemctl restart pcscd.service
 %endif
 %endif
@@ -231,60 +204,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %postun
 if [ "$1" = "0" ]; then
-rm -rf /usr/local/lib/libpteidcommon.so
-rm -rf /usr/local/lib/libpteidcommon.so.2
-rm -rf /usr/local/lib/libpteidcommon.so.2.0
-rm -rf /usr/local/lib/libpteiddialogsQT.so              
-rm -rf /usr/local/lib/libpteiddialogsQT.so.2
-rm -rf /usr/local/lib/libpteiddialogsQT.so.2.2
-rm -rf /usr/local/lib/libpteidcardlayer.so
-rm -rf /usr/local/lib/libpteidcardlayer.so.2
-rm -rf /usr/local/lib/libpteidcardlayer.so.2.0
-rm -rf /usr/local/lib/libpteidpkcs11.so
-rm -rf /usr/local/lib/libpteidpkcs11.so.2
-rm -rf /usr/local/lib/libpteidpkcs11.so.2.0
-rm -rf /usr/local/lib/libpteidapplayer.so
-rm -rf /usr/local/lib/libpteidapplayer.so.2
-rm -rf /usr/local/lib/libpteidapplayer.so.2.0
-rm -rf /usr/local/lib/libpteidlib.so
-rm -rf /usr/local/lib/libpteidlib.so.2
-rm -rf /usr/local/lib/libpteidlib.so.2.0
-
-# Delete all .pteid-ng folder and its contents from all users
-users=$(getent passwd | awk -F: '$3 >= 1000 && $3 <= 6000' | cut -d: -f6);
-for d in $users; do
-  if [ -d "$d/.pteid-ng" ]; then
-      if [ "$(ls -A $d/.pteid-ng)" ]; then
-          # Delete only files pertaining to the cache system
-          rm -f "$d"/.pteid-ng/*.ebin "$d"/.pteid-ng/*.bin "$d"/.pteid-ng/updateCertsLog.txt "$d"/.pteid-ng/updateNewsLog.txt
-      fi
-      rmdir --ignore-fail-on-non-empty "$d"/.pteid-ng
-  fi
-
-  # Delete scap attributes and eidmwcache folder and its contents
-  if [ -d "$d/.eidmwcache" ]; then
-    if [ -d "$d/.eidmwcache/scap_attributes" ]; then
-      if [ "$(ls -A $d/.eidmwcache/scap_attributes)" ]; then
-        # Delete only files pertaining to the cache system
-        rm -f "$d"/.eidmwcache/scap_attributes/*.xml
-      fi
-      rmdir --ignore-fail-on-non-empty "$d"/.eidmwcache/scap_attributes
-    fi
-    rmdir --ignore-fail-on-non-empty "$d"/.eidmwcache
-  fi
-done
-
-%if 0%{?fedora} || 0%{?centos_version}
-rm -rf /etc/ld.so.conf.d/pteid.conf
-%endif
-
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 /sbin/ldconfig > /dev/null 2>&1
 fi
 
 %files
-%defattr(-,root,root)
-/usr/local/lib/*
+/etc/ld.so.conf.d/pteid.conf
+/usr/local/lib/*.so.*
 /usr/local/bin/eidguiV2
 /usr/local/bin/pteiddialogsQTsrv
 /usr/local/bin/eidmw_en.qm
@@ -292,10 +218,36 @@ fi
 /usr/local/include/*
 /usr/share/applications/*
 /usr/share/icons/*
-/usr/local/share/certs
-/usr/local/share/pteid-mw
+/usr/share/pixmaps/*
+/usr/local/share/certs/
+/usr/local/share/pteid-mw/www/
+/usr/local/share/pteid-mw/fonts/
+%{_jnidir}/*
+
+%files devel
+/usr/local/include/*
+/usr/local/lib/*.so
 
 %changelog
+* Tue Feb 03 2026 Sérgio Basto <sergio@serjux.com> - 3.14.0-1
+- Update to 3.14.0
+
+* Sun Sep 21 2025 Sérgio Basto <sergio@serjux.com> - 3.13.3-1
+- Update to 3.13.3
+- Drop EL8, add EL10
+
+* Sun Apr 27 2025 Sérgio Basto <sergio@serjux.com> - 3.13.0-1
+- Update to 3.13.0
+
+* Tue Apr 15 2025 Sérgio Basto <sergio@serjux.com> - 3.12.0-3
+- rebuilt for xerces-c-3.3
+
+* Sun Jun 02 2024 Sérgio Basto <sergio@serjux.com> - 3.12.0-2
+- rebuilt
+
+* Sat Jun 01 2024 Sérgio Basto <sergio@serjux.com> - 3.12.0-1
+- 3.12.0
+
 * Tue Mar 28 2023 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - SCAP signature bugfix
 
@@ -312,6 +264,9 @@ fi
   - Address reading from online service
   - Certificate OCSP validation before signing with CC card
   - XAdES signature improvement: list and extract the contents of an ASiC container
+
+* Wed Sep 21 2022 Sérgio Basto <sergio@serjux.com> - 3.8.0-1
+- 3.8.0
 
 * Wed Jun 1 2022 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Chave Movel Digital signature support in the pteidlib SDK
@@ -340,6 +295,12 @@ fi
   - New feature - diagnostic report
   - Improved detection of unsupported PDF documents with XFA forms
 
+* Sat Nov 21 2020 Sérgio Basto <sergio@serjux.com> - 3.3.1-2
+- rpmlint pteid-mw-3.3.1-1.fc32.src.rpm pteid-mw-3.3.1-1.fc32.x86_64.rpm
+
+* Sat Nov 21 2020 Sérgio Basto <sergio@serjux.com> - 3.3.1-1
+- Update pteid-mw to 3.3.1
+
 * Wed Oct 28 2020 André Guerreiro <andre.guerreiro@caixamagica.pt>
   - Support for legislative change regarding expired cards until March 31st 2021
   - Improvement in trusted certificates update feature
@@ -354,6 +315,27 @@ fi
   - GUI scaling options to better support high-DPI screens
   - New feature: Export certificate to file
   - Accessibility improvements
+
+* Wed Jan 08 2020 Sérgio Basto <sergio@serjux.com> - 3.0.21-3
+- Rebuild for Qt 5.13.2
+
+* Mon Dec 02 2019 Sérgio Basto <sergio@serjux.com> - 3.0.21-2
+- Better spec file using make install
+
+* Sun Dec 01 2019 Sérgio Basto <sergio@serjux.com> - 3.0.21-1
+- 3.0.21
+
+* Fri Nov 29 2019 Sérgio Basto <sergio@serjux.com> - 3.0.20-2
+- Enable build for epel 7 and epel 8 build with or higher:
+  libzip 1.5.2-1
+  poppler 0.66.0-11
+  poppler-data 0.4.9-1
+  xalan-c 	1.11.0-16
+  xerces-c 	3.2.2-3
+  xml-security-c 2.0.2-4 (patched)
+
+* Sun Nov 17 2019 Sérgio Basto <sergio@serjux.com> - 3.0.20-1
+- 3.0.20
 
 * Fri Sep 13 2019 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   Accessibility improvements in the GUI application
@@ -472,7 +454,7 @@ fi
 * Fri Dec 13 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot: revision 3484 - Fixed locking issue on SignPDF
 
-* Mon Dec 09 2013 Andre Guerreiro 
+* Mon Dec 09 2013 Andre Guerreiro
   New SVN snapshot: revision 3468 - Fix CAP Pin change functionality
 
 * Fri Nov 22 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
@@ -485,7 +467,7 @@ fi
   New SVN snapshot : revision 3431 - new CA certificates
 
 * Tue Nov 12 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
-  New SVN snapshot : revision 3422 - Various bugfixes 
+  New SVN snapshot : revision 3422 - Various bugfixes
 
 * Wed Sep 11 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
   New SVN snapshot : revision 3400 - GUI Changes as requested by AMA, various bugfixes and new CA Certificates
@@ -494,7 +476,7 @@ fi
   New SVN snapshot : revision 3271 - Fix in PKCS11 module to support acroread SHA-256 signatures
 
 * Wed Jan 30 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
-  Fix %post and %postun, it was breaking the library symlinks on upgrade
+  Fix %%post and %%postun, it was breaking the library symlinks on upgrade
 
 * Mon Jan 21 2013 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
 - New SVN snapshot : revision 3256 - Fix the titlebar in pteidcertinstall.xpi
@@ -508,17 +490,17 @@ fi
 * Mon Nov 05 2012 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
 - Improved package description
 
-* Mon Oct 31 2012 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
-- New SVN snapshot revision 3078 - More fine-grained positioning for signatures and 
+* Wed Oct 31 2012 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
+- New SVN snapshot revision 3078 - More fine-grained positioning for signatures and
   some GUI improvements
 
 * Mon Oct 29 2012 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
-- New SVN snapshot revision 3058 - fix multiline issue in signature and parallel build 
-  for poppler 
+- New SVN snapshot revision 3058 - fix multiline issue in signature and parallel build
+  for poppler
 
 * Fri Oct 26 2012 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
 - New major release 2.1 - PDF Signatures is the new feature
- 
+
 * Fri Jul 27 2012 Andre Guerreiro <andre.guerreiro@caixamagica.pt>
 - Bump to 2957
 - Fix Fedora 17 build
