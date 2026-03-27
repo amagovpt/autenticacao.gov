@@ -37,7 +37,7 @@ cd ../../eidlibdotnetsdk
 sh ./generate_cs.sh
 popd
 
-VERSION="3.14.0.$git_revision"
+VERSION="3.15.0.$git_revision"
 
 echo "Packaging PTEID version $VERSION"
 echo "IMPORTANT: Don't forget to update the version in apps/Info.plist and release notes in resources dir"
@@ -62,6 +62,7 @@ recreate_dir system-libs/include
 cp $EIDLIB_DIR/eidlib.h              system-libs/include
 cp $EIDLIB_DIR/eidlibdefines.h       system-libs/include
 cp $EIDLIB_DIR/eidlibException.h     system-libs/include
+cp $EIDLIB_DIR/CardCallbacks.h       system-libs/include
 cp $EIDLIB_DIR/../common/eidErrors.h system-libs/include
 
 #Copy libraries and 3rd-party dependencies

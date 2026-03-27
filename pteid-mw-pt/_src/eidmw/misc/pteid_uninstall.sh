@@ -33,6 +33,7 @@ rm -f /usr/local/lib/pteidlib_dotnet8+.dylib
 
 #SDK header files
 rm -f /usr/local/include/eidlib.h
+rm -f /usr/local/include/CardCallbacks.h
 rm -f /usr/local/include/eidErrors.h
 rm -f /usr/local/include/eidlibException.h
 rm -f /usr/local/include/eidlibdefines.h
