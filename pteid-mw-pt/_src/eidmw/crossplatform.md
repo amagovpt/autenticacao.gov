@@ -59,7 +59,7 @@ Here is an example toolchain file for ARM64:
     set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
     set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
-This toolchain file should be saved (e.g., as `toolchain-aarch64.cmake`) and passed as a cmake parameter when configuring the cmake project.
+This toolchain file should be saved (e.g., as `toolchain-aarch64.cmake`) and passed as a cmake parameter when configuring the cmake project. The following commands should be run from `pteid-mw-pt/_src/eidmw/`, where the root `CMakeLists.txt` is located.
 
 **Important:** The toolchain file must be specified during the initial configuration. If reconfiguring an existing build directory, remove it first:
 
