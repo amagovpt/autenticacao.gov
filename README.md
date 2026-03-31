@@ -36,6 +36,8 @@ O Manual de Utilização pretende descrever todas as funcionalidades providencia
 
 [Manual de Utilização (download pdf)](https://amagovpt.github.io/docs.autenticacao.gov/Manual_de_Utilizacao_v3.pdf)
 
+[User manual (english)](https://amagovpt.github.io/docs.autenticacao.gov/user_manual_en.html)
+
 ### SDK
 
 Está disponível um SDK, com o objetivo de disponibilizar a integração com outras aplicações, das funcionalidades desenvolvidas no âmbito deste projeto.
@@ -48,7 +50,6 @@ Poderá aceder ao manual no seguinte URL:
 [Manual do SDK (download pdf)](https://amagovpt.github.io/docs.autenticacao.gov/Manual_de_SDK.pdf)
 
 A documentação da API disponibilizada pelo SDK está disponível nos seguintes URLs:
-
 
 [Documentação Técnica do SDK C++ (online)](https://amagovpt.github.io/docs.autenticacao.gov/sdk/cpp/)
 
