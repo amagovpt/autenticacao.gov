@@ -537,7 +537,6 @@ CMDPoolingThread::CMDPoolingThread(CMDSignature *signature) {
 
 void CMDPoolingThread::Run() {
 	while (m_return != ERR_NONE && m_wasCancelled == false) {
-		CThread::SleepMillisecs(1000);
 		try {
 			m_return = m_signature->signDocumentPooling();
 		} catch (CMWException &e) {
@@ -545,6 +544,8 @@ void CMDPoolingThread::Run() {
 			m_return = e.GetError();
 			break;
 		}
+		if (m_return != ERR_NONE && m_wasCancelled == false)
+			CThread::SleepMillisecs(1000);
 	}
 	if (m_wasCancelled == false) {
 		DlgCloseAskInputCMD();
