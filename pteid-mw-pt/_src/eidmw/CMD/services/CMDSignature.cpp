@@ -525,9 +525,7 @@ int CMDSignature::signClose() {
 
 	DlgRet ret = CMDSignatureClient::openAuthenticationDialogOTP(DlgCmdOperation::DLG_CMD_SIGNATURE, &otp,
 																 &m_docname_handle, &fSmsCallback);
-	if (poolingThread.m_isRunning) {
-		poolingThread.Stop();
-	}
+	poolingThread.Stop();
 
 	if (ret == DLG_CANCEL) {
 		if (poolingThread.getReturn() == ERR_NONE) {
