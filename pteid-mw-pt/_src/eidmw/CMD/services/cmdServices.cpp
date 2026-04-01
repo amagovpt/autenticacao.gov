@@ -51,13 +51,13 @@ namespace eIDMW {
 xsd__base64Binary *encode_base64(soap *sp, std::string in_str) {
 
 	if (sp == NULL) {
-		MWLOG_ERR("%s: Null soap");
+		MWLOG_ERR("Null soap");
 		return NULL;
 	}
 
 	xsd__base64Binary *encoded = NULL;
 	if (in_str.empty()) {
-		MWLOG_ERR("%s: Empty in_str");
+		MWLOG_ERR("Empty in_str");
 		return NULL;
 	}
 
@@ -82,7 +82,7 @@ public:
 
 			sp->proxy_host = _strdup(p.host.c_str());
 			sp->proxy_port = p.port;
-			MWLOG_DEBUG("Using proxy: host=%s, port=%ld", sp->proxy_host, sp->proxy_port);
+			MWLOG_DEBUG("Using proxy: host=%s, port=%d", sp->proxy_host, sp->proxy_port);
 
 			if (p.user.size() > 0) {
 				sp->proxy_userid = _strdup(p.user.c_str());
@@ -179,7 +179,7 @@ bool CMDServices::init(int recv_timeout, int send_timeout, int connect_timeout, 
 	// Dont output mustUnderstand attributes
 	sp->mustUnderstand = mustUnderstand;
 
-	char *ca_path = NULL;
+	const char *ca_path = NULL;
 	std::string cacerts_file;
 
 #ifdef __linux__

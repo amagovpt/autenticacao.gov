@@ -540,7 +540,7 @@ void CMDPoolingThread::Run() {
 		try {
 			m_return = m_signature->signClose("");
 		} catch (CMWException &e) {
-			MWLOG_ERR("CMDPoolingThread: signClose threw exception: %08x", e.GetError());
+			MWLOG_ERR("CMDPoolingThread: signClose threw exception: %08lx", e.GetError());
 			m_return = e.GetError();
 			break;
 		}
