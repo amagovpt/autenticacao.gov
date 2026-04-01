@@ -493,7 +493,7 @@ int CMDServices::checkCCMovelSignResponse(_ns2__CCMovelSignResponse *response) {
  ********************************************************* */
 int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std::string docName, std::string in_pin,
 							 bool IsBiometricValidationEnable) {
-
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
 	soap *sp = getSoap();
 	if (sp == NULL) {
 		MWLOG_ERR("Null soap");
@@ -639,6 +639,7 @@ int CMDServices::checkCCMovelMultipleSignResponse(_ns2__CCMovelMultipleSignRespo
 int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigned char *> in_hashes,
 									 std::vector<std::string> docNames, std::string in_pin,
 									 bool IsBiometricValidationEnable) {
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
 	// Gets SOAP
 	soap *sp = getSoap();
 	if (sp == NULL) {
@@ -1063,6 +1064,7 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::s
  ***    CMDServices::askForCertificate()                  ***
  ********************************************************* */
 int CMDServices::askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId, std::string in_pin) {
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
 	soap *sp = getSoap();
 	if (sp == NULL) {
 		MWLOG_ERR("Null soap");
@@ -1138,6 +1140,7 @@ int CMDServices::getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code, 
 		return ERR_INV_USERID;
 	}
 
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
 	std::string certificate;
 
 	int ret = ValidateOtp(proxyInfo, in_code, &certificate, isBiometric);
@@ -1173,6 +1176,7 @@ int CMDServices::getCertificate(CMDProxyInfo proxyInfo, std::string in_userId, s
 		MWLOG_ERR("Empty userId");
 		return ERR_INV_USERID;
 	}
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
 	// Creates certificate and certiface len variables
 	char *p_certificate = NULL;
 	int certificateLen = 0;
@@ -1215,6 +1219,7 @@ int CMDServices::getCertificate(CMDProxyInfo proxyInfo, std::string in_userId, s
 
 int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std::vector<CByteArray *> out_cb_vector,
 							   bool isBiometric) {
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
 	std::vector<unsigned int> signLen;
 	std::vector<unsigned char *> sign;
 	for (size_t i = 0; i < out_cb_vector.size(); i++) {
@@ -1254,6 +1259,7 @@ int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::string in_code, std:
 }
 
 int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::vector<CByteArray *> out_cb_vector) {
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
 	std::vector<unsigned int> signLen;
 	std::vector<unsigned char *> sign;
 	for (size_t i = 0; i < out_cb_vector.size(); i++) {
@@ -1298,6 +1304,7 @@ int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::vector<CByteArray *>
 ********************************************************* */
 int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId) {
 	MWLOG_DEBUG("CMDServices::forceSMS called");
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
 	soap *sp = getSoap();
 	if (sp == NULL) {
 		MWLOG_ERR("Null soap");
@@ -1329,67 +1336,6 @@ int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId) {
 	int ret;
 	_ns2__ForceSMSResponse response;
 	ret = proxy.ForceSMS(NULL, NULL, send, response);
-
-	/* Clean pointers before exit */
-	if (send->applicationId != NULL) {
-		if (send->applicationId->__ptr != NULL)
-			free(send->applicationId->__ptr);
-	}
-
-	/* Handling errors */
-	if (handleCommunicationError(proxy, ret) != ERR_NONE)
-		return ret;
-
-	/* Validate response */
-	ret = checkForceSmsResponse(&response);
-	if (ret != ERR_NONE)
-		return ret;
-
-	return ERR_NONE;
-}
-
-int CMDServices::forceSMS_mutex(CMDProxyInfo proxyInfo, std::string in_userId, std::mutex *mutex) {
-	// MUTEX LOCK
-	mutex->lock();
-	MWLOG_DEBUG("CMDServices::forceSMS called");
-	soap *sp = getSoap();
-	if (sp == NULL) {
-		MWLOG_ERR("Null soap");
-		// MUTEX UNLOCK
-		mutex->unlock();
-		return ERR_NULL_HANDLER;
-	}
-	enableBasicAuthentication();
-
-	std::string processId = getProcessID();
-	const char *endPoint = getEndPoint();
-
-	CMDSignatureGsoapProxy proxy(sp, proxyInfo);
-	proxy.soap_endpoint = endPoint;
-
-	/*
-	Get ForceSMS request
-	*/
-	_ns2__ForceSMS *send = soap_new__ns2__ForceSMS(sp);
-	if (send == NULL) {
-		MWLOG_ERR("Null send parameters");
-		// MUTEX UNLOCK
-		mutex->unlock();
-		return ERR_NULL_HANDLER;
-	}
-	send->processId = &processId;
-	send->applicationId = encode_base64(sp, getApplicationID());
-	send->citizenId = &in_userId;
-
-	/*
-	Call ForceSMS service
-	*/
-	int ret;
-	_ns2__ForceSMSResponse response;
-	ret = proxy.ForceSMS(NULL, NULL, send, response);
-
-	// MUTEX UNLOCK
-	mutex->unlock();
 
 	/* Clean pointers before exit */
 	if (send->applicationId != NULL) {

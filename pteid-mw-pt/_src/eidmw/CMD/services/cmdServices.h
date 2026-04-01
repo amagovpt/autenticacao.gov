@@ -63,7 +63,6 @@ public:
 
 	// ForceSMS
 	int forceSMS(CMDProxyInfo proxyInfo, std::string in_userId);
-	int forceSMS_mutex(CMDProxyInfo proxyInfo, std::string in_userId, std::mutex *mutex);
 
 	// ValidateOtp and SignatureDocumentPooling
 	// This getSignatures is used for the ValidateOTP
@@ -102,6 +101,7 @@ private:
 	std::string m_basicAuthUser;
 	std::string m_basicAuthPassword;
 	std::string m_endpoint;
+	std::mutex m_soap_mutex;
 
 	bool init(int recv_timeout, int send_timeout, int connect_timeout, short mustUnderstand);
 
