@@ -12,7 +12,6 @@
 #include <cassert>
 #include "CMDSignature.h"
 #include "MiscUtil.h"
-#include "StringOps.h"
 #include "PDFSignature.h"
 #include "cmdServices.h"
 #include "proxyinfo.h"
@@ -20,8 +19,7 @@
 #include "Crypto.h"
 #include "eidErrors.h"
 #include "cmdSignatureClient.h"
-#include <mutex>
-#include <chrono>
+#include <memory>
 
 #define MAX_DOCNAME_LENGTH 44
 // 5 Minutes
@@ -569,26 +567,27 @@ int CMDSignature::signClose() {
 }
 
 int CMDSignature::signDocumentPooling() {
-	std::vector<CByteArray *> signatures;
+	std::vector<std::unique_ptr<CByteArray>> signatures;
 	if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0) {
 		for (size_t i = 0; i < (std::max)(m_pdf_handlers.size(), std::size_t{1}); i++) {
-			signatures.push_back(new CByteArray());
+			signatures.push_back(std::make_unique<CByteArray>());
 		}
 	} else {
 		return ERR_NULL_HANDLER;
 	}
 
+	std::vector<CByteArray *> raw_signatures;
+	for (auto &s : signatures)
+		raw_signatures.push_back(s.get());
+
 	/*
 	   Gets the signatures.
 	   Create another function for a get Signatures, but with the SignDocumentPooling
 	*/
-	int ret = cli_getSignatures(signatures);
+	int ret = cli_getSignatures(raw_signatures);
 
-	if (ret != ERR_NONE) {
-		for (size_t i = 0; i < m_pdf_handlers.size(); i++)
-			delete signatures[i];
+	if (ret != ERR_NONE)
 		return ret;
-	}
 
 	if (m_pdf_handlers.size()) {
 		bool throwTimestampError = false;
@@ -644,26 +643,27 @@ int CMDSignature::signDocumentPooling() {
 
 // SignClose receives the signatures
 int CMDSignature::signClose(std::string in_code) {
-	std::vector<CByteArray *> signatures;
+	std::vector<std::unique_ptr<CByteArray>> signatures;
 	if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0) {
 		for (size_t i = 0; i < (std::max)(m_pdf_handlers.size(), std::size_t{1}); i++) {
-			signatures.push_back(new CByteArray());
+			signatures.push_back(std::make_unique<CByteArray>());
 		}
 	} else {
 		return ERR_NULL_HANDLER;
 	}
 
+	std::vector<CByteArray *> raw_signatures;
+	for (auto &s : signatures)
+		raw_signatures.push_back(s.get());
+
 	/*
 	   Gets the signatures.
 	   Create another function for a get Signatures, but with the SignDocumentPooling
 	*/
-	int ret = cli_getSignatures(signatures, in_code);
+	int ret = cli_getSignatures(raw_signatures, in_code);
 
-	if (ret != ERR_NONE) {
-		for (size_t i = 0; i < m_pdf_handlers.size(); i++)
-			delete signatures[i];
+	if (ret != ERR_NONE)
 		return ret;
-	}
 
 	if (m_pdf_handlers.size()) {
 		bool throwTimestampError = false;
