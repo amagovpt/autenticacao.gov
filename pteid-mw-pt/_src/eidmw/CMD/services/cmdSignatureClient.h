@@ -128,8 +128,6 @@ public:
 	int getReturn() { return m_return; };
 
 private:
-	DlgCmdOperation m_operation;
-
 	std::atomic<bool> m_wasCancelled = false;
 	CMDSignature *m_signature;
 	int m_return = ERR_ADDR_USER_BASE;
