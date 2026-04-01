@@ -517,18 +517,18 @@ int CMDSignature::signClose() {
 	std::string otp;
 	//The function pointer containing the fsmsCallback
 	std::function<void(void)> fSmsCallback = std::bind(&CMDServices::forceSMS, cmdService, m_proxyInfo, m_userId);
-	// Creates the pooling thread that will be used for SignDocumentPooling
-	CMDPoolingThread poolingThread(this);
-	poolingThread.Start();
+	// Creates the polling thread that polls for biometric approval
+	CMDPollingThread pollingThread(this);
+	pollingThread.Start();
 
 	DlgRet ret = CMDSignatureClient::openAuthenticationDialogOTP(DlgCmdOperation::DLG_CMD_SIGNATURE, &otp,
 																 &m_docname_handle, &fSmsCallback);
-	poolingThread.Stop();
+	pollingThread.Stop();
 
 	if (ret == DLG_CANCEL) {
 		// Biometry succeeded, too late to cancel
-		if (poolingThread.getReturn() == ERR_NONE) {
-			return poolingThread.getReturn();
+		if (pollingThread.getReturn() == ERR_NONE) {
+			return pollingThread.getReturn();
 		}
 
 		// The user cancelled it, it doesn't really matter what the polling returned at this point
@@ -536,8 +536,8 @@ int CMDSignature::signClose() {
 	} else if (ret != ERR_NONE) {
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 	} else {
-		if (poolingThread.getReturn() == ERR_NONE) {
-			return poolingThread.getReturn();
+		if (pollingThread.getReturn() == ERR_NONE) {
+			return pollingThread.getReturn();
 		}
 	}
 
@@ -565,7 +565,7 @@ int CMDSignature::signClose() {
 	}
 }
 
-// Retrieve and apply signatures. Pass empty string for biometric pooling, OTP code for OTP validation.
+// Retrieve and apply signatures. Pass empty string for biometric polling, OTP code for OTP validation.
 int CMDSignature::signClose(std::string in_code) {
 	std::vector<std::unique_ptr<CByteArray>> signatures;
 	if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0) {
@@ -580,10 +580,6 @@ int CMDSignature::signClose(std::string in_code) {
 	for (auto &s : signatures)
 		raw_signatures.push_back(s.get());
 
-	/*
-	   Gets the signatures.
-	   Create another function for a get Signatures, but with the SignDocumentPooling
-	*/
 	int ret = cli_getSignatures(raw_signatures, in_code);
 
 	if (ret != ERR_NONE)

@@ -114,10 +114,10 @@ private:
 	unsigned long m_oldDlgHandle = 0;
 };
 
-/* Do signDocumentPooling in a different thread. */
-class CMDPoolingThread : public CThread {
+/* Poll for biometric approval in a different thread. */
+class CMDPollingThread : public CThread {
 public:
-	CMDPoolingThread(CMDSignature *m_signature);
+	CMDPollingThread(CMDSignature *m_signature);
 
 	void Run() override;
 

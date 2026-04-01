@@ -530,17 +530,17 @@ void CMDProgressDlgThread::Stop(unsigned long ulSleepFrequency) {
 	WaitTillStopped();
 }
 
-CMDPoolingThread::CMDPoolingThread(CMDSignature *signature) {
+CMDPollingThread::CMDPollingThread(CMDSignature *signature) {
 	m_signature = signature;
 	m_wasCancelled = false;
 }
 
-void CMDPoolingThread::Run() {
+void CMDPollingThread::Run() {
 	while (m_return != ERR_NONE && m_wasCancelled == false) {
 		try {
 			m_return = m_signature->signClose("");
 		} catch (CMWException &e) {
-			MWLOG_ERR("CMDPoolingThread: signClose threw exception: %08lx", e.GetError());
+			MWLOG_ERR("CMDPollingThread: signClose threw exception: %08lx", e.GetError());
 			m_return = e.GetError();
 			break;
 		}
@@ -552,7 +552,7 @@ void CMDPoolingThread::Run() {
 	}
 }
 
-void CMDPoolingThread::Stop(unsigned long ulSleepFrequency) {
+void CMDPollingThread::Stop(unsigned long ulSleepFrequency) {
 	m_wasCancelled = true;
 	// Waits for the thread to finish
 	WaitTillStopped(ulSleepFrequency);
