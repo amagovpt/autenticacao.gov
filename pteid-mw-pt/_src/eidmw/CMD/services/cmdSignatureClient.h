@@ -17,6 +17,7 @@
 #include "APLCertif.h"
 #include "dialogs.h"
 #include "Thread.h"
+#include <atomic>
 #include <mutex>
 
 using namespace eIDMW;
@@ -107,7 +108,7 @@ public:
 private:
 	DlgCmdOperation m_operation;
 	bool m_isOtp;
-	bool m_wasCancelled = false;
+	std::atomic<bool> m_wasCancelled = false;
 	std::function<void(void)> *m_fCancelCallback = NULL;
 	unsigned long m_dlgHandle = 0;
 	unsigned long m_oldDlgHandle = 0;
@@ -129,7 +130,7 @@ public:
 private:
 	DlgCmdOperation m_operation;
 
-	bool m_wasCancelled = false;
+	std::atomic<bool> m_wasCancelled = false;
 	CMDSignature *m_signature;
 	int m_return = ERR_ADDR_USER_BASE;
 	unsigned long m_dlgHandle = 0;
