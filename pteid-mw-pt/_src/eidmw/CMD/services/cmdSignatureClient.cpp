@@ -158,9 +158,9 @@ CByteArray CMDSignatureClient::SignXades(const char *output_path, const char *co
 }
 
 void CMDSignatureClient::SignXadesIndividual(const char *output_path, const char *const *paths, unsigned int n_paths) {
-	(void) output_path;
-	(void) paths;
-	(void) n_paths;
+	(void)output_path;
+	(void)paths;
+	(void)n_paths;
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_IMPLEMENTED);
 }
 
@@ -445,7 +445,7 @@ DlgRet CMDSignatureClient::openAuthenticationDialogPIN(DlgCmdOperation operation
 #endif
 		userNameW = userNameWstr.c_str();
 		assert(userNameWstr.size() <= ULONG_MAX);
-		userNameLen = (unsigned long) userNameWstr.size();
+		userNameLen = (unsigned long)userNameWstr.size();
 	}
 
 	DlgRet ret = DlgAskInputCMD(operation, false, pinBuffer, pinBufferLength, mobileBuffer, mobileNumberLength,
@@ -538,9 +538,9 @@ CMDPoolingThread::CMDPoolingThread(CMDSignature *signature) {
 void CMDPoolingThread::Run() {
 	while (m_return != ERR_NONE && m_wasCancelled == false) {
 		try {
-			m_return = m_signature->signDocumentPooling();
+			m_return = m_signature->signClose("");
 		} catch (CMWException &e) {
-			MWLOG_ERR("CMDPoolingThread: signDocumentPooling threw exception: %08x", e.GetError());
+			MWLOG_ERR("CMDPoolingThread: signClose threw exception: %08x", e.GetError());
 			m_return = e.GetError();
 			break;
 		}

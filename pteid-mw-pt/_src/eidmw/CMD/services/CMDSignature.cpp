@@ -526,13 +526,12 @@ int CMDSignature::signClose() {
 	poolingThread.Stop();
 
 	if (ret == DLG_CANCEL) {
+		// Biometry succeeded, too late to cancel
 		if (poolingThread.getReturn() == ERR_NONE) {
 			return poolingThread.getReturn();
 		}
-		int poolingRet = poolingThread.getReturn();
-		if (poolingRet != ERR_ADDR_USER_BASE) {
-			throw CMWEXCEPTION(poolingRet);
-		}
+
+		// The user cancelled it, it doesn't really matter what the polling returned at this point
 		return ERR_OP_CANCELLED;
 	} else if (ret != ERR_NONE) {
 		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
@@ -566,82 +565,7 @@ int CMDSignature::signClose() {
 	}
 }
 
-int CMDSignature::signDocumentPooling() {
-	std::vector<std::unique_ptr<CByteArray>> signatures;
-	if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0) {
-		for (size_t i = 0; i < (std::max)(m_pdf_handlers.size(), std::size_t{1}); i++) {
-			signatures.push_back(std::make_unique<CByteArray>());
-		}
-	} else {
-		return ERR_NULL_HANDLER;
-	}
-
-	std::vector<CByteArray *> raw_signatures;
-	for (auto &s : signatures)
-		raw_signatures.push_back(s.get());
-
-	/*
-	   Gets the signatures.
-	   Create another function for a get Signatures, but with the SignDocumentPooling
-	*/
-	int ret = cli_getSignatures(raw_signatures);
-
-	if (ret != ERR_NONE)
-		return ret;
-
-	if (m_pdf_handlers.size()) {
-		bool throwTimestampError = false;
-		bool throwLTVError = false;
-		int ret_had_errors = ERR_NONE;
-		for (size_t i = 0; i < m_pdf_handlers.size(); i++) {
-			try {
-				PDFSignature *pdf = m_pdf_handlers[i];
-				// TODO: look for signature with right id and match it
-				CByteArray signature_cba(signatures[i]->GetBytes(), signatures[i]->Size());
-
-				ret = pdf->signClose(signature_cba);
-			} catch (CMWException &e) {
-				if (e.GetError() != EIDMW_TIMESTAMP_ERROR && e.GetError() != EIDMW_LTV_ERROR) {
-					throw CMWEXCEPTION(e.GetError());
-				}
-				if (e.GetError() == EIDMW_TIMESTAMP_ERROR)
-					throwTimestampError = true;
-				else
-					throwLTVError = true;
-			}
-
-			if (ret != ERR_NONE) {
-				ret_had_errors = ret;
-				MWLOG_ERR("SignClose failed");
-			}
-			if (isDBG) {
-				printData((char *)"\nSignature: ", (unsigned char *)signatures[i]->GetBytes(), signatures[i]->Size());
-			}
-		}
-
-		if (throwLTVError)
-			throw CMWEXCEPTION(EIDMW_LTV_ERROR);
-
-		if (throwTimestampError)
-			throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
-
-		if (ret_had_errors != ERR_NONE)
-			return ERR_SIGN_CLOSE;
-	} else {
-		if (isDBG) {
-			printf("Sign Close String\n");
-			assert(m_docname_handle.size() <= UINT_MAX);
-			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(),
-					  (unsigned int)m_docname_handle.size());
-		}
-
-		m_signature = CByteArray(signatures[0]->GetBytes(), signatures[0]->Size());
-	}
-
-	return ERR_NONE;
-}
-
-// SignClose receives the signatures
+// Retrieve and apply signatures. Pass empty string for biometric pooling, OTP code for OTP validation.
 int CMDSignature::signClose(std::string in_code) {
 	std::vector<std::unique_ptr<CByteArray>> signatures;
 	if (m_pdf_handlers.size() > 0 || m_array_handler.Size() > 0) {
@@ -706,7 +630,9 @@ int CMDSignature::signClose(std::string in_code) {
 	} else {
 		if (isDBG) {
 			printf("Sign Close String\n");
-			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(), m_docname_handle.size());
+			assert(m_docname_handle.size() <= UINT_MAX);
+			printData((char *)"\n String: ", (unsigned char *)m_docname_handle.c_str(),
+					  (unsigned int)m_docname_handle.size());
 		}
 
 		m_signature = CByteArray(signatures[0]->GetBytes(), signatures[0]->Size());
