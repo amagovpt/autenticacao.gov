@@ -818,10 +818,10 @@ private:
 
 class PTEID_DataGroupReport : public PTEID_Object {
 public:
-	PTEIDSDK_API PTEID_ByteArray GetStoredHash() const;
-	PTEIDSDK_API PTEID_ByteArray GetComputedHash() const;
-	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const char *GetStatusMessage() const;
+	PTEIDSDK_API PTEID_ByteArray GetStoredHash() const; /**< Return the hash value for the data group as stored in the SOD file */
+	PTEIDSDK_API PTEID_ByteArray GetComputedHash() const; /**< Return the hash value calculated from the actual data read from the data group */
+	PTEIDSDK_API long GetStatus() const; /**< Return the validation status (error code) of the data group verification result */
+	PTEIDSDK_API const char *GetStatusMessage() const; /**< Return a human-readable description of the validation status */
 
 private:
 	const EIDMW_DataGroupReport &m_impl;
@@ -887,19 +887,19 @@ private:
 class IcaoDg1;
 class PTEID_ICAO_DG1 : public PTEID_BaseDGReport {
 public:
-	PTEIDSDK_API const char *documentCode() const;
-	PTEIDSDK_API const char *issuingState() const;
-	PTEIDSDK_API const char *documentNumber() const;
-	PTEIDSDK_API int serialNumberCheckDigit() const;
-	PTEIDSDK_API const char *optionalDataLine1() const;
-	PTEIDSDK_API const char *dateOfBirth() const;
-	PTEIDSDK_API char sex() const;
-	PTEIDSDK_API const char *dateOfExpiry() const;
-	PTEIDSDK_API const char *nationality() const;
-	PTEIDSDK_API const char *optionalDataLine2() const;
-	PTEIDSDK_API const char *primaryIdentifier() const;
-	PTEIDSDK_API const char *secondaryIdentifier() const;
-	PTEIDSDK_API bool isPassport() const;
+	PTEIDSDK_API const char *documentCode() const; /**< Return the document code (e.g. "P" for passport, "I" for identity card) */
+	PTEIDSDK_API const char *issuingState() const; /**< Return the issuing state (3-letter ISO code) */
+	PTEIDSDK_API const char *documentNumber() const; /**< Return the document number */
+	PTEIDSDK_API int serialNumberCheckDigit() const; /**< Return the check digit for the document number. If -1, optional data completes the number. */
+	PTEIDSDK_API const char *optionalDataLine1() const; /**< Return the first line of optional data (present in some MRTD types) */
+	PTEIDSDK_API const char *dateOfBirth() const; /**< Return the date of birth (YYMMDD format) */
+	PTEIDSDK_API char sex() const; /**< Return the sex (M, F or <) */
+	PTEIDSDK_API const char *dateOfExpiry() const; /**< Return the date of expiry (YYMMDD format) */
+	PTEIDSDK_API const char *nationality() const; /**< Return the nationality (3-letter ISO code) */
+	PTEIDSDK_API const char *optionalDataLine2() const; /**< Return the second line of optional data (present in some MRTD types) */
+	PTEIDSDK_API const char *primaryIdentifier() const; /**< Return the primary identifier (surname) */
+	PTEIDSDK_API const char *secondaryIdentifier() const; /**< Return the secondary identifier (given names) */
+	PTEIDSDK_API bool isPassport() const; /**< Return true if the document is a passport (code starts with 'P') */
 	PTEIDSDK_API ~PTEID_ICAO_DG1();
 	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
 
@@ -935,33 +935,33 @@ private:
 
 class PTEID_FaceInfoData : public PTEID_Object {
 public:
-	PTEIDSDK_API long facialRecordDataLength() const;
-	PTEIDSDK_API unsigned short numberOfFeaturePoints() const;
-	PTEIDSDK_API unsigned char gender() const;
-	PTEIDSDK_API PTEID_Gender genderDecode() const;
-	PTEIDSDK_API unsigned char eyeColor() const;
-	PTEIDSDK_API PTEID_EyeColor eyeColorDecode() const;
-	PTEIDSDK_API unsigned char hairColour() const;
-	PTEIDSDK_API PTEID_HairColour hairColourDecode() const;
-	PTEIDSDK_API long featureMask() const;
-	PTEIDSDK_API long expression() const;
-	PTEIDSDK_API long poseAngle() const;
-	PTEIDSDK_API long poseAngleUncertainty() const;
-	PTEIDSDK_API std::vector<PTEID_FeaturePoint *> featurePoints() const;
-	PTEIDSDK_API unsigned char faceImgType() const;
-	PTEIDSDK_API PTEID_FaceImageType faceImgTypeDecode() const;
-	PTEIDSDK_API unsigned char imgDataType() const;
-	PTEIDSDK_API PTEID_ImageDataType imgDataTypeDecode() const;
-	PTEIDSDK_API unsigned short imgWidth() const;
-	PTEIDSDK_API unsigned short imgHeight() const;
-	PTEIDSDK_API unsigned char colourSpace() const;
-	PTEIDSDK_API PTEID_ImageColourSpace colourSpaceDecode() const;
-	PTEIDSDK_API unsigned char sourceType() const;
-	PTEIDSDK_API PTEID_SourceType sourceTypeDecode() const;
-	PTEIDSDK_API unsigned short deviceType() const;
-	PTEIDSDK_API unsigned short quality() const;
-	PTEIDSDK_API PTEID_ByteArray photoRawData() const;
-	PTEIDSDK_API PTEID_ByteArray photoRawDataPNG() const;
+	PTEIDSDK_API long facialRecordDataLength() const; /**< Return the length of the facial record data */
+	PTEIDSDK_API unsigned short numberOfFeaturePoints() const; /**< Return the number of feature points */
+	PTEIDSDK_API unsigned char gender() const; /**< Return the raw gender value */
+	PTEIDSDK_API PTEID_Gender genderDecode() const; /**< Return the decoded gender enum */
+	PTEIDSDK_API unsigned char eyeColor() const; /**< Return the raw eye color value */
+	PTEIDSDK_API PTEID_EyeColor eyeColorDecode() const; /**< Return the decoded eye color enum */
+	PTEIDSDK_API unsigned char hairColour() const; /**< Return the raw hair color value */
+	PTEIDSDK_API PTEID_HairColour hairColourDecode() const; /**< Return the decoded hair color enum */
+	PTEIDSDK_API long featureMask() const; /**< Return the feature mask */
+	PTEIDSDK_API long expression() const; /**< Return the expression value */
+	PTEIDSDK_API long poseAngle() const; /**< Return the pose angle */
+	PTEIDSDK_API long poseAngleUncertainty() const; /**< Return the pose angle uncertainty */
+	PTEIDSDK_API std::vector<PTEID_FeaturePoint *> featurePoints() const; /**< Return a vector of feature points */
+	PTEIDSDK_API unsigned char faceImgType() const; /**< Return the raw face image type */
+	PTEIDSDK_API PTEID_FaceImageType faceImgTypeDecode() const; /**< Return the decoded face image type enum */
+	PTEIDSDK_API unsigned char imgDataType() const; /**< Return the raw image data type */
+	PTEIDSDK_API PTEID_ImageDataType imgDataTypeDecode() const; /**< Return the decoded image data type enum */
+	PTEIDSDK_API unsigned short imgWidth() const; /**< Return the image width */
+	PTEIDSDK_API unsigned short imgHeight() const; /**< Return the image height */
+	PTEIDSDK_API unsigned char colourSpace() const; /**< Return the raw color space value */
+	PTEIDSDK_API PTEID_ImageColourSpace colourSpaceDecode() const; /**< Return the decoded color space enum */
+	PTEIDSDK_API unsigned char sourceType() const; /**< Return the raw source type value */
+	PTEIDSDK_API PTEID_SourceType sourceTypeDecode() const; /**< Return the decoded source type enum */
+	PTEIDSDK_API unsigned short deviceType() const; /**< Return the device type */
+	PTEIDSDK_API unsigned short quality() const; /**< Return the image quality */
+	PTEIDSDK_API PTEID_ByteArray photoRawData() const; /**< Return the raw photo data (original format) */
+	PTEIDSDK_API PTEID_ByteArray photoRawDataPNG() const; /**< Return the photo data converted to PNG */
 
 private:
 	friend class PTEID_FaceInfo;
@@ -974,11 +974,11 @@ private:
 
 class PTEID_FaceInfo : public PTEID_Object {
 public:
-	PTEIDSDK_API const char *version() const;
-	PTEIDSDK_API unsigned short encodingBytes() const;
-	PTEIDSDK_API long sizeOfRecord() const;
-	PTEIDSDK_API long numberOfFacialImages() const;
-	PTEIDSDK_API std::vector<PTEID_FaceInfoData *> faceInfoData() const;
+	PTEIDSDK_API const char *version() const; /**< Return the face info version */
+	PTEIDSDK_API unsigned short encodingBytes() const; /**< Return the number of bytes used for encoding */
+	PTEIDSDK_API long sizeOfRecord() const; /**< Return the size of the record */
+	PTEIDSDK_API long numberOfFacialImages() const; /**< Return the number of facial images in this record */
+	PTEIDSDK_API std::vector<PTEID_FaceInfoData *> faceInfoData() const; /**< Return a vector of Face Information Data instances */
 
 private:
 	friend class PTEID_ICAO_DG2;
@@ -992,15 +992,15 @@ private:
 
 class PTEID_BiometricInfomation : public PTEID_Object {
 public:
-	PTEIDSDK_API PTEID_ByteArray icaoHeaderVersion() const;
-	PTEIDSDK_API PTEID_ByteArray type() const;
-	PTEIDSDK_API PTEID_ByteArray subType() const;
-	PTEIDSDK_API PTEID_ByteArray creationDateAndtime() const;
-	PTEIDSDK_API PTEID_ByteArray validPeriod() const;
-	PTEIDSDK_API PTEID_ByteArray creatorOfBiometricRefData() const;
-	PTEIDSDK_API PTEID_ByteArray formatOwner() const;
-	PTEIDSDK_API PTEID_ByteArray formatType() const;
-	PTEIDSDK_API PTEID_FaceInfo *faceInfo() const;
+	PTEIDSDK_API PTEID_ByteArray icaoHeaderVersion() const; /**< Return the CBEFF header version */
+	PTEIDSDK_API PTEID_ByteArray type() const; /**< Return the biometric type */
+	PTEIDSDK_API PTEID_ByteArray subType() const; /**< Return the biometric subtype */
+	PTEIDSDK_API PTEID_ByteArray creationDateAndtime() const; /**< Return the creation date and time */
+	PTEIDSDK_API PTEID_ByteArray validPeriod() const; /**< Return the validity period */
+	PTEIDSDK_API PTEID_ByteArray creatorOfBiometricRefData() const; /**< Return the creator of the biometric reference data */
+	PTEIDSDK_API PTEID_ByteArray formatOwner() const; /**< Return the biometric format owner */
+	PTEIDSDK_API PTEID_ByteArray formatType() const; /**< Return the biometric format type */
+	PTEIDSDK_API PTEID_FaceInfo *faceInfo() const; /**< Return the Face Information biometric data */
 
 private:
 	friend class PTEID_ICAO_DG2;
@@ -1014,8 +1014,8 @@ private:
 
 class PTEID_ICAO_DG2 : public PTEID_BaseDGReport {
 public:
-	PTEIDSDK_API unsigned int numberOfBiometrics() const;
-	PTEIDSDK_API std::vector<PTEID_BiometricInfomation *> biometricInstances();
+	PTEIDSDK_API unsigned int numberOfBiometrics() const; /**< Return the number of biometric instances in this Data Group */
+	PTEIDSDK_API std::vector<PTEID_BiometricInfomation *> biometricInstances(); /**< Return a vector of Biometric Information instances */
 	PTEIDSDK_API ~PTEID_ICAO_DG2();
 	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
 
@@ -1106,21 +1106,21 @@ private:
 class IcaoDg11;
 class PTEID_ICAO_DG11 : public PTEID_BaseDGReport {
 public:
-	PTEIDSDK_API PTEID_ByteArray listOfTags() const;
-	PTEIDSDK_API const char *fullName() const;
-	PTEIDSDK_API const char *personalNumber() const;
-	PTEIDSDK_API const char *fullDateOfBirth() const;
-	PTEIDSDK_API const char *placeOfBirth() const;
-	PTEIDSDK_API const char *permanentAddress() const;
-	PTEIDSDK_API const char *telephone() const;
-	PTEIDSDK_API const char *profession() const;
-	PTEIDSDK_API const char *title() const;
-	PTEIDSDK_API const char *personalSummary() const;
-	PTEIDSDK_API const char *proofOfCitizenship() const;
-	PTEIDSDK_API const char *otherValidTDNumbers() const;
-	PTEIDSDK_API const char *custodyInformation() const;
-	PTEIDSDK_API int numberOfOtherNames() const;
-	PTEIDSDK_API const char *otherNames() const;
+	PTEIDSDK_API PTEID_ByteArray listOfTags() const; /**< Return the list of tags present in the DG11 */
+	PTEIDSDK_API const char *fullName() const; /**< Return the full name of the holder (optional, depending on the card content) */
+	PTEIDSDK_API const char *personalNumber() const; /**< Return the personal number of the holder (optional, depending on the card content) */
+	PTEIDSDK_API const char *fullDateOfBirth() const; /**< Return the full date of birth (YYYYMMDD) (optional, depending on the card content) */
+	PTEIDSDK_API const char *placeOfBirth() const; /**< Return the place of birth (optional, depending on the card content) */
+	PTEIDSDK_API const char *permanentAddress() const; /**< Return the permanent address (optional, depending on the card content) */
+	PTEIDSDK_API const char *telephone() const; /**< Return the telephone number (optional, depending on the card content) */
+	PTEIDSDK_API const char *profession() const; /**< Return the profession (optional, depending on the card content) */
+	PTEIDSDK_API const char *title() const; /**< Return the title (optional, depending on the card content) */
+	PTEIDSDK_API const char *personalSummary() const; /**< Return the personal summary (optional, depending on the card content) */
+	PTEIDSDK_API const char *proofOfCitizenship() const; /**< Return the proof of citizenship (optional, depending on the card content) */
+	PTEIDSDK_API const char *otherValidTDNumbers() const; /**< Return other valid travel document numbers (optional, depending on the card content) */
+	PTEIDSDK_API const char *custodyInformation() const; /**< Return custody information (optional, depending on the card content) */
+	PTEIDSDK_API int numberOfOtherNames() const; /**< Return the number of other names */
+	PTEIDSDK_API const char *otherNames() const; /**< Return other names (optional, depending on the card content) */
 	PTEIDSDK_API virtual ~PTEID_ICAO_DG11();
 	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
 
@@ -1150,10 +1150,24 @@ public:
 	 */
 	PTEIDSDK_API virtual PTEID_RawDataGroup *readDatagroupRaw(PTEID_DataGroupID tag);
 
+		/**
+	 * Read MRZ Data Group (mandatory data group)
+	 */
 	PTEIDSDK_API virtual PTEID_ICAO_DG1 *readDataGroup1();
+
+		/**
+	 * Read Facial Biometric Information (mandatory data group)
+	 */
 	PTEIDSDK_API virtual PTEID_ICAO_DG2 *readDataGroup2();
+
+			/**
+	 * Read fingerprint biometric Information (optional data group)
+	 */
 	PTEIDSDK_API virtual PTEID_ICAO_DG3 *readDataGroup3();
 
+				/**
+	 * Read personal details information (optional data group)
+	 */
 	PTEIDSDK_API virtual PTEID_ICAO_DG11 *readDataGroup11();
 
 	/**

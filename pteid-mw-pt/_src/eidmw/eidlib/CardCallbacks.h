@@ -76,18 +76,21 @@ enum class PTEID_CardProtocol {
  */
 
 /**
+ * @typedef PTEID_EstablishContextFn
  * Function to establish a context for card operations
  * @param context Pointer to the context
  */
 typedef PTEID_CallbackResult (*PTEID_EstablishContextFn)(void *context);
 
 /**
+ * @typedef PTEID_ReleaseContextFn
  * Function to release a previously established context
  * @param context Pointer to the context
  */
 typedef PTEID_CallbackResult (*PTEID_ReleaseContextFn)(void *context);
 
 /**
+ * @typedef PTEID_ListReadersFn
  * Function to list available card readers
  * Reader names are listed as a multi-string structure. Card reader names are separated by a single 0x00 byte and the structure ends with 2 0x00 bytes.
  * @param buffer Pre-allocated buffer to fill with reader names
@@ -97,6 +100,7 @@ typedef PTEID_CallbackResult (*PTEID_ReleaseContextFn)(void *context);
 typedef PTEID_CallbackResult (*PTEID_ListReadersFn)(unsigned char *buffer, unsigned long *bufferSize, void *context);
 
 /**
+ * @typedef PTEID_CardPresentInReaderFn
  * Function to check whether there is a card present in the given reader. Must not wait for card.
  * @param csReader Name of the reader
  * @param context Pointer to the context
@@ -105,6 +109,7 @@ typedef PTEID_CallbackResult (*PTEID_ListReadersFn)(unsigned char *buffer, unsig
 typedef PTEID_CallbackResult (*PTEID_CardPresentInReaderFn)(const char *csReader, void *context, bool *cardPresent);
 
 /**
+ * @typedef PTEID_StatusWithATRFn
  * Function to get reader status with ATR
  * @param handle Card handle
  * @param buffer Buffer to receive ATR
@@ -116,6 +121,7 @@ typedef PTEID_CallbackResult (*PTEID_StatusWithATRFn)(PTEID_CardHandle handle, u
 													  unsigned long *bufferSize, void *context);
 
 /**
+ * @typedef PTEID_ConnectFn
  * Function to connect to a card
  * @param csReader Name of the reader
  * @param outHandle Pointer to receive card handle
@@ -127,6 +133,7 @@ typedef PTEID_CallbackResult (*PTEID_ConnectFn)(const char *csReader, PTEID_Card
 												PTEID_CardProtocol *outProtocol, void *context);
 
 /**
+ * @typedef PTEID_DisconnectFn
  * Function to disconnect from a card
  * @param handle Card handle
  * @param context Pointer to the context
@@ -134,6 +141,7 @@ typedef PTEID_CallbackResult (*PTEID_ConnectFn)(const char *csReader, PTEID_Card
 typedef PTEID_CallbackResult (*PTEID_DisconnectFn)(PTEID_CardHandle handle, void *context);
 
 /**
+ * @typedef PTEID_TransmitFn
  * Function to transmit data to a card
  * @param handle Card handle
  * @param cmdData Command data
@@ -151,6 +159,7 @@ typedef PTEID_CallbackResult (*PTEID_TransmitFn)(PTEID_CardHandle handle, const 
 												 PTEID_CardProtocol protocol, void *context);
 
 /**
+ * @typedef PTEID_RecoverFn
  * Function to recover a card connection
  * @param handle Card handle
  * @param pulLockCount Pointer to receive lock count
@@ -159,6 +168,7 @@ typedef PTEID_CallbackResult (*PTEID_TransmitFn)(PTEID_CardHandle handle, const 
 typedef PTEID_CallbackResult (*PTEID_RecoverFn)(PTEID_CardHandle handle, unsigned long *pulLockCount, void *context);
 
 /**
+ * @typedef PTEID_ControlFn
  * Function to use a reader-specific function specified through control code
  * @param handle Card handle
  * @param ulControl Control code
@@ -175,6 +185,7 @@ typedef PTEID_CallbackResult (*PTEID_ControlFn)(PTEID_CardHandle handle, unsigne
 												unsigned long ulMaxResponseSize, void *context);
 
 /**
+ * @typedef PTEID_BeginTransactionFn
  * Function to begin a transaction
  * @param handle Card handle
  * @param context Pointer to the context
@@ -182,6 +193,7 @@ typedef PTEID_CallbackResult (*PTEID_ControlFn)(PTEID_CardHandle handle, unsigne
 typedef PTEID_CallbackResult (*PTEID_BeginTransactionFn)(PTEID_CardHandle handle, void *context);
 
 /**
+ * @typedef PTEID_EndTransactionFn
  * Function to end a transaction
  * @param handle Card handle
  * @param context Pointer to the context
@@ -189,18 +201,18 @@ typedef PTEID_CallbackResult (*PTEID_BeginTransactionFn)(PTEID_CardHandle handle
 typedef PTEID_CallbackResult (*PTEID_EndTransactionFn)(PTEID_CardHandle handle, void *context);
 
 struct PTEID_CardInterfaceCallbacks {
-	void *context;
+	void *context; /**< Pointer to the user-defined context */
 
-	PTEID_EstablishContextFn establishContext;
-	PTEID_ReleaseContextFn releaseContext;
-	PTEID_ListReadersFn listReaders;
-	PTEID_CardPresentInReaderFn cardPresentInReader;
-	PTEID_StatusWithATRFn statusWithATR;
-	PTEID_ConnectFn connect;
-	PTEID_DisconnectFn disconnect;
-	PTEID_TransmitFn transmit;
-	PTEID_RecoverFn recover;
-	PTEID_ControlFn control;
-	PTEID_BeginTransactionFn beginTransaction;
-	PTEID_EndTransactionFn endTransaction;
+	PTEID_EstablishContextFn establishContext; /**< @copydoc PTEID_EstablishContextFn */
+	PTEID_ReleaseContextFn releaseContext; /**< @copydoc PTEID_ReleaseContextFn */
+	PTEID_ListReadersFn listReaders; /**< @copydoc PTEID_ListReadersFn */
+	PTEID_CardPresentInReaderFn cardPresentInReader; /**< @copydoc PTEID_CardPresentInReaderFn */
+	PTEID_StatusWithATRFn statusWithATR; /**< @copydoc PTEID_StatusWithATRFn */
+	PTEID_ConnectFn connect; /**< @copydoc PTEID_ConnectFn */
+	PTEID_DisconnectFn disconnect; /**< @copydoc PTEID_DisconnectFn */
+	PTEID_TransmitFn transmit; /**< @copydoc PTEID_TransmitFn */
+	PTEID_RecoverFn recover; /**< @copydoc PTEID_RecoverFn */
+	PTEID_ControlFn control; /**< @copydoc PTEID_ControlFn */
+	PTEID_BeginTransactionFn beginTransaction; /**< @copydoc PTEID_BeginTransactionFn */
+	PTEID_EndTransactionFn endTransaction; /**< @copydoc PTEID_EndTransactionFn */
 };
