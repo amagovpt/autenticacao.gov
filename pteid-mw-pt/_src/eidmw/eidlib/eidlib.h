@@ -756,18 +756,18 @@ struct EIDMW_DataGroupReport;
 
 class PTEID_ActiveAuthenticationReport : public PTEID_Object {
 public:
-	PTEIDSDK_API PTEID_ByteArray GetDG14() const;
-	PTEIDSDK_API PTEID_ByteArray GetDG14StoredHash() const;
-	PTEIDSDK_API PTEID_ByteArray GetDG14ComputedHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG14() const; /**< Return Data Group 14 (Security Options) */
+	PTEIDSDK_API PTEID_ByteArray GetDG14StoredHash() const; /**< Return the hash for DG14 as stored in the SOD */
+	PTEIDSDK_API PTEID_ByteArray GetDG14ComputedHash() const; /**< Return the hash for DG14 as computed from the actual data */
 
-	PTEIDSDK_API PTEID_ByteArray GetDG15() const;
-	PTEIDSDK_API PTEID_ByteArray GetDG15StoredHash() const;
-	PTEIDSDK_API PTEID_ByteArray GetDG15ComputedHash() const;
+	PTEIDSDK_API PTEID_ByteArray GetDG15() const; /**< Return Data Group 15 (Active Authentication Public Key) */
+	PTEIDSDK_API PTEID_ByteArray GetDG15StoredHash() const; /**< Return the hash for DG15 as stored in the SOD */
+	PTEIDSDK_API PTEID_ByteArray GetDG15ComputedHash() const; /**< Return the hash for DG15 as computed from the actual data */
 
-	PTEIDSDK_API const char *GetOID() const;
+	PTEIDSDK_API const char *GetOID() const; /**< Return the Object Identifier (OID) of the Active Authentication algorithm */
 
-	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const char *GetStatusMessage() const;
+	PTEIDSDK_API long GetStatus() const; /**< Return the status code of the Active Authentication process */
+	PTEIDSDK_API const char *GetStatusMessage() const; /**< Return a descriptive message of the Active Authentication status */
 
 private:
 	const EIDMW_ActiveAuthenticationReport &m_impl;
@@ -782,11 +782,11 @@ private:
 
 class PTEID_ChipAuthenticationReport : public PTEID_Object {
 public:
-	PTEIDSDK_API PTEID_ByteArray GetPublicKey() const;
-	PTEIDSDK_API const char *GetOID() const;
+	PTEIDSDK_API PTEID_ByteArray GetPublicKey() const; /**< Return the public key used for the Chip Authentication process */
+	PTEIDSDK_API const char *GetOID() const; /**< Return the Object Identifier (OID) of the Chip Authentication algorithm */
 
-	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const char *GetStatusMessage() const;
+	PTEIDSDK_API long GetStatus() const; /**< Return the status code of the Chip Authentication process */
+	PTEIDSDK_API const char *GetStatusMessage() const; /**< Return a descriptive message of the Chip Authentication status */
 
 private:
 	const EIDMW_ChipAuthenticationReport &m_impl;
@@ -801,10 +801,10 @@ private:
 
 class PTEID_SodReport : public PTEID_Object {
 public:
-	PTEIDSDK_API PTEID_ByteArray GetSigner() const;
+	PTEIDSDK_API PTEID_ByteArray GetSigner() const; /**< Return the signer's certificate stored in the SOD file */
 
-	PTEIDSDK_API long GetStatus() const;
-	PTEIDSDK_API const char *GetStatusMessage() const;
+	PTEIDSDK_API long GetStatus() const; /**< Return the status code of the SOD validation process */
+	PTEIDSDK_API const char *GetStatusMessage() const; /**< Return a descriptive message of the SOD validation status */
 
 private:
 	const EIDMW_SodReport &m_impl;
@@ -838,10 +838,10 @@ private:
 
 class PTEID_DocumentReport : public PTEID_Object {
 public:
-	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const;
-	PTEIDSDK_API PTEID_ChipAuthenticationReport *GetChipAuthenticationReport() const;
-	PTEIDSDK_API PTEID_SodReport *GetSodReport() const;
-	PTEIDSDK_API PTEID_DataGroupReport *GetDataGroupReport(PTEID_DataGroupID tag) const;
+	PTEIDSDK_API PTEID_ActiveAuthenticationReport *GetActiveAuthenticationReport() const; /**< Get the report for the Active Authentication process */
+	PTEIDSDK_API PTEID_ChipAuthenticationReport *GetChipAuthenticationReport() const; /**< Get the report for the Chip Authentication process */
+	PTEIDSDK_API PTEID_SodReport *GetSodReport() const; /**< Get the report for the Security Object (SOD) validation */
+	PTEIDSDK_API PTEID_DataGroupReport *GetDataGroupReport(PTEID_DataGroupID tag) const; /**< Get the verification report for a specific Data Group */
 
 private:
 	const EIDMW_DocumentReport &m_impl;
@@ -869,8 +869,8 @@ protected:
 
 class PTEID_RawDataGroup : public PTEID_BaseDGReport {
 public:
-	PTEIDSDK_API PTEID_ByteArray GetData() const;
-	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const;
+	PTEIDSDK_API PTEID_ByteArray GetData() const; /**< Return the raw data of the data group */
+	PTEIDSDK_API virtual const PTEID_DataGroupReport *GetReport() const; /**< Get the verification report for this data group */
 
 private:
 	friend class ICAO_Card;
@@ -918,12 +918,12 @@ class FaceInfoData;
 class FeaturePoint;
 class PTEID_FeaturePoint {
 public:
-	PTEIDSDK_API unsigned char type() const;
-	PTEIDSDK_API unsigned char featurePoint() const;
-	PTEIDSDK_API unsigned char majorCode() const;
-	PTEIDSDK_API unsigned char minorCode() const;
-	PTEIDSDK_API unsigned short x_coord() const;
-	PTEIDSDK_API unsigned short y_coord() const;
+	PTEIDSDK_API unsigned char type() const; /**< Return the feature point type */
+	PTEIDSDK_API unsigned char featurePoint() const; /**< Return the feature point identifier */
+	PTEIDSDK_API unsigned char majorCode() const; /**< Return the major code */
+	PTEIDSDK_API unsigned char minorCode() const; /**< Return the minor code */
+	PTEIDSDK_API unsigned short x_coord() const; /**< Return the X coordinate of the feature point */
+	PTEIDSDK_API unsigned short y_coord() const; /**< Return the Y coordinate of the feature point */
 	PTEIDSDK_API unsigned short reserved() const;
 
 private:
