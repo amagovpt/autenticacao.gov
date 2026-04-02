@@ -1132,17 +1132,32 @@ private:
 	PTEID_ICAO_DG11 &operator=(const PTEID_ICAO_DG11 &) = delete; /**< Copy not allowed - not implemented */
 };
 
+/**
+ * Class representing an ICAO-compliant card (MRTD - Machine Readable Travel Document).
+ * Provides access to standardized Data Groups (DGs) such as identity information,
+ * biometric data, and additional holder information, as well as authentication
+ * mechanisms like BAC (Basic Access Control) and PACE (Password Authenticated Connection Establishment).
+ * Reading Data groups requires prior authentication with either PACE or BAC.
+ */
 class ICAO_Card : public PTEID_Object {
 public:
 	PTEIDSDK_API virtual std::vector<PTEID_DataGroupID> getAvailableDatagroups();
 
 	PTEIDSDK_API virtual PTEID_DocumentReport *GetDocumentReport() const;
 
+	/**
+	 * Init the Pace authentication process
+	 * @param secret string that holds the secret to make the PACE process
+	 * @param length size of the secret string
+	 * @param secretType type of the secret used to make the PACE process
+	 **/
 	PTEIDSDK_API virtual void initPaceAuthentication(const char *secret, size_t length,
 													 PTEID_CardPaceSecretType secretType);
 
-	/* @param: mrz_info must contain the full MRZInfo needed for BAC authentication:
-	           i.e. document number + date of birth + expiry date, all 3 fields including their respective check digits */
+	/**
+	 * @param mrz_info must contain the full MRZInfo needed for BAC authentication:
+	 * i.e. document number + date of birth + expiry date, all 3 fields including their respective check digits
+	 **/
 	PTEIDSDK_API virtual void initBACAuthentication(const char *mrz_info);
 
 	/**
