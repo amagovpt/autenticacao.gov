@@ -503,6 +503,16 @@ public:
 	 **/
 	PTEIDSDK_API PTEID_EIDCard &getEIDCard();
 
+	/**
+	 * Get an instance of ICAO_Card if the smartcard chip present in reader is compatible with ICAO Doc 9303 specification
+	 * 
+	 * Example of compatible documents: newer PT eID cards of type PTEID_CARDTYPE_IAS5, resident permits, european identity cards 
+	 * and ePassports
+	 * 
+	 * If no card is present in the reader, exception PTEID_ExNoCardPresent is thrown.
+	 * 
+	 * If the current card is not compatible with the ICAO specification, exception PTEID_ExCardTypeUnknown is thrown.
+	 **/
 	PTEIDSDK_API ICAO_Card &getICAOCard();
 
 	/**
