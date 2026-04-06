@@ -754,7 +754,13 @@ ScapResult<std::vector<ScapAttribute>> ScapClient::readAttributeCache() { return
 
 bool ScapClient::clearAttributeCache() { return clear_cache(); }
 
-static void clean_up_temp_documents(const std::vector<Document> &documents) {
+static void clean_up_temp_documents(std::vector<Document> &documents) {
+	for (auto& doc : documents) {
+		if (doc.sign_handle != NULL) {
+			delete doc.sign_handle;
+			doc.sign_handle = NULL;
+		}
+	}
 	if (!documents.empty()) {
 		delete documents.front().temp_dir;
 	}
