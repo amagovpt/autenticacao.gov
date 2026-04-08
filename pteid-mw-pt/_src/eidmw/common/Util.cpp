@@ -23,8 +23,10 @@
 **************************************************************************** */
 #include <algorithm>
 #include <codecvt>
+#include <filesystem>
 #include <fstream>
 #include <functional>
+#include <system_error>
 #include <vector>
 #include <iostream>
 #include <iterator>
@@ -295,125 +297,29 @@ void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dw
 }
 #endif
 
-#ifdef WIN32
-
 void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param,
 			 std::function<void(const char *, const char *, const char *, void *param)> callback) {
-	WIN32_FIND_DATAA FindFileData;
-	std::string path;
-	std::string subdir;
-	HANDLE hFind;
-	DWORD a = 0;
+	const std::string extension = strlen(Ext) > 0 ? std::string(".") + Ext : std::string();
 
-	path = Dir;
-	path += "\\*.*";
+	MWLOG_CTX(LEV_DEBUG, MOD_APL, "Scanning directory \"%s\" for extension \"%s\"", Dir, Ext);
 
-	// Get the first file
-	hFind = FindFirstFileA(path.c_str(), &FindFileData);
-	if (hFind == INVALID_HANDLE_VALUE)
-		return;
+	std::error_code ec;
 
-	while (a != ERROR_NO_MORE_FILES) {
+	for (const auto &entry : std::filesystem::directory_iterator(Dir, ec)) {
+		if (bStopRequest)
+			break;
 
-		if (strcmp(FindFileData.cFileName, ".") != 0 && strcmp(FindFileData.cFileName, "..") != 0) {
+		if (!std::filesystem::is_regular_file(entry.symlink_status()))
+			continue;
 
-			path = Dir;
-			path += "\\";
-			path += FindFileData.cFileName;
-
-			if (FindFileData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY) {
-
-				subdir = SubDir;
-				if (strlen(SubDir) != 0)
-					subdir += "\\";
-				subdir += FindFileData.cFileName;
-				scanDir(path.c_str(), subdir.c_str(), Ext, bStopRequest, param, callback);
-			} else {
-				std::string file = FindFileData.cFileName;
-				std::string ext = ".";
-				ext += Ext;
-				if (strlen(Ext) == 0 ||
-					(file.size() > ext.size() && file.compare(file.size() - ext.size(), ext.size(), ext) == 0)) {
-
-					callback(Dir, SubDir, FindFileData.cFileName, param);
-				}
-			}
-
-			if (bStopRequest)
-				break;
-		}
-
-		// Get next file
-		if (!FindNextFileA(hFind, &FindFileData))
-			a = GetLastError();
+		if (extension.empty() || entry.path().extension() == extension)
+			callback(Dir, SubDir, entry.path().filename().c_str(), param);
 	}
-	FindClose(hFind);
+
+	if (ec)
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Error scanning directory \"%s\": %s", Dir, ec.message().c_str());
 }
 
-#else
-#include <sys/stat.h>
-#include "dirent.h"
-#include "errno.h"
-
-void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param,
-			 std::function<void(const char *, const char *, const char *, void *param)> callback) {
-	std::string path = Dir;
-	std::string subdir;
-
-	DIR *pDir = opendir(Dir);
-
-	// If pDir is NULL then the dir doesn't exist
-	if (pDir != NULL) {
-		struct dirent *pFile = readdir(pDir);
-
-		for (; pFile != NULL; pFile = readdir(pDir)) {
-
-			// skip the . and .. directories
-			if (strcmp(pFile->d_name, ".") != 0 && strcmp(pFile->d_name, "..") != 0) {
-
-				path = Dir;
-				path += "/";
-				path += pFile->d_name;
-
-				// check file attributes
-				struct stat buffer;
-				if (!stat(path.c_str(), &buffer)) {
-					if (S_ISDIR(buffer.st_mode)) {
-						// this is a directory: recursive scan
-						subdir = SubDir;
-						if (strlen(SubDir) != 0)
-							subdir += "/";
-						subdir += pFile->d_name;
-
-						scanDir(path.c_str(), subdir.c_str(), Ext, bStopRequest, param, callback);
-					} else {
-						// this is a regular file
-						std::string file = pFile->d_name;
-						std::string ext = ".";
-						ext += Ext;
-						// check if the file has the requested extension
-						if (strlen(Ext) == 0 || (file.size() > ext.size() &&
-												 file.compare(file.size() - ext.size(), ext.size(), ext) == 0)) {
-							callback(Dir, SubDir, file.c_str(), param);
-						}
-					}
-				} else {
-					// log error
-					fprintf(stderr, "CPathUtil::scanDir stat failed: %s\n", strerror(errno));
-				}
-			}
-			if (bStopRequest)
-				break;
-		}
-		closedir(pDir);
-	} else {
-		// log error
-		fprintf(stderr, "CPathUtil::scanDir \"%s\" : %s\n", Dir, strerror(errno));
-		return;
-	}
-}
-
-#endif
 } // namespace eIDMW
 
 #ifndef WIN32
