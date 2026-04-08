@@ -575,7 +575,8 @@ bool CLog::open(bool bWchar) {
 		else
 			err = fopen_s(&m_f, utilStringNarrow(filename).c_str(), "a");
 #else
-		m_f = fopen(utilStringNarrow(filename).c_str(), "a, ccs=UTF-8");
+		std::string narrow_filename = utilStringNarrow(filename);
+		m_f = fopen(narrow_filename.size() > 0 ? narrow_filename.c_str() : "/tmp/PTEID_0.log", "a, ccs=UTF-8");
 		if (m_f == NULL)
 			err = errno;
 #endif
