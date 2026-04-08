@@ -390,6 +390,8 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskInputCMD(DlgCmdOperation operation, bool isValid
 		if (oData->returnValue == DLG_CALLBACK) {
 			(*fSendSmsCallback)();
 			oData->callbackWasCalled = true;
+			// Reset to a safe default, in case the subprocess is killed (biometric success)
+			oData->returnValue = DLG_CANCEL;
 			// CallQTServer(DLG_ASK_CMD_INPUT,csReadableFilePath.c_str(), NULL );
 			CallQTServerInput(DLG_ASK_CMD_INPUT, csReadableFilePath.c_str());
 			lRet = oData->returnValue;
