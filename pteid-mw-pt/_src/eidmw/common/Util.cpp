@@ -50,12 +50,18 @@ char a_cHexChars[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B'
 
 namespace eIDMW {
 
+#ifdef __APPLE__
+	#define ICONV_WCHAR_ENCODING "UTF-32LE"
+#else
+	#define ICONV_WCHAR_ENCODING "WCHAR_T"
+#endif
+
 std::wstring utilStringWiden(const std::string &in) {
 #ifndef WIN32
 	if (in.empty())
 		return std::wstring();
 
-	iconv_t cd = iconv_open("UTF-32LE", "UTF-8");
+	iconv_t cd = iconv_open(ICONV_WCHAR_ENCODING, "UTF-8");
 	if (cd == (iconv_t)-1) {
 		return std::wstring();
 	}
@@ -164,7 +170,7 @@ std::string utilStringNarrow(const std::wstring &in) {
 	if (in.empty())
 		return std::string();
 
-	iconv_t cd = iconv_open("UTF-8", "UTF-32LE");
+	iconv_t cd = iconv_open("UTF-8", ICONV_WCHAR_ENCODING);
 	if (cd == (iconv_t)-1) {
 		return std::string();
 	}
