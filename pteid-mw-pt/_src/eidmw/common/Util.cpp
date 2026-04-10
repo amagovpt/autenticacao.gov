@@ -316,8 +316,14 @@ void scanDir(const char *Dir, const char *Ext, void *param,
 		if (!std::filesystem::is_regular_file(entry.symlink_status()))
 			continue;
 
-		if (extension.empty() || entry.path().extension() == extension)
+		if (extension.empty() || entry.path().extension() == extension) {
+#ifdef WIN32
+			std::wstring w_filename = entry.path().filename().native();
+			callback(Dir, utilStringNarrow(w_filename).c_str(), param);
+#else 
 			callback(Dir, entry.path().filename().c_str(), param);
+#endif
+		}
 	}
 
 	if (ec)
