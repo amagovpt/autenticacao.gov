@@ -14,8 +14,8 @@ include_directories(../../cardlayer)
 include_directories(../../dialogs)
 include_directories(../../eidlib)
 
-set(sources cmdCertificates.cpp cmdSignatureClient.cpp cmdServices.cpp CMDSignature.cpp credentials.cpp soapC.cpp 
-                soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp stdsoap2.cpp
+set(sources cmdCertificates.cpp cmdSignatureClient.cpp cmdServices.cpp CMDSignature.cpp credentials.cpp soapC.cpp
+                soapBasicHttpBinding_USCORECCMovelSignatureProxy.cpp stdsoap2.cpp struct_timeval.cpp
 			cmdCertificates.h cmdSignatureClient.h cmdErrors.h cmdServices.h CMDSignature.h credentials.h soapH.h
                         soapStub.h soapBasicHttpBinding_USCORECCMovelSignatureProxy.h stdsoap2.h)
 

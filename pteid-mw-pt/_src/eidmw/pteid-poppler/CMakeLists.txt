@@ -17,8 +17,7 @@ set(sources poppler/Array.cc poppler/Annot.cc poppler/CachedFile.cc poppler/Cata
 	poppler/Rendition.cc poppler/StdinCachedFile.cc poppler/StdinPDFDocBuilder.cc poppler/Stream.cc poppler/ViewerPreferences.cc
 	poppler/XRef.cc poppler/PageLabelInfo.cc poppler/SecurityHandler.cc poppler/FlateEncoder.cc poppler/Sound.cc
 	poppler/BuiltinFont.cc poppler/BuiltinFontTables.cc poppler/FontEncodingTables.cc goo/gfile.cc goo/gmem.cc
-	goo/gmempp.cc goo/GooHash.cc goo/GooList.cc goo/gstrtod.cc goo/GooString.cc goo/GooTimer.cc fofi/FoFiBase.cc
-	fofi/FoFiEncodings.cc fofi/FoFiIdentifier.cc fofi/FoFiTrueType.cc fofi/FoFiType1.cc fofi/FoFiType1C.cc poppler/PDFDoc.h)
+	goo/gmempp.cc goo/GooHash.cc goo/GooList.cc goo/gstrtod.cc goo/GooString.cc goo/GooTimer.cc poppler/PDFDoc.h)
 
 add_library(${PROJECT_NAME} SHARED ${sources})
 
