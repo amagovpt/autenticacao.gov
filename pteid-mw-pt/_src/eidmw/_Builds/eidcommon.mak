@@ -17,7 +17,7 @@ isEmpty(PREFIX_DIR){
   PREFIX_DIR = /usr/local
 }
 
-DEFINES += 'EIDMW_PREFIX=$${PREFIX_DIR}'
+DEFINES += EIDMW_PREFIX=$$PREFIX_DIR
 
 macx:DEPS_DIR = $$(HOME)/mw-thirdparty-libs/
 macx:message(MacOS third-party libs should be at $$DEPS_DIR)
