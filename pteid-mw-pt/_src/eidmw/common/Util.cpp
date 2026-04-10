@@ -303,8 +303,8 @@ void WriteReg(HKEY hive, const wchar_t *subKey, const wchar_t *leafKey, DWORD dw
 }
 #endif
 
-void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRequest, void *param,
-			 std::function<void(const char *, const char *, const char *, void *param)> callback) {
+void scanDir(const char *Dir, const char *Ext, void *param,
+			 std::function<void(const char *, const char *, void *param)> callback) {
 	const std::string extension = strlen(Ext) > 0 ? std::string(".") + Ext : std::string();
 
 	MWLOG_CTX(LEV_DEBUG, MOD_APL, "Scanning directory \"%s\" for extension \"%s\"", Dir, Ext);
@@ -312,14 +312,12 @@ void scanDir(const char *Dir, const char *SubDir, const char *Ext, bool &bStopRe
 	std::error_code ec;
 
 	for (const auto &entry : std::filesystem::directory_iterator(Dir, ec)) {
-		if (bStopRequest)
-			break;
 
 		if (!std::filesystem::is_regular_file(entry.symlink_status()))
 			continue;
 
 		if (extension.empty() || entry.path().extension() == extension)
-			callback(Dir, SubDir, entry.path().filename().c_str(), param);
+			callback(Dir, entry.path().filename().c_str(), param);
 	}
 
 	if (ec)

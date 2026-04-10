@@ -25,6 +25,7 @@
 #include <sys/stat.h>
 #include "Cache.h"
 #include "Util.h"
+#include "OSUtil.h"
 #include "Config.h"
 
 #include <unordered_set>
@@ -282,20 +283,18 @@ void CCache::DiskStoreFile(const std::string &csName, const CByteArray &oData) {
 
 void CCache::DeleteNonEncryptedFiles() {
 	std::string cachePath = GetCacheDir();
-	bool stopRequest = false;
-	scanDir(cachePath.c_str(), "", CACHE_EXT, stopRequest, &stopRequest,
-			[&](const char *dir, const char *SubDir, const char *File, void *param) {
-				std::string fileFullPath = cachePath + File;
+	scanDir(cachePath.c_str(), CACHE_EXT, NULL,
+			[&](const char *dir, const char *File, void *param) {
+				std::string fileFullPath = cachePath + PATH_SEP_CHAR + File;
 				remove(fileFullPath.c_str());
 			});
 }
 
 void CCache::CacheDirIterate(std::function<void(const char *FileName, const char *FullPath)> step) {
 	std::string cachePath = GetCacheDir();
-	bool stopRequest = false;
-	scanDir(cachePath.c_str(), "", ENCRYPTED_CACHE_EXT, stopRequest, &stopRequest,
-			[&](const char *dir, const char *SubDir, const char *File, void *param) {
-				std::string fileFullPath = cachePath + File;
+	scanDir(cachePath.c_str(), ENCRYPTED_CACHE_EXT, NULL,
+			[&](const char *dir, const char *File, void *param) {
+				std::string fileFullPath = cachePath + PATH_SEP_CHAR + File;
 				step(File, fileFullPath.c_str());
 			});
 }

@@ -40,6 +40,7 @@
 #include "CardFile.h"
 #include "eidErrors.h"
 #include "Util.h"
+#include "OSUtil.h"
 #include "MWException.h"
 #include "CertStatusCache.h"
 #include "MiscUtil.h"
@@ -529,12 +530,10 @@ void APL_Certifs::loadCard() {
 }
 
 void APL_Certifs::loadFromFile() {
-	bool bStopRequest = false;
-	scanDir(m_certs_dir.c_str(), "", m_certExtension.c_str(), bStopRequest, this, &APL_Certifs::foundCertificate);
+	scanDir(m_certs_dir.c_str(), m_certExtension.c_str(), this, &APL_Certifs::foundCertificate);
 #ifndef WIN32
-	bStopRequest = false;
 	APL_Config cachePath(CConfig::EIDMW_CONFIG_PARAM_GENERAL_PTEID_CACHEDIR_CERTS);
-	scanDir(cachePath.getString(), "/", m_certExtension.c_str(), bStopRequest, this, &APL_Certifs::foundCertificate);
+	scanDir(cachePath.getString(), m_certExtension.c_str(), this, &APL_Certifs::foundCertificate);
 #endif
 }
 
@@ -592,27 +591,19 @@ void APL_Certifs::reOrderCerts() {
 	m_certifsOrder.insert(m_certifsOrder.end(), cardRoots.begin(), cardRoots.end());
 }
 
-void APL_Certifs::foundCertificate(const char *dir, const char *SubDir, const char *File, void *param) {
+void APL_Certifs::foundCertificate(const char *dir, const char *filename, void *param) {
 	APL_Certifs *certifs = static_cast<APL_Certifs *>(param);
-	std::string path = dir;
 	FILE *m_stream;
 	long int bufsize;
 	unsigned char *buf;
 	CByteArray *cert;
+	std::string path = dir;
+
+	path += PATH_SEP_CHAR;
+	path += filename;
 
 #ifdef WIN32
 	errno_t werr;
-	path += "\\"; // Quick Fix for a messy situation with the certificates subdir
-#endif
-	path += SubDir;
-#ifdef WIN32
-	path += (strlen(SubDir) != 0 ? "\\" : "");
-#else
-	path += (strlen(SubDir) != 0 ? "/" : "");
-#endif
-	path += File;
-
-#ifdef WIN32
 	if ((werr = fopen_s(&m_stream, path.c_str(), "rb")) != 0)
 		goto err;
 #else

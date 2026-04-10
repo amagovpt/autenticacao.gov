@@ -298,11 +298,10 @@ private:
 	/**
 	 * This is a callback function for the scanDir
 	 *
-	 * @param SubDir is the sub directory relative the the Dir of scanDir
-	 * @param File is the file to threat
+	 * @param file is the file to process
 	 * @param param must be this pointer
 	 */
-	static void foundCertificate(const char *dir, const char *SubDir, const char *File, void *param);
+	static void foundCertificate(const char *dir, const char *filename, void *param);
 
 	APL_SmartCard *m_card;		/**< The smart card from which some certificates come */
 	APL_CryptoFwk *m_cryptoFwk; /**< Pointer to the crypto framework */
