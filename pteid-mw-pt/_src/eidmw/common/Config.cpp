@@ -33,19 +33,20 @@
 #include "MWException.h"
 #include "prefix.h"
 
-// open the user config file and also the general config file
-// search first in the user config file and then in the general one
+/*
+Linux/Mac implementation of CConfig.
+All configuration is stored in a single per-user file: ~/.config/pteid.conf
+The tLocation parameter is accepted in the API for cross-platform compatibility
+with the Windows registry implementation (ConfigReg.cpp), but is ignored all
+reads and writes go to the user config file.
+*/
 
-// setters: set always in the user config file unless the admin is executing the programme
-// ---> now the choice of the file is made via the location::USER and location::SYSTEM,
-//      still one should check the permissions for the requested location
 namespace eIDMW {
 
 bool bIsInitialized = false;
 bool CConfig::bTestModeEnabled = false;
 
 CDataFile CConfig::o_userDataFile;
-CDataFile CConfig::o_systemDataFile;
 CMutex CConfig::m_Mutex;
 
 std::wstring home_path;
@@ -57,7 +58,6 @@ CConfig::~CConfig() {}
 void CConfig::Init() {
 
 	if (!bIsInitialized) {
-		const std::wstring system_datafilePath = utilStringWiden(STRINGIFY(EIDMW_PREFIX)) + L"/etc/";
 		home_path = utilStringWiden(std::string(getenv("HOME")));
 #ifdef __APPLE__
 		const std::wstring user_datafilePath = L"Library/Preferences/";
@@ -68,11 +68,8 @@ void CConfig::Init() {
 #endif
 
 		const std::wstring userFile = home_path + L"/" + user_datafilePath + L"pteid.conf";
-		const std::wstring systemFile = system_datafilePath + L"pteid.conf";
 
 		o_userDataFile.SetFileName(userFile);
-
-		o_systemDataFile.SetFileName(systemFile);
 
 		bIsInitialized = true;
 	}
@@ -142,12 +139,7 @@ std::wstring CConfig::GetStringInt(tLocation location, const std::wstring &csNam
 	if (!bIsInitialized)
 		Init();
 
-	std::wstring csResult = L"";
-
-	if (location == CConfig::SYSTEM)
-		csResult = o_systemDataFile.GetString(csName, csSection);
-	else
-		csResult = o_userDataFile.GetString(csName, csSection);
+	std::wstring csResult = o_userDataFile.GetString(csName, csSection);
 
 	if (csResult != L"")
 		return bExpand ? ExpandSection(csResult) : csResult;
@@ -156,11 +148,7 @@ std::wstring CConfig::GetStringInt(tLocation location, const std::wstring &csNam
 }
 
 std::wstring CConfig::GetStringInt(const std::wstring &csName, const std::wstring &csSection, bool bExpand) {
-	try {
-		return GetStringInt(CConfig::USER, csName, csSection, bExpand);
-	} catch (...) {
-		return GetStringInt(CConfig::SYSTEM, csName, csSection, bExpand);
-	}
+	return GetStringInt(CConfig::USER, csName, csSection, bExpand);
 }
 
 // std::wstring CConfig::GetString(t_Str szKey, t_Str szSection)
@@ -208,12 +196,7 @@ long CConfig::GetLong(tLocation location, const std::wstring &csName, const std:
 	if (!bIsInitialized)
 		Init();
 
-	long lResult = LONG_MIN;
-
-	if (location == CConfig::SYSTEM)
-		lResult = o_systemDataFile.GetLong(csName, czSection);
-	else
-		lResult = o_userDataFile.GetLong(csName, czSection);
+	long lResult = o_userDataFile.GetLong(csName, czSection);
 
 	if (lResult != LONG_MIN)
 		return lResult;
@@ -234,11 +217,7 @@ long CConfig::GetLong(tLocation location, const std::wstring &csName, const std:
 long CConfig::GetLong(const Param_Num param) { return (GetLong(param.csParam, param.csSection, param.lDefault)); }
 
 long CConfig::GetLong(const std::wstring &csName, const std::wstring &czSection) {
-	try {
-		return GetLong(CConfig::USER, csName, czSection);
-	} catch (...) {
-		return GetLong(CConfig::SYSTEM, csName, czSection);
-	}
+	return GetLong(CConfig::USER, csName, czSection);
 };
 
 long CConfig::GetLong(const std::wstring &csName, const std::wstring &czSection, long lDefaultValue) {
@@ -261,15 +240,9 @@ void CConfig::SetString(tLocation location, const std::wstring &csName, const st
 	if (!bIsInitialized)
 		Init();
 
-	if (location == SYSTEM) {
-		o_systemDataFile.SetValue(csName, csValue, L"", czSection);
-		if (!o_systemDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	} else {
-		o_userDataFile.SetValue(csName, csValue, L"", czSection);
-		if (!o_userDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	}
+	o_userDataFile.SetValue(csName, csValue, L"", czSection);
+	if (!o_userDataFile.Save())
+		throw CMWEXCEPTION(EIDMW_CONF);
 };
 
 void CConfig::DeleteKeysByPrefix(tLocation location, const struct Param_Str param) {
@@ -282,15 +255,9 @@ void CConfig::DeleteKeysByPrefix(tLocation location, const std::wstring &csName,
 	if (!bIsInitialized)
 		Init();
 
-	if (location == SYSTEM) {
-		o_systemDataFile.DeleteKeysByPrefix(csName, czSection);
-		if (!o_systemDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	} else {
-		o_userDataFile.DeleteKeysByPrefix(csName, czSection);
-		if (!o_userDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	}
+	o_userDataFile.DeleteKeysByPrefix(csName, czSection);
+	if (!o_userDataFile.Save())
+		throw CMWEXCEPTION(EIDMW_CONF);
 };
 
 unsigned int CConfig::CountKeysByPrefix(tLocation location, const struct Param_Str param) {
@@ -303,16 +270,9 @@ unsigned int CConfig::CountKeysByPrefix(tLocation location, const std::wstring &
 	if (!bIsInitialized)
 		Init();
 
-	unsigned int count = 0;
-	if (location == SYSTEM) {
-		count = o_systemDataFile.CountKeysByPrefix(csName, czSection);
-		if (!o_systemDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	} else {
-		count = o_userDataFile.CountKeysByPrefix(csName, czSection);
-		if (!o_userDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	}
+	unsigned int count = o_userDataFile.CountKeysByPrefix(csName, czSection);
+	if (!o_userDataFile.Save())
+		throw CMWEXCEPTION(EIDMW_CONF);
 
 	return count;
 };
@@ -327,15 +287,9 @@ void CConfig::SetLong(tLocation location, const std::wstring &csName, const std:
 	if (!bIsInitialized)
 		Init();
 
-	if (location == SYSTEM) {
-		o_systemDataFile.SetLong(csName, lValue, L"", czSection);
-		if (!o_systemDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	} else {
-		o_userDataFile.SetLong(csName, lValue, L"", czSection);
-		if (!o_userDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	}
+	o_userDataFile.SetLong(csName, lValue, L"", czSection);
+	if (!o_userDataFile.Save())
+		throw CMWEXCEPTION(EIDMW_CONF);
 };
 
 void CConfig::DelString(tLocation location, const struct Param_Str param) {
@@ -348,17 +302,10 @@ void CConfig::DelString(tLocation location, const std::wstring &csName, const st
 	if (!bIsInitialized)
 		Init();
 
-	if (location == SYSTEM) {
-		if (!o_systemDataFile.DeleteKey(csName, czSection))
-			throw CMWEXCEPTION(EIDMW_CONF);
-		if (!o_systemDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	} else {
-		if (!o_userDataFile.DeleteKey(csName, czSection))
-			throw CMWEXCEPTION(EIDMW_CONF);
-		if (!o_userDataFile.Save())
-			throw CMWEXCEPTION(EIDMW_CONF);
-	}
+	if (!o_userDataFile.DeleteKey(csName, czSection))
+		throw CMWEXCEPTION(EIDMW_CONF);
+	if (!o_userDataFile.Save())
+		throw CMWEXCEPTION(EIDMW_CONF);
 };
 
 void CConfig::DelLong(tLocation location, const struct Param_Num param) {

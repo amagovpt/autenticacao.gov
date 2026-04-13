@@ -462,7 +462,6 @@ private:
 #pragma warning(disable : 4251)
 #endif
 	static CDataFile o_userDataFile;
-	static CDataFile o_systemDataFile;
 
 	static CMutex m_Mutex; /**< Mutex for exclusive access */
 
