@@ -599,6 +599,11 @@ FWK_CertifStatus APL_CryptoFwk::CRLValidation(ASN1_INTEGER *serial_number, X509_
 	bool onHold = false;
 	FWK_CertifStatus eStatus = FWK_CERTIF_STATUS_UNCHECK;
 
+	if(pX509Crl == NULL) {
+		MWLOG(LEV_ERROR, MOD_SSL, L"Can't validate CRL with an empty CRL structure!");
+		return FWK_CERTIF_STATUS_ERROR;
+	}
+
 	// Gets the revoked certificates from the CRL
 	pRevokeds = X509_CRL_get_REVOKED(pX509Crl);
 
