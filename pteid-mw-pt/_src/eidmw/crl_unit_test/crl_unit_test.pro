@@ -94,7 +94,6 @@ HEADERS += \
 	../applayer/cryptoFwkPteid.h \
 	../applayer/APLCardPteid.h   \
 	../applayer/PhotoPteid.h \
-	../applayer/SecurityContext.h  \
 	../applayer/APLPublicKey.h \
 	../applayer/SigContainer.h \
 	../applayer/XadesSignature.h \
@@ -115,12 +114,17 @@ SOURCES += \
 	../applayer/APLCardPteid.cpp     \
 	../applayer/APLConfig.cpp	\
 	../applayer/APLReader.cpp        \
-	../applayer/CardFile.cpp	        \
+	../applayer/CardFile.cpp         \
 	../applayer/CardPteid.cpp        \
 	../applayer/CertStatusCache.cpp  \
 	../applayer/cryptoFramework.cpp  \
 	../applayer/cryptoFwkPteid.cpp   \
-	../applayer/APLCard.cpp          \ 
+	../applayer/IcaoDg1.cpp \
+	../applayer/IcaoDg11.cpp \
+	../applayer/IcaoDg2.cpp \
+	../applayer/IcaoDg14.cpp \
+	../applayer/IcaoDg3.cpp \
+	../applayer/APLCard.cpp \ 
 	../applayer/MiscUtil.cpp \
 	../applayer/XercesUtils.cpp \
 	../applayer/PhotoPteid.cpp \
@@ -132,7 +136,6 @@ SOURCES += \
 	../applayer/SODParser.cpp \
 	../applayer/SSLConnection.cpp \
 	../applayer/TSAClient.cpp \
-	../applayer/SecurityContext.cpp \
 	../applayer/sign-pkcs7.cpp \
 	../applayer/cJSON.c \
 	../applayer/PKIFetcher.cpp \
@@ -143,6 +146,7 @@ SOURCES += \
 	../applayer/J2KHelper.cpp \
 	../applayer/CurlUtil.cpp \
 	../applayer/proxyinfo.cpp \
+	../applayer/asn1_idfile.cpp \
 	main.cpp
 
 # Disable annoying and mostly useless gcc warning and add hidden visibility for non-exposed classes and functions

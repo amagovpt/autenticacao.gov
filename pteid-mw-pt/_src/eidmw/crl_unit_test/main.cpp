@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 
 	// Inits APP Layer and starts all services
 	CAppLayer *app_layer = &CAppLayer::instance();
-	app_layer->startAllServices();
+	app_layer->startAllServices(NULL);
 
 	// Gets crypto framework
 	APL_CryptoFwk *fwk = (APL_CryptoFwk *)app_layer->getCryptoFwk();
@@ -157,8 +157,11 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < test_descriptions.size(); i++) {
 		cout << test_descriptions.at(i) << endl;
 		uint64_t serial_number = serial_nums.at(i);
+
+		ASN1_INTEGER * asn1_int_serial = ASN1_INTEGER_new();
+		ASN1_INTEGER_set_uint64(asn1_int_serial, serial_number);
 		FWK_CertifStatus expected_status = expected_results.at(i);
-		FWK_CertifStatus obtained_status = fwk->CRLValidation(serial_number, crl);
+		FWK_CertifStatus obtained_status = fwk->CRLValidation(asn1_int_serial, crl);
 		if (obtained_status == expected_status) {
 			cout << "Test passed!" << endl;
 		} else {
