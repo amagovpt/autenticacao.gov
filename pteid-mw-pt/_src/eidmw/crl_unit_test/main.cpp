@@ -144,14 +144,14 @@ int main(int argc, char *argv[]) {
 	loadCRL("crl/delta_test.crl", &delta_crl);
 
 	// Logs those CRLs
-	logsCRL(crl);
-	logsCRL(delta_crl);
+	//logsCRL(crl);
+	//logsCRL(delta_crl);
 
 	// Updates the CRL
 	fwk->updateCRL(crl, delta_crl);
 
 	// Logs the updated CRL
-	logsCRL(crl);
+	//logsCRL(crl);
 
 	// Runs tests
 	for (int i = 0; i < test_descriptions.size(); i++) {
