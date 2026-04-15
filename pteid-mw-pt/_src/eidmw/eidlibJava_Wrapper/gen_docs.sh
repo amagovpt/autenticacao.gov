@@ -6,6 +6,7 @@ rm -r ./javadocs/
 rm -r ./GeneratedFiles/pteidlibJava_Wrapper.java
 rm -r ./GeneratedFiles/pteidlibJava_WrapperJNI.java
 rm -r ./GeneratedFiles/SWIGTYPE_p_unsigned_long.java
-javadoc -d ./javadocs/ -sourcepath ./GeneratedFiles/Callback.java ./GeneratedFiles/*.java -quiet -public -overview index.html --allow-script-in-comments && zip -r9 javadocs.zip ./javadocs/
+javadoc -d ./javadocs/ -sourcepath ./GeneratedFiles/Callback.java ./GeneratedFiles/*.java -quiet -public -encoding utf-8 -notimestamp -windowtitle "Portuguese eID Middleware SDK" -doctitle 3.14.0 -overview index.html --allow-script-in-comments && zip -r9 javadocs.zip ./javadocs/
 # The deleted files are generated again
-sudo ./create_java_files.sh
+./create_java_files.sh
+
