@@ -2158,10 +2158,8 @@ public:
 	/**
 	 * OCSP/CRL validation status
 	 *
-	 * @param useCache boolean that specifies if cached certificates can be utilized for the validation (default true)
-	 * @param validateChain boolean that specifies if the entire certificate chain is to be validated or not (default
-	 * true)
-	 *
+	 * @param useCache boolean that specifies if cached certificate status can be utilized for the validation
+	 * @param validateChain boolean that specifies if the entire certificate chain is to be validated or not
 	 */
 	PTEIDSDK_API PTEID_CertifStatus getStatus(bool useCache, bool validateChain);
 
