@@ -3889,7 +3889,7 @@ void GAPI::checkCCSignatureCert() {
 	emit signalStartCheckCCSignatureCert();
 
 	PTEID_Certificate &cert = card->getCertificates().getCert(PTEID_Certificate::CITIZEN_SIGN);
-	PTEID_CertifStatus certStatus = cert.getStatus();
+	PTEID_CertifStatus certStatus = cert.getStatus(true, false);
 
 	if (certStatus == PTEID_CertifStatus::PTEID_CERTIF_STATUS_SUSPENDED)
 		emit signalSignCertSuspended();
