@@ -1255,6 +1255,12 @@ void APL_CryptoFwk::updateCRL(X509_CRL *crl, X509_CRL *delta_crl) {
 
 	// Gets the revoked certificates in the CRL
 	STACK_OF(X509_REVOKED) *pRevokeds = NULL;
+
+	if (crl == NULL || delta_crl == NULL) {
+		MWLOG(LEV_ERROR, MOD_APL, "Couldn't update CRL");
+		return;
+	}
+
 	pRevokeds = X509_CRL_get_REVOKED(crl);
 
 	// Gets the revoked certificates in the delta CRL
