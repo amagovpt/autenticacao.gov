@@ -592,15 +592,15 @@ bool APL_CryptoFwk::VerifyRoot(const CByteArray &cert, const unsigned char *cons
 // Serial Number
 FWK_CertifStatus APL_CryptoFwk::CRLValidation(ASN1_INTEGER *serial_number, X509_CRL *pX509Crl) {
 
-	MWLOG(LEV_INFO, MOD_SSL, L"CRL Validation");
+	MWLOG(LEV_INFO, MOD_SSL, "CRL Validation");
 
 	STACK_OF(X509_REVOKED) *pRevokeds = NULL;
 	bool bFound = false;
 	bool onHold = false;
 	FWK_CertifStatus eStatus = FWK_CERTIF_STATUS_UNCHECK;
 
-	if(pX509Crl == NULL) {
-		MWLOG(LEV_ERROR, MOD_SSL, L"Can't validate CRL with an empty CRL structure!");
+	if (pX509Crl == NULL) {
+		MWLOG(LEV_ERROR, MOD_SSL, "Can't verify certificate with an empty CRL structure!");
 		return FWK_CERTIF_STATUS_ERROR;
 	}
 

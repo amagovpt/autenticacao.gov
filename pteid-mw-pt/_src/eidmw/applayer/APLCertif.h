@@ -592,48 +592,31 @@ private:
 	friend void APL_Certifs::addToSODCAs(const CByteArray &cert);
 };
 
-class APL_CrlDownloadingCache;
 struct tCrlInfo;
 
 /******************************************************************************/ /**
-  * Class that represents one crl
+  * Class that represents one CRL
   *
-  * To get APL_Crl object, we have to
-  *ask it from APL_Certif
   *********************************************************************************/
 class APL_Crl {
 public:
 	/**
 	 * Create an APL_Crl object from the URI only
-	 * As there is no issuer, this CRL can't be verify and some method are not allowed
-	 * (ex. getIssuer)
-	 * Theses methods throw EIDMW_ERR_BAD_USAGE exception
 	 */
 	EIDMW_APL_API APL_Crl(const char *uri, const char *delta_uri);
 
 	EIDMW_APL_API virtual ~APL_Crl(void); /**< Destructor */
 
 	/**
-	 * Verify certificate trough CRL process
+	 * Verify certificate through CRL processing
 	 */
 	EIDMW_APL_API APL_CertifStatus verifyCert(bool forceDownload = false);
 
 	/**
-	 * Return the CRL
-	 * If it commes from a Certif we verify the signing
-	 * If it's created from the URL only the signing is not verify
-	 * @return the status of the crl
+	 * Fetch and return the CRL data
+	 * @return the status of CRL downloading
 	 */
 	EIDMW_APL_API APL_CrlStatus getData(CByteArray &data, std::string &crl_uri);
-
-	/**
-	 * Return the certificate issuer (NULL if not found)
-	 *
-	 * The certificate comes from the store
-	 */
-	// EIDMW_APL_API APL_Certif *getIssuer();
-
-	// EIDMW_APL_API const char *getIssuerName();	/**< Return the name of the issuer */
 
 	EIDMW_APL_API const char *getUri(); /**< Return the uri of the CRL */
 
@@ -652,9 +635,7 @@ private:
 	void *m_serial_number; /**< The certificate's serial number */
 	tCrlInfo *m_info;	   /**< Divers information about the crl */
 
-	APL_CrlDownloadingCache *m_cache;
 	APL_CryptoFwk *m_cryptoFwk;
-	CMutex m_Mutex; /**< Mutex */
 
 	friend APL_Crl *APL_Certif::getCRL(); /**< This method must access protected constructor */
 };

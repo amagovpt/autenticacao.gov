@@ -1178,54 +1178,16 @@ unsigned long APL_Certif::getKeyLength() {
 /*****************************************************************************************
 ---------------------------------------- APL_Crl --------------------------------------
 *****************************************************************************************/
-/*
-APL_Crl::APL_Crl(const char *uri, const char *delta_uri)
-{
-	m_cryptoFwk=AppLayer.getCryptoFwk();
 
-	m_uri=uri;
-	m_delta_uri=delta_uri;
-
-	m_initOk=false;
-
-	m_certif=NULL;
-	m_issuer=NULL;
-
-	m_info=NULL;
-}*/
-
-/*
-APL_Crl::APL_Crl(const char *uri, const char *delta_uri, APL_Certif *certif)
-{
-	m_cryptoFwk=AppLayer.getCryptoFwk();
-	//m_cache=AppLayer.getCrlDownloadCache();
-
-	m_uri=uri;
-	m_delta_uri=delta_uri;
-
-	m_initOk=false;
-
-
-	m_serial_number=m_cryptoFwk->getCertSerialNumber(certif->getData());
-	m_certif=certif;
-	m_issuer=NULL;
-
-	m_info=NULL;
-}
-*/
 
 APL_Crl::APL_Crl(const char *uri, const char *delta_uri, void *serial_number) {
 	m_cryptoFwk = AppLayer.getCryptoFwk();
-	// m_cache=AppLayer.getCrlDownloadCache();
 
 	m_uri = uri;
 	m_delta_uri = delta_uri;
 
 	m_initOk = false;
-
 	m_serial_number = serial_number;
-	/*m_certif=NULL;
-	m_issuer=NULL;*/
 
 	m_info = NULL;
 }
@@ -1236,24 +1198,10 @@ APL_Crl::~APL_Crl(void) {
 	}
 }
 
-// Initialize the member if not yet done (m_init=false) or forced by passing crlIn!=NULL
-/*
-void APL_Crl::init()
-{
-	if(!m_initOk)
-	{
-		CByteArray data;
-		getData(data);
-	}
-}*/
 
 const char *APL_Crl::getUri() { return m_uri.c_str(); }
 
 APL_CertifStatus APL_Crl::verifyCert(bool forceDownload) {
-	/*
-	if(!m_certif)
-		throw CMWEXCEPTION(EIDMW_ERR_BAD_USAGE);
-	*/
 
 	FWK_CertifStatus eStatus;
 	CByteArray baCrl;
@@ -1290,7 +1238,7 @@ APL_CertifStatus APL_Crl::verifyCert(bool forceDownload) {
 	X509_CRL *updated_CRL = m_cryptoFwk->updateCRL(baCrl, baDeltaCRL);
 
 	MWLOG(LEV_DEBUG, MOD_APL, "APL_Crl::verifyCert validating cert in CRL and deltaCRL");
-	// Validates CRL
+	// Validates m_serial_number in CRL
 	eStatus = m_cryptoFwk->CRLValidation(reinterpret_cast<ASN1_INTEGER *>(m_serial_number), updated_CRL);
 
 	// Returns the Status
@@ -1316,24 +1264,6 @@ APL_CrlStatus APL_Crl::getData(CByteArray &data, std::string &crl_uri) {
 
 	return eRetStatus;
 }
-
-/*
-APL_Certif *APL_Crl::getIssuer()
-{
-	if(!m_certif)
-		throw CMWEXCEPTION(EIDMW_ERR_BAD_USAGE);
-
-	init();
-
-	return m_issuer;
-}
-
-const char *APL_Crl::getIssuerName()
-{
-	init();
-
-	return m_info->issuerName.c_str();
-}*/
 
 /*****************************************************************************************
 ---------------------------------------- APL_OcspResponse --------------------------------------
