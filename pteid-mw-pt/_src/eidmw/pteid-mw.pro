@@ -35,10 +35,10 @@ CONFIG += ordered
 
 QMAKE_STRIP = echo
 
-data.path +=  /usr/local/share/certs
+data.path +=  $${PREFIX_DIR}/share/certs
 data.files += misc/certs/*
 
-web.path += /usr/local/share/pteid-mw/www
+web.path += $${PREFIX_DIR}/share/pteid-mw/www
 web.files += misc/web/*
 
 INSTALLS += data \

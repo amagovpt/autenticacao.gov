@@ -57,4 +57,4 @@ if (NOT PTEID_MULTIPASS_SDK)
 endif()
 
 
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/misc/certs/ DESTINATION /usr/local/share/certs)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/misc/certs/ DESTINATION share/certs)

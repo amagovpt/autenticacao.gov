@@ -55,7 +55,7 @@ const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR = 
 #else
 const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR = {
 	EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CERTSDIR,
-	WDIRSEP L"usr" WDIRSEP L"local" WDIRSEP L"share" WDIRSEP L"certs" WDIRSEP};
+	EIDMW_CNF_MACRO_INSTALL WDIRSEP L"share" WDIRSEP L"certs" WDIRSEP};
 #endif
 #ifdef WIN32
 const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST = {
@@ -63,7 +63,7 @@ const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TE
 #else
 const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR_TEST = {
 	EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_CERTSDIR_TEST,
-	WDIRSEP L"usr" WDIRSEP L"local" WDIRSEP L"share" WDIRSEP L"certs_test" WDIRSEP};
+	EIDMW_CNF_MACRO_INSTALL WDIRSEP L"share" WDIRSEP L"certs_test" WDIRSEP};
 #endif
 #ifdef WIN32
 const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR = {
@@ -71,7 +71,7 @@ const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR = {
 #else
 const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_WEB_DIR = {
 	EIDMW_CNF_SECTION_GENERAL, EIDMW_CNF_GENERAL_WEBDIR,
-	WDIRSEP L"usr" WDIRSEP L"local" WDIRSEP L"share" WDIRSEP L"pteid-mw" WDIRSEP L"www"};
+	EIDMW_CNF_MACRO_INSTALL WDIRSEP L"share" WDIRSEP L"pteid-mw" WDIRSEP L"www"};
 #endif
 
 const struct CConfig::Param_Str CConfig::EIDMW_CONFIG_PARAM_GENERAL_LANGUAGE = {EIDMW_CNF_SECTION_GENERAL,
