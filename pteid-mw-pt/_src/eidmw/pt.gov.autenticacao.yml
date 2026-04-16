@@ -1,6 +1,6 @@
 app-id: pt.gov.autenticacao
 runtime: org.kde.Platform
-runtime-version: '5.15-23.08'
+runtime-version: '5.15-25.08'
 sdk: org.kde.Sdk
 command: eidguiV2
 finish-args:
@@ -57,6 +57,8 @@ modules:
       - '/share/man'
       - '/lib/pkg-config'
       - '/lib/cmake'
+    config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=lib
     sources:
       - type: archive
         url: https://libzip.org/download/libzip-1.10.1.tar.xz
@@ -80,6 +82,8 @@ modules:
       - '/lib/libcjson.a'
     config-opts:
       - -DBUILD_SHARED_LIBS=OFF
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      - -DCMAKE_INSTALL_LIBDIR=lib
     sources:
       - type: archive
         url: https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.17.tar.gz
@@ -107,10 +111,12 @@ modules:
       - '/lib/libopenjp2.a'
       - '/include'
       - '/bin/opj_*'
+    config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=lib
     sources:
       - type: archive
-        url: https://github.com/uclouvain/openjpeg/archive/v2.5.0.tar.gz
-        sha256: 0333806d6adecc6f7a91243b2b839ff4d2053823634d4f6ed7a59bc87409122a
+        url: https://github.com/uclouvain/openjpeg/archive/v2.5.4.tar.gz
+        sha256: a695fbe19c0165f295a8531b1e4e855cd94d0875d2f88ec4b61080677e27188a
   - name: poppler
     buildsystem: cmake-ninja
     cleanup:
@@ -126,6 +132,7 @@ modules:
       - -DENABLE_QT6=OFF
       - -DENABLE_GLIB=OFF
       - -DENABLE_BOOST=OFF
+      - -DCMAKE_INSTALL_LIBDIR=lib
     sources:
       - type: archive
         url: https://poppler.freedesktop.org/poppler-24.02.0.tar.xz
