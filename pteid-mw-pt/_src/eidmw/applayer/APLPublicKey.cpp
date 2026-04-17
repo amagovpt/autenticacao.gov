@@ -33,6 +33,8 @@ APLPublicKey::~APLPublicKey() {
 		delete m_modulus;
 	if (m_exponent)
 		delete m_exponent;
+	if (m_ecc_publickey)
+		delete m_ecc_publickey;
 }
 
 ECC_Curve_Identifier APLPublicKey::match_curve_size(CByteArray &ec_publickey) {
