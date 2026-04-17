@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
 	int iFunctionIndex = 0;
 	std::string readableFilePath;
 
-	Type_WndGeometry parentWndGeometry;
+	Type_WndGeometry parentWndGeometry = {};
 
 	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
 		MWLOG(LEV_ERROR, MOD_DLG, L"  %s setup of signal handler : %s ", argv[0], strerror(errno));
