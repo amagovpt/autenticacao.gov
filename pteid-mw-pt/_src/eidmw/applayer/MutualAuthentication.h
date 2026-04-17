@@ -67,7 +67,7 @@ public:
 	/* Mutual authentication for IAS v5 cards (DAPP) */
 	CByteArray getECDHParams();
 	char *generalAuthenticate(const char *ecdh_kifd);
-	char *sendPrebuiltAPDU(const char *apdu_string);
+	std::string sendPrebuiltAPDU(const char *apdu_string);
 	std::vector<std::string> sendSequenceOfPrebuiltAPDUs(std::vector<std::string> &apdu_array);
 	std::vector<std::string> remoteAddressStep3(std::string &signed_challenge, std::vector<std::string> &internal_auth,
 												const std::string &pin_status);

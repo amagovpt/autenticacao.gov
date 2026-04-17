@@ -461,16 +461,14 @@ std::vector<std::string> MutualAuthentication::sendSequenceOfPrebuiltAPDUs(std::
 		// We don't need to send 9000 responses obtained for Command APDUs sent in chaining mode
 		// XX: should be replaced by checking the CLA byte of the command
 		if (r.size() > 2 * 2) {
-			responses.push_back(r);
+			responses.push_back(std::move(r));
 		}
 		i++;
 	}
 	return responses;
 }
 
-char *MutualAuthentication::sendPrebuiltAPDU(const char *apdu_string) {
-	char *resp_string = NULL;
-
+std::string MutualAuthentication::sendPrebuiltAPDU(const char *apdu_string) {
 	CByteArray apdu_ba(std::string(apdu_string), true);
 
 	CByteArray resp = m_card->getCalReader()->SendAPDU(apdu_ba);
@@ -479,11 +477,9 @@ char *MutualAuthentication::sendPrebuiltAPDU(const char *apdu_string) {
 			  resp.GetByte(resp.Size() - 2), resp.GetByte(resp.Size() - 1));
 	}
 
-	resp_string = (char *)malloc(resp.Size() * 2 + 1);
-
-	binToHex(resp.GetBytes(), resp.Size(), resp_string, resp.Size() * 2 + 1);
-
-	return resp_string;
+	std::vector<char> buf(resp.Size() * 2 + 1);
+	binToHex(resp.GetBytes(), resp.Size(), buf.data(), buf.size());
+	return std::string(buf.data());
 }
 
 bool MutualAuthentication::verifySignedChallenge(CByteArray &signed_challenge) {
