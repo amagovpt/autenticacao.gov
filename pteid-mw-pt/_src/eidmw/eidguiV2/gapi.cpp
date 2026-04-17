@@ -1352,11 +1352,39 @@ void GAPI::storeQmlEngine(QQmlApplicationEngine *engine) {
 			SLOT(setAppAsDlgParent(QObject *, const QUrl &)));
 }
 
-void GAPI::doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams) {
-
+void GAPI::doSignCMD(SignParams &signParams) {
 	long ret = -1;
 
 	PTEID_CMDSignatureClient *client = m_cmd_client;
+
+	PTEID_PDFSignature pdf_signature;
+
+	if (signParams.loadedFilePaths.size() == 1) {
+		pdf_signature.setFileSigning((char *)getPlatformNativeString(signParams.loadedFilePaths.first()));
+	} else {
+		for (const QString &filepath : signParams.loadedFilePaths) {
+			pdf_signature.addToBatchSigning((char *)getPlatformNativeString(filepath), signParams.isLastPage);
+		}
+	}
+
+	if (signParams.isTimestamp) {
+		if (signParams.isLtv) {
+			pdf_signature.setSignatureLevel(PTEID_LEVEL_LTV);
+		} else {
+			pdf_signature.setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
+		}
+	}
+
+	if (signParams.isSmallSignature)
+		pdf_signature.enableSmallSignatureFormat();
+
+	pdf_signature.setCustomSealSize(m_seal_width, m_seal_height);
+
+	if (useCustomSignature()) {
+		const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()),
+										static_cast<unsigned long>(m_jpeg_scaled_data.size()));
+		pdf_signature.setCustomImage(imageData);
+	}
 
 	const int page = signParams.page;
 	const double coord_x = signParams.coord_x;
@@ -1441,40 +1469,10 @@ void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
 void GAPI::signCMD(QList<QString> loadedFilePaths, QString outputFile, int page, double coord_x, double coord_y,
 				   QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall, bool isLastPage) {
 
-	SignParams signParams = {loadedFilePaths, outputFile,  page,  coord_x, coord_y, reason,
-							 location,		  isTimestamp, isLTV, isSmall, false};
+	SignParams signParams = {loadedFilePaths, outputFile, page,  coord_x,    coord_y,
+							 reason,		  location,   isTimestamp, isLTV, isSmall, isLastPage};
 
-	PTEID_PDFSignature *pdf_signature = new PTEID_PDFSignature();
-
-	if (loadedFilePaths.size() == 1) {
-		pdf_signature->setFileSigning((char *)getPlatformNativeString(loadedFilePaths.first()));
-	} else {
-		// batch signature
-		for (QString filepath : loadedFilePaths) {
-			pdf_signature->addToBatchSigning((char *)getPlatformNativeString(filepath), isLastPage);
-		}
-	}
-
-	if (signParams.isTimestamp) {
-		if (signParams.isLtv) {
-			pdf_signature->setSignatureLevel(PTEID_LEVEL_LTV);
-		} else {
-			pdf_signature->setSignatureLevel(PTEID_LEVEL_TIMESTAMP);
-		}
-	}
-
-	if (signParams.isSmallSignature)
-		pdf_signature->enableSmallSignatureFormat();
-
-	pdf_signature->setCustomSealSize(m_seal_width, m_seal_height);
-
-	if (useCustomSignature()) {
-		const PTEID_ByteArray imageData(reinterpret_cast<const unsigned char *>(m_jpeg_scaled_data.data()),
-										static_cast<unsigned long>(m_jpeg_scaled_data.size()));
-		pdf_signature->setCustomImage(const_cast<unsigned char *>(imageData.GetBytes()), imageData.Size());
-	}
-
-	Concurrent::run(this, &GAPI::doSignCMD, *pdf_signature, signParams);
+	Concurrent::run(this, &GAPI::doSignCMD, signParams);
 }
 
 QString GAPI::getCardActivation() {

@@ -559,7 +559,7 @@ public slots:
 	void cancelCMDRegisterCert();
 	void signCMD(QList<QString> loadedFilePath, QString outputFile, int page, double coord_x, double coord_y,
 				 QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall, bool isLastPage);
-	void doSignCMD(PTEID_PDFSignature &pdf_signature, SignParams &signParams);
+	void doSignCMD(SignParams &signParams);
 
 	// SCAP with CMD
 	void signScapWithCMD(QList<QString> loadedFilePaths, QString outputFile, QList<QString> attribute_list, int page,
