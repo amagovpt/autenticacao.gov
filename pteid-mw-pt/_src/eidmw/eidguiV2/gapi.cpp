@@ -83,8 +83,7 @@ size_t GAPI::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata
 	return size * nmemb;
 }
 
-bool GAPI::isMacOSApplicationFolder() const
-{
+bool GAPI::isMacOSApplicationFolder() const {
 #ifdef __APPLE__
 	QString currentAppFolder = QCoreApplication::applicationDirPath();
 	QString executableInsidePackage = "/Contents/MacOS";
@@ -453,7 +452,7 @@ QString GAPI::loadCountryName(const QString &threeLetterCode, const QString &lan
 
 	QJsonObject threeLetterTranslationObj = threeLetterTranslation.toObject();
 	QJsonValue valueTranslated = threeLetterTranslationObj.value(useLanguage);
-	if(valueTranslated == QJsonValue::Undefined)
+	if (valueTranslated == QJsonValue::Undefined)
 		return threeLetterTranslationObj.value("en").toString();
 
 	return valueTranslated.toString();
@@ -514,7 +513,7 @@ WindowGeometry *GAPI::getWndGeometry() {
 
 QString GAPI::getDataCardIdentifyValue(IDInfoKey key) { return m_data[key]; }
 
-QString GAPI::getDataICAOValue(ICAOInfoKey key) { return m_icaoData[key];}
+QString GAPI::getDataICAOValue(ICAOInfoKey key) { return m_icaoData[key]; }
 
 void GAPI::setDataCardIdentify(QMap<IDInfoKey, QString> data) {
 
@@ -524,7 +523,7 @@ void GAPI::setDataCardIdentify(QMap<IDInfoKey, QString> data) {
 	emit signalCardDataChanged();
 }
 
-void GAPI::setDataCardICAO(QMap<ICAOInfoKey, QString>  data){
+void GAPI::setDataCardICAO(QMap<ICAOInfoKey, QString> data) {
 	qDebug() << "C++: setDataCardICAO ";
 
 	m_icaoData = data;
@@ -622,7 +621,8 @@ void GAPI::emitErrorSignal(const char *caller_function, long errorCode, int inde
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Permission denied error in %s", caller_function);
 		emit signalPdfSignFail(SignFilePermissionFailed, index);
 	} else if (errorCode == EIDMW_FILE_NOT_OPENED) {
-		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "Failed to write output file in %s: file is already open in another application", caller_function);
+		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
+				  "Failed to write output file in %s: file is already open in another application", caller_function);
 		emit signalPdfSignFail(SignFilePermissionFailed, index);
 	} else if (errorCode == EIDMW_PDF_INVALID_ERROR) {
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui", "PDF invalid error in %s", caller_function);
@@ -819,7 +819,7 @@ void GAPI::setPersoDataFile(const QString &text) {
 
 	try {
 		card->writePersonalNotes(ba_notes);
-	} catch (PTEID_Exception&) {
+	} catch (PTEID_Exception &) {
 		qDebug() << "Error writing personal notes!";
 		emit signalSetPersoDataFile(tr("STR_POPUP_ERROR"), tr("STR_PERSONAL_NOTES_ERROR"), false);
 		return;
@@ -1014,7 +1014,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 	} catch (PTEID_PACE_ERROR &e) {
 		PaceError err;
 		switch (e.GetError()) {
-		case EIDMW_PACE_ERR_BAD_TOKEN: 
+		case EIDMW_PACE_ERR_BAD_TOKEN:
 			err = PaceError::PaceBadToken;
 			deleteCAN();
 			break;
@@ -1469,8 +1469,8 @@ void GAPI::doSignXADESWithCMD(SignParams &params, bool isASIC) {
 void GAPI::signCMD(QList<QString> loadedFilePaths, QString outputFile, int page, double coord_x, double coord_y,
 				   QString reason, QString location, bool isTimestamp, bool isLTV, bool isSmall, bool isLastPage) {
 
-	SignParams signParams = {loadedFilePaths, outputFile, page,  coord_x,    coord_y,
-							 reason,		  location,   isTimestamp, isLTV, isSmall, isLastPage};
+	SignParams signParams = {loadedFilePaths, outputFile,  page,  coord_x, coord_y,	  reason,
+							 location,		  isTimestamp, isLTV, isSmall, isLastPage};
 
 	Concurrent::run(this, &GAPI::doSignCMD, signParams);
 }
@@ -1530,7 +1530,7 @@ QString GAPI::getCardActivation() {
 }
 
 QPixmap PhotoImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) {
-	if (p.count(id) == 0){
+	if (p.count(id) == 0) {
 		qDebug() << "PhotoImageProvider: wrong id requested - " << id;
 		return QPixmap();
 	}
@@ -2121,11 +2121,11 @@ bool GAPI::drawpdf(QPrinter &printer, PrintParams params, long &addressError) {
 
 			pos_y += 50 * print_scale_factor;
 
-			#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-				QStringList lines = perso_data.split("\n", Qt::KeepEmptyParts);
-			#else 
-				QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
-			#endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+			QStringList lines = perso_data.split("\n", Qt::KeepEmptyParts);
+#else
+			QStringList lines = perso_data.split("\n", QString::KeepEmptyParts);
+#endif
 
 			const int TEXT_LINE_HEIGHT = 20 * print_scale_factor;
 
@@ -2609,7 +2609,6 @@ void GAPI::startCardICAOReading() {
 	QFuture<void> future = Concurrent::run(this, &GAPI::connectToICAOCard);
 }
 
-
 void GAPI::startSavingCardPhoto(QString outputFile) {
 	QFuture<void> future = Concurrent::run(this, &GAPI::doSaveCardPhoto, outputFile);
 }
@@ -2659,7 +2658,7 @@ void GAPI::startSigningSCAP(QList<QString> inputPDFs, QString outputPDF, int pag
 							QString location, QString reason, bool isTimestamp, bool isLtv, bool isLastPage,
 							QList<QString> attribute_ids, bool useProfessionalName) {
 
-	SCAPSignParams signParams = {inputPDFs, outputPDF,	 page,	location_x, location_y,	  reason,
+	SCAPSignParams signParams = {inputPDFs, outputPDF,	 page,	location_x, location_y,			 reason,
 								 location,	isTimestamp, isLtv, isLastPage, useProfessionalName, attribute_ids};
 
 	Concurrent::run(this, &GAPI::doSignSCAP, signParams, false);
@@ -2669,7 +2668,7 @@ void GAPI::signScapWithCMD(QList<QString> inputPDFs, QString outputPDF, QList<QS
 						   double location_x, double location_y, QString reason, QString location, bool isTimestamp,
 						   bool isLtv, bool isLastPage, bool useProfessionalName) {
 
-	SCAPSignParams signParams = {inputPDFs, outputPDF,	 page,	location_x, location_y,	  reason,
+	SCAPSignParams signParams = {inputPDFs, outputPDF,	 page,	location_x, location_y,			 reason,
 								 location,	isTimestamp, isLtv, isLastPage, useProfessionalName, attribute_ids};
 
 	Concurrent::run(this, &GAPI::doSignSCAP, signParams, true);
@@ -3239,7 +3238,7 @@ QVariantList GAPI::getRetReaderList() {
 			emit signalSetReaderComboIndex(selectedReaderIndex);
 		}
 
-	} catch (PTEID_Exception&) {
+	} catch (PTEID_Exception &) {
 		qDebug() << "Error getRetReaderList!";
 	}
 
@@ -3298,15 +3297,15 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	cardData[IsNameFromMRZ] = "True";
 	cardData[IsPassport] = QString::fromStdString(dg->isPassport() ? "True" : "False");
 
-	// Load the photo from PTEID_ICAO_DG2	
-	PTEID_ICAO_DG2* dg2 = card->readDataGroup2();
+	// Load the photo from PTEID_ICAO_DG2
+	PTEID_ICAO_DG2 *dg2 = card->readDataGroup2();
 	statusDgs = statusDgs && dg2->GetReport()->GetStatus() == 0;
 	if (!dg2->biometricInstances().empty()) {
 		qDebug() << "Trying to process DG2";
-		std::vector<PTEID_BiometricInfomation*> biometric_instances = dg2->biometricInstances();
-		PTEID_BiometricInfomation* instance = biometric_instances.at(0);
-		PTEID_FaceInfo* faceInfo = instance->faceInfo();
-		PTEID_FaceInfoData* faceInfoData = faceInfo->faceInfoData().at(0);
+		std::vector<PTEID_BiometricInfomation *> biometric_instances = dg2->biometricInstances();
+		PTEID_BiometricInfomation *instance = biometric_instances.at(0);
+		PTEID_FaceInfo *faceInfo = instance->faceInfo();
+		PTEID_FaceInfoData *faceInfoData = faceInfo->faceInfoData().at(0);
 		unsigned short image_data_type = faceInfoData->imgDataType();
 		qDebug() << "DG2 image data type: " << image_data_type;
 		QPixmap image_photo;
@@ -3314,15 +3313,14 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 			// JPEG2000, which needs to be converted to PNG
 			PTEID_ByteArray photoRawData = faceInfoData->photoRawDataPNG();
 			image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "PNG");
-		}
-        else if (image_data_type == 0) {
+		} else if (image_data_type == 0) {
 			// JPG
 			PTEID_ByteArray photoRawData = faceInfoData->photoRawData();
 			image_photo.loadFromData(photoRawData.GetBytes(), photoRawData.Size(), "JPG");
 		}
 		// Updates image provider
 		image_provider->setPixmap("photoICAO.png", image_photo);
-    }
+	}
 
 	auto availableDgs = card->getAvailableDatagroups();
 	auto it = std::find(availableDgs.begin(), availableDgs.end(), PTEID_DATA_GROUP_ID_DG11);
@@ -3349,16 +3347,16 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 	}
 }
 
-QString GAPI::convertDate(const QString& date) {
-    if (date.length() != 6) {
-        return "Invalid date format";
-    }
+QString GAPI::convertDate(const QString &date) {
+	if (date.length() != 6) {
+		return "Invalid date format";
+	}
 
-    QString year = date.mid(0, 2);  // YY
-    QString month = date.mid(2, 2); // MM
-    QString day = date.mid(4, 2);   // DD
+	QString year = date.mid(0, 2);	// YY
+	QString month = date.mid(2, 2); // MM
+	QString day = date.mid(4, 2);	// DD
 
-    return QString("%1-%2-%3").arg(day, month, year);
+	return QString("%1-%2-%3").arg(day, month, year);
 }
 
 void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
@@ -3399,7 +3397,7 @@ void GAPI::finishLoadingCardData(PTEID_EIDCard *card) {
 	QPixmap image_photo;
 	image_photo.loadFromData(photo.GetBytes(), photo.Size(), "PNG");
 
-	image_provider->setPixmap("photo.png",image_photo);
+	image_provider->setPixmap("photo.png", image_photo);
 
 	// All data loaded: we can emit the signal to QML
 	setDataCardIdentify(cardData);
@@ -3461,7 +3459,7 @@ void GAPI::connectToICAOCard() {
 	BEGIN_TRY_CATCH
 
 	PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui", "GetCardInstance connectToICAOCard");
-	ICAO_Card* card = NULL;
+	ICAO_Card *card = NULL;
 	unsigned long ReaderCount = ReaderSet.readerCount();
 	PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eidgui", "getCardInstance Card Reader count =  %ld", ReaderCount);
 	unsigned long ReaderIdx = 0;
@@ -3470,8 +3468,8 @@ void GAPI::connectToICAOCard() {
 	if (ReaderCount == 0) {
 		emit signalCardAccessError(NoReaderFound);
 	}
-	
-	for(ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
+
+	for (ReaderIdx = 0; ReaderIdx < ReaderCount; ReaderIdx++) {
 		PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(ReaderIdx);
 		if (readerContext.isCardPresent()) {
 			tempReaderIndex = ReaderIdx;
@@ -3601,7 +3599,7 @@ void cardEventCallback(long lRet, unsigned long ulState, CallBackData *pCallBack
 					break;
 				}
 				case ICAO_CARDTYPE_MRTD:
-					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback","ICAO CARD inserted");
+					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "ICAO CARD inserted");
 					break;
 				case PTEID_CARDTYPE_UNKNOWN:
 					PTEID_LOG(PTEID_LOG_LEVEL_DEBUG, "eventCallback", "unknown Card - skipping ImportCertificates()");
@@ -3658,7 +3656,7 @@ void GAPI::setEventCallbacks(void) {
 			PTEID_ReaderContext &readerContext = ReaderSet.getReaderByNum(Ix);
 			CallBackData *pCBData = new CallBackData(readerName, this);
 
-			fCallback = (void (*)(long, unsigned long, void *)) & cardEventCallback;
+			fCallback = (void (*)(long, unsigned long, void *))&cardEventCallback;
 
 			m_callBackHandles[readerName] = readerContext.SetEventCallback(fCallback, pCBData);
 			m_callBackData[readerName] = pCBData;
@@ -3790,7 +3788,7 @@ void GAPI::doExportCardCertificate(QString issuedBy, QString issuedTo, QString o
 	file.open(QIODevice::WriteOnly);
 	int bytesWritten = file.write((const char *)certData.GetBytes(), certData.Size());
 	file.close();
-	if (bytesWritten < 0){
+	if (bytesWritten < 0) {
 		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_ERROR, "eidgui", "doExportCardCertificate: could not write certificate");
 		emit signalExportCertificates(false);
 		return;
