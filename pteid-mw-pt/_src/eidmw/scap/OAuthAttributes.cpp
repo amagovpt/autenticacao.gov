@@ -233,7 +233,7 @@ OAuthResult OAuthAttributes::fetchToken() {
 
 size_t OAuthAttributes::curl_write_data(char *recv, size_t size, size_t nmemb, void *buffer) {
 	size_t realsize = size * nmemb;
-	MWLOG(LEV_DEBUG, MOD_SCAP, "OAuthAttributes::curl_write_data received %lu bytes", realsize);
+	MWLOG(LEV_DEBUG, MOD_SCAP, "OAuthAttributes::curl_write_data received %zu bytes", realsize);
 	((std::string *)buffer)->append((char *)recv, realsize);
 	return realsize;
 }
