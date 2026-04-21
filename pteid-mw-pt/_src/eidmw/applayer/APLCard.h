@@ -122,12 +122,12 @@ public:
 
 	/* XADeS Signature Methods  */
 
-	EIDMW_APL_API CByteArray &SignXades(const char **path, unsigned int n_paths, const char *output_path,
+	EIDMW_APL_API CByteArray SignXades(const char **path, unsigned int n_paths, const char *output_path,
 										APL_SignatureLevel level);
 
-	EIDMW_APL_API CByteArray &SignXadesT(const char **path, unsigned int n_paths, const char *output_path);
+	EIDMW_APL_API CByteArray SignXadesT(const char **path, unsigned int n_paths, const char *output_path);
 
-	EIDMW_APL_API CByteArray &SignXadesA(const char **path, unsigned int n_paths, const char *output_path);
+	EIDMW_APL_API CByteArray SignXadesA(const char **path, unsigned int n_paths, const char *output_path);
 
 	EIDMW_APL_API void SignXadesIndividual(const char **, unsigned int, const char *);
 

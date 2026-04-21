@@ -84,9 +84,8 @@ PTEID_ByteArray PTEID_CMDSignatureClient::SignXades(const char *output_path, con
 
 	CMDSignatureClient *pCmdClient = static_cast<CMDSignatureClient *>(m_impl);
 
-	CByteArray &result = pCmdClient->SignXades(output_path, paths, n_paths, ConvertSignatureLevel(level));
+	CByteArray result = pCmdClient->SignXades(output_path, paths, n_paths, ConvertSignatureLevel(level));
 	out.Append(result.GetBytes(), result.Size());
-	delete &result;
 
 	END_TRY_CATCH
 

@@ -31,7 +31,7 @@ public:
 	EIDMW_APL_API XadesSignature(APL_Certifs *certs, std::function<CByteArray(const CByteArray &)> callback)
 		: m_cmdCertificates(certs), m_signCallback(callback) {};
 
-	EIDMW_APL_API CByteArray &signXades(const char **paths, unsigned int pathCount);
+	EIDMW_APL_API CByteArray signXades(const char **paths, unsigned int pathCount);
 	EIDMW_APL_API void signASiC(const char *path);
 
 	void enableTimestamp() { m_doTimestamp = true; };
@@ -42,7 +42,7 @@ public:
 	bool shouldThrowLTVException() { return m_throwLTVException; };
 
 private:
-	CByteArray &sign(const char **paths, unsigned int pathCount, zip_t *container = NULL);
+	CByteArray sign(const char **paths, unsigned int pathCount, zip_t *container = NULL);
 
 	APL_Card *m_pcard = NULL;
 	APL_Certifs *m_cmdCertificates = NULL;

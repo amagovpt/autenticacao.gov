@@ -31,9 +31,8 @@ PTEID_ByteArray PTEID_Card::SignXades(const char *output_path, const char *const
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
-	CByteArray &ca = pcard->SignXades((const char **)paths, n_paths, output_path, ConvertSignatureLevel(level));
+	CByteArray ca = pcard->SignXades((const char **)paths, n_paths, output_path, ConvertSignatureLevel(level));
 	out.Append(ca.GetBytes(), ca.Size());
-	delete (&ca);
 
 	END_TRY_CATCH
 
@@ -70,9 +69,8 @@ PTEID_ByteArray PTEID_Card::SignXadesT(const char *output_path, const char *cons
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
-	CByteArray &ca = pcard->SignXadesT((const char **)path, n_paths, output_path);
+	CByteArray ca = pcard->SignXadesT((const char **)path, n_paths, output_path);
 	out.Append(ca.GetBytes(), ca.Size());
-	delete (&ca);
 
 	END_TRY_CATCH
 
@@ -97,9 +95,8 @@ PTEID_ByteArray PTEID_Card::SignXadesA(const char *output_path, const char *cons
 
 	APL_Card *pcard = static_cast<APL_Card *>(m_impl);
 
-	CByteArray &ca = pcard->SignXadesA((const char **)path, n_paths, output_path);
+	CByteArray ca = pcard->SignXadesA((const char **)path, n_paths, output_path);
 	out.Append(ca.GetBytes(), ca.Size());
-	delete (&ca);
 
 	END_TRY_CATCH
 

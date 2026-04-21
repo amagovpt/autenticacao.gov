@@ -825,7 +825,7 @@ static void setReferenceHash(XMLByte *hash, unsigned int hash_len, int ref_index
 	free(base64Hash);
 }
 
-CByteArray &XadesSignature::sign(const char **paths, unsigned int pathCount, zip_t *container) {
+CByteArray XadesSignature::sign(const char **paths, unsigned int pathCount, zip_t *container) {
 	XSECProvider prov;
 	DSIGSignature *sig;
 
@@ -979,7 +979,7 @@ CByteArray &XadesSignature::sign(const char **paths, unsigned int pathCount, zip
 		if (digest_state) {
 			EVP_MD_CTX_free(digest_state);
 		}
-		return *(new CByteArray());
+		return CByteArray();
 	} catch (XSECException &e) {
 		MWLOG(LEV_ERROR, MOD_APL, L"An error occured during a signature load. Message: %s\n", e.getMsg());
 
@@ -993,15 +993,15 @@ CByteArray &XadesSignature::sign(const char **paths, unsigned int pathCount, zip
 		EVP_MD_CTX_free(digest_state);
 	}
 
-	CByteArray *xml_output = DOMDocumentToByteArray(doc);
+	std::unique_ptr<CByteArray> xml_output(DOMDocumentToByteArray(doc));
 	doc->release();
 
 	return *xml_output;
 }
 
-CByteArray &XadesSignature::signXades(const char **paths, unsigned int pathCount) {
+CByteArray XadesSignature::signXades(const char **paths, unsigned int pathCount) {
 	initXMLUtils();
-	CByteArray &result = sign(paths, pathCount);
+	CByteArray result = sign(paths, pathCount);
 	terminateXMLUtils();
 
 	return result;
@@ -1031,7 +1031,7 @@ void XadesSignature::signASiC(const char *path) {
 
 	initXMLUtils();
 	assert(paths.size() <= UINT_MAX);
-	CByteArray &sigXml = sign(&paths[0], (unsigned int) paths.size(), container);
+	CByteArray sigXml = sign(&paths[0], (unsigned int) paths.size(), container);
 	terminateXMLUtils();
 
 	const char *uniqueFileName = NULL;

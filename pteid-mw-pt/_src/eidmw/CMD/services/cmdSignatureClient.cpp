@@ -102,7 +102,7 @@ CByteArray CMDSignatureClient::Sign(const CByteArray &data, bool signatureKey, c
 	return cmdSignature.m_signature;
 }
 
-CByteArray &CMDSignatureClient::SignXades(const char *output_path, const char *const *paths, unsigned int n_paths,
+CByteArray CMDSignatureClient::SignXades(const char *output_path, const char *const *paths, unsigned int n_paths,
 										  APL_SignatureLevel level) {
 	const char **input_paths = const_cast<const char **>(paths);
 	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(input_paths, n_paths)) {
@@ -140,7 +140,7 @@ CByteArray &CMDSignatureClient::SignXades(const char *output_path, const char *c
 		sig.enableLongTermValidation();
 	}
 
-	CByteArray &signature = sig.signXades(input_paths, n_paths);
+	CByteArray signature = sig.signXades(input_paths, n_paths);
 
 	if (sig.shouldThrowTimestampException()) {
 		throw CMWEXCEPTION(EIDMW_TIMESTAMP_ERROR);
