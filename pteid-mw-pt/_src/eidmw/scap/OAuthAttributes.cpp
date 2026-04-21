@@ -233,7 +233,7 @@ OAuthResult OAuthAttributes::fetchToken() {
 
 size_t OAuthAttributes::curl_write_data(char *recv, size_t size, size_t nmemb, void *buffer) {
 	size_t realsize = size * nmemb;
-	MWLOG(LEV_DEBUG, MOD_SCAP, "OAuthAttributes::curl_write_data received %d bytes", realsize);
+	MWLOG(LEV_DEBUG, MOD_SCAP, "OAuthAttributes::curl_write_data received %lu bytes", realsize);
 	((std::string *)buffer)->append((char *)recv, realsize);
 	return realsize;
 }
@@ -335,7 +335,7 @@ OAuthResult OAuthAttributes::requestResources() {
 
 	CURLcode res = curl_easy_perform(curl);
 	if (res != CURLE_OK) {
-		MWLOG(LEV_ERROR, MOD_SCAP, L"OAuthAttributes: curl_easy_perform() failed: %S", curl_easy_strerror(res));
+		MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: curl_easy_perform() failed: %s", curl_easy_strerror(res));
 		curl_easy_cleanup(curl);
 		return OAuthGenericError;
 	}
@@ -343,7 +343,7 @@ OAuthResult OAuthAttributes::requestResources() {
 	long http_code = 0;
 	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 	if (http_code != 200) {
-		MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: Server response http code: %d with error: %s", http_code,
+		MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: Server response HTTP status code: %ld with error: %s", http_code,
 			  responseBuffer.c_str());
 		curl_easy_cleanup(curl);
 		return OAuthGenericError;
