@@ -126,14 +126,10 @@ CMDServices::CMDServices(std::string basicAuthUser, std::string basicAuthPasswor
 			  SOAP_MUST_NO_UNDERSTAND))
 		return;
 
-	const char *new_endpoint = NULL;
 	std::string cmd_endpoint = getEndpoint();
+	MWLOG_DEBUG("Using Endpoint: %s", cmd_endpoint.c_str());
 
-	new_endpoint = cmd_endpoint.c_str();
-
-	MWLOG_DEBUG("Using Endpoint: %s", new_endpoint);
-
-	setEndPoint(_strdup(new_endpoint));
+	setEndPoint(cmd_endpoint.c_str());
 
 	m_basicAuthUser = basicAuthUser;
 	m_basicAuthPassword = basicAuthPassword;
@@ -146,7 +142,7 @@ CMDServices::CMDServices(std::string basicAuthUser, std::string basicAuthPasswor
  ********************************************************* */
 CMDServices::~CMDServices() {
 	soap *sp = getSoap();
-
+	
 	if (NULL == sp)
 		return;
 
@@ -235,7 +231,7 @@ void CMDServices::setEndPoint(const char *endpoint) { m_endpoint = endpoint; }
 /*  *********************************************************
  ***    CMDServices::getEndPoint()                     ***
  ********************************************************* */
-const char *CMDServices::getEndPoint() { return m_endpoint; }
+const char *CMDServices::getEndPoint() { return m_endpoint.c_str(); }
 
 /*  *********************************************************
  ***    CMDServices::getProcessID()                    ***

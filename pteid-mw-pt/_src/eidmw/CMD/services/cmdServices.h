@@ -101,7 +101,7 @@ private:
 	std::string m_userId; // this is the phone number.
 	std::string m_basicAuthUser;
 	std::string m_basicAuthPassword;
-	const char *m_endpoint;
+	std::string m_endpoint;
 
 	bool init(int recv_timeout, int send_timeout, int connect_timeout, short mustUnderstand);
 
