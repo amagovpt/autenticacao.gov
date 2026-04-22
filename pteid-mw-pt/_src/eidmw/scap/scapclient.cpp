@@ -502,7 +502,7 @@ static CByteArray decode_base64(const std::string &encoded) {
 
 static ScapResult<void> close_scap_signature(std::vector<Document> &documents,
 											 const std::vector<std::string> &signatures) {
-	ScapResult<void> result;
+	ScapResult<void> result = {};
 	for (size_t i = 0; i < documents.size(); ++i) {
 		Document &doc = documents.at(i);
 		const std::string &sig_base64 = signatures.at(i);
