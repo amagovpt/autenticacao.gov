@@ -138,7 +138,7 @@ void PDFSignature::resetMembers() {
 
 void PDFSignature::setFile(const char *pdf_file_path) {
 	m_batch_mode = false;
-	m_pdf_file_path = _strdup(pdf_file_path);
+	m_pdf_file_path = pdf_file_path;
 	m_doc = makePDFDoc(pdf_file_path);
 }
 
