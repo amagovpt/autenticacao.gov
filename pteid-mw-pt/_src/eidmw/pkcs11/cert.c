@@ -88,6 +88,7 @@ int get_rsa_key_info(const unsigned char *pcert, unsigned int lcert, T_RSA_KEY_I
 	EVP_PKEY *pubKey = X509_get_pubkey(pX509);
 
 	BIGNUM *exponent = NULL;
+	BIGNUM *n = NULL;
 	if (!EVP_PKEY_get_bn_param(pubKey, OSSL_PKEY_PARAM_RSA_E, &exponent)) {
 		log_trace(WHERE, "Failed to get exponent from key");
 		EVP_PKEY_free(pubKey);
@@ -99,7 +100,7 @@ int get_rsa_key_info(const unsigned char *pcert, unsigned int lcert, T_RSA_KEY_I
 	rsa_keyinfo->exp = OPENSSL_malloc(rsa_keyinfo->l_exp);
 	BN_bn2bin(exponent, rsa_keyinfo->exp);
 
-	BIGNUM *n = NULL;
+
 	if (!EVP_PKEY_get_bn_param(pubKey, OSSL_PKEY_PARAM_RSA_N, &n)) {
 		log_trace(WHERE, "Failed to get modulus from key");
 		EVP_PKEY_free(pubKey);
