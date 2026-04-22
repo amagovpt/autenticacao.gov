@@ -614,7 +614,9 @@ void APL_Certifs::foundCertificate(const char *dir, const char *filename, void *
 	if (fseek(m_stream, 0L, SEEK_END))
 		goto err;
 
-	bufsize = ftell(m_stream);
+	if ((bufsize = ftell(m_stream)) == -1)
+		goto err;
+
 	buf = (unsigned char *)malloc(bufsize * sizeof(unsigned char));
 
 	if (fseek(m_stream, 0L, SEEK_SET)) {
