@@ -1441,6 +1441,7 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 
 void APL_AddrEId::loadRemoteAddress() {
 	long exception_code = 0;
+	char *kicc = NULL, *challenge = NULL, *chr = NULL;
 
 	if (remoteAddressLoaded) {
 		return;
@@ -1483,7 +1484,7 @@ void APL_AddrEId::loadRemoteAddress() {
 		}
 
 		// 2nd POST
-		char *kicc = mutual_authentication.getKICC();
+		kicc = mutual_authentication.getKICC();
 
 		bool verified = mutual_authentication.verifyCert_CV_IFD((char *)dh_params_resp.cv_ifd_cert.c_str());
 
@@ -1493,9 +1494,9 @@ void APL_AddrEId::loadRemoteAddress() {
 			goto cleanup;
 		}
 
-		char *chr = mutual_authentication.getPK_IFD_AUT((char *)dh_params_resp.cv_ifd_cert.c_str());
+		chr = mutual_authentication.getPK_IFD_AUT((char *)dh_params_resp.cv_ifd_cert.c_str());
 
-		char *challenge = mutual_authentication.generateChallenge(chr);
+		challenge = mutual_authentication.generateChallenge(chr);
 		if (challenge == NULL) {
 			exception_code = EIDMW_REMOTEADDR_SMARTCARD_ERROR;
 			goto cleanup;
@@ -1559,6 +1560,12 @@ void APL_AddrEId::loadRemoteAddress() {
 	}
 
 cleanup:
+	if (kicc)
+		free(kicc);
+	if (challenge)
+		free(challenge);
+	if (chr)
+		free(chr);
 	if (exception_code != 0) {
 		throw CMWEXCEPTION(exception_code);
 	}
