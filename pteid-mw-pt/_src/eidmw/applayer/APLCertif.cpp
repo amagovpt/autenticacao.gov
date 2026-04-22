@@ -164,7 +164,7 @@ void APL_Certifs::addToSODCAs(const CByteArray &cert_ba) {
 unsigned long APL_Certifs::countSODCAs() {
 	MWLOG(LEV_DEBUG, MOD_APL, "DEBUG: countSODCAs returns %lu", m_sod_cas.size());
 	assert(m_sod_cas.size() <= ULONG_MAX);
-	return (unsigned long) m_sod_cas.size();
+	return (unsigned long)m_sod_cas.size();
 }
 
 APL_Certif *APL_Certifs::getSODCA(int index) {
@@ -242,16 +242,17 @@ APL_Certif *APL_Certifs::getCertFromCard(unsigned long ulIndex) {
 
 		// Don't load the self-signed root cert from Card!
 		//  We ship the right version in eidstore...
-		if (strcmp(cert->getLabel(), "ROOT CA") == 0)
+		if (strcmp(cert->getLabel(), "ROOT CA") == 0) {
+			delete cert;
 			return NULL;
+		}
 
 		unsigned long ulUniqueId = cert->getUniqueId();
 		itr = m_certifs.find(ulUniqueId);
 		if (itr == m_certifs.end()) {
 			m_certifs[ulUniqueId] = cert;
 			m_certifsOrder.push_back(ulUniqueId);
-		}
-		else {
+		} else {
 			APL_Certif *foundCert = itr->second;
 			delete foundCert;
 			m_certifs[ulUniqueId] = cert;
@@ -824,10 +825,8 @@ void APL_Certif::setCardCertificateType() {
 	}
 }
 
-
-
 APL_Certif::APL_Certif(APL_Certifs *store, APL_CardFile_Certificate *file, APL_CertifType type, bool bOnCard,
-					    unsigned long ulIndex, const CByteArray *cert) {
+					   unsigned long ulIndex, const CByteArray *cert) {
 	m_cryptoFwk = AppLayer.getCryptoFwk();
 	m_statusCache = AppLayer.getCertStatusCache();
 
@@ -912,10 +911,7 @@ APL_Certif::~APL_Certif(void) {
 	}
 }
 
-APL_CertifType APL_Certif::getType() const {
-
-	return m_type;
-}
+APL_CertifType APL_Certif::getType() const { return m_type; }
 
 unsigned long APL_Certif::getIndexOnCard() const { return m_ulIndex; }
 
@@ -975,7 +971,7 @@ unsigned long APL_Certif::countChildren(bool bForceRecount) {
 
 APL_Certif *APL_Certif::getChildren(unsigned long ulIndex) { return m_store->getChildren(this, ulIndex); }
 
-bool APL_Certif::isTest()  { return (m_test != 0); }
+bool APL_Certif::isTest() { return (m_test != 0); }
 
 bool APL_Certif::isType(APL_CertifType type) const { return (getType() == type); }
 
