@@ -40,21 +40,16 @@ std::string generateTOTP(std::string secretKey, unsigned int digits, unsigned in
 
 	std::string key_buffer;
 
-	unsigned char hs[128];
-	char output_otp[12];
+	unsigned char hs[128] = {0};
+	char output_otp[12] = {0};
 	int key_len = 0;
 	const int DIGITS_POWER[] =
 		// 0 1  2   3    4     5      6       7        8
 		{1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
 
-	const int MAX_DIGITS = sizeof(DIGITS_POWER) / sizeof(int);
+	const int MAX_DIGITS = 8;
 
 	unsigned int md_len = sizeof(hs);
-
-	memset(hs, 0, sizeof(hs));
-	memset(output_otp, 0, sizeof(output_otp));
-
-	unsigned long S = 0;
 
 	if (digits > MAX_DIGITS) {
 		MWLOG(LEV_ERROR, MOD_SCAP,
@@ -88,6 +83,7 @@ std::string generateTOTP(std::string secretKey, unsigned int digits, unsigned in
 #endif
 
 	if (HMAC(EVP_sha1(), key_buffer.c_str(), key_len, (const unsigned char *)&msg, sizeof(msg), hs, &md_len) != NULL) {
+		unsigned long S = 0;
 
 		uint8_t offset = hs[md_len - 1] & 0x0f;
 
@@ -102,7 +98,9 @@ std::string generateTOTP(std::string secretKey, unsigned int digits, unsigned in
 		snprintf(output_otp, sizeof(output_otp), "%.*ld", digits, S);
 #endif
 		output_otp[digits] = '\0';
-
+		if (base64_buffer) {
+			delete[] (base64_buffer);
+		}
 		return output_otp;
 	} else {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s: error in HMAC-SHA1!", __FUNCTION__);
