@@ -426,6 +426,14 @@ GAPI::GAPI(GUISettings &settings, QObject *parent) : QObject(parent), m_Settings
 	m_scap_client = new ScapClient(scap_credentials);
 }
 
+GAPI::~GAPI() {
+	delete m_scap_client;
+	delete m_cmd_client;
+#ifdef WIN32
+	delete m_cmdCertificates;
+#endif
+}
+
 void GAPI::initTranslation() {
 
 	QString appPath = QCoreApplication::applicationDirPath();

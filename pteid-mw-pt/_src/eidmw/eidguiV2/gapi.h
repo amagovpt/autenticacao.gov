@@ -233,6 +233,7 @@ class GAPI : public QObject {
 
 public:
 	explicit GAPI(GUISettings &settings, QObject *parent = 0);
+	~GAPI();
 
 	enum IDInfoKey {
 		Documenttype,
