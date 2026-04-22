@@ -50,33 +50,33 @@ static std::string parse_date_header(const std::string &headers) {
 }
 
 static CURLU *set_url(ScapSettings &settings, const std::string &endpoint, const std::vector<std::string> &queries) {
-	CURLU *url = curl_url();
+	std::unique_ptr<CURLU, void (*)(CURLU *)> url = {curl_url(), curl_url_cleanup};
 
 	std::string host = "https://" + settings.getScapServerHost();
 
-	if (curl_url_set(url, CURLUPART_URL, host.c_str(), 0) != CURLUE_OK) {
+	if (curl_url_set(url.get(), CURLUPART_URL, host.c_str(), 0) != CURLUE_OK) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to set url: %s", __FUNCTION__, host.c_str());
 		return NULL;
 	}
 
-	if (curl_url_set(url, CURLUPART_PORT, settings.getScapServerPort().c_str(), 0) != CURLUE_OK) {
+	if (curl_url_set(url.get(), CURLUPART_PORT, settings.getScapServerPort().c_str(), 0) != CURLUE_OK) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to set port.", __FUNCTION__);
 		return NULL;
 	}
 
-	if (curl_url_set(url, CURLUPART_PATH, endpoint.c_str(), 0) != CURLUE_OK) {
+	if (curl_url_set(url.get(), CURLUPART_PATH, endpoint.c_str(), 0) != CURLUE_OK) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to set endpoint: %s", __FUNCTION__, endpoint.c_str());
 		return NULL;
 	}
 
 	for (const std::string &query : queries) {
-		if (curl_url_set(url, CURLUPART_QUERY, query.c_str(), CURLU_APPENDQUERY) != CURLUE_OK) {
+		if (curl_url_set(url.get(), CURLUPART_QUERY, query.c_str(), CURLU_APPENDQUERY) != CURLUE_OK) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed: to set processid query string.", __FUNCTION__);
 			return NULL;
 		}
 	}
 
-	return url;
+	return url.release();
 }
 
 ScapResponse perform_request(const ScapCredentials &credentials, const ScapRequest &request, CURL *curl) {
@@ -381,7 +381,7 @@ std::string create_search_attributes_body(const CitizenInfo &citizen_info, const
 			providers_strings.push_back(provider.uriId.c_str());
 		}
 		assert(providers.size() <= INT_MAX);
-		if ((providers_json = cJSON_CreateStringArray(&providers_strings[0], (int) providers.size())) == NULL) {
+		if ((providers_json = cJSON_CreateStringArray(&providers_strings[0], (int)providers.size())) == NULL) {
 			MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to create provider id array", __FUNCTION__);
 			goto clean_up;
 		}
@@ -850,7 +850,7 @@ std::string create_sign_hash_body(const std::string &processId, const std::strin
 		hashes_strings.push_back(hash.c_str());
 	}
 	assert(hashes.size() <= INT_MAX);
-	if ((hashes_array = cJSON_CreateStringArray(&hashes_strings[0], (int) hashes.size())) == NULL) {
+	if ((hashes_array = cJSON_CreateStringArray(&hashes_strings[0], (int)hashes.size())) == NULL) {
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s failed to create hashes_strings array", __FUNCTION__);
 		goto clean_up;
 	}
