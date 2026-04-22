@@ -771,7 +771,7 @@ bool CPteidCard::SelectApplet() {
 
 // Compatible with older CC where only 1 AID present
 tFileInfo CPteidCard::SelectFile(const std::string &csPath, bool bReturnFileInfo) {
-	return CPkiCard::SelectFile(csPath, PTEID_1_APPLET_AID, bReturnFileInfo);
+	return CPkiCard::SelectFile(csPath, {PTEID_1_APPLET_AID, sizeof(PTEID_1_APPLET_AID)}, bReturnFileInfo);
 }
 
 tCacheInfo CPteidCard::GetCacheInfo(const std::string &csPath) {

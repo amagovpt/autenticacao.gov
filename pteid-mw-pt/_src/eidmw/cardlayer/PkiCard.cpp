@@ -55,7 +55,6 @@ bool CPkiCard::SelectApplet() {
 void CPkiCard::ResetApplication() { m_lastSelectedApplication.ClearContents(); }
 
 void CPkiCard::SelectApplication(const CByteArray &oAID) {
-
 	if (m_lastSelectedApplication.Size() > 0 && oAID.Size() > 0 &&
 		memcmp(oAID.GetBytes(), m_lastSelectedApplication.GetBytes(), oAID.Size()) == 0) {
 		return;
@@ -481,7 +480,7 @@ CByteArray CPkiCard::GetRandom(unsigned long ulLen) {
 	return oRandom;
 }
 
-tFileInfo CPkiCard::SelectFile(const std::string &csPath, const unsigned char *oAID, bool bReturnFileInfo) {
+tFileInfo CPkiCard::SelectFile(const std::string &csPath, const CByteArray &oAID, bool bReturnFileInfo) {
 	auto ulPathLen = static_cast<unsigned long>(csPath.size());
 	tFileInfo info;
 	info.lFileLen = info.lReadPINRef = info.lWritePINRef = 0;
@@ -501,7 +500,7 @@ tFileInfo CPkiCard::SelectFile(const std::string &csPath, const unsigned char *o
 		if ((ulSW12 >> 0x8) & 0x6A) // Select File any error
 		{
 			// If failed, try to select the respective application
-			SelectApplication({oAID, sizeof(oAID)});
+			SelectApplication(oAID);
 
 			// Select by path again
 			responseSelection = SelectByPath(csPath, bReturnFileInfo);

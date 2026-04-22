@@ -14,7 +14,7 @@ tCardType CIcaoCard::GetType() { return tCardType::CARD_ICAO; }
 void CIcaoCard::InitEncryptionKey() { m_oCache.setEncryptionKey({}); }
 
 tFileInfo CIcaoCard::SelectFile(const std::string &csPath, bool bReturnFileInfo) {
-	return CPkiCard::SelectFile(csPath, ICAO_APPLET_MRTD, bReturnFileInfo);
+	return CPkiCard::SelectFile(csPath, {ICAO_APPLET_MRTD, sizeof(ICAO_APPLET_MRTD)}, bReturnFileInfo);
 }
 
 CByteArray CIcaoCard::GetSerialNrBytes() { throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED); }
@@ -67,19 +67,15 @@ CByteArray CIcaoCard::ReadUncachedFile(const std::string &csPath, unsigned long 
 		ulOffset += offsetChange;
 		currentBuffer.Append(response.GetBytes(), offsetChange);
 		if (ulSW12 == 0x6282 || ulSW12 == 0x6B00) {
-			MWLOG(LEV_DEBUG, MOD_CAL, "Reading loop finished for ICAO file %s with SW12: %lx",
-				  csPath.c_str(), ulSW12);
+			MWLOG(LEV_DEBUG, MOD_CAL, "Reading loop finished for ICAO file %s with SW12: %lx", csPath.c_str(), ulSW12);
 			break;
-		}
-		else if (ulSW12 != 0x9000) {
-			MWLOG(LEV_ERROR, MOD_CAL, "Error while reading ICAO file %s ulsw12: 0x%lx",
-				  csPath.c_str(), ulSW12);
+		} else if (ulSW12 != 0x9000) {
+			MWLOG(LEV_ERROR, MOD_CAL, "Error while reading ICAO file %s ulsw12: 0x%lx", csPath.c_str(), ulSW12);
 			break;
 		}
 	}
 
-	MWLOG(LEV_INFO, MOD_CAL, "Read ICAO file %s (%lu bytes) from card", csPath.c_str(),
-		  currentBuffer.Size());
+	MWLOG(LEV_INFO, MOD_CAL, "Read ICAO file %s (%lu bytes) from card", csPath.c_str(), currentBuffer.Size());
 	return currentBuffer;
 }
 
