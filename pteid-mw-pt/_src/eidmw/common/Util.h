@@ -136,4 +136,4 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr);
 
 #endif
 
-EIDMW_CMN_API size_t read_binary_file(const char *filename, unsigned char **outBuffer);
+EIDMW_CMN_API long read_binary_file(const char *filename, unsigned char **outBuffer);

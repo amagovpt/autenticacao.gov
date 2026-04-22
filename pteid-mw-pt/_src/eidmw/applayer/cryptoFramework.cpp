@@ -737,7 +737,7 @@ void APL_CryptoFwk::loadCertificatesToOcspStore(X509_STORE *store) {
 	} else {
 		//APL_Certifs instance without card, used for CMD certificates
 		APL_Certifs eidstore;
-		
+
 		for (unsigned long i = 0; i < eidstore.countAll(); i++) {
 			add_certif_to_store(eidstore.getCert(i));
 		}
@@ -1599,7 +1599,11 @@ void APL_CryptoFwk::loadMasterList(const char *filePath) {
 	}
 
 	unsigned char *der_buffer = NULL;
-	size_t der_len = read_binary_file(filePath, &der_buffer);
+	long der_len = read_binary_file(filePath, &der_buffer);
+	if (der_len < 0) {
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to read master list file contents at %s", filePath);
+		return;
+	}
 
 	const unsigned char *p = der_buffer;
 	CMS_ContentInfo *cms = d2i_CMS_ContentInfo(NULL, &p, der_len);
