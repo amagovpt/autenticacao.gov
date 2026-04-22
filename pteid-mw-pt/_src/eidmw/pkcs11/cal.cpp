@@ -859,8 +859,8 @@ int cal_read_object(CK_SLOT_ID hSlot, P11_OBJECT *pObject) {
 	P11_OBJECT *pCertObject = NULL;
 	P11_OBJECT *pPubKeyObject = NULL;
 	P11_OBJECT *pPrivKeyObject = NULL;
-	T_CERT_INFO certinfo;
-	T_RSA_KEY_INFO rsa_keyinfo;
+	T_CERT_INFO certinfo = {};
+	T_RSA_KEY_INFO rsa_keyinfo = {};
 	CByteArray oCertData;
 	tCert cert;
 	tPrivKey key;
