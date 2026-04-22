@@ -80,6 +80,7 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved) {
 		isDup = 1;
 	}
 	if (tmpvar == NULL) {
+		isDup = 0;	// failed to duplicate temp env, no need to free
 #ifndef WIN32
 		tmpvar = "/tmp";
 #else
