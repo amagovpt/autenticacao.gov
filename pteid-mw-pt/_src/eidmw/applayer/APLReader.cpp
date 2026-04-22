@@ -288,10 +288,13 @@ unsigned long APL_ReaderContext::SetEventCallback(void (*callback)(long lRet, un
 void APL_ReaderContext::StopEventCallback(unsigned long ulHandle) const { m_calreader->StopEventCallback(ulHandle); }
 
 void APL_ReaderContext::BeginTransaction() {
-	if (m_transaction_lock)
-		throw CMWEXCEPTION(EIDMW_ERR_BAD_TRANSACTION);
 
 	m_transaction_mutex.Lock();
+
+	if (m_transaction_lock) {
+		m_transaction_mutex.Unlock();
+		throw CMWEXCEPTION(EIDMW_ERR_BAD_TRANSACTION);
+	}
 
 	m_transaction_lock = true;
 
