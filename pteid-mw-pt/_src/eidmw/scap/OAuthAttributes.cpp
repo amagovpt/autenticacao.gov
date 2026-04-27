@@ -267,6 +267,7 @@ void OAuthAttributes::parseAttributes(const char *response) {
 
 OAuthResult OAuthAttributes::requestResources() {
 	CURL *curl;
+	char error_buffer[CURL_ERROR_SIZE] = {0};
 	/*curl_global_cleanup should be called for every curl_global_init
 	and calling curl_global_cleanup makes libraries such as OpenSSL
 	unusable (at least until curl_global_init is called again).
@@ -306,6 +307,7 @@ OAuthResult OAuthAttributes::requestResources() {
 	std::string responseBuffer;
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_data);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBuffer);
+	curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buffer);
 
 	std::string cacerts_file =
 		utilStringNarrow(CConfig::GetString(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CERTS_DIR)) + "/cacerts.pem";
@@ -335,7 +337,8 @@ OAuthResult OAuthAttributes::requestResources() {
 
 	CURLcode res = curl_easy_perform(curl);
 	if (res != CURLE_OK) {
-		MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: curl_easy_perform() failed: %s", curl_easy_strerror(res));
+		MWLOG(LEV_ERROR, MOD_SCAP, "OAuthAttributes: curl_easy_perform() failed. Libcurl error code: %d message: %s",
+			  res, error_buffer);
 		curl_easy_cleanup(curl);
 		return OAuthGenericError;
 	}

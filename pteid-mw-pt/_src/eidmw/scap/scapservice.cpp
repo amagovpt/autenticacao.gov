@@ -164,8 +164,8 @@ ScapResponse perform_request(const ScapCredentials &credentials, const ScapReque
 	}
 
 	if (ret != CURLE_OK) {
-		MWLOG(LEV_ERROR, MOD_SCAP, "Error on request %s. Libcurl returned %s\n", request.endpoint.c_str(),
-			  error_buffer);
+		MWLOG(LEV_ERROR, MOD_SCAP, "Error on request %s. Libcurl error code: %d message: %s", request.endpoint.c_str(), 
+			  ret, error_buffer);
 
 		long auth = 0;
 		if (!curl_easy_getinfo(curl, CURLINFO_PROXYAUTH_AVAIL, &auth) && auth) {
