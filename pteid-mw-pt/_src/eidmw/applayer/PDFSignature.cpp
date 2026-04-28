@@ -57,8 +57,7 @@ std::string generatePrefixedNativePath(const std::string &path) {
 		// Replace any Unix path seperator with Windows ones
 		std::replace(normalized_path.begin(), normalized_path.end(), '/', '\\');
 		normalized_path = regex_replace(normalized_path, std::regex(R"(\\{2,})"), R"(\)");
-		std::string prefixed_path = std::string(R"(\\?\)") + normalized_path;
-
+		std::string prefixed_path = (normalized_path[0] == '\\' ? std::string(R"(\\?\UNC)") : std::string(R"(\\?\)")) + normalized_path;
 		return prefixed_path;
 	}
 }
