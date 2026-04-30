@@ -1269,7 +1269,7 @@ PTEID_ICAO_DG3::PTEID_ICAO_DG3(const SDK_Context *context, const IcaoDg3 &dg3, c
 	}
 }
 
-const PTEID_DataGroupReport *PTEID_ICAO_DG3::GetReport() const { return GetReportByID(PTEID_DATA_GROUP_ID_DG2); }
+const PTEID_DataGroupReport *PTEID_ICAO_DG3::GetReport() const { return GetReportByID(PTEID_DATA_GROUP_ID_DG3); }
 
 unsigned int PTEID_BiometricInfoFingerImage::length() const { return m_impl.length(); }
 
@@ -1346,7 +1346,7 @@ PTEID_ICAO_DG3::~PTEID_ICAO_DG3() {
 PTEID_ICAO_DG11::PTEID_ICAO_DG11(const SDK_Context *context, const IcaoDg11 &dg11, const EIDMW_DocumentReport &report)
 	: PTEID_BaseDGReport(context, report), m_impl(dg11) {}
 
-const PTEID_DataGroupReport *PTEID_ICAO_DG11::GetReport() const { return GetReportByID(PTEID_DATA_GROUP_ID_DG2); }
+const PTEID_DataGroupReport *PTEID_ICAO_DG11::GetReport() const { return GetReportByID(PTEID_DATA_GROUP_ID_DG11); }
 
 unsigned int PTEID_ICAO_DG2::numberOfBiometrics() const { return m_impl.numberOfBiometrics(); }
 
