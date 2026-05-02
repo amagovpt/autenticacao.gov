@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/fabio/Documentos/Aulas/2º Semestre/Segurança e Aplicações de Hardware Confiável/autenticacao.gov/scripts_for_hardware/address_info.cpp" "CMakeFiles/cc_reader.dir/address_info.cpp.o" "gcc" "CMakeFiles/cc_reader.dir/address_info.cpp.o.d"
-  "/home/fabio/Documentos/Aulas/2º Semestre/Segurança e Aplicações de Hardware Confiável/autenticacao.gov/scripts_for_hardware/main.cpp" "CMakeFiles/cc_reader.dir/main.cpp.o" "gcc" "CMakeFiles/cc_reader.dir/main.cpp.o.d"
-  "/home/fabio/Documentos/Aulas/2º Semestre/Segurança e Aplicações de Hardware Confiável/autenticacao.gov/scripts_for_hardware/public_info.cpp" "CMakeFiles/cc_reader.dir/public_info.cpp.o" "gcc" "CMakeFiles/cc_reader.dir/public_info.cpp.o.d"
+  "/home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/address_info.cpp" "CMakeFiles/cc_reader.dir/address_info.cpp.o" "gcc" "CMakeFiles/cc_reader.dir/address_info.cpp.o.d"
+  "/home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/main.cpp" "CMakeFiles/cc_reader.dir/main.cpp.o" "gcc" "CMakeFiles/cc_reader.dir/main.cpp.o.d"
+  "/home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/public_info.cpp" "CMakeFiles/cc_reader.dir/public_info.cpp.o" "gcc" "CMakeFiles/cc_reader.dir/public_info.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

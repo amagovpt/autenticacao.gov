@@ -1,0 +1,14 @@
+[0;1;32m●[0m pcscd.service - PC/SC Smart Card Daemon
+     Loaded: loaded (]8;;file://angie/usr/lib/systemd/system/pcscd.service/usr/lib/systemd/system/pcscd.service]8;;; indirect; preset: [0;1;32menabled[0m)
+     Active: [0;1;32mactive (running)[0m since Thu 2026-04-30 14:00:57 UTC; 30s ago
+TriggeredBy: [0;1;32m●[0m pcscd.socket
+       Docs: ]8;;man:pcscd(8)man:pcscd(8)]8;;
+   Main PID: 27450 (pcscd)
+      Tasks: 6 (limit: 9358)
+     Memory: 1.2M (peak: 1.6M)
+        CPU: 27ms
+     CGroup: /system.slice/pcscd.service
+             └─[0;38;5;245m27450 /usr/sbin/pcscd --foreground --auto-exit[0m
+
+Apr 30 14:00:57 angie systemd[1]: Started pcscd.service - PC/SC Smart Card Daemon.
+Apr 30 14:00:57 angie (pcscd)[27450]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mpcscd.service: Referenced but unset environment variable evaluates to an empty string: PCSCD_ARGS[0m

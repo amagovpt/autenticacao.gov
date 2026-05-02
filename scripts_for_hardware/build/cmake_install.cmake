@@ -1,4 +1,4 @@
-# Install script for directory: /home/fabio/Documentos/Aulas/2º Semestre/Segurança e Aplicações de Hardware Confiável/autenticacao.gov/scripts_for_hardware
+# Install script for directory: /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/fabio/Documentos/Aulas/2º Semestre/Segurança e Aplicações de Hardware Confiável/autenticacao.gov/scripts_for_hardware/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

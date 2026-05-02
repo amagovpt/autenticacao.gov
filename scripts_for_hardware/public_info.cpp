@@ -56,10 +56,10 @@ void printPublicInfoAndSavePhoto(eIDMW::PTEID_EIDCard& eidCard, const std::strin
     std::cout << "Citizen ID (MRZ1): " << mrz1 << std::endl;
     std::cout << "-----------------------------------\n" << std::endl;
 
-    eIDMW::PTEID_PublicKey &publicKey = idInfo.getCardAuthKeyObj();
-    bool isECC = publicKey.isECCPublicKey();
-    eIDMW::PTEID_ByteArray &byte_array = publicKey.getCardAuthKeyModulus();
-    std::string pubKeyHex = bytesToHex(byte_array.GetBytes(), byte_array.Size());
+    //eIDMW::PTEID_PublicKey &publicKey = idInfo.getCardAuthKeyObj();
+    //bool isECC = publicKey.isECCPublicKey();
+    //eIDMW::PTEID_ByteArray &byte_array = publicKey.getCardAuthKeyModulus();
+    //std::string pubKeyHex = bytesToHex(byte_array.GetBytes(), byte_array.Size());
 
     // Save Photo (Overwrites for the current card)
     eIDMW::PTEID_Photo& photoObj = idInfo.getPhotoObj();
@@ -89,8 +89,8 @@ void printPublicInfoAndSavePhoto(eIDMW::PTEID_EIDCard& eidCard, const std::strin
     ss << "    \"pan\": \"" << escapeJson(pan) << "\",\n";
     ss << "    \"docType\": \"" << escapeJson(docType) << "\",\n";
     ss << "    \"docVersion\": \"" << escapeJson(docVersion) << "\",\n";
-    ss << "    \"isECC\": " << (isECC ? "true" : "false") << ",\n";
-    ss << "    \"publicKeyHex\": \"" << pubKeyHex << "\",\n";
+    //ss << "    \"isECC\": " << (isECC ? "true" : "false") << ",\n";
+    //ss << "    \"publicKeyHex\": \"" << pubKeyHex << "\",\n";
     ss << "    \"photoPath\": \"" << escapeJson(photoPath) << "\"\n";
     ss << "  }";
     std::string newEntry = ss.str();

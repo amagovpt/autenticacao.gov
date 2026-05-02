@@ -139,6 +139,10 @@ int main(int argc, char **argv) {
 
     } catch (PTEID_Exception &e) {
         std::cerr << "SDK Exception (Error code: " << e.GetError() << ")" << std::endl;
+        std::cerr << "SDK message: " << e.GetMessage() << std::endl;
+        if (e.GetError() == EIDMW_ERR_NO_READER) {
+            std::cerr << "No smart card reader detected. Check the reader connection, pcscd, and middleware installation." << std::endl;
+        }
         PTEID_ReleaseSDK();
         return 1;
     } catch (const std::exception &e) {
