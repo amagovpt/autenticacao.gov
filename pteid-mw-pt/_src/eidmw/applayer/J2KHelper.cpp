@@ -449,10 +449,9 @@ clean_up:
 	if (png) {
 		png_destroy_write_struct(&png, &info);
 	}
-	if (png)
-		if (row_buf) {
-			free(row_buf);
-		}
+	if (row_buf) {
+		free(row_buf);
+	}
 	if (row_pointers) {
 		free(row_pointers);
 	}
