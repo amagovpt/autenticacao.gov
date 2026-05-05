@@ -1648,6 +1648,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile() {
 		pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
 		X509_STORE_add_cert(store, pX509);
 		MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
+		X509_free(pX509); // Release our reference; store holds its own
 	}
 
 	BIO *Out = BIO_new(BIO_s_mem());
