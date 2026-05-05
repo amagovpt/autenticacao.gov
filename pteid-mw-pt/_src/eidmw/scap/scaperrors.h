@@ -11,6 +11,7 @@
 #include "string"
 
 enum class ScapError {
+	ok,
 	generic,
 	connection,
 	timeout,
@@ -48,7 +49,7 @@ enum class ScapError {
 
 template <class T> class ScapResult {
 public:
-	ScapResult(const T &data) : m_data(data), m_is_error(false) {};
+	ScapResult(const T &data) : m_data(data), m_error(ScapError::ok), m_is_error(false), m_is_critical(false) {};
 	ScapResult(const ScapError &error) : m_error(error), m_is_error(true) { set_critical(error); };
 	ScapResult(const ScapError &error, const std::vector<std::string> &error_data, const T &data)
 		: m_data(data), m_error(error), m_is_error(true), m_error_data(error_data) {
@@ -75,7 +76,7 @@ private:
 
 template <> class ScapResult<void> {
 public:
-	ScapResult() : m_is_error(false), m_is_critical(false) {};
+	ScapResult() : m_error(ScapError::ok), m_is_error(false), m_is_critical(false) {};
 	ScapResult(const ScapError &error) : m_error(error), m_is_error(true) { set_critical(error); };
 	ScapResult(const ScapError &error, const std::vector<std::string> &error_data)
 		: m_error(error), m_is_error(true), m_error_data(error_data) {
