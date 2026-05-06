@@ -1008,6 +1008,8 @@ void PDFDoc::prepareTimestamp()
     if (found == NULL)
     {
         error(errInternal, -1, "addTimestamp: can't find signature offset. Aborting timestamping!");
+        timestampDictObj->free();
+        delete timestampDictObj;
         return;
     }
     m_sig_offset = (long)found - (long)streamPtr + sizeof(needle) - 1;
