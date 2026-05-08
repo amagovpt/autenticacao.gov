@@ -2154,11 +2154,11 @@ Guint PDFDoc::getStartXRef()
       startXRefPos = 0;
       for (i = 0; i < n; i++) {
         if (!strncmp("endobj", &buf[i], 6)) {
-	  i += 6;
-	  //skip whitespace 
-	  while (buf[i] && Lexer::isSpace(buf[i])) ++i;
-	  startXRefPos = i;
-	  break;
+          i += 6;
+          //skip whitespace
+          while (buf[i] && Lexer::isSpace(buf[i])) ++i;
+          startXRefPos = i;
+          break;
         }
       }
     } else {
