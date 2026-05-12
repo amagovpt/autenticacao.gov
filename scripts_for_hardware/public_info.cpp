@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
+#include <filesystem>
 
 namespace ccapp {
 
@@ -30,8 +31,9 @@ static std::string bytesToHex(const unsigned char* bytes, unsigned long len) {
     return ss.str();
 }
 
-void printPublicInfoAndSavePhoto(eIDMW::PTEID_EIDCard& eidCard, const std::string& photoPath, const std::string& jsonPath) {
+void printPublicInfoAndSavePhoto(eIDMW::PTEID_EIDCard& eidCard,const std::string& photoPath, const std::string& jsonPath) {
     eIDMW::PTEID_EId& idInfo = eidCard.getID();
+     // Ensure the photo is saved with a .png extension
 
     std::string firstName = idInfo.getGivenName();
     std::string lastName = idInfo.getSurname();
@@ -50,21 +52,37 @@ void printPublicInfoAndSavePhoto(eIDMW::PTEID_EIDCard& eidCard, const std::strin
     std::string docType = idInfo.getDocumentType();
     std::string docVersion = idInfo.getDocumentVersion();
 
+    std::string photoPathWithExtension = photoPath + "/" + mrz1 + ".png";
+
     std::cout << "\n--- Public Identity Information ---" << std::endl;
     std::cout << "Name:        " << firstName << " " << lastName << std::endl;
     std::cout << "Birth Date:  " << birthDate << std::endl;
     std::cout << "Citizen ID (MRZ1): " << mrz1 << std::endl;
     std::cout << "-----------------------------------\n" << std::endl;
 
-    //eIDMW::PTEID_PublicKey &publicKey = idInfo.getCardAuthKeyObj();
-    //bool isECC = publicKey.isECCPublicKey();
-    //eIDMW::PTEID_ByteArray &byte_array = publicKey.getCardAuthKeyModulus();
-    //std::string pubKeyHex = bytesToHex(byte_array.GetBytes(), byte_array.Size());
+    eIDMW::PTEID_PublicKey &publicKey = idInfo.getCardAuthKeyObj();
+    bool isECC = publicKey.isECCPublicKey();
+    std::string pubKeyHex = std::string();
+    if (isECC) {
+        std::cout << "Public Key Type: ECC" << std::endl;
+        eIDMW::PTEID_ByteArray &ECCkey = idInfo.getCardAuthKeyObj().getCardAuthECCKey();
+        const eIDMW::PTEID_ECC_CurveIdentifier &curveId = idInfo.getCardAuthKeyObj().getECCCurveIdentifier();
+        pubKeyHex = bytesToHex(ECCkey.GetBytes(), ECCkey.Size());
+    } else {
+        std::cout << "Public Key Type: RSA" << std::endl;
+        eIDMW::PTEID_ByteArray &byte_array = publicKey.getCardAuthKeyModulus();
+        pubKeyHex = bytesToHex(byte_array.GetBytes(), byte_array.Size());
+
+    }
+    
+    
+    
 
     // Save Photo (Overwrites for the current card)
+    std::filesystem::create_directories(photoPath);
     eIDMW::PTEID_Photo& photoObj = idInfo.getPhotoObj();
     eIDMW::PTEID_ByteArray& pngPhoto = photoObj.getphoto();
-    std::ofstream photoFile(photoPath, std::ios::binary);
+    std::ofstream photoFile(photoPathWithExtension, std::ios::binary);
     if (photoFile.is_open()) {
         photoFile.write(reinterpret_cast<const char*>(pngPhoto.GetBytes()), pngPhoto.Size());
         photoFile.close();
@@ -89,9 +107,14 @@ void printPublicInfoAndSavePhoto(eIDMW::PTEID_EIDCard& eidCard, const std::strin
     ss << "    \"pan\": \"" << escapeJson(pan) << "\",\n";
     ss << "    \"docType\": \"" << escapeJson(docType) << "\",\n";
     ss << "    \"docVersion\": \"" << escapeJson(docVersion) << "\",\n";
+    if (isECC) {
+        ss << "    \"publicKeyType\": \"ECCKey-" << escapeJson(pubKeyHex) << "\",\n";
+    } else {
+        ss << "    \"publicKeyType\": \"RSA-" << escapeJson(pubKeyHex) << "\",\n";
+    }
     //ss << "    \"isECC\": " << (isECC ? "true" : "false") << ",\n";
     //ss << "    \"publicKeyHex\": \"" << pubKeyHex << "\",\n";
-    ss << "    \"photoPath\": \"" << escapeJson(photoPath) << "\"\n";
+    ss << "    \"photoPath\": \"" << escapeJson(photoPathWithExtension) << "\"\n";
     ss << "  }";
     std::string newEntry = ss.str();
 

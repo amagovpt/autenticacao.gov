@@ -44,7 +44,7 @@ def parse_apdu_cmd(data_hex):
     
     cla = data_hex[0:2].upper()
     ins = data_hex[2:4].upper()
-    p1 = data_hex[4:6].upsaper()
+    p1 = data_hex[4:6].upper()
     p2 = data_hex[6:8].upper()
     
     ins_map = {
