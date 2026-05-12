@@ -6,6 +6,7 @@
 #include <sstream>
 #include <vector>
 #include <filesystem>
+#include "address_info.h"
 
 namespace ccapp {
 
@@ -114,7 +115,13 @@ void printPublicInfoAndSavePhoto(eIDMW::PTEID_EIDCard& eidCard,const std::string
     }
     //ss << "    \"isECC\": " << (isECC ? "true" : "false") << ",\n";
     //ss << "    \"publicKeyHex\": \"" << pubKeyHex << "\",\n";
-    ss << "    \"photoPath\": \"" << escapeJson(photoPathWithExtension) << "\"\n";
+    ss << "    \"photoPath\": \"" << escapeJson(photoPathWithExtension) << "\",\n";
+
+    std::string addressInfo = readAddressInfo(eidCard);
+
+    ss << addressInfo;
+
+
     ss << "  }";
     std::string newEntry = ss.str();
 

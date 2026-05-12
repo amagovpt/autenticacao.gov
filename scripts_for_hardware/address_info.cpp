@@ -20,7 +20,7 @@ static std::string escapeJson(const std::string& s) {
     return out;
 }
 
-void readAddressInfo(eIDMW::PTEID_EIDCard& eidCard, const std::string& jsonPath) {
+std::string readAddressInfo(eIDMW::PTEID_EIDCard& eidCard, const std::string& jsonPath) {
     eIDMW::PTEID_Pins& pins = eidCard.getPins();
     eIDMW::PTEID_Pin& addressPin = pins.getPinByPinRef(eIDMW::PTEID_Pin::ADDR_PIN);
 
@@ -40,7 +40,7 @@ void readAddressInfo(eIDMW::PTEID_EIDCard& eidCard, const std::string& jsonPath)
 
     if (!isPinValid) {
         std::cerr << "Invalid Address PIN! Tries left: " << triesLeft << std::endl;
-        return;
+        return "";
     }
 
     std::cout << "Address PIN verified successfully!" << std::endl;
@@ -65,22 +65,15 @@ void readAddressInfo(eIDMW::PTEID_EIDCard& eidCard, const std::string& jsonPath)
     std::cout << "---------------------------\n" << std::endl;
 
     // Save JSON
-    std::ofstream jsonFile(jsonPath);
-    if (jsonFile.is_open()) {
-        jsonFile << "{\n";
-        jsonFile << "  \"district\": \"" << escapeJson(district) << "\",\n";
-        jsonFile << "  \"municipality\": \"" << escapeJson(municipality) << "\",\n";
-        jsonFile << "  \"parish\": \"" << escapeJson(parish) << "\",\n";
-        jsonFile << "  \"street\": \"" << escapeJson(street) << "\",\n";
-        jsonFile << "  \"doorNo\": \"" << escapeJson(doorNo) << "\",\n";
-        jsonFile << "  \"zip4\": \"" << escapeJson(zip4) << "\",\n";
-        jsonFile << "  \"zip3\": \"" << escapeJson(zip3) << "\"\n";
-        jsonFile << "}\n";
-        jsonFile.close();
-        std::cout << "Address saved to " << jsonPath << std::endl;
-    } else {
-        std::cerr << "Failed to open " << jsonPath << " for writing." << std::endl;
-    }
+    std::string jsonAddressProperties = std::string();
+        jsonAddressProperties.append("    \"district\": \" "+ escapeJson(district) + "\",\n");
+        jsonAddressProperties.append("    \"municipality\": \""+ escapeJson(municipality) + "\",\n");
+        jsonAddressProperties.append("    \"parish\": \"" + escapeJson(parish) + "\",\n");
+        jsonAddressProperties.append("    \"street\": \"" + escapeJson(street) + "\",\n");
+        jsonAddressProperties.append("    \"doorNo\": \"" + escapeJson(doorNo) + "\",\n");
+        jsonAddressProperties.append("    \"zip4\": \"" + escapeJson(zip4) + "\",\n");
+        jsonAddressProperties.append("    \"zip3\": \"" + escapeJson(zip3) + "\"\n");
+    return jsonAddressProperties;
 }
 
 }

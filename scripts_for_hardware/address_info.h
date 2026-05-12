@@ -5,6 +5,6 @@
 
 namespace ccapp {
 
-void readAddressInfo(eIDMW::PTEID_EIDCard& eidCard, const std::string& jsonPath = "cc_address.json");
+std::string readAddressInfo(eIDMW::PTEID_EIDCard& eidCard, const std::string& jsonPath = "cc_address.json");
 
 }

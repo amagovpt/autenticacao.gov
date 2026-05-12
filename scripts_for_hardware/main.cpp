@@ -4,7 +4,7 @@
 #include <eidlib.h>
 #include <eidlibException.h>
 
-#include "address_info.h"
+
 #include "public_info.h"
 
 using namespace eIDMW;
@@ -26,7 +26,7 @@ int main() {
         std::cout << "Card successfully connected!" << std::endl;
 
         ccapp::printPublicInfoAndSavePhoto(eidCard);
-        ccapp::readAddressInfo(eidCard);
+        //ccapp::readAddressInfo(eidCard);
 
         PTEID_ReleaseSDK();
 
