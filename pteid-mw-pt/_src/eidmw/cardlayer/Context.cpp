@@ -22,21 +22,9 @@
 **************************************************************************** */
 #include "Context.h"
 #include "Config.h"
-#include "PCSC.h"
 #include <memory>
 
 namespace eIDMW {
-CContext::CContext() {
-	m_bSSO = false;
-
-	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
-
-	// if not using PCSC we are not going to initialize card interface by default
-#ifdef __USE_PCSC__
-	m_oCardInterface = std::make_unique<CPCSC>();
-	m_oThreadPool.SetCardInterface(m_oCardInterface.get());
-#endif
-}
 
 CContext::~CContext() {
 	m_oThreadPool.FinishThreads();
@@ -44,13 +32,9 @@ CContext::~CContext() {
 	m_oCardInterface->ReleaseContext();
 }
 
-CContext::CContext(const PTEID_CardInterfaceCallbacks &callbacks) {
+CContext::CContext(std::shared_ptr<CardInterface> cardInterface) : m_oCardInterface(cardInterface) {
 	m_bSSO = false;
-
 	m_ulConnectionDelay = CConfig::GetLong(CConfig::EIDMW_CONFIG_PARAM_GENERAL_CARDCONNDELAY);
-
-	m_oCardInterface.reset(nullptr);
-	m_oCardInterface = std::make_unique<ExternalCardInterface>(&callbacks);
 	m_oThreadPool.SetCardInterface(m_oCardInterface.get());
 }
 

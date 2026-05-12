@@ -85,7 +85,8 @@ private:
 	CCardLayer &operator=(const CCardLayer &oCardLayer);
 	std::string *GetDefaultReader();
 
-	std::unique_ptr<CContext> m_oContext;
+	std::vector<std::unique_ptr<CContext>> m_contextVec;
+	std::shared_ptr<CardInterface> m_cardInterface;
 
 	std::string m_szDefaultReaderName;
 	unsigned long m_ulReaderCount;

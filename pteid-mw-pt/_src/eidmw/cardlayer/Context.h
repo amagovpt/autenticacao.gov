@@ -34,15 +34,14 @@ namespace eIDMW {
 
 class EIDMW_CAL_API CContext {
 public:
-	CContext();
-	CContext(const PTEID_CardInterfaceCallbacks& callbacks);
+	CContext(std::shared_ptr<CardInterface> cardInterface);
 	~CContext();
 
 	void setProtocol(PTEID_CardHandle hCard, PTEID_CardProtocol protocol);
 	PTEID_CardProtocol getProtocol(PTEID_CardHandle hCard);
 	void removeProtocol(PTEID_CardHandle hCard);
 
-	std::unique_ptr<CardInterface> m_oCardInterface;
+	std::shared_ptr<CardInterface> m_oCardInterface;
 	CThreadPool m_oThreadPool;
 
 	bool m_bSSO; // force Single Sign-On

@@ -23,27 +23,31 @@
 #include "CardLayer.h"
 #include "Cache.h"
 #include "Context.h"
+#include "PCSC.h"
+
 #include <memory>
 
 namespace eIDMW {
 
-CCardLayer::CCardLayer(void) {
+CCardLayer::CCardLayer(void) : m_contextVec(MAX_READERS) {
 	m_ulReaderCount = 0;
 	for (unsigned long i = 0; i < MAX_READERS; i++)
 		m_tpReaders[i] = NULL;
 
-	m_oContext = std::make_unique<CContext>();
+#ifdef __USE_PCSC__
+	m_cardInterface = std::make_shared<CPCSC>();
+#endif
 }
 
-CCardLayer::CCardLayer(const PTEID_CardInterfaceCallbacks *callbacks) {
+CCardLayer::CCardLayer(const PTEID_CardInterfaceCallbacks *callbacks) : m_contextVec(MAX_READERS) {
 	m_ulReaderCount = 0;
 	for (unsigned long i = 0; i < MAX_READERS; i++)
 		m_tpReaders[i] = NULL;
 
 	if (callbacks) {
-		m_oContext = std::make_unique<CContext>(*callbacks);
+		m_cardInterface = std::make_shared<ExternalCardInterface>(callbacks);
 	} else {
-		m_oContext = std::make_unique<CContext>();
+		m_cardInterface = std::make_shared<CPCSC>();
 	}
 }
 
@@ -70,7 +74,7 @@ DlgPinOperation PinOperation2Dlg(tPinOperation operation) {
 	}
 }
 
-void CCardLayer::ForceRelease(void) { m_oContext->m_oCardInterface->ReleaseContext(); }
+void CCardLayer::ForceRelease(void) { m_cardInterface->ReleaseContext(); }
 
 /**
  * This is something you typically do just once, unless you
@@ -85,8 +89,8 @@ CReadersInfo CCardLayer::ListReaders() {
 
 	// Do an SCardEstablishContext() if not done yet
 	try {
-		m_oContext->m_oCardInterface->EstablishContext();
-		oReaders = m_oContext->m_oCardInterface->ListReaders();
+		m_cardInterface->EstablishContext();
+		oReaders = m_cardInterface->ListReaders();
 	} catch (CMWException &e) {
 		unsigned long err = e.GetError();
 		if (err == EIDMW_ERR_NO_READER)
@@ -95,7 +99,7 @@ CReadersInfo CCardLayer::ListReaders() {
 		throw;
 	}
 
-	theReadersInfo = CReadersInfo(m_oContext->m_oCardInterface.get(), oReaders);
+	theReadersInfo = CReadersInfo(m_cardInterface.get(), oReaders);
 
 	if (oReaders.Size() != 0) {
 		m_szDefaultReaderName = (char *)oReaders.GetBytes();
@@ -106,7 +110,7 @@ CReadersInfo CCardLayer::ListReaders() {
 
 CReader &CCardLayer::getReader(const std::string &csReaderName) {
 	// Do an SCardEstablishContext() if not done yet
-	m_oContext->m_oCardInterface->EstablishContext();
+	m_cardInterface->EstablishContext();
 
 	CReader *pRet = NULL;
 
@@ -132,7 +136,14 @@ CReader &CCardLayer::getReader(const std::string &csReaderName) {
 	if (pRet == NULL) {
 		for (unsigned long i = 0; i < MAX_READERS; i++) {
 			if (m_tpReaders[i] == NULL) {
-				pRet = new CReader(*pcsReaderName, m_oContext.get());
+#ifdef __USE_PCSC__
+				std::shared_ptr<CPCSC> readerInterface = std::make_shared<CPCSC>();
+				std::unique_ptr<CContext> contextReader = std::make_unique<CContext>(readerInterface);
+#else
+				std::unique_ptr<CContext> contextReader = std::make_unique<CContext>(m_cardInterface);
+#endif
+				pRet = new CReader(*pcsReaderName, contextReader.get());
+				m_contextVec.push_back(std::move(contextReader));
 				m_tpReaders[i] = pRet;
 				break;
 			}
@@ -151,7 +162,7 @@ std::string *CCardLayer::GetDefaultReader() {
 	std::string *pRet = &m_szDefaultReaderName;
 
 	if (m_szDefaultReaderName.size() == 0) {
-		CByteArray csReaders = m_oContext->m_oCardInterface->ListReaders();
+		CByteArray csReaders = m_cardInterface->ListReaders();
 		if (csReaders.Size() != 0)
 			m_szDefaultReaderName = (char *)csReaders.GetBytes();
 	}
