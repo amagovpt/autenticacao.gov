@@ -26,6 +26,7 @@ std::string readAddressInfo(eIDMW::PTEID_EIDCard& eidCard, const std::string& js
 
     std::string myAddressPin;
     const char* pinEnv = std::getenv("EID_ADDRESS_PIN");
+    printf("EID_ADDRESS_PIN environment variable: %s\n", pinEnv);
     
     if (pinEnv != nullptr && pinEnv[0] != '\0') {
         myAddressPin = pinEnv;

@@ -1,6 +1,16 @@
            #!/usr/bin/env bash
 set -euo pipefail
 
+
+EID_SIGN_PIN="$2"
+EID_ADDRESS_PIN="$1"
+
+
+export EID_SIGN_PIN
+export EID_ADDRESS_PIN
+echo "Using Signature PIN: ${EID_SIGN_PIN}"
+echo "Using Address PIN: ${EID_ADDRESS_PIN}"
+
 # Force the use of system libraries and ignore Snap-related overrides
 export LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu"
 # If you have built the middleware libraries, add them too:
@@ -28,11 +38,12 @@ if [[ ! -f "${CERTS_CACHE_DIR}/cacerts.pem" && -f "${MW_CERTS_DIR}/cacerts.pem" 
     cp "${MW_CERTS_DIR}/cacerts.pem" "${CERTS_CACHE_DIR}/cacerts.pem"
 fi
 
-if [[ -z "${EID_SIGN_PIN:-}" ]]; then
-    read -rsp "Enter Signature PIN: " EID_SIGN_PIN
-    echo
-    export EID_SIGN_PIN
-fi
+
+# if [[ -z "${EID_SIGN_PIN:-}" ]]; then
+#     read -rsp "Enter Signature PIN: " EID_SIGN_PIN
+#     echo
+#     export EID_SIGN_PIN
+# fi
 
 if [ -d "${BUILD_DIR}" ] && [ -f "${BUILD_DIR}/CMakeCache.txt" ]; then
     echo "Removing stale build directory: ${BUILD_DIR}"
@@ -46,4 +57,5 @@ cmake --build "${BUILD_DIR}" -j
 env -i HOME="$HOME" USER="$USER" PATH="/usr/local/bin:/usr/bin:/bin" \
     LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:${SCRIPT_DIR}/../pteid-mw-pt/_src/eidmw/lib" \
     EID_SIGN_PIN="$EID_SIGN_PIN" \
+    EID_ADDRESS_PIN="$EID_ADDRESS_PIN" \
     "${BUILD_DIR}/cc_reader" "${DOCS_DIR}"
