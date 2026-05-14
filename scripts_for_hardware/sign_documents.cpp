@@ -1,3 +1,4 @@
+#include "sign_documents.h"
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -9,6 +10,8 @@
 
 namespace fs = std::filesystem;
 using namespace eIDMW;
+
+namespace ccapp {
 
 static bool shouldSign(const fs::directory_entry &entry, const fs::path &signedDir) {
     if (!entry.is_regular_file()) {
@@ -27,8 +30,8 @@ static bool shouldSign(const fs::directory_entry &entry, const fs::path &signedD
     return true;
 }
 
-int main(int argc, char **argv) {
-    const fs::path baseDir = (argc > 1) ? fs::path(argv[1]) : fs::path("docs_for_signing");
+int signDocuments(eIDMW::PTEID_EIDCard &eidCard, const std::string &baseDirStr) {
+    const fs::path baseDir = fs::path(baseDirStr);
     const fs::path signedDir = baseDir / "signed";
 
     try {
@@ -51,9 +54,6 @@ int main(int argc, char **argv) {
             return 0;
         }
 
-        std::cout << "Initializing SDK..." << std::endl;
-        PTEID_InitSDK();
-
         // Disable GUI elements through configuration
         try {
             PTEID_Config(PTEID_PARAM_GUITOOL_SHOWNOTIFICATION).setLong(0);
@@ -62,14 +62,6 @@ int main(int argc, char **argv) {
         } catch (...) {}
 
         PTEID_ReaderContext &readerContext = PTEID_ReaderSet::instance().getReader();
-        if (!readerContext.isCardPresent()) {
-            std::cerr << "No card found in the reader." << std::endl;
-            PTEID_ReleaseSDK();
-            return 1;
-        }
-
-        PTEID_EIDCard &eidCard = readerContext.getEIDCard();
-        std::cout << "Card successfully connected." << std::endl;
 
         std::cout << "Locking card for signing transaction..." << std::endl;
         readerContext.BeginTransaction();
@@ -84,7 +76,6 @@ int main(int argc, char **argv) {
                 if (!signPin.verifyPin(pinEnv, triesLeft, false)) {
                     std::cerr << "Signature PIN verification failed. Tries left: " << triesLeft << std::endl;
                     readerContext.EndTransaction();
-                    PTEID_ReleaseSDK();
                     return 1;
                 }
                 std::cout << "Signature PIN verified successfully." << std::endl;
@@ -104,6 +95,19 @@ int main(int argc, char **argv) {
                     outPath = (signedDir / filePath.filename()).string();
                 } else {
                     outPath = (signedDir / (filePath.filename().string() + ".asics")).string();
+                }
+                            const char *pinEnv = std::getenv("EID_SIGN_PIN");
+                if (pinEnv != nullptr && pinEnv[0] != '\0') {
+                    PTEID_Pins &pins = eidCard.getPins();
+                    PTEID_Pin &signPin = pins.getPinByPinRef(PTEID_Pin::SIGN_PIN);
+                    unsigned long triesLeft = 0;
+
+                    if (!signPin.verifyPin(pinEnv, triesLeft, false)) {
+                        std::cerr << "Signature PIN verification failed. Tries left: " << triesLeft << std::endl;
+                        readerContext.EndTransaction();
+                        return 1;
+                    }
+                    std::cout << "Signature PIN verified successfully." << std::endl;
                 }
 
                 try {
@@ -127,7 +131,6 @@ int main(int argc, char **argv) {
             }
 
             readerContext.EndTransaction();
-            PTEID_ReleaseSDK();
 
             std::cout << "Done. Success: " << okCount << ", Failed: " << failCount << std::endl;
             return failCount == 0 ? 0 : 2;
@@ -140,14 +143,11 @@ int main(int argc, char **argv) {
     } catch (PTEID_Exception &e) {
         std::cerr << "SDK Exception (Error code: " << e.GetError() << ")" << std::endl;
         std::cerr << "SDK message: " << e.GetMessage() << std::endl;
-        if (e.GetError() == EIDMW_ERR_NO_READER) {
-            std::cerr << "No smart card reader detected. Check the reader connection, pcscd, and middleware installation." << std::endl;
-        }
-        PTEID_ReleaseSDK();
         return 1;
     } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
-        PTEID_ReleaseSDK();
         return 1;
     }
 }
+
+} // namespace ccapp

@@ -1,4 +1,3 @@
 /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/build/CMakeFiles/cc_reader.dir
-/home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/build/CMakeFiles/doc_signer.dir
 /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/build/CMakeFiles/edit_cache.dir
 /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/build/CMakeFiles/rebuild_cache.dir

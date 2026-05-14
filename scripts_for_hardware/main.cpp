@@ -4,12 +4,14 @@
 #include <eidlib.h>
 #include <eidlibException.h>
 
-
 #include "public_info.h"
+#include "sign_documents.h"
 
 using namespace eIDMW;
 
-int main() {
+int main(int argc, char **argv) {
+    const std::string baseDir = (argc > 1) ? argv[1] : "docs_for_signing";
+
     try {
         std::cout << "Initializing SDK..." << std::endl;
         PTEID_InitSDK();
@@ -26,7 +28,9 @@ int main() {
         std::cout << "Card successfully connected!" << std::endl;
 
         ccapp::printPublicInfoAndSavePhoto(eidCard);
-        //ccapp::readAddressInfo(eidCard);
+        
+        std::cout << "\n--- Proceeding to Document Signing ---\n" << std::endl;
+        ccapp::signDocuments(eidCard, baseDir);
 
         PTEID_ReleaseSDK();
 
@@ -43,9 +47,6 @@ int main() {
         PTEID_ReleaseSDK();
         return 1;
     }
-
-    int a = 2;
-    int *pa = &a;
 
     return 0;
 }

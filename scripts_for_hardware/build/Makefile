@@ -129,19 +129,6 @@ cc_reader/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cc_reader.dir/build.make CMakeFiles/cc_reader.dir/build
 .PHONY : cc_reader/fast
 
-#=============================================================================
-# Target rules for targets named doc_signer
-
-# Build rule for target.
-doc_signer: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 doc_signer
-.PHONY : doc_signer
-
-# fast build rule for target.
-doc_signer/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/doc_signer.dir/build.make CMakeFiles/doc_signer.dir/build
-.PHONY : doc_signer/fast
-
 address_info.o: address_info.cpp.o
 .PHONY : address_info.o
 
@@ -219,7 +206,7 @@ sign_documents.o: sign_documents.cpp.o
 
 # target to build an object file
 sign_documents.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/doc_signer.dir/build.make CMakeFiles/doc_signer.dir/sign_documents.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cc_reader.dir/build.make CMakeFiles/cc_reader.dir/sign_documents.cpp.o
 .PHONY : sign_documents.cpp.o
 
 sign_documents.i: sign_documents.cpp.i
@@ -227,7 +214,7 @@ sign_documents.i: sign_documents.cpp.i
 
 # target to preprocess a source file
 sign_documents.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/doc_signer.dir/build.make CMakeFiles/doc_signer.dir/sign_documents.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cc_reader.dir/build.make CMakeFiles/cc_reader.dir/sign_documents.cpp.i
 .PHONY : sign_documents.cpp.i
 
 sign_documents.s: sign_documents.cpp.s
@@ -235,7 +222,7 @@ sign_documents.s: sign_documents.cpp.s
 
 # target to generate assembly for a file
 sign_documents.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/doc_signer.dir/build.make CMakeFiles/doc_signer.dir/sign_documents.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cc_reader.dir/build.make CMakeFiles/cc_reader.dir/sign_documents.cpp.s
 .PHONY : sign_documents.cpp.s
 
 # Help Target
@@ -247,7 +234,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... cc_reader"
-	@echo "... doc_signer"
 	@echo "... address_info.o"
 	@echo "... address_info.i"
 	@echo "... address_info.s"

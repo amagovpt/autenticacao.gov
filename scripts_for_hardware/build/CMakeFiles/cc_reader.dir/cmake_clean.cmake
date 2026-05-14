@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/cc_reader.dir/main.cpp.o.d"
   "CMakeFiles/cc_reader.dir/public_info.cpp.o"
   "CMakeFiles/cc_reader.dir/public_info.cpp.o.d"
+  "CMakeFiles/cc_reader.dir/sign_documents.cpp.o"
+  "CMakeFiles/cc_reader.dir/sign_documents.cpp.o.d"
   "cc_reader"
   "cc_reader.pdb"
 )

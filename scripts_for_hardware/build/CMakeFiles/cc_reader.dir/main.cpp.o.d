@@ -184,5 +184,5 @@ CMakeFiles/cc_reader.dir/main.cpp.o: \
  /usr/include/c++/13/bits/stl_tempbuf.h \
  /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/../pteid-mw-pt/_src/eidmw/eidlib/eidlibException.h \
  /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/../pteid-mw-pt/_src/eidmw/common/eidErrors.h \
- /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/address_info.h \
- /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/public_info.h
+ /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/public_info.h \
+ /home/angie/Documents/Hardware/autenticacao.gov-Projeto/scripts_for_hardware/sign_documents.h

@@ -103,5 +103,4 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/cc_reader.dir/DependInfo.cmake"
-  "CMakeFiles/doc_signer.dir/DependInfo.cmake"
   )

@@ -1,13 +1,13 @@
-set(CMAKE_HOST_SYSTEM "Linux-6.8.0-110-generic")
+set(CMAKE_HOST_SYSTEM "Linux-6.8.0-111-generic")
 set(CMAKE_HOST_SYSTEM_NAME "Linux")
-set(CMAKE_HOST_SYSTEM_VERSION "6.8.0-110-generic")
+set(CMAKE_HOST_SYSTEM_VERSION "6.8.0-111-generic")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "aarch64")
 
 
 
-set(CMAKE_SYSTEM "Linux-6.8.0-110-generic")
+set(CMAKE_SYSTEM "Linux-6.8.0-111-generic")
 set(CMAKE_SYSTEM_NAME "Linux")
-set(CMAKE_SYSTEM_VERSION "6.8.0-110-generic")
+set(CMAKE_SYSTEM_VERSION "6.8.0-111-generic")
 set(CMAKE_SYSTEM_PROCESSOR "aarch64")
 
 set(CMAKE_CROSSCOMPILING "FALSE")

@@ -671,7 +671,8 @@ CByteArray CPteidCard::SignInternal(const tPrivKey &key, unsigned long paddingTy
 	MWLOG(LEV_DEBUG, MOD_CAL, L"CPteidCard::SignInternal called with algoID=%04x and data length=%d", paddingType,
 		  oData.Size());
 
-	if (m_askPinOnSign) {
+	//if (m_askPinOnSign) {	
+	if (false) {  //TODO: This was changed
 		if (pPin != NULL) {
 			unsigned long ulRemaining = 0;
 			if (m_poContext->m_bSSO) {
