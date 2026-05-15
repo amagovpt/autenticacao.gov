@@ -881,7 +881,7 @@ static inline Gulong md5Round4(Gulong a, Gulong b, Gulong c, Gulong d,
 }
 
 void md5(Guchar *msg, int msgLen, Guchar *digest) {
-  Gulong x[16];
+  Gulong x[16] = {};
   Gulong a, b, c, d, aa, bb, cc, dd;
   int n64;
   int i, j, k;
@@ -910,16 +910,16 @@ void md5(Guchar *msg, int msgLen, Guchar *digest) {
       x[j] = (((((msg[k+3] << 8) + msg[k+2]) << 8) + msg[k+1]) << 8) + msg[k];
     if (i == n64 - 1) {
       if (k == msgLen - 3)
-	x[j] = 0x80000000 + (((msg[k+2] << 8) + msg[k+1]) << 8) + msg[k];
+	      x[j] = 0x80000000 + (((msg[k+2] << 8) + msg[k+1]) << 8) + msg[k];
       else if (k == msgLen - 2)
-	x[j] = 0x800000 + (msg[k+1] << 8) + msg[k];
+	      x[j] = 0x800000 + (msg[k+1] << 8) + msg[k];
       else if (k == msgLen - 1)
-	x[j] = 0x8000 + msg[k];
+	      x[j] = 0x8000 + msg[k];
       else
-	x[j] = 0x80;
+	      x[j] = 0x80;
       ++j;
       while (j < 16)
-	x[j++] = 0;
+	      x[j++] = 0;
       x[14] = msgLen << 3;
     }
 
