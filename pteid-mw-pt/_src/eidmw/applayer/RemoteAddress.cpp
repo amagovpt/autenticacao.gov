@@ -16,6 +16,12 @@
 
 namespace eIDMW {
 
+static void addHexStringToObject(cJSON *obj, const char *name, CByteArray &data) {
+	char *hex = byteArrayToHexString(data);
+	cJSON_AddStringToObject(obj, name, hex);
+	free(hex);
+}
+
 CByteArray getSodData(APL_EIDCard *card) {
 
 	const CByteArray sod_data = card->getSod().getData();
@@ -299,11 +305,11 @@ char *build_json_ecdh1(CByteArray &ecdh_params, CByteArray &id_file, CByteArray 
 					   std::string &icc_serial) {
 	cJSON *parent = cJSON_CreateObject();
 
-	cJSON_AddItemToObject(parent, "ecdh_params", cJSON_CreateString(byteArrayToHexString(ecdh_params)));
-	cJSON_AddItemToObject(parent, "sod", cJSON_CreateString(byteArrayToHexString(sod)));
-	cJSON_AddItemToObject(parent, "auth_cert", cJSON_CreateString(byteArrayToHexString(auth_cert)));
-	cJSON_AddItemToObject(parent, "id_dg13", cJSON_CreateString(byteArrayToHexString(id_file)));
-	cJSON_AddItemToObject(parent, "icc_serial", cJSON_CreateString(icc_serial.c_str()));
+	addHexStringToObject(parent, "ecdh_params", ecdh_params);
+	addHexStringToObject(parent, "sod", sod);
+	addHexStringToObject(parent, "auth_cert", auth_cert);
+	addHexStringToObject(parent, "id_dg13", id_file);
+	cJSON_AddStringToObject(parent, "icc_serial", icc_serial.c_str());
 
 	char *json_str = cJSON_PrintUnformatted(parent);
 	cJSON_Delete(parent);
@@ -440,8 +446,8 @@ char *build_json_obj_dhparams(DHParams &dh, APL_EidFile_ID *id_file, APL_EidFile
 	cJSON_AddItemToObject(root, "Q", cJSON_CreateString(dh.dh_q));
 	cJSON_AddItemToObject(root, "G", cJSON_CreateString(dh.dh_g));
 
-	cJSON_AddItemToObject(root, "sod", cJSON_CreateString(byteArrayToHexString(sod)));
-	cJSON_AddItemToObject(root, "auth_cert", cJSON_CreateString(byteArrayToHexString(auth_cert)));
+	addHexStringToObject(root, "sod", sod);
+	addHexStringToObject(root, "auth_cert", auth_cert);
 	cJSON_AddItemToObject(root, "card_auth_public_key", cJSON_CreateString(dh.card_auth_public_key));
 	cJSON_AddItemToObject(root, "cvc_ca_public_key", cJSON_CreateString(dh.cvc_ca_public_key));
 
@@ -482,9 +488,8 @@ char *build_json_obj_read_address(CByteArray &set_se_response, CByteArray &inter
 	cJSON *parent = cJSON_CreateObject();
 	cJSON *root = cJSON_CreateObject();
 
-	cJSON_AddItemToObject(root, "SetSEResponse", cJSON_CreateString(byteArrayToHexString(set_se_response)));
-	cJSON_AddItemToObject(root, "InternalAuthenticateResponse",
-						  cJSON_CreateString(byteArrayToHexString(internal_authenticate_response)));
+	addHexStringToObject(root, "SetSEResponse", set_se_response);
+	addHexStringToObject(root, "InternalAuthenticateResponse", internal_authenticate_response);
 
 	cJSON_AddItemToObject(parent, "ReadAddress", root);
 

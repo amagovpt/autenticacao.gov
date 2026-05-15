@@ -1357,6 +1357,9 @@ void APL_AddrEId::loadRemoteAddress_CC2() {
 		handleRemoteAddressError(sm_started, EIDMW_REMOTEADDR_SERVER_ERROR);
 	}
 	sm_started = true;
+	// RAII guard: ensures kicc is freed on any exit path of this function,
+	// including the throws/rethrows in the try/catch blocks below.
+	std::unique_ptr<char, decltype(&free)> kicc_guard(kicc, free);
 
 	json_str = build_json_ecdh2(kicc);
 

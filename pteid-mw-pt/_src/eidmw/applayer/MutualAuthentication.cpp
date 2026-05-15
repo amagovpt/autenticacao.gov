@@ -439,13 +439,17 @@ std::vector<std::string> MutualAuthentication::remoteAddressStep3(std::string &s
 	}
 
 	CByteArray resp1 = m_card->getCalReader()->SendAPDU(signed_challenge_ba);
-	responses.push_back(byteArrayToHexString(resp1.GetBytes(), resp1.Size()));
+	char *resp1_hex = byteArrayToHexString(resp1.GetBytes(), resp1.Size());
+	responses.push_back(resp1_hex);
+	free(resp1_hex);
 
 	auto resp_internal_auth = sendSequenceOfPrebuiltAPDUs(internal_auth);
 	responses.insert(responses.end(), resp_internal_auth.begin(), resp_internal_auth.end());
 
 	CByteArray resp2 = m_card->getCalReader()->SendAPDU(pin_status_ba);
-	responses.push_back(byteArrayToHexString(resp2.GetBytes(), resp2.Size()));
+	char *resp2_hex = byteArrayToHexString(resp2.GetBytes(), resp2.Size());
+	responses.push_back(resp2_hex);
+	free(resp2_hex);
 
 	return responses;
 }
