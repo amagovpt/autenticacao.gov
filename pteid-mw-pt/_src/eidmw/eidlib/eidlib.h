@@ -529,6 +529,19 @@ public:
 	PTEIDSDK_MULTIPASS_API PTEID_ByteArray getMultiPassToken();
 
 	/**
+	 * Enable or disable the use of extended APDUs for card communication.
+	 *
+	 * Extended APDUs allow reading larger data blocks in a single command,
+	 * which can improve performance for large file reads. However, not all
+	 * card readers or cards support extended APDUs.
+	 *
+	 * Disabled by default.
+	 *
+	 * @param bExtended true to enable extended APDUs, false to disable
+	 */
+	PTEIDSDK_API void setExtendedAPDU(bool bExtended);
+
+	/**
 	 * Specify a callback function to be called each time a
 	 * card is inserted/remove in/from this reader.
 	 *

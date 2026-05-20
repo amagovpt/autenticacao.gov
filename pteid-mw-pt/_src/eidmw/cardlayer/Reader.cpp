@@ -460,6 +460,12 @@ void CReader::openBACChannel(const CByteArray &mrz_info) {
 
 CByteArray CReader::readMultiPassToken() { return reinterpret_cast<CPteidCard *>(m_poCard)->readToken(); }
 
+void CReader::setExtendedAPDU(bool bExtended) {
+	if (m_poCard == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_CARD);
+	m_poCard->setExtendedAPDU(bExtended);
+}
+
 CByteArray CReader::ReadFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen,
 							 bool bDoNotCache) {
 	if (m_poCard == NULL)

@@ -331,6 +331,13 @@ void APL_ReaderContext::Recover() {
 	m_calreader->Recover();
 }
 
+void APL_ReaderContext::setExtendedAPDU(bool bExtended) {
+	if (m_calreader == NULL)
+		throw CMWEXCEPTION(EIDMW_ERR_NO_READER);
+
+	m_calreader->setExtendedAPDU(bExtended);
+}
+
 void APL_ReaderContext::CalLock() {
 	if (m_cal_lock)
 		throw CMWEXCEPTION(EIDMW_ERR_BAD_TRANSACTION);

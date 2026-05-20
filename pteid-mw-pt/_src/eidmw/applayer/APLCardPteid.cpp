@@ -412,8 +412,16 @@ CByteArray APL_EIDCard::readTokenData() {
 			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION, "DG 14 hash verification failed");
 		}
 
-		auto pkey = getChipAuthenticationKey(dg14);
-		auto oid_info = getChipAuthenticationOid(dg14);
+		auto security_infos = decodeDg14Data(dg14);
+		if (!security_infos) {
+			MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to decode DG14 Security Options structure!", __FUNCTION__);
+			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_ERR_CHECK, "Got invalid OID_INFO from dg14");
+		}
+
+		auto pkey = getChipAuthenticationKey(*security_infos);
+		auto oid_info = getChipAuthenticationOid(*security_infos);
+
+		SecurityInfos_free(security_infos);
 		if (!oid_info.is_valid()) {
 			LOG_AND_THROW(LEV_ERROR, MOD_APL, EIDMW_ERR_CHECK, "Got invalid OID_INFO from dg14");
 		}

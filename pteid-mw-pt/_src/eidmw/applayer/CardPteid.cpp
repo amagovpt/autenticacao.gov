@@ -263,15 +263,15 @@ void APL_EidFile_ID::PackIdData(CByteArray &cb) {
 	cb.SafeAppend((unsigned char *)m_Gender.c_str(), m_Gender.length());
 	cb.SafeAppend((unsigned char *)m_Nationality.c_str(), m_Nationality.length());
 	cb.SafeAppend((unsigned char *)m_DateOfBirth.c_str(), m_DateOfBirth.length());
-	cb.SafeAppend((unsigned char *)m_Height.c_str(),  m_Height.length());
-	cb.SafeAppend((unsigned char *)m_CivilianIdNumber.c_str(),  m_CivilianIdNumber.length());
-	cb.SafeAppend((unsigned char *)m_SurnameMother.c_str(),   m_SurnameMother.length());
-	cb.SafeAppend((unsigned char *)m_GivenNameMother.c_str(),   m_GivenNameMother.length());
-	cb.SafeAppend((unsigned char *)m_SurnameFather.c_str(),  m_SurnameFather.length());
-	cb.SafeAppend((unsigned char *)m_GivenNameFather.c_str(),  m_GivenNameFather.length());
-	cb.SafeAppend((unsigned char *)m_AccidentalIndications.c_str(),   m_AccidentalIndications.length());
-	cb.SafeAppend((unsigned char *)m_TaxNo.c_str(),   m_TaxNo.length());
-	cb.SafeAppend((unsigned char *)m_SocialSecurityNo.c_str(),  m_SocialSecurityNo.length());
+	cb.SafeAppend((unsigned char *)m_Height.c_str(), m_Height.length());
+	cb.SafeAppend((unsigned char *)m_CivilianIdNumber.c_str(), m_CivilianIdNumber.length());
+	cb.SafeAppend((unsigned char *)m_SurnameMother.c_str(), m_SurnameMother.length());
+	cb.SafeAppend((unsigned char *)m_GivenNameMother.c_str(), m_GivenNameMother.length());
+	cb.SafeAppend((unsigned char *)m_SurnameFather.c_str(), m_SurnameFather.length());
+	cb.SafeAppend((unsigned char *)m_GivenNameFather.c_str(), m_GivenNameFather.length());
+	cb.SafeAppend((unsigned char *)m_AccidentalIndications.c_str(), m_AccidentalIndications.length());
+	cb.SafeAppend((unsigned char *)m_TaxNo.c_str(), m_TaxNo.length());
+	cb.SafeAppend((unsigned char *)m_SocialSecurityNo.c_str(), m_SocialSecurityNo.length());
 	cb.SafeAppend((unsigned char *)m_HealthNo.c_str(), m_HealthNo.length());
 }
 
@@ -826,7 +826,8 @@ bool APL_EidFile_Photo::MapFields() {
 	// stop iterating 5 bytes before (0x5F 0x2E 0x82 XX XX)
 	for (size_t i = 0; i < m_data.Size() - 5; i++) {
 		assert(i + 2 <= ULONG_MAX);
-		if (m_data.GetByte((unsigned long) i) == 0x5F && m_data.GetByte((unsigned long) (i + 1)) == 0x2E && m_data.GetByte((unsigned long) (i + 2)) == 0x82) {
+		if (m_data.GetByte((unsigned long)i) == 0x5F && m_data.GetByte((unsigned long)(i + 1)) == 0x2E &&
+			m_data.GetByte((unsigned long)(i + 2)) == 0x82) {
 			tag_offset = i;
 			break;
 		}
@@ -836,14 +837,14 @@ bool APL_EidFile_Photo::MapFields() {
 		return false;
 
 	assert(tag_offset <= ULONG_MAX);
-	const auto len = der_get_length(m_data.GetBytes((unsigned long) tag_offset));
+	const auto len = der_get_length(m_data.GetBytes((unsigned long)tag_offset));
 	if (len == 0)
 		return false;
 	// Skip the 3 data blocks defined in ISO/IEC 19794-5 spec
 	size_t photo_offset = tag_offset + 5 + PTEIDNG_FIELD_ID_LEN_FACIALRECHDR + PTEIDNG_FIELD_ID_LEN_FACIALINFO +
-								 PTEIDNG_FIELD_ID_LEN_IMAGEINFO;
+						  PTEIDNG_FIELD_ID_LEN_IMAGEINFO;
 	assert(photo_offset <= ULONG_MAX);
-	m_PhotoRaw.Append(m_data.GetBytes((unsigned long) photo_offset));
+	m_PhotoRaw.Append(m_data.GetBytes((unsigned long)photo_offset));
 
 	m_mappedFields = true;
 	return true;
@@ -1033,36 +1034,36 @@ APL_EidFile_Address::~APL_EidFile_Address() {}
 void APL_EidFile_Address::PackAddressData(CByteArray &cb, bool isNational) {
 
 	if (isNational) {
-		cb.SafeAppend((unsigned char *)m_CountryCode.c_str(),  m_CountryCode.length());
-		cb.SafeAppend((unsigned char *)m_DistrictCode.c_str(),  m_DistrictCode.length());
-		cb.SafeAppend((unsigned char *)m_DistrictDescription.c_str(),  m_DistrictDescription.length());
-		cb.SafeAppend((unsigned char *)m_MunicipalityCode.c_str(),  m_MunicipalityCode.length());
-		cb.SafeAppend((unsigned char *)m_MunicipalityDescription.c_str(),  m_MunicipalityDescription.length());
-		cb.SafeAppend((unsigned char *)m_CivilParishCode.c_str(),  m_CivilParishCode.length());
-		cb.SafeAppend((unsigned char *)m_CivilParishDescription.c_str(),  m_CivilParishDescription.length());
-		cb.SafeAppend((unsigned char *)m_AbbrStreetType.c_str(),  m_AbbrStreetType.length());
-		cb.SafeAppend((unsigned char *)m_StreetType.c_str(),  m_StreetType.length());
-		cb.SafeAppend((unsigned char *)m_StreetName.c_str(),  m_StreetName.length());
-		cb.SafeAppend((unsigned char *)m_AbbrBuildingType.c_str(),  m_AbbrBuildingType.length());
-		cb.SafeAppend((unsigned char *)m_BuildingType.c_str(),  m_BuildingType.length());
-		cb.SafeAppend((unsigned char *)m_DoorNo.c_str(),  m_DoorNo.length());
-		cb.SafeAppend((unsigned char *)m_Floor.c_str(),  m_Floor.length());
-		cb.SafeAppend((unsigned char *)m_Side.c_str(),  m_Side.length());
-		cb.SafeAppend((unsigned char *)m_Place.c_str(),  m_Place.length());
-		cb.SafeAppend((unsigned char *)m_Locality.c_str(),  m_Locality.length());
-		cb.SafeAppend((unsigned char *)m_Zip4.c_str(),  m_Zip4.length());
-		cb.SafeAppend((unsigned char *)m_Zip3.c_str(),  m_Zip3.length());
-		cb.SafeAppend((unsigned char *)m_PostalLocality.c_str(),  m_PostalLocality.length());
-		cb.SafeAppend((unsigned char *)m_Generated_Address_Code.c_str(),  m_Generated_Address_Code.length());
+		cb.SafeAppend((unsigned char *)m_CountryCode.c_str(), m_CountryCode.length());
+		cb.SafeAppend((unsigned char *)m_DistrictCode.c_str(), m_DistrictCode.length());
+		cb.SafeAppend((unsigned char *)m_DistrictDescription.c_str(), m_DistrictDescription.length());
+		cb.SafeAppend((unsigned char *)m_MunicipalityCode.c_str(), m_MunicipalityCode.length());
+		cb.SafeAppend((unsigned char *)m_MunicipalityDescription.c_str(), m_MunicipalityDescription.length());
+		cb.SafeAppend((unsigned char *)m_CivilParishCode.c_str(), m_CivilParishCode.length());
+		cb.SafeAppend((unsigned char *)m_CivilParishDescription.c_str(), m_CivilParishDescription.length());
+		cb.SafeAppend((unsigned char *)m_AbbrStreetType.c_str(), m_AbbrStreetType.length());
+		cb.SafeAppend((unsigned char *)m_StreetType.c_str(), m_StreetType.length());
+		cb.SafeAppend((unsigned char *)m_StreetName.c_str(), m_StreetName.length());
+		cb.SafeAppend((unsigned char *)m_AbbrBuildingType.c_str(), m_AbbrBuildingType.length());
+		cb.SafeAppend((unsigned char *)m_BuildingType.c_str(), m_BuildingType.length());
+		cb.SafeAppend((unsigned char *)m_DoorNo.c_str(), m_DoorNo.length());
+		cb.SafeAppend((unsigned char *)m_Floor.c_str(), m_Floor.length());
+		cb.SafeAppend((unsigned char *)m_Side.c_str(), m_Side.length());
+		cb.SafeAppend((unsigned char *)m_Place.c_str(), m_Place.length());
+		cb.SafeAppend((unsigned char *)m_Locality.c_str(), m_Locality.length());
+		cb.SafeAppend((unsigned char *)m_Zip4.c_str(), m_Zip4.length());
+		cb.SafeAppend((unsigned char *)m_Zip3.c_str(), m_Zip3.length());
+		cb.SafeAppend((unsigned char *)m_PostalLocality.c_str(), m_PostalLocality.length());
+		cb.SafeAppend((unsigned char *)m_Generated_Address_Code.c_str(), m_Generated_Address_Code.length());
 	} else {
-		cb.SafeAppend((unsigned char *)m_CountryCode.c_str(),  m_CountryCode.length());
-		cb.SafeAppend((unsigned char *)m_Foreign_Country.c_str(),  m_Foreign_Country.length());
-		cb.SafeAppend((unsigned char *)m_Foreign_Generic_Address.c_str(),  m_Foreign_Generic_Address.length());
-		cb.SafeAppend((unsigned char *)m_Foreign_City.c_str(),  m_Foreign_City.length());
-		cb.SafeAppend((unsigned char *)m_Foreign_Region.c_str(),  m_Foreign_Region.length());
-		cb.SafeAppend((unsigned char *)m_Foreign_Locality.c_str(),  m_Foreign_Locality.length());
-		cb.SafeAppend((unsigned char *)m_Foreign_Postal_Code.c_str(),  m_Foreign_Postal_Code.length());
-		cb.SafeAppend((unsigned char *)m_Generated_Address_Code.c_str(),  m_Generated_Address_Code.length());
+		cb.SafeAppend((unsigned char *)m_CountryCode.c_str(), m_CountryCode.length());
+		cb.SafeAppend((unsigned char *)m_Foreign_Country.c_str(), m_Foreign_Country.length());
+		cb.SafeAppend((unsigned char *)m_Foreign_Generic_Address.c_str(), m_Foreign_Generic_Address.length());
+		cb.SafeAppend((unsigned char *)m_Foreign_City.c_str(), m_Foreign_City.length());
+		cb.SafeAppend((unsigned char *)m_Foreign_Region.c_str(), m_Foreign_Region.length());
+		cb.SafeAppend((unsigned char *)m_Foreign_Locality.c_str(), m_Foreign_Locality.length());
+		cb.SafeAppend((unsigned char *)m_Foreign_Postal_Code.c_str(), m_Foreign_Postal_Code.length());
+		cb.SafeAppend((unsigned char *)m_Generated_Address_Code.c_str(), m_Generated_Address_Code.length());
 	}
 }
 
@@ -1781,7 +1782,14 @@ void APL_EidFile_Sod::performActiveAuthentication() {
 	}
 
 	// read OID from security file
-	auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
+	auto security_infos = decodeDg14Data(secopt_file);
+	if (!security_infos) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to decode DG14 Security Options structure!", __FUNCTION__);
+		throw CMWEXCEPTION(EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION);
+	}
+
+	auto obj = getSecurityOptionOidByOid(*security_infos, {SECURITY_OPTION_ALGORITHM_OID});
+	SecurityInfos_free(security_infos);
 	if (obj == nullptr) {
 		MWLOG(LEV_ERROR, MOD_APL, "Failed to find active authentication algorithm OID in security options file!");
 		MWLOG(LEV_ERROR, MOD_APL, "DG14: %s", secopt_file.ToString(false, false).c_str());

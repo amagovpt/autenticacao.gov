@@ -27,9 +27,9 @@ DECLARE_ASN1_FUNCTIONS(SecurityInfos);
 DEFINE_STACK_OF(SecurityInfo);
 
 SecurityInfos *decodeDg14Data(const CByteArray &data);
-ASN1_OBJECT *getSecurityOptionOidByOid(const CByteArray &dg14_file, const CByteArray &oid);
-EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file);
-OID_INFO getChipAuthenticationOid(const CByteArray &dg14_file);
+ASN1_OBJECT *getSecurityOptionOidByOid(const SecurityInfos &security_infos, const CByteArray &oid);
+EVP_PKEY *getChipAuthenticationKey(const SecurityInfos &security_infos);
+OID_INFO getChipAuthenticationOid(const SecurityInfos &security_infos);
 
 } // namespace eIDMW
 #endif

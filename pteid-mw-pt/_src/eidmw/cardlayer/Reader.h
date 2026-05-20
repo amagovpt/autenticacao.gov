@@ -134,6 +134,8 @@ public:
 	void openBACChannel(const CByteArray &mrz_info);
 	CByteArray readMultiPassToken();
 
+	void setExtendedAPDU(bool bExtended);
+
 	/* Read the file indicated by 'csPath'.
 	 * This path can be absolute, relative or empty
 	 * (in which case the currenlty selected file is read)

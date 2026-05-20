@@ -42,8 +42,10 @@ const unsigned long MAX_APDU_READ_LEN = 256;
 const unsigned long MAX_APDU_WRITE_LEN = 255;
 // Max APDU size of the IAS applet
 const unsigned long MAX_APDU_LEN = 256;
-// Some readers may need a larger buffer because of weird Windows drivers
-const unsigned long APDU_BUF_LEN = 1024;
+// Max plaintext bytes to request in a single extended READ BINARY
+const unsigned long MAX_EXTENDED_READ_LEN = 2048;
+// Buffer for extended APDU responses (must be larger than MAX_EXTENDED_READ_LEN + SM overhead)
+const unsigned long APDU_BUF_LEN = 8192;
 
 const unsigned long CTRL_BUF_LEN = 258; // Fixme: this won't be enough for a pinpad init !!!
 

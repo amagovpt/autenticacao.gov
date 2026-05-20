@@ -23,7 +23,6 @@
 #include "ByteArray.h"
 #include "Log.h"
 #include <cstring>
-#include <fcntl.h>
 #include <openssl/asn1.h>
 #include <openssl/types.h>
 #include <eac/eac.h>
@@ -55,38 +54,85 @@ CByteArray SecureMessaging::sendSecureAPDU(const CByteArray &apdu, long &retValu
 	CByteArray encryptedAPDU;
 	CByteArray mac;
 
-	uint32_t lc = apdu.GetByte(4);		 // length of command data
 	bool isInsOdd = apdu.GetByte(1) & 1; // whether or not the instruction byte is odd
 
-	// command header
+	bool isExtended = (apdu.Size() >= 7 && apdu.GetByte(4) == 0x00);
+	uint32_t headerLen = isExtended ? 7 : 5; // 4-byte header + length field size
+	uint32_t lc = 0;
+	uint32_t dataOffset = headerLen;
+	uint32_t le = 0;
+	bool hasLe = false;
+	bool hasData = false;
+
+	if (apdu.Size() > 4) {
+		// first length field after the header
+		uint32_t firstField = isExtended
+			? (apdu.GetByte(5) << 8) | apdu.GetByte(6)
+			: apdu.GetByte(4);
+
+		uint32_t remaining = apdu.Size() - headerLen;
+
+		if (remaining == 0) {
+			// no bytes after the field. it encodes Le (no command data)
+			le = firstField;
+			hasLe = true;
+		} else {
+			// bytes follow, the field encodes Lc, data starts at headerLen
+			lc = firstField;
+			hasData = true;
+
+			// check if Le is appended after the data
+			if (remaining > lc) {
+				hasLe = true;
+				if (isExtended)
+					le = (apdu.GetByte(headerLen + lc) << 8) | apdu.GetByte(headerLen + lc + 1);
+				else
+					le = apdu.GetByte(apdu.Size() - 1);
+			}
+		}
+	}
+
+	// command header (first 4 bytes with SM control byte set)
 	auto commandHeader = apdu.GetBytes(0, 4);
 	commandHeader.SetByte(commandHeader.GetByte(0) | controlByte, 0);
 	auto paddedCommandHeader = addPadding(commandHeader);
 
+	// Build Le TLV: 1-byte Le for short, 2-byte Le for extended
 	CByteArray tlvLe;
-	if ((commandHeader.Size() + lc + 2 == apdu.Size()) || apdu.Size() == 5) {
+	if (hasLe) {
 		tlvLe.Append(Tle);
-		tlvLe.Append(0x01);
-		tlvLe.Append(apdu.GetByte(apdu.Size() - 1)); // add Le byte
+		if (isExtended) {
+			tlvLe.Append(0x02);
+			tlvLe.Append((unsigned char)(le >> 8));
+			tlvLe.Append((unsigned char)(le & 0xFF));
+		} else {
+			tlvLe.Append(0x01);
+			tlvLe.Append((unsigned char)le);
+		}
 	}
 
 	incrementSSC();
 
-	// apdu has data
-	if (apdu.Size() > 5) {
+	if (hasData) {
 		// encryption
-		CByteArray data = apdu.GetBytes(5, apdu.Size() - 5 - (tlvLe.Size() > 0));
+		CByteArray data = apdu.GetBytes(dataOffset, lc);
 		auto paddedData = addPadding(data);
 		auto encryptedData = encryptData(paddedData);
-		uint8_t lcg = encryptedData.Size() + (isInsOdd ? 0 : 1);
+		uint32_t lcg = encryptedData.Size() + (isInsOdd ? 0 : 1);
 
 		CByteArray cryptogram;
-		//TLV-encoding of cryptogram
+		// TLV-encoding of cryptogram
 		cryptogram.Append(isInsOdd ? TcgOdd : Tcg);
-		if (lcg >= 128) {
+		if (lcg >= 256) {
+			cryptogram.Append(0x82);
+			cryptogram.Append((unsigned char)(lcg >> 8));
+			cryptogram.Append((unsigned char)(lcg & 0xFF));
+		} else if (lcg >= 128) {
 			cryptogram.Append(0x81);
+			cryptogram.Append((unsigned char)lcg);
+		} else {
+			cryptogram.Append((unsigned char)lcg);
 		}
-		cryptogram.Append(lcg);
 		if (!isInsOdd)
 			cryptogram.Append(paddingIndicator);
 		cryptogram.Append(encryptedData);
@@ -99,27 +145,44 @@ CByteArray SecureMessaging::sendSecureAPDU(const CByteArray &apdu, long &retValu
 		inputForMac.Append(paddedCryptogram);
 		mac = computeMac(inputForMac);
 
-		// cryptogram || tcc || mac size || mac || le
-		uint8_t lc = cryptogram.Size() + 2 + mac.Size();
+		// Build wrapped APDU: header + Lc + cryptogram + MAC TLV + Le
+		uint32_t wrappedLc = cryptogram.Size() + 2 + mac.Size();
 		encryptedAPDU.Append(commandHeader);
-		encryptedAPDU.Append(lc);
+		if (isExtended) {
+			encryptedAPDU.Append(0x00); // extended Lc marker
+			encryptedAPDU.Append((unsigned char)(wrappedLc >> 8));
+			encryptedAPDU.Append((unsigned char)(wrappedLc & 0xFF));
+		} else {
+			encryptedAPDU.Append((unsigned char)wrappedLc);
+		}
 		encryptedAPDU.Append(cryptogram);
-	} else { // apdu does not have data
+	} else { // apdu does not have data (e.g. READ BINARY)
 		// mac calculation
 		CByteArray inputForMac;
 		inputForMac.Append(paddedCommandHeader);
 		inputForMac.Append(addPadding(tlvLe));
 		mac = computeMac(inputForMac);
 
-		uint8_t lc = tlvLe.Size() + 2 + mac.Size();
+		uint32_t wrappedLc = tlvLe.Size() + 2 + mac.Size();
 		encryptedAPDU.Append(commandHeader);
-		encryptedAPDU.Append(lc);
+		if (isExtended) {
+			encryptedAPDU.Append(0x00); // extended Lc marker
+			encryptedAPDU.Append((unsigned char)(wrappedLc >> 8));
+			encryptedAPDU.Append((unsigned char)(wrappedLc & 0xFF));
+		} else {
+			encryptedAPDU.Append((unsigned char)wrappedLc);
+		}
 		encryptedAPDU.Append(tlvLe);
 	}
 
 	encryptedAPDU.Append(Tcc);
 	encryptedAPDU.Append(mac.Size());
 	encryptedAPDU.Append(mac);
+
+	// Le for the wrapped APDU: extended (2 bytes) or short (1 byte)
+	if (isExtended) {
+		encryptedAPDU.Append(0x00);
+	}
 	encryptedAPDU.Append(0x00);
 
 	incrementSSC();
@@ -145,9 +208,8 @@ CByteArray SecureMessaging::decryptAPDUResponse(const CByteArray &encryptedRespo
 		int xclass = 0;
 		int asn1Tag = 0;
 		ASN1_get_object(&data, &sizeData, &asn1Tag, &xclass, encryptedResponse.Size());
-		auto result =
-			strstr(reinterpret_cast<const char *>(encryptedResponse.GetBytes()), reinterpret_cast<const char *>(data));
-		startOfData = reinterpret_cast<const unsigned char *>(result) - encryptedResponse.GetBytes();
+		// data pointer was advanced past the TLV header by ASN1_get_object
+		startOfData = data - encryptedResponse.GetBytes();
 		encryptedData = encryptedResponse.GetBytes(startOfData, sizeData);
 	}
 

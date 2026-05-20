@@ -200,7 +200,7 @@ int APL_Card::SignPDF(PDFSignature *pdf_sig, const char *location, const char *r
 }
 
 CByteArray APL_Card::SignXades(const char **paths, unsigned int n_paths, const char *output_path,
-								APL_SignatureLevel level) {
+							   APL_SignatureLevel level) {
 	if (paths == NULL || n_paths < 1 || !CPathUtil::checkExistingFiles(paths, n_paths))
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);
 
@@ -233,7 +233,6 @@ CByteArray APL_Card::SignXades(const char **paths, unsigned int n_paths, const c
 
 	return signature;
 }
-
 
 char *generateFinalPath(const char *output_dir, const char *path) {
 
@@ -680,7 +679,7 @@ void APL_ICAO::initializeCard() {
 
 	//MRTD application must be selected after PACE because Card.Access was read from the MasterFile
 	if (m_pace_performed) {
-	   selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)}); 
+		selectApplication({MRTD_APPLICATION, sizeof(MRTD_APPLICATION)});
 	}
 	loadAvailableDataGroups();
 
@@ -716,9 +715,7 @@ std::pair<EIDMW_DataGroupReport, CByteArray> APL_ICAO::readDatagroup(DataGroupID
 		initializeCard();
 	}
 
-	BEGIN_CAL_OPERATION(m_reader) {
-		out = readFile(DATAGROUP_PATHS.at(tag));
-	}
+	BEGIN_CAL_OPERATION(m_reader) { out = readFile(DATAGROUP_PATHS.at(tag)); }
 	END_CAL_OPERATION(m_reader);
 
 	// store hashes
@@ -968,7 +965,8 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 					report.error_code = crl_result;
 				}
 			} else {
-				MWLOG(LEV_WARN, MOD_APL, "Could not find issuer certificate for CRL validation. "
+				MWLOG(LEV_WARN, MOD_APL,
+					  "Could not find issuer certificate for CRL validation. "
 					  "Skipping CRL check for document signer.");
 			}
 		}
@@ -1005,7 +1003,6 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 		if (docsigner != NULL) {
 			addDocsignerToReport(report, docsigner);
 		}
-
 	}
 
 	unsigned char *p;
@@ -1101,7 +1098,15 @@ EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
 		}
 
 		// read OID from security file
-		auto obj = getSecurityOptionOidByOid(secopt_file, {SECURITY_OPTION_ALGORITHM_OID});
+		auto security_infos = decodeDg14Data(secopt_file);
+		if (!security_infos) {
+			MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to decode DG14 Security Options structure!", __FUNCTION__);
+			report.error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
+			report.type = EIDMW_ReportType::Error;
+			return report;
+		}
+		auto obj = getSecurityOptionOidByOid(*security_infos, {SECURITY_OPTION_ALGORITHM_OID});
+		SecurityInfos_free(security_infos);
 		if (obj == nullptr) {
 			MWLOG(LEV_WARN, MOD_APL,
 				  "Didn't find active authentication algorithm OID in security options file. This means we should try "
@@ -1140,28 +1145,36 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 	// Chip authentication is performed after Active Authentication.
 	// No need to re-verify DG14 hash as it was already performed during the previous AA step
 	auto dg14 = readFile(DATAGROUP_PATHS.at(DG14));
-
-	auto pkey = getChipAuthenticationKey(dg14);
-	unsigned char *buffer = nullptr;
-	if (!pkey) {
-		MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to parse CA public key from DG14! Mechanism not available");
+	auto security_infos = decodeDg14Data(dg14);
+	if (!security_infos) {
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to decode DG14 Security Options structure!");
 		report.type = EIDMW_ReportType::Error;
 		report.error_code = EIDMW_ERR_CHIP_AUTHENTICATION;
 		return report;
 	}
-	
+
+	auto pkey = getChipAuthenticationKey(*security_infos);
+	unsigned char *buffer = nullptr;
+	if (!pkey) {
+		MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to parse CA public key from DG14! Mechanism not available");
+		SecurityInfos_free(security_infos);
+		report.type = EIDMW_ReportType::Error;
+		report.error_code = EIDMW_ERR_CHIP_AUTHENTICATION;
+		return report;
+	}
+
 	int pubkey_len = 0;
 	if (EVP_PKEY_get_id(pkey) == EVP_PKEY_DH) {
 		pubkey_len = i2d_PUBKEY(pkey, &buffer);
-	}
-	else {
+	} else {
 		pubkey_len = i2d_PublicKey(pkey, &buffer);
 	}
 
 	if (pubkey_len > 0)
 		report.pubKey = CByteArray(buffer, pubkey_len);
 
-	auto oid_info = getChipAuthenticationOid(dg14);
+	auto oid_info = getChipAuthenticationOid(*security_infos);
+	SecurityInfos_free(security_infos);
 	if (!oid_info.is_valid()) {
 		MWLOG_CTX(LEV_ERROR, MOD_APL, "Got invalid OID_INFO from dg14");
 		throw CMWEXCEPTION(EIDMW_ERR_CHECK);

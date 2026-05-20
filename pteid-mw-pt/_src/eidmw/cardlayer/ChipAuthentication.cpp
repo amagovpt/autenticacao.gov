@@ -37,6 +37,38 @@ namespace eIDMW {
 
 using namespace Crypto;
 
+// Map EC curve NID to BSI TR-03110 standardized domain parameter ID
+int getStandardizedDomainParam(EVP_PKEY *key) {
+	if (EVP_PKEY_base_id(key) != EVP_PKEY_EC)
+		return 0; // fallback to DH
+
+	const EC_KEY *ec = EVP_PKEY_get0_EC_KEY(key);
+	if (!ec)
+		return 0;
+
+	const EC_GROUP *group = EC_KEY_get0_group(ec);
+	if (!group)
+		return 0;
+
+	int curve_nid = EC_GROUP_get_curve_name(group);
+	switch (curve_nid) {
+		case NID_X9_62_prime192v1:   return 8;
+		case NID_brainpoolP192r1:    return 9;
+		case NID_secp224r1:          return 10;
+		case NID_brainpoolP224r1:    return 11;
+		case NID_X9_62_prime256v1:   return 12;
+		case NID_brainpoolP256r1:    return 13;
+		case NID_brainpoolP320r1:    return 14;
+		case NID_secp384r1:          return 15;
+		case NID_brainpoolP384r1:    return 16;
+		case NID_brainpoolP512r1:    return 17;
+		case NID_secp521r1:          return 18;
+		default:
+			MWLOG(LEV_WARN, MOD_CAL, "%s: Unknown EC curve NID %d (%s)", __FUNCTION__, curve_nid, OBJ_nid2sn(curve_nid));
+			return 0;
+	}
+}
+
 CAParams getCAParams(const ASN1_OBJECT *oid) {
 	CAParams params = {EVP_sha1(), 16};
 
@@ -300,7 +332,8 @@ bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *icc_pu
 	BUF_MEM *shared_secret = nullptr;
 
 	CAParams params = getCAParams(oid);
-	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication OID: %s ", __FUNCTION__, OBJ_nid2sn(params.nid));
+	params.stnd_dp = getStandardizedDomainParam(icc_pubkey);
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication OID: %s, stnd_dp: %d", __FUNCTION__, OBJ_nid2sn(params.nid), params.stnd_dp);
 
 	gctx = EVP_PKEY_CTX_new_from_pkey(NULL, icc_pubkey, NULL);
 
@@ -359,7 +392,8 @@ void ChipAuthSecureMessaging::initEACContext(EVP_PKEY *eph_pkey, BUF_MEM *shared
 											 const CAParams &params) {
 	EAC_init();
 	m_ctx = EAC_CTX_new();
-	if (!EAC_CTX_init_ca(m_ctx, params.nid, 0)) {
+	MWLOG(LEV_DEBUG, MOD_CAL, "%s: params.nid = %d (%s), stnd_dp = %d", __FUNCTION__, params.nid, OBJ_nid2sn(params.nid), params.stnd_dp);
+	if (!EAC_CTX_init_ca(m_ctx, params.nid, params.stnd_dp)) {
 		MWLOG_CTX(LEV_ERROR, MOD_CAL, "Failed to initialize CA context");
 	}
 

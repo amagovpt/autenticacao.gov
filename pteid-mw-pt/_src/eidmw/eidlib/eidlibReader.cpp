@@ -616,6 +616,15 @@ PTEID_ByteArray PTEID_ReaderContext::getMultiPassToken() {
 	return out;
 }
 
+void PTEID_ReaderContext::setExtendedAPDU(bool bExtended) {
+	BEGIN_TRY_CATCH
+
+	APL_ReaderContext *pimpl = static_cast<APL_ReaderContext *>(m_impl);
+	pimpl->setExtendedAPDU(bExtended);
+
+	END_TRY_CATCH
+}
+
 PTEID_Card &PTEID_ReaderContext::getCard() {
 	PTEID_Card *out = NULL;
 

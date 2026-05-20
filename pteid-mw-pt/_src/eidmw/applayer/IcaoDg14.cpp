@@ -64,14 +64,12 @@ SecurityInfos *decodeDg14Data(const CByteArray &data) {
 	return security_infos;
 }
 
-ASN1_OBJECT *getSecurityOptionOidByOid(const CByteArray &dg14_file, const CByteArray &oid) {
-	auto security_infos = decodeDg14Data(dg14_file);
-
+ASN1_OBJECT *getSecurityOptionOidByOid(const SecurityInfos &security_infos, const CByteArray &oid) {
 	ASN1_OBJECT *oid_ret = nullptr;
 
-	size_t security_infos_n = sk_SecurityInfo_num(security_infos->infos);
+	size_t security_infos_n = sk_SecurityInfo_num(security_infos.infos);
 	for (size_t i = 0; i < security_infos_n; i++) {
-		auto info = sk_SecurityInfo_value(security_infos->infos, i);
+		auto info = sk_SecurityInfo_value(security_infos.infos, i);
 
 		// TODO: what is max OID size?
 		char obj_buff[255];
@@ -84,23 +82,19 @@ ASN1_OBJECT *getSecurityOptionOidByOid(const CByteArray &dg14_file, const CByteA
 		}
 	}
 
-	SecurityInfos_free(security_infos);
-
 	return oid_ret;
 }
 
-EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
+EVP_PKEY *getChipAuthenticationKey(const SecurityInfos &security_infos) {
 	EVP_PKEY *pkey = nullptr;
-
-	auto security_infos = decodeDg14Data(dg14_file);
 
 	ASN1_OBJECT *oid_ret = nullptr;
 	const size_t OID1_LEN = strlen(CA_ECDH_PUBKEY_OID);
 	const size_t OID2_LEN = strlen(CA_DH_PUBKEY_OID);
 
-	size_t security_infos_n = sk_SecurityInfo_num(security_infos->infos);
+	size_t security_infos_n = sk_SecurityInfo_num(security_infos.infos);
 	for (size_t i = 0; i < security_infos_n; i++) {
-		auto info = sk_SecurityInfo_value(security_infos->infos, i);
+		auto info = sk_SecurityInfo_value(security_infos.infos, i);
 
 		// TODO: what is max OID size?
 		char obj_buff[255];
@@ -117,28 +111,21 @@ EVP_PKEY *getChipAuthenticationKey(const CByteArray &dg14_file) {
 		}
 	}
 
-	SecurityInfos_free(security_infos);
 	return pkey;
 }
 
-OID_INFO getChipAuthenticationOid(const CByteArray &dg14_file) {
+OID_INFO getChipAuthenticationOid(const SecurityInfos &security_infos) {
 	// List of supported NIDs for chip authentication
 	static OID_INFO CA_OIDS[] = {get_id_CA_ECDH_3DES_CBC_CBC(),		get_id_CA_ECDH_AES_CBC_CMAC_128(),
 								 get_id_CA_ECDH_AES_CBC_CMAC_192(), get_id_CA_ECDH_AES_CBC_CMAC_256(),
 								 get_id_CA_DH_3DES_CBC_CBC(),		get_id_CA_DH_AES_CBC_CMAC_128(),
 								 get_id_CA_DH_AES_CBC_CMAC_192(),	get_id_CA_DH_AES_CBC_CMAC_256()};
 
-	auto security_infos = decodeDg14Data(dg14_file);
-	if (!security_infos) {
-		MWLOG(LEV_ERROR, MOD_APL, "%s: Failed to decode DG14 Security Options structure!", __FUNCTION__);
-		return {nullptr, 0, nullptr};
-	}
-
 	OID_INFO found_oid = {};
 
-	size_t security_infos_n = sk_SecurityInfo_num(security_infos->infos);
+	size_t security_infos_n = sk_SecurityInfo_num(security_infos.infos);
 	for (size_t i = 0; i < security_infos_n; i++) {
-		auto info = sk_SecurityInfo_value(security_infos->infos, i);
+		auto info = sk_SecurityInfo_value(security_infos.infos, i);
 
 		for (auto std_oid : CA_OIDS) {
 			if (std_oid.object && OBJ_cmp(info->protocol, std_oid.object) == 0) {
@@ -159,7 +146,6 @@ OID_INFO getChipAuthenticationOid(const CByteArray &dg14_file) {
 		}
 	}
 
-	SecurityInfos_free(security_infos);
 	return found_oid;
 }
 

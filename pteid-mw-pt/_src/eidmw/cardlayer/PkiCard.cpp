@@ -84,8 +84,7 @@ void CPkiCard::SelectApplication(const CByteArray &oAID) {
 
 CByteArray CPkiCard::ReadUncachedFile(const std::string &csPath, unsigned long ulOffset, unsigned long ulMaxLen) {
 	CAutoLock autolock(this);
-	// We use max_block_read_length as 223 because of a limit on SM layer
-	const int MAX_BLOCK_READ_LENGTH = m_secureMessaging.get() != NULL ? 223 : MAX_APDU_READ_LEN;
+	const unsigned long MAX_BLOCK_READ_LENGTH = m_useExtendedAPDU ? MAX_EXTENDED_READ_LEN : MAX_APDU_READ_LEN;
 
 	MWLOG(LEV_INFO, MOD_CAL, L"   SelectUncachedFile %ls", utilStringWiden(csPath).c_str());
 
@@ -102,14 +101,16 @@ CByteArray CPkiCard::ReadUncachedFile(const std::string &csPath, unsigned long u
 	while ((offsetByte != fileInfo.lFileLen) && (fileArray.Size() < realMaxLen)) {
 		unsigned long maxLength = (std::min)(fileInfo.lFileLen - offsetByte, (unsigned long)MAX_BLOCK_READ_LENGTH);
 		CByteArray response = ReadBinary(offsetByte, maxLength);
-		offsetByte += maxLength;
 
 		unsigned long ulSW12 = getSW12(response);
 
 		// If the file is a multiple of the block read size, you will get
 		// an SW12 = 6B00 (at least with PT eID) but that OK then..
-		if (ulSW12 == 0x9000 || (offsetByte != 0 && ulSW12 == 0x6B00))
-			fileArray.Append(response.GetBytes(), response.Size() - 2);
+		if (ulSW12 == 0x9000 || (offsetByte != 0 && ulSW12 == 0x6B00)) {
+			unsigned long bytesRead = response.Size() - 2;
+			fileArray.Append(response.GetBytes(), bytesRead);
+			offsetByte += bytesRead;
+		}
 		else if (ulSW12 == 0x6982) {
 			throw CNotAuthenticatedException(EIDMW_ERR_NOT_AUTHENTICATED, fileInfo.lReadPINRef);
 		} else if (ulSW12 == 0x6B00)
@@ -606,7 +607,19 @@ CByteArray CPkiCard::SelectByPath(const std::string &csPath, bool bReturnFileInf
 
 CByteArray CPkiCard::ReadBinary(unsigned long ulOffset, unsigned long ulLen) {
 
-	// Read Binary
+	// Read Binary with extended length if ulLen > 256
+	if (ulLen > MAX_APDU_READ_LEN) {
+		CByteArray oAPDU(10);
+		oAPDU.Append(m_ucCLA);
+		oAPDU.Append(0xB0);
+		oAPDU.Append((unsigned char)(ulOffset / 256));
+		oAPDU.Append((unsigned char)(ulOffset % 256));
+		oAPDU.Append(0x00); // extended length marker
+		oAPDU.Append((unsigned char)(ulLen / 256));
+		oAPDU.Append((unsigned char)(ulLen % 256));
+		return SendAPDU(oAPDU);
+	}
+
 	return SendAPDU(0xB0, (unsigned char)(ulOffset / 256), (unsigned char)(ulOffset % 256), (unsigned char)(ulLen));
 }
 

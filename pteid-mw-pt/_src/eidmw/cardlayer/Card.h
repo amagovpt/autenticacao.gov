@@ -132,6 +132,8 @@ public:
 	PTEID_CardProtocol getProtocolStructure();
 	const void setNextAPDUClearText() { cleartext_next = true; }
 
+	void setExtendedAPDU(bool bExtended) { m_useExtendedAPDU = bExtended; }
+
 	PTEID_CardHandle m_hCard = PTEID_INVALID_HANDLE;
 
 protected:
@@ -158,6 +160,7 @@ protected:
 	std::map<unsigned int, std::string> m_verifiedPINs;
 	unsigned char m_ucCLA;
 	bool cleartext_next;
+	bool m_useExtendedAPDU = false;
 
 	bool m_askPinOnSign;
 

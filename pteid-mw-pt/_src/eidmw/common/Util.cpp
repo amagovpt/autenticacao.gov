@@ -61,7 +61,7 @@ std::wstring utilStringWiden(const std::string &in) {
 	if (in.empty())
 		return std::wstring();
 
-	iconv_t cd = iconv_open(ICONV_WCHAR_ENCODING, "UTF-8");
+	static thread_local iconv_t cd = iconv_open(ICONV_WCHAR_ENCODING, "UTF-8");
 	if (cd == (iconv_t)-1) {
 		return std::wstring();
 	}
@@ -77,11 +77,10 @@ std::wstring utilStringWiden(const std::string &in) {
 	size_t outBytesLeft = outSize;
 
 	if (iconv(cd, &inBuf, &inBytesLeft, &outBuf, &outBytesLeft) == (size_t)-1) {
-		iconv_close(cd);
+		// Reset the descriptor to initial state after a failed conversion
+		iconv(cd, NULL, NULL, NULL, NULL);
 		return std::wstring();
 	}
-
-	iconv_close(cd);
 
 	return std::wstring(reinterpret_cast<wchar_t*>(outputBuffer.data()), (outSize - outBytesLeft) / sizeof(wchar_t));
 
@@ -170,7 +169,7 @@ std::string utilStringNarrow(const std::wstring &in) {
 	if (in.empty())
 		return std::string();
 
-	iconv_t cd = iconv_open("UTF-8", ICONV_WCHAR_ENCODING);
+	static thread_local iconv_t cd = iconv_open("UTF-8", ICONV_WCHAR_ENCODING);
 	if (cd == (iconv_t)-1) {
 		return std::string();
 	}
@@ -186,11 +185,10 @@ std::string utilStringNarrow(const std::wstring &in) {
 	size_t outBytesLeft = outSize;
 
 	if (iconv(cd, &inBuf, &inBytesLeft, &outBuf, &outBytesLeft) == (size_t)-1) {
-		iconv_close(cd);
+		// Reset the descriptor to initial state after a failed conversion
+		iconv(cd, NULL, NULL, NULL, NULL);
 		return std::string();
 	}
-
-	iconv_close(cd);
 
 	return std::string(outputBuffer.data(), outSize - outBytesLeft);
 #endif

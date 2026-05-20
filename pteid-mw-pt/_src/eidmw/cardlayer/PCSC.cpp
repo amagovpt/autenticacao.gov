@@ -341,9 +341,6 @@ CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, 
 	}
 	// SCARD_IO_REQUEST *pioRecvPci = (pRecvPci != NULL) ? (SCARD_IO_REQUEST*) pRecvPci : &m_ioRecvPci;
 
-	// DEBUG
-	// printf ("      SCardTransmit(%ls) \n", oCmdAPDU.ToWString(true, true, 0, ulLen).c_str() );
-
 	MWLOG(LEV_DEBUG, MOD_CAL, L"      SCardTransmit(%ls)", oCmdAPDU.ToWString(true, true, 0, ulLen).c_str());
 
 	// On Windows we can't send APDUs with Le byte on T=0 cards so the implemented change to support T=1 is not
@@ -354,12 +351,6 @@ CByteArray CPCSC::Transmit(PTEID_CardHandle hCard, const CByteArray &inputAPDU, 
 		}
 	}
 
-	// Very strange: sometimes an SCardTransmit() returns a communications
-	// error or a SW12 = 6D 00 error.
-	// It occurs with most readers (some more then others) and depends heavily
-	// on the type of card (e.g. nearly always with the test Kids card).
-	// It seems to be fixed when adding a delay before sending something to the card...
-	CThread::SleepMillisecs(m_ulCardTxDelay);
 
 #ifdef __APPLE__
 	int iRetryCount = 0;
@@ -385,13 +376,7 @@ try_again:
 	// Don't log the full response for privacy reasons, only SW1-SW2
 	MWLOG(LEV_DEBUG, MOD_CAL, L"        SCardTransmit(): SW12 = %02X %02X Len = %ld", tucRecv[dwRecvLen - 2],
 		  tucRecv[dwRecvLen - 1], dwRecvLen);
-	// DEBUG
-	// printf ("SCardTransmit(): SW12 = %02X %02X\n", tucRecv[dwRecvLen - 2], tucRecv[dwRecvLen - 1]);
 
-	// check response, and add 25 ms delay when error was returned
-	if ((tucRecv[dwRecvLen - 2] != 0x90) && (tucRecv[dwRecvLen - 1] != 0x00) && (tucRecv[dwRecvLen - 2] != 0x61)) {
-		CThread::SleepMillisecs(25);
-	}
 
 	return CByteArray(tucRecv, (unsigned long)dwRecvLen);
 }

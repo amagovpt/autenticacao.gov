@@ -33,6 +33,7 @@ struct CAParams {
 	const EVP_MD *kdf_md; // MD used for key derivation
 	size_t key_size;
 	int nid;
+	int stnd_dp; // BSI TR-03110 standardized domain parameter ID
 	const EVP_CIPHER *cipher;
 };
 
