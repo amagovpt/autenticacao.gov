@@ -1279,6 +1279,7 @@ cleanup:
 #define DOCNAME_BUFFER_SIZE 50
 #define PIN_BUFFER_SIZE 9
 #define OTP_BUFFER_SIZE 7 // OTP is 6 digit
+#define ERR_FAILED_SIGN_VERIFICATION 0x99
 
 void handleErrorAndShowDlg(bool proxyUsed, int error, SECURITY_STATUS *hStatus) {
 	std::wstring msg;
@@ -1314,6 +1315,9 @@ void handleErrorAndShowDlg(bool proxyUsed, int error, SECURITY_STATUS *hStatus) 
 		msg += L"\n";
 		msg += GETSTRING_DLG(RegisterCertificateAgain);
 		*hStatus = NTE_KEYSET_ENTRY_BAD;
+		break;
+	case ERR_FAILED_SIGN_VERIFICATION:
+		msg += GETSTRING_DLG(VerifySignatureFailed);
 		break;
 
 	default:
@@ -1493,6 +1497,28 @@ KSPSignHash(__in NCRYPT_PROV_HANDLE hProvider, __in NCRYPT_KEY_HANDLE hKey, __in
 
 		memcpy(pbSignature, signature.GetBytes(), signature.Size());
 		*pcbResult = signature.Size();
+
+		BCRYPT_KEY_HANDLE hPublicKey;
+		if (!CryptImportPublicKeyInfoEx2(X509_ASN_ENCODING, &pKey->pCert->pCertInfo->SubjectPublicKeyInfo, 0, NULL,
+										 &hPublicKey)) {
+			MWLOG_ERR(logBuf, "KSPSignHash: post-sign CryptImportPublicKeyInfoEx2 failed: 0x%x", GetLastError());
+			Status = NTE_INTERNAL_ERROR;
+			goto cleanup;
+		}
+
+		ntStatus = BCryptVerifySignature(hPublicKey, pPaddingInfo, pbHashValue, cbHashValue,
+										 signature.GetBytes(), (ULONG)signature.Size(),
+										 dwFlags & ~NCRYPT_SILENT_FLAG);
+		BCryptDestroyKey(hPublicKey);
+
+		if (!NT_SUCCESS(ntStatus)) {
+			MWLOG_ERR(logBuf, "KSPSignHash: post-sign verification FAILED: 0x%x", ntStatus);
+			handleErrorAndShowDlg(isProxySet, ERR_FAILED_SIGN_VERIFICATION, &Status);
+			Status = NTE_INTERNAL_ERROR;
+			goto cleanup;
+		}
+
+		MWLOG_DEBUG(logBuf, "KSPSignHash: post-sign verification OK");
 
 		Status = ERROR_SUCCESS;
 	}
