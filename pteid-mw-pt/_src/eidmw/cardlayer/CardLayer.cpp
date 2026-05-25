@@ -47,7 +47,9 @@ CCardLayer::CCardLayer(const PTEID_CardInterfaceCallbacks *callbacks) : m_contex
 	if (callbacks) {
 		m_cardInterface = std::make_shared<ExternalCardInterface>(callbacks);
 	} else {
+#ifdef __USE_PCSC__
 		m_cardInterface = std::make_shared<CPCSC>();
+#endif
 	}
 }
 
