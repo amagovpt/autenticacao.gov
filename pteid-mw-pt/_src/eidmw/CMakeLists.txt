@@ -14,6 +14,11 @@ message("Dependencies path is: ${LIB_ROOT_FOLDER}")
 set(project_name_target ${PTEID_PREFIX}-mw)
 project(${project_name_target} VERSION 3.12.0)
 
+if(NOT EIDMW_PREFIX)
+    set(EIDMW_PREFIX "${CMAKE_INSTALL_PREFIX}")
+endif()
+add_compile_definitions(EIDMW_PREFIX=${EIDMW_PREFIX})
+
 execute_process(
 	    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
 		COMMAND git rev-list --count HEAD
