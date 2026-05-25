@@ -539,7 +539,7 @@ public:
 	 *
 	 * @param bExtended true to enable extended APDUs, false to disable
 	 */
-	PTEIDSDK_API void setExtendedAPDU(bool bExtended);
+	PTEIDSDK_MULTIPASS_API void setExtendedAPDU(bool bExtended);
 
 	/**
 	 * Specify a callback function to be called each time a

@@ -116,6 +116,8 @@ SCARDHANDLE CPCSC::GetPcscHandleFrom(PTEID_CardHandle pteidHandle) {
 }
 
 CByteArray CPCSC::ListReaders() {
+	EstablishContext();
+
 	char csReaders[1024];
 	DWORD dwReadersLen = sizeof(csReaders);
 
@@ -137,6 +139,8 @@ CByteArray CPCSC::ListReaders() {
 }
 
 bool CPCSC::GetStatusChange(unsigned long ulTimeout, tReaderInfo *pReaderInfos, unsigned long ulReaderCount) {
+	EstablishContext();
+
 	bool bChanged = false;
 
 	SCARD_READERSTATEA txReaderStates[MAX_READERS];
@@ -214,6 +218,8 @@ wait_again:
 }
 
 bool CPCSC::Status(const std::string &csReader) {
+	EstablishContext();
+
 	SCARD_READERSTATEA xReaderState;
 	xReaderState.szReader = csReader.c_str();
 	xReaderState.dwCurrentState = 0;
@@ -247,6 +253,8 @@ std::pair<PTEID_CardHandle, PTEID_CardProtocol> CPCSC::Connect(const std::string
 #endif
 		break;
 	};
+
+	EstablishContext();
 
 	LONG lRet = SCardConnect(m_hContext, csReader.c_str(), SCARD_SHARE_SHARED, protocol, &hCard, &dwActiveProtocol);
 

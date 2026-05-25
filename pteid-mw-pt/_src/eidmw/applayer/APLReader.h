@@ -375,7 +375,7 @@ public:
 
 	EIDMW_APL_API void Recover(); /**< Recover the card when it's not responding properly */
 
-	EIDMW_APL_API void setExtendedAPDU(bool bExtended);
+	EIDMW_MULTIPASS_API void setExtendedAPDU(bool bExtended);
 
 	void CalLock();	  /**< Lock the reader for exclusive atomic access */
 	void CalUnlock(); /**< Unlock the reader */
