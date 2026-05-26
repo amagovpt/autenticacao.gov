@@ -62,6 +62,8 @@ EIDMW_CMN_API std::string utilStringNarrow(const std::wstring &in);
 EIDMW_CMN_API std::wstring windowsANSIToWideString(const std::string &in);
 #endif
 
+EIDMW_CMN_API std::string removeSpaces(const std::string &s);
+
 EIDMW_CMN_API uint64_t bigEndianBytesToLong(const uint8_t *bytes, size_t length);
 
 /**

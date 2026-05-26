@@ -238,6 +238,19 @@ int CMDSignatureClient::SignPDF(PDFSignature &pdf_sig, const char *location, con
 		ret = cmdSignature.signOpen(cmd_proxyinfo, location, reason, outfile_path, mobileCache);
 		handleErrorCode(ret, false);
 
+		#ifdef WIN32
+		{
+			std::string usedMobile = cmdSignature.getUserId();
+			if (!usedMobile.empty()) {
+				CMDCertificates cmdCerts(m_basicAuthUser, m_basicAuthPassword, m_applicationId);
+				MWLOG(LEV_DEBUG, MOD_CMD, "Update CMD certificate on pdf signing!");
+				cmdCerts.setCertificates(cmdSignature.m_certificates);
+				cmdCerts.setMobileNumber(usedMobile);
+				cmdCerts.updateCertChainIfChanged();
+			}
+		}
+		#endif
+
 		pdf_sig.setExternCertificate(cmdSignature.m_certificates.front());
 		ret = cmdSignature.signClose();
 		handleErrorCode(ret, true);

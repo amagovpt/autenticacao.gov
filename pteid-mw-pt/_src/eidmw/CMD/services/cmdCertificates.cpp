@@ -26,6 +26,33 @@ CMDCertificates::~CMDCertificates() {
 	}
 }
 
+void CMDCertificates::setCertificates(const std::vector<CByteArray> &certs) {
+	for (auto cert : m_certificates) {
+		delete cert;
+	}
+	m_certificates.clear();
+
+	for (const CByteArray &cert : certs) {
+		m_certificates.push_back(new std::string((char *)cert.GetBytes(), cert.Size()));
+	}
+}
+
+void CMDCertificates::setCertificates(const std::vector<std::string *> &certs) {
+	for (auto cert : m_certificates) {
+		delete cert;
+	}
+	m_certificates.clear();
+
+	for (const std::string *cert : certs) {
+		m_certificates.push_back(new std::string(*cert));
+	}
+}
+
+void CMDCertificates::setMobileNumber(const std::string &mobileNumber)
+{
+	m_mobileNumber = mobileNumber;
+}
+
 #ifdef WIN32
 int CMDCertificates::ImportCertificatesOpen(std::string mobileNumber, std::string pin) {
 
@@ -41,35 +68,12 @@ int CMDCertificates::ImportCertificatesOpen(std::string mobileNumber, std::strin
 }
 
 int CMDCertificates::ImportCertificatesClose(std::string otp) {
-	PCCERT_CONTEXT pCertContext = NULL;
-	int res;
-
-	res = fetchCertificates(otp);
+	int res = fetchCertificates(otp);
 	if (res != ERR_NONE)
 		return res;
 
-	for (auto cert : m_certificates) {
-		assert(cert->length() <= ULONG_MAX);
-		pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (BYTE *)cert->c_str(),
-													(DWORD) cert->length());
-		if (!pCertContext) {
-			MWLOG_ERR("Error creating certificate context: %x", GetLastError());
-			return ERR_INV_CERTIFICATE;
-		}
-
-		unsigned char KeyUsageBits = 0; // Intended key usage bits copied to here.
-		CertGetIntendedKeyUsage(X509_ASN_ENCODING, pCertContext->pCertInfo, &KeyUsageBits, 1);
-
-		if ((KeyUsageBits & CERT_KEY_CERT_SIGN_KEY_USAGE) == CERT_KEY_CERT_SIGN_KEY_USAGE) {
-			if (!StoreAuthorityCerts(pCertContext, KeyUsageBits))
-				return ERR_INV_CERTIFICATE_CA;
-		} else {
-			if (!StoreUserCert(pCertContext, KeyUsageBits, m_mobileNumber))
-				return ERR_INV_CERTIFICATE;
-		}
-	}
-
-	return ERR_NONE;
+	
+	return updateCertChainIfChanged(false);
 }
 
 void CMDCertificates::CancelImport() { m_cmdService->cancelRequest(); }
@@ -133,7 +137,7 @@ int CMDCertificates::fetchCertificates(std::string otp) {
 /**********************
 Add User cert to Store
 ***********************/
-bool CMDCertificates::StoreUserCert(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, std::string mobileNumber) {
+bool CMDCertificates::StoreUserCert(PCCERT_CONTEXT pCertContext, unsigned char KeyUsageBits, std::string mobileNumber, bool replaceIfExists) {
 	HCERTSTORE hMyStore = CertOpenSystemStore(NULL, L"MY");
 	BOOL bSuccess = FALSE;
 
@@ -149,8 +153,14 @@ bool CMDCertificates::StoreUserCert(PCCERT_CONTEXT pCertContext, unsigned char K
 		goto cleanup;
 	}
 
-	RemoveOlderUserCerts(pCertContext);
+	if (replaceIfExists) {
+		if (!CertExistsForPhoneNumber(hMyStore, mobileNumber)) {
+			bSuccess = true;
+			goto cleanup;
+		}
+	}
 
+	RemoveOlderUserCerts(pCertContext);
 	if (!CertAddCertificateContextToStore(hMyStore, pCertContext, CERT_STORE_ADD_REPLACE_EXISTING, NULL)) {
 		MWLOG_ERR("Error adding certificate to store: 0x%x", GetLastError());
 		goto cleanup;
@@ -162,6 +172,28 @@ cleanup:
 		CertCloseStore(hMyStore, CERT_CLOSE_STORE_FORCE_FLAG);
 	}
 	return bSuccess;
+}
+
+bool CMDCertificates::CertExistsForPhoneNumber(HCERTSTORE hMyStore, const std::string &mobileNumber) {
+	std::string normalizedSearch = removeSpaces(mobileNumber);
+
+	PCCERT_CONTEXT pCert = NULL;
+	while (pCert = CertEnumCertificatesInStore(hMyStore, pCert)) {
+		DWORD cbStoredNumber = 0;
+		if (!CertGetCertificateContextProperty(pCert, CERT_FIRST_USER_PROP_ID, NULL, &cbStoredNumber))
+			continue;
+
+		LPWSTR pszStoredNumber = new WCHAR[cbStoredNumber];
+		bool getCertOk = CertGetCertificateContextProperty(pCert, CERT_FIRST_USER_PROP_ID, pszStoredNumber, &cbStoredNumber);
+		bool matches = getCertOk && (normalizedSearch == removeSpaces(utilStringNarrow(pszStoredNumber)));
+		delete[] pszStoredNumber;
+
+		if (matches) {
+			CertFreeCertificateContext(pCert);
+			return true;
+		}
+	}
+	return false;
 }
 
 /**********************
@@ -317,6 +349,36 @@ cleanup:
 int CMDCertificates::sendSms() {
 	CMDProxyInfo proxyInfo = CMDProxyInfo::buildProxyInfo();
 	return m_cmdService->forceSMS(proxyInfo, m_mobileNumber);
+}
+
+int CMDCertificates::updateCertChainIfChanged(bool replaceIfExists) {
+	PCCERT_CONTEXT pCertContext = NULL;
+
+	if (m_certificates.empty())
+		return ERR_NONE;
+
+	for (const std::string *certStr : m_certificates) {
+		assert(certStr->length() <= ULONG_MAX);
+		CByteArray cert((const unsigned char *)certStr->c_str(), (unsigned long)certStr->length());
+		pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (BYTE *)cert.GetBytes(),
+											(DWORD) cert.Size());
+		if (!pCertContext) {
+			MWLOG_ERR("Error creating certificate context: %x", GetLastError());
+			return ERR_INV_CERTIFICATE;
+		}
+
+		unsigned char KeyUsageBits = 0; // Intended key usage bits copied to here.
+		CertGetIntendedKeyUsage(X509_ASN_ENCODING, pCertContext->pCertInfo, &KeyUsageBits, 1);
+
+		if ((KeyUsageBits & CERT_KEY_CERT_SIGN_KEY_USAGE) == CERT_KEY_CERT_SIGN_KEY_USAGE) {
+			if (!StoreAuthorityCerts(pCertContext, KeyUsageBits))
+				return ERR_INV_CERTIFICATE_CA;
+		} else {
+			if (!StoreUserCert(pCertContext, KeyUsageBits, m_mobileNumber, replaceIfExists))
+				return ERR_INV_CERTIFICATE;
+		}
+	}
+	return ERR_NONE;
 }
 
 #endif

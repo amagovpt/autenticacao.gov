@@ -83,6 +83,8 @@ public:
 
 	PTEIDCMD_API static std::string getEndpoint();
 
+	std::string getUserId() const { return m_userId; }
+
 	/* Certificate chain from last call to cli_getCertificate. */
 	std::vector<CByteArray> m_certificates;
 	CByteArray m_signature;

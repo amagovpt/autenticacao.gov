@@ -124,6 +124,13 @@ std::u32string stringWidenUTF32(std::string utf8_str) {
 }
 #endif
 
+std::string removeSpaces(const std::string &s)
+{
+	std::string result = s;
+	result.erase(std::remove(result.begin(), result.end(), ' '), result.end());
+	return result;
+}
+
 uint64_t bigEndianBytesToLong(const uint8_t *bytes, size_t length) {
 	uint64_t value = 0;
 	for (size_t i = 0; i < length; i++) {
