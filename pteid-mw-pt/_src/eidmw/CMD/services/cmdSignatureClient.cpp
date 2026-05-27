@@ -555,6 +555,9 @@ void CMDPollingThread::Run() {
 void CMDPollingThread::Stop(unsigned long ulSleepFrequency) {
 	m_wasCancelled = true;
 	// Waits for the thread to finish
+
+	m_signature->cancelRequest();
+
 	WaitTillStopped(ulSleepFrequency);
 }
 
