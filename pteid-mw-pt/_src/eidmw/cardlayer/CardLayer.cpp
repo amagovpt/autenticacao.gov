@@ -36,6 +36,9 @@ CCardLayer::CCardLayer(void) : m_contextVec(MAX_READERS) {
 
 #ifdef __USE_PCSC__
 	m_cardInterface = std::make_shared<CPCSC>();
+#else
+	MWLOG(LEV_ERROR, MOD_CAL, "CCardLayer: no card interface available. SDK compiled without PCSC support (USE_PCSC=OFF)");
+	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
 #endif
 }
 

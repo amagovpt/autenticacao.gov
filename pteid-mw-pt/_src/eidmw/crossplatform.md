@@ -19,6 +19,8 @@ All dependencies should be installed on the same sysroot.
 ## PCSC
 To compile the project without PCSC as a dependency, the flag USE_PCSC (`-DUSE_PCSC=<bool>`) can be set during cmake configuration. This will also disable some other features such as pinpad support.
 
+**Important:** When compiled without PCSC (`USE_PCSC=OFF`), the SDK must be initialized with `initSDKWithCallbacks()` providing a card interface implementation. Calling `initSDK()` without PCSC support will throw `EIDMW_ERR_NOT_SUPPORTED`.
+
 
 
 
