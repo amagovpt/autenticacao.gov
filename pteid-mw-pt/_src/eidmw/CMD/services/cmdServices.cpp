@@ -485,6 +485,17 @@ int CMDServices::checkCCMovelSignResponse(_ns2__CCMovelSignResponse *response) {
 		return ERR_NULL_DATA;
 	}
 
+	if (response->CCMovelSignResult->Code == NULL) {
+		MWLOG_ERR("Null Code in CCMovelSignResult");
+		return ERR_NULL_DATA;
+	}
+
+	int statusCode = atoi(response->CCMovelSignResult->Code->c_str());
+	if (IS_SOAP_ERROR(statusCode)) {
+		MWLOG_ERR("CCMovelSignResult SOAP Error Code %d", statusCode);
+		return statusCode;
+	}
+
 	return ERR_NONE;
 }
 
@@ -568,8 +579,10 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std
 		return ret;
 
 	/* Save ProcessId */
-	// std::cerr << "ProcessId: " << *response.CCMovelSignResult->ProcessId << endl;
-
+	if (response.CCMovelSignResult->ProcessId == NULL) {
+		MWLOG_ERR("Null ProcessId in CCMovelSignResult");
+		return ERR_NULL_DATA;
+	}
 	setProcessID(*response.CCMovelSignResult->ProcessId);
 
 	return ERR_NONE;
@@ -713,6 +726,10 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
 	if (ret != ERR_NONE)
 		return ret;
 
+	if (response.CCMovelMultipleSignResult->ProcessId == NULL) {
+		MWLOG_ERR("Null ProcessId in CCMovelMultipleSignResult");
+		return ERR_NULL_DATA;
+	}
 	setProcessID(*response.CCMovelMultipleSignResult->ProcessId);
 
 	return ERR_NONE;
@@ -1123,6 +1140,10 @@ int CMDServices::askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId
 		return ret;
 
 	/* Save ProcessId */
+	if (response.GetCertificateWithPinResult->ProcessId == NULL) {
+		MWLOG_ERR("Null ProcessId in GetCertificateWithPinResult");
+		return ERR_GET_CERTIFICATE;
+	}
 	setProcessID(*response.GetCertificateWithPinResult->ProcessId);
 
 	return ERR_NONE;
