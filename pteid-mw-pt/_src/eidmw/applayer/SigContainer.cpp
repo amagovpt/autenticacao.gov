@@ -13,6 +13,7 @@
 
 #include <fstream>
 #include <cstring>
+#include <filesystem>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -379,6 +380,16 @@ std::vector<std::string> SigContainer::listInputFiles() {
 }
 
 void SigContainer::extract(const char *filename, const char *out_dir) {
+	std::filesystem::path base = std::filesystem::weakly_canonical(out_dir);
+	std::filesystem::path resolved = std::filesystem::weakly_canonical(base / filename);
+
+	auto [a, b] = std::mismatch(base.begin(), base.end(), resolved.begin());
+	if (a != base.end()) {
+		MWLOG(LEV_ERROR, MOD_APL, "%s: resolved path doesn't match initial out_dir path filename: '%s' out_dir: '%s'",
+			  __FUNCTION__, filename, out_dir);
+		throw CMWEXCEPTION(EIDMW_XADES_INVALID_ASIC_ERROR);
+	}
+
 	zip_t *container;
 	bool write_mode = false;
 	if (!isASiC(m_path.c_str(), write_mode, &container) || container == NULL) {
