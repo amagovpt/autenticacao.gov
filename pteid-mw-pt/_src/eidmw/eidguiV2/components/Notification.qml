@@ -34,6 +34,7 @@ Item {
         id: title
         width: parent.width - Constants.SIZE_IMAGE_BOTTOM_MENU - 40
         text: ""
+        textFormat: Text.PlainText
         lineHeight: 1.2
         wrapMode: Text.WordWrap
         elide: Text.ElideRight
@@ -59,6 +60,7 @@ Item {
         id: description
         width: parent.width - Constants.SIZE_IMAGE_BOTTOM_MENU - 40
         text: ""
+        textFormat: Text.PlainText
         wrapMode: TextEdit.Wrap
         color: Constants.COLOR_TEXT_BODY
         horizontalAlignment: Text.AlignJustify
@@ -85,7 +87,7 @@ Item {
         id: linkContainer
         height: Constants.SIZE_TEXT_LABEL
         opacity: 0.5
-        visible: propertyUrl.length > 0
+        visible: Functions.isSafeExternalUrl(propertyUrl)
 
         anchors.left: parent.left
         anchors.leftMargin: Constants.SIZE_IMAGE_BOTTOM_MENU + 2 * 10 + 4  
@@ -103,7 +105,7 @@ Item {
 
             anchors.top: parent.top
 
-            propertyText.text: "<a href='" + propertyUrl + "'>"
+            propertyText.text: "<a href='" + Functions.htmlAttrEscape(propertyUrl) + "'>"
                                      + qsTranslate("PageDefinitionsUpdates","STR_AUTOUPDATENEWS_KNOW_MORE")
             propertyText.verticalAlignment: Text.AlignVCenter
             propertyText.font.capitalization: Font.MixedCase

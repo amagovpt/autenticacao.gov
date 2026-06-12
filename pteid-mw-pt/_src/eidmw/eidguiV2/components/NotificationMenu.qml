@@ -100,6 +100,7 @@ Item {
 
                 Text {
                     text: model.title
+                    textFormat: Text.PlainText
                     visible: !model.activated
                     width: parent.width - icon.width - 40
                     color: Constants.COLOR_TEXT_BODY

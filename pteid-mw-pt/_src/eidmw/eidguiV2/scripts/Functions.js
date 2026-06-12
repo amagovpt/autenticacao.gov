@@ -282,3 +282,35 @@ function toTitleCase(str) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
 }
+
+// Mirrors the C++ link validation in autoUpdates.cpp.
+function sanitizeExternalUrl(url) {
+    if (typeof url !== "string")
+        return "";
+    var u = url.replace(/^[\x00-\x20]+|[\x00-\x20]+$/g, "");
+    if (u.substring(0, 8).toLowerCase() !== "https://")
+        return "";
+    for (var i = 0; i < u.length; i++) {
+        var c = u.charCodeAt(i);
+        if (c <= 0x20 || c === 0x7F || c === 0x5C ||
+            c === 0x3C || c === 0x3E || c === 0x27 || c === 0x22)
+            return "";
+    }
+    return u;
+}
+
+function isSafeExternalUrl(url) {
+    return sanitizeExternalUrl(url).length > 0;
+}
+
+function openExternalUrlSafely(url) {
+    var safe = sanitizeExternalUrl(url);
+    if (safe.length > 0)
+        Qt.openUrlExternally(safe);
+}
+
+function htmlAttrEscape(s) {
+    return String(s)
+        .replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}

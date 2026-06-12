@@ -11,6 +11,7 @@
 import QtQuick 2.6
 
 import "../scripts/Constants.js" as Constants
+import "../scripts/Functions.js" as Functions
 
 Item {
     id: linkRect
@@ -35,22 +36,22 @@ Item {
         color: Constants.COLOR_TEXT_BODY
         visible: parent.visible
         font.underline: mouseArea.containsMouse
-        onLinkActivated: Qt.openUrlExternally(link === "" ? propertyLinkUrl : link)
+        onLinkActivated: Functions.openExternalUrlSafely(link === "" ? propertyLinkUrl : link)
         wrapMode: Text.WordWrap
 
         Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 
         Accessible.name: propertyAccessibleText
         Accessible.description: propertyAccessibleDescription
 
-        Keys.onSpacePressed: Qt.openUrlExternally(propertyLinkUrl)
-        Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
+        Keys.onSpacePressed: Functions.openExternalUrlSafely(propertyLinkUrl)
+        Keys.onReturnPressed: Functions.openExternalUrlSafely(propertyLinkUrl)
 
     }
     Accessible.role: propertyLinkUrl == "" ? Accessible.StaticText : Accessible.Link 
     Accessible.name: propertyAccessibleText
     Accessible.description: propertyAccessibleDescription
-    Keys.onSpacePressed: Qt.openUrlExternally(propertyLinkUrl)
-    Keys.onReturnPressed: Qt.openUrlExternally(propertyLinkUrl)
+    Keys.onSpacePressed: Functions.openExternalUrlSafely(propertyLinkUrl)
+    Keys.onReturnPressed: Functions.openExternalUrlSafely(propertyLinkUrl)
     MouseArea {
         id: mouseArea
         anchors.fill: linkText

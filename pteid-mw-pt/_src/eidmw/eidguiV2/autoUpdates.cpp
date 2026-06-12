@@ -341,6 +341,25 @@ std::vector<NewsEntry> AutoUpdates::chooseNews() {
 	return filteredNews;
 }
 
+static void trimAsciiSpace(std::string &s) {
+	size_t b = 0, e = s.size();
+	while (b < e && (unsigned char)s[b] <= 0x20)
+		b++;
+	while (e > b && (unsigned char)s[e - 1] <= 0x20)
+		e--;
+	s = s.substr(b, e - b);
+}
+
+static bool isAllowedNewsLink(const std::string &link) {
+	if (!StartsWithCI(link.c_str(), "https://"))
+		return false;
+	for (unsigned char c : link) {
+		if (c <= 0x20 || c == 0x7F || c == '\\' || c == '<' || c == '>' || c == '\'' || c == '"')
+			return false;
+	}
+	return true;
+}
+
 void AutoUpdates::parseNews(const std::string &data) {
 	// parses news.json file into vector of NewsEntry in m_news
 	cJSON_ptr json(cJSON_Parse(data.c_str()), ::cJSON_Delete);
@@ -423,10 +442,19 @@ void AutoUpdates::parseNews(const std::string &data) {
 		newsEntry.first_day = std::string(new_jsonBegin->valuestring);
 		newsEntry.last_day = std::string(new_jsonEnd->valuestring);
 		newsEntry.text = std::string(new_jsonText->valuestring);
-		if (new_jsonLink)
-			newsEntry.link = std::string(new_jsonLink->valuestring);
-		else
+		if (new_jsonLink) {
+			std::string candidate(new_jsonLink->valuestring);
+			trimAsciiSpace(candidate);
+			if (isAllowedNewsLink(candidate)) {
+				newsEntry.link = candidate;
+			} else {
+				newsEntry.link = "";
+				PTEID_LOG(PTEID_LOG_LEVEL_WARNING, "eidgui",
+						  "news.json: rejected unsafe link on news entry; discarding link only");
+			}
+		} else {
 			newsEntry.link = "";
+		}
 
 		m_news.push_back(newsEntry);
 	}

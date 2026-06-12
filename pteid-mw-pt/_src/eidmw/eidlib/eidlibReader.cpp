@@ -975,14 +975,15 @@ PTEID_Config::PTEID_Config(PTEID_Param Param) : PTEID_Object(NULL, NULL) {
 		break;
 
 	// AUTOUPDATES
+	// Read SYSTEM_ONLY (HKLM on Windows) so an unprivileged HKCU override can't redirect them.
 	case PTEID_PARAM_AUTOUPDATES_VERIFY_URL:
-		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL);
+		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_VERIFY_URL, APL_Config::SYSTEM_ONLY);
 		break;
 	case PTEID_PARAM_AUTOUPDATES_CERTS_URL:
-		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_CERTS_URL);
+		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_CERTS_URL, APL_Config::SYSTEM_ONLY);
 		break;
 	case PTEID_PARAM_AUTOUPDATES_NEWS_URL:
-		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_NEWS_URL);
+		m_impl = new APL_Config(CConfig::EIDMW_CONFIG_PARAM_AUTOUPDATES_NEWS_URL, APL_Config::SYSTEM_ONLY);
 		break;
 
 	// CMD
