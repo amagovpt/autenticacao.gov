@@ -309,7 +309,7 @@ void GAPI::doUpdateTelemetry(TelemetryAction action) {
 		qDebug() << "updateTelemetry HTTP status:" << http_code << "for URL:" << url << "Using proxy?: " << using_proxy;
 		if (action == TelemetryAction::Accepted || action == TelemetryAction::Denied) {
 			setTelemetryStatus(
-				http_code == 200
+				(http_code == 200 || http_code == 403)
 					? (action == TelemetryAction::Accepted ? TelemetryStatus::Enabled : TelemetryStatus::Disabled)
 					: (action == TelemetryAction::Accepted ? TelemetryStatus::RetryEnable
 														   : TelemetryStatus::RetryDisable));
