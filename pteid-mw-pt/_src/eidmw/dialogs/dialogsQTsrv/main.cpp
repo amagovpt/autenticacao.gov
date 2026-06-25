@@ -66,6 +66,8 @@ QDialog *dlg = NULL;
 
 pid_t getPidFromParentid(pid_t parentid, const char *CommandLineToFind);
 
+static std::atomic<bool> g_sigintReceived{false};
+
 using namespace eIDMW;
 
 void sigint_handler(int sig) {
@@ -73,25 +75,18 @@ void sigint_handler(int sig) {
 	// to this function, the handler is reset to the
 	// unix default
 	signal(SIGINT, sigint_handler);
+	g_sigintReceived.store(true, std::memory_order_relaxed);
+}
 
-	// respond to the signal : clean up the dialogs,
-	// the shared memory and the random file
-	if (dlgInfo)
-		delete dlgInfo;
-	dlgInfo = NULL;
+void timerToDialog(QDialog *dlg) {
+	QTimer *timer = new QTimer(dlg);
 
-	if (dlg) {
-		dlgWndCmdMsg *ptr = dynamic_cast<dlgWndCmdMsg *>(dlg);
-		if (ptr) {
-			// dlgWndCmdMsg
-			ptr->close();
-		} else {
-			// pinpad
-			delete dlg;
+	QObject::connect(timer, &QTimer::timeout, dlg, [dlg]() {
+		if (g_sigintReceived.load()) {
+			dlg->done(0);
 		}
-	}
-	QCoreApplication::quit();
-	dlg = NULL;
+	});
+	timer->start(100);
 }
 
 int g_UseKeyPad = -1;
@@ -306,6 +301,7 @@ int main(int argc, char *argv[]) {
 
 			dlg =
 				new dlgWndAskPIN(oData.pinInfo, oData.usage, Header, PINName, DlgGetKeyPad(), 0, &parentWndGeometry);
+			timerToDialog(dlg);
 			int retVal = dlg->exec();
 
 			if (retVal == QDialog::Accepted) {
@@ -360,6 +356,7 @@ int main(int argc, char *argv[]) {
 			}
 			dlg = new dlgWndAskPINs(oData.pin1Info, oData.pin2Info, Header, tr_pin, DlgGetKeyPad(), 0,
 									&parentWndGeometry);
+			timerToDialog(dlg);
 			if (dlg->exec()) {
 				wcscpy_s(oData.pin1, sizeof(oData.pin1) / sizeof(wchar_t), dlg->getPIN1().c_str());
 				wcscpy_s(oData.pin2, sizeof(oData.pin2) / sizeof(wchar_t), dlg->getPIN2().c_str());
@@ -396,6 +393,7 @@ int main(int argc, char *argv[]) {
 			QString PINName;
 			PINName = getPinName(oData.usage, oData.pinName);
 			dlg = new dlgWndBadPIN(PINName, oData.ulRemainingTries, 0, &parentWndGeometry);
+			timerToDialog(dlg);
 			if (dlg->exec()) {
 				delete dlg;
 				dlg = NULL;
@@ -507,6 +505,7 @@ int main(int argc, char *argv[]) {
 										   &parentWndGeometry);
 
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndPinpadInfo created", argv[0]);
+			timerToDialog(dlg);
 			dlg->show();
 			dlg->raise();
 			dlg->exec();
@@ -587,6 +586,7 @@ int main(int argc, char *argv[]) {
 			dlg = new dlgWndAskCmd(oData.operation, oData.isValidateOtp, sMessage, &userId, &userName,
 								   oData.callbackWasCalled, askForId, NULL, &parentWndGeometry);
 
+			timerToDialog(dlg);
 			if (dlg->exec()) {
 				if (dlg->callCallback()) {
 					oData.returnValue = DLG_CALLBACK;
@@ -629,6 +629,7 @@ int main(int argc, char *argv[]) {
 		dlgWndPickDevice *dlg = NULL;
 		try {
 			dlg = new dlgWndPickDevice(NULL, &parentWndGeometry);
+			timerToDialog(dlg);
 			if (dlg->exec()) {
 				oData.outDevice = dlg->getOutDevice();
 				oData.returnValue = DLG_OK;
@@ -666,6 +667,7 @@ int main(int argc, char *argv[]) {
 
 				dlg = new dlgWndCmdMsg(oCmdMsgData.operation, type, message, oCmdMsgData.cmdMsgCollectorIndex, NULL,
 									   &parentWndGeometry);
+				timerToDialog(dlg);
 
 				MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : dlgWndCmdMsg created", argv[0]);
 				int res = dlg->exec();
