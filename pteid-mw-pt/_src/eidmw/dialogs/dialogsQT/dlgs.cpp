@@ -644,6 +644,7 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo(unsigned long ulHandle) {
 			}
 			else {
 				write(pIt->second->pipe2[1], "1", 1);
+				waitpid(pIt->second->tRunningProcess, nullptr, 0);
 			}
 
 		} else {
@@ -853,6 +854,7 @@ DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle) {
 			}
 			else {
 				write(pIt->second->pipe2[1], "1", 1);
+				waitpid(pIt->second->tRunningProcess, nullptr, 0);
 			}
 
 		} else {
@@ -872,6 +874,7 @@ DLGS_EXPORT void eIDMW::DlgCloseAskInputCMD() {
 		if (!kill(current_dlg_pid, 0)) {
 			// Kills the process
 			kill(current_dlg_pid, SIGINT);
+			waitpid(current_dlg_pid, nullptr, 0);
 		}
 	}
 }
@@ -940,6 +943,7 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 		close(pipe2[0]);
 		close(pipe2[1]);
 		current_dlg_pid = 0;
+		waitpid(pid, nullptr, 0);
 	}
 }
 
