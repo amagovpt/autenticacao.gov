@@ -41,7 +41,7 @@ unix:!macx: {
     preprocess.name = execute swig to generate python and c++ wrapper
     preprocess.input = PREPROCESS_FILES
     preprocess.output = ./GeneratedFiles/eidlibPython_Wrapper.cpp
-    preprocess.commands = swig -v -c++ -python -shadow -modern -o ./GeneratedFiles/eidlibPython_Wrapper.cpp -outdir ./GeneratedModule ../eidlib/eidlib.i
+    preprocess.commands = swig -v -c++ -python -shadow -o ./GeneratedFiles/eidlibPython_Wrapper.cpp -outdir ./GeneratedModule ../eidlib/eidlib.i
     QMAKE_EXTRA_COMPILERS += preprocess
     preprocess.variable_out += SOURCES
 }
