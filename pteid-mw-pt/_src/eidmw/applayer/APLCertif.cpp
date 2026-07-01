@@ -202,6 +202,9 @@ APL_Certifs::~APL_Certifs(void) {
 	}
 	m_certifs.clear();
 	m_certifsOrder.clear();
+	if(m_card) {
+		m_cryptoFwk->setActiveCard(NULL);
+	}
 }
 
 unsigned long APL_Certifs::countFromCard() {
