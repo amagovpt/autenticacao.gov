@@ -39,8 +39,8 @@ DEFINE_LANG_STR(NoCMDCredentials) = {L"The Citizen Card Middleware installed doe
 									 L"Obtenha um instalador oficial em https://www.autenticacao.gov.pt.",
 									 L"", L""};
 DEFINE_LANG_STR(ValidatingCertificate) = {L"Validating certificate...", L"A validar certificado..."};
-DEFINE_LANG_STR(VerifySignatureFailed) = {L"Failed to create signature, please open the middleware and reinstall CMD signature certificate.", 
-																				L"Falhou na criação da assinatura por favor abra o Middleware e\nreinstale o certificado de assinatura da CMD." };
+DEFINE_LANG_STR(VerifySignatureFailed) = {L"Failed to create signature: please open Autenticação.gov and reinstall CMD signature certificate.", 
+																				L"Erro na criação da assinatura: por favor abra a aplicação Autenticação.gov e\nregiste de novo o certificado de assinatura da CMD." };
 } // namespace eIDMW
 
 #endif // __CMDKSP_LANGUAGE_H__
