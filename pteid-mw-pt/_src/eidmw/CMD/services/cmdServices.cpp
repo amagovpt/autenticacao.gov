@@ -285,10 +285,10 @@ void CMDServices::enableBasicAuthentication() {
 /*  *********************************************************
 ***    CMDServices::get_GetCertificateRequest()       ***
 ********************************************************* */
-_ns2__GetCertificateWithPin *CMDServices::get_GetCertificateWithPinRequest(soap *sp, std::string in_applicationID,
+_ns1__GetCertificateWithPin *CMDServices::get_GetCertificateWithPinRequest(soap *sp, std::string in_applicationID,
 																		   std::string *in_userId,
 																		   std::string *in_pin) {
-	_ns2__GetCertificateWithPin *send = soap_new__ns2__GetCertificateWithPin(sp);
+	_ns1__GetCertificateWithPin *send = soap_new__ns2__GetCertificateWithPin(sp);
 	if (NULL == send)
 		return send;
 
@@ -302,7 +302,7 @@ _ns2__GetCertificateWithPin *CMDServices::get_GetCertificateWithPinRequest(soap 
 /*  *********************************************************
 ***    CMDServices::checkGetCertificateResponse()     ***
 ********************************************************* */
-int CMDServices::checkGetCertificateWithPinResponse(_ns2__GetCertificateWithPinResponse *response) {
+int CMDServices::checkGetCertificateWithPinResponse(_ns1__GetCertificateWithPinResponse *response) {
 	if (response == NULL) {
 		MWLOG_ERR("Null response");
 		return ERR_NULL_HANDLER;
@@ -340,10 +340,10 @@ int CMDServices::checkGetCertificateWithPinResponse(_ns2__GetCertificateWithPinR
 /*  *********************************************************
  ***    CMDServices::get_GetCertificateRequest()       ***
  ********************************************************* */
-_ns2__GetCertificate *CMDServices::get_GetCertificateRequest(soap *sp, std::string in_applicationID,
+_ns1__GetCertificate *CMDServices::get_GetCertificateRequest(soap *sp, std::string in_applicationID,
 															 std::string *in_userId) {
 
-	_ns2__GetCertificate *send = soap_new__ns2__GetCertificate(sp);
+	_ns1__GetCertificate *send = soap_new__ns2__GetCertificate(sp);
 	if (NULL == send)
 		return send;
 
@@ -356,7 +356,7 @@ _ns2__GetCertificate *CMDServices::get_GetCertificateRequest(soap *sp, std::stri
 /*  *********************************************************
  ***    CMDServices::checkGetCertificateResponse()     ***
  ********************************************************* */
-int CMDServices::checkGetCertificateResponse(_ns2__GetCertificateResponse *response) {
+int CMDServices::checkGetCertificateResponse(_ns1__GetCertificateResponse *response) {
 	if (response == NULL) {
 		MWLOG_ERR("Null response");
 		return ERR_NULL_HANDLER;
@@ -395,7 +395,7 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
 	/*
 		Get GetCertificate request
 	*/
-	_ns2__GetCertificate *send = get_GetCertificateRequest(sp, getApplicationID(), &in_userId);
+	_ns1__GetCertificate *send = get_GetCertificateRequest(sp, getApplicationID(), &in_userId);
 	if (send == NULL) {
 		MWLOG_ERR("NULL send parameters");
 		return ERR_NULL_HANDLER;
@@ -407,7 +407,7 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
 	/*
 		Call GetCertificate service
 	*/
-	_ns2__GetCertificateResponse response;
+	_ns1__GetCertificateResponse response;
 	int ret;
 	ret = proxy.GetCertificate(send, response);
 
@@ -444,7 +444,7 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
 /*  *********************************************************
  ***    CMDServices::get_CCMovelSignRequest()          ***
  ********************************************************* */
-_ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp, std::string in_applicationID, std::string *docName,
+_ns1__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp, std::string in_applicationID, std::string *docName,
 													   unsigned char *in_hash, std::string *in_pin,
 													   std::string *in_userId, bool *IsBiometricValidationEnable) {
 	// SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( sp );
@@ -455,7 +455,7 @@ _ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp, std::string in_
 	// Set the created header in our soap structure
 	// sp->header = soapHeader;
 
-	ns3__SignRequest *soapBody = soap_new_ns3__SignRequest(sp);
+	ns2__SignRequest *soapBody = soap_new_ns2__SignRequest(sp);
 
 	soapBody->ApplicationId = encode_base64(sp, in_applicationID);
 	int hash_len = 51;
@@ -467,14 +467,14 @@ _ns2__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp, std::string in_
 
 	soapBody->IsBiometricValidationEnable = IsBiometricValidationEnable;
 
-	_ns2__CCMovelSign *send = soap_new_set__ns2__CCMovelSign(sp, soapBody);
+	_ns1__CCMovelSign *send = soap_new_set__ns2__CCMovelSign(sp, soapBody);
 	return send;
 }
 
 /*  *********************************************************
  ***    CMDServices::checkCCMovelSignResponse()        ***
  ********************************************************* */
-int CMDServices::checkCCMovelSignResponse(_ns2__CCMovelSignResponse *response) {
+int CMDServices::checkCCMovelSignResponse(_ns1__CCMovelSignResponse *response) {
 	if (response == NULL) {
 		MWLOG_ERR("Null response");
 		return ERR_NULL_HANDLER;
@@ -540,7 +540,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std
 	/*
 		Get CCMovelSign request
 	*/
-	_ns2__CCMovelSign *send = get_CCMovelSignRequest(sp, getApplicationID(), &docName, in_hash, &in_pin, &in_userId,
+	_ns1__CCMovelSign *send = get_CCMovelSignRequest(sp, getApplicationID(), &docName, in_hash, &in_pin, &in_userId,
 													 &IsBiometricValidationEnable);
 	if (send == NULL) {
 		MWLOG_ERR("NULL send parameters");
@@ -550,7 +550,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std
 	/*
 		Call CCMovelSign service
 	*/
-	_ns2__CCMovelSignResponse response;
+	_ns1__CCMovelSignResponse response;
 	int ret;
 	ret = proxy.CCMovelSign(NULL, NULL, send, response);
 
@@ -594,11 +594,11 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std
  ****
  ******************************************************************************************************************* */
 
-_ns2__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest(
+_ns1__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest(
 	soap *sp, std::string in_applicationID, std::vector<std::string *> docNames, std::vector<unsigned char *> in_hashes,
 	std::vector<std::string *> ids, std::string *in_pin, std::string *in_userId, bool *IsBiometricValidationEnable) {
 
-	ns3__MultipleSignRequest *soapMultipleSignRequest = soap_new_ns3__MultipleSignRequest(sp);
+	ns2__MultipleSignRequest *soapMultipleSignRequest = soap_new_ns2__MultipleSignRequest(sp);
 
 	soapMultipleSignRequest->ApplicationId = encode_base64(sp, in_applicationID);
 	soapMultipleSignRequest->Pin = in_pin;
@@ -606,10 +606,10 @@ _ns2__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest(
 
 	soapMultipleSignRequest->IsBiometricValidationEnable = IsBiometricValidationEnable;
 
-	ns3__ArrayOfHashStructure *soapHashesArray = soap_new_ns3__ArrayOfHashStructure(sp);
+	ns2__ArrayOfHashStructure *soapHashesArray = soap_new_ns2__ArrayOfHashStructure(sp);
 
 	for (size_t i = 0; i < in_hashes.size(); i++) {
-		ns3__HashStructure *soapHashStructure = soap_new_ns3__HashStructure(sp);
+		ns2__HashStructure *soapHashStructure = soap_new_ns2__HashStructure(sp);
 
 		int hash_len = 51;
 		soapHashStructure->Hash = soap_new_set_xsd__base64Binary(sp, in_hashes[i], hash_len, NULL, NULL, NULL);
@@ -618,13 +618,13 @@ _ns2__CCMovelMultipleSign *CMDServices::get_CCMovelMultipleSignRequest(
 		soapHashesArray->HashStructure.push_back(soapHashStructure);
 	}
 
-	_ns2__CCMovelMultipleSign *send =
+	_ns1__CCMovelMultipleSign *send =
 		soap_new_set__ns2__CCMovelMultipleSign(sp, soapMultipleSignRequest, soapHashesArray);
 
 	return send;
 }
 
-int CMDServices::checkCCMovelMultipleSignResponse(_ns2__CCMovelMultipleSignResponse *response) {
+int CMDServices::checkCCMovelMultipleSignResponse(_ns1__CCMovelMultipleSignResponse *response) {
 	if (response == NULL) {
 		MWLOG_ERR("Null response");
 		return ERR_NULL_HANDLER;
@@ -700,7 +700,7 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
 	/*
 		Get CCMovelMultipleSign request
 	*/
-	_ns2__CCMovelMultipleSign *send = get_CCMovelMultipleSignRequest(
+	_ns1__CCMovelMultipleSign *send = get_CCMovelMultipleSignRequest(
 		sp, getApplicationID(), docNamesPtrs, in_hashes, ids, &in_pin, &in_userId, &IsBiometricValidationEnable);
 	if (send == NULL) {
 		MWLOG_ERR("NULL send parameters");
@@ -710,7 +710,7 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
 	/*
 		Call CCMovelMultipleSign service
 	*/
-	_ns2__CCMovelMultipleSignResponse response;
+	_ns1__CCMovelMultipleSignResponse response;
 	int ret;
 	ret = proxy.CCMovelMultipleSign(NULL, NULL, send, response);
 
@@ -744,9 +744,9 @@ int CMDServices::ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigne
 /*  *********************************************************
  ***    CMDServices::get_ValidateOtpRequest()          ***
  ********************************************************* */
-_ns2__ValidateOtp *CMDServices::get_ValidateOtpRequest(soap *sp, std::string in_applicationID, std::string *in_code,
+_ns1__ValidateOtp *CMDServices::get_ValidateOtpRequest(soap *sp, std::string in_applicationID, std::string *in_code,
 													   std::string *in_processId, bool *isBiometric) {
-	_ns2__ValidateOtp *send = soap_new__ns2__ValidateOtp(sp);
+	_ns1__ValidateOtp *send = soap_new__ns2__ValidateOtp(sp);
 	if (send == NULL)
 		return NULL;
 
@@ -761,7 +761,7 @@ _ns2__ValidateOtp *CMDServices::get_ValidateOtpRequest(soap *sp, std::string in_
 /*  *********************************************************
  ***    CMDServices::checkValidateOtpResponse()        ***
  ********************************************************* */
-int CMDServices::checkValidateOtpResponse(_ns2__ValidateOtpResponse *response) {
+int CMDServices::checkValidateOtpResponse(_ns1__ValidateOtpResponse *response) {
 	if (response == NULL) {
 		MWLOG_ERR("Null response");
 		return ERR_NULL_HANDLER;
@@ -842,7 +842,7 @@ int CMDServices::checkValidateOtpResponse(_ns2__ValidateOtpResponse *response) {
 /*  *********************************************************
 ***    CMDServices::checkForceSmsResponse()        ***
 ********************************************************* */
-int CMDServices::checkForceSmsResponse(_ns2__ForceSMSResponse *response) {
+int CMDServices::checkForceSmsResponse(_ns1__ForceSMSResponse *response) {
 	if (response == NULL) {
 		MWLOG_ERR("Null response");
 		return ERR_NULL_HANDLER;
@@ -870,7 +870,7 @@ int CMDServices::checkForceSmsResponse(_ns2__ForceSMSResponse *response) {
 /*  *********************************************************
 ***    CMDServices::checkSignatureDocumentPoolingResponse() ***
 ********************************************************* */
-int CMDServices::checkSignatureDocumentPoolingResponse(_ns2__SignDocumentPoolingResponse *response) {
+int CMDServices::checkSignatureDocumentPoolingResponse(_ns1__SignDocumentPoolingResponse *response) {
 	if (response == NULL) {
 		MWLOG_ERR("Null response");
 		return ERR_NULL_HANDLER;
@@ -952,7 +952,7 @@ int CMDServices::checkSignatureDocumentPoolingResponse(_ns2__SignDocumentPooling
 /*  *********************************************************
  ***    CMDServices::ValidateOtp()                     ***
  ********************************************************* */
-int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns2__ValidateOtpResponse &response,
+int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns1__ValidateOtpResponse &response,
 								 bool isBiometric) {
 	soap *sp = getSoap();
 	if (sp == NULL) {
@@ -976,7 +976,7 @@ int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _n
 	/*
 		Get ValidateOtp request
 	*/
-	_ns2__ValidateOtp *send = get_ValidateOtpRequest(sp, getApplicationID(), &code, &processId, &isBiometric);
+	_ns1__ValidateOtp *send = get_ValidateOtpRequest(sp, getApplicationID(), &code, &processId, &isBiometric);
 
 	if (send == NULL) {
 		MWLOG_ERR("Null send parameters");
@@ -1010,7 +1010,7 @@ int CMDServices::sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _n
 int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::vector<unsigned char *> *outSignature,
 							 std::vector<unsigned int> *outSignatureLen, bool isBiometric) {
 
-	_ns2__ValidateOtpResponse response;
+	_ns1__ValidateOtpResponse response;
 	int ret = sendValidateOtp(proxyInfo, in_code, response, isBiometric);
 	if (ret != ERR_NONE)
 		return ret;
@@ -1056,7 +1056,7 @@ int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::v
 
 int CMDServices::ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::string *outCertificate,
 							 bool isBiometric) {
-	_ns2__ValidateOtpResponse response;
+	_ns1__ValidateOtpResponse response;
 	int ret = sendValidateOtp(proxyInfo, in_code, response, isBiometric);
 	if (ret != ERR_NONE)
 		return ret;
@@ -1111,7 +1111,7 @@ int CMDServices::askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId
 	/*
 	Get GetCertificateWithPin request
 	*/
-	_ns2__GetCertificateWithPin *send = get_GetCertificateWithPinRequest(sp, getApplicationID(), &in_userId, &in_pin);
+	_ns1__GetCertificateWithPin *send = get_GetCertificateWithPinRequest(sp, getApplicationID(), &in_userId, &in_pin);
 	if (send == NULL) {
 		MWLOG_ERR("NULL send parameters");
 		return ERR_NULL_HANDLER;
@@ -1120,7 +1120,7 @@ int CMDServices::askForCertificate(CMDProxyInfo proxyInfo, std::string in_userId
 	/*
 	Call GetCertificateWithPin service
 	*/
-	_ns2__GetCertificateWithPinResponse response;
+	_ns1__GetCertificateWithPinResponse response;
 	int ret;
 	ret = proxy.GetCertificateWithPin(NULL, NULL, send, response);
 
@@ -1339,7 +1339,7 @@ int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId) {
 	/*
 	Get ForceSMS request
 	*/
-	_ns2__ForceSMS *send = soap_new__ns2__ForceSMS(sp);
+	_ns1__ForceSMS *send = soap_new__ns2__ForceSMS(sp);
 	if (send == NULL) {
 		MWLOG_ERR("Null send parameters");
 		return ERR_NULL_HANDLER;
@@ -1352,7 +1352,7 @@ int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId) {
 	Call ForceSMS service
 	*/
 	int ret;
-	_ns2__ForceSMSResponse response;
+	_ns1__ForceSMSResponse response;
 	ret = proxy.ForceSMS(NULL, NULL, send, response);
 
 	/* Clean pointers before exit */
@@ -1377,10 +1377,10 @@ int CMDServices::forceSMS(CMDProxyInfo proxyInfo, std::string in_userId) {
 ***    CMDServices::signatureDocumentPooling()           ***
 ********************************************************* */
 
-_ns2__SignDocumentPooling *CMDServices::get_SignDocumentPoolingRequest(soap *sp, std::string in_applicationID,
+_ns1__SignDocumentPooling *CMDServices::get_SignDocumentPoolingRequest(soap *sp, std::string in_applicationID,
 																	   std::string *in_processId) {
 
-	_ns2__SignDocumentPooling *send = soap_new__ns2__SignDocumentPooling(sp);
+	_ns1__SignDocumentPooling *send = soap_new__ns2__SignDocumentPooling(sp);
 	if (send == NULL)
 		return NULL;
 
@@ -1390,7 +1390,7 @@ _ns2__SignDocumentPooling *CMDServices::get_SignDocumentPoolingRequest(soap *sp,
 	return send;
 }
 
-int CMDServices::sendSignatureDocumentPooling(CMDProxyInfo proxyInfo, _ns2__SignDocumentPoolingResponse &response) {
+int CMDServices::sendSignatureDocumentPooling(CMDProxyInfo proxyInfo, _ns1__SignDocumentPoolingResponse &response) {
 	soap *sp = getSoap();
 	if (sp == NULL) {
 		MWLOG_ERR("Null soap");
@@ -1407,7 +1407,7 @@ int CMDServices::sendSignatureDocumentPooling(CMDProxyInfo proxyInfo, _ns2__Sign
 	/*
 		Get SignDocumentPooling request
 	*/
-	_ns2__SignDocumentPooling *send = get_SignDocumentPoolingRequest(sp, getApplicationID(), &processId);
+	_ns1__SignDocumentPooling *send = get_SignDocumentPoolingRequest(sp, getApplicationID(), &processId);
 
 	if (send == NULL) {
 		MWLOG_ERR("Null send parameters");
@@ -1441,7 +1441,7 @@ int CMDServices::sendSignatureDocumentPooling(CMDProxyInfo proxyInfo, _ns2__Sign
 int CMDServices::signatureDocumentPooling(CMDProxyInfo proxyInfo, std::vector<unsigned char *> *outSignature,
 										  std::vector<unsigned int> *outSignatureLen) {
 
-	_ns2__SignDocumentPoolingResponse response;
+	_ns1__SignDocumentPoolingResponse response;
 	int ret = sendSignatureDocumentPooling(proxyInfo, response);
 	if (ret != ERR_NONE)
 		return ret;

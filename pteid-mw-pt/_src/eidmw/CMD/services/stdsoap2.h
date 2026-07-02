@@ -1,5 +1,5 @@
 /*
-        stdsoap2.h 2.8.131
+        stdsoap2.h 2.8.132
 
         gSOAP runtime engine
 
@@ -52,7 +52,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
 --------------------------------------------------------------------------------
 */
 
-#define GSOAP_VERSION 208131
+#define GSOAP_VERSION 208132
 
 #ifdef WITH_SOAPDEFS_H
 # include "soapdefs.h"          /* include user-defined stuff in soapdefs.h */
@@ -2414,10 +2414,12 @@ struct SOAP_CMAC soap_dom_attribute
   soap_dom_attribute(struct soap *soap, const char *ns, const char *tag, const wchar_t *str);
   soap_dom_attribute(struct soap *soap, const char *ns, const wchar_t *tag, const char *str);
   soap_dom_attribute(struct soap *soap, const char *ns, const wchar_t *tag, const wchar_t *str);
+#ifndef WITH_COMPAT
   soap_dom_attribute(struct soap *soap, const char *ns, const char *tag, const std::string& str);
   soap_dom_attribute(struct soap *soap, const char *ns, const char *tag, const std::wstring& str);
   soap_dom_attribute(struct soap *soap, const char *ns, const wchar_t *tag, const std::string& str);
   soap_dom_attribute(struct soap *soap, const char *ns, const wchar_t *tag, const std::wstring& str);
+#endif
   ~soap_dom_attribute();
   soap_dom_attribute& set(const char *ns, const char *tag)      { return *soap_att_set(this, ns, tag); }
   soap_dom_attribute& set(const char *ns, const wchar_t *tag)   { return *soap_att_set_w(this, ns, tag); }

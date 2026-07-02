@@ -106,58 +106,58 @@ private:
 	bool init(int recv_timeout, int send_timeout, int connect_timeout, short mustUnderstand);
 
 	// CCMovelSign
-	_ns2__CCMovelSign *get_CCMovelSignRequest(soap *sp, std::string in_applicationID, std::string *docName,
+	_ns1__CCMovelSign *get_CCMovelSignRequest(soap *sp, std::string in_applicationID, std::string *docName,
 											  unsigned char *in_hash, std::string *in_pin, std::string *in_userId,
 											  bool *IsBiometricValidationEnable);
 
-	int checkCCMovelSignResponse(_ns2__CCMovelSignResponse *response);
+	int checkCCMovelSignResponse(_ns1__CCMovelSignResponse *response);
 
 	// CCMovelMultipleSign
-	_ns2__CCMovelMultipleSign *
+	_ns1__CCMovelMultipleSign *
 	get_CCMovelMultipleSignRequest(soap *sp, std::string in_applicationID, std::vector<std::string *> docNames,
 								   std::vector<unsigned char *> in_hashes, std::vector<std::string *> ids,
 								   std::string *in_pin, std::string *in_userId, bool *IsBiometricValidationEnable);
 
-	int checkCCMovelMultipleSignResponse(_ns2__CCMovelMultipleSignResponse *response);
+	int checkCCMovelMultipleSignResponse(_ns1__CCMovelMultipleSignResponse *response);
 
 	// ValidateOtp
 	int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::vector<unsigned char *> *outSignature,
 					std::vector<unsigned int> *outSignatureLen, bool isBiometric);
 	int ValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, std::string *outCertificate, bool isBiometric);
 
-	int sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns2__ValidateOtpResponse &response,
+	int sendValidateOtp(CMDProxyInfo proxyInfo, std::string in_code, _ns1__ValidateOtpResponse &response,
 						bool isBiometric);
 
-	_ns2__ValidateOtp *get_ValidateOtpRequest(soap *sp, std::string in_applicationID, std::string *in_code,
+	_ns1__ValidateOtp *get_ValidateOtpRequest(soap *sp, std::string in_applicationID, std::string *in_code,
 											  std::string *in_processId, bool *isBiometric);
 
-	int checkValidateOtpResponse(_ns2__ValidateOtpResponse *response);
+	int checkValidateOtpResponse(_ns1__ValidateOtpResponse *response);
 
 	// GetCertificate
-	_ns2__GetCertificate *get_GetCertificateRequest(soap *sp, std::string in_applicationID, std::string *in_userId);
+	_ns1__GetCertificate *get_GetCertificateRequest(soap *sp, std::string in_applicationID, std::string *in_userId);
 
-	int checkGetCertificateResponse(_ns2__GetCertificateResponse *response);
+	int checkGetCertificateResponse(_ns1__GetCertificateResponse *response);
 	int GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, char **out_certificate, int *out_certificateLen);
 
 	// GetCertificateWithPin
-	_ns2__GetCertificateWithPin *get_GetCertificateWithPinRequest(soap *sp, std::string in_applicationID,
+	_ns1__GetCertificateWithPin *get_GetCertificateWithPinRequest(soap *sp, std::string in_applicationID,
 																  std::string *in_userId, std::string *in_pin);
 
-	int checkGetCertificateWithPinResponse(_ns2__GetCertificateWithPinResponse *response);
+	int checkGetCertificateWithPinResponse(_ns1__GetCertificateWithPinResponse *response);
 
 	// ForceSMS
-	int checkForceSmsResponse(_ns2__ForceSMSResponse *response);
+	int checkForceSmsResponse(_ns1__ForceSMSResponse *response);
 
 	// SignatureDocumentPooling
-	_ns2__SignDocumentPooling *get_SignDocumentPoolingRequest(soap *sp, std::string in_applicationID,
+	_ns1__SignDocumentPooling *get_SignDocumentPoolingRequest(soap *sp, std::string in_applicationID,
 															  std::string *in_processId);
 
 	int signatureDocumentPooling(CMDProxyInfo proxyInfo, std::vector<unsigned char *> *outSignature,
 								 std::vector<unsigned int> *outSignatureLen);
 
-	int sendSignatureDocumentPooling(CMDProxyInfo proxyInfo, _ns2__SignDocumentPoolingResponse &response);
+	int sendSignatureDocumentPooling(CMDProxyInfo proxyInfo, _ns1__SignDocumentPoolingResponse &response);
 
-	int checkSignatureDocumentPoolingResponse(_ns2__SignDocumentPoolingResponse *response);
+	int checkSignatureDocumentPoolingResponse(_ns1__SignDocumentPoolingResponse *response);
 };
 
 } // namespace eIDMW
