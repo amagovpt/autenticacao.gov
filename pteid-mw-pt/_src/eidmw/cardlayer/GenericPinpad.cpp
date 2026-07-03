@@ -134,8 +134,13 @@ CByteArray GenericPinpad::PinCmd(tPinOperation operation, const tPin &pin, unsig
 		oResp = PinCmd2(operation, pin, ucPinType, oAPDU, ulRemaining, wndGeometry);
 
 	if (oResp.Size() != 2) {
-		MWLOG(LEV_ERROR, MOD_CAL, "Pinpad reader returned: %s", oResp.ToString().c_str());
-		return EIDMW_ERR_UNKNOWN; // should never happen
+		if (oResp.Size() > 0) {
+			MWLOG(LEV_ERROR, MOD_CAL, "Pinpad reader returned: %s", oResp.ToString().c_str());
+		} else {
+			//Currently happens on macOS with default reader driver
+			MWLOG(LEV_ERROR, MOD_CAL, "Pinpad reader returned empty buffer");
+		}
+		throw CMWEXCEPTION(EIDMW_ERR_PINPAD);
 	}
 
 	return oResp;
@@ -275,10 +280,13 @@ CByteArray GenericPinpad::PinpadControl(unsigned long ulControl, const CByteArra
 	try {
 		oResp = m_poContext->m_oCardInterface->Control(m_hCard, ulControl, oCmd);
 
-		// give some time for the dialog process to fork() (it was killing too fast :-) )
-		unsigned long ulSW12 = 256 * oResp.GetByte(oResp.Size() - 2) + oResp.GetByte(oResp.Size() - 1);
-		if (ulSW12 == 0x6B80)
-			CThread::SleepMillisecs(500);
+		if (oResp.Size() >= 2) {
+			// give some time for the dialog process to fork() (it was killing too fast :-) )
+			unsigned long ulSW12 = 256 * oResp.GetByte(oResp.Size() - 2) + oResp.GetByte(oResp.Size() - 1);
+			// Status code 6B 80 means the reader rejected the command: "Invalid parameter in passed structure" according to pcsc10_v2.02.09
+			if (ulSW12 == 0x6B80)
+				CThread::SleepMillisecs(500);
+		}
 
 	} catch (...) {
 		if (showDlg)
