@@ -947,33 +947,6 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 	}
 }
 
-void eIDMW::CallQTServer(const DlgFunctionIndex index, const char *csFilename, void *wndGeometry) {
-	char csCommand[150];
-	Type_WndGeometry *pWndGeometry = (Type_WndGeometry *)wndGeometry;
-
-	std::string csServerPath = STRINGIFY(EIDMW_PREFIX) "/bin/";
-#ifdef __APPLE__
-	csServerPath += "pteiddialogsQTsrv.app/Contents/MacOS/";
-#endif
-
-	sprintf(csCommand, "%s/%s %i %s", csServerPath.c_str(), csServerName.c_str(), index, csFilename);
-
-	if ((pWndGeometry != NULL) && (pWndGeometry->x >= 0) && (pWndGeometry->y >= 0) && (pWndGeometry->width >= 0) &&
-		(pWndGeometry->height >= 0)) {
-		int len = strlen(csCommand);
-		sprintf(&csCommand[len], " %i %i %i %i", pWndGeometry->x, pWndGeometry->y, pWndGeometry->width,
-				pWndGeometry->height);
-	}
-
-	int code = system(csCommand);
-	if (code != 0) {
-		MWLOG(g_bSystemCallsFail ? LEV_WARN : LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServer %i %s : %s ", index,
-			  csFilename, strerror(errno));
-		if (!g_bSystemCallsFail)
-			throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
-	}
-	return;
-}
 bool eIDMW::getWndCenterPos(Type_WndGeometry *pWndGeometry, int desktop_width, int desktop_height, int wnd_width,
 							int wnd_height, Type_WndGeometry *outWndGeometry) {
 
