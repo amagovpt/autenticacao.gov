@@ -182,7 +182,7 @@ int CMDSignature::cli_getCertificate(std::string in_userId) {
 	return ERR_NONE;
 }
 
-int CMDSignature::cli_sendDataToSign(std::string in_pin) {
+int CMDSignature::cli_sendDataToSign(std::string in_pin, const std::string &certificateNumber) {
 	// Verifies if the handlers are empty. If they are 0
 	if (m_pdf_handlers.empty() && m_array_handler.Size() == 0) {
 		MWLOG_ERR("NULL handler");
@@ -283,7 +283,7 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin) {
 
 	int ret;
 	if (m_pdf_handlers.size() == 1 || m_array_handler.Size() > 0)
-		ret = cmdService->ccMovelSign(m_proxyInfo, signatureInputsBytes[0], signDocNames[0], userPin);
+		ret = cmdService->ccMovelSign(m_proxyInfo, signatureInputsBytes[0], signDocNames[0], userPin, true, certificateNumber);
 	else
 		ret = cmdService->ccMovelMultipleSign(m_proxyInfo, signatureInputsBytes, signDocNames, userPin);
 
@@ -299,7 +299,7 @@ int CMDSignature::cli_sendDataToSign(std::string in_pin) {
 }
 
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::string docname, std::string *mobileNumber,
-						   const char *userName) {
+						   const char *userName, const std::string &certificateNumber) {
 	std::string mobile, pin;
 
 	if (mobileNumber) {
@@ -333,7 +333,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::str
 	}
 	try {
 		// Sends the signOpen
-		int result = signOpen(proxyinfo, mobile, pin, in_hash, docname);
+		int result = signOpen(proxyinfo, mobile, pin, in_hash, docname, certificateNumber);
 		// After signOpen has a response then, the progress dialog is stopped.
 		if (m_showProgressDialog) {
 			progressDlgThread.Stop();
@@ -353,7 +353,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::str
 }
 
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, const char *location, const char *reason, const char *outfile_path,
-						   std::string *mobileCache) {
+						   std::string *mobileCache, const std::string &certificateNumber) {
 	std::string mobile, pin;
 	if (mobileCache) {
 		mobile.append(*mobileCache);
@@ -374,7 +374,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, const char *location, const c
 	CMDProgressDlgThread progressDlgThread(DlgCmdOperation::DLG_CMD_SIGNATURE, false, &cancelRequestCallback);
 	progressDlgThread.Start();
 	try {
-		int result = signOpen(proxyinfo, mobile, pin, location, reason, outfile_path);
+		int result = signOpen(proxyinfo, mobile, pin, location, reason, outfile_path, certificateNumber);
 
 		if (progressDlgThread.wasCancelled())
 			return ERR_OP_CANCELLED;
@@ -390,15 +390,15 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, const char *location, const c
 }
 
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, CByteArray &in_hash,
-						   std::string docname) {
+						   std::string docname, const std::string &certificateNumber) {
 	set_string_handler(docname, in_hash);
 	clear_pdf_handlers();
 	m_computeHash = false;
-	return signOpen(proxyinfo, in_userId, in_pin, NULL, NULL, NULL);
+	return signOpen(proxyinfo, in_userId, in_pin, NULL, NULL, NULL, certificateNumber);
 }
 
 int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, const char *location,
-						   const char *reason, const char *outfile_path) {
+						   const char *reason, const char *outfile_path, const std::string &certificateNumber) {
 	m_userId = in_userId;
 	// Deletes cmdService if it exists
 	if (cmdService) {
@@ -457,7 +457,7 @@ int CMDSignature::signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::s
 		}
 	}
 	MWLOG(LEV_DEBUG, MOD_CMD, L"Requesting CCMovelSign endpoint");
-	ret = cli_sendDataToSign(in_pin);
+	ret = cli_sendDataToSign(in_pin, certificateNumber);
 	return ret;
 }
 

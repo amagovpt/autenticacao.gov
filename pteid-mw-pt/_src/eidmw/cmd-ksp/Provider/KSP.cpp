@@ -1340,6 +1340,39 @@ bool validateInputHash(DWORD hash_len) {
 	return hash_len == SHA256_LEN;
 }
 
+/* Converts a certificate serial number (CRYPT_INTEGER_BLOB, stored little-endian) to its decimal string
+   representation, since CertGetCertificateContextProperty/CertNameToStr only expose it as hex. */
+static std::string getCertificateSerialNumberDecimal(PCCERT_CONTEXT pCert) {
+	CRYPT_INTEGER_BLOB &serialNumber = pCert->pCertInfo->SerialNumber;
+
+	std::vector<unsigned char> bigEndianBytes(serialNumber.pbData, serialNumber.pbData + serialNumber.cbData);
+	std::reverse(bigEndianBytes.begin(), bigEndianBytes.end());
+
+	std::vector<unsigned char> decimalDigits(1, 0); // least significant digit first
+	for (unsigned char byteValue : bigEndianBytes) {
+		int carry = byteValue;
+		for (size_t i = 0; i < decimalDigits.size(); i++) {
+			int value = decimalDigits[i] * 256 + carry;
+			decimalDigits[i] = value % 10;
+			carry = value / 10;
+		}
+		while (carry > 0) {
+			decimalDigits.push_back(carry % 10);
+			carry /= 10;
+		}
+	}
+
+	while (decimalDigits.size() > 1 && decimalDigits.back() == 0)
+		decimalDigits.pop_back();
+
+	std::string result;
+	result.reserve(decimalDigits.size());
+	for (auto it = decimalDigits.rbegin(); it != decimalDigits.rend(); ++it)
+		result.push_back('0' + *it);
+
+	return result;
+}
+
 /******************************************************************************
  * DESCRIPTION :  creates a signature of a hash value.
  *
@@ -1486,10 +1519,14 @@ KSPSignHash(__in NCRYPT_PROV_HANDLE hProvider, __in NCRYPT_KEY_HANDLE hKey, __in
 		char docnameBuffer[DOCNAME_BUFFER_SIZE];
 		getDocName(pKey->hWnd, pKey->pszProcessBaseName, docnameBuffer, DOCNAME_BUFFER_SIZE, pbHashValue, cbHashValue);
 
+		std::string certificateSerialNumber = getCertificateSerialNumberDecimal(pKey->pCert);
+		MWLOG_ERR(logBuf, "Using this certificate, serial number: %s", certificateSerialNumber.c_str());
+
 		CByteArray signature;
 		try {
 			CMDSignatureClient cmdClient;
-			signature = cmdClient.Sign(hashBytes, true, docnameBuffer, registeredMobileNumber.c_str(), csSubject);
+			signature = cmdClient.Sign(hashBytes, true, docnameBuffer, registeredMobileNumber.c_str(), csSubject,
+										certificateSerialNumber.c_str());
 		} catch (CMWException &e) {
 			handleErrorAndShowDlg(isProxySet, e.GetError(), &Status);
 			goto cleanup;

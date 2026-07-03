@@ -43,7 +43,7 @@ public:
 			indicate the mobile and user name associated with the certificate. Only Windows (for the KSP). It overrides
 	  mobile cache. */
 	PTEIDCMD_API CByteArray Sign(const CByteArray &data, bool signatureKey = false, const char *docname = NULL,
-								 const char *mobileNumber = NULL, const char *userName = NULL);
+								 const char *mobileNumber = NULL, const char *userName = NULL, const char *certificateNumber = "");
 	PTEIDCMD_API CByteArray SignXades(const char *output_path, const char *const *paths, unsigned int n_paths,
 									   APL_SignatureLevel level);
 	PTEIDCMD_API void SignXadesIndividual(const char *output_path, const char *const *paths, unsigned int n_paths);

@@ -446,7 +446,7 @@ int CMDServices::GetCertificate(CMDProxyInfo proxyInfo, std::string in_userId, c
  ********************************************************* */
 _ns1__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp, std::string in_applicationID, std::string *docName,
 													   unsigned char *in_hash, std::string *in_pin,
-													   std::string *in_userId, bool *IsBiometricValidationEnable) {
+													   std::string *in_userId, bool *IsBiometricValidationEnable, std::string *certificateNumber) {
 	// SOAP_ENV__Header *soapHeader = soap_new_SOAP_ENV__Header( sp );
 	// soapHeader->wsa__To = endpoint;
 
@@ -464,6 +464,7 @@ _ns1__CCMovelSign *CMDServices::get_CCMovelSignRequest(soap *sp, std::string in_
 	soapBody->Pin = in_pin;
 	soapBody->UserId = in_userId;
 	soapBody->DocName = docName;
+	soapBody->CertificateSerialNumber = certificateNumber;
 
 	soapBody->IsBiometricValidationEnable = IsBiometricValidationEnable;
 
@@ -503,8 +504,8 @@ int CMDServices::checkCCMovelSignResponse(_ns1__CCMovelSignResponse *response) {
  ***    CMDServices::CCMovelSign()                     ***
  ********************************************************* */
 int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std::string docName, std::string in_pin,
-							 bool IsBiometricValidationEnable) {
-	std::lock_guard<std::mutex> lock(m_soap_mutex);
+							 bool IsBiometricValidationEnable, std::string certificateNumber) {
+
 	soap *sp = getSoap();
 	if (sp == NULL) {
 		MWLOG_ERR("Null soap");
@@ -541,7 +542,7 @@ int CMDServices::ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std
 		Get CCMovelSign request
 	*/
 	_ns1__CCMovelSign *send = get_CCMovelSignRequest(sp, getApplicationID(), &docName, in_hash, &in_pin, &in_userId,
-													 &IsBiometricValidationEnable);
+													 &IsBiometricValidationEnable, certificateNumber.empty() ? NULL : &certificateNumber);
 	if (send == NULL) {
 		MWLOG_ERR("NULL send parameters");
 		return ERR_NULL_HANDLER;

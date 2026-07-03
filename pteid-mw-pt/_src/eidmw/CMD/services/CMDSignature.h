@@ -58,15 +58,15 @@ public:
 	// proxyinfo parameter is saved in m_proxyInfo so that we can reuse it later in signClose()
 	// signOpen used to sign hash
 	PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, CByteArray &in_hash,
-							  std::string docname);
+							  std::string docname, const std::string &certificateNumber = "");
 	PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, CByteArray &in_hash, std::string docname,
-							  std::string *mobile = NULL, const char *userName = NULL);
+							  std::string *mobile = NULL, const char *userName = NULL, const std::string &certificateNumber = "");
 	// this signOpen should be used to sign PDFs
 	PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, std::string in_userId, std::string in_pin, const char *location,
-							  const char *reason, const char *outfile_path);
+							  const char *reason, const char *outfile_path, const std::string &certificateNumber);
 	PTEIDCMD_API int signOpen(CMDProxyInfo proxyinfo, const char *location, const char *reason,
 							  const char *outfile_path,
-							  std::string *mobileCache = NULL); // mobileNumber used for placeholder (cache)
+							  std::string *mobileCache = NULL, const std::string &certificateNumber = ""); // mobileNumber used for placeholder (cache)
 
 	PTEIDCMD_API int signClose();
 	PTEIDCMD_API int signClose(std::string in_code);
@@ -104,8 +104,8 @@ private:
 	bool m_showProgressDialog = true;
 	CMDProxyInfo m_proxyInfo;
 	int cli_getCertificate(std::string in_userId);
-	int cli_sendDataToSign(std::string in_pin);
-	// Get Signatures used
+	int cli_sendDataToSign(std::string in_pin, const std::string &certificateNumber = "");
+	// Get Signatures used 
 	int cli_getSignatures(std::vector<CByteArray *> out_sign, std::string in_code = "");
 
 	std::string m_basicAuthUser;

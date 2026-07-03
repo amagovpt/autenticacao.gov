@@ -54,7 +54,7 @@ public:
 
 	// CCMovelSign
 	int ccMovelSign(CMDProxyInfo proxyInfo, unsigned char *in_hash, std::string docName, std::string in_pin,
-					bool IsBiometricValidationEnable = true);
+					bool IsBiometricValidationEnable = true, std::string certificateNumber = "");
 
 	// CCMovelMultipleSign
 	int ccMovelMultipleSign(CMDProxyInfo proxyInfo, std::vector<unsigned char *> in_hashs,
@@ -108,7 +108,7 @@ private:
 	// CCMovelSign
 	_ns1__CCMovelSign *get_CCMovelSignRequest(soap *sp, std::string in_applicationID, std::string *docName,
 											  unsigned char *in_hash, std::string *in_pin, std::string *in_userId,
-											  bool *IsBiometricValidationEnable);
+											  bool *IsBiometricValidationEnable, std::string *certificateNumber);
 
 	int checkCCMovelSignResponse(_ns1__CCMovelSignResponse *response);
 

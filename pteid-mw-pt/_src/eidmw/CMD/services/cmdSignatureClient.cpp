@@ -52,7 +52,7 @@ bool CMDSignatureClient::shouldShowProgressDialogs() {
 }
 
 CByteArray CMDSignatureClient::Sign(const CByteArray &data, bool signatureKey, const char *docname,
-									const char *mobileNumber, const char *userName) {
+									const char *mobileNumber, const char *userName, const char *certificateNumber) {
 	if (!signatureKey) {
 		MWLOG(LEV_ERROR, MOD_CMD, "CMDSignatureClient::Sign: only signature key is supported.");
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_BAD);
@@ -88,9 +88,9 @@ CByteArray CMDSignatureClient::Sign(const CByteArray &data, bool signatureKey, c
 
 	int ret;
 	if (!m_mobileNumber.empty() && !m_pin.empty()) {
-		ret = cmdSignature.signOpen(cmd_proxyinfo, m_mobileNumber, m_pin, cData, docId);
+		ret = cmdSignature.signOpen(cmd_proxyinfo, m_mobileNumber, m_pin, cData, docId, certificateNumber);
 	} else {
-		ret = cmdSignature.signOpen(cmd_proxyinfo, cData, docId.c_str(), mobile, userName);
+		ret = cmdSignature.signOpen(cmd_proxyinfo, cData, docId.c_str(), mobile, userName, certificateNumber);
 	}
 	handleErrorCode(ret, false);
 
