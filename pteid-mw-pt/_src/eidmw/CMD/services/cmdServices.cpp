@@ -486,14 +486,18 @@ int CMDServices::checkCCMovelSignResponse(_ns1__CCMovelSignResponse *response) {
 		return ERR_NULL_DATA;
 	}
 
-	if (response->CCMovelSignResult->Code == NULL) {
-		MWLOG_ERR("Null Code in CCMovelSignResult");
-		return ERR_NULL_DATA;
-	}
-
 	int statusCode = atoi(response->CCMovelSignResult->Code->c_str());
 	if (IS_SOAP_ERROR(statusCode)) {
-		MWLOG_ERR("CCMovelSignResult SOAP Error Code %d", statusCode);
+		if (!response->CCMovelSignResult->Message->empty()) {
+			MWLOG_ERR("CCMovelSignResult SOAP Error Code %d: %s", statusCode,
+					  response->CCMovelSignResult->Message->c_str());
+		} else {
+			MWLOG_ERR("CCMovelSignResult SOAP Error Code %d", statusCode);
+		}
+
+		if (statusCode == SOAP_ERR_CERTIFICATE_PROCESSING || statusCode == SOAP_ERR_INVALID_CERTIFICATE_SERIAL_NUMBER) {
+			return ERR_INVALID_CERTIFICATE;
+		}
 		return statusCode;
 	}
 

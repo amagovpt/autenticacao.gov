@@ -1316,8 +1316,10 @@ void handleErrorAndShowDlg(bool proxyUsed, int error, SECURITY_STATUS *hStatus) 
 		msg += GETSTRING_DLG(RegisterCertificateAgain);
 		*hStatus = NTE_KEYSET_ENTRY_BAD;
 		break;
+	case EIDMW_ERR_CMD_INVALID_CERTIFICATE:
 	case ERR_FAILED_SIGN_VERIFICATION:
 		msg += GETSTRING_DLG(VerifySignatureFailed);
+		*hStatus = NTE_KEYSET_ENTRY_BAD;
 		break;
 
 	default:
