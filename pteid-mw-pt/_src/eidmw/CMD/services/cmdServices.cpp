@@ -98,7 +98,7 @@ public:
 int handleCommunicationError(BasicHttpBinding_USCORECCMovelSignatureProxy proxy, int &ret) {
 	if (ret != SOAP_OK) {
 		if ((proxy.soap_fault() != NULL) && (proxy.soap_fault()->faultstring)) {
-			MWLOG_ERR("SOAP Fault! %s", proxy.soap_fault()->faultstring);
+			MWLOG_ERR("SOAP Fault! Code: %d, %s", proxy.soap->status, proxy.soap_fault()->faultstring);
 		} else {
 			MWLOG_ERR("Unknown SOAP Fault! - ret: %d", ret);
 		}
