@@ -76,8 +76,8 @@ void BasicHttpBinding_USCORECCMovelSignatureProxy::BasicHttpBinding_USCORECCMove
 	soap_omode(this->soap, omode);
 	soap_endpoint = NULL;
 	static const struct Namespace namespaces[] = {
-        { "SOAP-ENV", "http://www.w3.org/2003/05/soap-envelope", "http://schemas.xmlsoap.org/soap/envelope/", NULL },
-        { "SOAP-ENC", "http://www.w3.org/2003/05/soap-encoding", "http://schemas.xmlsoap.org/soap/encoding/", NULL },
+        { "SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/", "http://schemas.xmlsoap.org/soap/envelope/", NULL },
+        { "SOAP-ENC", "http://schemas.xmlsoap.org/soap/encoding/", "http://schemas.xmlsoap.org/soap/encoding/", NULL },
         { "xsi", "http://www.w3.org/2001/XMLSchema-instance", "http://www.w3.org/*/XMLSchema-instance", NULL },
         { "xsd", "http://www.w3.org/2001/XMLSchema", "http://www.w3.org/*/XMLSchema", NULL },
         { "ns2", "http://schemas.datacontract.org/2004/07/Ama.Structures.CCMovelSignature", NULL, NULL },
