@@ -495,9 +495,6 @@ int CMDServices::checkCCMovelSignResponse(_ns1__CCMovelSignResponse *response) {
 			MWLOG_ERR("CCMovelSignResult SOAP Error Code %d", statusCode);
 		}
 
-		if (statusCode == SOAP_ERR_CERTIFICATE_PROCESSING || statusCode == SOAP_ERR_INVALID_CERTIFICATE_SERIAL_NUMBER) {
-			return ERR_INVALID_CERTIFICATE;
-		}
 		return statusCode;
 	}
 
@@ -793,6 +790,10 @@ int CMDServices::checkValidateOtpResponse(_ns1__ValidateOtpResponse *response) {
 		return ERR_INV_DATA;
 	}
 
+	if (statusCode == SOAP_ERR_CERTIFICATE_PROCESSING || statusCode == SOAP_ERR_INVALID_CERTIFICATE_SERIAL_NUMBER) {
+		return ERR_INVALID_CERTIFICATE;
+	}
+
 	if (IS_SOAP_ERROR(statusCode)) {
 		MWLOG_ERR("Error Status Code");
 		return statusCode;
@@ -900,6 +901,10 @@ int CMDServices::checkSignatureDocumentPoolingResponse(_ns1__SignDocumentPooling
 	if (statusCode == 0) {
 		MWLOG_ERR("Status Code is not a valid code");
 		return ERR_INV_DATA;
+	}
+
+	if (statusCode == SOAP_ERR_CERTIFICATE_PROCESSING || statusCode == SOAP_ERR_INVALID_CERTIFICATE_SERIAL_NUMBER) {
+		return ERR_INVALID_CERTIFICATE;
 	}
 
 	if (IS_SOAP_ERROR(statusCode)) {
