@@ -344,7 +344,7 @@ void CMDSignatureClient::handleErrorCode(int err, bool isOtp) {
 		case ERR_INVALID_CERTIFICATE:
 			MWLOG(LEV_ERROR, MOD_CMD, "%s: CMD certificate processing error or invalid certificate serial number.",
 				  __FUNCTION__);
-			throw CMWEXCEPTION(EIDMW_ERR_CMD_INVALID_CERTIFICATE);
+			throw CMWEXCEPTION(EIDMW_ERR_CMD_INVALID_STORED_CERTIFICATE);
 		default:
 			if (err > ERR_ADDR_CMD_BASE + 200) {
 				MWLOG(LEV_ERROR, MOD_CMD, "%s: HTTP service Error code %d.", __FUNCTION__, err - ERR_ADDR_CMD_BASE);
