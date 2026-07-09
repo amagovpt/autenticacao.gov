@@ -1288,10 +1288,7 @@ int CMDServices::getSignatures(CMDProxyInfo proxyInfo, std::vector<CByteArray *>
 		sign.push_back(NULL);
 	}
 
-	// Creates a request name to use for the logs
 	MWLOG(LEV_DEBUG, MOD_CMD, "Requesting SignatureDocumentPooling endpoint");
-	// If isOTP is true, then a ValidateOTP SOAP request will be sent. If isOTP is false, then a
-	// signatureDocumentPooling SOAP request will be sent.
 	int ret = signatureDocumentPooling(proxyInfo, &sign, &signLen);
 	if (ret != ERR_NONE) {
 		MWLOG_DEBUG("Signature with biometric validation: not ready yet");
