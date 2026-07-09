@@ -441,18 +441,12 @@ DLGS_EXPORT DlgRet eIDMW::DlgAskPin(DlgPinOperation operation, DlgPinUsage usage
 		oData.pinInfo = pinInfo;
 		wcscpy_s(oData.pin, sizeof(oData.pin) / sizeof(wchar_t), wsPin);
 
-		MWLOG(LEV_DEBUG, MOD_DLG, "eIDMW::DlgAskPin print debug before call qt");
 		CallQTServerPipe(DLG_ASK_PIN, readAskPinArguments, writeAskPinArguments, (void *)&oData, wndGeometry);
-		MWLOG(LEV_DEBUG, MOD_DLG, "eIDMW::DlgAskPin print debug after call qt");
 		lRet = oData.returnValue;
 
 		if (lRet == DLG_OK) {
 			wcscpy_s(wsPin, ulPinBufferLen, oData.pin);
 		}
-
-		// detach from the segment
-
-		// delete the random file
 	} catch (...) {
 
 		return DLG_ERR;
