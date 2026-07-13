@@ -845,6 +845,8 @@ ScapResult<void> ScapClient::sign(PTEID_SigningDevice *device, const PDFSignatur
 	} else if (status == SCAP_TRANSACTION_OR_TOTP_ERROR) {
 		clean_up_temp_documents(documents);
 		std::string code_descr = get_response_code_description(response.response);
+		MWLOG(LEV_ERROR, MOD_SCAP, "signHashAuthorization: Error code %d with description: %s",
+			  SCAP_TRANSACTION_OR_TOTP_ERROR, code_descr.c_str());
 
 		if (code_descr.compare(SCAP_INVALID_TOTP_CODE_DESCR) == 0) {
 			if (!validate_local_clock(response)) {
