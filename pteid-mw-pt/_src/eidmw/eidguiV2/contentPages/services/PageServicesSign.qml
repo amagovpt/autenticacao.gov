@@ -1412,7 +1412,7 @@ PageServicesSignForm {
     Dialog {
         id: signsuccess_dialog
         width: 400
-        height: 220
+        height: titleText.height + rectPopUp.height + Constants.SIZE_ROW_V_SPACE + bottomDialog.height + Constants.SIZE_ROW_V_SPACE * 3
         visible: false
         font.family: lato.name
         modal: true
@@ -1444,8 +1444,7 @@ PageServicesSignForm {
         Item {
             id: rectPopUp
             width: signsuccess_dialog.availableWidth
-            height: 50
-
+            height: rectLabelText.height
             Keys.enabled: true
             Keys.onPressed: {
                 if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return || event.key===Qt.Key_Space) {
@@ -1465,7 +1464,10 @@ PageServicesSignForm {
             Item {
                 id: rectLabelText
                 width: parent.width
-                height: childRect.height
+                height: labelText.height + labelOpenText.height + Constants.SIZE_ROW_V_SPACE
+                        + (labelClickOnVerifySign.visible
+                           ? (labelClickOnVerifySign.height + verifySignLinkSigned.height + Constants.SIZE_ROW_V_SPACE * 2)
+                           : 0)
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: labelText
@@ -1507,7 +1509,7 @@ PageServicesSignForm {
                     color: Constants.COLOR_TEXT_LABEL
                     wrapMode: Text.Wrap
 
-                    anchors.top: labelClickOnVerifySign.text == "" ? parent.top : labelText.bottom
+                    anchors.top: labelClickOnVerifySign.text == "" ? parent.top : labelOpenText.bottom
                     anchors.topMargin: labelClickOnVerifySign.text == "" ? 0 : Constants.SIZE_ROW_V_SPACE
                 }
 
@@ -1540,9 +1542,11 @@ PageServicesSignForm {
         }
 
         Item {
+            id: bottomDialog
             width: signsuccess_dialog.availableWidth
             height: Constants.HEIGHT_BOTTOM_COMPONENT
-            y: 100
+            anchors.top: rectPopUp.bottom
+            anchors.topMargin: Constants.SIZE_ROW_V_SPACE
             Item {
                 width: parent.width
                 height: Constants.HEIGHT_BOTTOM_COMPONENT
