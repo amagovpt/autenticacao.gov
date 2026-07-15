@@ -91,6 +91,7 @@ private:
 	std::string m_szDefaultReaderName;
 	unsigned long m_ulReaderCount;
 	CReader *m_tpReaders[MAX_READERS];
+	bool m_isCardInterfacePCSC;
 };
 
 } // namespace eIDMW

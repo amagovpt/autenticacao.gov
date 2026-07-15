@@ -36,6 +36,7 @@ CCardLayer::CCardLayer(void) : m_contextVec(MAX_READERS) {
 
 #ifdef __USE_PCSC__
 	m_cardInterface = std::make_shared<CPCSC>();
+	m_isCardInterfacePCSC = true;
 #else
 	MWLOG(LEV_ERROR, MOD_CAL, "CCardLayer: no card interface available. SDK compiled without PCSC support (USE_PCSC=OFF)");
 	throw CMWEXCEPTION(EIDMW_ERR_NOT_SUPPORTED);
@@ -54,6 +55,7 @@ CCardLayer::CCardLayer(const PTEID_CardInterfaceCallbacks *callbacks) : m_contex
 		m_cardInterface = std::make_shared<CPCSC>();
 #endif
 	}
+	m_isCardInterfacePCSC = (callbacks == NULL);
 }
 
 CCardLayer::~CCardLayer(void) {
@@ -142,8 +144,9 @@ CReader &CCardLayer::getReader(const std::string &csReaderName) {
 		for (unsigned long i = 0; i < MAX_READERS; i++) {
 			if (m_tpReaders[i] == NULL) {
 #ifdef __USE_PCSC__
-				std::shared_ptr<CPCSC> readerInterface = std::make_shared<CPCSC>();
-				std::unique_ptr<CContext> contextReader = std::make_unique<CContext>(readerInterface);
+				//For PCSC option create a new CPCSC context so that internally we keep one SCARDCONTEXT per-reader
+				std::unique_ptr<CContext> contextReader = m_isCardInterfacePCSC ? std::make_unique<CContext>(std::make_shared<CPCSC>()) :
+					                                     std::make_unique<CContext>(m_cardInterface);
 #else
 				std::unique_ptr<CContext> contextReader = std::make_unique<CContext>(m_cardInterface);
 #endif
