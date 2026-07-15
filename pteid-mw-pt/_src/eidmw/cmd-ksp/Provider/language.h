@@ -39,8 +39,11 @@ DEFINE_LANG_STR(NoCMDCredentials) = {L"The Citizen Card Middleware installed doe
 									 L"Obtenha um instalador oficial em https://www.autenticacao.gov.pt.",
 									 L"", L""};
 DEFINE_LANG_STR(ValidatingCertificate) = {L"Validating certificate...", L"A validar certificado..."};
-DEFINE_LANG_STR(VerifySignatureFailed) = {L"Failed to create signature: please open Autenticação.gov and reinstall CMD signature certificate.", 
-																				L"Erro na criação da assinatura: por favor abra a aplicação Autenticação.gov e\nregiste de novo o certificado de assinatura da CMD." };
+DEFINE_LANG_STR(VerifySignatureFailed) = {
+	L"The signing certificate linked to your Digital Mobile Key is out of date. To update it, open the Autentica\u00e7\u00e3o.Gov app, go to \"Signatures configuration\" and select \"Register\".",
+	L"O certificado de assinatura associado \u00e0 sua Chave M\u00f3vel Digital est\u00e1 "
+	L"desatualizado. Para o atualizar, abra a app Autentica\u00e7\u00e3o.Gov, aceda a "
+	L"\"Configura\u00e7\u00e3o de assinaturas\" e clique em \"Registar\" "};
 } // namespace eIDMW
 
 #endif // __CMDKSP_LANGUAGE_H__

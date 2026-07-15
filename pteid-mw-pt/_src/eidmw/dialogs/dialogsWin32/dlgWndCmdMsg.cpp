@@ -47,8 +47,8 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType msgType, con
 
 	dlgResult = DLG_OK;
 
-	int Height = 360;
-	int Width = 430;
+	int Height = 400;
+	int Width = 480;
 
 	if (CreateWnd(tmpTitle.c_str(), Width, Height, IDI_APPICON, Parent)) {
 		RECT clientRect;
