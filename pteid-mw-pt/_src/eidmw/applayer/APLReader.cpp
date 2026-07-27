@@ -541,6 +541,12 @@ void CAppLayer::initializeAAContext() {
 			return;
 		}
 
+		// OBJ_create() fails with OID_EXISTS if the app layer was already initialized in this process
+		if (OBJ_txt2nid(oid_str) != NID_undef) {
+			ASN1_OBJECT_free(oid);
+			return;
+		}
+
 		auto created_nid = OBJ_create(oid_str, SN, LN);
 		if (created_nid == NID_undef) {
 			MWLOG(LEV_ERROR, MOD_APL, "Failed to create NID for %s", LN);
