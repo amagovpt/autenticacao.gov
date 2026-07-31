@@ -45,6 +45,7 @@ enum class ScapError {
 	invalid_attributes,
 	no_attributes,
 	incomplete_response,
+	file_not_opened,
 };
 
 template <class T> class ScapResult {

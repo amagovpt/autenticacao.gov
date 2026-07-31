@@ -413,6 +413,9 @@ static ScapError interpret_exception_code(const long code, const char *call) {
 	case EIDMW_ERR_CMD_SERVICE:
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s: cmd service generic error.", call);
 		return ScapError::sign_cmd_generic;
+	case EIDMW_FILE_NOT_OPENED:
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s:Failed to write output file, file is already open in another application", call);
+		return ScapError::file_not_opened;
 	default:
 		MWLOG(LEV_ERROR, MOD_SCAP, "%s: caught exception: %08lx.", call, code);
 		return ScapError::generic;

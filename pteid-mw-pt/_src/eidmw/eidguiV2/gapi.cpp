@@ -2783,6 +2783,8 @@ template <typename T> bool GAPI::handleScapError(const ScapResult<T> &result, bo
 		emit signalCacheNotReadable();
 	} else if (error == ScapError::cache_write_failure) {
 		emit signalCacheNotWritable();
+	} else if(error == ScapError::file_not_opened) {
+		emit signalPdfSignFail(SignFilePermissionFailed, -1);
 	} else {
 		emit signalSCAPServiceFail(ScapGenericError, isCompany);
 	}
