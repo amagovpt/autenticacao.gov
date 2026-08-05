@@ -211,7 +211,10 @@ bool CMDServices::init(int recv_timeout, int send_timeout, int connect_timeout, 
 /*  *********************************************************
  ***    CMDServices::cancelRequest()                   ***
  ********************************************************* */
-void CMDServices::cancelRequest() { soap_force_closesock(m_soap); }
+void CMDServices::cancelRequest() {
+	std::lock_guard<std::mutex> lock(m_soap_mutex);
+	soap_force_closesock(m_soap);
+}
 
 /*  *********************************************************
  ***    CMDServices::getSoap()                         ***
