@@ -454,6 +454,7 @@ PageDefinitionsSCAPForm {
                 font.pixelSize: Constants.SIZE_TEXT_FIELD
                 font.capitalization: Font.MixedCase
                 anchors.top: parent.top
+                checked: checkBoxAttr
                 onCheckedChanged: {
                     entityAttributesModel.get(index).checkBoxAttr = checkboxSel.checked
                     propertyButtonLoadEntityAttributes.enabled =
