@@ -165,5 +165,3 @@ modules:
         path: .
       - type: patch
         path: misc/flatpak-patches/dont-build-pteidlibj.patch
-      - type: patch
-        path: misc/flatpak-patches/dont-use-usrlocal.patch
