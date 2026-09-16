@@ -458,13 +458,13 @@ void CAppLayer::stopAllServices() {
 	// Stopping is made in the opposite order then starting
 	MWLOG(LEV_INFO, MOD_APL, L"Stop all applayer services");
 
+	delete m_certStatusCache;
+	releaseReaders();
+
 	if (m_cryptoFwk) {
 		delete m_cryptoFwk;
 		m_cryptoFwk = NULL;
 	}
-
-	delete m_certStatusCache;
-	releaseReaders();
 
 	if (m_Cal) {
 		// m_Cal->ForceRelease();  //No need => cause trouble
