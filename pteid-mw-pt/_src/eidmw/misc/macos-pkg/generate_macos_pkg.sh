@@ -100,6 +100,12 @@ cd $PKG_DIR
 cp -af $THIRD_PARTY_DEPS/fc-cache $BIN_BUNDLE_DIR
 rmdir_if_exists $BIN_BUNDLE_DIR/pteiddialogsQTsrv.app
 cp -af $BIN_DIR/pteiddialogsQTsrv.app $BIN_BUNDLE_DIR
+#Keep the helper's bundle identifier stable across upgrades, and give it the
+#release version so that crash reports show which build crashed
+HELPER_PLIST=$BIN_BUNDLE_DIR/pteiddialogsQTsrv.app/Contents/Info.plist
+plutil -replace CFBundleIdentifier -string pt.gov.pteiddialogsQTsrv $HELPER_PLIST
+plutil -replace CFBundleShortVersionString -string ${VERSION%.*} $HELPER_PLIST
+plutil -replace CFBundleVersion -string $VERSION $HELPER_PLIST
 cp -af $MISC_DIR/pteid_uninstall.sh $BIN_BUNDLE_DIR
 chmod +x $BIN_BUNDLE_DIR/pteid_uninstall.sh
 cd $BIN_BUNDLE_DIR
@@ -142,6 +148,8 @@ pkgbuild --filter '.*/change_paths.sh' --root system-libs --install-location /us
 pkgbuild --filter '.*/change_paths.sh' --root dialogs --install-location /usr/local/bin --component-plist dialogs/apps.plist --identifier pt.cartaodecidadao.bin --version $VERSION  --ownership recommended pkg/pteid-bin.pkg
 pkgbuild --filter '.*/change_paths.sh' --root apps --install-location /Applications --scripts pkg-scripts/ --component-plist apps.plist --identifier pt.cartaodecidadao.apps --version $VERSION  --ownership recommended pkg/pteid-apps.pkg
 pkgbuild --root certs --identifier pt.cartaodecidadao.certs --install-location /usr/local/share --version $VERSION --ownership recommended pkg/pteid-certs.pkg
+#Scripts-only package, installed first: removes what a previous version leaves behind
+pkgbuild --nopayload --scripts cleanup-scripts/ --identifier pt.cartaodecidadao.cleanup --version $VERSION pkg/cleanup.pkg
 
 productbuild --distribution distribution.xml --resources resources --package-path pkg --version $VERSION pteid-mw-$VERSION.pkg
 

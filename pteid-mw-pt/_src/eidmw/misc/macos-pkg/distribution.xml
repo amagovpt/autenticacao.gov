@@ -26,6 +26,8 @@
     <welcome    file="welcome.html"    mime-type="text/html" />
     <license    file="license.html"    mime-type="text/html" />
     <!-- List all component packages -->
+    <pkg-ref id="pt.cartaodecidadao.cleanup"
+             version="0">cleanup.pkg</pkg-ref>
     <pkg-ref id="pt.cartaodecidadao.lib"
              version="0"
              auth="root">pteid-lib.pkg</pkg-ref>
@@ -42,12 +44,18 @@
     <!-- List them again here. They can now be organized
          as a hierarchy if you want. -->
     <choices-outline>
+        <line choice="cleanup"/>
         <line choice="pt.cartaodecidadao.lib"/>
         <line choice="pt.cartaodecidadao.certs"/>
         <line choice="pt.cartaodecidadao.bin"/>
         <line choice="pt.cartaodecidadao.apps"/>
     </choices-outline>
     <!-- Define each choice above -->
+    <choice
+        id="cleanup"
+        visible="false">
+      <pkg-ref id="pt.cartaodecidadao.cleanup"/>
+    </choice>
     <choice
         id="pt.cartaodecidadao.lib"
         visible="true"

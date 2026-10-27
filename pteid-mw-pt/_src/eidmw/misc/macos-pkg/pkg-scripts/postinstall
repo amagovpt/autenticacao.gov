@@ -9,5 +9,12 @@ then
    rm -rf "/Applications/Autenticação.gov.localized"
 fi
 
+#Amend the Bundle ID-related problems in 3.15.0 and 3.16.0
+if [ -d "/usr/local/bin/pteiddialogsQTsrv.localized/pteiddialogsQTsrv.app" ]
+then
+   mv "/usr/local/bin/pteiddialogsQTsrv.localized/pteiddialogsQTsrv.app" "/usr/local/bin/pteiddialogsQTsrv.app" 
+   rm -rf "/usr/local/bin/pteiddialogsQTsrv.localized"
+fi
+
 #Generate fontconfig cache in advance
 /usr/local/bin/fc-cache

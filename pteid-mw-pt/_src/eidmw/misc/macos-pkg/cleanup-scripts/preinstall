@@ -23,6 +23,27 @@ then
    rm -rf "/Applications/Autenticação.gov.app"
 fi
 
+# Force remove a previous bundle which may have a different CFBundleIdentifier
+if [ -d "/usr/local/bin/pteiddialogsQTsrv.app" ]
+then
+   rm -rf "/usr/local/bin/pteiddialogsQTsrv.app"
+fi
+
+#Remove leftovers from previous install
+for i in $(seq 1 5)
+do
+
+   if [ -d /usr/local/bin/pteiddialogsQTsrv-$i.localized ]
+   then
+        /bin/rm -rf "/usr/local/bin/pteiddialogsQTsrv-$i.localized"
+   fi
+done
+
+if [ -d /usr/local/bin/pteiddialogsQTsrv.localized ]
+then
+   /bin/rm -rf "/usr/local/bin/pteiddialogsQTsrv.localized"
+fi
+
 if [ -f "/usr/local/bin/pteiddialogsQTsrv" ]
 then
    rm -f "/usr/local/bin/pteiddialogsQTsrv"
