@@ -1,3 +1,12 @@
+pteid-mw (3.16.0+git20260916) UNRELEASED; urgency=medium
+
+  * Update packaging to release 3.16.0
+  * Build with qmake explicitly: debhelper picks CMake now that CMakeLists.txt exists
+  * Add libcjson-dev and libeac-dev to Build-Depends
+  * Depend on pkexec (policykit-1 on older releases) and libnsspem
+
+ -- Paulo Villalobos <265691890+paulovillalobos@users.noreply.github.com>  Tue, 27 Oct 2026 20:39:05 +0000
+
 pteid-mw (3.8.0+git20220601) UNRELEASED; urgency=medium
 
   * Chave Movel Digital signature support in the pteidlib SDK
