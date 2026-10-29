@@ -659,7 +659,7 @@ bool AppController::isAccessibilityActive() { return QAccessible::isActive(); }
 
 QStringList AppController::getFilesFromClipboard() {
 	const QClipboard *clipboard = QGuiApplication::clipboard();
-	QStringList filenames = clipboard->text().split(QRegExp("\n"));
+	QStringList filenames = clipboard->text().split("\n");
 
 	return filenames;
 }
@@ -879,7 +879,7 @@ void AppController::getSignatureOptions() {
     }
 
 	QVariantList options;
-	options.append({pades, timestamp, lta, prof_name, visible, reduced, reason, location, seal_width, seal_height, scap,
+	options.append({pades, timestamp, lta, prof_name, visible, reduced, QString::fromUtf8(reason), QString::fromUtf8(location), seal_width, seal_height, scap,
 					attribute_ids});
 	emit signalRetrieveStoredSignOptions(options);
 }

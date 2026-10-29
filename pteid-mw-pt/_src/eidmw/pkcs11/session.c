@@ -214,11 +214,13 @@ int isAcroread() {
 	bufsize = GetModuleFileNameA(NULL, buf, (DWORD)buf_len);
 #endif
 #ifdef __linux__
-	ssize_t s = readlink("/proc/self/exe", buf, (size_t)buf_len);
-	buf[s] = 0;
+	ssize_t s = readlink("/proc/self/exe", buf, (size_t)buf_len - 1);
+	buf[s < 0 ? 0 : s] = 0;
 #endif
 #ifdef __APPLE__
-	_NSGetExecutablePath(buf, &buf_len);
+	uint32_t size = buf_len;
+	if (_NSGetExecutablePath(buf, &size) != 0)
+		buf[0] = 0;
 #endif
 
 	if (strstr(buf, "acroread") != NULL || strstr(buf, "AcroRd32") != NULL || strstr(buf, "AdobeReader") != NULL ||

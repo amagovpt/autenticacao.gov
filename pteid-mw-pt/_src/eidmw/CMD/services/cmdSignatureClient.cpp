@@ -439,7 +439,8 @@ DlgRet CMDSignatureClient::openAuthenticationDialogPIN(DlgCmdOperation operation
 	std::wstring mobileW = utilStringWiden(*mobileNumber);
 	const unsigned long mobileBufferLength = PHONE_NUMBER_LENGTH + 1;
 	wchar_t mobileBuffer[mobileBufferLength];
-	wcsncpy(mobileBuffer, mobileW.c_str(), mobileBufferLength);
+	// wcsncpy did not terminate a number that fills the buffer
+	mobileBuffer[mobileW.copy(mobileBuffer, mobileBufferLength - 1)] = L'\0';
 
 	if (mobileW.size() > 0) {
 		MWLOG(LEV_DEBUG, MOD_CMD,

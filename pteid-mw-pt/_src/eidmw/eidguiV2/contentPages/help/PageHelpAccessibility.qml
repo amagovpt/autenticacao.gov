@@ -6,7 +6,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -16,7 +16,7 @@ PageHelpAccessibilityForm {
         target: controler
     }
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageHelpAccessibilityForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }

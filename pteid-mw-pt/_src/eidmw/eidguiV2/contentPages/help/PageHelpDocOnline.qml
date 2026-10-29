@@ -7,7 +7,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -23,7 +23,7 @@ PageHelpDocOnlineForm {
         }
     }
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageHelpDocOnlineForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }

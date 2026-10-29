@@ -480,11 +480,5 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>btnSendSms</sender>
-   <signal>clicked()</signal>
-   <receiver>dlgWndAskCmdClass</receiver>
-   <slot>sendSms()</slot>
-  </connection>
  </connections>
 </ui>

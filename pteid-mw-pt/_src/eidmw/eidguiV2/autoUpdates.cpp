@@ -965,6 +965,7 @@ bool copyFileWithAuthorization(QString &cert_filepath, QString &destination_path
 	if (destination_pipe == NULL) {
 		PTEID_LOG(PTEID_LOG_LEVEL_ERROR, "eidgui",
 				  "copyFileWithAuthorization: Failed to open pipe to 'authopen' (%d - %s)", errno, strerror(errno));
+		return false;
 	} else {
 
 		fwrite(form.bytes, kAuthorizationExternalFormLength, 1, destination_pipe);
@@ -973,6 +974,7 @@ bool copyFileWithAuthorization(QString &cert_filepath, QString &destination_path
 		QByteArray file_content = readOriginalFile(cert_filepath);
 
 		if (file_content.size() == 0) {
+			pclose(destination_pipe);
 			return false;
 		}
 

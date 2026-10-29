@@ -44,8 +44,8 @@ CByteArray::CByteArray(unsigned long ulCapacity)
 	: m_pucData(NULL), m_ulSize(0), m_ulCapacity(ulCapacity), m_bMallocError(false) {}
 
 CByteArray::CByteArray(size_t size, unsigned char value)
-	: m_pucData(NULL), m_ulSize(0), m_ulCapacity(size), m_bMallocError(false) {
-	Resize(size);
+	: m_pucData(NULL), m_ulSize(0), m_ulCapacity((unsigned long)size), m_bMallocError(false) {
+	Resize((unsigned long)size);
 	memset(m_pucData, value, size);
 }
 

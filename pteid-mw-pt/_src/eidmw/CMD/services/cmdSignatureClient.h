@@ -131,8 +131,6 @@ private:
 	std::atomic<bool> m_wasCancelled = false;
 	CMDSignature *m_signature;
 	int m_return = ERR_ADDR_USER_BASE;
-	unsigned long m_dlgHandle = 0;
-	unsigned long m_oldDlgHandle = 0;
 };
 } // namespace eIDMW
 

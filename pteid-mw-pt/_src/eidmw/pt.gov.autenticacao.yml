@@ -1,6 +1,6 @@
 app-id: pt.gov.autenticacao
 runtime: org.kde.Platform
-runtime-version: '5.15-25.08'
+runtime-version: '6.11'
 sdk: org.kde.Sdk
 command: eidguiV2
 finish-args:
@@ -129,7 +129,7 @@ modules:
       - -DBUILD_CPP_TESTS=OFF
       - -DENABLE_UTILS=OFF
       - -DENABLE_CPP=OFF
-      - -DENABLE_QT6=OFF
+      - -DENABLE_QT5=OFF
       - -DENABLE_GLIB=OFF
       - -DENABLE_BOOST=OFF
       - -DCMAKE_INSTALL_LIBDIR=lib
@@ -153,7 +153,7 @@ modules:
     config-opts:
       - LIBS += -L/app/lib/
       - INCLUDEPATH += /app/include/PCSC
-      - INCLUDEPATH += /app/include/poppler/qt5
+      - INCLUDEPATH += /app/include/poppler/qt6
       - PREFIX_DIR = /app/
     build-commands:
       -  sed -i 's/pteid-scalable/pt.gov.autenticacao/g' debian/pteid-mw-gui.desktop

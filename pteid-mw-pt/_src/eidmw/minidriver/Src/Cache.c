@@ -78,7 +78,7 @@ BOOL readFromCache(const char *cache_path, char *Buf) {
 	fp = fopen(cache_path, "rb");
 
 	if (fp != NULL) {
-		if (fread(Buf, sizeof(char), st.st_size, fp) < st.st_size) {
+		if (fread(Buf, sizeof(char), st.st_size, fp) < (size_t)st.st_size) {
 			LogTrace(LOGTYPE_ERROR, WHERE, "Error reading cached file: errno=%d", errno);
 		}
 

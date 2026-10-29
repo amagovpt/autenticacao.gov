@@ -234,9 +234,9 @@ CByteArray buildMSEKetAPDU(unsigned char *pubkey, size_t pubkey_len) {
 	apdu_kat.Append(0xA6);
 
 	//Ephemeral public key tag
-	CByteArray data = encodeBERTLVObject(0x91, CByteArray(pubkey, pubkey_len));
+	CByteArray data = encodeBERTLVObject(0x91, CByteArray(pubkey, (unsigned long)pubkey_len));
 
-	apdu_kat.Append(data.Size());
+	apdu_kat.Append((unsigned char)data.Size());
 	apdu_kat.Append(data);
 
 	return apdu_kat;
@@ -276,7 +276,7 @@ bool ChipAuthSecureMessaging::sendIFDPublicKey(SecureMessaging *sm, EVP_PKEY *if
 		apdu_mse.Append(0x22);
 		apdu_mse.Append(0x41);
 		apdu_mse.Append(0xA4);
-		apdu_mse.Append(2 + oid_data.Size());
+		apdu_mse.Append((unsigned char)(2 + oid_data.Size()));
 		apdu_mse.Append(0x80);
 		apdu_mse.Append(0x0A); //CA OIDs have constant size of 10 bytes
 		apdu_mse.Append(oid_data);
@@ -291,7 +291,7 @@ bool ChipAuthSecureMessaging::sendIFDPublicKey(SecureMessaging *sm, EVP_PKEY *if
 		MWLOG(LEV_DEBUG, MOD_CAL, "%s: MSE-SET: Success", __FUNCTION__);
 
 		// Encoded Ephemeral public key
-		CByteArray eepk = encodeBERTLVObject(0x80, CByteArray(pubkey, pubkey_len));
+		CByteArray eepk = encodeBERTLVObject(0x80, CByteArray(pubkey, (unsigned long)pubkey_len));
 
 		CByteArray data = encodeBERTLVObject(0x7C, eepk);
 
@@ -300,7 +300,7 @@ bool ChipAuthSecureMessaging::sendIFDPublicKey(SecureMessaging *sm, EVP_PKEY *if
 		apdu_gen_auth.Append(0x86);
 		apdu_gen_auth.Append(0x00);
 		apdu_gen_auth.Append(0x00);
-		apdu_gen_auth.Append(data.Size());
+		apdu_gen_auth.Append((unsigned char)data.Size());
 		apdu_gen_auth.Append(data);
 		apdu_gen_auth.Append(0x00);
 
@@ -371,8 +371,8 @@ bool ChipAuthSecureMessaging::authenticate(SecureMessaging *sm, EVP_PKEY *icc_pu
 	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Session Keys derivation step: Success", __FUNCTION__);
 
 	// 5. Use keys for secure messaging
-	enc = CByteArray(ks_enc, params.key_size);
-	mac = CByteArray(ks_mac, params.key_size);
+	enc = CByteArray(ks_enc, (unsigned long)params.key_size);
+	mac = CByteArray(ks_mac, (unsigned long)params.key_size);
 
 	initEACContext(ifd_key, shared_secret, enc, mac, params);
 	MWLOG(LEV_DEBUG, MOD_CAL, "%s: Chip Authentication: Success", __FUNCTION__);
@@ -420,7 +420,7 @@ void ChipAuthSecureMessaging::initEACContext(EVP_PKEY *eph_pkey, BUF_MEM *shared
 	ka->key = eph_pkey;
 
 	// Switch to CA secure messaging
-	ka->enc_keylen = ka->mac_keylen = params.key_size;
+	ka->enc_keylen = ka->mac_keylen = (int)params.key_size;
 	ka->cipher = params.cipher;
 	ka->md = params.kdf_md;
 	if (!EAC_CTX_set_encryption_ctx(m_ctx, EAC_ID_CA)) {

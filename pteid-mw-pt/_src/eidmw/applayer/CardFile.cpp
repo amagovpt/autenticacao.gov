@@ -102,7 +102,7 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload) {
 				return m_status;
 			}
 			if (err == EIDMW_ERR_CARD_COMM) {
-				MWLOG(LEV_WARN, MOD_APL, "LoadData: Could not read file : %s - Error : 0x%x", m_path.c_str(),
+				MWLOG(LEV_WARN, MOD_APL, "LoadData: Could not read file : %s - Error : 0x%lx", m_path.c_str(),
 					  e.GetError());
 				m_status = CARDFILESTATUS_ERROR_NOFILE;
 				return m_status;
@@ -112,7 +112,7 @@ tCardFileStatus APL_CardFile::LoadData(bool bForceReload) {
 				throw e;
 			}
 
-			MWLOG(LEV_ERROR, MOD_APL, "LoadData: Could not read file : %s - Error : 0x%x", m_path.c_str(),
+			MWLOG(LEV_ERROR, MOD_APL, "LoadData: Could not read file : %s - Error : 0x%lx", m_path.c_str(),
 				  e.GetError());
 			throw e;
 		}

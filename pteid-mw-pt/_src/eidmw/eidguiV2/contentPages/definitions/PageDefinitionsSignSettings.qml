@@ -7,8 +7,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -19,14 +19,14 @@ import eidguiV2 1.0
 
 PageDefinitionsSignSettingsForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageDefinitionsSignSettingsForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
 
     Connections {
         target: gapi
-        onSignalInstalledRootCACert: {
+        function onSignalInstalledRootCACert(successful) {
             propertyBusyIndicator.running = false
             propertyIsRootCaCertInstalled = successful
 
@@ -66,7 +66,7 @@ PageDefinitionsSignSettingsForm {
     }
     Connections {
         target: propertyTextFieldTimeStamp
-        onEditingFinished: {
+        function onEditingFinished() {
             console.log("Editing TimeStamp finished host: " + propertyTextFieldTimeStamp.text);
             controler.setTimeStampHostValue(propertyTextFieldTimeStamp.text)
         }

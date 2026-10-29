@@ -531,7 +531,7 @@ unsigned long CCard::getSW12(const CByteArray &oRespAPDU, unsigned long ulExpect
 
 ////////////////////////////////////////////////////////////////:
 
-CAutoLock::CAutoLock(CCard *poCard) : m_poCard(poCard), m_poCardInterface(NULL), m_hCard({0}) { m_poCard->Lock(); }
+CAutoLock::CAutoLock(CCard *poCard) : m_poCard(poCard), m_poCardInterface(NULL), m_hCard{} { m_poCard->Lock(); }
 
 CAutoLock::CAutoLock(CardInterface *poCardInterface, PTEID_CardHandle hCard)
 	: m_poCard(NULL), m_poCardInterface(poCardInterface), m_hCard(hCard) {

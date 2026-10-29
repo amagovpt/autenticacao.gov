@@ -6,8 +6,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -19,18 +19,18 @@ import eidguiV2 1.0
 
 PageSecurityCertificateStateForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
 
     Connections {
         target: gapi
 
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
         }
 
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Security Pin Codes onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
@@ -63,7 +63,7 @@ PageSecurityCertificateStateForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             propertyBusyIndicator.running = false
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Security Certificates onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -82,7 +82,7 @@ PageSecurityCertificateStateForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
         }
-        onSignalCertificatesFail: {
+        function onSignalCertificatesFail() {
             propertyBusyIndicator.running = false
             propertyButtonValidateCertificates.enabled = true
 
@@ -91,7 +91,7 @@ PageSecurityCertificateStateForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
         }
 
-        onSignalCertificatesChanged: {
+        function onSignalCertificatesChanged(certificatesMap) {
             propertyTextAuthIssuer.propertyDateField.text = certificatesMap.level0.IssuerName
             propertyTextAuthValidFrom.propertyDateField.text =  certificatesMap.level0.ValidityBegin
             propertyTextAuthValidUntil.propertyDateField.text =  certificatesMap.level0.ValidityEnd
@@ -124,12 +124,12 @@ PageSecurityCertificateStateForm {
             console.log("Certificates validation completed");
         }
 
-        onSignalContactlessCANNeeded: {
+        function onSignalContactlessCANNeeded() {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
         }
 
-        onSignalErrorPace: {
+        function onSignalErrorPace(error_code) {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
@@ -139,7 +139,7 @@ PageSecurityCertificateStateForm {
 
     Connections {
         target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
-        onClosed: {
+        function onClosed() {
             paceDialogLoader.active = false
             propertyButtonValidateCertificates.enabled = true
         }

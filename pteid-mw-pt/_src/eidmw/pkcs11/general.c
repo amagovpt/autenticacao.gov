@@ -74,11 +74,20 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved) {
 	sep = '/';
 #endif
 
+#ifdef WIN32
+	char *dup = NULL;
+	size_t dupLength = 0;
+	if (_dupenv_s(&dup, &dupLength, env_vr) == 0 && dup != NULL) {
+		tmpvar = dup;
+		isDup = 1;
+	}
+#else
 	temp = getenv(env_vr);
 	if (temp != NULL) {
 		tmpvar = _strdup(temp);
 		isDup = 1;
 	}
+#endif
 	if (tmpvar == NULL) {
 		isDup = 0;	// failed to duplicate temp env, no need to free
 #ifndef WIN32
@@ -89,7 +98,7 @@ CK_RV C_Initialize(CK_VOID_PTR pReserved) {
 	}
 
 	log_path = (char *)malloc(strlen(tmpvar) + 20);
-	_snprintf(log_path, strlen(tmpvar) + 20, "%s%c.pteid-pkcs11.log", tmpvar, sep);
+	snprintf(log_path, strlen(tmpvar) + 20, "%s%c.pteid-pkcs11.log", tmpvar, sep);
 
 #if _DEBUG
 	log_init(log_path, LOG_LEVEL_INFO);

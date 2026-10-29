@@ -61,6 +61,34 @@ bool bRandInitialized = false;
 
 static bool g_bSystemCallsFail = false;
 
+/* The arguments of a dialog go through a pipe to the dialog process and back:
+   write and read them whole, retrying interrupted and partial transfers */
+static bool writeFully(int fd, const char *data, size_t len) {
+	while (len > 0) {
+		ssize_t n = write(fd, data, len);
+		if (n < 0 && errno == EINTR)
+			continue;
+		if (n <= 0)
+			return false;
+		data += n;
+		len -= n;
+	}
+	return true;
+}
+
+static bool readFully(int fd, char *data, size_t len) {
+	while (len > 0) {
+		ssize_t n = read(fd, data, len);
+		if (n < 0 && errno == EINTR)
+			continue;
+		if (n <= 0)
+			return false;
+		data += n;
+		len -= n;
+	}
+	return true;
+}
+
 /************************
  *       DIALOGS
  ************************/
@@ -85,8 +113,10 @@ void eIDMW::writeAskPinArguments(int fd, void *arg) {
 	memcpy(buffer, &pinArg->pin, sizeof(pinArg->pin));
 	buffer += sizeof(pinArg->pin);
 	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
-	write(fd, initBuffer, len);
+	bool written = writeFully(fd, initBuffer, len);
 	free(initBuffer);
+	if (!written)
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 }
 
 void eIDMW::readAskPinArguments(int fd, void *arg) {
@@ -95,7 +125,10 @@ void eIDMW::readAskPinArguments(int fd, void *arg) {
 	DlgAskPINArguments *pinArg = (DlgAskPINArguments *)(arg);
 	int len = sizeof(DlgAskPINArguments);
 	buffer = (char *)malloc(len);
-	read(fd, buffer, len);
+	if (!readFully(fd, buffer, len)) {
+		free(buffer);
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	}
 	initBuffer = buffer;
 
 	memcpy(&pinArg->operation, buffer, sizeof(pinArg->operation));
@@ -136,8 +169,10 @@ void eIDMW::writeAskPinsArguments(int fd, void *arg)
 	buffer += sizeof(pinArg->pin2);
 	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
 
-	write(fd, initBuffer, len);
+	bool written = writeFully(fd, initBuffer, len);
 	free(initBuffer);
+	if (!written)
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 }
 
 void eIDMW::readAskPinsArguments(int fd, void *arg) {
@@ -146,7 +181,10 @@ void eIDMW::readAskPinsArguments(int fd, void *arg) {
 	DlgAskPINsArguments *pinArg = (DlgAskPINsArguments *)(arg);
 	int len = sizeof(DlgAskPINsArguments);
 	buffer = (char *)malloc(len);
-	read(fd, buffer, len);
+	if (!readFully(fd, buffer, len)) {
+		free(buffer);
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	}
 	initBuffer = buffer;
 
 	memcpy(&pinArg->operation, buffer, sizeof(pinArg->operation));
@@ -176,7 +214,10 @@ void eIDMW::readBadPinArguments(int fd, void *arg)
 	int len = sizeof(DlgBadPinArguments);
 
 	buffer = (char *)malloc(len);
-	read(fd, buffer, len);
+	if (!readFully(fd, buffer, len)) {
+		free(buffer);
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	}
 	initBuffer = buffer;
 
 	memcpy(&pinArg->usage, buffer, sizeof(pinArg->usage));
@@ -207,8 +248,10 @@ void eIDMW::writeBadPinArguments(int fd, void *arg)
 	buffer += sizeof(pinArg->ulRemainingTries);
 	memcpy(buffer, &pinArg->returnValue, sizeof(pinArg->returnValue));
 
-	write(fd, initBuffer, len);
+	bool written = writeFully(fd, initBuffer, len);
 	free(initBuffer);
+	if (!written)
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 }
 
 void eIDMW::writeDisplayPinpadInfoArguments(int fd, void *arg)
@@ -235,8 +278,10 @@ void eIDMW::writeDisplayPinpadInfoArguments(int fd, void *arg)
 	buffer += sizeof(pinPadInfo->tRunningProcess);
 	memcpy(buffer, &pinPadInfo->returnValue, sizeof(pinPadInfo->returnValue));
 
-	write(fd, initBuffer, len);
+	bool written = writeFully(fd, initBuffer, len);
 	free(initBuffer);
+	if (!written)
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 }
 
 void eIDMW::readDisplayPinpadInfoArguments(int fd, void *arg)
@@ -305,8 +350,10 @@ void eIDMW::writeAskInputCMDArguments(int fd, void *arg) {
 
 	memcpy(buffer, &cmdArg->returnValue, sizeof(cmdArg->returnValue));
 
-	write(fd, initBuffer, len);
+	bool written = writeFully(fd, initBuffer, len);
 	free(initBuffer);
+	if (!written)
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 }
 
 void eIDMW::readAskInputCMDArguments(int fd, void *arg) {
@@ -315,7 +362,10 @@ void eIDMW::readAskInputCMDArguments(int fd, void *arg) {
 	DlgAskInputCMDArguments *cmdArg = (DlgAskInputCMDArguments *)(arg);
 	int len = sizeof(DlgAskInputCMDArguments);
 	buffer = (char *)malloc(len);
-	read(fd, buffer, len);
+	if (!readFully(fd, buffer, len)) {
+		free(buffer);
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	}
 	initBuffer = buffer;
 
 	memcpy(&cmdArg->inOutId, buffer, sizeof(cmdArg->inOutId));
@@ -359,8 +409,10 @@ void eIDMW::writeCMDMessageArguments(int fd, void *arg) {
 	buffer += sizeof(cmdArg->cmdMsgCollectorIndex);
 	memcpy(buffer, &cmdArg->tRunningProcess, sizeof(cmdArg->tRunningProcess));
 
-	write(fd, initBuffer, len);
+	bool written = writeFully(fd, initBuffer, len);
 	free(initBuffer);
+	if (!written)
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 }
 
 void eIDMW::writeDlgPickDeviceArguments(int fd, void *arg)
@@ -374,8 +426,10 @@ void eIDMW::writeDlgPickDeviceArguments(int fd, void *arg)
 	memcpy(buffer, &dlgArg->outDevice, sizeof(dlgArg->outDevice));
 	buffer += sizeof(dlgArg->outDevice);
 	memcpy(buffer, &dlgArg->returnValue, sizeof(dlgArg->returnValue));
-	write(fd, initBuffer, len);
+	bool written = writeFully(fd, initBuffer, len);
 	free(initBuffer);
+	if (!written)
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 }
 
 void eIDMW::readDlgPickDeviceArguments(int fd, void *arg)
@@ -385,7 +439,10 @@ void eIDMW::readDlgPickDeviceArguments(int fd, void *arg)
 	DlgPickDeviceArguments *dlgArg = (DlgPickDeviceArguments *)(arg);
 	int len = sizeof(DlgPickDeviceArguments);
 	buffer = (char *)malloc(len);
-	read(fd, buffer, len);
+	if (!readFully(fd, buffer, len)) {
+		free(buffer);
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	}
 	initBuffer = buffer;
 	memcpy(&dlgArg->outDevice, buffer, sizeof(dlgArg->outDevice));
 	buffer += sizeof(dlgArg->outDevice);
@@ -637,7 +694,8 @@ DLGS_EXPORT void eIDMW::DlgClosePinpadInfo(unsigned long ulHandle) {
 				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 			}
 			else {
-				write(pIt->second->pipe2[1], "1", 1);
+				if (write(pIt->second->pipe2[1], "1", 1) != 1)
+					MWLOG(LEV_WARN, MOD_DLG, "  eIDMW: failed to notify the dialog process: %s", strerror(errno));
 				waitpid(pIt->second->tRunningProcess, nullptr, 0);
 			}
 
@@ -847,7 +905,8 @@ DLGS_EXPORT void eIDMW::DlgCloseCMDMessage(unsigned long ulHandle) {
 				throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
 			}
 			else {
-				write(pIt->second->pipe2[1], "1", 1);
+				if (write(pIt->second->pipe2[1], "1", 1) != 1)
+					MWLOG(LEV_WARN, MOD_DLG, "  eIDMW: failed to notify the dialog process: %s", strerror(errno));
 				waitpid(pIt->second->tRunningProcess, nullptr, 0);
 			}
 

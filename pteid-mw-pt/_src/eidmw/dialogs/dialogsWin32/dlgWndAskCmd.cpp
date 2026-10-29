@@ -224,8 +224,8 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 			std::wstring OTPText;
 			OTPText = GETSTRING_DLG(InsertOTP);
 			OTPTextData.text = OTPText.c_str();
-			HWND hOTPText = PteidControls::CreateText(contentX + contentWidth * 0.15, OTPBoxY + 0.5 * paddingY,
-													  contentWidth * 0.75, buttonHeight + 2 * paddingY, m_hWnd,
+			HWND hOTPText = PteidControls::CreateText((int)(contentX + contentWidth * 0.15), (int)(OTPBoxY + 0.5 * paddingY),
+													  (int)(contentWidth * 0.75), buttonHeight + 2 * paddingY, m_hWnd,
 													  (HMENU)IDC_SEND_SMS_TEXT, m_hInstance, &OTPTextData);
 		}
 
@@ -238,7 +238,7 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 			std::wstring biometryText = GETSTRING_DLG(BiometricAppInfo);
 			biometryTextData.text = biometryText.c_str();
 			HWND hBiometryText = PteidControls::CreateText(
-				contentX + contentWidth * 0.15, biometryBoxY + 0.5 * paddingY, contentWidth * 0.75,
+				(int)(contentX + contentWidth * 0.15), (int)(biometryBoxY + 0.5 * paddingY), (int)(contentWidth * 0.75),
 				buttonHeight + 4 * paddingY, m_hWnd, (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &biometryTextData);
 		}
 
@@ -299,12 +299,12 @@ dlgWndAskCmd::dlgWndAskCmd(DlgCmdOperation operation, bool isValidateOtp, std::w
 			sendSmsTextData.text = sendSmsText.c_str();
 
 			HWND hSendSMSText =
-				PteidControls::CreateText(contentX, smsTextY + buttonHeight * 0.25, contentWidth, paddingY, m_hWnd,
+				PteidControls::CreateText(contentX, (int)(smsTextY + buttonHeight * 0.25), contentWidth, paddingY, m_hWnd,
 										  (HMENU)IDC_STATIC_BOX_TEXT, m_hInstance, &sendSmsTextData);
 
 			sendSmsBtnData.text = GETSTRING_DLG(SendSms);
 			HWND hSendSmsButton =
-				PteidControls::CreateButton(contentX + contentWidth - buttonWidth * 0.85, smsTextY, buttonWidth * 0.85,
+				PteidControls::CreateButton((int)(contentX + contentWidth - buttonWidth * 0.85), smsTextY, (int)(buttonWidth * 0.85),
 											buttonHeight, m_hWnd, (HMENU)IDB_SEND_SMS, m_hInstance, &sendSmsBtnData);
 		}
 	}

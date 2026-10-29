@@ -168,7 +168,7 @@ unsigned long APL_Certifs::countSODCAs() {
 }
 
 APL_Certif *APL_Certifs::getSODCA(int index) {
-	if (index >= m_sod_cas.size())
+	if (index < 0 || static_cast<size_t>(index) >= m_sod_cas.size())
 		throw CMWEXCEPTION(EIDMW_ERR_PARAM_RANGE);
 
 	return m_sod_cas[index];

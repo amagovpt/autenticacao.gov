@@ -91,7 +91,8 @@ public:
 	BlockCipherCtx &operator=(const BlockCipherCtx &) = delete;
 
 	BlockCipherCtx(BlockCipherCtx &&) = default;
-	BlockCipherCtx &operator=(BlockCipherCtx &&) = default;
+	// block_size and key_size are const
+	BlockCipherCtx &operator=(BlockCipherCtx &&) = delete;
 
 	/**
 	 * @brief Setup for encrypt/decrypt
@@ -107,16 +108,15 @@ public:
 	std::vector<uint8_t> processBlock(const uint8_t *data, size_t len);
 
 	/**
-	 * @brief Encrypts blob of data based on constructed cipher
+	 * @brief Decrypts blob of data based on constructed cipher
 	 * @param key MUST be key_size bytes
-	 * @param data pointer to data to be encrypted
-	 * @param len size of data
+	 * @param input data to be decrypted
 	 * @param iv iv or nullptr for zero
 	 */
 	template <typename T>
 	static CByteArray decrypt(const unsigned char *key, const CByteArray &input, const unsigned char *iv = nullptr) {
 		T cipher;
-		cipher.init(key, nullptr, false); // decrypt mode
+		cipher.init(key, iv, false); // decrypt mode
 		auto decrypted = cipher.processBlock(input.GetBytes(), input.Size());
 
 		if (input.Size() != decrypted.size()) {
@@ -129,16 +129,15 @@ public:
 	}
 
 	/**
-	 * @brief Decrypts blob of data based on constructed cipher
+	 * @brief Encrypts blob of data based on constructed cipher
 	 * @param key MUST be key_size bytes
-	 * @param data pointer to data to be decrypted
-	 * @param len size of data
+	 * @param input data to be encrypted
 	 * @param iv iv or nullptr for zero
 	 */
 	template <typename T>
 	static CByteArray encrypt(const unsigned char *key, const CByteArray &input, const unsigned char *iv = nullptr) {
 		T cipher;
-		cipher.init(key, nullptr, true); // encrypt mode
+		cipher.init(key, iv, true); // encrypt mode
 		auto decrypted = cipher.processBlock(input.GetBytes(), input.Size());
 
 		if (input.Size() != decrypted.size()) {
@@ -366,7 +365,7 @@ public:
 	BUF_MEM *operator->() const { return m_buf; }
 	operator BUF_MEM *() const { return m_buf; }
 
-	CByteArray toByteArray() const { return CByteArray((unsigned char *)m_buf->data, m_buf->length); }
+	CByteArray toByteArray() const { return CByteArray((unsigned char *)m_buf->data, (unsigned long)m_buf->length); }
 
 private:
 	BUF_MEM *m_buf = nullptr;
@@ -377,7 +376,7 @@ private:
 // - The CByteArray must remain valid while BUF_MEM is in use
 // - Do not pass to non-const parameters
 inline BUF_MEM bufMemView(const CByteArray &array) {
-	BUF_MEM view = {0};
+	BUF_MEM view{};
 	view.data = (char *)array.GetBytes();
 	view.length = array.Size();
 	view.max = array.Size();

@@ -7,8 +7,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -18,7 +18,7 @@ import eidguiV2 1.0
 
 PageDefinitionsSignatureForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageDefinitionsSignatureForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
@@ -27,10 +27,10 @@ PageDefinitionsSignatureForm {
     }
     Connections {
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
         }
-        onSignalSignCertDataChanged: {
+        function onSignalSignCertDataChanged(ownerName, NIC) {
             console.log("Definitions Signature --> Certificate Data Changed")
 
             propertySigSignedByNameText.text = propertySigSignedByNameTextCustom.text = ownerName
@@ -42,12 +42,12 @@ PageDefinitionsSignatureForm {
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                         propertyRadioButtonDefault.forceActiveFocus()
         }
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Definitions Signature --> onSignalCardAccessError")
             clearFields()
             propertyBusyIndicator.running = false
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Definitions Signature --> onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -71,7 +71,7 @@ PageDefinitionsSignatureForm {
 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
-        onSignalCustomSignImageRemoved: {
+        function onSignalCustomSignImageRemoved() {
             console.log("Definitions Signature onSignalCustomSignImageRemoved")
             var titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
             var bodyPopup = qsTranslate("PageServicesSign","STR_CUSTOM_IMAGE_REMOVED")
@@ -81,7 +81,7 @@ PageDefinitionsSignatureForm {
 
     propertyDropArea {
 
-        onEntered: {
+        onEntered: function(drag) {
             /*console.log("You chose file(s): " + drag.urls.toString());*/
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
@@ -115,9 +115,9 @@ PageDefinitionsSignatureForm {
 
     propertyFileDialog {
         onAccepted: {
-            /*console.log("You chose file(s): " + propertyFileDialog.fileUrls)
-            console.log("Adding file: " + propertyFileDialog.fileUrls[0])*/
-            var path = propertyFileDialog.fileUrls[0];
+            /*console.log("You chose file(s): " + propertyFileDialog.files)
+            console.log("Adding file: " + propertyFileDialog.files[0])*/
+            var path = propertyFileDialog.files[0];
 
             filesModel.clear()
             filesModel.append({

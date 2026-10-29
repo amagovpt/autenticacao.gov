@@ -1,141 +1,80 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--
+  Autenticação.gov application, Qt 6.
+
+  Qt 6 has no prebuilt 32-bit MSVC binaries, so the application is built for x64 only:
+  the x86 installer ships the middleware without it.
+
+  Environment (set_path_autenticacao.gov.bat):
+    PTEID_DIR_QT_6_X64   Qt 6 for MSVC x64, e.g. C:\Qt\6.10.1\msvc2022_64
+    PTEID_POPPLER_QT6    poppler built with ENABLE_QT6 (CMake install prefix: include, lib, bin)
+-->
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
+    <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8669C59A-52C0-32D6-A32D-91546481FAEA}</ProjectGuid>
     <RootNamespace>eidguiV2</RootNamespace>
-    <Keyword>Qt4VSv1.0</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <PlatformToolSet>v141</PlatformToolSet>
-    <OutputDirectory>release\</OutputDirectory>
-    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
-    <CharacterSet>NotSet</CharacterSet>
+  <PropertyGroup Label="Configuration">
+    <!-- Qt 6 requires MSVC 2022 -->
+    <PlatformToolset>v143</PlatformToolset>
     <ConfigurationType>Application</ConfigurationType>
-    <IntermediateDirectory>release\</IntermediateDirectory>
-    <PrimaryOutput>eidguiV2</PrimaryOutput>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <PlatformToolSet>v141</PlatformToolSet>
-    <OutputDirectory>release\</OutputDirectory>
-    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>Application</ConfigurationType>
-    <IntermediateDirectory>release\</IntermediateDirectory>
-    <PrimaryOutput>eidguiV2</PrimaryOutput>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <PlatformToolSet>v141</PlatformToolSet>
-    <OutputDirectory>debug\</OutputDirectory>
-    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
-    <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>Application</ConfigurationType>
-    <IntermediateDirectory>debug\</IntermediateDirectory>
-    <PrimaryOutput>eidguiV2</PrimaryOutput>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <PlatformToolSet>v141</PlatformToolSet>
-    <OutputDirectory>debug\</OutputDirectory>
-    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
-    <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>Application</ConfigurationType>
-    <IntermediateDirectory>debug\</IntermediateDirectory>
-    <PrimaryOutput>eidguiV2</PrimaryOutput>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+  <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-  </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <QtDir>$(PTEID_DIR_QT_6_X64)</QtDir>
+    <QtLibSuffix Condition="'$(Configuration)'=='Debug'">d</QtLibSuffix>
+    <GeneratedDir>GeneratedFiles\$(Configuration)\</GeneratedDir>
+  </PropertyGroup>
   <PropertyGroup>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pteidguiV2</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pteidguiV2</TargetName>
-    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
-    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pteidguiV2</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pteidguiV2</TargetName>
-    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
-    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\_Binaries35\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>pteidguiV2</TargetName>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL_X64)\include;.;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtQuick;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\;..\_Builds;..\dialogs;..\common;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtConcurrent;$(PTEID_DIR_QT_5_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_5_X64)\include\QtWidgets;$(PTEID_DIR_QT_5_X64)\include\QtPrintSupport;$(PTEID_DIR_QT_5_X64)\include\QtANGLE;$(PTEID_DIR_QT_5_X64)\include\QtQml;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;..\scap\;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_LIBZIP_X64)\include;$(PTEID_DIR_CJSON_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
-      <AssemblerListingLocation>release\</AssemblerListingLocation>
-      <BrowseInformation>false</BrowseInformation>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <AdditionalIncludeDirectories>.;$(GeneratedDir);..\_Builds;..\dialogs;..\common;..\applayer;..\cardlayer;..\eidlib;..\CMD\services;..\scap;$(QtDir)\include;$(QtDir)\include\QtCore;$(QtDir)\include\QtGui;$(QtDir)\include\QtWidgets;$(QtDir)\include\QtNetwork;$(QtDir)\include\QtQml;$(QtDir)\include\QtQuick;$(QtDir)\include\QtQuickControls2;$(QtDir)\include\QtConcurrent;$(QtDir)\include\QtPrintSupport;$(QtDir)\include\QtCore5Compat;$(QtDir)\mkspecs\win32-msvc;$(PTEID_POPPLER_QT6)\include\poppler\qt6;$(PTEID_DIR_CURL_X64)\include;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_LIBZIP_X64)\include;$(PTEID_DIR_CJSON_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <!-- /Zc:__cplusplus and /permissive- are required by the Qt 6 headers -->
+      <AdditionalOptions>/Zc:__cplusplus /permissive- /utf-8 -Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;NOMINMAX;CURL_STATICLIB;WITH_OPENSSL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <ObjectFileName>release\</ObjectFileName>
-      <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;CURL_STATICLIB;WITH_OPENSSL;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessToFile>false</PreprocessToFile>
-      <ProgramDataBaseFileName>
-      </ProgramDataBaseFileName>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcurl_a.lib;Ws2_32.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;Crypt32.lib;qtmain.lib;shell32.lib;libcrypto.lib;libssl.lib;libzip.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteid-poppler.lib;pteidlib.lib;cmdServices.lib;scap.lib;cjson.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;$(PTEID_DIR_CJSON_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Qt6Core$(QtLibSuffix).lib;Qt6Gui$(QtLibSuffix).lib;Qt6Widgets$(QtLibSuffix).lib;Qt6Network$(QtLibSuffix).lib;Qt6Qml$(QtLibSuffix).lib;Qt6Quick$(QtLibSuffix).lib;Qt6QuickControls2$(QtLibSuffix).lib;Qt6Concurrent$(QtLibSuffix).lib;Qt6PrintSupport$(QtLibSuffix).lib;Qt6Core5Compat$(QtLibSuffix).lib;Qt6EntryPoint$(QtLibSuffix).lib;poppler-qt6.lib;libcurl_a.lib;Iphlpapi.lib;Ws2_32.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;Crypt32.lib;shell32.lib;libcrypto.lib;libssl.lib;libzip.lib;cjson.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteid-poppler.lib;pteidlib.lib;cmdServices.lib;scap.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QtDir)\lib;$(PTEID_POPPLER_QT6)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;$(PTEID_DIR_CJSON_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <LinkIncremental>false</LinkIncremental>
-      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidguiV2.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
-    <Midl>
-      <DefaultCharType>Unsigned</DefaultCharType>
-      <EnableErrorChecks>None</EnableErrorChecks>
-      <WarningLevel>0</WarningLevel>
-    </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PreBuildEvent>
       <Command>echo "*********************************************************************************"
@@ -153,334 +92,69 @@ echo "**************************************************************************
       <EnableDpiAwareness>true</EnableDpiAwareness>
     </Manifest>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL)\include;.;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtQuick;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\;..\_Builds;..\dialogs;..\common;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtConcurrent;$(PTEID_DIR_QT_5)\include\QtQuickControls2;$(PTEID_DIR_QT_5)\include\QtWidgets;$(PTEID_DIR_QT_5)\include\QtPrintSupport;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_DIR_QT_5)\include\QtQml;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;..\scap\;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_LIBZIP)\include;$(PTEID_DIR_CJSON)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
-      <AssemblerListingLocation>release\</AssemblerListingLocation>
-      <BrowseInformation>false</BrowseInformation>
-      <DebugInformationFormat>None</DebugInformationFormat>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;CURL_STATICLIB;WITH_OPENSSL;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessToFile>false</PreprocessToFile>
-      <ProgramDataBaseFileName>
-      </ProgramDataBaseFileName>
+      <DebugInformationFormat>None</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>QT_NO_DEBUG;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>libcurl_a.lib;Ws2_32.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;qtmain.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quick.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Qml.lib;Qt5Network.lib;Qt5Core.lib;Qt5PrintSupport.lib;Qt5QuickControls2.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;scap.lib;cjson.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBZIP)\lib;$(PTEID_DIR_CJSON)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
-      <DataExecutionPrevention>true</DataExecutionPrevention>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <LinkIncremental>false</LinkIncremental>
-      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidguiV2.exe</OutputFile>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Windows</SubSystem>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Link>
-    <Midl>
-      <DefaultCharType>Unsigned</DefaultCharType>
-      <EnableErrorChecks>None</EnableErrorChecks>
-      <WarningLevel>0</WarningLevel>
-    </Midl>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ResourceCompile>
-    <PreBuildEvent>
-      <Command>echo "*********************************************************************************"
-IF EXIST %PTEID_CREDENTIALS_FOLDER%\eidguiV2Credentials.h   (
-    echo "Copying credentials file %PTEID_CREDENTIALS_FOLDER%\eidguiV2Credentials.h"
-    copy "%PTEID_CREDENTIALS_FOLDER%\eidguiV2Credentials.h" "$(ProjectDir)\eidguiV2Credentials.h"
-) ELSE (
-    echo "%PTEID_CREDENTIALS_FOLDER%\eidguiV2Credentials.h not found."
-    echo "Copying credentials file "$(ProjectDir)\eidguiV2Credentials.h.template"
-    copy "$(ProjectDir)\eidguiV2Credentials.h.template" "$(ProjectDir)\eidguiV2Credentials.h"
-)
-echo "*********************************************************************************"</Command>
-    </PreBuildEvent>
-    <Manifest>
-      <EnableDpiAwareness>true</EnableDpiAwareness>
-    </Manifest>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL_X64)\include;.;$(PTEID_DIR_QT_5_X64)\include;$(PTEID_DIR_QT_5_X64)\include\QtQuick;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\;..\_Builds;..\dialogs;..\common;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5_X64)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5_X64)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5_X64)\include\QtGui;$(PTEID_DIR_QT_5_X64)\include\QtConcurrent;$(PTEID_DIR_QT_5_X64)\include\QtQuickControls2;$(PTEID_DIR_QT_5_X64)\include\QtWidgets;$(PTEID_DIR_QT_5_X64)\include\QtPrintSupport;$(PTEID_DIR_QT_5_X64)\include\QtANGLE;$(PTEID_DIR_QT_5_X64)\include\QtQml;$(PTEID_DIR_QT_5_X64)\include\QtNetwork;$(PTEID_DIR_QT_5_X64)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5_X64)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL_X64)\include;$(PTEID_DIR_LIBZIP_X64)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
-      <AssemblerListingLocation>debug\</AssemblerListingLocation>
-      <BrowseInformation>false</BrowseInformation>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;CURL_STATICLIB;WITH_OPENSSL;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessToFile>false</PreprocessToFile>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <WarningLevel>Level3</WarningLevel>
-    </ClCompile>
-    <Link>
-      <AdditionalDependencies>libcurl_a.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;qtmaind.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quickd.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Qmld.lib;Qt5Networkd.lib;Qt5Cored.lib;Qt5PrintSupportd.lib;Qt5QuickControls2d.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_POPPLER_QT5)\x64;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_DIR_QT_5_X64)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
-      <DataExecutionPrevention>true</DataExecutionPrevention>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidguiV2.exe</OutputFile>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Windows</SubSystem>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Link>
-    <Midl>
-      <DefaultCharType>Unsigned</DefaultCharType>
-      <EnableErrorChecks>None</EnableErrorChecks>
-      <WarningLevel>0</WarningLevel>
-    </Midl>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ResourceCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>$(PTEID_DIR_CURL)\include;.;$(PTEID_DIR_QT_5)\include;$(PTEID_DIR_QT_5)\include\QtQuick;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\;..\_Builds;..\dialogs;..\common;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8\QtCore;$(PTEID_DIR_QT_5)\include\QtCore\5.12.8;$(PTEID_DIR_QT_5)\include\QtGui\5.12.8\QtGui;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc;$(PTEID_DIR_QT_5)\include\QtGui;$(PTEID_DIR_QT_5)\include\QtConcurrent;$(PTEID_DIR_QT_5)\include\QtQuickControls2;$(PTEID_DIR_QT_5)\include\QtWidgets;$(PTEID_DIR_QT_5)\include\QtPrintSupport;$(PTEID_DIR_QT_5)\include\QtANGLE;$(PTEID_DIR_QT_5)\include\QtQml;$(PTEID_DIR_QT_5)\include\QtNetwork;$(PTEID_DIR_QT_5)\include\QtCore;$(PTEID_POPPLER_QT5)\qt5\src;release;$(PTEID_DIR_QT_5)\mkspecs\win32-msvc2013;..\applayer;..\cardlayer;..\eidlib;..\CMD\services\;$(PTEID_DIR_OPENSSL)\include;$(PTEID_DIR_LIBZIP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
-      <AssemblerListingLocation>debug\</AssemblerListingLocation>
-      <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <ObjectFileName>debug\</ObjectFileName>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;CURL_STATICLIB;WITH_OPENSSL;QT_DEPRECATED_WARNINGS;QT_NO_DEBUG;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>libcurl_a.lib;Wldap32.lib;normaliz.lib;zlibstatic.lib;Cryptui.lib;Wintrust.lib;qtmaind.lib;Crypt32.lib;shell32.lib;libssl.lib;libcrypto.lib;libzip.lib;Qt5Quickd.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Qmld.lib;Qt5Networkd.lib;Qt5Cored.lib;Qt5PrintSupportd.lib;Qt5QuickControls2d.lib;poppler-qt5.lib;pteidapplayer.lib;pteidcardlayer.lib;pteidlib.lib;pteidcommon.lib;pteidDlgsWin32.lib;cmdServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PTEID_DIR_CURL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_POPPLER_QT5)\win32;$(PTEID_DIR_OPENSSL)\lib\;$(PTEID_DIR_QT_5)\lib;..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
-      <DataExecutionPrevention>true</DataExecutionPrevention>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteidguiV2.exe</OutputFile>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Windows</SubSystem>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Link>
-    <Midl>
-      <DefaultCharType>Unsigned</DefaultCharType>
-      <EnableErrorChecks>None</EnableErrorChecks>
-      <WarningLevel>0</WarningLevel>
-    </Midl>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_DEPRECATED_WARNINGS;QT_QUICK_LIB;QT_GUI_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="certificates.cpp" />
-    <ClCompile Include="concurrent.cpp" />
-    <ClCompile Include="gapi.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_singleapplication.cpp">
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_singleapplication_p.cpp">
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="appcontroller.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_gapi.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_appcontroller.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_autoUpdates.cpp" />
+    <ClCompile Include="gapi.cpp" />
     <ClCompile Include="autoUpdates.cpp" />
-    <ClCompile Include="can_cache.cpp" />
-    <ClCompile Include="singleapplication.cpp" />
+    <ClCompile Include="certificates.cpp" />
     <ClCompile Include="singleapplication_p.cpp" />
+    <ClCompile Include="singleapplication.cpp" />
+    <ClCompile Include="can_cache.cpp" />
+    <ClCompile Include="concurrent.cpp" />
+    <ClCompile Include="$(GeneratedDir)moc_appcontroller.cpp" />
+    <ClCompile Include="$(GeneratedDir)moc_gapi.cpp" />
+    <ClCompile Include="$(GeneratedDir)moc_singleapplication.cpp" />
+    <ClCompile Include="$(GeneratedDir)moc_singleapplication_p.cpp" />
+    <ClCompile Include="$(GeneratedDir)qrc_resources.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="release\qrc_resources.cpp">
-    </ClCompile>
+    <ClInclude Include="autoUpdates.h" />
+    <ClInclude Include="Settings.h" />
+    <ClInclude Include="certificates.h" />
+    <ClInclude Include="concurrent.h" />
+    <ClInclude Include="eidguiV2Credentials.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="eidguiV2.rc" />
   </ItemGroup>
+  <!-- Headers with Q_OBJECT -->
   <ItemGroup>
-    <None Include="components\Accordion.qml" />
-    <None Include="components\Button.qml" />
-    <None Include="components\DialogCMD.qml" />
-    <None Include="components\Notification.qml" />
-    <None Include="components\NotificationMenu.qml" />
-    <None Include="components\PhoneCountriesCodeListModel.qml" />
-    <None Include="components\Link.qml" />
-    <None Include="components\TextRow.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsData.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsDataForm.ui.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsSCAP.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsSCAPForm.ui.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsSignSettings.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsSignSettingsForm.ui.qml" />
-    <None Include="contentPages\help\PageHelpAccessibility.qml" />
-    <None Include="contentPages\help\PageHelpAccessibilityForm.ui.qml" />
-    <None Include="contentPages\services\PageServicesSign.qml" />
-    <None Include="contentPages\services\PageServicesSignForm.ui.qml" />
-    <None Include="images\dummy\CCdemo.png" />
-    <None Include="images\dummy\CCdemo_custom.png" />
-    <None Include="components\CardRowTop.qml" />
-    <None Include="scripts\Constants.js" />
-    <None Include="components\FrameWindow.qml" />
-    <None Include="components\LabelTextBox.qml" />
-    <None Include="components\LabelTextBoxForm.ui.qml" />
-    <None Include="fonts\lato\Lato-Regular.ttf" />
-    <None Include="MainForm.ui.qml" />
-    <None Include="MainMenuBottomModel.qml" />
-    <None Include="MainMenuModel.qml" />
-    <None Include="components\PDFPreview.qml" />
-    <None Include="contentPages\card\PageCardAdress.qml" />
-    <None Include="contentPages\card\PageCardAdressForm.ui.qml" />
-    <None Include="contentPages\card\PageCardIdentify.qml" />
-    <None Include="contentPages\card\PageCardIdentifyForm.ui.qml" />
-    <None Include="contentPages\card\PageCardNotes.qml" />
-    <None Include="contentPages\card\PageCardNotesForm.ui.qml" />
-    <None Include="contentPages\card\PageCardOtherData.qml" />
-    <None Include="contentPages\card\PageCardOtherDataForm.ui.qml" />
-    <None Include="contentPages\card\PageCardPrint.qml" />
-    <None Include="contentPages\card\PageCardPrintForm.ui.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsApp.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsAppForm.ui.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsSignature.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsSignatureForm.ui.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsUpdates.qml" />
-    <None Include="contentPages\definitions\PageDefinitionsUpdatesForm.ui.qml" />
-    <None Include="contentPages\help\PageHelpAbout.qml" />
-    <None Include="contentPages\help\PageHelpAboutForm.ui.qml" />
-    <None Include="contentPages\help\PageHelpDocOnline.qml" />
-    <None Include="contentPages\help\PageHelpDocOnlineForm.ui.qml" />
-    <None Include="contentPages\home\PageHome.qml" />
-    <None Include="contentPages\home\PageHomeForm.ui.qml" />
-    <None Include="PageLoader.qml" />
-    <None Include="contentPages\security\PageSecurityCertificates.qml" />
-    <None Include="contentPages\security\PageSecurityCertificatesForm.ui.qml" />
-    <None Include="contentPages\security\PageSecurityPinCodes.qml" />
-    <None Include="contentPages\security\PageSecurityPinCodesForm.ui.qml" />
-    <None Include="images\dummy\Pdfdemo.png" />
-    <None Include="contentPages\security\PinCodesModel.qml" />
-    <None Include="components\ScrollBar.qml" />
-    <None Include="SubMenuModel.qml" />
-    <None Include="components\TextBullet.qml" />
-    <None Include="components\TitleBar.qml" />
-    <None Include="images\arrow-right_AMA.png" />
-    <None Include="images\arrow-right_hover.png" />
-    <None Include="images\arrow-right_white_AMA.png" />
-    <None Include="images\definitions_icon.png" />
-    <None Include="images\definitions_icon_selected.png" />
-    <None Include="favicon.ico" />
-    <None Include="images\help_icon.png" />
-    <None Include="images\help_icon_selected.png" />
-    <None Include="images\icons-move.png" />
-    <None Include="images\logo_CC.png" />
-    <None Include="images\logo_CC_seal.png" />
-    <None Include="images\logo_autenticacao_gov.png" />
-    <None Include="images\logo_autenticacao_gov100.png" />
-    <None Include="images\logo_compete2020.png" />
-    <None Include="main.qml" />
-    <None Include="images\titleBar\maximize.png" />
-    <None Include="images\titleBar\maximize_hover.png" />
-    <None Include="images\titleBar\minimize.png" />
-    <None Include="images\titleBar\minimize_hover.png" />
-    <None Include="images\dummy\photo.png" />
-    <None Include="images\pteid_signature_watermark.jpg" />
-    <None Include="qtquickcontrols2.conf" />
-    <None Include="images\titleBar\quit.png" />
-    <None Include="images\titleBar\quit_hover.png" />
-    <None Include="images\titleBar\quit_hover_blue.png" />
-    <None Include="images\remove_file.png" />
-    <None Include="images\remove_file_hover.png" />
-    <None Include="images\tooltip_grey.png" />
+    <CustomBuild Include="appcontroller.h;gapi.h;singleapplication.h;singleapplication_p.h">
+      <Message>MOC %(Filename)%(Extension)</Message>
+      <Command>"$(QtDir)\bin\moc.exe" --compiler-flavor=msvc "%(FullPath)" -o "$(GeneratedDir)moc_%(Filename).cpp"</Command>
+      <Outputs>$(GeneratedDir)moc_%(Filename).cpp</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <!-- QML, images and fonts compiled into the executable -->
+  <ItemGroup>
+    <QrcInput Include="**\*.qml;**\*.js;images\**;fonts\**;qtquickcontrols2.conf" />
     <CustomBuild Include="resources.qrc">
-      <FileType>Document</FileType>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">resources.qrc;MainForm.ui.qml;main.cpp;PageLoader.qml;MainMenuModel.qml;SubMenuModel.qml;main.qml;scripts\Constants.js;images\logo-ag.svg;contentPages\card\PageCardOtherData.qml;contentPages\card\PageCardPinCodesForm.ui.qml;contentPages\card\PageCardNotesForm.ui.qml;contentPages\card\PageCardIdentify.qml;contentPages\card\PageCardPinCodes.qml;contentPages\card\PageCardAdressForm.ui.qml;contentPages\card\PageCardAdress.qml;contentPages\card\PageCardNotes.qml;contentPages\card\PageCardIdentifyForm.ui.qml;contentPages\card\PageCardCertificatesForm.ui.qml;contentPages\card\PageCardCertificates.qml;contentPages\card\photo.png;contentPages\card\PageCardOtherDataForm.ui.qml;contentPages\definitions\PageDefinitionsParameters.qml;contentPages\definitions\PageDefinitionsParametersForm.ui.qml;contentPages\help\PageHelpAbout.qml;contentPages\help\PageHelpDocOnline.qml;contentPages\help\PageHelpUpdates.qml;contentPages\help\PageHelpUpdatesForm.ui.qml;contentPages\help\PageHelpAboutForm.ui.qml;contentPages\help\PageHelpDocOnlineForm.ui.qml;contentPages\home\PageHomeForm.ui.qml;contentPages\services\PageServicesSign.qml;contentPages\services\PageServicesSign.ui.qml;contentPages\home\PageHome.qml;fonts\lato\Lato-Regular.ttf;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">resources.qrc;MainForm.ui.qml;main.cpp;PageLoader.qml;MainMenuModel.qml;SubMenuModel.qml;main.qml;scripts\Constants.js;images\logo-ag.svg;contentPages\card\PageCardOtherData.qml;contentPages\card\PageCardPinCodesForm.ui.qml;contentPages\card\PageCardNotesForm.ui.qml;contentPages\card\PageCardIdentify.qml;contentPages\card\PageCardPinCodes.qml;contentPages\card\PageCardAdressForm.ui.qml;contentPages\card\PageCardAdress.qml;contentPages\card\PageCardNotes.qml;contentPages\card\PageCardIdentifyForm.ui.qml;contentPages\card\PageCardCertificatesForm.ui.qml;contentPages\card\PageCardCertificates.qml;contentPages\card\photo.png;contentPages\card\PageCardOtherDataForm.ui.qml;contentPages\definitions\PageDefinitionsParameters.qml;contentPages\definitions\PageDefinitionsParametersForm.ui.qml;contentPages\help\PageHelpAbout.qml;contentPages\help\PageHelpDocOnline.qml;contentPages\help\PageHelpUpdates.qml;contentPages\help\PageHelpUpdatesForm.ui.qml;contentPages\help\PageHelpAboutForm.ui.qml;contentPages\help\PageHelpDocOnlineForm.ui.qml;contentPages\home\PageHomeForm.ui.qml;contentPages\services\PageServicesSign.qml;contentPages\services\PageServicesSign.ui.qml;contentPages\home\PageHome.qml;fonts\lato\Lato-Regular.ttf;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5)\bin\rcc.exe -name resources resources.qrc -o release\qrc_resources.cpp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\rcc.exe -name resources resources.qrc -o release\qrc_resources.cpp</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC resources.qrc</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">RCC resources.qrc</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\qrc_resources.cpp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\qrc_resources.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">resources.qrc;MainForm.ui.qml;main.cpp;PageLoader.qml;MainMenuModel.qml;SubMenuModel.qml;main.qml;scripts\Constants.js;images\logo-ag.svg;contentPages\card\PageCardOtherData.qml;contentPages\card\PageCardPinCodesForm.ui.qml;contentPages\card\PageCardNotesForm.ui.qml;contentPages\card\PageCardIdentify.qml;contentPages\card\PageCardPinCodes.qml;contentPages\card\PageCardAdressForm.ui.qml;contentPages\card\PageCardAdress.qml;contentPages\card\PageCardNotes.qml;contentPages\card\PageCardIdentifyForm.ui.qml;contentPages\card\PageCardCertificatesForm.ui.qml;contentPages\card\PageCardCertificates.qml;contentPages\card\photo.png;contentPages\card\PageCardOtherDataForm.ui.qml;contentPages\definitions\PageDefinitionsParameters.qml;contentPages\definitions\PageDefinitionsParametersForm.ui.qml;contentPages\help\PageHelpAbout.qml;contentPages\help\PageHelpDocOnline.qml;contentPages\help\PageHelpUpdates.qml;contentPages\help\PageHelpUpdatesForm.ui.qml;contentPages\help\PageHelpAboutForm.ui.qml;contentPages\help\PageHelpDocOnlineForm.ui.qml;contentPages\home\PageHomeForm.ui.qml;contentPages\services\PageServicesSign.qml;contentPages\services\PageServicesSign.ui.qml;contentPages\home\PageHome.qml;fonts\lato\Lato-Regular.ttf;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">resources.qrc;MainForm.ui.qml;main.cpp;PageLoader.qml;MainMenuModel.qml;SubMenuModel.qml;main.qml;scripts\Constants.js;images\logo-ag.svg;contentPages\card\PageCardOtherData.qml;contentPages\card\PageCardPinCodesForm.ui.qml;contentPages\card\PageCardNotesForm.ui.qml;contentPages\card\PageCardIdentify.qml;contentPages\card\PageCardPinCodes.qml;contentPages\card\PageCardAdressForm.ui.qml;contentPages\card\PageCardAdress.qml;contentPages\card\PageCardNotes.qml;contentPages\card\PageCardIdentifyForm.ui.qml;contentPages\card\PageCardCertificatesForm.ui.qml;contentPages\card\PageCardCertificates.qml;contentPages\card\photo.png;contentPages\card\PageCardOtherDataForm.ui.qml;contentPages\definitions\PageDefinitionsParameters.qml;contentPages\definitions\PageDefinitionsParametersForm.ui.qml;contentPages\help\PageHelpAbout.qml;contentPages\help\PageHelpDocOnline.qml;contentPages\help\PageHelpUpdates.qml;contentPages\help\PageHelpUpdatesForm.ui.qml;contentPages\help\PageHelpAboutForm.ui.qml;contentPages\help\PageHelpDocOnlineForm.ui.qml;contentPages\home\PageHomeForm.ui.qml;contentPages\services\PageServicesSign.qml;contentPages\services\PageServicesSign.ui.qml;contentPages\home\PageHome.qml;fonts\lato\Lato-Regular.ttf;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(PTEID_DIR_QT_5)\bin\rcc.exe -name resources resources.qrc -o debug\qrc_resources.cpp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\rcc.exe -name resources resources.qrc -o debug\qrc_resources.cpp</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC resources.qrc</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">RCC resources.qrc</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\qrc_resources.cpp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\qrc_resources.cpp;%(Outputs)</Outputs>
-      <SubType>Designer</SubType>
-    </CustomBuild>
-    <CustomBuild Include="appcontroller.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
-			</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
-		  </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="autoUpdates.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
-			</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
-		  </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="gapi.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
-		</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
-	  </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="singleapplication.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="singleapplication_p.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PTEID_DIR_QT_5)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running MOC on %(FullPath)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(PTEID_DIR_QT_5_X64)\bin\moc -o ".\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp" %(FullPath)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(Configuration)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Message>RCC %(Filename)%(Extension)</Message>
+      <Command>"$(QtDir)\bin\rcc.exe" -name resources "%(FullPath)" -o "$(GeneratedDir)qrc_resources.cpp"</Command>
+      <AdditionalInputs>@(QrcInput)</AdditionalInputs>
+      <Outputs>$(GeneratedDir)qrc_resources.cpp</Outputs>
     </CustomBuild>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="eidguiV2Credentials.h" />
-    <ClInclude Include="concurrent.h" />
-  </ItemGroup>
+  <Target Name="CreateGeneratedDir" BeforeTargets="CustomBuild">
+    <MakeDir Directories="$(GeneratedDir)" />
+  </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

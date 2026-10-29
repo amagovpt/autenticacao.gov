@@ -189,7 +189,14 @@ FaceInfo::FaceInfo(const unsigned char *biometricData, int biometricDataLen) {
 
 		m_numberOfFacialImages = readTwoBytes(biometricData); // 2 bytes
 		biometricData += 2;
-		for (unsigned int i = 0; i < m_numberOfFacialImages; ++i) {
+		for (long i = 0; i < m_numberOfFacialImages; ++i) {
+			// Facial record header: 20 bytes, 8 per feature point, then 12 bytes of image information
+			const size_t remaining = biometricDataLen - (biometricData - startOfBiometricData);
+			if (remaining < 32 || remaining < 32 + 8 * static_cast<size_t>(readTwoBytes(biometricData + 4))) {
+				MWLOG(LEV_WARN, MOD_APL, "Facial record header %ld exceeds the biometric data!", i);
+				break;
+			}
+
 			std::shared_ptr<FaceInfoData> data = std::make_unique<FaceInfoData>();
 			data->m_facialRecordDataLength = (biometricData[0] << 24) | (biometricData[1] << 16) |
 											 (biometricData[2] << 8) | biometricData[3]; // 4 bytes
@@ -255,17 +262,21 @@ FaceInfo::FaceInfo(const unsigned char *biometricData, int biometricDataLen) {
 			data->m_quality = readTwoBytes(biometricData);
 			biometricData += 2;
 
-			ptrdiff_t offset = biometricData - startOfBiometricData;
+			const size_t available = biometricDataLen - (biometricData - startOfBiometricData);
+			const long headerLength = 20 + 8L * data->m_numberOfFeaturePoints + 12;
 
-			size_t sizePhotoRaw = data->m_facialRecordDataLength - 20 - (8 * data->m_numberOfFeaturePoints) - 12;
-			if (offset + sizePhotoRaw > biometricDataLen) {
+			// The record length comes from the document: it must not wrap the image size around
+			size_t sizePhotoRaw = data->m_facialRecordDataLength > headerLength
+									  ? static_cast<size_t>(data->m_facialRecordDataLength - headerLength)
+									  : 0;
+			if (sizePhotoRaw > available) {
 				MWLOG(LEV_WARN, MOD_APL, "Image data inconsistent with Facial Record Header!");
-				sizePhotoRaw = biometricDataLen - offset;
+				sizePhotoRaw = available;
 			}
 
-			data->m_photoRawData = CByteArray(biometricData, sizePhotoRaw);
+			data->m_photoRawData = CByteArray(biometricData, (unsigned long)sizePhotoRaw);
 			bool img_datatype_check = checkImageDataType(data->m_photoRawData, data->m_imgDataType);
-			MWLOG(LEV_INFO, MOD_APL, "DG2 image %d data type check: %s", i, img_datatype_check ? "OK" : "NOT_OK");
+			MWLOG(LEV_INFO, MOD_APL, "DG2 image %ld data type check: %s", i, img_datatype_check ? "OK" : "NOT_OK");
 
 			biometricData += sizePhotoRaw;
 		}

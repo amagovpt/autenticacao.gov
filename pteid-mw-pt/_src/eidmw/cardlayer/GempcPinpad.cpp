@@ -180,7 +180,7 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation, const tPin &pin, unsigne
 
 	// For IAS cards we need to VerifyPIN before Modify
 	if (operation == PIN_OP_VERIFY) {
-		ioctl2 = CM_IOCTL_VERIFY_PIN;
+		ioctl2 = GEMPC_IOCTL_VERIFY_PIN;
 		pin_struct = &pin_verify;
 
 		fillVerifyControlStruct(&pin_verify);
@@ -194,7 +194,7 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation, const tPin &pin, unsigne
 
 		return PinpadControl((unsigned long)ioctl2, b1, operation, ucPinType, pin.csLabel, wndGeometry);
 	} else if (operation == PIN_OP_CHANGE) {
-		ioctl2 = CM_IOCTL_MODIFY_PIN;
+		ioctl2 = GEMPC_IOCTL_MODIFY_PIN;
 		pin_struct = &pin_change;
 
 		fillModifyControlStruct(&pin_change, IsGemsafe(atr));
@@ -207,7 +207,7 @@ CByteArray GemPcPinpad::PinCmd(tPinOperation operation, const tPin &pin, unsigne
 
 		return PinpadControl((unsigned long)ioctl2, b2, operation, ucPinType, pin.csLabel, wndGeometry);
 	} else if (operation == PIN_OP_RESET || operation == PIN_OP_RESET_NO_PUK) {
-		ioctl2 = CM_IOCTL_MODIFY_PIN;
+		ioctl2 = GEMPC_IOCTL_MODIFY_PIN;
 		pin_struct = &pin_change;
 		bool include_verify = IsGemsafe(atr);
 		if (operation == PIN_OP_RESET)

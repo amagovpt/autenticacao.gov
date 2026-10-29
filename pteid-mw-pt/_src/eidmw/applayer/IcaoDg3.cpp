@@ -266,7 +266,7 @@ eIDMW::IcaoDg3::IcaoDg3(const CByteArray &biometricData) {
 		if (size > 255)
 			biometricTemplateArray.Append(getSizeExtended(size));
 		else
-			biometricTemplateArray.Append(size);
+			biometricTemplateArray.Append((unsigned char)size);
 		biometricTemplateArray.Append(biometricTemplate, size);
 		const unsigned char *biometricTemplateArrayData = biometricTemplateArray.GetBytes();
 		BITDG3 *bitDG3 =

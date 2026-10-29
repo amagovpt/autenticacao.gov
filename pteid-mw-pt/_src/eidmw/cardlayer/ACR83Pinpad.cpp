@@ -89,7 +89,7 @@ CByteArray ACR83Pinpad::PinCmd(tPinOperation operation, const tPin &pin, unsigne
 	// For IAS cards we need to VerifyPIN before Modify
 	if (operation == PIN_OP_VERIFY) {
 
-		ioctl2 = CM_IOCTL_VERIFY_PIN;
+		ioctl2 = ACR83_IOCTL_VERIFY_PIN;
 		pin_struct = &pin_verify;
 
 		fillVerifyControlStruct(&pin_verify);
@@ -104,7 +104,7 @@ CByteArray ACR83Pinpad::PinCmd(tPinOperation operation, const tPin &pin, unsigne
 
 	} else if (operation == PIN_OP_CHANGE) {
 
-		ioctl2 = CM_IOCTL_MODIFY_PIN;
+		ioctl2 = ACR83_IOCTL_MODIFY_PIN;
 		pin_struct = &pin_change;
 
 		fillModifyControlStruct(&pin_change);
@@ -125,7 +125,7 @@ CByteArray ACR83Pinpad::PinCmd(tPinOperation operation, const tPin &pin, unsigne
 
 		return PinpadControl((unsigned long)ioctl2, b2, operation, ucPinType, pin.csLabel, wndGeometry);
 	} else if (operation == PIN_OP_RESET) {
-		ioctl2 = CM_IOCTL_MODIFY_PIN;
+		ioctl2 = ACR83_IOCTL_MODIFY_PIN;
 		pin_struct = &pin_change;
 
 		fillModifyControlStruct(&pin_change);

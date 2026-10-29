@@ -49,8 +49,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.6
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Window
 
 /* Constants imports */
 import "../scripts/Constants.js" as Constants
@@ -126,7 +126,7 @@ Item {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked:{
-                    if (Qt.platform.os === "osx")
+                    if (Qt.platform.os === "macos")
                         mainWindow.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.WindowMinMaxButtonsHint;
                     mainWindow.showMinimized();
                 }

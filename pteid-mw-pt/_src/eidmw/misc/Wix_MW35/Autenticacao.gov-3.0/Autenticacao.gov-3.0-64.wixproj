@@ -60,7 +60,41 @@
     <Compile Include="Product64-3.0.wxs" />
     <Compile Include="qml-app.wxs" />
   </ItemGroup>
+  <!--
+    Qt runtime of the application: the directory windeployqt deployed pteidguiV2.exe into
+    (PTEID_DIR_QML_X64), harvested into the QtRuntime component group at build time so
+    the package follows the Qt version. Component GUIDs are derived from the install paths.
+  -->
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);QMLDIR=$(PTEID_DIR_QML_X64)</DefineConstants>
+    <HarvestDirectoryAutogenerateGuids>true</HarvestDirectoryAutogenerateGuids>
+    <HarvestDirectorySuppressRegistry>true</HarvestDirectorySuppressRegistry>
+    <HarvestDirectorySuppressCom>true</HarvestDirectorySuppressCom>
+  </PropertyGroup>
   <Import Project="$(WixTargetsPath)" />
+  <!--
+    The HarvestDirectory item is added at build time: Visual Studio cannot show an item outside
+    the project directory and refuses to load the project. With PTEID_DEPLOY_QT=1 the Qt runtime
+    of pteidguiV2.exe is first deployed into PTEID_DIR_QML_X64 with windeployqt, instead of using
+    a directory deployed beforehand.
+  -->
+  <PropertyGroup>
+    <!-- First dependency of Harvest: HarvestDirectory checks for items before BeforeTargets run -->
+    <HarvestDependsOn>AddQtRuntime;$(HarvestDependsOn)</HarvestDependsOn>
+  </PropertyGroup>
+  <Target Name="AddQtRuntime">
+    <RemoveDir Directories="$(PTEID_DIR_QML_X64)" Condition="'$(PTEID_DEPLOY_QT)' == '1'" />
+    <!-- windeployqt follows the dependencies of every DLL, poppler-qt6.dll included -->
+    <Exec StandardOutputImportance="high" StandardErrorImportance="high" Command="set &quot;PATH=$(PTEID_POPPLER_QT6)\bin;%PATH%&quot; &amp;&amp; &quot;$(PTEID_DIR_QT_6_X64)\bin\windeployqt.exe&quot; --release --no-compiler-runtime --qmldir &quot;$(ProjectDir)..\..\..\eidguiV2&quot; --dir &quot;$(PTEID_DIR_QML_X64)&quot; &quot;$(ProjectDir)..\..\..\_Binaries35\x64\Release\pteidguiV2.exe&quot;" Condition="'$(PTEID_DEPLOY_QT)' == '1'" />
+    <ItemGroup>
+      <HarvestDirectory Include="$(PTEID_DIR_QML_X64)">
+        <DirectoryRefId>APPLICATIONFOLDER</DirectoryRefId>
+        <ComponentGroupName>QtRuntime</ComponentGroupName>
+        <PreprocessorVariable>var.QMLDIR</PreprocessorVariable>
+        <SuppressRootDirectory>true</SuppressRootDirectory>
+      </HarvestDirectory>
+    </ItemGroup>
+  </Target>
   <PropertyGroup>
     <PreBuildEvent>cmd.exe /C "$(ProjectDir)..\..\..\eidlibdotnetsdk\build.bat  $(ProjectDir)\..\..\..\_Binaries35\AnyCPU\Release\"</PreBuildEvent>
   </PropertyGroup>

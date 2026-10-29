@@ -83,8 +83,6 @@ DG11 *decodeDg11(const CByteArray &dg11_data) {
 		MWLOG(LEV_ERROR, MOD_APL, "%s: Empty data array on Data group 11!", __FUNCTION__);
 		return NULL;
 	}
-	long size;
-
 	unsigned char *asn1_data = process.GetBytes();
 
 	if (asn1_data[0] != 0x6B) {

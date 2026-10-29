@@ -9,7 +9,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -19,7 +19,7 @@ import eidguiV2 1.0
 
 PageCardNotesForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageCardNotesForm onPressed:" + event.key)
         if(propertyEditNotes.focus === false  && !event.isAutoRepeat){
             Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
@@ -33,10 +33,10 @@ PageCardNotesForm {
     }
     Connections {
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
         }
-        onSignalPersoDataLoaded: {
+        function onSignalPersoDataLoaded(persoNotes) {
             setUnsupportedMessageVisible(false)
 
             console.log("QML: onSignalPersoDataLoaded!")
@@ -53,12 +53,12 @@ PageCardNotesForm {
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyNotesText.forceActiveFocus()
         }
-        onSignalPersonalDataNotSupported:
+        function onSignalPersonalDataNotSupported()
         {
             console.log("QML: onSignalPersonalDataNotSupported")
             setUnsupportedMessageVisible(true);
         }
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Card Notes onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
@@ -102,7 +102,7 @@ PageCardNotesForm {
         }
 
 
-        onSignalSetPersoDataFile: {
+        function onSignalSetPersoDataFile(titleMessage, statusMessage, success) {
             mainFormID.propertyPageLoader.activateGeneralPopup(titleMessage, statusMessage, false);
             if (success) {
                 mainFormID.propertyPageLoader.propertyUnsavedNotes = false;
@@ -110,7 +110,7 @@ PageCardNotesForm {
                 propertyLoadedText = "";
             }
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
             var returnSubMenuWhenClosed = false

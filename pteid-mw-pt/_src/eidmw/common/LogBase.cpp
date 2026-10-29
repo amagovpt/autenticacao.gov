@@ -196,12 +196,18 @@ bool isWindowsDebugActive() {
 	}
 	CoTaskMemFree(pszPath);
 
-	std::wstring debugFlag2(_wgetenv(L"WINDIR"));
-	debugFlag2 += L"\\pteid-debug.conf";
+	wchar_t *windir = NULL;
+	size_t windirLength = 0;
+	if (_wdupenv_s(&windir, &windirLength, L"WINDIR") == 0 && windir != NULL) {
+		std::wstring debugFlag2(windir);
+		debugFlag2 += L"\\pteid-debug.conf";
 
-	dwAttr = GetFileAttributes(debugFlag2.c_str());
+		dwAttr = GetFileAttributes(debugFlag2.c_str());
+		is_windows_debug = is_windows_debug || dwAttr != INVALID_FILE_ATTRIBUTES;
+	}
+	free(windir);
 
-	return (dwAttr != INVALID_FILE_ATTRIBUTES) || is_windows_debug;
+	return is_windows_debug;
 }
 
 #endif
@@ -773,7 +779,7 @@ void CLogger::initAppName() {
 	DWORD baseNamseSize = 0;
 	baseNamseSize = GetModuleFileNameA(NULL, app_path, sizeof(app_path));
 	if (baseNamseSize == 0) {
-		strcpy(app_path, "Unknown name");
+		strcpy_s(app_path, sizeof(app_path), "Unknown name");
 	}
 #elif __linux__
 	getProcessExecutableName(app_path, sizeof(app_path));
@@ -856,7 +862,7 @@ bool CLog::writeLineHeaderA(tLOG_Level level_in, const int line, const char *fil
 		if (isFileMixingGroups()) {
 			fprintf_s(m_f,
 					  "%s - %ld - %s: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",
-					  timestamp.c_str(), CThread::getCurrentPid(), m_group.c_str(), lPreviousOpenFailed);
+					  timestamp.c_str(), CThread::getCurrentPid(), utilStringNarrow(m_group).c_str(), lPreviousOpenFailed);
 		} else {
 			fprintf_s(m_f, "%s - %ld: ...ERROR: This file could not be opened. %ld logging line(s) are missing...\n",
 					  timestamp.c_str(), CThread::getCurrentPid(), lPreviousOpenFailed);

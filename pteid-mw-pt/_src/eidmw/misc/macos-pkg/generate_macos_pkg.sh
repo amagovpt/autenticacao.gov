@@ -15,8 +15,6 @@ CTK_BUNDLE_DIR=$MW_SOURCE_DIR/pteid-mw-pt/_src/eidmw/pteid-ctk/build/Release
 PKG_DIR=$(pwd)
 
 EIDGUI_BUNDLE_DIR="${PKG_DIR}/apps/Autenticação.gov.app/Contents/MacOS"
-RESOURCES_BUNDLE_DIR="${PKG_DIR}/apps/Autenticação.gov.app/Contents/Resources"
-EIDGUI_BUNDLE_FRAMEWORKS="${PKG_DIR}/apps/Autenticação.gov.app/Contents/Frameworks"
 BIN_BUNDLE_DIR="${PKG_DIR}/dialogs"
 CERTS_BUNDLE_DIR="${PKG_DIR}/certs/"
 HTML_BUNDLE_DIR="${PKG_DIR}/certs/pteid-mw/www/"
@@ -84,12 +82,8 @@ cd $PKG_DIR
 
 rmdir_if_exists ${PKG_DIR}/apps/Autenticação.gov.app
 echo "Copying into $EIDGUI_BUNDLE_DIR"
-copy_appbundle ${PKG_DIR}/apps/
-copy_poppler_qt_to_appbundle  "$EIDGUI_BUNDLE_FRAMEWORKS"
-cp -af $BIN_DIR/../eidguiV2/eidguiV2.app/Contents/MacOS/* "$EIDGUI_BUNDLE_DIR"
-cp -af $BIN_DIR/../eidguiV2/*.qm "$RESOURCES_BUNDLE_DIR"
-cp  $BIN_DIR/../eidguiV2/fonts/lato/Lato-Regular.ttf "$RESOURCES_BUNDLE_DIR"
-cp  $BIN_DIR/../eidguiV2/fonts/myriad/MyriadPro-Regular.otf "$RESOURCES_BUNDLE_DIR"
+# Translations and fonts are already in the eidguiV2.app bundle (QMAKE_BUNDLE_DATA)
+deploy_qt_appbundle ${PKG_DIR}/apps $BIN_DIR/../eidguiV2
 cp apps/Info.plist "$EIDGUI_BUNDLE_DIR/../"
 
 cd ${PKG_DIR}/apps/
@@ -106,6 +100,21 @@ cp -f $BIN_BUNDLE_DIR/Info.plist $BIN_BUNDLE_DIR/pteiddialogsQTsrv.app/Contents/
 chmod +x $BIN_BUNDLE_DIR/pteid_uninstall.sh
 cd $BIN_BUNDLE_DIR
 bash ./change_paths.sh
+cd $PKG_DIR
+
+# Every dependency must be a system library, a library installed in /usr/local/lib by pteid-lib.pkg
+# or a library of the app bundle, never a path of the build machine
+unresolved=$(find system-libs/lib apps dialogs -type f -print0 | while IFS= read -r -d '' f
+do
+	file -b "$f" | grep -q Mach-O || continue
+	otool -X -L "$f" | awk -v f="$f" '$1 !~ /^(\/usr\/lib\/|\/System\/|\/usr\/local\/lib\/|@rpath\/|@loader_path\/|@executable_path\/)/ {print f ": " $1}'
+done)
+if [ -n "$unresolved" ]
+then
+	echo "Dependencies outside the system, /usr/local/lib and the app bundle:"
+	echo "$unresolved"
+	exit 1
+fi
 
 rmdir_if_exists $CERTS_BUNDLE_DIR
 mkdir -p $CERTS_BUNDLE_DIR/certs

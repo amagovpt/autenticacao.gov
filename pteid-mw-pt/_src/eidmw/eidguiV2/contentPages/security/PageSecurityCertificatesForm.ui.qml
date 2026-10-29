@@ -8,11 +8,11 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Window 2.2
-import QtGraphicalEffects 1.0
-import QtQuick.Controls 2.1
-import Qt.labs.platform 1.0
+import QtQuick
+import QtQuick.Window
+import Qt5Compat.GraphicalEffects
+import QtQuick.Controls
+import Qt.labs.platform
 import eidguiV2 1.0
 
 /* Constants imports */
@@ -165,7 +165,7 @@ Item {
                     }
                     Accessible.role: Accessible.Row
                     Accessible.name: textEntity.accessibleText
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, rectEntity)
                     }
                     KeyNavigation.tab: rectAuth
@@ -190,7 +190,7 @@ Item {
                     }
                     Accessible.role: Accessible.Row
                     Accessible.name: textAuth.accessibleText
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, rectAuth)
                     }
                     KeyNavigation.tab: rectValid
@@ -215,7 +215,7 @@ Item {
                     }
                     Accessible.role: Accessible.Row
                     Accessible.name: textValid.accessibleText
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, rectValid)
                     }
                     KeyNavigation.tab: rectUntil
@@ -242,7 +242,7 @@ Item {
                     }
                     Accessible.role: Accessible.Row
                     Accessible.name: textUntil.accessibleText
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, rectUntil)
                     }
                     KeyNavigation.tab: rectKey
@@ -267,7 +267,7 @@ Item {
                     }
                     Accessible.role: Accessible.Row
                     Accessible.name: textKey.accessibleText
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, rectKey)
                     }
                     KeyNavigation.tab: rectSerialNumber
@@ -294,7 +294,7 @@ Item {
                     }
                     Accessible.role: Accessible.Row
                     Accessible.name: textKey.accessibleText
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, rectKey)
                     }
                     KeyNavigation.tab: rectStatus
@@ -323,7 +323,7 @@ Item {
                     }
                     Accessible.role: Accessible.Row
                     Accessible.name: textStatus.accessibleText
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, rectStatus)
                     }
                     KeyNavigation.tab: (buttonViewCertificate.visible ? buttonViewCertificate : buttonExportCertificate)
@@ -355,7 +355,7 @@ Item {
                         highlighted: activeFocus
                         Accessible.role: Accessible.Button
                         Accessible.name: text
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, buttonViewCertificate)
                         }
                         KeyNavigation.tab: buttonExportCertificate
@@ -381,7 +381,7 @@ Item {
                         highlighted: activeFocus
                         Accessible.role: Accessible.Button
                         Accessible.name: text
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, buttonExportCertificate)
                         }
                         KeyNavigation.tab: buttonLessCertificateDetails

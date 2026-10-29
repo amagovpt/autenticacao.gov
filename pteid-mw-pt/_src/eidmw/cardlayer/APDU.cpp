@@ -48,7 +48,7 @@ eIDMW::CByteArray eIDMW::APDU::getLe(bool onlyLe) const {
 		}
 		result.Append(formatLe);
 	} else {
-		result.Append(m_le);
+		result.Append((unsigned char)m_le);
 	}
 	return result;
 }
@@ -67,7 +67,7 @@ eIDMW::CByteArray eIDMW::APDU::getLc(bool onlyLc) const {
 		else
 			result.Append(formatExtended(lc, 3));
 		} else {
-			result.Append(lc);
+			result.Append((unsigned char)lc);
 		}
 
 	return result;

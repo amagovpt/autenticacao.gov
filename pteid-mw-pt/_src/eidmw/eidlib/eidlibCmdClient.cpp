@@ -181,17 +181,13 @@ PTEID_Certificates &PTEID_CMDSignatureClient::getCertificates() {
 	/* Check if the cached APL_Certifs from call to GetCertifica Service matches the
 	last PTEID_Certificates in m_certificates. */
 	APL_Certifs *cachedCertifs = pCmdClient->getCertificates();
-	if (m_certificates.empty()) {
-		m_certificates.push_back(new PTEID_Certificates(NULL, cachedCertifs));
-		return *m_certificates.back();
-	}
-	APL_Certifs *lastWrappedCertifs = (APL_Certifs *)m_certificates.back()->m_impl;
-	if (cachedCertifs != lastWrappedCertifs) {
+	if (m_certificates.empty() || cachedCertifs != (APL_Certifs *)m_certificates.back()->m_impl) {
 		m_certificates.push_back(new PTEID_Certificates(NULL, cachedCertifs));
 	}
-	return *m_certificates.back();
 
 	END_TRY_CATCH
+
+	return *m_certificates.back();
 }
 
 PTEID_Certificate &PTEID_CMDSignatureClient::getCert(PTEID_CertifType type) { return getCertificates().getCert(type); }

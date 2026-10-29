@@ -57,8 +57,8 @@ static void signatureDataFromPkcs7Object(QByteArray &sigBinary, SignatureDetails
 	PKCS7 *p7 = d2i_PKCS7(NULL, (const unsigned char **)&binaryData, sigBinary.size());
 
 	if (!p7) {
-		MWLOG(LEV_ERROR, MOD_SCAP, "%s: Error decoding the PKCS7 object from binary data of size %d", __FUNCTION__,
-			  sigBinary.size());
+		MWLOG(LEV_ERROR, MOD_SCAP, "%s: Error decoding the PKCS7 object from binary data of size %lld", __FUNCTION__,
+			  static_cast<long long>(sigBinary.size()));
 		return;
 	}
 

@@ -38,7 +38,7 @@
 
 #ifndef WIN32
 #define strcpy_s(a, b, c) strcpy((a), (c))
-#define sprintf_s(a, b, c, d) sprintf((a), (c), (d))
+#define sprintf_s(a, b, c, d) snprintf((a), (b), (c), (d))
 #endif
 
 using namespace eIDMW;

@@ -497,9 +497,9 @@ void APL_EidFile_ID::MapFieldsInternal() {
 		CByteArray photoRAW;
 
 		photoRAW = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_Photo, PTEIDNG_FIELD_ID_LEN_Photo);
-		MWLOG(LEV_DEBUG, MOD_APL, "SOD photoRAW: %d", photoRAW.Size());
+		MWLOG(LEV_DEBUG, MOD_APL, "SOD photoRAW: %lu", photoRAW.Size());
 		photoRAW.TrimRight(0);
-		MWLOG(LEV_DEBUG, MOD_APL, "SOD photoRAW: %d", photoRAW.Size());
+		MWLOG(LEV_DEBUG, MOD_APL, "SOD photoRAW: %lu", photoRAW.Size());
 		cbeff = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_CBEFF, PTEIDNG_FIELD_ID_LEN_CBEFF);
 		facialrechdr = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FACIALRECHDR, PTEIDNG_FIELD_ID_LEN_FACIALRECHDR);
 		facialinfo = m_data.GetBytes(PTEIDNG_FIELD_ID_POS_FACIALINFO, PTEIDNG_FIELD_ID_LEN_FACIALINFO);
@@ -1648,7 +1648,7 @@ tCardFileStatus APL_EidFile_Sod::VerifyFile() {
 		const unsigned char *p = sod_ca->getData().GetBytes();
 		pX509 = d2i_X509(&pX509, &p, sod_ca->getData().Size());
 		X509_STORE_add_cert(store, pX509);
-		MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
+		MWLOG(LEV_DEBUG, MOD_APL, "%lu. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
 		X509_free(pX509); // Release our reference; store holds its own
 	}
 

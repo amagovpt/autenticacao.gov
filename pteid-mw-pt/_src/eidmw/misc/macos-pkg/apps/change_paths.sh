@@ -1,26 +1,64 @@
 BUNDLE_BIN_DIR="Autenticação.gov.app/Contents/MacOS"
 BUNDLE_FWK_DIR="Autenticação.gov.app/Contents/Frameworks"
+# Libraries installed in /usr/local/lib by pteid-lib.pkg
+SYSTEM_LIBS_DIR=${SYSTEM_LIBS_DIR:-../system-libs/lib}
 
-function change_dylib_dep {
-	DYLIB_PATH=$1
-	DYLIB_DEPS=$2
-	current_deps=$(otool -X -L $DYLIB_PATH)
-	for dylib in $DYLIB_DEPS
-	do 
-		DEP=$(printf $dylib | sed -E sx\\.x\\\\.xg) #Escape dots in dylib name to include in regex
-		original_path=$(echo $current_deps | egrep -o "\S*$DEP")
-		echo "Replacing original path $original_path"
-		install_name_tool -change $original_path /usr/local/lib/$dylib $DYLIB_PATH		 
+# Point every dependency that is shipped in /usr/local/lib to the installed copy
+function relink_to_system_libs {
+	BINARY=$1
+	for dep in $(otool -X -L "$BINARY" | awk '{print $1}')
+	do
+		name=$(basename $dep)
+		if [ -e "$SYSTEM_LIBS_DIR/$name" ] && [ "$dep" != "/usr/local/lib/$name" ]
+		then
+			echo "Replacing original path $dep in $(basename "$BINARY")"
+			install_name_tool -change $dep /usr/local/lib/$name "$BINARY"
+		fi
 	done
 }
 
-change_dylib_dep $BUNDLE_BIN_DIR/eidguiV2 "libpteidlib.2.dylib libpteidcommon.2.dylib libpteidapplayer.2.dylib libCMDServices.1.dylib \
-   libssl.1.1.dylib libcrypto.1.1.dylib libcurl.4.dylib libzip.5.dylib"
+# QML LocalStorage only needs the SQLite driver; the other SQL drivers deployed by macdeployqt
+# link to libraries that are not shipped (ODBC, PostgreSQL, MySQL)
+find Autenticação.gov.app/Contents/PlugIns/sqldrivers -type f ! -name 'libqsqlite.dylib' -delete 2>/dev/null
 
-change_dylib_dep $BUNDLE_FWK_DIR/libpoppler-qt5.1.32.0.dylib "libpoppler.129.dylib libfreetype.6.dylib"
+# Every Mach-O file of the bundle: the Qt framework binaries are not marked executable
+BUNDLE_BINARIES=$(find Autenticação.gov.app/Contents -type f -exec file {} + | grep 'Mach-O' | cut -d: -f1)
 
-#install_name_tool -change /usr/local/opt/poppler/lib/libpoppler-qt5.1.dylib '@rpath/libpoppler-qt5.1.dylib' $BUNDLE_BIN_DIR/eidguiV2
-install_name_tool -add_rpath "@loader_path/$BUNDLE_FWK_DIR/" ./$BUNDLE_BIN_DIR/eidguiV2
-install_name_tool -add_rpath "/Applications/$BUNDLE_FWK_DIR/" $BUNDLE_FWK_DIR/libpoppler-qt5.1.32.0.dylib
+# macdeployqt also copies the libraries shipped in /usr/local/lib into the bundle, remove the duplicates
+for lib in $BUNDLE_FWK_DIR/*.dylib
+do
+	if [ -e "$SYSTEM_LIBS_DIR/$(basename $lib)" ]
+	then
+		rm -f "$lib"
+		BUNDLE_BINARIES=$(echo "$BUNDLE_BINARIES" | grep -v "/$(basename $lib)\$")
+	fi
+done
+
+echo "$BUNDLE_BINARIES" | while read -r binary
+do
+	relink_to_system_libs "$binary"
+done
+
+# Drop the libraries that were only needed by the removed ones
+removed=1
+while [ $removed -eq 1 ]
+do
+	removed=0
+	# Library names referenced by the other binaries (otool -L also prints each library's own id)
+	referenced=$(echo "$BUNDLE_BINARIES" | tr '\n' '\0' | xargs -0 otool -L 2>/dev/null \
+		| awk '/:$/ {self=$0; sub(/:$/, "", self); n=split(self, p, "/"); self=p[n]; next}
+		       {n=split($1, p, "/"); if (p[n] != self) print p[n]}' | sort -u)
+	for lib in $BUNDLE_FWK_DIR/*.dylib
+	do
+		name=$(basename $lib)
+		if ! echo "$referenced" | grep -qx "$name"
+		then
+			echo "Removing unused $name"
+			rm -f "$lib"
+			BUNDLE_BINARIES=$(echo "$BUNDLE_BINARIES" | grep -v "/$name\$")
+			removed=1
+		fi
+	done
+done
 
 otool -L $BUNDLE_BIN_DIR/eidguiV2

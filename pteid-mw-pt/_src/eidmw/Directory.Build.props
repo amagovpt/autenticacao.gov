@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Imported by every Visual Studio project below this directory.
+
+  C4251/C4275: the DLLs export classes that use the C++ standard library in their interface.
+  The middleware DLLs are always built together with the same compiler and C runtime (/MD),
+  which is the case where Microsoft documents these warnings as safe to ignore.
+-->
+<Project>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <DisableSpecificWarnings>4251;4275;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

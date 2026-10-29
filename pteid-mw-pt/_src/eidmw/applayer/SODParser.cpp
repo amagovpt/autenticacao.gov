@@ -85,7 +85,7 @@ void SODParser::ParseSodEncapsulatedContent(const CByteArray &contents, const st
 	} else {
 		attr = new SODAttributes();
 
-		MWLOG(LEV_DEBUG, MOD_APL, "EF.SOD structure version: %d", ASN1_INTEGER_get(decoded_obj->version));
+		MWLOG(LEV_DEBUG, MOD_APL, "EF.SOD structure version: %ld", ASN1_INTEGER_get(decoded_obj->version));
 		auto hash_algorithm = decoded_obj->hashAlgorithm;
 		auto hash_md = EVP_get_digestbyobj(hash_algorithm->algorithm);
 		attr->setHashFunction(hash_md);

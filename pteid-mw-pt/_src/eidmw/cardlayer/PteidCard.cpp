@@ -96,7 +96,7 @@ CCard *PteidCardGetInstance(unsigned long ulVersion, const char *csReader, PTEID
 			// }
 		}
 	} catch (CMWException &e) {
-		MWLOG(LEV_ERROR, MOD_CAL, "Exception in card object creation! Error code: %0x on %s:%ld", e.GetError(),
+		MWLOG(LEV_ERROR, MOD_CAL, "Exception in card object creation! Error code: %lx on %s:%ld", e.GetError(),
 			  e.GetFile().c_str(), e.GetLine());
 	} catch (const std::exception &e) {
 		MWLOG(LEV_ERROR, MOD_CAL, "Std::exception in card object creation! Msg: %s", e.what());
@@ -145,7 +145,7 @@ void CPteidCard::ReadSerialNumber() {
 		}
 		m_oSerialNr = SendAPDU(0xCA, 0x9F, 0x7F, 0x2D).GetBytes(13, 8);
 	} catch (CMWException e) {
-		MWLOG(LEV_WARN, MOD_CAL, "Failed to read serial number: 0x%0x File: %s, Line:%ld", e.GetError(),
+		MWLOG(LEV_WARN, MOD_CAL, "Failed to read serial number: 0x%lx File: %s, Line:%ld", e.GetError(),
 			  e.GetFile().c_str(), e.GetLine());
 		Disconnect(DISCONNECT_LEAVE_CARD);
 	} catch (const std::exception &) {

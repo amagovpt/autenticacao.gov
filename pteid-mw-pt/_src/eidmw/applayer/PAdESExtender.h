@@ -1,7 +1,7 @@
 /*-****************************************************************************
 
  * Copyright (C) 2019 Miguel Figueira - <miguelblcfigueira@gmail.com>
- * Copyright (C) 2020 André Guerreiro - <aguerreiro1985@gmail.com>
+ * Copyright (C) 2020 AndrÃ© Guerreiro - <aguerreiro1985@gmail.com>
  *
  * Licensed under the EUPL V.1.2
 

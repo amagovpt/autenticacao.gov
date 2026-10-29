@@ -8,8 +8,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Window
 
 /* Constants imports */
 import "../scripts/Constants.js" as Constants
@@ -88,7 +88,6 @@ Rectangle {
 
     FontLoader {
         id: myriad
-        name: "MyriadPro"
         source: controler.getFontFile("myriad")
     }
 

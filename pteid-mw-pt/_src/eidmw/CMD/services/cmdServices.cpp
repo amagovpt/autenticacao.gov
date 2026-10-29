@@ -1183,7 +1183,7 @@ int CMDServices::getCMDCertificate(CMDProxyInfo proxyInfo, std::string in_code, 
 		return ret;
 	}
 
-	std::vector<std::string> certs = parsePEMCertSequence((char *)certificate.c_str(), certificate.size());
+	std::vector<std::string> certs = parsePEMCertSequence((char *)certificate.c_str(), (int)certificate.size());
 
 	for (size_t i = 0; i != certs.size(); i++) {
 		CByteArray ba;

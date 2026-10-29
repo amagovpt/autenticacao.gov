@@ -250,7 +250,7 @@ bool CERTIFICATES::StoreUserCerts(PTEID_EIDCard &Card, PCCERT_CONTEXT pCertConte
 
 			QString strFriendlyName;
 			strFriendlyName = QString::fromUtf8(cert.getOwnerName());
-			int iFriendLen = (strFriendlyName.length() + 1) * sizeof(QChar);
+			int iFriendLen = (int)((strFriendlyName.length() + 1) * sizeof(QChar));
 
 			tpFriendlyName.pbData = new unsigned char[iFriendLen];
 

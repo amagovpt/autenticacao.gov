@@ -76,7 +76,7 @@ void handleEvilKeys(DWORD access_mask) {
 			if (retCode == ERROR_SUCCESS) {
 				printf("(%d) %s\n", i + 1, achKey);
 			}
-			sprintf(subkey_name, "%s\\%s", parent_key, achKey);
+			snprintf(subkey_name, strlen(parent_key) + 257, "%s\\%s", parent_key, achKey);
 			// printf("Opening key %s\n", subkey_name);
 
 			LONG lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, subkey_name, 0, KEY_READ | access_mask, &hRegSubKey);
