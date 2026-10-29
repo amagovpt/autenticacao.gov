@@ -8,7 +8,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -18,17 +18,17 @@ import eidguiV2 1.0
 
 PageCardOtherDataForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageCardOtherDataForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
 
     Connections {
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
         }
-        onSignalCardDataChanged: {
+        function onSignalCardDataChanged() {
             console.log("Data Card Identify --> Data Changed")
             propertyTextBoxNIF.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NIF)
             propertyTextBoxNISS.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.NISS)
@@ -44,7 +44,7 @@ PageCardOtherDataForm {
                 propertyRectTaxNum.forceActiveFocus()
         }
 
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Card Other Data onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
@@ -81,7 +81,7 @@ PageCardOtherDataForm {
             propertyTextBoxPlaceOfRequest.propertyDateField.text = ""
             propertyBusyIndicator.running = false
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Card Other Data Page onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -109,12 +109,12 @@ PageCardOtherDataForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
-        onSignalContactlessCANNeeded: {
+        function onSignalContactlessCANNeeded() {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
         }
 
-        onSignalErrorPace: {
+        function onSignalErrorPace(error_code) {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
@@ -124,7 +124,7 @@ PageCardOtherDataForm {
 
     Connections {
         target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
-        onClosed: {
+        function onClosed() {
             paceDialogLoader.active = false
         }
     }

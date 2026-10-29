@@ -9,8 +9,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -22,26 +22,26 @@ import eidguiV2 1.0
 PageDefinitionsAppForm {
     property bool adminConfiguration: controler.getAdminConfiguration()
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageDefinitionsAppForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
 
     Connections {
         target: gapi
-        onSignalCardAccessError:{
+        function onSignalCardAccessError(error_code) {
             propertyComboBoxReader.model = gapi.getRetReaderList()
         }
-        onSignalCardDataChanged:{
+        function onSignalCardDataChanged() {
             propertyComboBoxReader.model = gapi.getRetReaderList()
         }
-        onSignalCardChanged:{
+        function onSignalCardChanged(error_code) {
             propertyComboBoxReader.model = gapi.getRetReaderList()
         }
     }
     Connections {
         target: controler
-        onSignalZipLogsSuccess: {
+        function onSignalZipLogsSuccess(largeZip, filename) {
             console.log("Zip containing log files successfully created on Desktop")
             var titlePopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_SUCCESS_TITLE")
             var bodyPopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_SUCCESS")  + filename + "."
@@ -52,7 +52,7 @@ PageDefinitionsAppForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
 
         }
-        onSignalZipLogsFail: {
+        function onSignalZipLogsFail() {
             console.log("Failed to create a zip with log files on Desktop")
             var titlePopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_FAIL_TITLE") 
             var bodyPopup = qsTranslate("PageDefinitionsApp","STR_LOG_ZIP_FAIL") 
@@ -213,14 +213,14 @@ PageDefinitionsAppForm {
 
     Connections {
         target: propertyTextFieldAdress
-        onEditingFinished: {
+        function onEditingFinished() {
             console.log("Editing proxy host finished - host: " + propertyTextFieldAdress.text);
             controler.setProxyHostValue(propertyTextFieldAdress.text)
         }
     }
     Connections {
         target: propertyTextFieldPort
-        onEditingFinished: {
+        function onEditingFinished() {
             console.log("Editing proxy host port finished - port: " + propertyTextFieldPort.text);
             controler.setProxyPortValue(parseInt(propertyTextFieldPort.text))
         }
@@ -236,14 +236,14 @@ PageDefinitionsAppForm {
     }
     Connections {
         target: propertyTextFieldAutUser
-        onEditingFinished: {
+        function onEditingFinished() {
             //console.log("Editing proxy username finished - username: " + propertyTextFieldAutUser.text);
             controler.setProxyUsernameValue(propertyTextFieldAutUser.text)
         }
     }
     Connections {
         target: propertyTextFieldAutPass
-        onEditingFinished: {
+        function onEditingFinished() {
             //console.log("Editing proxy password finished - password: " + propertyTextFieldAutPass.text);
             controler.setProxyPwdValue(propertyTextFieldAutPass.text) 
         }
@@ -347,12 +347,25 @@ PageDefinitionsAppForm {
     }
     function updateGraphicsTextField(){
             propertyGraphicsTextField.text = qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT")  + " : "
-                    + OpenGLInfo.majorVersion + "." + OpenGLInfo.minorVersion
+                    + GraphicsInfo.majorVersion + "." + GraphicsInfo.minorVersion
                     + "\n" + qsTranslate("PageDefinitionsApp","STR_ACCEL_GRAPHICS_TEXT_DESCRIPTION")
         }
     function updatePages(){
         // Update submenu
         mainFormID.state = Constants.MenuState.NORMAL
+        var subdata = mainFormID.propertyMainMenuBottomListView.model.get(0).subdata
+        var subMenuModel = mainFormID.propertySubMenuListView.model
+        if (subMenuModel.count === subdata.count) {
+            // Only retranslate: rebuilding the model recreates the delegates and in Qt 6
+            // the first one takes the focus and resets the selected submenu entry
+            for (var j = 0; j < subdata.count; ++j) {
+                subMenuModel.setProperty(j, "subName", qsTranslate("MainMenuBottomModel", subdata.get(j).subName))
+            }
+            updateGraphicsTextField()
+            mainFormID.propertySubMenuListView.currentIndex = 2
+            mainFormID.propertyPageLoader.forceActiveFocus()
+            return
+        }
         mainFormID.propertySubMenuListView.model.clear()
         for(var i = 0; i < mainFormID.propertyMainMenuBottomListView.model.get(0).subdata.count; ++i) {
             /*console.log("Sub Menu indice " + i + " - "

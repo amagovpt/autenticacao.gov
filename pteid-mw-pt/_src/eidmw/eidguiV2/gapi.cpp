@@ -15,7 +15,7 @@
 #include <QString>
 #include <QVector>
 #include <QDate>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <cstdio>
 #include <QQuickImageProvider>
 #include <QDesktopServices>
@@ -413,7 +413,7 @@ GAPI::GAPI(GUISettings &settings, QObject *parent) : QObject(parent), m_Settings
 							 readerContext.getCardContactInterface() == PTEID_CARD_CONTACTLESS) ||
 							m_hasOnlyIcao;
 			} catch (PTEID_Exception &err) {
-				qDebug() << "Not able to get card type! Error code: " << hex << err.GetError();
+				qDebug() << "Not able to get card type! Error code: " << Qt::hex << err.GetError();
 				m_hasOnlyIcao = false;
 				m_hasIcao = false;
 			}
@@ -1003,7 +1003,7 @@ void GAPI::doStartPACEAuthentication(QString pace_can, CardOperation op) {
 				cardIcao = &readerContext.getICAOCard();
 
 			} catch (PTEID_Exception err) {
-				qDebug() << "Error while trying to create ICAO Card object! error: " << hex << err.GetError();
+				qDebug() << "Error while trying to create ICAO Card object! error: " << Qt::hex << err.GetError();
 			}
 		}
 	}
@@ -2497,7 +2497,7 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
 
 	if (m_docs.find(m_filePath) == m_docs.end()) {
 
-		Poppler::Document *newdoc = Poppler::Document::load(pdf_path);
+		Poppler::Document *newdoc = Poppler::Document::load(pdf_path).release();
 		if (!newdoc) {
 			qDebug() << "Failed to load PDF file";
 			return QPixmap();
@@ -2525,30 +2525,31 @@ QPixmap PDFPreviewImageProvider::requestPixmap(const QString &id, QSize *size, c
 }
 
 QSize PDFPreviewImageProvider::getPageSize(int page) {
-	Poppler::Page *popplerPage = m_docs.at(m_filePath)->page(page - 1);
+	std::unique_ptr<Poppler::Page> popplerPage = m_docs.at(m_filePath)->page(page - 1);
 	return popplerPage->pageSize();
 }
 
 QPixmap PDFPreviewImageProvider::renderPDFPage(unsigned int page) {
-	renderMutex.lock();
-	if (m_docs.empty()) {
-		qDebug() << "Pdf to be rendered was unloaded!";
-		return QPixmap();
+	QImage image;
+	{
+		// the early returns used to leave renderMutex locked
+		QMutexLocker locker(&renderMutex);
+		if (m_docs.empty()) {
+			qDebug() << "Pdf to be rendered was unloaded!";
+			return QPixmap();
+		}
+		// Document starts at page 0 in the poppler-qt6 API
+		std::unique_ptr<Poppler::Page> popplerPage = m_docs.at(m_filePath)->page(page - 1);
+
+		if (!popplerPage) {
+			qDebug() << "Failed to get page object: " << page;
+			return QPixmap();
+		}
+
+		const double resX = 300.0;
+		const double resY = 300.0;
+		image = popplerPage->renderToImage(resX, resY);
 	}
-	// Document starts at page 0 in the poppler-qt5 API
-	Poppler::Page *popplerPage = m_docs.at(m_filePath)->page(page - 1);
-
-	if (popplerPage == NULL) {
-		qDebug() << "Failed to get page object: " << page;
-		return QPixmap();
-	}
-
-	const double resX = 300.0;
-	const double resY = 300.0;
-	QImage image = popplerPage->renderToImage(resX, resY);
-
-	delete popplerPage;
-	renderMutex.unlock();
 
 	if (!image.isNull()) {
 		return QPixmap::fromImage(image);
@@ -2581,6 +2582,12 @@ void PDFPreviewImageProvider::doCloseAllDocs() {
 	m_docs.clear();
 	renderMutex.unlock();
 }
+
+/* isNotesSupported() reads the notes from the card: called from QML it blocks the GUI thread
+   while another operation holds the reader (e.g. a PIN dialog is open) */
+void GAPI::startCheckNotesSupported() { Concurrent::run(this, &GAPI::doCheckNotesSupported); }
+
+void GAPI::doCheckNotesSupported() { emit signalNotesSupported(isNotesSupported()); }
 
 bool GAPI::isNotesSupported() {
 	BEGIN_TRY_CATCH;
@@ -2885,9 +2892,9 @@ void GAPI::getSCAPEntities() {
 bool isSpecialValidity(QString value) {
 
 	// Search AAAA/MM/DD, AAAA-MM-DD, AAAA MM DD
-	QRegExp dateFormat("(9999|99|12|31)(/|-| *)(9999|99|12|31)(/|-| *)(9999|99|12|31)");
+	QRegularExpression dateFormat("(9999|99|12|31)(/|-| *)(9999|99|12|31)(/|-| *)(9999|99|12|31)");
 
-	return dateFormat.indexIn(value) != -1;
+	return dateFormat.match(value).hasMatch();
 }
 
 static std::map<std::string, std::vector<std::string>>
@@ -3044,8 +3051,8 @@ void GAPI::getSCAPCompanyAttributes(bool useOAuth) {
 }
 
 bool GAPI::isAttributeExpired(std::string &date, std::string &supplier) {
-	QRegExp dateFormat("^\\d{4}-\\d{2}-\\d{2}$"); // xsd:date format
-	if (date.empty() || dateFormat.indexIn(date.c_str()) == -1) {
+	QRegularExpression dateFormat("^\\d{4}-\\d{2}-\\d{2}$"); // xsd:date format
+	if (date.empty() || !dateFormat.match(QString::fromStdString(date)).hasMatch()) {
 		PTEID_LOG(eIDMW::PTEID_LOG_LEVEL_DEBUG, "eidgui",
 				  "%s: Bad date format in validity of attribute supplied by: '%s' -> '%s'", __FUNCTION__,
 				  supplier.c_str(), date.c_str());
@@ -3342,7 +3349,7 @@ void GAPI::finishLoadingICAOCardData(ICAO_Card *card) {
 				cardData[IsNameFromMRZ] = "False";
 			}
 		} catch (PTEID_Exception &err) {
-			qDebug() << "Error while trying to read DG11! Error code: " << hex << err.GetError();
+			qDebug() << "Error while trying to read DG11! Error code: " << Qt::hex << err.GetError();
 		}
 	}
 
@@ -4308,7 +4315,8 @@ void GAPI::doRegisterCMDCertClose(QString otp) {
 
 bool GAPI::areRootCACertsInstalled() {
 #ifdef WIN32
-	return Concurrent::run(&CERTIFICATES::IsNewRootCACertInstalled);
+	// QFuture no longer converts to its result in Qt 6
+	return Concurrent::run(&CERTIFICATES::IsNewRootCACertInstalled).result();
 #else
 	return false;
 #endif

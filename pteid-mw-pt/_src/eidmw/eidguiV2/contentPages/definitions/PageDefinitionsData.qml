@@ -7,8 +7,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -18,7 +18,7 @@ import eidguiV2 1.0
 
 PageDefinitionsDataForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageDefinitionsDataForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
@@ -26,14 +26,14 @@ PageDefinitionsDataForm {
     Connections {
         target: gapi
 
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
         }
-        onSignalCardDataChanged: {
+        function onSignalCardDataChanged() {
             propertyBusyIndicator.running = false
             updateCacheSize();
         }
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
             propertyBusyIndicator.running = false;
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -62,7 +62,7 @@ PageDefinitionsDataForm {
 
             propertyBusyIndicator.running = false
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Definitions SCAP Signature --> onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -79,7 +79,7 @@ PageDefinitionsDataForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalRemoveSCAPAttributesSucess: {
+        function onSignalRemoveSCAPAttributesSucess() {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
             updateCacheSize();
             propertyBusyIndicator.running = false
@@ -87,7 +87,7 @@ PageDefinitionsDataForm {
             var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_SUCC")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalRemoveSCAPAttributesFail: {
+        function onSignalRemoveSCAPAttributesFail() {
             console.log("Definitions SCAP - Signal Remove SCAP Attributes Fail")
             updateCacheSize();
             propertyBusyIndicator.running = false
@@ -95,7 +95,7 @@ PageDefinitionsDataForm {
             var bodyPopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE_ERROR")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalCacheNotReadable:{
+        function onSignalCacheNotReadable() {
             updateCacheSize();
             propertyBusyIndicator.running = false;
             var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
@@ -103,7 +103,7 @@ PageDefinitionsDataForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
 
-		onSignalRemoveCANCacheSucess:{
+		function onSignalRemoveCANCacheSucess() {
 			console.log("Definitions SCAP - Signal CAN Signal Remove CAN cache Sucess")
 			propertyBusyIndicator.running = false;
 			var titlePopup = qsTranslate("PageDataApp","STR_CLEAR_CACHE")
@@ -114,7 +114,7 @@ PageDefinitionsDataForm {
     Connections {
         target: controler
 
-        onSignalRemovePteidCacheSuccess:{
+        function onSignalRemovePteidCacheSuccess() {
             updateCacheSize();
             if (propertyCheckboxEnableCache.checked)
             {
@@ -124,7 +124,7 @@ PageDefinitionsDataForm {
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
-        onSignalRemovePteidCacheFail:{
+        function onSignalRemovePteidCacheFail() {
             updateCacheSize();
             if (propertyCheckboxEnableCache.checked)
             {
@@ -134,7 +134,7 @@ PageDefinitionsDataForm {
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
-        onSignalCacheNotReadable:{
+        function onSignalCacheNotReadable() {
             updateCacheSize();
             if (propertyCheckboxEnableCache.checked)
             {
@@ -144,10 +144,10 @@ PageDefinitionsDataForm {
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             }
         }
-        onSignalAppCacheSize:{
+        function onSignalAppCacheSize(cacheSize) {
             propertyCacheAppSizeTextField.text  = qsTranslate("PageDataApp", "STR_SIZE_OF_CACHE") + " " + cacheSize;
         }
-        onSignalScapCacheSize:{
+        function onSignalScapCacheSize(cacheSize) {
             propertyCacheSCAPSizeTextField.text  = qsTranslate("PageDataApp", "STR_SIZE_OF_CACHE") + " " + cacheSize;
         }
     }

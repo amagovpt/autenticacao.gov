@@ -27,7 +27,7 @@
 
 #include "dlgWndAskPIN.h"
 #include "../langUtil.h"
-#include <QDesktopWidget>
+#include <QScreen>
 
 #include <stdio.h>
 
@@ -39,8 +39,8 @@ dlgWndAskPIN::dlgWndAskPIN(DlgPinInfo pinInfo, DlgPinUsage PinPusage, QString &H
 	if (pinInfo.ulFlags & PIN_FLAG_DIGITS) {
 		char buffer[20];
 		sprintf(buffer, "[0-9]{%llu,%llu}", pinInfo.ulMinLen, pinInfo.ulMaxLen);
-		QRegExp rx(buffer);
-		m_PinValidator = new QRegExpValidator(rx, 0);
+		QRegularExpression rx(buffer);
+		m_PinValidator = new QRegularExpressionValidator(rx, 0);
 	} else {
 		m_PinValidator = NULL;
 	}
@@ -107,7 +107,7 @@ QLineEdit:focus {border: 3px solid #D6D7D7;}");
 	setFixedSize(this->width(), this->height());
 
 	Type_WndGeometry WndGeometry;
-	if (getWndCenterPos(pParentWndGeometry, QApplication::desktop()->width(), QApplication::desktop()->height(),
+	if (getWndCenterPos(pParentWndGeometry, QGuiApplication::primaryScreen()->virtualGeometry().width(), QGuiApplication::primaryScreen()->virtualGeometry().height(),
 						this->width(), this->height(), &WndGeometry)) {
 		this->move(WndGeometry.x, WndGeometry.y);
 	}

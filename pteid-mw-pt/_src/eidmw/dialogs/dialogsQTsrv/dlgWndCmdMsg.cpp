@@ -20,7 +20,7 @@
 
 #include "dlgWndCmdMsg.h"
 #include "../langUtil.h"
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QMovie>
 
 dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType type, QString &message, unsigned long ulHandle,
@@ -92,7 +92,7 @@ dlgWndCmdMsg::dlgWndCmdMsg(DlgCmdOperation operation, DlgCmdMsgType type, QStrin
 QPushButton:hover{background-color: #C6C7C7}");
 
 	Type_WndGeometry WndGeometry;
-	if (getWndCenterPos(pParentWndGeometry, QApplication::desktop()->width(), QApplication::desktop()->height(),
+	if (getWndCenterPos(pParentWndGeometry, QGuiApplication::primaryScreen()->virtualGeometry().width(), QGuiApplication::primaryScreen()->virtualGeometry().height(),
 						this->width(), this->height(), &WndGeometry)) {
 		this->move(WndGeometry.x, WndGeometry.y);
 	}

@@ -8,8 +8,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 import "scripts/Constants.js" as Constants
 import "components" as Components
@@ -88,7 +88,7 @@ Loader{
             height: generalPopUp.availableHeight - generalPopUp.padding
 
             Keys.enabled: true
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
                 {
                     generalPopUp.close()

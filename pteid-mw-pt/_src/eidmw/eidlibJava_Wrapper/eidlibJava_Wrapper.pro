@@ -21,7 +21,6 @@ jar.path = $${INSTALL_DIR_LIB}/pteid_jni/
 target.path = $${INSTALL_DIR_LIB}
 INSTALLS += target jar
 
-QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
 
 CONFIG -= warn_on qt
 QMAKE_CXXFLAGS += -fno-strict-aliasing
@@ -62,7 +61,12 @@ LIBS +=	-l$${CARDLAYERLIB}
 LIBS +=	-l$${APPLAYERLIB}
 LIBS +=	-l$${CMDSERVICESLIB}
 
-macx: INCLUDEPATH += /Library/Java/JavaVirtualMachines/jdk-17.0.5.jdk/Contents/Home/include/ /Library/Java/JavaVirtualMachines/jdk-17.0.5.jdk/Contents/Home/include/darwin/ $$DEPS_DIR/openssl-3/include
+## JDK used for the JNI headers: JAVA_HOME if set, otherwise the JDK of the release builds
+macx {
+  JDK_HOME = $$(JAVA_HOME)
+  isEmpty(JDK_HOME): JDK_HOME = /Library/Java/JavaVirtualMachines/jdk-17.0.5.jdk/Contents/Home
+  INCLUDEPATH += $$JDK_HOME/include/ $$JDK_HOME/include/darwin/ $$DEPS_DIR/openssl-3/include
+}
 macx: LIB += -Wl,-framework -Wl,Java
 
 DEPENDPATH += .

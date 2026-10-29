@@ -7,9 +7,9 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -108,7 +108,7 @@ Item {
                     // If this component is changed, the workaround to scroll the page automatically with
                     // keyboard navigation has to be updated also;
                     // this is located in PageDefinitionsSignSettings.qml - function handleKeyPressed
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, dateAppCertificates)
                     }
                     KeyNavigation.tab: linkCertificates
@@ -158,7 +158,7 @@ Item {
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyText.font.bold: activeFocus
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, linkCertificates)
                         }
                         KeyNavigation.tab: checkboxRegister
@@ -183,7 +183,7 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, checkboxRegister)
                         }
                         KeyNavigation.tab: checkboxRemove
@@ -208,7 +208,7 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, checkboxRemove)
                         }
                         KeyNavigation.tab: dateAppTimeStamp
@@ -244,7 +244,7 @@ Item {
                                       "STR_TIMESTAMP_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, dateAppTimeStamp)
                     }
                     KeyNavigation.tab: linkTimestampService
@@ -293,7 +293,7 @@ Item {
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyText.font.bold: activeFocus
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, linkTimestampService)
                         }
                         KeyNavigation.tab: checkboxTimeStamp
@@ -318,7 +318,7 @@ Item {
                         checked: false
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, checkboxTimeStamp)
                         }
                         KeyNavigation.tab: checkboxTimeStamp.checked ? textFieldTimeStamp : (rectOffice.visible ? textOfficeTitle: dateAppTimeStamp)
@@ -350,13 +350,13 @@ Item {
                             enabled: checkboxTimeStamp.checked
                             opacity: checkboxTimeStamp.checked ? 1.0 : Constants.OPACITY_DEFINITIONS_APP_OPTION_DISABLED
                             inputMethodHints: Qt.ImhUrlCharactersOnly
-                            validator: RegExpValidator {
+                            validator: RegularExpressionValidator {
                                 //http/https url validator
-                                regExp: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+                                regularExpression: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
                             }
                             Accessible.role: Accessible.EditableText
                             Accessible.name: text
-                            Keys.onPressed: {
+                            Keys.onPressed: function(event) {
                                 handleKeyPressed(event.key, textFieldTimeStamp)
                             }
                             KeyNavigation.tab:  rectOffice.visible ? textOfficeTitle: dateAppTimeStamp
@@ -392,7 +392,7 @@ Item {
                                       "STR_OFFICE_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, textOfficeTitle)
                     }
                     KeyNavigation.tab: checkboxDisable
@@ -441,7 +441,7 @@ Item {
                         anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, checkboxDisable)
                         }
                         KeyNavigation.tab: textLoadCMDCertsTitle
@@ -476,7 +476,7 @@ Item {
                     text: qsTranslate("PageDefinitionsApp","STR_CMD_CERT_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, textLoadCMDCertsTitle)
                     }
                     KeyNavigation.tab: loadCMDCertsText
@@ -529,7 +529,7 @@ Item {
                             wrapMode: Text.WordWrap
                             Accessible.role: Accessible.StaticText
                             Accessible.name: text
-                            Keys.onPressed: {
+                            Keys.onPressed: function(event) {
                                 handleKeyPressed(event.key, loadCMDCertsText)
                             }
                             KeyNavigation.tab: linkRegisterCMDCert
@@ -551,7 +551,7 @@ Item {
                         propertyText.font.capitalization: Font.MixedCase
                         propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                         propertyText.font.bold: activeFocus
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, linkRegisterCMDCert)
                         }
                         KeyNavigation.tab: checkboxCMDRegRemember
@@ -582,7 +582,7 @@ Item {
                             anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
                             Accessible.role: Accessible.CheckBox
                             Accessible.name: text
-                            Keys.onPressed: {
+                            Keys.onPressed: function(event) {
                                 handleKeyPressed(event.key, checkboxCMDRegRemember)
                             }
                             KeyNavigation.tab: loadCMDCertsButton
@@ -610,7 +610,7 @@ Item {
                         font.bold: activeFocus
                         Accessible.role: Accessible.CheckBox
                         Accessible.name: text
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handleKeyPressed(event.key, loadCMDCertsButton)
                         }
                         KeyNavigation.tab: textRootCACertTitle
@@ -644,7 +644,7 @@ Item {
                     text: qsTranslate("PageDefinitionsApp","STR_ROOT_CA_CERT_INSTALL_TITLE")
                     Accessible.role: Accessible.StaticText
                     Accessible.name: text
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handleKeyPressed(event.key, textRootCACertTitle)
                     }
                     KeyNavigation.tab: textRootCACertDesc
@@ -698,7 +698,7 @@ Item {
                             wrapMode: Text.WordWrap
                             Accessible.role: Accessible.StaticText
                             Accessible.name: text
-                            Keys.onPressed: {
+                            Keys.onPressed: function(event) {
                                 handleKeyPressed(event.key, textRootCACertDesc)
                             }
                             KeyNavigation.tab: linkManualProblemsNewCertChain
@@ -719,7 +719,7 @@ Item {
                             propertyText.font.capitalization: Font.MixedCase
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             propertyText.font.bold: activeFocus
-                            Keys.onPressed: {
+                            Keys.onPressed: function(event) {
                                 handleKeyPressed(event.key, linkManualProblemsNewCertChain)
                             }
                             KeyNavigation.tab: textIsCertInstalled
@@ -758,7 +758,7 @@ Item {
                                 topPadding: Constants.SIZE_ROW_V_SPACE
                                 Accessible.role: Accessible.StaticText
                                 Accessible.name: text
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handleKeyPressed(event.key, textIsCertInstalled)
                                 }
                                 KeyNavigation.tab: buttonAddCACert
@@ -778,7 +778,7 @@ Item {
                                 font.family: lato.name
                                 font.capitalization: Font.MixedCase
                                 highlighted: activeFocus
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handleKeyPressed(event.key, buttonAddCACert)
                                 }
                                 KeyNavigation.tab: dateAppCertificates
@@ -814,7 +814,7 @@ Item {
                                            "STR_SCAP_TITLE")
                          Accessible.role: Accessible.StaticText
                          Accessible.name: text
-                         Keys.onPressed: {
+                         Keys.onPressed: function(event) {
                              handleKeyPressed(event.key, dateAppSCAP)
                          }
                          KeyNavigation.tab: checkboxRemove
@@ -863,7 +863,7 @@ Item {
                              checked: false
                              Accessible.role: Accessible.CheckBox
                              Accessible.name: text
-                             Keys.onPressed: {
+                             Keys.onPressed: function(event) {
                                  handleKeyPressed(event.key, checkboxSCAP)
                              }
                              KeyNavigation.tab: (rectOffice.visible ? textOfficeTitle: dateAppSCAP)

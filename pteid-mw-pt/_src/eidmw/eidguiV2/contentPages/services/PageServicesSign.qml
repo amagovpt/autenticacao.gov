@@ -11,8 +11,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -54,7 +54,7 @@ PageServicesSignForm {
             jump_to_definitions_SCAP()
     }
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageServicesSignForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
 
@@ -68,12 +68,12 @@ PageServicesSignForm {
     Connections {
         target: gapi
 
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
-        onSignalAttributesLoaded: (institution_attributes, enterprise_attributes) => {
+        function onSignalAttributesLoaded(institution_attributes, enterprise_attributes) {
             console.log("Sign advanced - Signal SCAP attributes loaded")
             append_attributes_to_model(institution_attributes)
             append_attributes_to_model(enterprise_attributes)
@@ -103,7 +103,7 @@ PageServicesSignForm {
             isSwitchAddAttributesOn = false
         }
 
-        onSignalPdfSignSuccess: (error_code) => {
+        function onSignalPdfSignSuccess(error_code) {
             signsuccess_dialog.open()
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
@@ -123,13 +123,13 @@ PageServicesSignForm {
             }
         }
 
-        onSignalSignatureFinished: {
+        function onSignalSignatureFinished() {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             gapi.setShortcutOutput("")
         }
 
-        onSignalPdfSignFail: (error_code, index) => {
+        function onSignalPdfSignFail(error_code, index) {
             console.log("Sign failed with error code: " + error_code)
 
             var error_text = ""
@@ -171,7 +171,7 @@ PageServicesSignForm {
             show_error_message(error_text, generic_text)
         }
 
-        onSignalPdfBatchSignFail: (error_code, filename) => {
+        function onSignalPdfBatchSignFail(error_code, filename) {
             const batch_error_text = qsTranslate("PageServicesSign","STR_SIGN_BATCH_FAILED") + filename
             var generic_text
             if (error_code == GAPI.SignFilePermissionFailed) {
@@ -186,7 +186,7 @@ PageServicesSignForm {
             show_error_message(batch_error_text, generic_text)
         }
 
-        onSignalSCAPServiceFail: (pdfsignresult) => {
+        function onSignalSCAPServiceFail(pdfsignresult) {
             console.log("Sign advanced - Signal SCAP Service Fail")
             signerror_dialog.propertySignFailDialogGenericText.text = ""
 
@@ -237,7 +237,7 @@ PageServicesSignForm {
             propertyOutputSignedFile = ""
         }
 
-        onSignalSCAPConnectionFailed: {
+        function onSignalSCAPConnectionFailed() {
             console.log("Scap connection failed")
 
             const text_top = qsTranslate("PageServicesSign", "STR_SCAP_PING_FAIL_FIRST")
@@ -245,14 +245,14 @@ PageServicesSignForm {
             show_error_message(text_top, text_bottom)
         }
 
-        onSignalSCAPBadCredentials: {
+        function onSignalSCAPBadCredentials() {
             console.log("Scap Bad Credentials")
 
             const text_top = qsTranslate("PageServicesSign", "STR_SCAP_BAD_CREDENTIALS")
             show_error_message(text_top, "")
         }
 
-        onSignalSCAPPossibleProxyMisconfigured: {
+        function onSignalSCAPPossibleProxyMisconfigured() {
             console.log("Scap possible misconfiguration of proxy")
 
             var text_top = qsTranslate("PageServicesSign","STR_SCAP_PING_FAIL_FIRST")
@@ -262,7 +262,7 @@ PageServicesSignForm {
             show_error_message(text_top, text_bottom)
         }
 
-        onSignalCacheRemovedLegacy: {
+        function onSignalCacheRemovedLegacy() {
             console.log("Removed Legacy Scap cache files")
 
             signerror_dialog.propertySignFailDialogTitle.text = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
@@ -276,7 +276,7 @@ PageServicesSignForm {
             buttonCancelAttr.visible = true
         }
 
-        onSignalCacheNotReadable: {
+        function onSignalCacheNotReadable() {
             console.log("Scap cache not readable")
 
             signerror_dialog.propertySignFailDialogTitle.text = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
@@ -285,12 +285,12 @@ PageServicesSignForm {
             show_error_message(text_top, "")
         }
 
-        onSignalCanceledSignature: {
+        function onSignalCanceledSignature() {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
-        onSignalCardAccessError: (error_code) => {
+        function onSignalCardAccessError(error_code) {
             console.log("Sign Advanced Page onSignalCardAccessError")
             if (cardLoaded) {
                 var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -329,7 +329,7 @@ PageServicesSignForm {
             propertyButtonAdd.forceActiveFocus()
         }
 
-        onSignalSignCertDataChanged: (ownerName, NIC) => {
+        function onSignalSignCertDataChanged(ownerName, NIC) {
             console.log("Services Sign Advanced --> Certificate Data Changed")
 
             ownerNameBackup = ownerName
@@ -350,7 +350,7 @@ PageServicesSignForm {
             cardLoaded = true
         }
 
-        onSignalCardChanged: (error_code) => {
+        function onSignalCardChanged(error_code) {
             console.log("Services Sign Advanced onSignalCardChanged")
             const titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -388,12 +388,12 @@ PageServicesSignForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
 
-        onSignalContactlessCANNeeded: {
+        function onSignalContactlessCANNeeded() {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
         }
 
-        onSignalSignCertExpired: {
+        function onSignalSignCertExpired() {
             console.log("Services Sign onSignalSignCertExpired")
             const titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
             const bodyPopup = qsTranslate("PageServicesSign","STR_EXPIRED_SIGN_CERT")
@@ -404,7 +404,7 @@ PageServicesSignForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
-        onSignalSignCertSuspended: {
+        function onSignalSignCertSuspended() {
             console.log("Services Sign onSignalSignCertRevoked")
             const titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
             const bodyPopup = qsTranslate("PageServicesSign","STR_SUSPENDED_SIGN_CERT")
@@ -414,7 +414,7 @@ PageServicesSignForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
-        onSignalSignCertRevoked: {
+        function onSignalSignCertRevoked() {
             console.log("Services Sign onSignalSignCertRevoked")
             const titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
             const bodyPopup = qsTranslate("PageServicesSign","STR_REVOKED_SIGN_CERT")
@@ -424,26 +424,26 @@ PageServicesSignForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
-        onSignalCustomSignImageRemoved: {
+        function onSignalCustomSignImageRemoved() {
             console.log("Services Sign onSignalCustomSignImageRemoved")
             const titlePopup = qsTranslate("PageServicesSign", "STR_WARNING")
             const bodyPopup = qsTranslate("PageServicesSign","STR_CUSTOM_IMAGE_REMOVED")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
 
-        onSignalStartCheckCCSignatureCert: {
+        function onSignalStartCheckCCSignatureCert() {
             console.log("Services Sign onSignalStartCheckCCSignatureCert")
             propertyBusyIndicator.running = true
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
         }
 
-        onSignalOkSignCertificate: {
+        function onSignalOkSignCertificate() {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             perform_signature_CC()
         }
 
-        onSignalErrorPace: {
+        function onSignalErrorPace(error_code) {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
@@ -453,7 +453,7 @@ PageServicesSignForm {
 
     Connections {
         target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
-        onClosed: {
+        function onClosed() {
             paceDialogLoader.active = false
         }
     }
@@ -472,7 +472,7 @@ PageServicesSignForm {
     Connections {
         target: controler
 
-        onSignalRetrieveStoredSignOptions: (options) => {
+        function onSignalRetrieveStoredSignOptions(options) {
             console.log("Retrieving Stored Sign Options")
             isSignOptions = true
 
@@ -511,7 +511,7 @@ PageServicesSignForm {
     Connections {
         target: image_provider_pdf
 
-        onSignalPdfSourceChanged: (original_width) => {
+        function onSignalPdfSourceChanged(original_width) {
             propertyPDFPreview.propertyPdfOriginalWidth = original_width
             propertyPDFPreview.forceActiveFocus()
         }
@@ -519,7 +519,7 @@ PageServicesSignForm {
 
     Connections {
         target: propertyPDFPreview
-        onUpdateSealData: {
+        function onUpdateSealData() {
             updateSealData = true
 
             var width = to_real_seal_size(propertyPDFPreview.propertyDragSigRect.width)
@@ -719,7 +719,7 @@ PageServicesSignForm {
     }
 
     propertyDropArea {
-        onEntered: {
+        onEntered: function(drag) {
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
@@ -733,7 +733,7 @@ PageServicesSignForm {
     }
 
     propertyDropFileArea {
-        onEntered: {
+        onEntered: function(drag) {
             filesArray = drag.urls
             console.log("Num files: "+filesArray.length);
         }
@@ -841,19 +841,19 @@ PageServicesSignForm {
             Keys.onSpacePressed: {
                 checkboxSel.checked = !checkboxSel.checked
             }
-            Keys.onTabPressed: {
+            Keys.onTabPressed: function(event) {
                 focus_forward();
                 handle_key_pressed(event.key, attributeListDelegate)
             }
-            Keys.onDownPressed: {
+            Keys.onDownPressed: function(event) {
                 focus_forward();
                 handle_key_pressed(event.key, attributeListDelegate)
             }
-            Keys.onBacktabPressed: {
+            Keys.onBacktabPressed: function(event) {
                 focus_backward();
                 handle_key_pressed(event.key, attributeListDelegate)
             }
-            Keys.onUpPressed: {
+            Keys.onUpPressed: function(event) {
                 focus_backward();
                 handle_key_pressed(event.key, attributeListDelegate)
             }
@@ -1072,7 +1072,7 @@ PageServicesSignForm {
                 }
             }
 
-            Keys.onTabPressed: {
+            Keys.onTabPressed: function(event) {
                 if (propertyListViewFiles.currentIndex == propertyListViewFiles.count -1) {
                     propertyListViewFiles.currentIndex = 0;
                     handle_key_pressed(event.key, "")
@@ -1446,7 +1446,7 @@ PageServicesSignForm {
             width: signsuccess_dialog.availableWidth
             height: rectLabelText.height
             Keys.enabled: true
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return || event.key===Qt.Key_Space) {
                     open_show_signed_file_dialog()
                 }
@@ -1530,7 +1530,7 @@ PageServicesSignForm {
                     propertyText.leftPadding: 0
                     propertyText.rightPadding: 0
                     propertyText.textMargin: 0
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handle_key_pressed(event.key, verifySignLinkSigned)
                     }
                     propertyText.wrapMode: Text.Wrap
@@ -2036,18 +2036,18 @@ PageServicesSignForm {
     }
 
     function update_indicators(pageCount) {
-        propertySpinBoxControl.up.indicator.visible = true
-        propertySpinBoxControl.down.indicator.visible = true
-        propertySpinBoxControl.up.indicator.enabled = true
-        propertySpinBoxControl.down.indicator.enabled = true
+        propertyPageNext.visible = true
+        propertyPagePrevious.visible = true
+        propertyPageNext.enabled = true
+        propertyPagePrevious.enabled = true
 
         if (propertySpinBoxControl.value === pageCount || propertySpinBoxControl.value === get_minimum_page()) {
-            propertySpinBoxControl.up.indicator.visible = false
-            propertySpinBoxControl.up.indicator.enabled = false
+            propertyPageNext.visible = false
+            propertyPageNext.enabled = false
         }
         if (propertySpinBoxControl.value === 1) {
-            propertySpinBoxControl.down.indicator.visible = false
-            propertySpinBoxControl.down.indicator.enabled = false
+            propertyPagePrevious.visible = false
+            propertyPagePrevious.enabled = false
         }
     }
 

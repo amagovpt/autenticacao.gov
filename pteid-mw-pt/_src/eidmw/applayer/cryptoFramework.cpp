@@ -30,6 +30,7 @@
 #include "MWException.h"
 #include "eidErrors.h"
 #include "Util.h"
+#include "prefix.h"
 #include "Log.h"
 #include "ByteArray.h"
 #include "APLConfig.h"
@@ -192,7 +193,8 @@ private:
 ***************** */
 APL_CryptoFwk::APL_CryptoFwk() {
 #ifdef __APPLE__
-	OSSL_PROVIDER_set_default_search_path(NULL, "/usr/local/lib/ossl-modules/");
+	// the OpenSSL modules are installed with the middleware libraries (/usr/local by default)
+	OSSL_PROVIDER_set_default_search_path(NULL, STRINGIFY(EIDMW_PREFIX) "/lib/ossl-modules/");
 #endif
 	m_LegacyProvider = OSSL_PROVIDER_load(NULL, "legacy");
 	m_DefaultProvider = OSSL_PROVIDER_load(NULL, "default");

@@ -7,7 +7,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 /* This list is copied in countryCallingCodeList.h */
 ListModel { 

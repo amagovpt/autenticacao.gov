@@ -8,9 +8,9 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 
 import "../../scripts/Constants.js" as Constants
@@ -22,7 +22,7 @@ import eidguiV2 1.0
 PageCardICAOForm {
     property string outputFile : ""
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageCardICAOForm onPressed:" + event.key)
         if(propertyCancelExport.focus){
             propertySavePhotoButton.visible = true
@@ -35,7 +35,7 @@ PageCardICAOForm {
 
     Connections {
         target: controler
-        onLanguageChanged: {
+        function onLanguageChanged() {
             propertyTextBoxCountry.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.IssuingState), controler.getGuiLanguageString())
             propertyTextBoxNacionality.propertyDateField.text = gapi.loadCountryName(gapi.getDataICAOValue(GAPI.Nat), controler.getGuiLanguageString())
             propertySecurityStatusText.text = gapi.getDataICAOValue(GAPI.IsDgsSecured) === "True" ? qsTranslate("GAPI", "STR_ICAO_IS_SECURE") : qsTranslate("GAPI", "STR_ICAO_IS_NOT_SECURE")
@@ -45,13 +45,13 @@ PageCardICAOForm {
 
     Connections {
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
         }
-        onSignalReaderContext: {
+        function onSignalReaderContext() {
             propertyBusyIndicator.running = false
         }
-        onSignalICAODataChanged: {
+        function onSignalICAODataChanged() {
             console.log("Data Card ICAO --> Data Changed")
             //console.trace();
             propertyIsFullNameMrz = gapi.getDataICAOValue(GAPI.IsNameFromMRZ) === "True" ? true : false
@@ -73,7 +73,7 @@ PageCardICAOForm {
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                                     propertyTextBoxSurName.forceActiveFocus()
         }
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Card ICAO Page onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
@@ -115,7 +115,7 @@ PageCardICAOForm {
             propertyBusyIndicator.running = false
             propertySavePhotoButton.enabled = false
         }
-        onSignalIncompatibleCard: {
+        function onSignalIncompatibleCard() {
             console.log("Card ICAO Page onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = qsTranslate("Popup Card","STR_POPUP_CARD_INCOMPATIBLE_ICAO")
@@ -134,7 +134,7 @@ PageCardICAOForm {
             propertyBusyIndicator.running = false
             propertySavePhotoButton.enabled = false
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Card Identify Page onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -168,12 +168,12 @@ PageCardICAOForm {
         }
 
         // Add variable to signal
-        onSignalContactlessCANNeeded: {
+        function onSignalContactlessCANNeeded() {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
         }
 
-        onSignalSaveCardPhotoFinished: {
+        function onSignalSaveCardPhotoFinished(success) {
             if(success) {
                 createsuccess_dialog.open()
                 createdSuccTitle.forceActiveFocus()
@@ -184,7 +184,7 @@ PageCardICAOForm {
             }
         }
 
-        onSignalErrorPace: {
+        function onSignalErrorPace(error_code) {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
@@ -194,7 +194,7 @@ PageCardICAOForm {
 
     Connections {
         target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
-        onClosed: {
+        function onClosed() {
             paceDialogLoader.active = false
         }
     }
@@ -240,7 +240,7 @@ PageCardICAOForm {
             height: 50
 
             Keys.enabled: true
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
                 {
                     showCreatedFile()

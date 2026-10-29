@@ -7,7 +7,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants

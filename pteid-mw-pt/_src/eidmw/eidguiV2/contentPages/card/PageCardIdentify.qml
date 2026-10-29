@@ -8,9 +8,9 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 
 import "../../scripts/Constants.js" as Constants
@@ -23,7 +23,7 @@ PageCardIdentifyForm {
 
     property string outputFile : ""
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageCardIdentifyForm onPressed:" + event.key)
         if(propertyCancelExport.focus){
             propertySavePhotoButton.visible = true
@@ -36,13 +36,13 @@ PageCardIdentifyForm {
 
     Connections {
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
         }
-        onSignalReaderContext: {
+        function onSignalReaderContext() {
             propertyBusyIndicator.running = false
         }
-        onSignalCardDataChanged: {
+        function onSignalCardDataChanged() {
             console.log("Data Card Identify --> Data Changed")
             //console.trace();
             propertyTextBoxName.propertyDateField.text = gapi.getDataCardIdentifyValue(GAPI.Givenname)
@@ -68,7 +68,7 @@ PageCardIdentifyForm {
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                         propertyGivenNameTextForm.forceActiveFocus()
         }
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Card Identify Page onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
@@ -113,7 +113,7 @@ PageCardIdentifyForm {
             propertyBusyIndicator.running = false
             propertySavePhotoButton.enabled = false
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Card Identify Page onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -149,13 +149,13 @@ PageCardIdentifyForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, returnSubMenuWhenClosed)
         }
 
-        onSignalContactlessCANNeeded: {
+        function onSignalContactlessCANNeeded() {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
             paceDialogLoader.item.isICAOCAN = false
         }
 
-        onSignalSaveCardPhotoFinished: {
+        function onSignalSaveCardPhotoFinished(success) {
             if(success) {
                 createsuccess_dialog.open()
                 createdSuccTitle.forceActiveFocus()
@@ -166,7 +166,7 @@ PageCardIdentifyForm {
             }
         }
 
-        onSignalErrorPace: {
+        function onSignalErrorPace(error_code) {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
@@ -176,7 +176,7 @@ PageCardIdentifyForm {
 
     Connections {
         target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
-        onClosed: {
+        function onClosed() {
             paceDialogLoader.active = false
         }
     }
@@ -222,7 +222,7 @@ PageCardIdentifyForm {
             height: 50
 
             Keys.enabled: true
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
                 {
                     showCreatedFile()

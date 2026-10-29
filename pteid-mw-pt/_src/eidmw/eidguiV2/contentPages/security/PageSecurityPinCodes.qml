@@ -8,8 +8,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -21,7 +21,7 @@ import eidguiV2 1.0
 
 PageSecurityPinCodesForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         // if focus is already on the tab, exit to sub-menu
         if (getCurrentTab().activeFocus === true) {
             Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
@@ -37,7 +37,7 @@ PageSecurityPinCodesForm {
     Connections {
         target: gapi
 
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Security Pin Codes onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
@@ -77,7 +77,7 @@ PageSecurityPinCodesForm {
             
             propertyBusyIndicator.running = false
         }
-        onSignalCardDataChanged: {
+        function onSignalCardDataChanged() {
             console.log("Security Pin Codes --> Data Changed")
             propertyButtonModifyAuth.enabled = true
             propertyButtonTestAuth.enabled = true
@@ -103,7 +103,7 @@ PageSecurityPinCodesForm {
                 break
             }
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Security Pin Codes onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 propertyTriesLeftAuthPin.text = ""
@@ -132,11 +132,11 @@ PageSecurityPinCodesForm {
                 propertyButtonTestAddress.enabled = false
             }
         }
-        onSignalTriesLeftPinFinished: {
+        function onSignalTriesLeftPinFinished(triesLeft, pin) {
             updateWithTriesLeft(triesLeft, pin)
         }
 
-        onSignalTestPinFinished: {
+        function onSignalTestPinFinished(triesLeft, pin) {
             if (triesLeft === 3) {
                 var titlePopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_VERIFY")
                 var bodyPopup = qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_SUCESS")
@@ -145,7 +145,7 @@ PageSecurityPinCodesForm {
             updateWithTriesLeft(triesLeft, pin)
         }
 
-        onSignalModifyPinFinished: {
+        function onSignalModifyPinFinished(triesLeft, pin) {
             if (triesLeft === 3) {
                 var titlePopup = qsTranslate("Popup PIN","STR_PIN_MODIFY")
                 var bodyPopup = qsTranslate("Popup PIN","STR_PIN_MODIFY_SUCESS")
@@ -154,14 +154,14 @@ PageSecurityPinCodesForm {
             updateWithTriesLeft(triesLeft, pin)
         }
 
-        onSignalContactlessCANNeeded: {
+        function onSignalContactlessCANNeeded() {
             console.log("QML: Contactless CAN is needed!!")
             if(paceDialogLoader.active == true)
                 paceDialogLoader.active = false
             paceDialogLoader.active = true
         }
 
-        onSignalErrorPace: {
+        function onSignalErrorPace(error_code) {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
@@ -222,7 +222,7 @@ PageSecurityPinCodesForm {
                     font.italic: textFieldPin.text === "" ? true: false
                     placeholderText: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CURRENT")
                     echoMode : TextInput.Password
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    validator: RegularExpressionValidator { regularExpression: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -373,7 +373,7 @@ PageSecurityPinCodesForm {
                     font.italic: textFieldPinCurrent.text === "" ? true: false
                     placeholderText: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CURRENT")
                     echoMode : TextInput.Password
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    validator: RegularExpressionValidator { regularExpression: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -407,7 +407,7 @@ PageSecurityPinCodesForm {
                     font.italic: textFieldPinNew.text === "" ? true: false
                     placeholderText: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_NEW") + "?"
                     echoMode : TextInput.Password
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    validator: RegularExpressionValidator { regularExpression: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -441,7 +441,7 @@ PageSecurityPinCodesForm {
                     font.italic: textFieldPinConfirm.text === "" ? true: false
                     placeholderText: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CONFIRM") + "?"
                     echoMode : TextInput.Password
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    validator: RegularExpressionValidator { regularExpression: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -695,7 +695,7 @@ PageSecurityPinCodesForm {
 
     Connections {
         target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
-        onClosed: {
+        function onClosed() {
             paceDialogLoader.active = false
         }
     }

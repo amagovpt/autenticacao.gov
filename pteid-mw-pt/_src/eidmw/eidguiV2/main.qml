@@ -10,11 +10,11 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
-import QtQuick.Controls.Material 2.1
-import QtQuick.Controls.Universal 2.1
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Controls.Universal
+import QtQuick.Window
 
 import "scripts/Constants.js" as Constants
 import "scripts/Functions.js" as Functions
@@ -36,14 +36,19 @@ Window {
 
     title: "Autenticação.Gov"
 
+    // FontLoader.name is read-only in Qt 6: on linux use the installed font by name
+    QtObject {
+        id: lato
+        readonly property string name: Qt.platform.os === "windows" || Qt.platform.os === "macos" ? latoLoader.name : "Lato"
+    }
+
     FontLoader {
-        id: lato;
-        name: "Lato" // This avoids printing error on application start
+        id: latoLoader
 
         source: {
             // on linux, load installed font by name
             // on windows and macOS use source property to point to distributed font file
-            if (Qt.platform.os === "windows" || Qt.platform.os === "osx") {
+            if (Qt.platform.os === "windows" || Qt.platform.os === "macos") {
                 controler.getFontFile("lato")
             }
             else ""
@@ -65,7 +70,7 @@ Window {
     }
     onYChanged: {
     }
-    onClosing:{
+    onClosing: function(close) {
         // check for unsaved notes when closing application
         close.accepted = false;
         if(!handleUnsavedNotes(-1,"", Constants.QUIT_APPLICATION)){
@@ -77,18 +82,18 @@ Window {
 
     Connections {
         target: controler
-        onSignalRestoreWindows: {
+        function onSignalRestoreWindows() {
             console.log("Signal onSignalRestoreWindows")
             // Minimize window in case it was just hidden (it would remain hidden otherwise)
             mainWindow.showMinimized()
 
-            if (Qt.platform.os === "osx")
+            if (Qt.platform.os === "macos")
                 mainWindow.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.FramelessWindowHint;
             mainWindow.raise();
             mainWindow.show();
             mainWindow.requestActivate();
         }
-        onSignalLanguageChangedError: {
+        function onSignalLanguageChangedError() {
             var titlePopup = "Erro / Error"
             var bodyPopup = "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
 Load language error. Please reinstall the application"
@@ -99,11 +104,11 @@ Load language error. Please reinstall the application"
         property var autoUpdateCerts: true
         property var isAutoUpdateAlreadyDetected: false
 
-        onSignalAutoUpdateNews: {
+        function onSignalAutoUpdateNews(news_list) {
             mainFormID.propertyNotificationMenu.addAppNews(news_list)
         }
 
-        onSignalAutoUpdateAvailable: {
+        function onSignalAutoUpdateAvailable(updateType, arg1, arg2, arg3, url_list) {
             // Do not show dialog when update page is open
             if(mainFormID.propertyMainMenuBottomListView.currentIndex != 0
                     || mainFormID.propertySubMenuListView.currentIndex != 5){
@@ -111,7 +116,7 @@ Load language error. Please reinstall the application"
             }
         }
 
-        onSignalAutoUpdateFail: {
+        function onSignalAutoUpdateFail(updateType, error_code) {
 
             console.log("No updates or startup auto update failed.")
             if(updateType == GAPI.AutoUpdateApp){
@@ -135,7 +140,7 @@ Load language error. Please reinstall the application"
                 }
             }
         }
-        onSignalAutoUpdateSuccess: {
+        function onSignalAutoUpdateSuccess(updateType) {
             if(updateType == GAPI.AutoUpdateCerts){
                 restart_dialog.headerTitle = qsTranslate("PageDefinitionsUpdates","STR_UPDATED_CERTIFICATES")
                 restart_dialog.open()
@@ -146,34 +151,34 @@ Load language error. Please reinstall the application"
     Connections {
         id: connectionsGAPI
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             console.log("Signal onSignalGenericError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = qsTranslate("Popup Card","STR_GENERIC_ERROR_MSG") + "<br/><br/>" +
                             qsTranslate("Popup Card","STR_ERROR_CODE") + error_code
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalImportCertificatesFail: {
+        function onSignalImportCertificatesFail() {
             console.log("Signal onSignalImportCertificatesFail")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = qsTranslate("Popup Card","STR_CERTIFICATES_IMPORT_ERROR_MSG")
                 + "<br/><br/>" + qsTranslate("Popup Card","STR_GENERIC_CARD_ERROR_MSG") 
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalRemoveCertificatesFail: {
+        function onSignalRemoveCertificatesFail() {
             console.log("Signal onSignalRemoveCertificatesFail")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = qsTranslate("Popup Card","STR_CERTIFICATES_REMOVE_ERROR_MSG")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalLanguageChangedError: {
+        function onSignalLanguageChangedError() {
             var titlePopup = "Erro / Error"
             var bodyPopup = "Erro na leitura dos idiomas. Por favor, reinstale a aplicação <br/>
 Load language error. Please reinstall the application"
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
 
-        onSignalReaderContext: {
+        function onSignalReaderContext() {
             //console.log("Reader List: " + gapi.getRetReaderList())
             //console.log("Reader List Count: " + gapi.getRetReaderList().length)
 
@@ -184,9 +189,9 @@ Load language error. Please reinstall the application"
             mainFormID.opacity = Constants.OPACITY_POPUP_FOCUS
             readerContext.open()
         }
-        onSignalCardAccessError: updateAvailableMenus()
+        function onSignalCardAccessError(error_code) { updateAvailableMenus() }
 
-        onSignalCardChanged: updateAvailableMenus()
+        function onSignalCardChanged(error_code) { updateAvailableMenus() }
 
         function updateAvailableMenus() {
             var hasOnlyIcao = gapi.hasOnlyICAO()
@@ -223,8 +228,8 @@ Load language error. Please reinstall the application"
                         })
             }
 
-            if(mainFormID.propertyMainMenuListView.model.get(mainFormID.propertyMainMenuListView.currentIndex).isCard &&
-                    mainFormID.propertyMainMenuListView.model.count > 0)
+            if(mainFormID.propertyMainMenuListView.currentIndex >= 0 &&
+                    mainFormID.propertyMainMenuListView.model.get(mainFormID.propertyMainMenuListView.currentIndex).isCard)
             {
                 mainMenuPressed(mainFormID.propertyMainMenuListView.currentIndex)
             }
@@ -242,9 +247,6 @@ Load language error. Please reinstall the application"
         x: parent.width * 0.5 - readerContext.width * 0.5
         y: parent.height * 0.5 - readerContext.height * 0.5
 
-        Accessible.role: Accessible.AlertMessage
-        Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + labelReaderContext.text + textMessageTop.text
-
 
         header: Label {
             id: labelReaderContext
@@ -260,6 +262,9 @@ Load language error. Please reinstall the application"
         Item {
             width: parent.width
             height: rectMessageTop.height + rectReaderCombo.height + rectSwitchRemember.height
+            // Popup is not an Item in Qt 6, so the Accessible attached property goes on its content
+            Accessible.role: Accessible.AlertMessage
+            Accessible.name: qsTranslate("Popup Card","STR_SHOW_WINDOWS") + labelReaderContext.text + textMessageTop.text
 
             Item {
                 id: rectMessageTop
@@ -997,7 +1002,7 @@ Load language error. Please reinstall the application"
                 }
             }
         ]
-        Keys.onPressed: {
+        Keys.onPressed: function(event) {
             console.log("Main Menu Key Pressed: " + event.key)
             // if backing out of notes, using keys
             if(mainFormID.propertySubMenuListView.focus){
@@ -1079,7 +1084,7 @@ Load language error. Please reinstall the application"
 
     Connections {
         target: mainFormID.propertyNotificationMenu
-        onPopupClosed: {
+        function onPopupClosed() {
             if (mainFormID.propertyMainMenuListView.currentIndex !== -1) {
                 mainFormID.propertyMainMenuListView.forceActiveFocus()
             } else if (mainFormID.propertyMainMenuBottomListView.currentIndex !== -1) {
@@ -1095,7 +1100,7 @@ Load language error. Please reinstall the application"
             height: mainFormID.propertyMainMenuListView.height
                     / mainFormID.propertyMainMenuListView.count
 
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 console.log("mainMenu onPressed:" + event.key)
                 Functions.detectBackKeys(event.key, Constants.MenuState.HOME)
             }
@@ -1262,7 +1267,7 @@ Load language error. Please reinstall the application"
             height: mainFormID.propertyMainMenuBottomListView.height
 
 
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 console.log("mainMenuBottom onPressed:" + event.key)
                 Functions.detectBackKeys(event.key, Constants.MenuState.HOME)
                     }
@@ -1419,7 +1424,7 @@ Load language error. Please reinstall the application"
             width: mainFormID.propertySubMenuListView.width
             height: mainFormID.propertyMainView.height * Constants.SUB_MENU_RELATIVE_V_ITEM_SIZE
 
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 console.log("subMenu onPressed:" + event.key)
                 Functions.detectBackKeys(event.key, Constants.MenuState.HOME)
             }
@@ -1597,7 +1602,7 @@ Load language error. Please reinstall the application"
             mainWindow.visibility = Window.Maximized
         }
         
-        if(Qt.platform.os === "osx") {
+        if(Qt.platform.os === "macos") {
             if(!gapi.isMacOSApplicationFolder()) {
                 mainFormID.propertyPageLoader.activateGeneralPopup(qsTranslate("main", "STR_WARNING_NOT_CORRECT_FOLDER_MAC"),
                                                                    qsTranslate("main", "STR_WARNING_NOT_CORRECT_FOLDER_MAC_BODY"), false)

@@ -6,9 +6,9 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.1
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 /* Constants imports */
 import "../scripts/Constants.js" as Constants
@@ -555,7 +555,6 @@ Item {
                         anchors.top: new_notification_title.bottom
                         anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
 
-                        Keys.forwardTo: delegate
                         onFocusChanged: currentIndex = 0
                     }
                 }
@@ -605,7 +604,6 @@ Item {
                         anchors.top: read_notification_title.bottom
                         anchors.topMargin: Constants.MARGIN_NOTIFICATION_CENTER / 2
 
-                        Keys.forwardTo: delegate
                         onFocusChanged: currentIndex = 0
                     }
                 }

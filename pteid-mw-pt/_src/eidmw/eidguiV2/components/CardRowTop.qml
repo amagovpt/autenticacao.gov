@@ -6,7 +6,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 import "../scripts/Constants.js" as Constants
 
@@ -21,9 +21,9 @@ Item {
     Connections {
         id: connectionGapi
         target: gapi
-        onSignalCardAccessError: updateIcon()
+        function onSignalCardAccessError(error_code) { updateIcon() }
 
-        onSignalCardChanged: updateIcon()
+        function onSignalCardChanged(error_code) { updateIcon() }
 
         function updateIcon() {
             iconImage.width = gapi.hasOnlyICAO() ? Constants.SIZE_IMAGE_LOGO_ICAO_WIDTH : Constants.SIZE_IMAGE_LOGO_CC_WIDTH

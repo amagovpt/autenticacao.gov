@@ -81,15 +81,6 @@ set startTime=%time%
 :find_cpdk
 @echo [INFO] Using PTEID_DIR_CRYPTPDK=%PTEID_DIR_CRYPTPDK%
 
-:: Check QT 5
-:: ==================
-@call "%CHECKS%\PathQt5.bat"
-@if %ERRORLEVEL%==0 goto find_qt5
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_5
-@goto end
-:find_qt5
-@echo [INFO] Using PTEID_DIR_QT_5=%PTEID_DIR_QT_5%
-
 :: Check OpenSSL
 :: ====================
 @call "%CHECKS%\PathOpenssl.bat"
@@ -135,15 +126,6 @@ set startTime=%time%
 :find_openjpeg
 @echo [INFO] Using PTEID_DIR_OPENJPEG=%PTEID_DIR_OPENJPEG%
 
-:: Check Jpeg
-:: ==================
-@call "%CHECKS%\PathJpeg.bat"
-@if %ERRORLEVEL%==0 goto find_jpeg
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_JPEG
-@goto end
-:find_jpeg
-@echo [INFO] Using PTEID_DIR_OPENJPEG=%PTEID_DIR_JPEG%
-
 :: Curl
 ::=============
 @call "%CHECKS%\PathCurl.bat"
@@ -156,14 +138,14 @@ set startTime=%time%
 
 @if "%SKIP_X64_DEPS_CHECK%"=="1" goto skip_64_deps
 
-:: Check QT 5 X64
+:: Check Qt 6 X64 (the application is x64 only)
 :: ==================
-@call "%CHECKS%\PathQt5_x64.bat"
-@if %ERRORLEVEL%==0 goto find_qt5_x64
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_5_X64
+@call "%CHECKS%\PathQt6_x64.bat"
+@if %ERRORLEVEL%==0 goto find_qt6_x64
+@echo [TIP] Use set_path.bat script to define PTEID_DIR_QT_6_X64
 @goto end
-:find_qt5_x64
-@echo [INFO] Using PTEID_DIR_QT_5_X64=%PTEID_DIR_QT_5_X64%
+:find_qt6_x64
+@echo [INFO] Using PTEID_DIR_QT_6_X64=%PTEID_DIR_QT_6_X64%
 
 :: Check OpenSSL X64
 :: ====================
@@ -209,15 +191,6 @@ set startTime=%time%
 @goto end
 :find_openjpeg_x64
 @echo [INFO] Using PTEID_DIR_OPENJPEG_X64=%PTEID_DIR_OPENJPEG_X64%
-
-:: Check Jpeg X64
-:: ==================
-@call "%CHECKS%\PathJpeg_x64.bat"
-@if %ERRORLEVEL%==0 goto find_jpeg_x64
-@echo [TIP] Use set_path.bat script to define PTEID_DIR_JPEG_X64
-@goto end
-:find_jpeg_x64
-@echo [INFO] Using PTEID_DIR_JPEG_X64=%PTEID_DIR_JPEG_X64%
 
 :: Check Curl X64
 ::=============

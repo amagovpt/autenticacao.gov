@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <string>
 
 #define MAX_KEY_LENGTH 255
 

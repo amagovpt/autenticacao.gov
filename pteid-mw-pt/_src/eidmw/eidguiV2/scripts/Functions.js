@@ -216,6 +216,8 @@ function detectBackKeysTextEdit(key) {
     return false;
 }
 function stripFilePrefix(filePath) {
+    // Qt 6 file dialogs return url objects, not strings
+    filePath = filePath.toString()
     if (Qt.platform.os === "windows") {
         return filePath.replace(/^(file:\/{3})|(file:)|(qrc:\/{3})|(http:\/{3})/, "")
     }
@@ -224,6 +226,7 @@ function stripFilePrefix(filePath) {
     }
 }
 function replaceFileSuffix(url, suffix){
+    url = url.toString()
     //replaces file extension if there is one, by given suffix.
     var filename = url.split(/[\\/]/).pop()
     if (filename.lastIndexOf('.') > 0)
@@ -232,7 +235,7 @@ function replaceFileSuffix(url, suffix){
     return url.substring(0, url.lastIndexOf('/') + 1 ) + filename + suffix
 }
 function fileBaseName(filepath){
-    return filepath.split(/[\\/]/).pop()
+    return filepath.toString().split(/[\\/]/).pop()
 }
 function filterText(text){
     var temp = text.replace(/<[^>]*>/g, '')

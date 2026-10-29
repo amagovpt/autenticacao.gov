@@ -34,7 +34,7 @@
 	#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-#include <poppler-qt5.h>
+#include <poppler-qt6.h>
 
 #ifdef WIN32
 	#pragma warning(pop)
@@ -192,7 +192,7 @@ struct WindowGeometry {
 	int height;
 };
 
-class PDFPreviewImageProvider : public QObject, public QQuickImageProvider {
+class PDFPreviewImageProvider : public QQuickImageProvider {
 	Q_OBJECT
 public:
 	PDFPreviewImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap) {}
@@ -446,6 +446,8 @@ public slots:
 
 	// get notes functionality support
 	bool isNotesSupported();
+	// same check in a worker thread, the result is sent with signalNotesSupported()
+	void startCheckNotesSupported();
 
 	// Slots to Gui request values
 	QVariantList getRetReaderList(void);
@@ -668,6 +670,7 @@ signals:
 	void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage, bool success);
 	void signalCertificatesChanged(const QVariantMap certificatesMap);
 	void signalCertificatesFail();
+	void signalNotesSupported(bool supported);
 	void signalInstalledRootCACert(bool successful);
 	void signalShowCardActivation(QString statusMessage);
 	void signalTestPinFinished(int triesLeft, int pin);
@@ -742,6 +745,7 @@ private:
 	void getPersoDataFile();
 	void setPersoDataFile(const QString &text);
 	void doSaveCardPhoto(QString outputFile);
+	void doCheckNotesSupported();
 	void doSaveIcaoCardPhoto(const QString &outputFile);
 	void getAddressFile();
 	void doSignPDF(SignParams &params);
