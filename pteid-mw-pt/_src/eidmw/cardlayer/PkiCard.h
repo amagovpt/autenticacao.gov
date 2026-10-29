@@ -42,38 +42,38 @@ public:
 	CPkiCard(PTEID_CardHandle hCard, CContext *poContext, PinpadInterface *poPinpad);
 	virtual ~CPkiCard(void);
 
-	virtual tCardType GetType() = 0;
+	virtual tCardType GetType() override = 0;
 
-	virtual CByteArray GetSerialNrBytes() = 0;
+	virtual CByteArray GetSerialNrBytes() override = 0;
 
-	virtual void SelectApplication(const CByteArray &oAID);
+	virtual void SelectApplication(const CByteArray &oAID) override;
 
 	virtual CByteArray ReadUncachedFile(const std::string &csPath, unsigned long ulOffset = 0,
-										unsigned long ulMaxLen = FULL_FILE);
-	virtual void WriteUncachedFile(const std::string &csPath, unsigned long ulOffset, const CByteArray &oData);
+										unsigned long ulMaxLen = FULL_FILE) override;
+	virtual void WriteUncachedFile(const std::string &csPath, unsigned long ulOffset, const CByteArray &oData) override;
 
-	virtual DlgPinUsage PinUsage2Dlg(const tPin &Pin, const tPrivKey *pKey) = 0;
+	virtual DlgPinUsage PinUsage2Dlg(const tPin &Pin, const tPrivKey *pKey) override = 0;
 
-	virtual unsigned long PinStatus(const tPin &Pin) = 0;
-	virtual CByteArray RootCAPubKey() = 0;
-	virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN) = 0;
+	virtual unsigned long PinStatus(const tPin &Pin) override = 0;
+	virtual CByteArray RootCAPubKey() override = 0;
+	virtual bool Activate(const char *pinCode, CByteArray &BCDDate, bool blockActivationPIN) override = 0;
 	virtual bool unlockPIN(const tPin &pin, const tPin *puk, const char *pszPuk, const char *pszNewPin,
-						   unsigned long &triesLeft, unsigned long unblockFlags) = 0;
+						   unsigned long &triesLeft, unsigned long unblockFlags) override = 0;
 
 	virtual bool PinCmd(tPinOperation operation, const tPin &Pin, const std::string &csPin1, const std::string &csPin2,
 						unsigned long &ulRemaining, const tPrivKey *pKey = NULL, bool bShowDlg = true,
-						void *wndGeometry = 0, unsigned long unblockFlags = 0);
+						void *wndGeometry = 0, unsigned long unblockFlags = 0) override;
 
 	virtual bool PinCmdIAS(tPinOperation operation, const tPin &Pin, const std::string &csPin1,
 						   const std::string &csPin2, unsigned long &ulRemaining, const tPrivKey *pKey = NULL,
 						   bool bShowDlg = true, void *wndGeometry = 0);
 
-	virtual CByteArray Sign(const tPrivKey &key, const tPin &Pin, unsigned long paddingType, const CByteArray &oData);
+	virtual CByteArray Sign(const tPrivKey &key, const tPin &Pin, unsigned long paddingType, const CByteArray &oData) override;
 
-	virtual CByteArray GetRandom(unsigned long ulLen);
+	virtual CByteArray GetRandom(unsigned long ulLen) override;
 
 protected:
-	virtual bool SelectApplet();
+	virtual bool SelectApplet() override;
 
 	virtual void ResetApplication() override;
 	virtual tFileInfo SelectFile(const std::string &csPath, const CByteArray &oAID, bool bReturnFileInfo = false);

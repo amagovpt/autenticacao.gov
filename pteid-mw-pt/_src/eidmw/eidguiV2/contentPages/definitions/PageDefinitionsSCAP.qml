@@ -9,8 +9,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 //Import C++ defined enums
 import eidguiV2 1.0
@@ -41,7 +41,7 @@ PageDefinitionsSCAPForm {
             returnToSignaturePage()
     }
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         var index = propertyStackLayout.currentIndex
         var isOnEntitiesTab = index === 0
         var isOnEntityTab = index === 1
@@ -62,11 +62,11 @@ PageDefinitionsSCAPForm {
 
     Connections {
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
-        onSignalCardDataChanged: {
+        function onSignalCardDataChanged() {
             console.log("Definitions SCAP Signature --> Data Changed")
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicator.running = false
@@ -76,7 +76,7 @@ PageDefinitionsSCAPForm {
             propertyButtonLoadCompanyAttributes.enabled =
                     !isLoadingCache && isCardPresent
         }
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Definitions SCAP Signature --> onSignalCardAccessError")
             isCardPresent = false
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -116,7 +116,7 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicator.running = false
             propertyTabButtonEntities.forceActiveFocus()
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Definitions SCAP Signature --> onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -137,7 +137,7 @@ PageDefinitionsSCAPForm {
                     !isLoadingCache && isCardPresent && isAnyEntitySelected()
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalSCAPServiceFail: {
+        function onSignalSCAPServiceFail(pdfsignresult, isCompany) {
             isLoadingAttributes = false
             console.log("Definitions SCAP - Signal SCAP service fail Code = "
                         + pdfsignresult + " isCompany = " + isCompany)
@@ -214,7 +214,7 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicator.running = false
         }
 
-        onSignalSCAPIncompleteResponse: {
+        function onSignalSCAPIncompleteResponse(failed_providers) {
             console.log("ScapIncompleteResponse")
 
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
@@ -230,7 +230,7 @@ PageDefinitionsSCAPForm {
             show_error_message(titlePopup, bodyPopup)
         }
 
-        onSignalSCAPConnectionFailed: {
+        function onSignalSCAPConnectionFailed() {
             console.log("Scap connection failed")
 
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
@@ -240,7 +240,7 @@ PageDefinitionsSCAPForm {
             show_error_message(titlePopup, bodyPopup)
         }
 
-        onSignalSCAPProxyAuthRequired: {
+        function onSignalSCAPProxyAuthRequired() {
             console.log("Scap proxy auth required")
 
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
@@ -249,7 +249,7 @@ PageDefinitionsSCAPForm {
             show_error_message(titlePopup, bodyPopup)
         }
 
-        onSignalSCAPPossibleProxyMisconfigured: {
+        function onSignalSCAPPossibleProxyMisconfigured() {
             console.log("Scap possible misconfiguration of proxy")
 
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
@@ -260,7 +260,7 @@ PageDefinitionsSCAPForm {
             show_error_message(titlePopup, bodyPopup)
         }
 
-        onSignalSCAPNoAttributesResponse: {
+        function onSignalSCAPNoAttributesResponse(failed_providers, enterprise) {
             console.log("Scap No Attributes")
 
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
@@ -280,7 +280,7 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false, linkUrl, accessibleText)
         }
 
-        onSignalSCAPBadCredentials: {
+        function onSignalSCAPBadCredentials() {
             console.log("Scap Bad Credentials")
 
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_ERROR")
@@ -289,7 +289,7 @@ PageDefinitionsSCAPForm {
             show_error_message(titlePopup, bodyPopup)
         }
 
-        onSignalCacheRemovedLegacy: {
+        function onSignalCacheRemovedLegacy() {
             console.log("Scap Removed Legacy cache files")
 
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
@@ -298,7 +298,7 @@ PageDefinitionsSCAPForm {
             show_error_message(titlePopup, bodyPopup)
         }
 
-        onSignalEntityAttributesLoadedError: {
+        function onSignalEntityAttributesLoadedError() {
             isLoadingAttributes = false
             console.log("Definitions SCAP - Signal SCAP entities loaded error")
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
@@ -308,7 +308,7 @@ PageDefinitionsSCAPForm {
                 propertyBusyIndicatorAttributes.running = false
             propertyListViewEntities.forceActiveFocus()
         }
-        onSignalCompanyAttributesLoadedError: {
+        function onSignalCompanyAttributesLoadedError() {
             isLoadingAttributes = false
             console.log("Definitions SCAP - Signal SCAP company loaded error")
             var titlePopup = qsTranslate("PageDefinitionsSCAP","STR_SCAP_ERROR")
@@ -317,7 +317,7 @@ PageDefinitionsSCAPForm {
             if(propertyBar.currentIndex == 1)
                 propertyBusyIndicatorAttributes.running = false
         }
-        onSignalSCAPEntitiesLoaded: {
+        function onSignalSCAPEntitiesLoaded(entitiesList) {
             console.log("Definitions SCAP - Signal SCAP entities loaded")
             entityAttributesModel.clear()
             for (var i = 0; i < entitiesList.length; i++)
@@ -336,7 +336,7 @@ PageDefinitionsSCAPForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
             propertyBusyIndicatorAttributes.running = false
         }
-        onSignalAttributesLoaded: {
+        function onSignalAttributesLoaded(institution_attributes, enterprise_attributes) {
             console.log("Definitions SCAP - Signal SCAP Entity attributes loaded")
             isLoadingCache = false
             cmdLoadDialog.close()
@@ -347,7 +347,7 @@ PageDefinitionsSCAPForm {
             propertyBusyIndicatorAttributes.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
-        onSignalAttributesPossiblyExpired: {
+        function onSignalAttributesPossiblyExpired(expiredSuppliers) {
             var titlePopup = qsTranslate("PageServicesSign","STR_SCAP_WARNING")
             var bodyPopup = qsTranslate("PageServicesSign","STR_SCAP_ATTRS_POSSIBLY_EXPIRED") + "<br>"
             for (var i = 0; i < expiredSuppliers.length; i++) {
@@ -355,7 +355,7 @@ PageDefinitionsSCAPForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalRemoveSCAPAttributesSucess: {
+        function onSignalRemoveSCAPAttributesSucess() {
             console.log("Definitions SCAP - Signal SCAP Signal Remove SCAP Attributes Sucess")
             if (isLoadingAttributes == false) {
                 propertyBusyIndicatorAttributes.running = false
@@ -365,7 +365,7 @@ PageDefinitionsSCAPForm {
             }
             gapi.startGettingEntities()
         }
-        onSignalRemoveSCAPAttributesFail: {
+        function onSignalRemoveSCAPAttributesFail() {
             console.log("Definitions SCAP - Signal Remove SCAP Attributes Fail")
             propertyBusyIndicatorAttributes.running = false
             var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
@@ -373,7 +373,7 @@ PageDefinitionsSCAPForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
             gapi.startGettingEntities()
         }
-        onSignalCacheNotReadable:{
+        function onSignalCacheNotReadable() {
             propertyBusyIndicatorAttributes.running = false;
             var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_READABLE")
@@ -381,19 +381,19 @@ PageDefinitionsSCAPForm {
             gapi.startGettingEntities()
             propertyBusyIndicator.running = true
         }
-        onSignalCacheNotWritable:{
+        function onSignalCacheNotWritable() {
             propertyBusyIndicatorAttributes.running = false;
             var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_NOT_WRITABLE")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalCacheFolderNotCreated:{
+        function onSignalCacheFolderNotCreated() {
             propertyBusyIndicatorAttributes.running = false;
             var titlePopup = qsTranslate("PageDataApp","STR_PERMISSIONS_CACHE")
             var bodyPopup = qsTranslate("PageDataApp","STR_CACHE_FOLDER_NOT_CREATED")
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
-        onSignalEndOAuth: {
+        function onSignalEndOAuth(oauthResult) {
             cmdLoadDialog.close()
 
             switch (oauthResult){

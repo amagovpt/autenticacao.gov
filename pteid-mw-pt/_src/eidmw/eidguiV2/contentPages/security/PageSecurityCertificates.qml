@@ -9,7 +9,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 /* Constants imports */
 import "../../scripts/Constants.js" as Constants
@@ -21,16 +21,16 @@ import eidguiV2 1.0
 
 PageSecurityCertificatesForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
 
     Connections {
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
         }
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Security Pin Codes onSignalCardAccessError")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
@@ -59,7 +59,7 @@ PageSecurityCertificatesForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             propertyBusyIndicator.running = false
         }
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Security Certificates onSignalCardChanged")
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
             var bodyPopup = ""
@@ -78,7 +78,7 @@ PageSecurityCertificatesForm {
             }
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
         }
-        onSignalCertificatesFail: {
+        function onSignalCertificatesFail() {
             propertyBusyIndicator.running = false
             propertyButtonViewCertificate.enabled = false
             propertyButtonExportCertificate.enabled = false
@@ -88,12 +88,12 @@ PageSecurityCertificatesForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
         }
 
-        onSignalContactlessCANNeeded: {
+        function onSignalContactlessCANNeeded() {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
         }
 
-        onSignalCertificatesChanged: {
+        function onSignalCertificatesChanged(certificatesMap) {
             console.log("Certificate chain levels: "+ certificatesMap.levelCount)
             var initialOption
             if(certificatesMap.levelCount === 5){
@@ -314,7 +314,7 @@ PageSecurityCertificatesForm {
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyRectEntity.forceActiveFocus()
         }
-        onSignalExportCertificates: {
+        function onSignalExportCertificates(success) {
             if (success) {
                 var titlePopup = qsTranslate("GAPI","STR_POPUP_SUCESS")
                 var bodyPopup = qsTranslate("PageSecurityCertificates","STR_EXPORT_CERTIFICATE_SUCCESS")
@@ -326,7 +326,7 @@ PageSecurityCertificatesForm {
             mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, false)
         }
 
-        onSignalErrorPace: {
+        function onSignalErrorPace(error_code) {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
@@ -336,7 +336,7 @@ PageSecurityCertificatesForm {
 
     Connections {
         target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
-        onClosed: {
+        function onClosed() {
             paceDialogLoader.active = false
         }
     }

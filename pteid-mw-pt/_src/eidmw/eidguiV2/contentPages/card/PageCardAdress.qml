@@ -9,8 +9,8 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.1
+import QtQuick
+import QtQuick.Controls
 
 import "../../scripts/Constants.js" as Constants
 import "../../scripts/Functions.js" as Functions
@@ -22,18 +22,18 @@ import eidguiV2 1.0
 
 PageCardAdressForm {
 
-    Keys.onPressed: {
+    Keys.onPressed: function(event) {
         console.log("PageCardAdressForm onPressed:" + event.key)
         Functions.detectBackKeys(event.key, Constants.MenuState.SUB_MENU)
     }
 
     Connections {
         target: gapi
-        onSignalGenericError: {
+        function onSignalGenericError(error_code) {
             propertyBusyIndicator.running = false
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
-        onSignalAddressLoaded: {
+        function onSignalAddressLoaded(m_foreign) {
             console.log("Address --> Data Changed")
             if(m_foreign){
                 propertyItemForeignCitizen.visible = true
@@ -72,7 +72,7 @@ PageCardAdressForm {
             if(mainFormID.propertyPageLoader.propertyForceFocus)
                 propertyRectNacionalDistrict.forceActiveFocus()
         }
-        onSignalUpdateProgressBar: {
+        function onSignalUpdateProgressBar(value) {
             console.log("Address change --> update progress bar with value = " + value)
             progressBar.value = value
             if(value === 100) {
@@ -80,14 +80,14 @@ PageCardAdressForm {
                 progressBarIndeterminate.visible = false
             }
         }
-        onSignalUpdateProgressStatus: {
+        function onSignalUpdateProgressStatus(statusMessage) {
             console.log("Address change --> update progress status with text = " + statusMessage)            
             textMessageTop.propertyText.text = statusMessage
             textMessageTop.propertyAccessibleText = Functions.filterText(statusMessage)
             textMessageTop.propertyText.forceActiveFocus()
         }
 
-        onSignalRemoteAddressError: {
+        function onSignalRemoteAddressError(error_code) {
             console.log("Card Address onSignalRemoteAddressError: "+ error_code)
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
             var bodyPopup = ""
@@ -153,7 +153,7 @@ PageCardAdressForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
-        onSignalCardAccessError: {
+        function onSignalCardAccessError(error_code) {
             console.log("Card Adress onSignalCardAccessError"+ error_code)
 
             var titlePopup = qsTranslate("Popup Card","STR_POPUP_ERROR")
@@ -207,7 +207,7 @@ PageCardAdressForm {
             mainFormID.opacity = Constants.OPACITY_MAIN_FOCUS
         }
 
-        onSignalCardChanged: {
+        function onSignalCardChanged(error_code) {
             console.log("Card Address onSignalCardChanged")
             if (error_code == GAPI.ET_CARD_REMOVED) {
                 var titlePopup = qsTranslate("Popup Card","STR_POPUP_CARD_READ")
@@ -249,19 +249,19 @@ PageCardAdressForm {
                 mainFormID.propertyPageLoader.activateGeneralPopup(titlePopup, bodyPopup, true)
             }
         }
-        onSignalTestPinFinished: {
+        function onSignalTestPinFinished(triesLeft, pin) {
             if (triesLeft === 3) {
                 propertyBusyIndicator.running = true
                 gapi.startReadingAddress()
             }
         }
 
-        onSignalContactlessCANNeeded: {
+        function onSignalContactlessCANNeeded() {
             console.log("QML: Contactless CAN is needed!!")
             paceDialogLoader.active = true
         }
 
-        onSignalErrorPace: {
+        function onSignalErrorPace(error_code) {
             if(error_code === GAPI.PaceBadToken){
                 console.log("QML: The stored CAN is wrong!! Will ask again!!")
                 paceDialogLoader.active = true
@@ -271,7 +271,7 @@ PageCardAdressForm {
 
     Connections {
         target: paceDialogLoader.status === Loader.Ready ? paceDialogLoader.item : null
-        onClosed: {
+        function onClosed() {
             paceDialogLoader.active = false
         }
     }
@@ -389,7 +389,7 @@ PageCardAdressForm {
                     font.italic: textFieldPin.text === "" ? true: false
                     placeholderText: qsTranslate("Popup PIN","STR_POPUP_CARD_PIN_CURRENT")
                     echoMode : TextInput.Password
-                    validator: RegExpValidator { regExp: /[0-9]+/ }
+                    validator: RegularExpressionValidator { regularExpression: /[0-9]+/ }
                     maximumLength: 8
                     font.family: lato.name
                     font.pixelSize: Constants.SIZE_TEXT_FIELD

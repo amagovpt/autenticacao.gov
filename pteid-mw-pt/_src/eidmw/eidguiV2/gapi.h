@@ -30,11 +30,13 @@
 	#pragma warning(disable: 4996)
 #else
 	#pragma GCC diagnostic push
+	#ifndef __clang__
 	#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+	#endif
 	#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-#include <poppler-qt5.h>
+#include <poppler-qt6.h>
 
 #ifdef WIN32
 	#pragma warning(pop)
@@ -192,7 +194,7 @@ struct WindowGeometry {
 	int height;
 };
 
-class PDFPreviewImageProvider : public QObject, public QQuickImageProvider {
+class PDFPreviewImageProvider : public QQuickImageProvider {
 	Q_OBJECT
 public:
 	PDFPreviewImageProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap) {}
@@ -226,9 +228,6 @@ std::string getCANFromCache();
 class GAPI : public QObject {
 #define TIMERREADERLIST 5000
 	Q_OBJECT
-	Q_PROPERTY(QMap<IDInfoKey, QString> m_data NOTIFY signalCardDataChanged)
-	Q_PROPERTY(QMap<ICAOInfoKey, QString> m_icaoData NOTIFY signalICAODataChanged)
-	Q_PROPERTY(QMap<AddressInfoKey, QString> m_addressData NOTIFY signalAddressLoaded)
 	Q_PROPERTY(QString persoData MEMBER m_persoData NOTIFY signalPersoDataLoaded)
 
 public:
@@ -396,27 +395,25 @@ public:
 		ICAOData,
 	};
 
-	Q_ENUMS(ScapPdfSignResult)
-	Q_ENUMS(CardAccessError)
-	Q_ENUMS(RemoteAddressError)
-	Q_ENUMS(eCustomEventType)
-	Q_ENUMS(IDInfoKey)
-	Q_ENUMS(ICAOInfoKey)
-	Q_ENUMS(AddressInfoKey)
-	Q_ENUMS(UI_LANGUAGE)
-	Q_ENUMS(SignMessage)
-	Q_ENUMS(PrintMessage)
-	Q_ENUMS(AutoUpdateMessage)
-	Q_ENUMS(AutoUpdateType)
-	Q_ENUMS(PinUsage)
-	Q_ENUMS(CmdDialogClass)
-	Q_ENUMS(SignatureLevel)
-	Q_ENUMS(ShortcutId)
-	Q_ENUMS(TelemetryAction)
-	Q_ENUMS(TelemetryStatus)
-	Q_ENUMS(OAuthErrors)
-	Q_ENUMS(CardOperation);
-	Q_ENUMS(PaceError);
+	Q_ENUM(ScapPdfSignResult)
+	Q_ENUM(CardAccessError)
+	Q_ENUM(RemoteAddressError)
+	Q_ENUM(eCustomEventType)
+	Q_ENUM(IDInfoKey)
+	Q_ENUM(ICAOInfoKey)
+	Q_ENUM(AddressInfoKey)
+	Q_ENUM(SignMessage)
+	Q_ENUM(PrintMessage)
+	Q_ENUM(AutoUpdateMessage)
+	Q_ENUM(AutoUpdateType)
+	Q_ENUM(PinUsage)
+	Q_ENUM(CmdDialogClass)
+	Q_ENUM(ShortcutId)
+	Q_ENUM(TelemetryAction)
+	Q_ENUM(TelemetryStatus)
+	Q_ENUM(OAuthErrors)
+	Q_ENUM(CardOperation)
+	Q_ENUM(PaceError)
 
 	QQuickImageProvider *buildImageProvider() { return image_provider; }
 	QQuickImageProvider *buildPdfImageProvider() { return image_provider_pdf; }
@@ -446,6 +443,8 @@ public slots:
 
 	// get notes functionality support
 	bool isNotesSupported();
+	// same check in a worker thread, the result is sent with signalNotesSupported()
+	void startCheckNotesSupported();
 
 	// Slots to Gui request values
 	QVariantList getRetReaderList(void);
@@ -668,6 +667,7 @@ signals:
 	void signalSetPersoDataFile(const QString titleMessage, const QString statusMessage, bool success);
 	void signalCertificatesChanged(const QVariantMap certificatesMap);
 	void signalCertificatesFail();
+	void signalNotesSupported(bool supported);
 	void signalInstalledRootCACert(bool successful);
 	void signalShowCardActivation(QString statusMessage);
 	void signalTestPinFinished(int triesLeft, int pin);
@@ -742,6 +742,7 @@ private:
 	void getPersoDataFile();
 	void setPersoDataFile(const QString &text);
 	void doSaveCardPhoto(QString outputFile);
+	void doCheckNotesSupported();
 	void doSaveIcaoCardPhoto(const QString &outputFile);
 	void getAddressFile();
 	void doSignPDF(SignParams &params);

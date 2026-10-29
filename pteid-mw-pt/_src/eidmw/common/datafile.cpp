@@ -362,7 +362,7 @@ bool CDataFile::Save() {
 	// outStream.close();
 
 #ifdef WIN32
-	fprintf_s(m_stream, "%ls", outStream.str().c_str());
+	fprintf_s(m_stream, "%s", outStream.str().c_str());
 #else
 	fprintf(m_stream, "%s", outStream.str().c_str());
 #endif

@@ -356,12 +356,16 @@ PTEID_PublicKey::~PTEID_PublicKey() {
 }
 
 bool PTEID_PublicKey::isECCPublicKey() {
+	bool isECC = false;
+
 	BEGIN_TRY_CATCH
 
 	APLPublicKey *pimpl = static_cast<APLPublicKey *>(m_impl);
-	return pimpl->isECCPublicKey();
+	isECC = pimpl->isECCPublicKey();
 
 	END_TRY_CATCH
+
+	return isECC;
 }
 
 PTEID_ByteArray &PTEID_PublicKey::getCardAuthECCKey() {
@@ -391,6 +395,8 @@ PTEID_ByteArray &PTEID_PublicKey::getCardAuthECCKey() {
 }
 
 PTEID_ECC_CurveIdentifier PTEID_PublicKey::getECCCurveIdentifier() {
+	PTEID_ECC_CurveIdentifier curve = PTEID_ECC_CurveIdentifier::NIST_P256;
+
 	BEGIN_TRY_CATCH
 
 	auto *pimpl = static_cast<APLPublicKey *>(m_impl);
@@ -400,16 +406,21 @@ PTEID_ECC_CurveIdentifier PTEID_PublicKey::getECCCurveIdentifier() {
 
 	switch (pimpl->getECCPublicKeyCurveIdentifier()) {
 	case ECC_Curve_Identifier::NIST_P256:
-		return PTEID_ECC_CurveIdentifier::NIST_P256;
+		curve = PTEID_ECC_CurveIdentifier::NIST_P256;
+		break;
 	case ECC_Curve_Identifier::NIST_P384:
-		return PTEID_ECC_CurveIdentifier::NIST_P384;
+		curve = PTEID_ECC_CurveIdentifier::NIST_P384;
+		break;
 	case ECC_Curve_Identifier::NIST_P521:
-		return PTEID_ECC_CurveIdentifier::NIST_P521;
+		curve = PTEID_ECC_CurveIdentifier::NIST_P521;
+		break;
 	default:
 		throw PTEID_ExBadUsage();
 	}
 
 	END_TRY_CATCH
+
+	return curve;
 }
 
 PTEID_ByteArray &PTEID_PublicKey::getCardAuthKeyModulus() {

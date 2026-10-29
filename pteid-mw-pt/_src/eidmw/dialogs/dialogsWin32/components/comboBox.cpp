@@ -143,7 +143,7 @@ LRESULT CALLBACK PteidControls::ComboBox_Container_Proc(HWND hWnd, UINT uMsg, WP
 			GetTextMetrics(hDC, &tm);
 			for (size_t i = 0; i < data->items.size(); i++) {
 				size_t itemLen = _tcsclen(data->items[i]);
-				if (tm.tmAveCharWidth * itemLen > itemWidth) {
+				if (tm.tmAveCharWidth * itemLen > static_cast<size_t>(itemWidth)) {
 					assert(tm.tmMaxCharWidth * itemLen <= INT_MAX);
 					itemWidth = (int) (tm.tmMaxCharWidth * itemLen);
 				}

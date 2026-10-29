@@ -176,7 +176,7 @@ CByteArray SecureMessaging::sendSecureAPDU(const CByteArray &apdu, long &retValu
 	}
 
 	encryptedAPDU.Append(Tcc);
-	encryptedAPDU.Append(mac.Size());
+	encryptedAPDU.Append((unsigned char)mac.Size());
 	encryptedAPDU.Append(mac);
 
 	// Le for the wrapped APDU: extended (2 bytes) or short (1 byte)
@@ -198,7 +198,7 @@ CByteArray SecureMessaging::decryptAPDUResponse(const CByteArray &encryptedRespo
 	}
 
 	bool isOdd = encryptedResponse.GetByte(0) == TcgOdd;
-	uint64_t startOfData = 0;
+	unsigned long startOfData = 0;
 	CByteArray encryptedData;
 	CByteArray inputForMac;
 
@@ -209,7 +209,7 @@ CByteArray SecureMessaging::decryptAPDUResponse(const CByteArray &encryptedRespo
 		int asn1Tag = 0;
 		ASN1_get_object(&data, &sizeData, &asn1Tag, &xclass, encryptedResponse.Size());
 		// data pointer was advanced past the TLV header by ASN1_get_object
-		startOfData = data - encryptedResponse.GetBytes();
+		startOfData = (unsigned long)(data - encryptedResponse.GetBytes());
 		encryptedData = encryptedResponse.GetBytes(startOfData, sizeData);
 	}
 
@@ -223,13 +223,13 @@ CByteArray SecureMessaging::decryptAPDUResponse(const CByteArray &encryptedRespo
 
 	if (status.Size() > 0) {
 		inputForMac.Append(0x99);
-		inputForMac.Append(status.Size());
+		inputForMac.Append((unsigned char)status.Size());
 		inputForMac.Append(status);
 	}
 
 	auto responseMac = computeMac(addPadding(inputForMac));
 
-	uint64_t macIndex = inputForMac.Size() + 2;
+	unsigned long macIndex = inputForMac.Size() + 2;
 	auto mac = encryptedResponse.GetBytes(macIndex, encryptedResponse.GetByte(macIndex - 1));
 
 	if (memcmp(responseMac.GetBytes(), mac.GetBytes(), mac.Size()) != 0) {

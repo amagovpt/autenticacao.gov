@@ -243,7 +243,7 @@ FontParams calculateFontParams(bool small_signature_format, const std::string &r
 			linesCount += countAttributes;
 		}
 
-		if (linesFit >= linesCount) {
+		if (linesFit >= 0 && static_cast<size_t>(linesFit) >= linesCount) {
 			// printf("break i = %d countReason=%d countName=%d countEntities=%d countAttributes=%d countLocation=%d\n",
 			//   i, countReason, countName, countEntities, countAttributes,countLocation );
 			break;

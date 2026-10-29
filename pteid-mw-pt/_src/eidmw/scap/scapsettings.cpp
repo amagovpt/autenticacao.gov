@@ -59,7 +59,7 @@ void ScapSettings::setScapServerHost(const QString &host) {
 std::string ScapSettings::getScapServerHost() { return m_scap_server_host.toStdString(); }
 
 void ScapSettings::setScapServerPort(int server_port) {
-	m_scap_server_port = server_port;
+	m_scap_server_port = QString::number(server_port);
 
 	PTEID_Config config(PTEID_PARAM_GENERAL_SCAP_PORT);
 	config.setLong(server_port);

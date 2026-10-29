@@ -67,8 +67,8 @@ SecurityInfos *decodeDg14Data(const CByteArray &data) {
 ASN1_OBJECT *getSecurityOptionOidByOid(const SecurityInfos &security_infos, const CByteArray &oid) {
 	ASN1_OBJECT *oid_ret = nullptr;
 
-	size_t security_infos_n = sk_SecurityInfo_num(security_infos.infos);
-	for (size_t i = 0; i < security_infos_n; i++) {
+	int security_infos_n = sk_SecurityInfo_num(security_infos.infos);
+	for (int i = 0; i < security_infos_n; i++) {
 		auto info = sk_SecurityInfo_value(security_infos.infos, i);
 
 		// TODO: what is max OID size?
@@ -92,8 +92,8 @@ EVP_PKEY *getChipAuthenticationKey(const SecurityInfos &security_infos) {
 	const size_t OID1_LEN = strlen(CA_ECDH_PUBKEY_OID);
 	const size_t OID2_LEN = strlen(CA_DH_PUBKEY_OID);
 
-	size_t security_infos_n = sk_SecurityInfo_num(security_infos.infos);
-	for (size_t i = 0; i < security_infos_n; i++) {
+	int security_infos_n = sk_SecurityInfo_num(security_infos.infos);
+	for (int i = 0; i < security_infos_n; i++) {
 		auto info = sk_SecurityInfo_value(security_infos.infos, i);
 
 		// TODO: what is max OID size?
@@ -104,7 +104,7 @@ EVP_PKEY *getChipAuthenticationKey(const SecurityInfos &security_infos) {
 			   memcmp(obj_buff, CA_DH_PUBKEY_OID, OID2_LEN) == 0) {
 			// create evp key from required data sequence
 			if (info->requiredData->type == V_ASN1_SEQUENCE) {
-				size_t len = ASN1_STRING_length(info->requiredData->value.sequence);
+				int len = ASN1_STRING_length(info->requiredData->value.sequence);
 				const unsigned char *p = ASN1_STRING_get0_data(info->requiredData->value.sequence);
 				pkey = d2i_PUBKEY(NULL, &p, len);
 			}
@@ -123,8 +123,8 @@ OID_INFO getChipAuthenticationOid(const SecurityInfos &security_infos) {
 
 	OID_INFO found_oid = {};
 
-	size_t security_infos_n = sk_SecurityInfo_num(security_infos.infos);
-	for (size_t i = 0; i < security_infos_n; i++) {
+	int security_infos_n = sk_SecurityInfo_num(security_infos.infos);
+	for (int i = 0; i < security_infos_n; i++) {
 		auto info = sk_SecurityInfo_value(security_infos.infos, i);
 
 		for (auto std_oid : CA_OIDS) {

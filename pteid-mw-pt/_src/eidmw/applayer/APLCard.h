@@ -438,7 +438,7 @@ private:
 	static const std::vector<int> EXPECTED_TAGS;
 
 	EIDMW_SodReport verifySodFileIntegrity(const CByteArray &data, CByteArray &out_sod);
-	CByteArray readFile(const std::string &csPath) const;
+	CByteArray readIcaoFile(const std::string &csPath) const;
 	void loadAvailableDataGroups();
 	bool verifySOD(DataGroupID tag, const CByteArray &data);
 	EIDMW_ActiveAuthenticationReport performActiveAuthentication();

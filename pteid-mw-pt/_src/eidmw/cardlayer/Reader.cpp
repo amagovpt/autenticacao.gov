@@ -162,7 +162,7 @@ static void parse_reader_device_properties(unsigned char *bRecvBuffer, unsigned 
 	unsigned char *p;
 
 	p = bRecvBuffer;
-	while (p - bRecvBuffer < length) {
+	while ((unsigned long)(p - bRecvBuffer) < length) {
 		int tag, len, value, other_prop;
 
 		tag = *p++;

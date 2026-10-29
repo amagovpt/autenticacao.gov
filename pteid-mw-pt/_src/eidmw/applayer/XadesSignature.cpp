@@ -171,9 +171,9 @@ static CByteArray hashFileInContainer(zip_t *container, const char *filename, EV
 			MWLOG(LEV_ERROR, MOD_APL, L"XadesSignature::hashFileInContainer: zip_fread() failed");
 			return CByteArray();
 		}
-		EVP_DigestUpdate(mdctx, buffer, read);
+		EVP_DigestUpdate(mdctx, buffer, (size_t)read);
 		if (digest_state) {
-			EVP_DigestUpdate(digest_state, buffer, read);
+			EVP_DigestUpdate(digest_state, buffer, (size_t)read);
 		}
 		sum += read;
 	}
@@ -227,9 +227,9 @@ static CByteArray hashFile(const char *filename, EVP_MD_CTX *digest_state) {
 			MWLOG(LEV_ERROR, MOD_APL, "XadesSignature::hashFile: Failed to read file!");
 			return CByteArray();
 		}
-		EVP_DigestUpdate(mdctx, buffer, read);
+		EVP_DigestUpdate(mdctx, buffer, (size_t)read);
 		if (digest_state) {
-			EVP_DigestUpdate(digest_state, buffer, read);
+			EVP_DigestUpdate(digest_state, buffer, (size_t)read);
 		}
 	} while (!feof(fp));
 
@@ -285,7 +285,7 @@ static std::basic_string<XMLCh> generateNodeID() {
 #if _XSEC_VERSION_FULL >= 20000L
 	unsigned char b[128] = {0};
 	XMLCh id[258] = {0};
-	int toGen = 20;
+	const unsigned int toGen = 20;
 
 	if (RAND_bytes(b, toGen) != 1) {
 		MWLOG(LEV_ERROR, MOD_APL, "%s: RAND_bytes entropy source failed or is not available!", __FUNCTION__);

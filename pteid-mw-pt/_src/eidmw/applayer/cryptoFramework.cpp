@@ -30,6 +30,7 @@
 #include "MWException.h"
 #include "eidErrors.h"
 #include "Util.h"
+#include "prefix.h"
 #include "Log.h"
 #include "ByteArray.h"
 #include "APLConfig.h"
@@ -192,7 +193,8 @@ private:
 ***************** */
 APL_CryptoFwk::APL_CryptoFwk() {
 #ifdef __APPLE__
-	OSSL_PROVIDER_set_default_search_path(NULL, "/usr/local/lib/ossl-modules/");
+	// the OpenSSL modules are installed with the middleware libraries (/usr/local by default)
+	OSSL_PROVIDER_set_default_search_path(NULL, STRINGIFY(EIDMW_PREFIX) "/lib/ossl-modules/");
 #endif
 	m_LegacyProvider = OSSL_PROVIDER_load(NULL, "legacy");
 	m_DefaultProvider = OSSL_PROVIDER_load(NULL, "default");
@@ -1376,19 +1378,19 @@ void AA_RsaSignatureVerify(CByteArray &ifd_random, CByteArray &signature, EVP_PK
 	if (recovered_out[rec_len - 1] == 0xCC) {
 		switch (recovered_out[rec_len - 2]) {
 		case 0x34:
-			padding_bytes = rec_len - 35;
+			padding_bytes = (int)(rec_len - 35);
 			digest_type = EVP_sha256();
 			break;
 		case 0x36:
 			digest_type = EVP_sha384();
-			padding_bytes = rec_len - 51;
+			padding_bytes = (int)(rec_len - 51);
 			break;
 		case 0x35:
-			padding_bytes = rec_len - 67;
+			padding_bytes = (int)(rec_len - 67);
 			digest_type = EVP_sha512();
 			break;
 		case 0x38:
-			padding_bytes = rec_len - 31;
+			padding_bytes = (int)(rec_len - 31);
 			digest_type = EVP_sha224();
 			break;
 		default:
@@ -1399,7 +1401,7 @@ void AA_RsaSignatureVerify(CByteArray &ifd_random, CByteArray &signature, EVP_PK
 		}
 	} else if (recovered_out[rec_len - 1] == 0xBC) {
 		digest_type = EVP_sha1();
-		padding_bytes = rec_len - 22;
+		padding_bytes = (int)(rec_len - 22);
 	} else {
 		MWLOG(LEV_WARN, MOD_APL, "Unrecognized trailer field in RSA ISO-9796 signature!");
 		error_code = EIDMW_SOD_ERR_ACTIVE_AUTHENTICATION;
@@ -1458,7 +1460,7 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	unsigned char *der_signature = nullptr;
 	int signature_len = 0;
 	BIGNUM *r, *s;
-	size_t sig_point_size;
+	int sig_point_size;
 	APDU internal_auth_apdu;
 	CByteArray data;
 	size_t data_size;
@@ -1492,7 +1494,7 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	RAND_bytes(data_to_sign, 8);
 	data_size = sizeof(data_to_sign);
 
-	data.Append(data_to_sign, data_size);
+	data.Append(data_to_sign, (unsigned long)data_size);
 
 	internal_auth_apdu.ins() = 0x88;
 	internal_auth_apdu.setData(data);
@@ -1511,7 +1513,7 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	// We need to convert signature to DER format if AA public key is of type EC
 	if (EVP_PKEY_get_base_id(pkey) == EVP_PKEY_EC) {
 		// convert to DER signature object
-		sig_point_size = (signature.Size() - 2) / 2;
+		sig_point_size = (int)((signature.Size() - 2) / 2);
 		ec_sig = ECDSA_SIG_new();
 		r = BN_bin2bn(signature.GetBytes(), sig_point_size, nullptr);
 		s = BN_bin2bn(signature.GetBytes() + sig_point_size, sig_point_size, nullptr);
@@ -1549,7 +1551,7 @@ void APL_CryptoFwk::performActiveAuthentication(const ASN1_OBJECT *oid, const CB
 	} else { /* RSA signature */
 		signature.Chop(2);
 		CByteArray ifd_random(data_to_sign, sizeof(data_to_sign));
-		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type RSA and size: %d",
+		MWLOG(LEV_DEBUG, MOD_APL, "Verifying active authentication signature of type RSA and size: %lu",
 			  signature.Size());
 
 		AA_RsaSignatureVerify(ifd_random, signature, pkey);
@@ -1665,7 +1667,7 @@ std::pair<long, CByteArray> APL_CryptoFwk::getSodContents(const CByteArray &data
 	OpenSSL_add_all_digests();
 
 	const unsigned char *temp = data.GetBytes();
-	size_t length = data.Size();
+	unsigned long length = data.Size();
 	temp += 4; // Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
 
 	p7 = d2i_PKCS7(nullptr, &temp, length);
@@ -1720,7 +1722,7 @@ std::pair<long, CByteArray> APL_CryptoFwk::getSodContents(const CByteArray &data
 	}
 
 	unsigned char *p;
-	size_t size = BIO_get_mem_data(out, &p);
+	long size = BIO_get_mem_data(out, &p);
 	CByteArray out_data = CByteArray(p, size);
 
 	BIO_free_all(out);
@@ -1742,7 +1744,7 @@ X509_STORE *APL_CryptoFwk::getMultipassStore() {
 				X509_STORE_add_cert(m_multipassStore, pX509);
 				X509_free(pX509);
 			}
-			MWLOG(LEV_DEBUG, MOD_APL, "%d. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
+			MWLOG(LEV_DEBUG, MOD_APL, "%lu. Adding certificate Subject CN: %s", i, sod_ca->getOwnerName());
 		}
 
 		certs.clearSODCAs();
@@ -2050,7 +2052,7 @@ BIO *APL_CryptoFwk::Connect(char *pszHost, int iPort, int iSSL, SSL_CTX **ppSSLC
 	}
 
 	char port_buffer[10];
-	sprintf(port_buffer, "%d", iPort);
+	snprintf(port_buffer, sizeof(port_buffer), "%d", iPort);
 	BIO_set_conn_port(pConnect, port_buffer);
 
 	// Set BIO as nonblocking

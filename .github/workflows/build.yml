@@ -1,0 +1,351 @@
+name: Build
+
+on:
+  push:
+    branches: [master, qt6-macos-arm64]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: Platforms to build
+        type: choice
+        options: [all, windows]
+        default: all
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  QT_VERSION: '6.10.*'
+
+jobs:
+  macos:
+    name: macOS ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-15
+          - arch: x86_64
+            runner: macos-15-intel
+    if: inputs.platforms != 'windows'
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: qt5compat
+          cache: true
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install build tools
+        run: brew install autoconf automake libtool ninja swig gengetopt help2man
+
+      - name: Restore third-party libraries
+        id: deps-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/mw-thirdparty-libs
+          key: macos-deps-${{ matrix.arch }}-${{ env.QT_VERSION }}-${{ hashFiles('.github/ci/macos/build-deps.sh') }}
+
+      - name: Build third-party libraries
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: .github/ci/macos/build-deps.sh "$QT_ROOT_DIR"
+
+      - name: Build the middleware
+        run: .github/ci/macos/build-mw.sh
+
+      # Archives keep the symlinks and permissions that upload-artifact drops
+      - name: Archive the build
+        run: |
+          tar -czf mw-${{ matrix.arch }}.tar.gz -C pteid-mw-pt/_src/eidmw lib bin jar eidguiV2/eidguiV2.app
+          tar -czf deps-${{ matrix.arch }}.tar.gz -C ~ mw-thirdparty-libs
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: macos-${{ matrix.arch }}
+          path: '*-${{ matrix.arch }}.tar.gz'
+          retention-days: 7
+
+  macos-package:
+    name: macOS package
+    needs: macos
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the package version uses the commit count
+
+      # qtshadertools: a dependency of the Qt5Compat.GraphicalEffects QML plugin, deployed by macdeployqt
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: qt5compat qtshadertools
+          cache: true
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install build tools
+        run: brew install swig
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: macos-*
+          merge-multiple: true
+
+      - name: Merge arm64 and x86_64 into universal binaries
+        run: |
+          for arch in arm64 x86_64; do
+            mkdir -p "build-$arch/mw" "build-$arch/deps"
+            tar -xzf "mw-$arch.tar.gz" -C "build-$arch/mw"
+            tar -xzf "deps-$arch.tar.gz" -C "build-$arch/deps"
+          done
+          .github/ci/macos/lipo-merge.sh build-arm64/deps/mw-thirdparty-libs build-x86_64/deps/mw-thirdparty-libs ~/mw-thirdparty-libs
+          .github/ci/macos/lipo-merge.sh build-arm64/mw build-x86_64/mw universal
+          cp -a universal/. pteid-mw-pt/_src/eidmw/
+
+      - name: Build the CryptoTokenKit extension
+        working-directory: pteid-mw-pt/_src/eidmw/pteid-ctk
+        run: |
+          xcodebuild -project pteid-ctk.xcodeproj -configuration Release \
+            ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO MACOSX_DEPLOYMENT_TARGET=13.0 CODE_SIGN_IDENTITY=-
+
+      - name: Generate the package
+        working-directory: pteid-mw-pt/_src/eidmw/misc/macos-pkg
+        env:
+          MW_SOURCE_DIR: ${{ github.workspace }}
+          PTEID_PKG_ASSUME_YES: '1'
+        # Without the AMA Developer ID certificate the package is signed ad-hoc
+        run: ./generate_macos_pkg.sh -
+
+      # macdeployqt skips the dependencies it cannot find: a missing framework only shows when a
+      # QML plugin fails to load at run time
+      - name: Check that the application bundle has every Qt library it links to
+        working-directory: pteid-mw-pt/_src/eidmw/misc/macos-pkg
+        run: |
+          status=0
+          for app in apps/*.app; do
+            while IFS= read -r -d '' f; do
+              file -b "$f" | grep -q Mach-O || continue
+              for dep in $(otool -L "$f" | awk 'NR > 1 && $1 ~ /^@rpath\// {print $1}' | sort -u); do
+                lib=${dep#@rpath/}
+                case "$lib" in
+                  *.framework/*) path="$app/Contents/Frameworks/${lib%%.framework/*}.framework" ;;
+                  *) path="$app/Contents/Frameworks/$lib" ;;
+                esac
+                [ -e "$path" ] || { echo "::error::$f links to $dep, missing from the bundle"; status=1; }
+              done
+            done < <(find "$app/Contents" -type f -print0)
+          done
+          exit $status
+
+      - name: Check the deployment target of the packaged binaries
+        working-directory: pteid-mw-pt/_src/eidmw/misc/macos-pkg
+        run: |
+          status=0
+          while IFS= read -r -d '' f; do
+            file -b "$f" | grep -q Mach-O || continue
+            for arch in arm64 x86_64; do
+              minos=$(vtool -arch "$arch" -show-build "$f" 2>/dev/null | awk '/minos/ {print $2; exit}')
+              if [ -z "$minos" ]; then
+                echo "::error::$f has no $arch slice"; status=1
+              elif [ "$(printf '%s\n13.0\n' "$minos" | sort -V | tail -1)" != 13.0 ]; then
+                echo "::error::$f ($arch) targets macOS $minos"; status=1
+              fi
+            done
+          done < <(find apps system-libs dialogs -type f -print0)
+          exit $status
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: macos-pkg
+          path: pteid-mw-pt/_src/eidmw/misc/macos-pkg/pteid-mw-*.pkg
+
+  flatpak:
+    name: Linux Flatpak
+    if: inputs.platforms != 'windows'
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.11
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          manifest-path: pteid-mw-pt/_src/eidmw/pt.gov.autenticacao.yml
+          bundle: pteid-mw.flatpak
+          cache-key: flatpak-builder-${{ github.sha }}
+
+  windows-deps:
+    name: Windows libraries ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            vcvars: amd64
+            openpace: x64
+          - arch: x86
+            vcvars: amd64_x86
+            openpace: win32
+    runs-on: windows-2022
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: jurplel/install-qt-action@v4
+        if: matrix.arch == 'x64'
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: win64_msvc2022_64
+          modules: qt5compat
+          cache: true
+
+      # The most recent build, even a failed one: build-deps.ps1 skips the libraries
+      # whose recipe has not changed
+      - name: Restore the libraries
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            C:\mw-deps\${{ matrix.arch }}
+            C:\mw-deps\openpace\include
+            C:\mw-deps\openpace\${{ matrix.openpace }}
+          key: windows-deps-${{ matrix.arch }}-${{ env.QT_VERSION }}-${{ github.run_id }}
+          restore-keys: windows-deps-${{ matrix.arch }}-${{ env.QT_VERSION }}-
+
+      # NASM for libjpeg-turbo, jom (parallel nmake) for OpenSSL
+      - name: Install NASM and jom
+        run: |
+          choco install --no-progress -y nasm jom
+          "$env:ProgramFiles\NASM" | Out-File -Append -Encoding utf8 $env:GITHUB_PATH
+
+      - name: Load the Visual Studio environment
+        run: .github/ci/windows/vcvars.ps1 -Arch ${{ matrix.vcvars }}
+
+      - name: Build the libraries
+        id: build
+        run: .github/ci/windows/build-deps.ps1 -Arch ${{ matrix.arch }} -Prefix C:\mw-deps\${{ matrix.arch }} -QtDir "$env:QT_ROOT_DIR"
+
+      - name: Save the libraries
+        if: always() && steps.build.outputs.built == 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            C:\mw-deps\${{ matrix.arch }}
+            C:\mw-deps\openpace\include
+            C:\mw-deps\openpace\${{ matrix.openpace }}
+          key: windows-deps-${{ matrix.arch }}-${{ env.QT_VERSION }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-deps-${{ matrix.arch }}
+          path: |
+            C:\mw-deps\${{ matrix.arch }}
+            C:\mw-deps\openpace\include
+            C:\mw-deps\openpace\${{ matrix.openpace }}
+          retention-days: 7
+
+  windows:
+    name: Windows installers
+    needs: windows-deps
+    runs-on: windows-2022
+    timeout-minutes: 120
+    env:
+      # pteid-mw-pt\windows\set_path_autenticacao.gov.bat keeps the variables that are already set
+      PTEID_DIR_OPENSSL: C:\mw-deps\x86\openssl
+      PTEID_DIR_XERCES: C:\mw-deps\x86\xerces
+      PTEID_XMLSECURITY: C:\mw-deps\x86\xmlsec
+      PTEID_DIR_CURL: C:\mw-deps\x86\curl
+      PTEID_DIR_ZLIB: C:\mw-deps\x86\zlib
+      PTEID_DIR_LIBZIP: C:\mw-deps\x86\libzip
+      PTEID_DIR_LIBPNG: C:\mw-deps\x86\libpng
+      PTEID_DIR_OPENJPEG: C:\mw-deps\x86\openjpeg
+      PTEID_DIR_CJSON: C:\mw-deps\x86\cjson
+      PTEID_DIR_OPEN_PACE: C:\mw-deps\openpace
+      PTEID_DIR_OPENSSL_X64: C:\mw-deps\x64\openssl
+      PTEID_DIR_XERCES_X64: C:\mw-deps\x64\xerces
+      PTEID_XMLSECURITY_X64: C:\mw-deps\x64\xmlsec
+      PTEID_DIR_CURL_X64: C:\mw-deps\x64\curl
+      PTEID_DIR_ZLIB_X64: C:\mw-deps\x64\zlib
+      PTEID_DIR_LIBZIP_X64: C:\mw-deps\x64\libzip
+      PTEID_DIR_LIBPNG_X64: C:\mw-deps\x64\libpng
+      PTEID_DIR_OPENJPEG_X64: C:\mw-deps\x64\openjpeg
+      PTEID_DIR_CJSON_X64: C:\mw-deps\x64\cjson
+      PTEID_POPPLER_QT6: C:\mw-deps\x64\poppler
+      PTEID_DIR_QML_X64: C:\mw-deps\qml-app
+      PTEID_DEPLOY_QT: '1'
+      PTEID_CREDENTIALS_FOLDER: C:\no-credentials
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the package version uses the commit count
+
+      # qtshadertools: a dependency of the Qt5Compat.GraphicalEffects QML plugin
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: win64_msvc2022_64
+          modules: qt5compat qtshadertools
+          cache: true
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: windows-deps-*
+          path: C:\mw-deps
+          merge-multiple: true
+
+      - name: Install the build tools
+        run: |
+          .github/ci/windows/setup-tools.ps1
+          "PTEID_DIR_QT_6_X64=$env:QT_ROOT_DIR" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+
+      # The build script of the project: release_data.h/.wxs, checks of the dependencies and tools,
+      # then Release|Win32 and Release|x64 of _Builds\Autenticacao.gov.sln, including both installers
+      - name: Build the solution and the installers
+        shell: cmd
+        env:
+          DEBUG: '0'
+          OUTPUTLOG: '1'
+        run: call pteid-mw-pt\windows\ezbuild_sln_autenticacao.gov.bat < NUL
+
+      # devenv does not show the output of the commands of a project: run windeployqt again
+      - name: Show the windeployqt output
+        if: failure()
+        run: |
+          $env:PATH = "$env:PTEID_POPPLER_QT6\bin;$env:PATH"
+          & "$env:PTEID_DIR_QT_6_X64\bin\windeployqt.exe" --verbose 2 --release --no-compiler-runtime `
+            --qmldir pteid-mw-pt\_src\eidmw\eidguiV2 --dir "$env:RUNNER_TEMP\qml-app" `
+            pteid-mw-pt\_src\eidmw\_Binaries35\x64\Release\pteidguiV2.exe
+
+      - name: Check the installers
+        run: |
+          $msi = Get-ChildItem -Recurse pteid-mw-pt\_src\eidmw\misc\Wix_MW35\Autenticacao.gov-3.0\bin -Filter *.msi
+          $msi | Format-Table FullName, Length
+          if (-not ($msi | Where-Object Name -like '*x64*')) { throw 'The x64 installer was not built' }
+          if (($msi | Measure-Object).Count -lt 2) { throw 'The x86 installer was not built' }
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-msi
+          path: pteid-mw-pt/_src/eidmw/misc/Wix_MW35/Autenticacao.gov-3.0/bin/**/*.msi

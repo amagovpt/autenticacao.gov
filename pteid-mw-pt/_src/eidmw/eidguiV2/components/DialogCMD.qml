@@ -8,9 +8,9 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.7
-import QtQuick.Controls 2.1
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 /* Constants imports */
 import "../scripts/Constants.js" as Constants
@@ -32,31 +32,31 @@ Item {
         enabled: enabledConnections
         target: gapi
 
-        onSignalValidateOtp: {
+        function onSignalValidateOtp() {
             console.log("Signal Validate OTP")
             dialogContent.state = Constants.DLG_STATE.VALIDATE_OTP;
             textFieldReturnCode.forceActiveFocus()
         }
-        onSignalShowMessage: {
+        function onSignalShowMessage(msg, urlLink) {
             open(GAPI.ShowMessage)
             showMessage(msg,urlLink)
         }
-        onSignalOpenFile: {
+        function onSignalOpenFile() {
             console.log("Signal Open File")
             dialogContent.state = Constants.DLG_STATE.OPEN_FILE;
             dialogContent.forceActiveFocus()
         }
-        onSignalUpdateProgressBar: {
+        function onSignalUpdateProgressBar(value) {
             console.log("CMD sign change --> update progress bar with value = " + value)
             progressBar.value = value
         }
-        onSignalUpdateProgressStatus: {
+        function onSignalUpdateProgressStatus(statusMessage) {
             console.log("CMD sign change --> update progress status with text = " + statusMessage)
             open(GAPI.Progress)
             textMessageTop.text = statusMessage
             textMessageTop.forceActiveFocus()
         }
-        onSignalShowLoadAttrButton: {
+        function onSignalShowLoadAttrButton() {
             console.log("Signal show load attributes button")
             dialogContent.state = Constants.DLG_STATE.LOAD_ATTRIBUTES;
         }
@@ -103,7 +103,7 @@ Item {
             id: dialogContent
             height: parent.height
             Keys.enabled: true
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 if(event.key===Qt.Key_Enter || event.key===Qt.Key_Return)
                 {
                     confirmDlg()
@@ -245,7 +245,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         font.italic: textFieldMobileNumber.text === "" ? true: false
                         placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_MOVEL_NUM_OP") + "?"
-                        validator: RegExpValidator { regExp: /[0-9]+/ }
+                        validator: RegularExpressionValidator { regularExpression: /[0-9]+/ }
                         maximumLength: 15
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -291,7 +291,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         font.italic: textFieldPin.text === "" ? true: false
                         placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_PIN_OP") + "?"
-                        validator: RegExpValidator { regExp: /[0-9]{4,8}/ }
+                        validator: RegularExpressionValidator { regularExpression: /[0-9]{4,8}/ }
                         echoMode : TextInput.Normal
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -364,7 +364,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         font.italic: textFieldReturnCode.text === "" ? true: false
                         placeholderText: qsTranslate("PageServicesSign","STR_SIGN_CMD_CODE_OP") + "?"
-                        validator: RegExpValidator { regExp: /^[0-9]{6}$/ }
+                        validator: RegularExpressionValidator { regularExpression: /^[0-9]{6}$/ }
                         font.family: lato.name
                         font.pixelSize: Constants.SIZE_TEXT_FIELD
                         font.bold: activeFocus

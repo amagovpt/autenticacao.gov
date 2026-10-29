@@ -37,6 +37,7 @@
         <file>components/LabelTextBox.qml</file>
         <file>components/LabelTextBoxForm.ui.qml</file>
         <file>components/Button.qml</file>
+        <file>components/SwitchIndicator.qml</file>
         <file>components/ScrollBar.qml</file>
         <file>components/ScrollableTextField.qml</file>
         <file>images/arrow-right_AMA.png</file>

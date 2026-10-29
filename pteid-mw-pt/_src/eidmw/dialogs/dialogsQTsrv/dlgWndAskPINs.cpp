@@ -25,7 +25,7 @@
 
 #include "dlgWndAskPINs.h"
 #include "../langUtil.h"
-#include <QDesktopWidget>
+#include <QScreen>
 
 #include <iostream>
 #include <stdio.h>
@@ -45,18 +45,18 @@ dlgWndAskPINs::dlgWndAskPINs(DlgPinInfo pinInfo1, DlgPinInfo pinInfo2, QString &
 
 	if (pinInfo1.ulFlags & PIN_FLAG_DIGITS) {
 		char buffer[20];
-		sprintf(buffer, "[0-9]{%u,%u}", m_ulPin1MinLen, m_ulPin1MaxLen);
-		QRegExp rx(buffer);
-		m_Pin1Validator = new QRegExpValidator(rx, 0);
+		snprintf(buffer, sizeof(buffer), "[0-9]{%u,%u}", m_ulPin1MinLen, m_ulPin1MaxLen);
+		QRegularExpression rx(buffer);
+		m_Pin1Validator = new QRegularExpressionValidator(rx, 0);
 	} else {
 		m_Pin1Validator = NULL;
 	}
 
 	if (pinInfo2.ulFlags & PIN_FLAG_DIGITS) {
 		char buffer[20];
-		sprintf(buffer, "[0-9]{%u,%u}", m_ulPin2MinLen, m_ulPin2MaxLen);
-		QRegExp rx(buffer);
-		m_Pin2Validator = new QRegExpValidator(rx, 0);
+		snprintf(buffer, sizeof(buffer), "[0-9]{%u,%u}", m_ulPin2MinLen, m_ulPin2MaxLen);
+		QRegularExpression rx(buffer);
+		m_Pin2Validator = new QRegularExpressionValidator(rx, 0);
 	} else {
 		m_Pin2Validator = NULL;
 	}
@@ -148,7 +148,7 @@ QPushButton:hover{background-color: #2C3DAC}");
 QPushButton:hover{background-color: #C6C7C7}");
 
 	Type_WndGeometry WndGeometry;
-	if (getWndCenterPos(pParentWndGeometry, QApplication::desktop()->width(), QApplication::desktop()->height(),
+	if (getWndCenterPos(pParentWndGeometry, QGuiApplication::primaryScreen()->virtualGeometry().width(), QGuiApplication::primaryScreen()->virtualGeometry().height(),
 						this->width(), this->height(), &WndGeometry)) {
 		this->move(WndGeometry.x, WndGeometry.y);
 	}

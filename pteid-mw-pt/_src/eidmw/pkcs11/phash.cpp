@@ -33,7 +33,7 @@ using namespace eIDMW;
 int hash_init(CK_MECHANISM_PTR pMechanism, void **pphashinfo, unsigned int *size) {
 	int ret = CKR_OK;
 
-	Crypto::MessageDigestCtx *oHash;
+	Crypto::MessageDigestCtx *oHash = nullptr;
 	std::string algo;
 
 	switch (pMechanism->mechanism) {

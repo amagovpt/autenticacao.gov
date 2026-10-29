@@ -323,16 +323,10 @@ static bool save_cache(const std::string &to_be_saved, const std::string &id) {
 
 static bool check_dir_readable(const QDir &dir) {
 #ifdef WIN32
-	// necessary according to https://doc.qt.io/archives/qt-5.12/qfileinfo.html#ntfs-permissions
-	qt_ntfs_permission_lookup++;
+	// necessary according to https://doc.qt.io/qt-6/qfileinfo.html#ntfs-permissions
+	QNtfsPermissionCheckGuard permissionGuard;
 #endif
-	const bool is_readable = dir.isReadable();
-
-#ifdef WIN32
-	qt_ntfs_permission_lookup--;
-#endif
-
-	return is_readable;
+	return dir.isReadable();
 }
 
 ScapResult<std::vector<ScapAttribute>> load_cache() {

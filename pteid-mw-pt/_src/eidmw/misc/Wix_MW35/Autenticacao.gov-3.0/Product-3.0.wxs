@@ -41,8 +41,6 @@
     <?define var.PTEID_DIR_MSM=$(env.PTEID_DIR_MSM)?>
     <?endif?>
 
-    <?define var.PTEID_QT_IMAGEFORMATS=$(env.PTEID_DIR_QT_5)\plugins\imageformats\?>
-    <?define var.PTEID_QT_PRINTSUPPORT=$(env.PTEID_DIR_QT_5)\plugins\printsupport\?>
 
     <?define var.PTEID_TARGET_RUNTIME=VCR9 ?>
 
@@ -92,11 +90,6 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
 
-      <Directory Id="ProgramMenuFolder" Name="Menu">
-        <Directory Id="ApplicationProgramsFolder" Name="Cartão de Cidadão">
-        </Directory>
-      </Directory>
-
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONFOLDER" Name="Portugal Identity Card">
 
@@ -125,9 +118,9 @@
       </Directory>
 
 
-      <!-- VC9 runtime -->
-      <?define var.VCRT_TITLE="VC++ 12.0 runtime" ?>
-      <Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC141_CRT_x86.msm" Language="0" DiskId="1" />
+      <!-- Visual C++ 2015-2022 runtime (VS 2022 merge modules, required by Qt 6) -->
+      <?define var.VCRT_TITLE="Visual C++ 2015-2022 runtime" ?>
+      <Merge Id="VCRT" SourceFile="$(var.PTEID_DIR_MSM)\Microsoft_VC143_CRT_x86.msm" Language="0" DiskId="1" />
 
     </Directory>
 
@@ -455,14 +448,7 @@
       <ComponentRef Id="pteidmdrvsystem32"/>
       <ComponentRef Id="REGISTERMINIDRIVER"/>
       
-      <Feature Id="GUI"
-                Title="!(loc.PteidGui)"
-                Description="!(loc.PteidGuiDescr)"
-                Level="1"
-                AllowAdvertise="no"
-                >
-        <ComponentGroupRef Id="qmlAppComponentGroup"/>
-      </Feature>
+      <!-- The Qt 6 application is x64 only (Qt 6 has no 32-bit MSVC build): this package has no GUI feature -->
 
       <Feature Id="Crypto"
                 Title="!(loc.Crypto)"

@@ -6,7 +6,7 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
+import QtQuick
 
 // Changing this file may force update the next constants:
 // MAIN_MENU_SIGN_PAGE_INDEX; SUB_MENU_SIGN_PAGE_INDEX; SIGNATURE_PAGE_URL

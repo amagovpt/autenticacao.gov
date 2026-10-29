@@ -12,7 +12,7 @@
 		<key>BundleOverwriteAction</key>
 		<string>upgrade</string>
 		<key>RootRelativeBundlePath</key>
-		<string>pteiddialogsQtsrv.app</string>
+		<string>pteiddialogsQTsrv.app</string>
 	</dict>
 </array>
 </plist>

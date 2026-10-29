@@ -13,7 +13,6 @@ DESTDIR = ./../lib
 
 INCLUDEPATH += ../_Builds/ ../common/ ./poppler ./goo ./fofi
 
-QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
 
 SOURCES += poppler/Array.cc \
 	poppler/Annot.cc		\

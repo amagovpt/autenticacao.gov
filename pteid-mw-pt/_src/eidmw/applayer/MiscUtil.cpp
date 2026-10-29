@@ -393,7 +393,7 @@ long der_get_length(const CByteArray &der_object) {
 	const unsigned char *op = der_data;
 
 	int ret = ASN1_get_object(&der_data, &len, &tag, &xclass, der_object.Size());
-	MWLOG(LEV_DEBUG, MOD_APL, "%s: Ret=%02x Decoded object len: %d tag: %d, class: %d", __FUNCTION__, ret, len, tag,
+	MWLOG(LEV_DEBUG, MOD_APL, "%s: Ret=%02x Decoded object len: %ld tag: %d, class: %d", __FUNCTION__, ret, len, tag,
 		  xclass);
 
 	if (ret != 0x00 && len == 0) {
@@ -413,7 +413,7 @@ long der_certificate_length(const CByteArray &der_certificate) {
 	const unsigned char *op = der_data;
 
 	int ret = ASN1_get_object(&der_data, &len, &tag, &xclass, der_certificate.Size());
-	MWLOG(LEV_DEBUG, MOD_APL, "%s: Ret=%02x Decoded object len: %d tag: %d, class: %d", __FUNCTION__, ret, len, tag,
+	MWLOG(LEV_DEBUG, MOD_APL, "%s: Ret=%02x Decoded object len: %ld tag: %d, class: %d", __FUNCTION__, ret, len, tag,
 		  xclass);
 
 	if (ret != 0x20) {
@@ -525,9 +525,12 @@ void binToHex(const unsigned char *in, size_t in_len, char *out, size_t out_len)
 	unsigned int n;
 	char *pos;
 
+	if (out_len == 0)
+		return;
+
 	pos = out;
-	for (n = 0; n < in_len; n++) {
-		sprintf(pos, "%02x", in[n]);
+	for (n = 0; n < in_len && 2 * n + 2 < out_len; n++) {
+		snprintf(pos, 3, "%02x", in[n]);
 		pos += 2;
 	}
 	*pos = '\0';
@@ -834,7 +837,7 @@ void CPathUtil::generate_unique_filenames(const char *folder, std::vector<std::s
 	std::vector<std::pair<std::string, int>> filenames_counter;
 	std::vector<std::string> unique_filenames;
 
-	for (int i = 0; i < filenames.size(); i++) {
+	for (size_t i = 0; i < filenames.size(); i++) {
 
 		std::string basename = std::string(Basename((char *)(filenames[i]->c_str())));
 		std::string clean_filename = CPathUtil::remove_ext_from_basename(basename.c_str());

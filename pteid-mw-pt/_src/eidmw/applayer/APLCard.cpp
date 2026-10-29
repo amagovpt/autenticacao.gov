@@ -98,7 +98,7 @@ unsigned long APL_Card::readFile(const char *csPath, CByteArray &oData, unsigned
 		oData = m_reader->getCalReader()->ReadFile(csPath, ulOffset, (ulMaxLength == 0 ? FULL_FILE : ulMaxLength));
 	} catch (CMWException &e) {
 		MWLOG(LEV_ERROR, MOD_APL,
-			  "Error trying to read file error: 0x%x file: %s line: %d, csPath: %s, uloffset: %lu, ulmaxlen: %lu",
+			  "Error trying to read file error: 0x%lx file: %s line: %ld, csPath: %s, uloffset: %lu, ulmaxlen: %lu",
 			  e.GetError(), e.GetFile().c_str(), e.GetLine(), csPath, ulOffset, ulMaxLength);
 		m_reader->CalUnlock();
 		if (e.GetError() == EIDMW_ERR_INCOMPATIBLE_READER)
@@ -245,8 +245,9 @@ char *generateFinalPath(const char *output_dir, const char *path) {
 	replace_lastdot_inplace(tmp_path);
 
 	// Buffer for the filename components plus ".zip" plus PATH_SEP and terminating NULL
-	char *final_path = new char[strlen(output_dir) + strlen(tmp_path) + 6 + 1 + 1];
-	sprintf(final_path, "%s" PATH_SEP "%s.zip", output_dir, tmp_path);
+	size_t final_path_size = strlen(output_dir) + strlen(tmp_path) + 6 + 1 + 1;
+	char *final_path = new char[final_path_size];
+	snprintf(final_path, final_path_size, "%s" PATH_SEP "%s.zip", output_dir, tmp_path);
 	delete[] tmp_path;
 
 	return final_path;
@@ -715,7 +716,7 @@ std::pair<EIDMW_DataGroupReport, CByteArray> APL_ICAO::readDatagroup(DataGroupID
 		initializeCard();
 	}
 
-	BEGIN_CAL_OPERATION(m_reader) { out = readFile(DATAGROUP_PATHS.at(tag)); }
+	BEGIN_CAL_OPERATION(m_reader) { out = readIcaoFile(DATAGROUP_PATHS.at(tag)); }
 	END_CAL_OPERATION(m_reader);
 
 	// store hashes
@@ -788,7 +789,7 @@ void APL_ICAO::loadAvailableDataGroups() {
 	if (m_SodAttributes)
 		return;
 
-	CByteArray oData = readFile(SOD_PATH);
+	CByteArray oData = readIcaoFile(SOD_PATH);
 
 	CByteArray sod;
 	auto report = verifySodFileIntegrity(oData, sod);
@@ -910,7 +911,7 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	OpenSSL_add_all_digests();
 
 	const unsigned char *temp = data.GetBytes();
-	size_t length = data.Size();
+	unsigned long length = data.Size();
 	temp += 4; // Skip the ASN.1 Application 23 tag + 3-byte length (DER type 77)
 
 	p7 = d2i_PKCS7(nullptr, &temp, length - 4);
@@ -1006,7 +1007,7 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	}
 
 	unsigned char *p;
-	size_t size = BIO_get_mem_data(out, &p);
+	long size = BIO_get_mem_data(out, &p);
 	out_sod.Append(p, size);
 
 	BIO_free_all(out);
@@ -1015,7 +1016,7 @@ EIDMW_SodReport APL_ICAO::verifySodFileIntegrity(const CByteArray &data, CByteAr
 	return report;
 }
 
-CByteArray APL_ICAO::readFile(const std::string &csPath) const {
+CByteArray APL_ICAO::readIcaoFile(const std::string &csPath) const {
 	auto out = m_reader->getCalReader()->ReadFile(csPath);
 
 	// remove padding
@@ -1040,7 +1041,7 @@ CByteArray extractPublicKeyFromDG15(CByteArray &dg15_data) {
 	const unsigned char *der_p = dg15_data.GetBytes();
 	int ret = ASN1_get_object(&der_p, &len, &tag, &xclass, dg15_data.Size());
 	if (ret & 0x80) {
-		MWLOG(LEV_ERROR, MOD_APL, "DG15 ASN.1 failed to decode! Error code: %08x", ERR_get_error());
+		MWLOG(LEV_ERROR, MOD_APL, "DG15 ASN.1 failed to decode! Error code: %08lx", ERR_get_error());
 	} else if (tag != 15 && xclass != V_ASN1_APPLICATION) {
 		MWLOG(LEV_ERROR, MOD_APL,
 			  "Malformed DG15: expected tag 0x6F (APPLICATION 15)! Found ASN.1 tag with class: %d and tag number: %d",
@@ -1059,7 +1060,7 @@ EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
 	auto cryptFwk = AppLayer.getCryptoFwk();
 
 	// CByteArray security_file;
-	CByteArray secopt_file = readFile(PTEID_FILE_SECURITY);
+	CByteArray secopt_file = readIcaoFile(PTEID_FILE_SECURITY);
 	report.dg14.Append(secopt_file);
 
 	char *dg14_str = byteArrayToHexString(secopt_file.GetBytes(), secopt_file.Size());
@@ -1081,7 +1082,7 @@ EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
 
 	try {
 		// read public key DG15
-		CByteArray pubkey_file = readFile(PTEID_FILE_PUB_KEY_AA);
+		CByteArray pubkey_file = readIcaoFile(PTEID_FILE_PUB_KEY_AA);
 		report.dg15 = pubkey_file;
 
 		// Store hashes
@@ -1130,7 +1131,7 @@ EIDMW_ActiveAuthenticationReport APL_ICAO::performActiveAuthentication() {
 			MWLOG(LEV_WARN, MOD_APL, "DG15 not found! Active Authentication not available for this document.");
 			return report;
 		} else {
-			MWLOG(LEV_WARN, MOD_APL, "Active Authentication failed! Error code %08x thrown at %s:%ld", e.GetError(),
+			MWLOG(LEV_WARN, MOD_APL, "Active Authentication failed! Error code %08lx thrown at %s:%ld", e.GetError(),
 				  e.GetFile().c_str(), e.GetLine());
 			return report;
 		}
@@ -1144,7 +1145,7 @@ EIDMW_ChipAuthenticationReport APL_ICAO::performChipAuthentication() {
 
 	// Chip authentication is performed after Active Authentication.
 	// No need to re-verify DG14 hash as it was already performed during the previous AA step
-	auto dg14 = readFile(DATAGROUP_PATHS.at(DG14));
+	auto dg14 = readIcaoFile(DATAGROUP_PATHS.at(DG14));
 	auto security_infos = decodeDg14Data(dg14);
 	if (!security_infos) {
 		MWLOG_CTX(LEV_ERROR, MOD_APL, "Failed to decode DG14 Security Options structure!");

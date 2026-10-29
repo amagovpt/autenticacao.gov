@@ -10,11 +10,11 @@
 
 ****************************************************************************-*/
 
-import QtQuick 2.6
-import QtQuick.Controls 2.5
-import Qt.labs.platform 1.0
-import QtGraphicalEffects 1.0
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import Qt.labs.platform
+import Qt5Compat.GraphicalEffects
+import QtQuick.Layouts
 import eidguiV2 1.0
 
 /* Constants imports */
@@ -73,6 +73,8 @@ Item {
     property alias propertyMouseAreaTextAttributesMsg: mouseAreaTextAttributesMsg
     property alias propertyTextSpinBox: textSpinBox
     property alias propertySpinBoxControl: spinBoxControl
+    property alias propertyPageNext: pageNext
+    property alias propertyPagePrevious: pagePrevious
     property alias propertyCheckLastPage: checkLastPage
     property alias propertyPageText: pageText
     property alias propertyTitleConf: titleConf
@@ -191,7 +193,7 @@ Item {
                     KeyNavigation.tab: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
                     KeyNavigation.down: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
                     KeyNavigation.right: propertyShowHelp == true ? textSubTitle.propertyText : buttonArrowHelp
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handle_key_pressed(event.key, titleHelp)
                     }
                     KeyNavigation.left: titleHelp
@@ -244,7 +246,7 @@ Item {
                             KeyNavigation.tab: autenticacaoGovLink.propertyText
                             KeyNavigation.down: autenticacaoGovLink.propertyText
                             KeyNavigation.right: autenticacaoGovLink.propertyText
-                            Keys.onPressed: {
+                            Keys.onPressed: function(event) {
                                 handle_key_pressed(event.key, textSubTitle)
                             }
                             KeyNavigation.left: titleHelp
@@ -279,7 +281,7 @@ Item {
                             KeyNavigation.tab: verifySignLink
                             KeyNavigation.down: verifySignLink
                             KeyNavigation.right: verifySignLink
-                            Keys.onPressed: {
+                            Keys.onPressed: function(event) {
                                 handle_key_pressed(event.key, autenticacaoGovLink)
                             }
                             KeyNavigation.left: textSubTitle.propertyText
@@ -306,7 +308,7 @@ Item {
                                                  "STR_SIGN_HELP_TOPIC_VERIFY_GOV_LINK")
                             propertyText.font.pixelSize: Constants.SIZE_TEXT_LINK_LABEL
                             propertyText.width: parent.width
-                            Keys.onPressed: {
+                            Keys.onPressed: function(event) {
                                 handle_key_pressed(event.key, verifySignLink)
                             }
                             propertyText.textMargin: Constants.SIZE_TEXT_FIELD_H_SPACE
@@ -350,7 +352,7 @@ Item {
                                 KeyNavigation.tab: titleSelectFile
                                 KeyNavigation.down: titleSelectFile
                                 KeyNavigation.right: titleSelectFile
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handle_key_pressed(event.key, buttonArrowHelp)
                                 }
                                 KeyNavigation.backtab: propertyShowHelp == true ? autenticacaoGovLink.propertyText : titleHelp
@@ -412,7 +414,7 @@ Item {
                         Accessible.name: text
                         KeyNavigation.tab: listViewFiles.count > 0 ? listViewFiles : buttonAdd
                         KeyNavigation.down: listViewFiles.count > 0 ? listViewFiles : buttonAdd
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handle_key_pressed(event.key, titleSelectFile)
                         }
                         KeyNavigation.right: listViewFiles.count > 0 ? listViewFiles : buttonAdd
@@ -503,7 +505,7 @@ Item {
                                 KeyNavigation.tab: buttonRemoveAll
                                 KeyNavigation.down: buttonRemoveAll
                                 KeyNavigation.right: buttonRemoveAll
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handle_key_pressed(event.key, buttonAdd)
                                 }
                                 KeyNavigation.backtab: button_signCMD
@@ -528,7 +530,7 @@ Item {
                                 KeyNavigation.tab: titleConf
                                 KeyNavigation.down: titleConf
                                 KeyNavigation.right: titleConf
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handle_key_pressed(event.key, buttonRemoveAll)
                                 }
                                 KeyNavigation.backtab: buttonAdd
@@ -576,7 +578,7 @@ Item {
                         Accessible.name: text
                         KeyNavigation.tab: buttonArrowOptions
                         KeyNavigation.down: buttonArrowOptions
-                        Keys.onPressed: {
+                        Keys.onPressed: function(event) {
                             handle_key_pressed(event.key, titleConf)
                         }
                         KeyNavigation.right: buttonArrowOptions
@@ -638,7 +640,7 @@ Item {
                                 KeyNavigation.tab: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
                                 KeyNavigation.down: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
                                 KeyNavigation.right: propertyShowOptions == true ? textFormatSign : pdfPreviewArea
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handle_key_pressed(event.key, buttonArrowOptions)
                                 }
                                 KeyNavigation.backtab: titleConf
@@ -684,7 +686,7 @@ Item {
                                     Accessible.name: text
                                     KeyNavigation.tab: radioButtonPADES
                                     KeyNavigation.down: radioButtonPADES
-                                    Keys.onPressed: {
+                                    Keys.onPressed: function(event) {
                                         handle_key_pressed(event.key, textFormatSign)
                                     }
                                     KeyNavigation.right: radioButtonPADES
@@ -708,7 +710,7 @@ Item {
                                     KeyNavigation.tab: radioButtonXADES
                                     KeyNavigation.down: radioButtonXADES
                                     KeyNavigation.right: radioButtonXADES
-                                    Keys.onPressed: {
+                                    Keys.onPressed: function(event) {
                                         handle_key_pressed(event.key, radioButtonPADES)
                                     }
                                     KeyNavigation.backtab: textFormatSign
@@ -762,7 +764,7 @@ Item {
                                     KeyNavigation.tab: textFieldReason
                                     KeyNavigation.down: textFieldReason
                                     KeyNavigation.right: textFieldReason
-                                    Keys.onPressed: {
+                                    Keys.onPressed: function(event) {
                                         handle_key_pressed(event.key, radioButtonXADES)
                                     }
                                     KeyNavigation.backtab: radioButtonPADES
@@ -817,7 +819,7 @@ Item {
                                 Accessible.name: textFieldReason.placeholderText
                                 KeyNavigation.tab: textFieldLocal
                                 KeyNavigation.down: textFieldLocal
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handle_key_pressed(event.key, textFieldReason)
                                 }
                                 KeyNavigation.right: textFieldLocal
@@ -829,6 +831,7 @@ Item {
                                 width: parent.width
                                 font.italic: textFieldLocal.text === "" ? true : false
                                 anchors.top: textFieldReason.bottom
+                                anchors.topMargin: 2 * Constants.SIZE_TEXT_V_SPACE
                                 placeholderText: qsTranslate("PageServicesSign",
                                                              "STR_SIGN_LOCAL") + "?"
                                 font.pixelSize: Constants.SIZE_TEXT_FIELD
@@ -840,7 +843,7 @@ Item {
                                 KeyNavigation.tab: switchSignTemp
                                 KeyNavigation.down: switchSignTemp
                                 KeyNavigation.right: switchSignTemp
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handle_key_pressed(event.key, textFieldLocal)
                                 }
                                 KeyNavigation.backtab: textFieldReason
@@ -848,6 +851,7 @@ Item {
                             }
                             Switch {
                                 id: switchSignTemp
+                                indicator: Components.SwitchIndicator { control: switchSignTemp }
                                 height: Constants.HEIGHT_SWITCH_COMPONENT
                                 anchors.top: textFieldLocal.bottom
                                 x: 5
@@ -862,7 +866,7 @@ Item {
                                 Accessible.name: text
                                 KeyNavigation.tab: (checkboxLTV.enabled ? checkboxLTV : switchAddAttributes)
                                 KeyNavigation.down: (checkboxLTV.enabled ? checkboxLTV : switchAddAttributes)
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handle_key_pressed(event.key, switchSignTemp)
                                 }
                                 KeyNavigation.right: (checkboxLTV.enabled ? checkboxLTV : switchAddAttributes)
@@ -909,6 +913,7 @@ Item {
                             }
                             Switch {
                                 id: switchAddAttributes
+                                indicator: Components.SwitchIndicator { control: switchAddAttributes }
                                 height: Constants.HEIGHT_SWITCH_COMPONENT
                                 anchors.top: checkboxLTV.bottom
                                 anchors.topMargin: Constants.SIZE_TEXT_V_SPACE
@@ -925,7 +930,7 @@ Item {
                                 KeyNavigation.tab: switchAddAttributes.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                                 KeyNavigation.down: switchAddAttributes.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
                                 KeyNavigation.right: switchAddAttributes.checked ? (textAttributesMsg.visible ? textAttributesMsg : listViewEntities) : pdfPreviewArea
-                                Keys.onPressed: {
+                                Keys.onPressed: function(event) {
                                     handle_key_pressed(event.key, switchAddAttributes)
                                 }
                                 KeyNavigation.backtab: (checkboxLTV.enabled ? checkboxLTV : switchSignTemp)
@@ -1003,7 +1008,7 @@ Item {
                                     KeyNavigation.tab: pdfPreviewArea
                                     KeyNavigation.down:pdfPreviewArea
                                     KeyNavigation.right: pdfPreviewArea
-                                    Keys.onPressed: {
+                                    Keys.onPressed: function(event) {
                                         handle_key_pressed(event.key, textAttributesMsg)
                                     }
                                     KeyNavigation.backtab: switchAddAttributes
@@ -1022,7 +1027,6 @@ Item {
                                     cacheBuffer: Constants.SCAP_ATTR_LISTVIEW_CACHEBUFFER
                                     interactive: false //disables scroll/drag for this listview
                                     height: contentHeight
-                                    Keys.forwardTo: attributeListDelegate
                                 }
                             }
                         }
@@ -1132,7 +1136,7 @@ Item {
 
                 Item {
                     id: itemCheckPage
-                    width: 150
+                    width: 170
                     height: parent.height
                     anchors.top: parent.top
 
@@ -1149,6 +1153,27 @@ Item {
                         opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
                     }
 
+                    Text {
+                        id: pagePrevious
+                        anchors.left: pageText.right
+                        anchors.verticalCenter: spinBoxControl.verticalCenter
+                        width: 20
+                        text: "<"
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_ARROW_INDICATOR
+                        font.bold: true
+                        color: Constants.COLOR_MAIN_BLUE
+                        horizontalAlignment: Text.AlignHCenter
+                        opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                        MouseArea {
+                            anchors.fill: parent
+                            enabled: spinBoxControl.enabled
+                            onClicked: {
+                                spinBoxControl.decrease()
+                                spinBoxControl.valueModified()
+                            }
+                        }
+                    }
                     SpinBox {
                         id: spinBoxControl
                         y: 0
@@ -1156,14 +1181,16 @@ Item {
                         to: 10000
                         stepSize: 1
                         value: 1
-                        anchors.left: pageText.right
-                        width: 100
+                        anchors.left: pagePrevious.right
+                        width: 50
                         height: parent.height
                         anchors.leftMargin: 0
                         enabled: fileLoaded && propertyRadioButtonPADES.checked
                                  && !checkLastPage.checked && checkSignShow.checked
                         editable: enabled
-                        validator: RegExpValidator { regExp: /[1-9][0-9]*/ }
+                        leftPadding: 0
+                        rightPadding: 0
+                        validator: RegularExpressionValidator { regularExpression: /[1-9][0-9]*/ }
                         Accessible.ignored: true
 
                         contentItem: TextInput {
@@ -1189,45 +1216,29 @@ Item {
                             KeyNavigation.up: pdfPreviewArea
                         }
 
-                        up.indicator: Rectangle {
-                            x: spinBoxControl.mirrored ? 0 : parent.width - width
-                            y: Constants.SIZE_ARROW_OFFSET
-                            height: parent.height
-                            implicitWidth: 20
-                            implicitHeight: parent.height
-                            color: "transparent"
-
-                            Text {
-                                text: ">"
-                                font.family: lato.name
-                                font.pixelSize: Constants.SIZE_ARROW_INDICATOR
-                                color: Constants.COLOR_MAIN_BLUE
-                                font.bold: true
-                                opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
-                                anchors.fill: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                            }
-                        }
-
-                        down.indicator: Rectangle {
-                            visible: false
-                            x: spinBoxControl.mirrored ? parent.width - width : 0
-                            y: Constants.SIZE_ARROW_OFFSET
-                            height: parent.height
-                            implicitWidth: 20
-                            implicitHeight: Constants.HEIGHT_BOTTOM_COMPONENT
-                            color: "transparent"
-
-                            Text {
-                                text: "<"
-                                font.family: lato.name
-                                font.pixelSize: Constants.SIZE_ARROW_INDICATOR
-                                color: Constants.COLOR_MAIN_BLUE
-                                opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
-                                anchors.fill: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
+                        // The arrows are drawn outside the box (pagePrevious/pageNext),
+                        // Qt 6 does not deliver clicks to custom indicators inside it
+                        up.indicator: Item { implicitWidth: 0 }
+                        down.indicator: Item { implicitWidth: 0 }
+                    }
+                    Text {
+                        id: pageNext
+                        anchors.left: spinBoxControl.right
+                        anchors.verticalCenter: spinBoxControl.verticalCenter
+                        width: 20
+                        text: ">"
+                        font.family: lato.name
+                        font.pixelSize: Constants.SIZE_ARROW_INDICATOR
+                        font.bold: true
+                        color: Constants.COLOR_MAIN_BLUE
+                        horizontalAlignment: Text.AlignHCenter
+                        opacity: spinBoxControl.enabled ? 1.0 : Constants.OPACITY_SERVICES_SIGN_ADVANCE_TEXT_DISABLED
+                        MouseArea {
+                            anchors.fill: parent
+                            enabled: spinBoxControl.enabled
+                            onClicked: {
+                                spinBoxControl.increase()
+                                spinBoxControl.valueModified()
                             }
                         }
                     }
@@ -1240,6 +1251,7 @@ Item {
                     anchors.top: parent.top
                     Switch {
                         id: checkLastPage
+                        indicator: Components.SwitchIndicator { control: checkLastPage }
                         text: qsTranslate("PageServicesSign", "STR_SIGN_LAST")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
                         font.family: lato.name
@@ -1275,6 +1287,7 @@ Item {
                     anchors.top: parent.top
                     Switch {
                         id: checkSignShow
+                        indicator: Components.SwitchIndicator { control: checkSignShow }
                         text: qsTranslate("PageServicesSign",
                                           "STR_SIGN_VISIBLE")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
@@ -1305,6 +1318,7 @@ Item {
 
                     Switch {
                         id: checkSignReduced
+                        indicator: Components.SwitchIndicator { control: checkSignReduced }
                         text: qsTranslate("PageServicesSign",
                                           "STR_SIGN_REDUCED")
                         height: Constants.HEIGHT_SWITCH_COMPONENT
@@ -1352,7 +1366,7 @@ Item {
                     KeyNavigation.tab: button_signCMD.enabled ? button_signCMD : titleHelp
                     KeyNavigation.down: button_signCMD.enabled ? button_signCMD : titleHelp
                     KeyNavigation.right: button_signCMD.enabled ? button_signCMD : titleHelp
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handle_key_pressed(event.key, button_signCC)
                     }
                     KeyNavigation.backtab: checkSignReduced
@@ -1377,7 +1391,7 @@ Item {
                     KeyNavigation.tab: titleHelp
                     KeyNavigation.down: titleHelp
                     KeyNavigation.right: titleHelp
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         handle_key_pressed(event.key, button_signCMD)
                     }
                     KeyNavigation.backtab: button_signCC

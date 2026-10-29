@@ -39,7 +39,7 @@ CMWException::CMWException(long lError, const char *cpFile, long lLine)
 
 {}
 
-const char *CMWException::what() throw() { return "CMWException, error code strings to be implemented"; }
+const char *CMWException::what() const noexcept { return "CMWException, error code strings to be implemented"; }
 
 // CNotAuthenticatedException::CNotAuthenticatedException(...)
 CNotAuthenticatedException::CNotAuthenticatedException(long lError, long lPinRef)

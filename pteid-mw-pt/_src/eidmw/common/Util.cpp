@@ -22,7 +22,6 @@
 
 **************************************************************************** */
 #include <algorithm>
-#include <codecvt>
 #include <filesystem>
 #include <fstream>
 #include <functional>
@@ -31,6 +30,7 @@
 #include <iostream>
 #include <iterator>
 #include <locale>
+#include <stdexcept>
 
 #include <openssl/asn1.h>
 
@@ -114,11 +114,32 @@ std::wstring windowsANSIToWideString(const std::string &in) {
 #endif
 
 #ifndef _WIN32
-/* Using C++11 features
-   Adapted from https://en.cppreference.com/w/cpp/locale/wstring_convert */
+/* UTF-8 to UTF-32, as std::wstring_convert<std::codecvt_utf8<char32_t>> (deprecated in C++17) did:
+   throws std::range_error on invalid UTF-8 */
 std::u32string stringWidenUTF32(std::string utf8_str) {
-	// the UTF-8 / UTF-32 standard conversion facet
-	std::u32string utf32 = std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>{}.from_bytes(utf8_str);
+	static const char32_t min_code_point[] = {0, 0, 0x80, 0x800, 0x10000};
+	std::u32string utf32;
+	size_t i = 0;
+
+	while (i < utf8_str.size()) {
+		unsigned char lead = utf8_str[i];
+		size_t len = lead < 0x80 ? 1 : (lead >> 5) == 0x06 ? 2 : (lead >> 4) == 0x0E ? 3 : (lead >> 3) == 0x1E ? 4 : 0;
+		if (len == 0 || i + len > utf8_str.size())
+			throw std::range_error("stringWidenUTF32: invalid UTF-8");
+
+		char32_t code_point = len == 1 ? lead : lead & (0x7F >> len);
+		for (size_t k = 1; k < len; k++) {
+			unsigned char continuation = utf8_str[i + k];
+			if ((continuation & 0xC0) != 0x80)
+				throw std::range_error("stringWidenUTF32: invalid UTF-8");
+			code_point = (code_point << 6) | (continuation & 0x3F);
+		}
+		if (code_point < min_code_point[len] || code_point > 0x10FFFF || (code_point >= 0xD800 && code_point <= 0xDFFF))
+			throw std::range_error("stringWidenUTF32: invalid UTF-8");
+
+		utf32.push_back(code_point);
+		i += len;
+	}
 
 	return utf32;
 }
@@ -169,8 +190,17 @@ const unsigned char *findASN1Object(const CByteArray &array, long &size, long ta
 
 std::string utilStringNarrow(const std::wstring &in) {
 #ifdef WIN32
-	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	return converter.to_bytes(in);
+	// wchar_t is UTF-16 on Windows: std::codecvt_utf8<wchar_t> took it for UCS-2 and broke surrogate pairs
+	if (in.empty())
+		return std::string();
+
+	int required_size = WideCharToMultiByte(CP_UTF8, 0, in.c_str(), (int)in.size(), NULL, 0, NULL, NULL);
+	if (required_size == 0)
+		return std::string();
+
+	std::string out(required_size, '\0');
+	WideCharToMultiByte(CP_UTF8, 0, in.c_str(), (int)in.size(), &out[0], required_size, NULL, NULL);
+	return out;
 
 #else
 	if (in.empty())
@@ -479,16 +509,20 @@ EIDMW_CMN_API int vfprintf_s(FILE *stream, const char *format, va_list argptr) {
 #endif
 
 EIDMW_CMN_API long read_binary_file(const char *filename, unsigned char **outBuffer) {
-	FILE *file = fopen(filename, "rb");
-	if (file == NULL) {
+	FILE *file = NULL;
+	if (fopen_s(&file, filename, "rb") != 0 || file == NULL) {
 		perror("Failed to open file");
 		return -1;
 	}
 
 	// Seek to the end of the file to determine the file size
 	fseek(file, 0, SEEK_END);
-	size_t fileSize = ftell(file);
+	long fileSize = ftell(file);
 	rewind(file); // Go back to the start of the file
+	if (fileSize < 0) {
+		fclose(file);
+		return -1;
+	}
 
 	// Allocate memory for the entire file
 	*outBuffer = (unsigned char *)malloc(fileSize);
@@ -500,7 +534,7 @@ EIDMW_CMN_API long read_binary_file(const char *filename, unsigned char **outBuf
 
 	// Read the file into the buffer
 	size_t bytesRead = fread(*outBuffer, 1, fileSize, file);
-	if (bytesRead != fileSize) {
+	if (bytesRead != (size_t)fileSize) {
 		fprintf(stderr, "Error reading file\n");
 		free(*outBuffer);
 		fclose(file);

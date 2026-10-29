@@ -248,7 +248,7 @@ int asn1_get_item(const unsigned char *p_cInDat, /**< In: ASN-1 data */
 		/* first octet of bit string is the number of unused bits at the end of the bitstring */
 		/* in CER/DER: unused bits are always zero. And if they aren't zero, we still don't need to know the nr. of
 		 * unused bits */
-		if ((iNumTag == 0x03)) {
+		if (iNumTag == 0x03) {
 			p_cDat++;
 			iLen--;
 		}

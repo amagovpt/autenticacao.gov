@@ -106,7 +106,7 @@ std::vector<uint8_t> BlockCipherCtx::processBlock(const uint8_t *data, size_t le
 	std::vector<uint8_t> out(len);
 	int outlen = 0;
 
-	if (!EVP_CipherUpdate(ctx, out.data(), &outlen, data, len)) {
+	if (!EVP_CipherUpdate(ctx, out.data(), &outlen, data, (int)len)) {
 		LOG_AND_THROW(LEV_ERROR, MOD_SSL, EIDMW_ERR_BAC_CRYPTO_ERROR, "Cipher update failed");
 	}
 
@@ -132,8 +132,8 @@ CByteArray BlockCipherCtx::retailMac(const CByteArray &key, const CByteArray &in
 	CByteArray res(MAC_KEYSIZE, 0);
 	CByteArray xx(MAC_KEYSIZE, 0);
 
-	for (size_t j = 0; j < (input.Size() / MAC_KEYSIZE); j++) {
-		for (size_t i = 0; i < MAC_KEYSIZE; i++)
+	for (unsigned long j = 0; j < (input.Size() / MAC_KEYSIZE); j++) {
+		for (unsigned long i = 0; i < MAC_KEYSIZE; i++)
 			xx.SetByte(input.GetByte(i + j * MAC_KEYSIZE) ^ res.GetByte(i), i);
 
 		res = BlockCipherCtx::encrypt<DesCipher>(key1.GetBytes(), xx);
@@ -190,7 +190,7 @@ void SecureMessagingKeys::deriveKeys(const CByteArray &seed) {
 }
 
 CByteArray withIso7816Padding(const CByteArray &input, size_t blockSize) {
-	int padLen = blockSize - input.Size() % blockSize;
+	int padLen = (int)(blockSize - input.Size() % blockSize);
 
 	CByteArray paddedContent;
 	paddedContent.Append(input);

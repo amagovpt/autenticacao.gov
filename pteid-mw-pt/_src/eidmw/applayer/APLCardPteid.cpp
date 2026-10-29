@@ -565,9 +565,9 @@ APLPublicKey *APL_EIDCard::getRootCAPubKey() {
 		case APL_CARDTYPE_PTEID_IAS5:
 			ec_pubkey = out.GetBytes(EC_PUBKEY_OFFSET);
 			break;
-		case APL_CARDTYPE_UNKNOWN:
+		default:
+			// APL_CARDTYPE_UNKNOWN, or an ICAO document: no PT eID root CA key
 			throw CMWEXCEPTION(EIDMW_ERR_CARDTYPE_UNKNOWN);
-			break;
 		}
 
 		if (ec_pubkey.Size() > 0) {

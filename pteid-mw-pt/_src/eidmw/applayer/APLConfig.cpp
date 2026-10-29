@@ -56,8 +56,7 @@ typedef BOOL(WINAPI *FCTDEF_WinHttpGetProxyForUrl)(IN HINTERNET hSession, IN LPC
 #ifdef __APPLE__
 #include <CoreFoundation/CFDictionary.h>
 #include <SystemConfiguration/SCDynamicStoreCopySpecific.h>
-// #include <CFNetwork/CFHTTPStream.h>
-#include <CFHTTPStream.h>
+#include <SystemConfiguration/SCSchemaDefinitions.h>
 #endif
 
 namespace eIDMW {
@@ -478,7 +477,7 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 	// function will fail and this function will return false.
 
 	if (result) {
-		hostStr = (CFStringRef)CFDictionaryGetValue(proxyDict, kCFStreamPropertyHTTPProxyHost);
+		hostStr = (CFStringRef)CFDictionaryGetValue(proxyDict, kSCPropNetProxiesHTTPProxy);
 
 		result = (hostStr != NULL) && (CFGetTypeID(hostStr) == CFStringGetTypeID());
 	}
@@ -489,7 +488,7 @@ void getProxySystemWide(const wchar_t *host_default, long port_default, const wc
 	// Get the proxy port.
 
 	if (result) {
-		portNum = (CFNumberRef)CFDictionaryGetValue(proxyDict, kCFStreamPropertyHTTPProxyPort);
+		portNum = (CFNumberRef)CFDictionaryGetValue(proxyDict, kSCPropNetProxiesHTTPPort);
 
 		result = (portNum != NULL) && (CFGetTypeID(portNum) == CFNumberGetTypeID());
 	}

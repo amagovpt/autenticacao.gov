@@ -35,6 +35,10 @@ namespace eIDMW {
 
 class CMWException;
 
+// Always throws: the PTEID_Exception that matches the error code of e
+#ifndef SWIG
+[[noreturn]]
+#endif
 NOEXPORT_PTEIDSDK void THROWException(CMWException &e);
 
 /******************************************************************************/ /**

@@ -23,29 +23,29 @@
     <ProjectGuid>{DC41E34B-8251-41DE-8065-D56B022F5755}</ProjectGuid>
     <RootNamespace>pteidapplayer</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -111,7 +111,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Iphlpapi.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES)\lib;$(PTEID_DIR_OPENSSL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBPNG)\lib;$(PTEID_DIR_OPENJPEG)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -130,7 +130,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ShowIncludes>false</ShowIncludes>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4275;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -141,7 +141,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Iphlpapi.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL)\lib;$(PTEID_DIR_XERCES)\lib;$(PTEID_DIR_OPENSSL)\lib;$(PTEID_XMLSECURITY)\lib;$(PTEID_DIR_ZLIB)\lib;$(PTEID_DIR_LIBPNG)\lib;$(PTEID_DIR_OPENJPEG)\lib;$(PTEID_DIR_LIBZIP)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -176,7 +176,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Iphlpapi.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBPNG_X64)\lib;$(PTEID_DIR_OPENJPEG_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -197,7 +197,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4275;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ShowIncludes>false</ShowIncludes>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -210,7 +210,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Ws2_32.lib;Shlwapi.lib;crypt32.lib;libcrypto.lib;libssl.lib;xerces-c_3.lib;libcurl_a.lib;Iphlpapi.lib;Wldap32.lib;normaliz.lib;pteid-poppler.lib;xsec_lib.lib;pteidcommon.lib;pteidDlgsWin32.lib;pteidcardlayer.lib;zlibstatic.lib;libpng16_static.lib;openjp2.lib;libzip.lib;cryptnet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\_Binaries35\$(Platform)\$(Configuration)\pteid$(ProjectName).dll</OutputFile>
       <Version />
       <AdditionalLibraryDirectories>..\_Binaries35\$(Platform)\$(Configuration);$(PTEID_DIR_CURL_X64)\lib;$(PTEID_DIR_XERCES_X64)\lib;$(PTEID_DIR_OPENSSL_X64)\lib;$(PTEID_XMLSECURITY_X64)\lib;$(PTEID_DIR_ZLIB_X64)\lib;$(PTEID_DIR_LIBPNG_X64)\lib;$(PTEID_DIR_OPENJPEG_X64)\lib;$(PTEID_DIR_LIBZIP_X64)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
