@@ -182,6 +182,15 @@ QFont getLatoFont() {
 	return font;
 }
 
+void setupApplication(QApplication &a) {
+	a.setFont(getLatoFont());
+	// On macOS, setWindowIcon also replaces the bundle's appicon.icns in the Dock with appicon.ico,
+	// which lacks the margin of macOS icons and is larger than the other Dock icons.
+#ifndef __APPLE__
+	a.setWindowIcon(QIcon(":/images/appicon.ico"));
+#endif
+}
+
 int main(int argc, char *argv[]) {
 	int iFunctionIndex = 0;
 	std::string readableFilePath;
@@ -235,8 +244,7 @@ int main(int argc, char *argv[]) {
 
 	if (iFunctionIndex == DLG_ASK_PIN) {
 		QApplication a(argc, argv);
-		a.setFont(getLatoFont());
-		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+		setupApplication(a);
 
 		// attach to the segment and get a pointer
 		DlgAskPINArguments oData;
@@ -325,8 +333,7 @@ int main(int argc, char *argv[]) {
 
 	} else if (iFunctionIndex == DLG_ASK_PINS) {
 		QApplication a(argc, argv);
-		a.setFont(getLatoFont());
-		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+		setupApplication(a);
 
 		DlgAskPINsArguments oData;
 		readAskPinsArguments(firstPipe, (void*)&oData);
@@ -381,8 +388,7 @@ int main(int argc, char *argv[]) {
 
 	} else if (iFunctionIndex == DLG_BAD_PIN) {
 		QApplication a(argc, argv);
-		a.setFont(getLatoFont());
-		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+		setupApplication(a);
 
 		// attach to the segment and get a pointer
 		DlgBadPinArguments oData;
@@ -440,8 +446,7 @@ int main(int argc, char *argv[]) {
 			  oInfoData.pinName, oInfoData.usage, oInfoData.operation);
 
 		QApplication a(argc, argv);
-		a.setFont(getLatoFont());
-		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+		setupApplication(a);
 		MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QApplication created", argv[0]);
 
 
@@ -544,8 +549,7 @@ int main(int argc, char *argv[]) {
 		return 0;
 	} else if (iFunctionIndex == DLG_ASK_CMD_INPUT) {
 		QApplication a(argc, argv);
-		a.setFont(getLatoFont());
-		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+		setupApplication(a);
 
 		// attach to the segment and get a pointer
 		DlgAskInputCMDArguments oData;
@@ -623,8 +627,7 @@ int main(int argc, char *argv[]) {
 		readDlgPickDeviceArguments(firstPipe, (void*)&oData);
 
 		QApplication a(argc, argv);
-		a.setFont(getLatoFont());
-		a.setWindowIcon(QIcon(":/images/appicon.ico"));
+		setupApplication(a);
 
 		dlgWndPickDevice *dlg = NULL;
 		try {
@@ -657,8 +660,7 @@ int main(int argc, char *argv[]) {
 			readCMDMessageArguments(firstPipe, (void*)&oCmdMsgData);
 
 			QApplication a(argc, argv);
-			a.setFont(getLatoFont());
-			a.setWindowIcon(QIcon(":/images/appicon.ico"));
+			setupApplication(a);
 			MWLOG(LEV_DEBUG, MOD_DLG, L"  %s child process : QApplication created", argv[0]);
 
 			try {

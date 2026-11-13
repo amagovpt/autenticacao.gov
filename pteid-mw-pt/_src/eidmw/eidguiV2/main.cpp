@@ -284,8 +284,11 @@ int main(int argc, char *argv[]) {
 
 		PTEID_InitSDK();
 
-		// Set app icon
+		// Set app icon. On macOS, setWindowIcon also replaces the bundle's appicon.icns in the Dock
+		// with appicon.ico, which lacks the margin of macOS icons and is larger than the other Dock icons.
+#ifndef __APPLE__
 		app.setWindowIcon(QIcon(":/appicon.ico"));
+#endif
 
 		// GAPI init
 		GAPI gapi(settings);
