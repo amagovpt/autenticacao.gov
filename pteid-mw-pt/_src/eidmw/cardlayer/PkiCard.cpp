@@ -494,6 +494,15 @@ tFileInfo CPkiCard::SelectFile(const std::string &csPath, const CByteArray &oAID
 	CByteArray responseSelection;
 	CAutoLock autolock(this);
 	{
+		// Another program may have selected a different applet since our last
+		// transaction (#228), so select ours again inside this one. Not done
+		// under secure messaging, which must keep its session state.
+		if (m_lastSelectedApplication.Size() > 0 && !(m_secureMessaging && m_secureMessaging->isInitialized())) {
+			CByteArray oApplication = m_lastSelectedApplication;
+			ResetApplication();
+			SelectApplication(oApplication);
+		}
+
 		// Try to select from current application
 		responseSelection = SelectByPath(csPath, bReturnFileInfo);
 
