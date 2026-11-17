@@ -9,7 +9,7 @@ export CFLAGS
 export CXXFLAGS
 
 %:
-	dh $@ --parallel
+	dh $@ --parallel --buildsystem=qmake
 
 override_dh_usrlocal:
 override_dh_makeshlibs:

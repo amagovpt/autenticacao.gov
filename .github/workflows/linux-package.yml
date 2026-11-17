@@ -1,0 +1,36 @@
+name: Linux package
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  deb:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build dependencies come from debian/control, so a missing one fails here.
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends devscripts equivs
+          sudo mk-build-deps --install --remove --tool "apt-get -y --no-install-recommends" pteid-mw-pt/_src/eidmw/debian/control
+
+      - name: Build the package
+        working-directory: pteid-mw-pt/_src/eidmw
+        run: dpkg-buildpackage -us -uc -b -j"$(nproc)"
+
+      - name: Install the package
+        run: sudo apt-get install -y ./pteid-mw-pt/_src/pteid-mw_*.deb
+
+      - name: Check that the installed binaries find their libraries
+        run: |
+          if ldd /usr/local/bin/eidguiV2 /usr/local/lib/libpteidlib.so /usr/local/lib/libpteidpkcs11.so | grep "not found"; then
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pteid-mw-deb
+          path: pteid-mw-pt/_src/pteid-mw_*.deb
