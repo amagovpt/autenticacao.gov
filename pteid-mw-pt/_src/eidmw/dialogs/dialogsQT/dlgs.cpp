@@ -557,9 +557,9 @@ DLGS_EXPORT DlgRet eIDMW::DlgDisplayPinpadInfo(DlgPinOperation operation, const 
 			if(resultExec == -1) {
 				MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgDisplayPinpadInfo Failed to execute dialog executable error: %s",
 					  strerror(errno));
-				exit(-1);
+				_exit(-1);
 			}
-			exit(0);
+			_exit(0);
 
 		}
 		else if(pid == -1) {
@@ -749,6 +749,12 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 		csServerPath += csServerName;
 #endif
 
+		if (access(csServerPath.c_str(), X_OK) != 0) {
+			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage Dialog executable not found at %s error: %s",
+				  csServerPath.c_str(), strerror(errno));
+			return DLG_ERR;
+		}
+
 		int firstPipeResult = pipe(pipe1);
 		if (firstPipeResult == -1) {
 			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage Failed to open the first pipe error: %s",
@@ -775,9 +781,9 @@ DLGS_EXPORT DlgRet eIDMW::DlgCMDMessage(DlgCmdOperation operation, DlgCmdMsgType
 			if(resultExec == -1) {
 				MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage Failed to execute dialog executable error: %s",
 					  strerror(errno));
-				exit(-1);
+				_exit(-1);
 			}
-			exit(0);
+			_exit(0);
 		}
 		else if(pid == -1) {
 			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::DlgCMDMessage Failed to create a new process error: %s",
@@ -888,6 +894,13 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 	csServerPath += csServerName;
 #endif
 
+	// Fail early if the dialog server is missing, otherwise the parent blocks forever reading from the pipe
+	if (access(csServerPath.c_str(), X_OK) != 0) {
+		MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServerPipe Dialog executable not found at %s error: %s",
+			  csServerPath.c_str(), strerror(errno));
+		throw CMWEXCEPTION(EIDMW_ERR_UNKNOWN);
+	}
+
 	int pipe1[2]; // parent -> child
 	int pipe2[2]; // child -> parent
 
@@ -917,10 +930,10 @@ void eIDMW::CallQTServerPipe(const DlgFunctionIndex index, readArgument readFunc
 		if(resultExec == -1) {
 			MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServerPipe Failed to execute dialog executable error: %s",
 				  strerror(errno));
-			exit(-1);
+			_exit(-1);
 		}
 
-		exit(0);
+		_exit(0);
 	} else if (pid == -1) {
 		MWLOG(LEV_ERROR, MOD_DLG, "  eIDMW::CallQTServerPipe Failed to create a new process error: %s",
 			  strerror(errno));
